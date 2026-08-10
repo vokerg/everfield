@@ -56,7 +56,7 @@ A fresh agent with no prior conversation context MUST:
 
 Do **not** choose one of the candidate missions in `docs/planning/03-planning-program.md` directly. Those missions are seed material until Planning Program v1 turns them into an executable mission graph.
 
-At the current bootstrap state, Issue #2 is the first executable planning task. Issues #3–#6 form its gated review/synthesis/verification/canonicalization chain and are not eligible until their stated prerequisites are met.
+At the current bootstrap state, Issue #2 is the first executable planning task after seed PR #1 is integrated. Issues #3–#6 form its gated review/synthesis/verification/canonicalization chain and are not eligible until their stated prerequisites are met.
 
 ## Planning Work Output Rule
 
@@ -89,6 +89,16 @@ Before stopping after modifying repository state:
 - do not leave uncommitted local state as the only copy of useful work.
 
 A continuation agent must independently inspect/review inherited work before extending it.
+
+## Main Integration Rule — Canonical Human Directive
+
+All changes integrated into `main` MUST use **squash merge**.
+
+- Task/feature branches may contain multiple WIP, review, and correction commits.
+- Integration into `main` produces one squash commit representing the accepted task/PR outcome.
+- Normal agents MUST NOT use merge commits or rebase-merge to integrate a PR into `main`.
+- If repository settings permit other merge methods, this rule still governs agent behavior until explicitly superseded by a later human directive.
+- Planning Program v1 and all later workflow specifications must preserve this rule.
 
 ## Human Directives
 
