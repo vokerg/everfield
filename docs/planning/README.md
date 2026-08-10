@@ -1,5 +1,18 @@
 # Everfield Planning Corpus
 
+## Start Here
+
+Fresh agents must **not** begin by reading this directory top-to-bottom.
+
+Read, in order:
+
+1. `/AGENTS.md`
+2. `START-HERE.md`
+3. the eligible `[PLAN-BOOTSTRAP]` GitHub issue selected by that entry protocol
+4. only the authoritative inputs named by that issue
+
+`START-HERE.md` is the temporary dispatcher until Planning Program v1 defines the mature entry path.
+
 ## Purpose
 
 This directory is the seed corpus for planning **how Everfield will be planned and built**.
@@ -17,6 +30,7 @@ It is deliberately upstream of implementation. The immediate objective is to con
 
 ## Current Documents
 
+- `START-HERE.md` — executable cold-start path, temporary claim/resume rules, context-loading discipline, and handoff requirements.
 - `00-project-charter.md` — project intent, constraints, success conditions, and non-goals for this phase.
 - `01-autonomous-factory-mandate.md` — requirements for an AI-only development organization with no routine human gate.
 - `02-game-design-mandate.md` — the high-level product and game-design direction that later design agents must preserve.
@@ -24,6 +38,18 @@ It is deliberately upstream of implementation. The immediate objective is to con
 - `04-evaluation-and-evidence.md` — initial requirements for machine-grounded judgment, CI evidence, protected evaluation, and playtesting.
 - `05-research-agenda.md` — unresolved questions and research missions that must be explored before major commitments.
 - `06-planning-deliverables.md` — expected canonical artifacts before implementation throughput begins.
+
+## Bootstrap Work Queue
+
+The current small bootstrap chain is represented by GitHub Issues, not by the 50 candidate missions in the seed planning document:
+
+- **#2** — produce the executable Planning Program v1 proposal / first-wave mission graph;
+- **#3** — adversarially review #2; blocked until #2 is review-ready;
+- **#4** — revise and synthesize; blocked until #2 and #3 are complete enough;
+- **#5** — cold-start verify the synthesized program; blocked until #4;
+- **#6** — canonicalize the verified program and instantiate the first detailed planning wave; blocked until #5 records PASS.
+
+Agents must evaluate issue prerequisites, not merely select the lowest open issue number.
 
 ## Planning Philosophy
 
@@ -63,6 +89,8 @@ Documents in this directory may have one of four states:
 
 Current documents are primarily **SEED** artifacts.
 
+No agent may infer CANONICAL status merely from a document existing on a branch or PR.
+
 ## Immediate Goal
 
 The next agents should turn this seed into a **Planning Program v1** that defines:
@@ -77,4 +105,4 @@ The next agents should turn this seed into a **Planning Program v1** that define
 - dependency extraction rules;
 - conditions for converting plans into GitHub Issues.
 
-Only after that program itself has been reviewed should the repository begin producing the detailed technical and game-design plans.
+Only after that program itself has been independently reviewed, revised, and cold-start verified should the repository begin producing the detailed technical and game-design plans.
