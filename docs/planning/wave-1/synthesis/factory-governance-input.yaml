@@ -1,0 +1,35 @@
+version: 1
+synthesis_issue: 37
+mission_id: W1-SYN-FAC
+synthesis_episode: w1-syn-fac-synthesizer-20260810-01
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+producer_and_reviewer_branches_immutable: true
+inputs:
+  producers:
+    - {mission_id: W1-GOV-01, issue: 22, status_comment_id: 5245434514, work_sha: ffa6b62b3b20c84a152e676b7a5db223daa130e5, artifact: docs/planning/wave-1/proposals/governance-and-canonicality.md}
+    - {mission_id: W1-FAC-01, issue: 23, status_comment_id: 5245474479, work_sha: e7fe3d0eaae22038e661ea941e652a618c3a7ec7, artifact: docs/planning/wave-1/proposals/agent-operating-model.md}
+    - {mission_id: W1-FAC-02, issue: 24, status_comment_id: 5245532215, work_sha: 095372a41498e8d7e3b25364cba89dbc647b8839, artifact: docs/planning/wave-1/proposals/github-control-plane-and-scheduler.md}
+    - {mission_id: W1-FAC-03, issue: 25, status_comment_id: 5245577951, work_sha: 70b763a965cdec0fa1f6c025a5b7492b844288fc, artifact: docs/planning/wave-1/proposals/review-verification-and-trust.md}
+    - {mission_id: W1-FAC-04, issue: 26, status_comment_id: 5245629575, work_sha: 99b0c7b3bddbad1a71e05f085fd0bd9f2c74e566, artifact: docs/planning/wave-1/proposals/ci-evidence-and-factory-measurement.md}
+  review:
+    mission_id: W1-REV-FAC
+    issue: 34
+    review_status_comment_id: 5245732114
+    work_sha: 4ffa7fd8a175bae504280160e8c48a508909e6f3
+    head_sha: 0dc3dac0d93c966a1b8fd07efff062dc45fa9733
+    disposition: CHANGES_REQUIRED
+    blocker_count: 1
+    major_count: 7
+    artifact: docs/planning/wave-1/reviews/factory-and-governance.md
+required_dispositions: [FG-B01, FG-M02, FG-M03, FG-M04, FG-M05, FG-M06, FG-M07, FG-M08]
+minor_findings_to_address_when_material: [FG-m09, FG-m10, FG-m11]
+notes_to_preserve: [FG-n12, FG-n13]
+forbidden_by_default:
+  - seed_mandates_unless_reviewed_evidence_cannot_disposition_a_conflict
+  - sibling_technical_game_proposals
+  - producer_or_reviewer_private_chat_rationale
+output: docs/planning/wave-1/synthesis/factory-governance-candidate.md
+required_next_review: W1-REV-CROSS
