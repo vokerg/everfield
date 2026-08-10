@@ -21,10 +21,13 @@ composition:
     path: docs/planning/10-planning-program-v1-canonicalization-manifest.yaml
     blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c
   operation_semantics:
-    replace_path: target_path_must_exist_in_base_and_is_replaced_entirely
-    extend_mapping: target_path_must_be_mapping_and_added_keys_must_not_exist_in_base
+    source_paths_resolve_in: this_overlay_manifest_document
+    target_paths_resolve_in: effective_manifest_tree_after_all_prior_operations
+    source_path_must_exist_exactly_once: true
+    replace_path: target_path_must_exist_and_is_replaced_entirely
+    extend_mapping: target_path_must_be_mapping_and_added_keys_must_not_exist
     append_unique_sequence: target_path_must_be_sequence_and_each_added_value_must_be_absent
-    invalid_on_target_mismatch_or_key_collision: true
+    invalid_on_target_mismatch_source_mismatch_or_key_collision: true
     operations_apply_in_list_order: true
 
 verification_contract:
@@ -82,10 +85,10 @@ operational_overlay:
         remediation_or_revision_issue_is_closed_completed: true
         new_candidate_manifest_and_adopted_blob_exist: true
         new_payload_is_selected_current_verification_payload: true
-        new_verified_base_main_sha_equals_current_main: true
+        new_verified_base_main_sha_must_equal_current_main: true
       ownership:
-        observed_head_sha_equals_current_verification_branch_head: true
-        previous_ownership_comment_id_equals_source_result_ownership_generation: true
+        observed_head_sha_must_equal_current_verification_branch_head: true
+        previous_ownership_comment_id_must_equal_source_result_ownership_generation: true
         winner: lowest_comment_id_for_same_source_new_tuple_base_and_head
         only_first_valid_winner_grant_creates_owner: true
       effect: new_ownership_generation
@@ -211,12 +214,9 @@ preserved_effective_base_paths:
   - wave_1_contract_adoption
   - operational_capsules.authority_metadata
   - operational_capsules.types
-  - operational_capsules.field_types_after_extension
   - operational_capsules.structured_types
   - operational_capsules.common_required
   - operational_capsules.common_rules
-  - operational_capsules.kinds_after_extension
-  - transition_table_after_extension
   - mutation_fence
   - next_wave_governor
 
