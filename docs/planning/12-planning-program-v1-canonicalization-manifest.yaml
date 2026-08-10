@@ -16,12 +16,18 @@ composition:
   base_candidate:
     path: docs/planning/11-planning-program-v1-bootstrap-final-candidate.md
     blob_sha: d083e5bfa108360818898f9628e939f50b4f3940
-    adoption: all_generic_protocol_and_issue16_corrections
+    adoption: all_clauses_exactly
   base_manifest:
     path: docs/planning/11-planning-program-v1-canonicalization-manifest.yaml
     blob_sha: bca34638a054d725239b936dd8232a7d274e814d
-    adoption: all_clauses_except_program_promotion_source_and_applicability_overrides_below
+    adoption: all_clauses_exactly
   adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+  overlay_precedence:
+    allowed_overrides:
+      - bootstrap_numbered_clause_authority_by_applicability_guard
+      - program_promotion_source_and_header_replacements
+    all_other_conflicts: BASE_ISSUE16_WINS
+    invented_generic_vs_nongeneric_partition: forbidden
   missing_or_mismatched_base_blob: VERIFICATION_FAILURE
 
 applicability_guard:
