@@ -1,0 +1,139 @@
+version: 1
+issue: 5
+mission_id: BOOTSTRAP-VERIFY-05
+episode: issue5-degraded-verifier-20260810-01
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+input_manifest_path: docs/planning/reviews/issue-5-final-cold-start-input-manifest.yaml
+input_manifest_blob_sha: ecd42d1060f96babe13273d7f07cbbad8fb24232
+candidate_blob_sha: 9829975eb3b8ac12b7dd8338a3569ff1a50cf309
+manifest_blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c
+adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+verified_base_main_sha: c822934c74cc5903b057e6d081f5e0a4c3e58226
+result: FAIL
+blocker_count: 1
+major_count: 0
+
+wave_1_graph_compile:
+  expected_missions: 23
+  observed_mission_classes:
+    roots: 12
+    domain_reviews: 3
+    domain_syntheses: 3
+    cross_review: 1
+    final_synthesis: 1
+    verifier: 1
+    canonicalizer: 1
+    recovery: 1
+  mission_ids:
+    - W1-REC-01
+    - W1-GOV-01
+    - W1-FAC-01
+    - W1-FAC-02
+    - W1-FAC-03
+    - W1-FAC-04
+    - W1-TEC-01
+    - W1-TEC-02
+    - W1-DES-01
+    - W1-DES-02
+    - W1-DES-03
+    - W1-EXP-01
+    - W1-EVAL-01
+    - W1-REV-FAC
+    - W1-REV-TECH
+    - W1-REV-GAME
+    - W1-SYN-FAC
+    - W1-SYN-TECH
+    - W1-SYN-GAME
+    - W1-REV-CROSS
+    - W1-SYN-FINAL
+    - W1-VERIFY-01
+    - W1-CANON-01
+  duplicate_mission_ids: false
+  hard_dependency_cycle_found: false
+  initial_normal_ready_after_terminal_binding: 12
+  recovery_initially_ready: false
+  result: PASS
+
+scenarios:
+  simultaneous_new_claimants:
+    result: PASS
+    evidence: deterministic branch creation plus earliest valid schema-3 CLAIM leaves one owner; alternate task branches are forbidden.
+  legacy_issue_5_BOOTSTRAP_RESUME_competition:
+    result: PASS
+    evidence: exact legacy HANDOFF predecessor plus lowest valid comment-id winner creates one schema-3 owner; current episode owner is comment 5244621850.
+  branch_created_then_claim_comment_crash:
+    result: PASS
+    evidence: branch-without-owner enters ORPHAN_PROBE, ten-minute server maturity, intent competition, RECOVER.
+  orphan_competing_recovery:
+    result: PASS
+    evidence: intents bind exact mature probe/head and lowest valid comment ID wins.
+  handoff_competing_resume:
+    result: PASS
+    evidence: STATUS(HANDOFF_READY) plus source/head-bound RESUME_INTENT and first valid RESUME grant.
+  stale_owner_continues_after_recovery:
+    result: PASS
+    evidence: later recovery generation plus mutation/result current-owner checks makes stale generation fail closed.
+  stale_reviewer_or_verifier_terminal_attempt:
+    result: PASS
+    evidence: REVIEW_STATUS, VERIFICATION_STATUS, BOOTSTRAP_VERIFICATION_STATUS and INTEGRATION_STATUS require current unexpired owner and current branch head.
+  wrong_type_illegal_null_unknown_kind_edited_capsule:
+    result: PASS
+    evidence: schema-3 closed field/type/nullability registry and edited/unknown fail-closed rules.
+  external_retirement_never_claimed_work:
+    result: PASS
+    evidence: STATUS authority_mode EXTERNAL allows only SUPERSEDED/INVALIDATED, null owner, typed external authorization, nullable head only if branch absent.
+  review_disposition_routing:
+    result: PASS
+    evidence: PASS_FOR_SYNTHESIS and CHANGES_REQUIRED route only to declared synthesis/revision; INVALIDATED routes only recovery/replanning.
+  domain_REVIEW_READY_vs_final_VERIFICATION_READY:
+    result: PASS
+    evidence: domain syntheses emit REVIEW_READY; final synthesis emits VERIFICATION_READY.
+  degraded_single_agent_profile:
+    result: PASS
+    evidence: resource constraint 5244416013, new role episode, immutable candidate, frozen cold-start inputs, candidate-edit prohibition, trust DEGRADED and reopen condition are explicit.
+  context_unknown_window_fallback:
+    result: PASS
+    evidence: deterministic 100000 UTF-8 fallback; silent truncation forbidden.
+  no_READY_liveness:
+    result: PASS
+    evidence: active owner, recoverable work, review/revision/verification/integration, then bounded recovery classification.
+  mechanical_AGENTS_phase_transition:
+    result: PASS
+    evidence: manifest changes title, Status, Current Phase and cold-start intervals and fully replaces START-HERE; all post-activation surfaces report PLANNING while implementation remains blocked.
+  post_merge_pre_terminal_window:
+    result: PASS
+    evidence: canonical program naming an issue with no prior valid binding permits only that canonicalization issue post-merge activation sequence.
+  later_unrelated_main_merge_preserves_binding:
+    result: PASS
+    evidence: canonical binding requires activation main SHA to be ancestor/equal current main, not equal current HEAD, and current program blob to match.
+  changed_program_blob_with_old_binding_yields_binding_mismatch:
+    result: PASS
+    evidence: prior valid binding for another current program blob routes CANONICAL_BINDING_MISMATCH recovery, not activation replay.
+  later_program_version_new_header_binding:
+    result: PASS
+    evidence: new canonical version changes Canonicalized-by issue and publishes a new program-blob binding.
+  main_advances_after_PASS_before_issue_6_claim_or_merge:
+    result: FAIL
+    finding: V5-B08
+    evidence: Issue #6 correctly requires current main equal PASS verified base, but after terminal Issue #5 PASS no registered transition re-acquires/reopens verification to bind the unchanged candidate to a new descendant base. Fail-closed behavior therefore strands bootstrap.
+  pre_activation_wave_1_claim:
+    result: PASS
+    evidence: no Wave 1 issues before squash; post-squash issues remain blocked until terminal Issue #6 canonical binding.
+  squash_only_integration:
+    result: PASS
+    evidence: root directive, candidate and manifest require squash-only main integration and INTEGRATION_STATUS merge_method is constant squash.
+
+regression_findings:
+  V5-B03: PASS_CORRECTED
+  V5-B04: PASS_CORRECTED
+  V5-B05: PASS_CORRECTED
+  V5-B06: PASS_CORRECTED
+  V5-B07: PASS_CORRECTED
+  V5-B08: BLOCKER
+
+required_remediation:
+  issue: 16
+  title: Close post-PASS base-drift re-verification gap
+  constraint: candidate_under_test_must_remain_immutable_in_this_verification_episode
