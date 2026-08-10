@@ -1,0 +1,523 @@
+version: 1
+state: REVIEWED_CANDIDATE_SUPPORT
+bootstrap_issue: 4
+candidate_path: docs/planning/08-planning-program-v1-reviewed-candidate.md
+dispositions_path: docs/planning/reviews/issue-3-finding-dispositions.md
+
+verification_contract:
+  verifier_issue: 5
+  required_result: PASS
+  bind:
+    - candidate_work_sha
+    - manifest_blob_or_work_sha
+    - verified_base_main_sha
+  pass_forbidden_with_unresolved_severity:
+    - BLOCKER
+    - MAJOR
+
+bootstrap_canonicalization:
+  issue: 6
+  pre_merge_requirements:
+    current_main_must_equal_verified_base_main_sha: true
+    base_drift_action: independent_compatibility_or_reverification
+    unresolved_blocker_major_forbidden: true
+    merge_method: squash
+  program_promotion:
+    source: docs/planning/08-planning-program-v1-reviewed-candidate.md
+    destination: docs/planning/PLANNING-PROGRAM-v1.md
+    transform:
+      type: exact_literal_replacements_then_byte_identical_remainder
+      replacements:
+        - from: "**State:** REVIEWED-CANDIDATE"
+          to: "**State:** CANONICAL"
+        - from: "**Bootstrap issue:** #4"
+          to: "**Canonicalized by:** Bootstrap Issue #6"
+        - from: "**Authority:** Candidate operating model only. It MUST NOT become CANONICAL until Bootstrap Issue #5 independently verifies this exact candidate work state and Bootstrap Issue #6 performs the verified, mechanically constrained promotion."
+          to: "**Authority:** CANONICAL planning operating model for the current planning phase, activated only after the verified Bootstrap Issue #6 squash integration recorded on GitHub."
+      all_other_bytes_identical: true
+  agents_entry_patch:
+    source_path: AGENTS.md
+    base_must_match_verified_main: true
+    replace_section:
+      heading: "## Mandatory Cold-Start Entry Point"
+      until_next_heading: "## Planning Work Output Rule"
+      replacement: |
+        ## Mandatory Cold-Start Entry Point
+
+        A fresh agent with no prior conversation context MUST:
+
+        1. Read this file.
+        2. Read `docs/planning/START-HERE.md`.
+        3. Follow the canonical Planning Program v1 referenced there.
+        4. Select/resume work only from repository + GitHub state using the canonical dispatcher rules.
+        5. Preserve the canonical squash-only `main` integration rule.
+
+        The bootstrap Issues #2-#6 are provenance after canonicalization and are not the normal work queue.
+
+  start_here_replacement:
+    path: docs/planning/START-HERE.md
+    content: |
+      # START HERE — Canonical Planning Entry
+
+      **Phase:** PLANNING  
+      **Authority:** Entry pointer to canonical Planning Program v1.
+
+      A fresh agent with no prior conversation context MUST:
+
+      1. Read `/AGENTS.md`.
+      2. Read `docs/planning/PLANNING-PROGRAM-v1.md` from current `main`.
+      3. Query open GitHub issues beginning with `[PLAN-v1]`.
+      4. Derive eligibility, ownership, recovery, priority, context, output, review, and handoff state exactly as defined by the canonical program.
+      5. Prefer resumable/recovery and review/revision/verification/integration work before new proposal work.
+      6. Never use prior chat history as project authority.
+      7. Never integrate into `main` except by squash merge.
+
+      Bootstrap planning artifacts remain provenance and may be read only when the canonical program or selected issue explicitly requires them.
+
+  post_merge_sequence:
+    - obtain_squash_main_sha
+    - verify_canonical_program_at_that_sha
+    - instantiate_exactly_23_wave_1_issues_from_this_manifest
+    - validate_all_created_issue_contracts
+    - post_mission_id_to_issue_number_mapping
+    - post_issue_6_DONE_with_main_sha
+  wave_1_creation_before_merge: forbidden
+
+issue_compiler:
+  title_template: "[PLAN-v1][{mission_id}] {title}"
+  body_field_order:
+    - Mission ID
+    - Role
+    - State at creation
+    - Priority rank
+    - Objective
+    - Hard prerequisites
+    - Conflict/ownership surface
+    - Authoritative inputs
+    - Optional retrieval triggers
+    - Forbidden-by-default context
+    - Output path(s)
+    - Output schema
+    - Evidence requirements
+    - Acceptance criteria
+    - Required independent critique/review
+    - Downstream missions unblocked
+    - Branch/base rule
+    - Stopping/handoff rule
+    - Canonicalization/integration rule
+  common_branch_rule: "Use planning/issue-N from current main after the concrete Wave 1 activation SHA is satisfied."
+  common_stopping_rule: "Commit useful state; update docs/planning/handoffs/issue-N.md; post final STATUS with exact branch head."
+  common_integration_rule: "No artifact becomes canonical by authorship or PR existence; every main integration is squash-only and follows the mission review/verification route."
+  common_forbidden_context: "All planning documents not listed as authoritative inputs are forbidden-by-default unless an optional retrieval trigger is satisfied."
+  root_output_schema: proposal_research_v1
+  review_output_schema: adversarial_review_v1
+  synthesis_output_schema: synthesis_v1
+  verification_output_schema: verification_v1
+  activation_prerequisite:
+    bootstrap_issue: 6
+    required_state: DONE
+    required_integration_method: squash
+    required_main_sha: RESOLVE_FROM_ISSUE_6_POST_MERGE_STATUS
+    required_canonical_program: docs/planning/PLANNING-PROGRAM-v1.md
+
+universal_root_acceptance:
+  - exact_output_exists
+  - review_index_at_most_4000_utf8_chars
+  - proposal_research_schema_satisfied
+  - scope_and_non_goals_explicit
+  - assumptions_evidence_inference_recommendations_distinguished
+  - material_alternatives_fairly_represented
+  - current_external_claims_authoritative_or_deferred
+  - empirical_uncertainty_bounded_as_experiment
+  - interfaces_dependencies_conflict_surfaces_explicit
+  - observability_and_failure_modes_explicit
+  - open_questions_and_reopen_conditions_explicit
+  - required_critique_named
+  - no_self_instantiated_current_wave_work
+  - handoff_and_final_head_status_present
+  - pr_for_diff_visibility_or_explicit_no_pr_rationale
+
+wave_1:
+  initial_issue_count: 23
+  max_initial_ready: 12
+  instantiate_only_after_bootstrap_merge: true
+  missions:
+    - mission_id: W1-REC-01
+      title: Planning liveness recovery
+      role: checkpoint/recovery agent
+      priority_rank: 5
+      initial_state: BLOCKED
+      objective: Diagnose a planning liveness defect and restore the smallest credible READY path without bypassing review, verification, canonicalization, or squash integration.
+      prerequisites:
+        condition: no_normal_ready_or_recoverable_work_and_no_valid_active_owner_can_unblock_graph
+      ownership_surface: docs/planning/wave-1/recovery/
+      authoritative_inputs:
+        - docs/planning/PLANNING-PROGRAM-v1.md
+        - complete_relevant_open_PLAN_v1_issue_graph
+        - latest_valid_capsules_for_affected_missions
+        - affected_task_branches_and_handoffs_as_needed
+      optional_retrieval: Earlier proposal/review/synthesis artifacts only to trace the specific invalidated dependency or contradiction.
+      output: docs/planning/wave-1/recovery/liveness-recovery.md
+      schema: recovery_episode_v1
+      evidence: Graph snapshot, failure classification, affected mission IDs/SHAs, smallest remediation, resulting eligible path.
+      acceptance: Single-use episode; no gate waiver; accepted integration may create exactly one blocked successor W1-REC-02.
+      review: independent_review_or_verification_as_required_by_remediation
+      downstream: restored_ready_path_and_optional_single_successor_recovery_issue
+
+    - mission_id: W1-GOV-01
+      title: Governance, canonicality, and provenance
+      role: governance planner
+      priority_rank: 10
+      initial_state: BLOCKED
+      objective: Propose autonomy constitution, human-directive semantics, canonicality/decision rules, risk model, self-modification boundaries, and legal/IP/provenance requirements.
+      ownership_surface: docs/planning/wave-1/proposals/governance-and-canonicality.md
+      authoritative_inputs: [AGENTS.md, docs/planning/00-project-charter.md, docs/planning/01-autonomous-factory-mandate.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/governance-and-canonicality.md
+      schema: proposal_research_v1
+      review: W1-REV-FAC
+      downstream: [W1-REV-FAC]
+
+    - mission_id: W1-FAC-01
+      title: Agent operating model and context/handoff lifecycle
+      role: factory operating-model planner
+      priority_rank: 20
+      initial_state: BLOCKED
+      objective: Define roles, task/session lifecycle, continuation, context disclosure, branch semantics, stopping/handoff quality, and discovered-work routing.
+      ownership_surface: docs/planning/wave-1/proposals/agent-operating-model.md
+      authoritative_inputs: [AGENTS.md, docs/planning/01-autonomous-factory-mandate.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/agent-operating-model.md
+      schema: proposal_research_v1
+      review: W1-REV-FAC
+      downstream: [W1-REV-FAC]
+
+    - mission_id: W1-FAC-02
+      title: GitHub control plane, dependencies, and scheduler
+      role: control-plane/scheduler planner
+      priority_rank: 30
+      initial_state: BLOCKED
+      objective: Design mature atomic claiming, issue/dependency state, READY algorithm, WIP policy, scheduler, PR/merge lifecycle, garbage collection, and machine automation.
+      ownership_surface: docs/planning/wave-1/proposals/github-control-plane-and-scheduler.md
+      authoritative_inputs: [AGENTS.md, docs/planning/01-autonomous-factory-mandate.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md, docs/planning/PLANNING-PROGRAM-v1.md]
+      output: docs/planning/wave-1/proposals/github-control-plane-and-scheduler.md
+      schema: proposal_research_v1
+      evidence: Current GitHub capabilities must use authoritative GitHub documentation or empirical tests; identify unenforceable surfaces.
+      review: [W1-REV-FAC, W1-REV-TECH]
+      downstream: [W1-REV-FAC, W1-REV-TECH]
+
+    - mission_id: W1-FAC-03
+      title: Independent review, verification, and trust boundaries
+      role: verification/trust planner
+      priority_rank: 40
+      initial_state: BLOCKED
+      objective: Define review classes, independence, disagreement handling, protected evaluation, permission boundaries, evidence sufficiency, anti-Goodhart controls, and integration eligibility.
+      ownership_surface: docs/planning/wave-1/proposals/review-verification-and-trust.md
+      authoritative_inputs: [docs/planning/01-autonomous-factory-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/review-verification-and-trust.md
+      schema: proposal_research_v1
+      review: [W1-REV-FAC, W1-REV-TECH]
+      downstream: [W1-REV-FAC, W1-REV-TECH]
+
+    - mission_id: W1-FAC-04
+      title: CI, evidence topology, and factory measurement
+      role: CI/evidence/factory-measurement planner
+      priority_rank: 50
+      initial_state: BLOCKED
+      objective: Propose run reports, evidence provenance/retention, CI taxonomy, flake policy, factory metrics, benchmarks, and protocol-change measurement.
+      ownership_surface: docs/planning/wave-1/proposals/ci-evidence-and-factory-measurement.md
+      authoritative_inputs: [docs/planning/01-autonomous-factory-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/ci-evidence-and-factory-measurement.md
+      schema: proposal_research_v1
+      review: [W1-REV-FAC, W1-REV-TECH]
+      downstream: [W1-REV-FAC, W1-REV-TECH]
+
+    - mission_id: W1-TEC-01
+      title: Engine evaluation program and representative spikes
+      role: engine evaluation planner
+      priority_rank: 60
+      initial_state: BLOCKED
+      objective: Define engine screening, comparative rubric, representative autonomous-development spikes, and ADR decision protocol without selecting an engine prematurely.
+      ownership_surface: docs/planning/wave-1/proposals/engine-evaluation-program.md
+      authoritative_inputs: [docs/planning/00-project-charter.md, docs/planning/01-autonomous-factory-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/engine-evaluation-program.md
+      schema: proposal_research_v1
+      review: W1-REV-TECH
+      downstream: [W1-REV-TECH]
+
+    - mission_id: W1-TEC-02
+      title: Runtime, data, determinism, persistence, and content foundation
+      role: technical-foundation planner
+      priority_rank: 70
+      initial_state: BLOCKED
+      objective: Define engine-independent runtime/data boundaries, determinism, persistence/migration, IDs/schemas, content validation, performance observability, and extension/conflict constraints.
+      ownership_surface: docs/planning/wave-1/proposals/runtime-data-foundation.md
+      authoritative_inputs: [docs/planning/00-project-charter.md, docs/planning/02-game-design-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/runtime-data-foundation.md
+      schema: proposal_research_v1
+      review: [W1-REV-TECH, W1-REV-GAME]
+      downstream: [W1-REV-TECH, W1-REV-GAME]
+
+    - mission_id: W1-DES-01
+      title: Game-design foundation and possibility-space model
+      role: game-design foundation planner
+      priority_rank: 80
+      initial_state: BLOCKED
+      objective: Propose game pillars, time-horizon loops, possibility-space/sandbox structure, discovery, system decomposition, chore policy, extensibility, and late-game principles.
+      ownership_surface: docs/planning/wave-1/proposals/game-design-foundation.md
+      authoritative_inputs: [docs/planning/00-project-charter.md, docs/planning/02-game-design-mandate.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/game-design-foundation.md
+      schema: proposal_research_v1
+      review: W1-REV-GAME
+      downstream: [W1-REV-GAME]
+
+    - mission_id: W1-DES-02
+      title: Economy, progression, automation, and sandbox viability
+      role: economy/progression/automation planner
+      priority_rank: 90
+      initial_state: BLOCKED
+      objective: Propose progression/automation/economy principles, viable playstyles, dominant-strategy detection, late-game sinks, and simulation requirements without inventing balance facts.
+      ownership_surface: docs/planning/wave-1/proposals/economy-progression-automation.md
+      authoritative_inputs: [docs/planning/00-project-charter.md, docs/planning/02-game-design-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/economy-progression-automation.md
+      schema: proposal_research_v1
+      review: W1-REV-GAME
+      downstream: [W1-REV-GAME]
+
+    - mission_id: W1-DES-03
+      title: World, NPC, social, narrative, quest, and content architecture
+      role: world/narrative systems planner
+      priority_rank: 100
+      initial_state: BLOCKED
+      objective: Propose interfaces among world state, NPC simulation, relationships, dialogue, quests, narrative facts, generated/authored content, consistency, and progression consequences.
+      ownership_surface: docs/planning/wave-1/proposals/world-social-narrative-content.md
+      authoritative_inputs: [docs/planning/00-project-charter.md, docs/planning/02-game-design-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/world-social-narrative-content.md
+      schema: proposal_research_v1
+      review: W1-REV-GAME
+      downstream: [W1-REV-GAME]
+
+    - mission_id: W1-EXP-01
+      title: UX, accessibility, visual, and audio production/evaluation foundations
+      role: experience-pipeline planner
+      priority_rank: 110
+      initial_state: BLOCKED
+      objective: Define UX/onboarding/accessibility constraints plus visual/audio production, provenance, consistency, and multimodal evaluation foundations without fixing final style.
+      ownership_surface: docs/planning/wave-1/proposals/experience-accessibility-media.md
+      authoritative_inputs: [docs/planning/00-project-charter.md, docs/planning/02-game-design-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/experience-accessibility-media.md
+      schema: proposal_research_v1
+      review: W1-REV-GAME
+      downstream: [W1-REV-GAME]
+
+    - mission_id: W1-EVAL-01
+      title: Automated game evaluation and synthetic players
+      role: game-evaluation planner
+      priority_rank: 120
+      initial_state: BLOCKED
+      objective: Define semantic coverage, synthetic players, simulation/exploit search, subjective judge protocols, evaluator versioning, and protected/golden scenarios without a single fun score.
+      ownership_surface: docs/planning/wave-1/proposals/automated-game-evaluation.md
+      authoritative_inputs: [docs/planning/00-project-charter.md, docs/planning/02-game-design-mandate.md, docs/planning/04-evaluation-and-evidence.md, docs/planning/05-research-agenda.md, docs/planning/06-planning-deliverables.md]
+      output: docs/planning/wave-1/proposals/automated-game-evaluation.md
+      schema: proposal_research_v1
+      review: [W1-REV-TECH, W1-REV-GAME]
+      downstream: [W1-REV-TECH, W1-REV-GAME]
+
+    - mission_id: W1-REV-FAC
+      title: Factory/governance adversarial review
+      role: independent adversarial reviewer
+      priority_rank: 210
+      initial_state: BLOCKED
+      objective: Attack governance/factory proposals for hidden gates, authority ambiguity, claim/recovery races, context overload, self-modification loopholes, Goodhart paths, WIP growth, garbage collection, merge safety, and READY-frontier collapse.
+      ownership_surface: docs/planning/wave-1/reviews/factory-and-governance.md
+      prerequisites:
+        all_review_ready: [W1-GOV-01, W1-FAC-01, W1-FAC-02, W1-FAC-03, W1-FAC-04]
+      authoritative_inputs:
+        - W1-GOV-01@work_sha
+        - W1-FAC-01@work_sha
+        - W1-FAC-02@work_sha
+        - W1-FAC-03@work_sha
+        - W1-FAC-04@work_sha
+        - prerequisite_status_capsules
+      output: docs/planning/wave-1/reviews/factory-and-governance.md
+      schema: adversarial_review_v1
+      allowed_dispositions: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED]
+      downstream:
+        PASS_FOR_SYNTHESIS: [W1-SYN-FAC]
+        CHANGES_REQUIRED: [W1-SYN-FAC]
+        INVALIDATED: [W1-REC-01]
+
+    - mission_id: W1-REV-TECH
+      title: Technical/evidence adversarial review
+      role: independent adversarial reviewer
+      priority_rank: 220
+      initial_state: BLOCKED
+      objective: Attack technical/evidence proposals for premature engine assumptions, fake evidence, nondeterminism, unversioned/protected-oracle weakness, merge-hostile architecture, schema bottlenecks, and untestable requirements.
+      ownership_surface: docs/planning/wave-1/reviews/technical-and-evidence.md
+      prerequisites:
+        all_review_ready: [W1-FAC-02, W1-FAC-03, W1-FAC-04, W1-TEC-01, W1-TEC-02, W1-EVAL-01]
+      authoritative_inputs: [W1-FAC-02@work_sha, W1-FAC-03@work_sha, W1-FAC-04@work_sha, W1-TEC-01@work_sha, W1-TEC-02@work_sha, W1-EVAL-01@work_sha, prerequisite_status_capsules]
+      output: docs/planning/wave-1/reviews/technical-and-evidence.md
+      schema: adversarial_review_v1
+      allowed_dispositions: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED]
+      downstream:
+        PASS_FOR_SYNTHESIS: [W1-SYN-TECH]
+        CHANGES_REQUIRED: [W1-SYN-TECH]
+        INVALIDATED: [W1-REC-01]
+
+    - mission_id: W1-REV-GAME
+      title: Game/experience adversarial review
+      role: independent adversarial reviewer
+      priority_rank: 230
+      initial_state: BLOCKED
+      objective: Attack game/experience proposals for fake sandbox diversity, dominant progression, automation eliminating play, content inflation, shallow interaction, narrative disconnects, inaccessible complexity, evaluator blind spots, and cloning risk.
+      ownership_surface: docs/planning/wave-1/reviews/game-and-experience.md
+      prerequisites:
+        all_review_ready: [W1-TEC-02, W1-DES-01, W1-DES-02, W1-DES-03, W1-EXP-01, W1-EVAL-01]
+      authoritative_inputs: [W1-TEC-02@work_sha, W1-DES-01@work_sha, W1-DES-02@work_sha, W1-DES-03@work_sha, W1-EXP-01@work_sha, W1-EVAL-01@work_sha, prerequisite_status_capsules]
+      output: docs/planning/wave-1/reviews/game-and-experience.md
+      schema: adversarial_review_v1
+      allowed_dispositions: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED]
+      downstream:
+        PASS_FOR_SYNTHESIS: [W1-SYN-GAME]
+        CHANGES_REQUIRED: [W1-SYN-GAME]
+        INVALIDATED: [W1-REC-01]
+
+    - mission_id: W1-SYN-FAC
+      title: Factory/governance synthesis candidate
+      role: synthesis/revision agent independent of reviewed producers and reviewer
+      priority_rank: 310
+      initial_state: BLOCKED
+      objective: Disposition every BLOCKER/MAJOR and synthesize coherent governance, agent lifecycle, control-plane, trust, CI/evidence, measurement, and self-improvement interfaces.
+      ownership_surface: docs/planning/wave-1/synthesis/factory-governance-candidate.md
+      prerequisites:
+        review: W1-REV-FAC
+        allowed_review_disposition: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED]
+      authoritative_inputs: [W1-GOV-01@reviewed_work_sha, W1-FAC-01@reviewed_work_sha, W1-FAC-02@reviewed_work_sha, W1-FAC-03@reviewed_work_sha, W1-FAC-04@reviewed_work_sha, W1-REV-FAC@work_sha, prerequisite_status_capsules]
+      output: docs/planning/wave-1/synthesis/factory-governance-candidate.md
+      schema: synthesis_v1
+      completion_state: REVIEW_READY
+      review: W1-REV-CROSS
+      downstream: [W1-REV-CROSS]
+
+    - mission_id: W1-SYN-TECH
+      title: Technical/evidence synthesis candidate
+      role: synthesis/revision agent independent of reviewed producers and reviewer
+      priority_rank: 320
+      initial_state: BLOCKED
+      objective: Disposition every BLOCKER/MAJOR and reconcile runtime/data/evidence/evaluation contracts while producing an evidence path rather than an unsupported engine choice.
+      ownership_surface: docs/planning/wave-1/synthesis/technical-evidence-candidate.md
+      prerequisites:
+        review: W1-REV-TECH
+        allowed_review_disposition: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED]
+      authoritative_inputs: [W1-FAC-02@reviewed_work_sha, W1-FAC-03@reviewed_work_sha, W1-FAC-04@reviewed_work_sha, W1-TEC-01@reviewed_work_sha, W1-TEC-02@reviewed_work_sha, W1-EVAL-01@reviewed_work_sha, W1-REV-TECH@work_sha, prerequisite_status_capsules]
+      output: docs/planning/wave-1/synthesis/technical-evidence-candidate.md
+      schema: synthesis_v1
+      completion_state: REVIEW_READY
+      review: W1-REV-CROSS
+      downstream: [W1-REV-CROSS]
+
+    - mission_id: W1-SYN-GAME
+      title: Game/experience synthesis candidate
+      role: synthesis/revision agent independent of reviewed producers and reviewer
+      priority_rank: 330
+      initial_state: BLOCKED
+      objective: Disposition every BLOCKER/MAJOR and reconcile loops, sandbox, economy/progression/automation, world/social/narrative/content, UX/accessibility/media, technical constraints, and evaluation.
+      ownership_surface: docs/planning/wave-1/synthesis/game-experience-candidate.md
+      prerequisites:
+        review: W1-REV-GAME
+        allowed_review_disposition: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED]
+      authoritative_inputs: [W1-TEC-02@reviewed_work_sha, W1-DES-01@reviewed_work_sha, W1-DES-02@reviewed_work_sha, W1-DES-03@reviewed_work_sha, W1-EXP-01@reviewed_work_sha, W1-EVAL-01@reviewed_work_sha, W1-REV-GAME@work_sha, prerequisite_status_capsules]
+      output: docs/planning/wave-1/synthesis/game-experience-candidate.md
+      schema: synthesis_v1
+      completion_state: REVIEW_READY
+      review: W1-REV-CROSS
+      downstream: [W1-REV-CROSS]
+
+    - mission_id: W1-REV-CROSS
+      title: Cross-domain interface/parallelism adversarial review
+      role: independent cross-domain reviewer
+      priority_rank: 410
+      initial_state: BLOCKED
+      objective: Attack contradictions, hidden serialization, shared ownership surfaces, circular interfaces, untestable requirements, evaluator/control-plane conflicts, readiness leakage, and concurrency collapse.
+      ownership_surface: docs/planning/wave-1/reviews/cross-domain-interface-and-parallelism.md
+      prerequisites:
+        all_review_ready: [W1-SYN-FAC, W1-SYN-TECH, W1-SYN-GAME]
+      authoritative_inputs: [W1-SYN-FAC@work_sha, W1-SYN-TECH@work_sha, W1-SYN-GAME@work_sha, prerequisite_status_capsules]
+      output: docs/planning/wave-1/reviews/cross-domain-interface-and-parallelism.md
+      schema: adversarial_review_v1
+      allowed_dispositions: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED]
+      downstream:
+        PASS_FOR_SYNTHESIS: [W1-SYN-FINAL]
+        CHANGES_REQUIRED: [W1-SYN-FINAL]
+        INVALIDATED: [W1-REC-01]
+
+    - mission_id: W1-SYN-FINAL
+      title: Wave-1 canonicalization candidate and dependency map
+      role: final planning synthesizer distinct from cross-domain reviewer
+      priority_rank: 510
+      initial_state: BLOCKED
+      objective: Disposition cross-domain BLOCKER/MAJOR findings, separate candidate canonical decisions from deferrals, and emit typed dependencies, empirical work, conflicts, bounded next-wave candidates, and implementation-readiness blockers.
+      ownership_surface: docs/planning/wave-1/synthesis/
+      prerequisites:
+        review: W1-REV-CROSS
+        allowed_review_disposition: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED]
+      authoritative_inputs: [W1-SYN-FAC@reviewed_work_sha, W1-SYN-TECH@reviewed_work_sha, W1-SYN-GAME@reviewed_work_sha, W1-REV-CROSS@work_sha, prerequisite_status_capsules]
+      outputs: [docs/planning/wave-1/synthesis/wave-1-canonicalization-candidate.md, docs/planning/wave-1/synthesis/dependency-map.yaml, docs/planning/wave-1/synthesis/next-wave-promotion-manifest.yaml]
+      schema: final_synthesis_v1
+      completion_state: VERIFICATION_READY
+      downstream: [W1-VERIFY-01]
+
+    - mission_id: W1-VERIFY-01
+      title: Independent wave-1 cold-start/coherence verification
+      role: verifier distinct from final synthesizer and cross reviewer
+      priority_rank: 610
+      initial_state: BLOCKED
+      objective: Independently verify exact final-synthesis work state, promotion manifest, issue graph, claim/recovery/fencing, base pinning, context limits, implementation barrier, and squash integration behavior.
+      ownership_surface: docs/planning/wave-1/reviews/wave-1-cold-start-verification.md
+      prerequisites:
+        exact_state: W1-SYN-FINAL@VERIFICATION_READY
+      authoritative_inputs: [W1-SYN-FINAL@work_sha, dependency_map_from_same_work_sha, next_wave_promotion_manifest_from_same_work_sha, complete_current_PLAN_v1_issue_graph_and_valid_capsules, current_main_entry_docs]
+      output: docs/planning/wave-1/reviews/wave-1-cold-start-verification.md
+      schema: verification_v1
+      result: [PASS, FAIL]
+      downstream:
+        PASS: [W1-CANON-01]
+        FAIL: [bounded_remediation_only]
+
+    - mission_id: W1-CANON-01
+      title: Canonicalize accepted wave-1 foundations and instantiate next bounded wave
+      role: integration/canonicalization agent distinct from final synthesizer and verifier
+      priority_rank: 710
+      initial_state: BLOCKED
+      objective: Promote only the exact verified Wave 1 candidate using its verified promotion manifest, retire superseded work, and instantiate only the compiler-validated bounded next wave.
+      ownership_surface: canonical planning locations plus docs/planning/wave-1/canonicalization-report.md
+      prerequisites:
+        verification: W1-VERIFY-01@PASS
+        exact_candidate_match_required: true
+        verified_base_current_main_match_or_reverification: true
+      authoritative_inputs: [W1-SYN-FINAL@verified_work_sha, dependency_map_same_work_state, next_wave_promotion_manifest_same_work_state, W1-VERIFY-01@PASS_work_sha, current_main_entry_docs, current_wave_issue_status_for_retirement]
+      output: docs/planning/wave-1/canonicalization-report.md
+      schema: canonicalization_report_v1
+      integration: squash_only
+      next_wave_governor:
+        max_new_issues: 24
+        max_initial_ready: 12
+        compiler_checks: [unique_mission_ids, acyclic_hard_dependencies, no_output_path_collisions, ownership_conflict_validation, required_review_routes, activation_prerequisites]
+
+non_root_optional_retrieval:
+  W1-REV-FAC: Seed/mandate docs only to test a concrete contradiction or omission.
+  W1-REV-TECH: Primary technical sources or seed mandates only to test a concrete claim/omission.
+  W1-REV-GAME: Charter/game/evaluation seed docs only to test intent, reference boundaries, or evaluator requirements.
+  W1-SYN-FAC: Seed mandates only when reviewed evidence cannot disposition a finding/conflict.
+  W1-SYN-TECH: Primary technical evidence only when a finding disposition depends on a current technical claim.
+  W1-SYN-GAME: Seed mandates only to adjudicate intent preservation or unresolved cross-artifact conflict.
+  W1-REV-CROSS: Earlier root/review artifacts only to trace a concrete disputed provenance chain.
+  W1-SYN-FINAL: Earlier proposals/reviews only to trace a disputed finding/evidence claim.
+  W1-VERIFY-01: Earlier provenance only to verify a contradiction or promotion lineage.
+  W1-CANON-01: Earlier provenance only to validate promotion, supersession, or disposition.
+
+next_wave_candidate_schema:
+  required_fields: [mission_id, role, priority_rank, objective, hard_prerequisites, ownership_surface, authoritative_inputs, output_paths, output_schema, evidence_requirements, acceptance_criteria, required_review, downstream, integration_rule]
+  candidates_may_exceed_instantiation_cap: true
+  excess_candidates_state: DEFERRED
+  max_instantiated_per_activation: 24
+  max_initial_ready_per_activation: 12
