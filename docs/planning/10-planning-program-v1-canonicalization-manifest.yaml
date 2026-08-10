@@ -48,9 +48,24 @@ bootstrap_bridge:
     branch: planning/issue-5
     legacy_predecessor:
       selection: latest_matching_legacy_STATUS
-      required_fields: [kind, issue, branch, state, remediation_issue, remediation_work_sha, remediation_head_sha, remediation_candidate, remediation_manifest, verified_base_main_sha, next_action]
+      must_be_unedited: true
+      required_fields: [kind, issue, branch, head_sha, state, remediation_issue, remediation_work_sha, remediation_head_sha, remediation_candidate, remediation_manifest, verified_base_main_sha, next_action]
+      field_types:
+        kind: nonempty_string
+        issue: positive_integer
+        branch: nonempty_string
+        head_sha: sha40
+        state: nonempty_string
+        remediation_issue: positive_integer
+        remediation_work_sha: sha40
+        remediation_head_sha: sha40
+        remediation_candidate: repo_path
+        remediation_manifest: repo_path
+        verified_base_main_sha: sha40
+        next_action: nonempty_string
       constants: {kind: STATUS, issue: 5, branch: planning/issue-5, state: HANDOFF_READY, remediation_issue: 14, next_action: reverify_issue_14_payload}
       remediation_work_and_head_must_exist: true
+      head_sha_must_equal_issue_5_branch_head_at_comment_creation: true
     ownership_acquisition_kind: BOOTSTRAP_RESUME
     result_kind: BOOTSTRAP_VERIFICATION_STATUS
   issue_6:
@@ -180,6 +195,10 @@ operational_capsules:
     nonempty_string: utf8_length_1_to_4096
     session_id: utf8_length_1_to_256
     boolean: true_or_false
+    list: yaml_sequence
+    map: yaml_mapping
+    structured: tagged_yaml_mapping
+    list_session_id: yaml_sequence_of_session_id
     immutable_ref: sha40_or_exact_comment_id_or_workflow_artifact_id_or_repo_path_at_work_sha
 
   field_types:
@@ -288,7 +307,7 @@ operational_capsules:
       scope: issue_5_only
       required: [state, observed_head_sha, legacy_predecessor_comment_id, previous_ownership_comment_id]
       constants: {state: IN_PROGRESS, previous_ownership_comment_id: null}
-      predecessor: {matches_bootstrap_bridge_legacy_predecessor: true, observed_head_equals_legacy_predecessor_head: true}
+      predecessor: {matches_bootstrap_bridge_legacy_predecessor: true, observed_head_equals_legacy_predecessor_head: true, current_head_equals_observed_head: true}
       winner: lowest_comment_id_for_same_legacy_predecessor_and_head
       effect: new_owner_generation
 
@@ -301,10 +320,7 @@ operational_capsules:
     RESUME_INTENT:
       required: [reason, source_comment_id, observed_head_sha]
       enums: {reason: [HANDOFF, STALE, ORPHAN]}
-      predecessor:
-        HANDOFF: STATUS_HANDOFF_READY
-        STALE: expired_current_owner_or_PROGRESS
-        ORPHAN: mature_ORPHAN_PROBE
+      predecessor: {HANDOFF: STATUS_HANDOFF_READY, STALE: expired_current_owner_or_PROGRESS, ORPHAN: mature_ORPHAN_PROBE}
       current_head_must_equal_observed_head: true
       winner: lowest_comment_id_for_same_source_and_head
       effect: none
@@ -320,12 +336,8 @@ operational_capsules:
       required: [state, recovery_reason, observed_head_sha, previous_ownership_comment_id, winning_intent_comment_id, source_comment_id]
       constants: {state: IN_PROGRESS}
       enums: {recovery_reason: [STALE, ORPHAN]}
-      predecessor:
-        STALE: winning_STALE_intent_and_source_still_stale
-        ORPHAN: winning_ORPHAN_intent_and_probe_still_mature
-      previous_ownership:
-        STALE: equals_recovered_generation
-        ORPHAN: null
+      predecessor: {STALE: winning_STALE_intent_and_source_still_stale, ORPHAN: winning_ORPHAN_intent_and_probe_still_mature}
+      previous_ownership: {STALE: equals_recovered_generation, ORPHAN: null}
       rules: [actor_equals_winning_intent_actor, current_head_equals_observed_head, first_valid_grant_for_intent_only]
       effect: new_owner_generation
 
