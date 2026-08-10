@@ -1,8 +1,10 @@
-# AGENTS.md — Planning Bootstrap
+# AGENTS.md — Canonical Planning
 
 ## Status
 
-This file governs the **pre-implementation planning phase** of Everfield. It is intentionally provisional. Future planning work is expected to replace or substantially expand it before implementation begins.
+This file governs Everfield's **pre-implementation PLANNING phase** and delegates normal planning dispatch to canonical `docs/planning/PLANNING-PROGRAM-v1.md` through `docs/planning/START-HERE.md`.
+
+Bootstrap planning artifacts are provenance after canonical activation. High-throughput gameplay implementation remains blocked until a later independently verified implementation-readiness decision.
 
 ## Prime Directive
 
@@ -10,26 +12,11 @@ Everfield is an AI-native project. The normal development process must not depen
 
 ## Current Phase
 
-The repository is currently in **PLAN-THE-PLAN** mode.
+The repository is in **PLANNING** mode under canonical Planning Program v1.
 
-Agents working under this version of `AGENTS.md` MUST NOT:
+Agents MUST NOT implement gameplay/high-throughput implementation before verified implementation readiness, choose an engine as an unreviewed assumption, generate an unbounded implementation backlog, treat design hypotheses as permanently settled, or optimize for a single quality metric.
 
-- implement gameplay;
-- choose an engine as an unreviewed assumption;
-- generate a large implementation backlog;
-- treat any current design hypothesis as permanently settled;
-- optimize for issue count, code volume, or token efficiency.
-
-Agents SHOULD:
-
-- refine the autonomous development model;
-- research relevant software-engineering, agentic, game-development, testing, evaluation, and CI practices;
-- define measurable decision processes;
-- identify unresolved design questions;
-- propose competing approaches;
-- design planning-agent missions;
-- define how planning outputs will be criticized and synthesized;
-- preserve important conclusions in repository-owned artifacts.
+Agents SHOULD execute bounded canonical planning missions, preserve evidence/provenance, and reopen assumptions when evidence requires it.
 
 ## Canonical Working Principles
 
@@ -50,13 +37,14 @@ A fresh agent with no prior conversation context MUST:
 
 1. Read this file.
 2. Read `docs/planning/START-HERE.md`.
-3. Inspect open GitHub issues beginning with `[PLAN-BOOTSTRAP]`.
-4. Follow the eligibility, claim/resume, branch, context-loading, output, review, and handoff rules in `START-HERE.md` and in the selected issue.
-5. Read `docs/planning/README.md` only after the entry protocol tells it what planning context is relevant.
+3. Read current canonical `docs/planning/PLANNING-PROGRAM-v1.md`.
+4. Parse its `Canonicalized by` issue and resolve the active canonical binding defined by the program.
+5. If binding resolves, select/resume open `[PLAN-v1]` work under the canonical dispatcher.
+6. If no binding exists and the named issue has never published a canonical binding, execute only that issue's verified post-merge activation sequence.
+7. If a prior binding exists for another program blob, fail closed as `CANONICAL_BINDING_MISMATCH` and use canonical recovery/reverification.
+8. Never use chat history as project authority and never integrate into `main` except by squash merge.
 
-Do **not** choose one of the candidate missions in `docs/planning/03-planning-program.md` directly. Those missions are seed material until Planning Program v1 turns them into an executable mission graph.
-
-At the current bootstrap state, Issue #2 is the first executable planning task after seed PR #1 is integrated. Issues #3–#6 form its gated review/synthesis/verification/canonicalization chain and are not eligible until their stated prerequisites are met.
+After active canonical binding, Bootstrap Issues #2-#6, #11, and #14 are provenance only.
 
 ## Planning Work Output Rule
 
