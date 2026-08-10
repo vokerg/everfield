@@ -3,7 +3,7 @@ role: Planning synthesizer / revision agent
 branch: planning/issue-4
 head_sha: 1d7b9a980e74d6999789c86694f3c7fb99e13b99
 base_sha: 21a3c1a5053f3697be3f82f6fe73de42423a482b
-state: REVIEW_READY
+state: VERIFICATION_READY
 completed:
   - Re-entered from current main after Issue #3 squash integration and re-read AGENTS.md, docs/planning/START-HERE.md, and Issue #4.
   - Claimed planning/issue-4 deterministically from main@21a3c1a5053f3697be3f82f6fe73de42423a482b.
@@ -15,6 +15,7 @@ completed:
   - Added orphan-branch recovery, append-only/server-time capsule validation, ownership generations, stale-writer fencing, review-disposition transition predicates, context budgets, single-use recovery episodes, verified-base pinning, post-merge Wave 1 instantiation, and hard next-wave governors.
   - Corrected an Issue #4 self-review finding so domain syntheses complete REVIEW_READY while only final synthesis/bootstrap final candidates proceed to verification readiness.
   - Empirically checked the current GitHub comment REST resource and confirmed immutable comment ID plus created_at/updated_at are available for capsule ordering/edit detection.
+  - Performed a second pre-merge self-review and corrected the handoff/status classification from REVIEW_READY to VERIFICATION_READY so repository state matches candidate Sections 14.4 and 30.
 remaining:
   - Bootstrap Issue #5 must independently cold-start verify the exact Issue #4 work state and current main base.
   - Bootstrap Issue #6 remains blocked unless Issue #5 records PASS for the exact candidate/manifest/base tuple.
@@ -27,6 +28,7 @@ checks_performed:
   - Verified Issue #6 Wave 1 creation is forbidden before squash merge and uses the concrete resulting main SHA before final DONE.
   - Verified canonical promotion binds candidate, manifest, and verified_base_main_sha and preserves squash-only integration.
   - Verified no gameplay code, final engine choice, mass implementation backlog, routine human gate, or self-canonicalization was introduced.
+  - Verified PR #10 had no review comments or configured CI runs, was mergeable, and main still matched the task base during the second pre-merge review.
 evidence:
   - docs/planning/08-planning-program-v1-reviewed-candidate.md at substantive work commit 1d7b9a980e74d6999789c86694f3c7fb99e13b99
   - docs/planning/reviews/issue-3-finding-dispositions.md
