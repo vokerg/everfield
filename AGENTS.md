@@ -35,8 +35,8 @@ Agents SHOULD:
 
 1. **The repository is memory.** Important knowledge must not exist only in chat history.
 2. **Execution must be resumable.** Every meaningful work episode must leave a continuation artifact.
-3. **Review must be independent.** Implementers cannot be the final judges of their own work.
-4. **Evidence beats assertion.** Tests, executable scenarios, telemetry, screenshots, traces, and reproducible state are preferred over prose claims.
+3. **Review must be independent.** Authors/implementers cannot be the final judges of their own work.
+4. **Evidence beats assertion.** Tests, executable scenarios, telemetry, screenshots, traces, reproducible state, and authoritative research are preferred over prose claims.
 5. **No routine human gate.** Uncertainty should trigger more evidence, more independent evaluation, or re-planning before it triggers human escalation.
 6. **Context is a budgeted resource.** Agents should load only the context required for their role and task.
 7. **Parallelism must be designed.** Architecture and task decomposition should target large safe READY frontiers for many concurrent agents.
@@ -44,22 +44,54 @@ Agents SHOULD:
 9. **Goodhart resistance is mandatory.** No single metric or self-authored test suite may become the sole quality oracle.
 10. **Reversibility matters.** Early plans should record assumptions and reopen conditions rather than pretending uncertainty does not exist.
 
-## Planning Work Entry Point
+## Mandatory Cold-Start Entry Point
 
-Until a later agent-dispatch mechanism exists, a planning agent should:
+A fresh agent with no prior conversation context MUST:
 
 1. Read this file.
-2. Read `docs/planning/README.md`.
-3. Read only the planning documents relevant to its assigned mission.
-4. Inspect unresolved questions and dependencies before adding conclusions.
-5. Produce a bounded artifact with assumptions, evidence, alternatives, decisions, unresolved questions, and explicit downstream dependencies.
-6. Request or create an independent critique pass before treating major conclusions as canonical.
-7. Leave a concise structured handoff when stopping.
+2. Read `docs/planning/START-HERE.md`.
+3. Inspect open GitHub issues beginning with `[PLAN-BOOTSTRAP]`.
+4. Follow the eligibility, claim/resume, branch, context-loading, output, review, and handoff rules in `START-HERE.md` and in the selected issue.
+5. Read `docs/planning/README.md` only after the entry protocol tells it what planning context is relevant.
+
+Do **not** choose one of the candidate missions in `docs/planning/03-planning-program.md` directly. Those missions are seed material until Planning Program v1 turns them into an executable mission graph.
+
+At the current bootstrap state, Issue #2 is the first executable planning task. Issues #3–#6 form its gated review/synthesis/verification/canonicalization chain and are not eligible until their stated prerequisites are met.
+
+## Planning Work Output Rule
+
+A planning agent must produce a bounded repository-owned artifact using the schema required by its issue. Unless the issue is stricter, the artifact must explicitly separate:
+
+- scope and non-goals;
+- constraints and assumptions;
+- evidence from inference;
+- alternatives from recommendations;
+- dependencies/interfaces;
+- observability/evaluation;
+- failure modes and risks;
+- unresolved questions;
+- reopen conditions;
+- required independent critiques;
+- downstream work unblocked.
+
+The author must not mark its own new proposal CANONICAL unless an already-canonical protocol explicitly permits that transition.
 
 ## Stopping Rule
 
-A session may stop before its planning task is complete, but it must leave the repository in a reconstructable state. A future agent must be able to continue from repository state alone, without access to prior conversation context.
+A session may stop before its planning task is complete, but it must leave the repository in a reconstructable state. A future agent must be able to continue from repository + GitHub state alone, without access to prior conversation context.
+
+Before stopping after modifying repository state:
+
+- commit useful work to the task branch;
+- ensure the task branch is pushed/visible;
+- update the structured handoff required by `docs/planning/START-HERE.md` or the issue contract;
+- record what is complete, what remains, known problems, checks/evidence, and the next recommended action;
+- do not leave uncommitted local state as the only copy of useful work.
+
+A continuation agent must independently inspect/review inherited work before extending it.
 
 ## Human Directives
 
 Explicit human directives override this bootstrap document. They should be recorded in the repository when they materially affect project direction so that later agents do not need hidden conversational knowledge.
+
+Absence of a human directive is never a reason to wait.
