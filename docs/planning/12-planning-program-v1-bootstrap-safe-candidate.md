@@ -12,9 +12,10 @@ This candidate is a narrow interpretation overlay over the exact Issue #16 paylo
 - base candidate: `docs/planning/11-planning-program-v1-bootstrap-final-candidate.md` blob `d083e5bfa108360818898f9628e939f50b4f3940`;
 - base manifest: `docs/planning/11-planning-program-v1-canonicalization-manifest.yaml` blob `bca34638a054d725239b936dd8232a7d274e814d`;
 - adopted Wave 1 contract blob remains `d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd`;
-- all Issue #16 generic protocol semantics remain normative unless the applicability guard below changes whether a bootstrap-numbered clause is operational in the current state.
+- **every clause** of the exact Issue #16 candidate remains normative;
+- this overlay changes only the authority/applicability of bootstrap-numbered clauses according to Section 2 and changes the canonical promotion source to this wrapper; on any other semantic conflict, the exact Issue #16 clause wins.
 
-Issue #16 artifacts are `SUPERSEDED_FOR_VERIFICATION`, not CANONICAL. Missing or mismatched base blobs are a verification failure.
+Issue #16 artifacts are `SUPERSEDED_FOR_VERIFICATION`, not CANONICAL. Missing or mismatched base blobs are a verification failure. No reader may invent an additional composition category such as “generic” versus “non-generic” to decide which inherited clauses apply.
 
 ## 2. Normative applicability guard
 
