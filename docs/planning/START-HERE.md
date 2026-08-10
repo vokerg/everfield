@@ -44,25 +44,25 @@ For an eligible issue `#N`:
 
 1. Re-read the issue immediately before claiming.
 2. Confirm all stated prerequisites are satisfied.
-3. Determine the issue's deterministic branch name from the issue contract. If the issue does not specify one, use:
+3. Use exactly this deterministic branch name unless the issue explicitly overrides it:
 
-   `planning/issue-N-short-slug`
+   `planning/issue-N`
 
 4. Create that branch from the base branch stated by the issue. For seed-corpus work, the default base is `planning/factory-seed`.
-5. If branch creation fails because the deterministic branch already exists, **do not create an alternate competing branch**. Treat the issue as already claimed/in progress and inspect it for continuation state.
+5. If branch creation fails because `planning/issue-N` already exists, **do not create an alternate branch**. Treat the issue as already claimed/in progress and inspect it for continuation state.
 6. After successfully creating the branch, leave a GitHub issue comment containing a claim capsule:
 
 ```yaml
 kind: CLAIM
 issue: N
-branch: planning/issue-N-short-slug
+branch: planning/issue-N
 base: <base-branch>@<base-sha>
 state: IN_PROGRESS
 started_at: <ISO-8601 UTC timestamp>
 role: <role from issue>
 ```
 
-The deterministic branch creation, not the prose comment, is the temporary exclusion primitive.
+The exact deterministic branch creation, not the prose comment, is the temporary exclusion primitive. There must never be two normal task branches for the same bootstrap issue.
 
 ### Resume work
 
@@ -86,7 +86,7 @@ Never assume incomplete work is correct merely because another agent wrote it.
 
 - `main` remains the stable repository base.
 - `planning/factory-seed` contains the current seed corpus and draft PR #1.
-- Work that refines the seed corpus should normally branch from `planning/factory-seed` using the deterministic issue branch name.
+- Work that refines the seed corpus should normally branch from `planning/factory-seed` as `planning/issue-N`.
 - Review PRs for bootstrap planning work should target `planning/factory-seed` unless the issue explicitly says otherwise.
 - Do not push unrelated changes directly to `main`.
 - Do not rewrite or force-push another task branch.
