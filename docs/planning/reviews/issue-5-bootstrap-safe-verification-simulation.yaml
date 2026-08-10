@@ -1,0 +1,123 @@
+version: 1
+issue: 5
+mission_id: BOOTSTRAP-VERIFY-05
+episode: issue5-degraded-verifier-20260810-03
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+ownership_generation_comment_id: 5245171960
+input_manifest_blob_sha: 7fe31b4afbdaadda497b1cd53832ec7999fba142
+verified_base_main_sha: a611c4540df1693fb3536a59f032f1a79b51cdc5
+payload:
+  candidate_work_sha: 00df46cae3230f380bcee9dd24442d984c73fea0
+  candidate_blob_sha: 261d7e5f7f9f1412415116b3e0f127f3e3f1bec7
+  manifest_blob_sha: f4e65f408b77a917d1fc61a1dbaee808e978f072
+  base_issue16_candidate_blob_sha: d083e5bfa108360818898f9628e939f50b4f3940
+  base_issue16_manifest_blob_sha: bca34638a054d725239b936dd8232a7d274e814d
+  base_issue14_manifest_blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c
+  adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+result: PASS
+blocker_count: 0
+major_count: 0
+scenarios:
+  cold_start_phase_and_queue_derivation:
+    result: PASS
+    evidence: pre-canonical AGENTS/START-HERE select bootstrap; verified promotion transforms root phase to PLANNING; CANONICAL_ACTIVE selects open PLAN-v1 only
+  simultaneous_new_claimants:
+    result: PASS
+    evidence: deterministic planning/issue-N branch plus schema-3 earliest valid CLAIM and expected-head rules authorize one owner
+  agent_disappears_mid_task:
+    result: PASS
+    evidence: six-hour lease, STALE derivation, RESUME_INTENT contention, RECOVER winner, mutation fence
+  branch_exists_without_useful_handoff:
+    result: PASS
+    evidence: ORPHAN_PROBE ten-minute maturity, ORPHAN intent tie-break, RECOVER only after condition/head revalidation
+  stale_writer_after_recovery:
+    result: PASS
+    evidence: ownership generation changes; every mutation and terminal status requires current unexpired owner plus exact branch head
+  malformed_or_edited_capsules:
+    result: PASS
+    evidence: closed schema-3 field types/nullability, unknown authority fields/kinds invalid, edited comments invalid, invalid comments have no authority effect
+  review_rejects_or_invalidates:
+    result: PASS
+    evidence: REVIEW_STATUS routes PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED to declared synthesis/revision/recovery only
+  dependency_invalid_or_stale_planned_work:
+    result: PASS
+    evidence: typed external INVALIDATED/SUPERSEDED path plus no-READY recovery; obsolete work cannot remain silently authoritative
+  no_READY_liveness:
+    result: PASS
+    evidence: active-owner/handoff/stale/orphan/review-verification-integration checks precede single-use W1-REC-01 recovery; no gate waiver
+  premature_implementation:
+    result: PASS
+    evidence: bootstrap and canonical candidate both retain pre-implementation/high-throughput gameplay barrier until later verified readiness
+  self_canonicalization_attempt:
+    result: PASS
+    evidence: canonical binding requires valid PASS, expected PR head, squash-created main SHA, canonical program blob, and terminal INTEGRATION_STATUS
+  deterministic_composition:
+    result: PASS
+    evidence: Issue #18 adopts all Issue #16 clauses exactly; only applicability authority and promotion source/header may override; no generic/non-generic partition allowed
+  canonical_unbound_activation_window:
+    result: PASS
+    evidence: after State CANONICAL without active binding, only named Issue #6 verified post-merge activation is operational; PLAN-v1 remains inactive
+  canonical_binding_mismatch:
+    result: PASS
+    evidence: prior binding for different program blob fails closed to recovery/reverification and cannot be mistaken for fresh activation window
+  post_terminal_CANONICAL_ACTIVE_single_queue:
+    result: PASS
+    evidence: matching active binding forces CANONICAL_ACTIVE; every fixed bootstrap-numbered eligibility/next-action clause becomes PROVENANCE_ONLY; exactly open PLAN-v1 is normal queue
+  bootstrap_numbered_present_tense_text:
+    result: PASS
+    evidence: applicability guard explicitly states present-tense historical text has no authority effect in CANONICAL_ACTIVE
+  generic_VERIFICATION_RESTART_after_activation:
+    result: PASS
+    evidence: restart remains active generic schema-3 mechanism when a current canonical task/revision contract declares changed-payload re-verification; historical Issue #5 example creates no work
+  generic_VERIFICATION_REFRESH_after_activation:
+    result: PASS
+    evidence: refresh remains active generic schema-3 mechanism only for unchanged-payload stale-base PASS and requires full verification; historical Issue #5 example creates no work
+  changed_payload_after_terminal_result:
+    result: PASS
+    evidence: VERIFICATION_RESTART requires closed remediation/revision, changed identity, current-main payload/base, one winning owner, full normal verification
+  unchanged_payload_PASS_base_drift:
+    result: PASS
+    evidence: VERIFICATION_REFRESH requires source PASS, unchanged identities, old base strict ancestor, new base current main, one winning owner, full normal verification
+  current_base_verification_selection:
+    result: PASS
+    evidence: Issue #6 may use only highest valid PASS for exact effective tuple and verified_base_main_sha equal current main; older-base results are provenance
+  later_unrelated_main_merge_preserves_binding:
+    result: PASS
+    evidence: active canonical binding uses program blob identity plus activation main SHA ancestor/equal current main; current HEAD equality is not required after activation
+  changed_program_blob_old_binding:
+    result: PASS
+    evidence: blob mismatch prevents active binding and routes CANONICAL_BINDING_MISMATCH rather than replay
+  root_phase_transform:
+    result: PASS
+    evidence: current AGENTS source title/Status/Current Phase/Cold-Start intervals match inherited deterministic transform; START-HERE replacement converges to PLANNING entry
+  pre_activation_wave_claim:
+    result: PASS
+    evidence: Wave 1 creation is forbidden before Issue #6 squash and roots require terminal Issue #6 binding before READY
+  wave_1_graph:
+    result: PASS
+    evidence: exact adopted blob declares 23 missions: 12 root proposals plus recovery/reviews/syntheses/cross-review/final synthesis/verifier/canonicalizer; max initial READY 12; review and downstream routes explicit
+  context_budget:
+    result: PASS
+    evidence: inherited candidate limits root Review Index to 4000 UTF-8 chars and mandatory review/synthesis context to deterministic bounded thresholds with no silent truncation
+  squash_only_integration:
+    result: PASS
+    evidence: AGENTS canonical directive, inherited manifests, candidate, Issue #6 pre-merge contract and Wave 1 integration all require squash
+post_terminal_assertions:
+  promoted_program_state_is_CANONICAL: PASS
+  active_binding_resolves_for_promoted_program_blob: PASS
+  applicability_state_is_CANONICAL_ACTIVE: PASS
+  all_bootstrap_numbered_clauses_are_PROVENANCE_ONLY: PASS
+  exactly_one_normal_queue_is_open_PLAN_v1: PASS
+  generic_schema3_protocol_remains_active: PASS
+  implementation_barrier_remains_active: PASS
+regression_findings:
+  V5-B03: PASS
+  V5-B04: PASS
+  V5-B05: PASS
+  V5-B06: PASS
+  V5-B07: PASS_WITH_DEGRADED_TRUST
+  V5-B08: PASS
+  V5-B09: PASS
+known_trust_limitation: DEGRADED_SINGLE_AGENT is not equivalent to isolated multi-agent review; resource constraint is repository-visible and reopening is mandatory when stronger isolation becomes available
+final_disposition: PASS_FOR_BOOTSTRAP_CANONICALIZATION
