@@ -24,11 +24,13 @@ Do not select one of the 50 seed missions in `03-planning-program.md` directly u
 
 ## 2. Current Immediately Executable Work
 
-At the time this bootstrap entry point was created, the canonical first task is:
+After seed PR #1 is squash-merged into `main`, the canonical first task is:
 
 - GitHub Issue **#2 — `[PLAN-BOOTSTRAP] Produce Planning Program v1 entry protocol and first-wave mission graph`**.
 
-If issue #2 is still open, inspect it before inventing any new planning task.
+Do not begin Issue #2 before PR #1 is integrated, because the bootstrap corpus must first exist on `main`.
+
+If issue #2 is still open after PR #1 is integrated, inspect it before inventing any new planning task.
 
 If it already has an active task branch, treat the issue as in progress and follow the resume rules below instead of creating parallel competing work.
 
@@ -48,7 +50,7 @@ For an eligible issue `#N`:
 
    `planning/issue-N`
 
-4. Create that branch from the base branch stated by the issue. For seed-corpus work, the default base is `planning/factory-seed`.
+4. Create that branch from the base branch stated by the issue. After PR #1 is integrated, the default bootstrap base is the current `main` HEAD.
 5. If branch creation fails because `planning/issue-N` already exists, **do not create an alternate branch**. Treat the issue as already claimed/in progress and inspect it for continuation state.
 6. After successfully creating the branch, leave a GitHub issue comment containing a claim capsule:
 
@@ -56,7 +58,7 @@ For an eligible issue `#N`:
 kind: CLAIM
 issue: N
 branch: planning/issue-N
-base: <base-branch>@<base-sha>
+base: main@<base-sha>
 state: IN_PROGRESS
 started_at: <ISO-8601 UTC timestamp>
 role: <role from issue>
@@ -82,16 +84,17 @@ Before editing:
 
 Never assume incomplete work is correct merely because another agent wrote it.
 
-## 4. Branch Semantics During Bootstrap Planning
+## 4. Branch and Integration Semantics During Bootstrap Planning
 
-- `main` remains the stable repository base.
-- `planning/factory-seed` contains the current seed corpus and draft PR #1.
-- Work that refines the seed corpus should normally branch from `planning/factory-seed` as `planning/issue-N`.
-- Review PRs for bootstrap planning work should target `planning/factory-seed` unless the issue explicitly says otherwise.
+- `main` is the authoritative stable repository base after PR #1 is integrated.
+- `planning/factory-seed` is provenance for seed PR #1 and must not be used as the normal base for new bootstrap tasks after that merge.
+- New bootstrap planning work should branch from current `main` as `planning/issue-N` unless the issue explicitly defines another base.
+- Review PRs for bootstrap planning work should target `main` unless the issue explicitly says otherwise.
+- All integration into `main` MUST use squash merge, per the canonical human directive in `/AGENTS.md` and the project charter.
 - Do not push unrelated changes directly to `main`.
 - Do not rewrite or force-push another task branch.
 
-This is temporary. Planning Program v1 must replace it with the mature branch/task lifecycle.
+This is temporary. Planning Program v1 must replace it with the mature branch/task lifecycle while preserving the squash-only `main` integration rule.
 
 ## 5. Context Loading Rule
 
@@ -210,9 +213,10 @@ A fresh agent must not:
 - invent a parallel planning process when an eligible bootstrap issue already exists;
 - ask for routine human approval;
 - read the prior chat as required project memory;
-- treat draft PR #1 as reviewed truth;
+- treat seed documents as reviewed truth merely because PR #1 has been merged;
 - hide uncertainty in confident prose;
-- leave uncommitted work as the only continuation state.
+- leave uncommitted work as the only continuation state;
+- integrate into `main` using anything other than squash merge.
 
 ## 10. Bootstrap Exit
 
