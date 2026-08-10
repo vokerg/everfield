@@ -1,0 +1,442 @@
+version: 3
+state: REVIEWED_CANDIDATE_SUPPORT
+bootstrap_remediation_issue: 14
+candidate_path: docs/planning/10-planning-program-v1-final-bootstrap-candidate.md
+dispositions_path: docs/planning/reviews/issue-5-reverification-finding-dispositions.md
+
+supersedes_for_verification:
+  - {path: docs/planning/09-planning-program-v1-remediated-candidate.md, blob_sha: 5e60d827ab99fe04e8a23c4addfc59d6f418d281, state: SUPERSEDED_FOR_VERIFICATION}
+  - {path: docs/planning/09-planning-program-v1-canonicalization-manifest.yaml, blob_sha: 9ecad20d9332eb1b649dfcb16beece5cda3fa330, state: SUPERSEDED_FOR_VERIFICATION}
+
+resource_constraint:
+  mode: SINGLE_AGENT
+  source_issue: 5
+  source_comment_id: 5244416013
+  trust_level: DEGRADED
+  scope: BOOTSTRAP_AND_WAVE_1_UNTIL_CANONICALLY_SUPERSEDED
+  reopen_condition: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE
+
+verification_contract:
+  verifier_issue: 5
+  required_result: PASS
+  allowed_independence_modes: [FULL_INDEPENDENT_CONTEXT, DEGRADED_SINGLE_AGENT]
+  degraded_mode_resource_comment_id: 5244416013
+  bind: [candidate_work_sha, manifest_identity, adopted_wave_1_contract_blob_sha, verified_base_main_sha, verification_report_work_sha, verification_report_head_sha, simulation_artifact_blob_sha, independence_profile]
+  PASS_requires_blocker_count: 0
+  PASS_requires_major_count: 0
+
+canonical_binding:
+  header_field: Canonicalized by
+  terminal_kind: INTEGRATION_STATUS
+  required_canonicality: CANONICAL_PLANNING_PROGRAM
+  matching_binding_requires:
+    - status_issue_equals_header_issue
+    - status_canonical_program_blob_sha_equals_current_program_blob_sha
+    - status_main_sha_is_ancestor_or_equal_current_main
+    - referenced_verification_is_valid_PASS
+    - referenced_squash_merge_is_valid
+  selection: highest_comment_id_among_matching_valid_bindings
+  no_matching_binding:
+    no_prior_valid_canonical_binding_on_header_issue: BOUNDED_POST_MERGE_ACTIVATION_WINDOW
+    prior_valid_binding_exists_for_different_program_blob: CANONICAL_BINDING_MISMATCH_RECOVERY_REQUIRED
+  current_HEAD_equality_required_after_activation: false
+
+bootstrap_bridge:
+  issue_5:
+    issue: 5
+    mission_id: BOOTSTRAP-VERIFY-05
+    branch: planning/issue-5
+    legacy_predecessor:
+      selection: latest_matching_legacy_STATUS
+      must_be_unedited: true
+      required_fields: [kind, issue, branch, head_sha, state, remediation_issue, remediation_work_sha, remediation_head_sha, remediation_candidate, remediation_manifest, verified_base_main_sha, next_action]
+      field_types:
+        kind: nonempty_string
+        issue: positive_integer
+        branch: nonempty_string
+        head_sha: sha40
+        state: nonempty_string
+        remediation_issue: positive_integer
+        remediation_work_sha: sha40
+        remediation_head_sha: sha40
+        remediation_candidate: repo_path
+        remediation_manifest: repo_path
+        verified_base_main_sha: sha40
+        next_action: nonempty_string
+      constants: {kind: STATUS, issue: 5, branch: planning/issue-5, state: HANDOFF_READY, remediation_issue: 14, next_action: reverify_issue_14_payload}
+      remediation_work_and_head_must_exist: true
+      head_sha_must_equal_issue_5_branch_head_at_comment_creation: true
+    ownership_acquisition_kind: BOOTSTRAP_RESUME
+    result_kind: BOOTSTRAP_VERIFICATION_STATUS
+  issue_6:
+    issue: 6
+    mission_id: BOOTSTRAP-CANON-06
+    branch: planning/issue-6
+    ownership_acquisition_kind: CLAIM
+    eligibility:
+      required_issue_5_kind: BOOTSTRAP_VERIFICATION_STATUS
+      required_result: PASS
+      current_main_equals_issue_5_verified_base_main_sha: true
+    allowed_verification_source_kinds: [BOOTSTRAP_VERIFICATION_STATUS]
+
+bootstrap_canonicalization:
+  issue: 6
+  pre_merge: {unresolved_BLOCKER_MAJOR_forbidden: true, expected_head_required: true, compatibility_evidence_required: true, merge_method: squash}
+  program_promotion:
+    source: docs/planning/10-planning-program-v1-final-bootstrap-candidate.md
+    destination: docs/planning/PLANNING-PROGRAM-v1.md
+    transform:
+      type: exact_literal_replacements_then_byte_identical_remainder
+      every_from_literal_matches_exactly_once: true
+      replacements:
+        - {from: "# Planning Program v1 — Final Bootstrap Candidate", to: "# Planning Program v1 — Canonical"}
+        - {from: "**State:** REVIEWED-CANDIDATE-FINAL-BOOTSTRAP", to: "**State:** CANONICAL"}
+        - {from: "**Bootstrap remediation issue:** #14", to: "**Canonicalized by:** Bootstrap Issue #6"}
+        - {from: "**Authority:** NON-CANONICAL until Bootstrap Issue #5 records a valid PASS for this exact work state and Bootstrap Issue #6 performs the verified squash-only promotion and activation sequence.", to: "**Authority:** CANONICAL planning operating model for the current pre-implementation PLANNING phase."}
+  agents_transform:
+    source: AGENTS.md
+    every_source_interval_matches_exactly_once: true
+    title: {from: "# AGENTS.md — Planning Bootstrap", to: "# AGENTS.md — Canonical Planning"}
+    sections:
+      - heading: "## Status"
+        until: "## Prime Directive"
+        replacement: |
+          ## Status
+
+          This file governs Everfield's **pre-implementation PLANNING phase** and delegates normal planning dispatch to canonical `docs/planning/PLANNING-PROGRAM-v1.md` through `docs/planning/START-HERE.md`.
+
+          Bootstrap planning artifacts are provenance after canonical activation. High-throughput gameplay implementation remains blocked until a later independently verified implementation-readiness decision.
+
+      - heading: "## Current Phase"
+        until: "## Canonical Working Principles"
+        replacement: |
+          ## Current Phase
+
+          The repository is in **PLANNING** mode under canonical Planning Program v1.
+
+          Agents MUST NOT implement gameplay/high-throughput implementation before verified implementation readiness, choose an engine as an unreviewed assumption, generate an unbounded implementation backlog, treat design hypotheses as permanently settled, or optimize for a single quality metric.
+
+          Agents SHOULD execute bounded canonical planning missions, preserve evidence/provenance, and reopen assumptions when evidence requires it.
+
+      - heading: "## Mandatory Cold-Start Entry Point"
+        until: "## Planning Work Output Rule"
+        replacement: |
+          ## Mandatory Cold-Start Entry Point
+
+          A fresh agent with no prior conversation context MUST:
+
+          1. Read this file.
+          2. Read `docs/planning/START-HERE.md`.
+          3. Read current canonical `docs/planning/PLANNING-PROGRAM-v1.md`.
+          4. Parse its `Canonicalized by` issue and resolve the active canonical binding defined by the program.
+          5. If binding resolves, select/resume open `[PLAN-v1]` work under the canonical dispatcher.
+          6. If no binding exists and the named issue has never published a canonical binding, execute only that issue's verified post-merge activation sequence.
+          7. If a prior binding exists for another program blob, fail closed as `CANONICAL_BINDING_MISMATCH` and use canonical recovery/reverification.
+          8. Never use chat history as project authority and never integrate into `main` except by squash merge.
+
+          After active canonical binding, Bootstrap Issues #2-#6, #11, and #14 are provenance only.
+
+  start_here_replacement:
+    path: docs/planning/START-HERE.md
+    content: |
+      # START HERE — Canonical Planning Entry
+
+      **Phase:** PLANNING  
+      **Authority:** Entry pointer to canonical Planning Program v1.
+
+      1. Read `/AGENTS.md` and current `docs/planning/PLANNING-PROGRAM-v1.md`.
+      2. Parse the program's `Canonicalized by` issue.
+      3. Resolve the active canonical binding: matching program blob + activation SHA ancestor/equal current main + valid verification/squash provenance.
+      4. If binding resolves, query open `[PLAN-v1]` issues and use canonical schema-3 dispatch.
+      5. If no binding exists and the named issue has no prior canonical binding, execute only its verified post-merge activation sequence.
+      6. If the issue has a prior binding for a different program blob, fail closed as canonical-binding mismatch and use recovery/reverification.
+      7. Prefer recoverable/review/revision/verification/integration work before new proposals.
+      8. Never use chat history as project authority; all `main` integration is squash-only.
+
+  post_merge_sequence:
+    - obtain_squash_main_sha
+    - verify_program_and_entry_transforms
+    - compute_canonical_program_blob_sha
+    - load_adopted_wave_1_contract_blob
+    - instantiate_exactly_23_wave_1_issues_with_activation_sha
+    - validate_created_issue_contracts
+    - post_mission_id_to_issue_mapping
+    - post_schema_3_INTEGRATION_STATUS_CANONICAL_PLANNING_PROGRAM
+  wave_1_creation_before_merge: forbidden
+
+wave_1_contract_adoption:
+  source_path: docs/planning/08-planning-program-v1-canonicalization-manifest.yaml
+  source_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+  adopted_sections: [issue_compiler, universal_root_acceptance, wave_1, non_root_optional_retrieval, next_wave_candidate_schema]
+  explicitly_not_adopted: [verification_contract, bootstrap_canonicalization]
+  interpretation:
+    activation_placeholder_resolves_to_issue_6_squash_sha: true
+    all_post_activation_operational_comments_use_schema_3: true
+    STATUS_in_adopted_text_means_registered_schema_3_STATUS: true
+    root_READY_requires_terminal_issue_6_binding: true
+
+operational_capsules:
+  protocol: planning-v1
+  schema: 3
+  authority_metadata:
+    ordering: github_comment_id_ascending
+    creation_time: github_server_created_at
+    unedited_requires_created_at_equals_updated_at: true
+    body_timestamps_authoritative: false
+    unknown_top_level_fields: invalid
+    fields_non_null_by_default: true
+    extensions: {allowed: true, authority_effect: none}
+
+  types:
+    positive_integer: integer_gt_0
+    nonnegative_integer: integer_gte_0
+    sha40: regex_40_hex
+    repo_path: relative_nonempty_no_dotdot
+    nonempty_string: utf8_length_1_to_4096
+    session_id: utf8_length_1_to_256
+    boolean: true_or_false
+    list: yaml_sequence
+    map: yaml_mapping
+    structured: tagged_yaml_mapping
+    list_session_id: yaml_sequence_of_session_id
+    immutable_ref: sha40_or_exact_comment_id_or_workflow_artifact_id_or_repo_path_at_work_sha
+
+  field_types:
+    protocol: {type: nonempty_string, constant: planning-v1}
+    schema: {type: positive_integer, constant: 3}
+    kind: nonempty_string
+    issue: positive_integer
+    mission_id: {type: nonempty_string, regex: "^[A-Z0-9][A-Z0-9-]*$"}
+    branch: {type: nonempty_string, regex: "^planning/issue-[1-9][0-9]*$"}
+    actor_session_id: session_id
+    extensions: {type: map, optional: true}
+    state: nonempty_string
+    base_sha: sha40
+    observed_head_sha: sha40
+    observed_main_sha: sha40
+    previous_ownership_comment_id: {type: positive_integer, nullable: true}
+    observed_no_ownership_through_comment_id: positive_integer
+    reason: nonempty_string
+    source_comment_id: positive_integer
+    source_status_comment_id: positive_integer
+    winning_intent_comment_id: positive_integer
+    recovery_reason: nonempty_string
+    ownership_generation_comment_id: {type: positive_integer, nullable: true}
+    progress_basis: nonempty_string
+    evidence_refs: {type: list, element: immutable_ref}
+    authority_mode: nonempty_string
+    head_sha: {type: sha40, nullable: true}
+    work_sha: sha40
+    handoff_path: repo_path
+    artifact_paths: {type: list, element: repo_path}
+    acceptance_evidence_refs: {type: list, element: immutable_ref}
+    candidate_work_sha: sha40
+    manifest_identity: sha40
+    result_code: nonempty_string
+    superseded_by_issue_or_artifact: nonempty_string
+    external_authorization_comment_id: positive_integer
+    remediation_issue_or_path: nonempty_string
+    reviewed_work_shas: {type: list, element: sha40}
+    disposition: nonempty_string
+    findings_artifact: repo_path
+    blocker_count: nonnegative_integer
+    major_count: nonnegative_integer
+    independence_profile: {type: structured, ref: independence_profile}
+    adopted_wave_1_contract_blob_sha: sha40
+    verified_base_main_sha: sha40
+    report_path: repo_path
+    simulation_artifact_path: repo_path
+    simulation_artifact_blob_sha: sha40
+    result: nonempty_string
+    verification_status_comment_id: positive_integer
+    verified_candidate_work_sha: sha40
+    verified_manifest_identity: sha40
+    expected_pre_merge_head_sha: sha40
+    pr_number: positive_integer
+    main_sha: sha40
+    merge_method: nonempty_string
+    canonicality: nonempty_string
+    canonical_program_blob_sha: {type: sha40, nullable: true}
+    compatibility_evidence: {type: structured, ref: compatibility_evidence}
+    issue_mapping_comment_id: {type: positive_integer, nullable: true}
+    activated_issue_count: nonnegative_integer
+    legacy_predecessor_comment_id: positive_integer
+
+  structured_types:
+    independence_profile:
+      discriminator: mode
+      FULL_INDEPENDENT_CONTEXT:
+        required: [mode, episode_id, cold_start_input_manifest_path, cold_start_input_manifest_blob_sha, candidate_edit_prohibited, prior_rationale_gate, trust_level, excluded_actor_session_ids, platform_context_id]
+        constants: {mode: FULL_INDEPENDENT_CONTEXT, candidate_edit_prohibited: true, prior_rationale_gate: AFTER_INITIAL_EVIDENCE, trust_level: FULL}
+        types: {episode_id: session_id, cold_start_input_manifest_path: repo_path, cold_start_input_manifest_blob_sha: sha40, excluded_actor_session_ids: list_session_id, platform_context_id: nonempty_string}
+      DEGRADED_SINGLE_AGENT:
+        required: [mode, episode_id, cold_start_input_manifest_path, cold_start_input_manifest_blob_sha, candidate_edit_prohibited, prior_rationale_gate, trust_level, resource_constraint_comment_id, reopen_condition]
+        constants: {mode: DEGRADED_SINGLE_AGENT, candidate_edit_prohibited: true, prior_rationale_gate: AFTER_INITIAL_EVIDENCE, trust_level: DEGRADED, resource_constraint_comment_id: 5244416013, reopen_condition: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE}
+        types: {episode_id: session_id, cold_start_input_manifest_path: repo_path, cold_start_input_manifest_blob_sha: sha40, resource_constraint_comment_id: positive_integer, reopen_condition: nonempty_string}
+    compatibility_evidence:
+      discriminator: mode
+      EXACT_BASE_MATCH:
+        required: [mode, observed_pre_merge_main_sha]
+        constants: {mode: EXACT_BASE_MATCH}
+        types: {observed_pre_merge_main_sha: sha40}
+      REVERIFIED_BASE_DRIFT:
+        required: [mode, evidence_comment_id, evidence_work_sha, evidence_path, covered_main_range]
+        constants: {mode: REVERIFIED_BASE_DRIFT}
+        types: {evidence_comment_id: positive_integer, evidence_work_sha: sha40, evidence_path: repo_path, covered_main_range: nonempty_string}
+
+  common_required: [protocol, schema, kind, issue, mission_id, branch, actor_session_id]
+  common_rules:
+    issue_and_mission_match_issue_contract_or_verified_bootstrap_overlay: true
+    branch_equals_planning_issue_number: true
+    all_referenced_git_objects_exist: true
+    unsupported_kind_invalid: true
+    wrong_type_or_illegal_null_invalid: true
+    unknown_authority_field_invalid: true
+    invalid_comment_authority_effect: none
+    allowed_fields_are_common_plus_kind_required_plus_kind_conditional_plus_extensions_only: true
+
+  kinds:
+    CLAIM:
+      required: [state, base_sha, observed_head_sha, previous_ownership_comment_id]
+      constants: {state: IN_PROGRESS, previous_ownership_comment_id: null}
+      predecessor: {derived_state: READY, branch_existed_before_attempt: false, base_sha_equals_current_main: true, observed_head_sha_equals_created_branch_head: true}
+      winner: earliest_valid_claim_for_created_branch_and_head
+      effect: new_owner_generation
+
+    BOOTSTRAP_RESUME:
+      scope: issue_5_only
+      required: [state, observed_head_sha, legacy_predecessor_comment_id, previous_ownership_comment_id]
+      constants: {state: IN_PROGRESS, previous_ownership_comment_id: null}
+      predecessor: {matches_bootstrap_bridge_legacy_predecessor: true, observed_head_equals_legacy_predecessor_head: true, current_head_equals_observed_head: true}
+      winner: lowest_comment_id_for_same_legacy_predecessor_and_head
+      effect: new_owner_generation
+
+    ORPHAN_PROBE:
+      required: [observed_head_sha, observed_main_sha, observed_no_ownership_through_comment_id]
+      predecessor: {branch_exists: true, valid_owner_exists: false}
+      maturity: {server_minutes: 10, invalid_if_later_owner_exists: true}
+      effect: none
+
+    RESUME_INTENT:
+      required: [reason, source_comment_id, observed_head_sha]
+      enums: {reason: [HANDOFF, STALE, ORPHAN]}
+      predecessor: {HANDOFF: STATUS_HANDOFF_READY, STALE: expired_current_owner_or_PROGRESS, ORPHAN: mature_ORPHAN_PROBE}
+      current_head_must_equal_observed_head: true
+      winner: lowest_comment_id_for_same_source_and_head
+      effect: none
+
+    RESUME:
+      required: [state, observed_head_sha, previous_ownership_comment_id, winning_intent_comment_id, source_status_comment_id]
+      constants: {state: IN_PROGRESS}
+      predecessor: winning_HANDOFF_intent
+      rules: [actor_equals_winning_intent_actor, previous_ownership_equals_source_STATUS_ownership_generation, current_head_equals_observed_head, first_valid_grant_for_intent_only]
+      effect: new_owner_generation
+
+    RECOVER:
+      required: [state, recovery_reason, observed_head_sha, previous_ownership_comment_id, winning_intent_comment_id, source_comment_id]
+      constants: {state: IN_PROGRESS}
+      enums: {recovery_reason: [STALE, ORPHAN]}
+      predecessor: {STALE: winning_STALE_intent_and_source_still_stale, ORPHAN: winning_ORPHAN_intent_and_probe_still_mature}
+      previous_ownership: {STALE: equals_recovered_generation, ORPHAN: null}
+      rules: [actor_equals_winning_intent_actor, current_head_equals_observed_head, first_valid_grant_for_intent_only]
+      effect: new_owner_generation
+
+    PROGRESS:
+      required: [state, ownership_generation_comment_id, observed_head_sha, progress_basis, evidence_refs]
+      constants: {state: IN_PROGRESS}
+      enums: {progress_basis: [HEAD_ADVANCE, EVIDENCE]}
+      rules: [current_unexpired_owner_required, ownership_generation_equals_current_owner, current_head_equals_observed_head, HEAD_ADVANCE_requires_new_head, EVIDENCE_requires_nonempty_immutable_refs, max_three_consecutive_EVIDENCE_without_head_advance]
+      effect: renew_current_lease_only
+
+    STATUS:
+      required: [state, authority_mode, ownership_generation_comment_id, head_sha]
+      enums: {state: [HANDOFF_READY, REVIEW_READY, VERIFICATION_READY, DONE, SUPERSEDED, INVALIDATED], authority_mode: [OWNER, EXTERNAL]}
+      authority:
+        OWNER: {ownership_generation_non_null: true, head_sha_non_null: true, current_unexpired_owner_required: true, generation_equals_current_owner: true, current_branch_head_equals_head_sha: true}
+        EXTERNAL: {allowed_states: [SUPERSEDED, INVALIDATED], ownership_generation_must_be_null: true, external_authorization_comment_id_required: true, authorization_kind: [REVIEW_STATUS, INTEGRATION_STATUS], head_sha_nullable_only_if_branch_absent: true}
+      state_fields:
+        HANDOFF_READY: [work_sha, handoff_path]
+        REVIEW_READY: [work_sha, artifact_paths, acceptance_evidence_refs]
+        VERIFICATION_READY: [candidate_work_sha, manifest_identity, artifact_paths]
+        DONE: [work_sha, result_code, evidence_refs]
+        SUPERSEDED: [superseded_by_issue_or_artifact, reason]
+        INVALIDATED: [reason, remediation_issue_or_path]
+      work_sha_must_be_ancestor_or_equal_head_when_present: true
+      effect: recorded_task_state
+
+    REVIEW_STATUS:
+      required: [state, ownership_generation_comment_id, head_sha, work_sha, reviewed_work_shas, disposition, findings_artifact, blocker_count, major_count, independence_profile]
+      enums: {state: [DONE, INVALIDATED], disposition: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED]}
+      rules: [current_unexpired_owner_required, generation_equals_current_owner, current_head_equals_head_sha, work_sha_ancestor_or_equal_head_sha, findings_exist_at_work_sha, independence_profile_valid]
+      transitions: {PASS_FOR_SYNTHESIS: DONE, CHANGES_REQUIRED: DONE, INVALIDATED: INVALIDATED}
+      downstream: {PASS_FOR_SYNTHESIS: declared_synthesis, CHANGES_REQUIRED: declared_revision_synthesis, INVALIDATED: declared_recovery_only}
+
+    VERIFICATION_STATUS:
+      required: [state, ownership_generation_comment_id, head_sha, work_sha, result, candidate_work_sha, manifest_identity, adopted_wave_1_contract_blob_sha, verified_base_main_sha, report_path, simulation_artifact_path, simulation_artifact_blob_sha, blocker_count, major_count, independence_profile]
+      constants: {state: DONE}
+      enums: {result: [PASS, FAIL]}
+      rules: [current_unexpired_owner_required, generation_equals_current_owner, current_head_equals_head_sha, work_sha_ancestor_or_equal_head_sha, report_and_simulation_exist_at_work_sha, exact_candidate_tuple_match, independence_profile_valid, current_main_at_publication_equals_verified_base_main_sha]
+      PASS: {blocker_count: 0, major_count: 0}
+      downstream: {PASS: declared_canonicalization, FAIL: bounded_remediation_only}
+
+    BOOTSTRAP_VERIFICATION_STATUS:
+      scope: issue_5_only
+      required: [state, ownership_generation_comment_id, head_sha, work_sha, result, candidate_work_sha, manifest_identity, adopted_wave_1_contract_blob_sha, verified_base_main_sha, report_path, simulation_artifact_path, simulation_artifact_blob_sha, blocker_count, major_count, independence_profile, legacy_predecessor_comment_id]
+      constants: {state: DONE}
+      enums: {result: [PASS, FAIL]}
+      rules: [generation_is_winning_BOOTSTRAP_RESUME, current_unexpired_owner_required, current_head_equals_head_sha, work_sha_ancestor_or_equal_head_sha, legacy_predecessor_matches_bridge, report_and_simulation_exist_at_work_sha, exact_candidate_tuple_match, independence_profile_valid, current_main_at_publication_equals_verified_base_main_sha]
+      PASS: {blocker_count: 0, major_count: 0}
+      downstream: {PASS: bootstrap_issue_6, FAIL: bounded_remediation_only}
+
+    INTEGRATION_STATUS:
+      required: [state, ownership_generation_comment_id, head_sha, work_sha, verification_status_comment_id, verified_candidate_work_sha, verified_manifest_identity, verified_base_main_sha, expected_pre_merge_head_sha, pr_number, main_sha, merge_method, canonicality, canonical_program_blob_sha, compatibility_evidence, issue_mapping_comment_id, activated_issue_count]
+      constants: {state: DONE, merge_method: squash}
+      enums: {canonicality: [CANONICAL_PLANNING_PROGRAM, CANONICAL_PLANNING_UPDATE, NON_CANONICAL_PROVENANCE]}
+      rules: [current_unexpired_owner_required, generation_equals_current_owner, task_branch_head_equals_head_sha, work_sha_ancestor_or_equal_head_sha, expected_pre_merge_head_equals_PR_head, PR_squash_created_main_sha, compatibility_evidence_valid, verification_source_allowed_by_issue_contract_or_bootstrap_overlay, verification_result_is_valid_PASS]
+      canonical_program_binding:
+        CANONICAL_PLANNING_PROGRAM: {canonical_program_blob_sha_non_null: true, blob_exists_at_main_sha: true, issue_6_requires_activated_issue_count: 23, issue_6_requires_issue_mapping_comment_id_non_null: true}
+      effect: terminal_integration_and_optional_canonical_binding
+
+transition_table:
+  new_issue: {BLOCKED_to_READY: derived_prerequisites, READY_to_IN_PROGRESS: CLAIM}
+  bootstrap_issue_5: {legacy_HANDOFF_READY_to_IN_PROGRESS: BOOTSTRAP_RESUME, IN_PROGRESS_to_DONE: BOOTSTRAP_VERIFICATION_STATUS}
+  orphan: {branch_without_owner_to_probe: ORPHAN_PROBE, mature_probe_to_intent: RESUME_INTENT_ORPHAN, winning_intent_to_IN_PROGRESS: RECOVER_ORPHAN}
+  handoff: {IN_PROGRESS_to_HANDOFF_READY: STATUS_OWNER_HANDOFF_READY, HANDOFF_to_intent: RESUME_INTENT_HANDOFF, winner_to_IN_PROGRESS: RESUME}
+  stale: {IN_PROGRESS_to_STALE: lease_expiry, STALE_to_intent: RESUME_INTENT_STALE, winner_to_IN_PROGRESS: RECOVER_STALE}
+  review: {pass: REVIEW_STATUS_PASS_FOR_SYNTHESIS, changes: REVIEW_STATUS_CHANGES_REQUIRED, invalidated: REVIEW_STATUS_INVALIDATED}
+  verification: {pass: VERIFICATION_STATUS_PASS, fail: VERIFICATION_STATUS_FAIL}
+  integration: {post_squash_terminal: INTEGRATION_STATUS}
+  external_retirement: {supersede: STATUS_EXTERNAL_SUPERSEDED, invalidate: STATUS_EXTERNAL_INVALIDATED}
+
+mutation_fence:
+  steps: [refetch_valid_comments, verify_current_unexpired_owner, fetch_remote_head, require_remote_head_equals_proposed_parent, create_commit_with_exact_parent, update_ref_force_false, abort_on_mismatch_or_non_fast_forward]
+
+verification_scenarios_required:
+  - simultaneous_new_claimants
+  - legacy_issue_5_BOOTSTRAP_RESUME_competition
+  - branch_created_then_claim_comment_crash
+  - orphan_competing_recovery
+  - handoff_competing_resume
+  - stale_owner_continues_after_recovery
+  - stale_reviewer_or_verifier_terminal_attempt
+  - wrong_type_illegal_null_unknown_kind_edited_capsule
+  - external_retirement_never_claimed_work
+  - review_disposition_routing
+  - domain_REVIEW_READY_vs_final_VERIFICATION_READY
+  - degraded_single_agent_profile
+  - context_unknown_window_fallback
+  - no_READY_liveness
+  - mechanical_AGENTS_phase_transition
+  - post_merge_pre_terminal_window
+  - later_unrelated_main_merge_preserves_binding
+  - changed_program_blob_with_old_binding_yields_binding_mismatch
+  - later_program_version_new_header_binding
+  - main_advances_after_PASS_before_issue_6_claim_or_merge
+  - pre_activation_wave_1_claim
+  - squash_only_integration
+
+next_wave_governor:
+  max_new_issues: 24
+  max_initial_ready: 12
+  compiler_checks: [unique_mission_ids, acyclic_hard_dependencies, no_output_path_collisions, ownership_conflict_validation, required_review_routes, activation_prerequisites]
+  excess_candidates_state: DEFERRED
