@@ -44,16 +44,12 @@ bootstrap_canonicalization:
           to: "**Canonicalized by:** Bootstrap Issue #6"
         - from: "**Authority:** Candidate operating model only. It is NON-CANONICAL until a fresh independent Bootstrap Issue #5 verifier records PASS for this exact remediation work state and Bootstrap Issue #6 performs the verified mechanical promotion."
           to: "**Authority:** CANONICAL planning operating model for the current planning phase, activated only after the verified Bootstrap Issue #6 squash integration recorded on GitHub."
-        - from: "When this document's header state is `CANONICAL` and `docs/planning/START-HERE.md` points here, a fresh planning agent MUST:"
-          to: "When this document's header state is `CANONICAL`, `docs/planning/START-HERE.md` points here, and Bootstrap Issue #6 has a valid terminal schema-2 `INTEGRATION_STATUS` for this exact canonical main SHA, a fresh planning agent MUST:"
-        - from: "**After this file is CANONICAL, Bootstrap Issues #2–#6 and #11 are historical provenance only and MUST NOT be selected as normal planning work.**"
-          to: "**After this file is CANONICAL and Issue #6 has posted a valid terminal schema-2 INTEGRATION_STATUS for this exact canonical main SHA, Bootstrap Issues #2–#6 and #11 are historical provenance only and MUST NOT be selected as normal planning work. Before that terminal status, Issue #6 is the sole bootstrap completion surface.**"
       all_other_bytes_identical: true
       post_transform_assertions:
         - canonical_header_state_equals_CANONICAL
-        - section_9_requires_issue_6_terminal_status_before_normal_wave_selection
-        - section_29_routes_pre_terminal_window_only_to_issue_6_completion
-        - section_30_routes_fully_activated_agents_to_open_PLAN_v1_issues
+        - candidate_body_section_9_already_requires_issue_6_terminal_status_before_normal_wave_selection
+        - candidate_body_section_29_already_routes_pre_terminal_window_only_to_issue_6_completion
+        - candidate_body_section_30_already_routes_fully_activated_agents_to_open_PLAN_v1_issues
         - no_text_asserts_issue_5_or_6_is_normal_queue_after_terminal_activation
   agents_entry_patch:
     source_path: AGENTS.md
