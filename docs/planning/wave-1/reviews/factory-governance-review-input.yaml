@@ -1,0 +1,81 @@
+version: 1
+review_issue: 34
+mission_id: W1-REV-FAC
+review_episode: w1-rev-fac-reviewer-20260810-01
+role: independent_adversarial_reviewer
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_ATTACK_PLAN
+activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+reviewed_inputs:
+  - mission_id: W1-GOV-01
+    issue: 22
+    status_comment_id: 5245434514
+    work_sha: ffa6b62b3b20c84a152e676b7a5db223daa130e5
+    head_sha: 3c0fe2f1bd1d19bd43e4f65b9c05a8a43c5ac0e3
+    artifact: docs/planning/wave-1/proposals/governance-and-canonicality.md
+  - mission_id: W1-FAC-01
+    issue: 23
+    status_comment_id: 5245474479
+    work_sha: e7fe3d0eaae22038e661ea941e652a618c3a7ec7
+    head_sha: a72a4b10e316482bf43a2931c6d306ed0baea547
+    artifact: docs/planning/wave-1/proposals/agent-operating-model.md
+  - mission_id: W1-FAC-02
+    issue: 24
+    status_comment_id: 5245532215
+    work_sha: 095372a41498e8d7e3b25364cba89dbc647b8839
+    head_sha: 67aaf055e0ca5479e5af0b86f8876e5cb848ad90
+    artifact: docs/planning/wave-1/proposals/github-control-plane-and-scheduler.md
+  - mission_id: W1-FAC-03
+    issue: 25
+    status_comment_id: 5245577951
+    work_sha: 70b763a965cdec0fa1f6c025a5b7492b844288fc
+    head_sha: 9f3646b7e4d280ce4ef102d30284f9e631a1a389
+    artifact: docs/planning/wave-1/proposals/review-verification-and-trust.md
+  - mission_id: W1-FAC-04
+    issue: 26
+    status_comment_id: 5245629575
+    work_sha: 99b0c7b3bddbad1a71e05f085fd0bd9f2c74e566
+    head_sha: 8f90b251c5d7736caed53781ae69b0b19787e8b3
+    artifact: docs/planning/wave-1/proposals/ci-evidence-and-factory-measurement.md
+forbidden_by_default:
+  - seed_and_mandate_documents_not_needed_to_test_a_concrete_contradiction
+  - sibling_technical_game_proposals_not_in_this_review_contract
+  - producer_private_rationale_or_chat
+attack_plan:
+  - id: A1
+    surface: authority_and_supersession
+    attacks: [hidden_human_gate, directive_scope_collision, stale_authority, canonicality_inference]
+  - id: A2
+    surface: ownership_claim_recovery
+    attacks: [duplicate_owner, lease_race, crash_between_transaction_steps, conflict_lock_escalation]
+  - id: A3
+    surface: context_continuation_handoff
+    attacks: [context_overload, stale_handoff_trust, hidden_local_state, scope_creep]
+  - id: A4
+    surface: self_modification_and_trust
+    attacks: [new_policy_judges_itself, role_laundering, degraded_trust_debt_lost, evaluator_capture]
+  - id: A5
+    surface: evidence_and_ci
+    attacks: [self_authored_oracle, flaky_retry_laundering, evidence_substitution_ambiguity, evidence_gc]
+  - id: A6
+    surface: scheduler_wip_goodhart
+    attacks: [activity_bias, starvation, opaque_unblock_score, issue_growth, quality_queue_collapse]
+  - id: A7
+    surface: dependency_ready_and_liveness
+    attacks: [dependency_mirror_drift, closed_issue_false_satisfaction, cycle_or_missing_transition, dynamic_conflict_scope]
+  - id: A8
+    surface: merge_and_integration
+    attacks: [expected_head_without_base, merge_method_drift, stale_verification, bypass_permissions]
+  - id: A9
+    surface: provenance_retention
+    attacks: [producer_branch_gc_breaks_work_sha, quarantine_deadlock, duplicate_identity_schemas]
+severity_rule:
+  BLOCKER: proceeding_to_synthesis_without_explicit_correction_can_make_authority_ownership_verification_or_liveness_invalid
+  MAJOR: material_cross_proposal_gap_or_ambiguity_requires_synthesis_correction_or_bounded_evidence_before_acceptance
+  MINOR: useful correction_not_required_to_establish_core_factory_safety
+  NOTE: observation_or_measurement_target_without_current_acceptance_block
+disposition_allowed: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED]
