@@ -1,0 +1,193 @@
+version: 5
+state: REVIEWED_CANDIDATE_SUPPORT
+bootstrap_remediation_issue: 18
+candidate_path: docs/planning/12-planning-program-v1-bootstrap-safe-candidate.md
+dispositions_path: docs/planning/reviews/issue-5-canonical-wrapper-finding-dispositions.md
+
+supersedes_for_verification:
+  - path: docs/planning/11-planning-program-v1-bootstrap-final-candidate.md
+    blob_sha: d083e5bfa108360818898f9628e939f50b4f3940
+    state: SUPERSEDED_FOR_VERIFICATION
+  - path: docs/planning/11-planning-program-v1-canonicalization-manifest.yaml
+    blob_sha: bca34638a054d725239b936dd8232a7d274e814d
+    state: SUPERSEDED_FOR_VERIFICATION
+
+composition:
+  base_candidate:
+    path: docs/planning/11-planning-program-v1-bootstrap-final-candidate.md
+    blob_sha: d083e5bfa108360818898f9628e939f50b4f3940
+    adoption: all_clauses_exactly
+  base_manifest:
+    path: docs/planning/11-planning-program-v1-canonicalization-manifest.yaml
+    blob_sha: bca34638a054d725239b936dd8232a7d274e814d
+    adoption: all_clauses_exactly
+  adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+  overlay_precedence:
+    allowed_overrides:
+      - bootstrap_numbered_clause_authority_by_applicability_guard
+      - program_promotion_source_and_header_replacements
+    all_other_conflicts: BASE_ISSUE16_WINS
+    invented_generic_vs_nongeneric_partition: forbidden
+  missing_or_mismatched_base_blob: VERIFICATION_FAILURE
+
+applicability_guard:
+  classify_before_work_selection: true
+  states:
+    PRE_CANONICAL_BOOTSTRAP:
+      predicate:
+        program_header_state_not_equal: CANONICAL
+      authority:
+        bootstrap_verification_and_canonicalization: ACTIVE_AS_DECLARED
+        generic_schema3_protocol: ACTIVE
+        normal_PLAN_v1_queue: INACTIVE
+    CANONICAL_UNBOUND_ACTIVATION:
+      predicate:
+        program_header_state_equals: CANONICAL
+        active_canonical_binding_resolves: false
+        named_canonicalizer_has_prior_valid_binding_for_different_program_blob: false
+      authority:
+        allowed_bootstrap_surface: NAMED_CANONICALIZER_POST_MERGE_ACTIVATION_ONLY
+        named_canonicalizer_issue: 6
+        all_other_bootstrap_numbered_clauses: PROVENANCE_ONLY
+        normal_PLAN_v1_queue: INACTIVE
+        generic_schema3_validation_and_binding: ACTIVE
+    CANONICAL_ACTIVE:
+      predicate:
+        program_header_state_equals: CANONICAL
+        active_canonical_binding_resolves: true
+      authority:
+        normal_queue: OPEN_PLAN_V1_ONLY
+        bootstrap_numbered_clauses: PROVENANCE_ONLY
+        generic_schema3_protocol: ACTIVE
+        verification_restart_refresh: ACTIVE_WHEN_DECLARED_BY_CURRENT_CANONICAL_TASK_GRAPH
+        root_entry_docs: ACTIVE
+    CANONICAL_BINDING_MISMATCH:
+      predicate:
+        program_header_state_equals: CANONICAL
+        active_canonical_binding_resolves: false
+        named_canonicalizer_has_prior_valid_binding_for_different_program_blob: true
+      authority:
+        normal_PLAN_v1_queue: INACTIVE
+        bootstrap_replay: FORBIDDEN
+        action: FAIL_CLOSED_CANONICAL_RECOVERY_OR_REVERIFICATION
+
+bootstrap_numbered_clause_classifier:
+  fixed_bootstrap_issues: [2, 3, 4, 5, 6, 11, 14, 16, 18]
+  corresponding_bootstrap_mission_ids_are_in_scope: true
+  operational_subject_matches_when_clause_can:
+    - create_eligibility
+    - require_next_action
+    - change_priority
+    - block_current_queue
+    - require_replay
+    - reactivate_completed_bootstrap_work
+  provenance_only_references_do_not_gain_authority:
+    - immutable_source_reference
+    - historical_example
+    - evidence_identifier
+    - source_sha_or_blob
+    - transition_provenance
+  CANONICAL_ACTIVE_effect: PROVENANCE_ONLY
+  present_tense_text_does_not_override_guard: true
+
+canonical_binding:
+  inherit_from_base_manifest: true
+  current_HEAD_equality_required_after_activation: false
+  active_binding_requires:
+    - canonicalizer_issue_matches_program_header
+    - terminal_INTEGRATION_STATUS_is_valid
+    - canonical_program_blob_matches_current_program_blob
+    - activation_main_sha_is_ancestor_or_equal_current_main
+    - referenced_verification_is_valid_PASS
+
+verification_lifecycle:
+  inherit_VERIFICATION_RESTART: true
+  inherit_VERIFICATION_REFRESH: true
+  CANONICAL_ACTIVE_scope:
+    generic_mechanisms_remain_active: true
+    bootstrap_issue_examples_create_future_work: false
+    invocation_requires_current_canonical_task_or_revision_contract: true
+
+verification_contract:
+  verifier_issue: 5
+  required_result: PASS
+  allowed_independence_modes: [FULL_INDEPENDENT_CONTEXT, DEGRADED_SINGLE_AGENT]
+  exact_payload_bindings:
+    - issue18_candidate_work_sha
+    - issue18_manifest_identity
+    - base_issue16_candidate_blob_sha
+    - base_issue16_manifest_blob_sha
+    - adopted_wave_1_contract_blob_sha
+    - verified_base_main_sha
+    - verification_report_work_sha
+    - verification_simulation_blob_sha
+  PASS_requires_blocker_count: 0
+  PASS_requires_major_count: 0
+  required_regressions:
+    - V5-B03
+    - V5-B04
+    - V5-B05
+    - V5-B06
+    - V5-B07
+    - V5-B08
+    - V5-B09
+  required_scenarios:
+    - post_terminal_canonical_reader_has_one_normal_queue
+    - bootstrap_numbered_clause_cannot_reactivate_after_binding
+    - generic_VERIFICATION_RESTART_remains_active
+    - generic_VERIFICATION_REFRESH_remains_active
+    - canonical_unbound_window_allows_only_issue6_post_merge_activation
+    - canonical_binding_mismatch_does_not_enter_activation_window
+    - later_unrelated_main_merge_preserves_active_binding
+    - current_base_verification_selection
+    - squash_only_integration
+    - implementation_barrier_preserved
+
+bootstrap_canonicalization:
+  issue: 6
+  inherit_base_issue6_contract_overlay: true
+  pre_merge:
+    valid_current_base_issue5_PASS_required: true
+    unresolved_BLOCKER_MAJOR_forbidden: true
+    expected_head_required: true
+    merge_method: squash
+  program_promotion:
+    source: docs/planning/12-planning-program-v1-bootstrap-safe-candidate.md
+    destination: docs/planning/PLANNING-PROGRAM-v1.md
+    transform:
+      type: exact_literal_replacements_then_byte_identical_remainder
+      every_from_literal_matches_exactly_once: true
+      replacements:
+        - from: "# Planning Program v1 — Bootstrap-Safe Final Candidate"
+          to: "# Planning Program v1 — Canonical"
+        - from: "**State:** REVIEWED-CANDIDATE-BOOTSTRAP-SAFE"
+          to: "**State:** CANONICAL"
+        - from: "**Bootstrap remediation issue:** #18"
+          to: "**Canonicalized by:** Bootstrap Issue #6"
+        - from: "**Authority:** NON-CANONICAL until Bootstrap Issue #5 records PASS for this exact effective candidate/manifest state and Bootstrap Issue #6 performs verified squash-only promotion and terminal activation."
+          to: "**Authority:** CANONICAL planning operating model for the current pre-implementation PLANNING phase."
+      all_other_bytes_identical: true
+      applicability_guard_survives_byte_identically: true
+  root_entry_transforms:
+    inherit_AGENTS_transform_from_base_manifest: true
+    inherit_START_HERE_replacement_from_base_manifest: true
+  post_merge_sequence:
+    inherit_from_base_manifest: true
+    terminal_binding_must_precede_PLAN_v1_activation: true
+
+post_terminal_assertions:
+  - promoted_program_state_is_CANONICAL
+  - active_binding_resolves_for_promoted_program_blob
+  - applicability_state_is_CANONICAL_ACTIVE
+  - all_bootstrap_numbered_clauses_have_PROVENANCE_ONLY_authority
+  - exactly_one_normal_queue_is_open_PLAN_v1
+  - no_bootstrap_clause_can_require_replay
+  - generic_schema3_protocol_remains_active
+  - generic_VERIFICATION_RESTART_and_REFRESH_remain_available_when_declared
+  - root_AGENTS_START_HERE_program_phase_is_PLANNING
+  - gameplay_implementation_barrier_remains_active
+
+integration:
+  main_merge_method: squash
+  wave_1_creation_before_issue6_squash: forbidden
+  normal_wave_activation_before_terminal_binding: forbidden
