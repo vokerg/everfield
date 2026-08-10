@@ -23,9 +23,7 @@ verification_contract:
     - adopted_wave_1_contract_blob_sha
     - verified_base_main_sha
     - simulated_wave_1_issue_graph
-  pass_forbidden_with_unresolved_severity:
-    - BLOCKER
-    - MAJOR
+  pass_forbidden_with_unresolved_severity: [BLOCKER, MAJOR]
 
 bootstrap_canonicalization:
   issue: 6
@@ -46,12 +44,17 @@ bootstrap_canonicalization:
           to: "**Canonicalized by:** Bootstrap Issue #6"
         - from: "**Authority:** Candidate operating model only. It is NON-CANONICAL until a fresh independent Bootstrap Issue #5 verifier records PASS for this exact remediation work state and Bootstrap Issue #6 performs the verified mechanical promotion."
           to: "**Authority:** CANONICAL planning operating model for the current planning phase, activated only after the verified Bootstrap Issue #6 squash integration recorded on GitHub."
+        - from: "When this document's header state is `CANONICAL` and `docs/planning/START-HERE.md` points here, a fresh planning agent MUST:"
+          to: "When this document's header state is `CANONICAL`, `docs/planning/START-HERE.md` points here, and Bootstrap Issue #6 has a valid terminal schema-2 `INTEGRATION_STATUS` for this exact canonical main SHA, a fresh planning agent MUST:"
+        - from: "**After this file is CANONICAL, Bootstrap Issues #2–#6 and #11 are historical provenance only and MUST NOT be selected as normal planning work.**"
+          to: "**After this file is CANONICAL and Issue #6 has posted a valid terminal schema-2 INTEGRATION_STATUS for this exact canonical main SHA, Bootstrap Issues #2–#6 and #11 are historical provenance only and MUST NOT be selected as normal planning work. Before that terminal status, Issue #6 is the sole bootstrap completion surface.**"
       all_other_bytes_identical: true
       post_transform_assertions:
         - canonical_header_state_equals_CANONICAL
-        - no_text_asserts_bootstrap_issue_5_or_6_is_current_normal_queue
-        - section_29_marks_bootstrap_chain_provenance_only_when_canonical
-        - section_30_routes_canonical_agents_to_open_PLAN_v1_issues
+        - section_9_requires_issue_6_terminal_status_before_normal_wave_selection
+        - section_29_routes_pre_terminal_window_only_to_issue_6_completion
+        - section_30_routes_fully_activated_agents_to_open_PLAN_v1_issues
+        - no_text_asserts_issue_5_or_6_is_normal_queue_after_terminal_activation
   agents_entry_patch:
     source_path: AGENTS.md
     base_must_match_verified_main: true
@@ -66,10 +69,12 @@ bootstrap_canonicalization:
         1. Read this file.
         2. Read `docs/planning/START-HERE.md`.
         3. Follow the canonical Planning Program v1 referenced there.
-        4. Select/resume work only from repository + GitHub state using the canonical dispatcher rules.
-        5. Preserve the canonical squash-only `main` integration rule.
+        4. Before normal `[PLAN-v1]` selection, confirm Bootstrap Issue #6 has a valid terminal schema-2 `INTEGRATION_STATUS` for the exact current canonical main SHA.
+        5. If that terminal status is absent, inspect Issue #6 and complete only its verified post-merge activation steps; do not treat an empty `[PLAN-v1]` queue as a liveness defect.
+        6. After the terminal status exists, select/resume work only from repository + GitHub state using the canonical dispatcher rules.
+        7. Preserve the canonical squash-only `main` integration rule.
 
-        The bootstrap Issues #2-#6 and #11 are provenance after canonicalization and are not the normal work queue.
+        After terminal Issue #6 activation, Bootstrap Issues #2-#6 and #11 are provenance and are not the normal work queue.
   start_here_replacement:
     path: docs/planning/START-HERE.md
     content: |
@@ -82,13 +87,15 @@ bootstrap_canonicalization:
 
       1. Read `/AGENTS.md`.
       2. Read `docs/planning/PLANNING-PROGRAM-v1.md` from current `main`.
-      3. Query open GitHub issues beginning with `[PLAN-v1]`.
-      4. Derive eligibility, ownership, recovery, priority, context, output, review, and handoff state exactly as defined by the canonical program and schema-2 operational registry.
-      5. Prefer resumable/recovery and review/revision/verification/integration work before new proposal work.
-      6. Never use prior chat history as project authority.
-      7. Never integrate into `main` except by squash merge.
+      3. Confirm Bootstrap Issue #6 has a valid terminal schema-2 `INTEGRATION_STATUS` for this exact canonical main SHA.
+      4. If that terminal status is absent, inspect Issue #6 and complete only the verified post-merge activation sequence; do not invoke normal liveness recovery for the not-yet-created Wave 1 queue.
+      5. If the terminal status exists, query open GitHub issues beginning with `[PLAN-v1]`.
+      6. Derive eligibility, ownership, recovery, priority, context, output, review, and handoff state exactly as defined by the canonical program and schema-2 operational registry.
+      7. Prefer resumable/recovery and review/revision/verification/integration work before new proposal work.
+      8. Never use prior chat history as project authority.
+      9. Never integrate into `main` except by squash merge.
 
-      Bootstrap planning artifacts remain provenance and may be read only when the canonical program or selected issue explicitly requires them.
+      After terminal Issue #6 activation, bootstrap planning artifacts are provenance and may be read only when the canonical program or selected issue explicitly requires them.
   post_merge_sequence:
     - obtain_squash_main_sha
     - verify_canonical_program_and_entry_docs_at_that_sha
@@ -102,15 +109,8 @@ bootstrap_canonicalization:
 wave_1_contract_adoption:
   source_path: docs/planning/08-planning-program-v1-canonicalization-manifest.yaml
   source_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
-  adopted_sections:
-    - issue_compiler
-    - universal_root_acceptance
-    - wave_1
-    - non_root_optional_retrieval
-    - next_wave_candidate_schema
-  explicitly_not_adopted:
-    - verification_contract
-    - bootstrap_canonicalization
+  adopted_sections: [issue_compiler, universal_root_acceptance, wave_1, non_root_optional_retrieval, next_wave_candidate_schema]
+  explicitly_not_adopted: [verification_contract, bootstrap_canonicalization]
   interpretation:
     activation_main_sha_placeholder_must_be_resolved_to_issue_6_squash_main_sha_before_issue_creation: true
     common_stopping_rule_final_STATUS_means_schema_2_registered_status_kind: true
@@ -125,17 +125,8 @@ operational_capsules:
     edit_detection: github_server_created_at_must_equal_updated_at
     body_timestamps_authoritative: false
     unknown_top_level_fields: invalid
-    extensions_field:
-      allowed: true
-      authority_effect: none
-  common_required_fields:
-    - protocol
-    - schema
-    - kind
-    - issue
-    - mission_id
-    - branch
-    - actor_session_id
+    extensions_field: {allowed: true, authority_effect: none}
+  common_required_fields: [protocol, schema, kind, issue, mission_id, branch, actor_session_id]
   common_invariants:
     protocol: planning-v1
     schema: 2
@@ -150,58 +141,26 @@ operational_capsules:
 
   kinds:
     CLAIM:
-      required_fields:
-        - state
-        - base_sha
-        - observed_head_sha
-        - previous_ownership_comment_id
-      field_constraints:
-        state: IN_PROGRESS
-        previous_ownership_comment_id: null
-      predecessor:
-        derived_state: READY
-        branch_existed_before_claim_attempt: false
+      required_fields: [state, base_sha, observed_head_sha, previous_ownership_comment_id]
+      constants: {state: IN_PROGRESS, previous_ownership_comment_id: null}
+      predecessor: {derived_state: READY, branch_existed_before_claim_attempt: false}
       winner_rule: earliest_valid_claim_for_created_branch_and_observed_head
       authority_effect: new_ownership_generation
 
     ORPHAN_PROBE:
-      required_fields:
-        - observed_head_sha
-        - observed_main_sha
-        - observed_no_ownership_through_comment_id
-      predecessor:
-        branch_exists: true
-        valid_ownership_grant_exists: false
+      required_fields: [observed_head_sha, observed_main_sha, observed_no_ownership_through_comment_id]
+      predecessor: {branch_exists: true, valid_ownership_grant_exists: false}
       winner_rule: none_non_owning
       authority_effect: none
-      maturity:
-        minimum_server_age_minutes: 10
-        invalid_if_later_valid_ownership_grant_exists: true
+      maturity: {minimum_server_age_minutes: 10, invalid_if_later_valid_ownership_grant_exists: true}
 
     RESUME_INTENT:
-      required_fields:
-        - reason
-        - source_comment_id
-        - observed_head_sha
-      enums:
-        reason:
-          - HANDOFF
-          - STALE
-          - ORPHAN
+      required_fields: [reason, source_comment_id, observed_head_sha]
+      enums: {reason: [HANDOFF, STALE, ORPHAN]}
       predecessor_by_reason:
-        HANDOFF:
-          source_kind: STATUS
-          source_state: HANDOFF_READY
-        STALE:
-          source_kind:
-            - CLAIM
-            - RESUME
-            - RECOVER
-            - PROGRESS
-          source_condition: lease_expired_and_no_later_completion_or_handoff
-        ORPHAN:
-          source_kind: ORPHAN_PROBE
-          source_condition: mature_probe_and_no_later_ownership
+        HANDOFF: {source_kind: STATUS, source_state: HANDOFF_READY}
+        STALE: {source_kind: [CLAIM, RESUME, RECOVER, PROGRESS], source_condition: lease_expired_and_no_later_completion_or_handoff}
+        ORPHAN: {source_kind: ORPHAN_PROBE, source_condition: mature_probe_and_no_later_ownership}
       validity:
         observed_head_must_equal_current_branch_head: true
         source_condition_must_still_hold_at_comment_creation: true
@@ -209,19 +168,9 @@ operational_capsules:
       authority_effect: none
 
     RESUME:
-      required_fields:
-        - state
-        - base_sha
-        - observed_head_sha
-        - previous_ownership_comment_id
-        - winning_intent_comment_id
-        - source_status_comment_id
-      field_constraints:
-        state: IN_PROGRESS
-      predecessor:
-        winning_intent_reason: HANDOFF
-        source_kind: STATUS
-        source_state: HANDOFF_READY
+      required_fields: [state, base_sha, observed_head_sha, previous_ownership_comment_id, winning_intent_comment_id, source_status_comment_id]
+      constants: {state: IN_PROGRESS}
+      predecessor: {winning_intent_reason: HANDOFF, source_kind: STATUS, source_state: HANDOFF_READY}
       validity:
         actor_session_must_equal_winning_intent_actor_session: true
         winning_intent_must_be_lowest_valid_intent: true
@@ -230,27 +179,12 @@ operational_capsules:
       authority_effect: new_ownership_generation
 
     RECOVER:
-      required_fields:
-        - state
-        - recovery_reason
-        - base_sha
-        - observed_head_sha
-        - previous_ownership_comment_id
-        - winning_intent_comment_id
-        - source_comment_id
-      field_constraints:
-        state: IN_PROGRESS
-      enums:
-        recovery_reason:
-          - STALE
-          - ORPHAN
+      required_fields: [state, recovery_reason, base_sha, observed_head_sha, previous_ownership_comment_id, winning_intent_comment_id, source_comment_id]
+      constants: {state: IN_PROGRESS}
+      enums: {recovery_reason: [STALE, ORPHAN]}
       predecessor_by_reason:
-        STALE:
-          winning_intent_reason: STALE
-          source_condition: referenced_ownership_is_stale
-        ORPHAN:
-          winning_intent_reason: ORPHAN
-          source_condition: referenced_orphan_probe_is_mature
+        STALE: {winning_intent_reason: STALE, source_condition: referenced_ownership_is_stale}
+        ORPHAN: {winning_intent_reason: ORPHAN, source_condition: referenced_orphan_probe_is_mature}
       validity:
         actor_session_must_equal_winning_intent_actor_session: true
         winning_intent_must_be_lowest_valid_intent: true
@@ -260,20 +194,10 @@ operational_capsules:
       authority_effect: new_ownership_generation
 
     PROGRESS:
-      required_fields:
-        - state
-        - ownership_generation_comment_id
-        - observed_head_sha
-        - progress_basis
-        - evidence_refs
-      field_constraints:
-        state: IN_PROGRESS
-      enums:
-        progress_basis:
-          - HEAD_ADVANCE
-          - EVIDENCE
-      predecessor:
-        current_valid_owner_required: true
+      required_fields: [state, ownership_generation_comment_id, observed_head_sha, progress_basis, evidence_refs]
+      constants: {state: IN_PROGRESS}
+      enums: {progress_basis: [HEAD_ADVANCE, EVIDENCE]}
+      predecessor: {current_valid_owner_required: true}
       validity:
         ownership_generation_must_equal_current_owner: true
         posted_before_lease_expiry: true
@@ -284,112 +208,49 @@ operational_capsules:
       authority_effect: renew_current_lease_only
 
     STATUS:
-      required_fields:
-        - state
-        - ownership_generation_comment_id
-        - head_sha
-      enums:
-        state:
-          - HANDOFF_READY
-          - REVIEW_READY
-          - VERIFICATION_READY
-          - DONE
-          - SUPERSEDED
-          - INVALIDATED
+      required_fields: [state, ownership_generation_comment_id, head_sha]
+      enums: {state: [HANDOFF_READY, REVIEW_READY, VERIFICATION_READY, DONE, SUPERSEDED, INVALIDATED]}
       predecessor:
-        current_valid_owner_required_unless_state_is_SUPERSEDED_after_external_canonicalization: true
+        ordinary_status_requires_current_valid_owner: true
+        SUPERSEDED_external_path_requires_valid_superseding_INTEGRATION_STATUS: true
+        INVALIDATED_external_path_requires_valid_authorizing_REVIEW_STATUS_or_INTEGRATION_STATUS: true
       conditional_required_fields:
-        HANDOFF_READY:
-          - work_sha
-          - handoff_path
-        REVIEW_READY:
-          - work_sha
-          - artifact_paths
-          - acceptance_evidence_refs
-        VERIFICATION_READY:
-          - candidate_work_sha
-          - manifest_identity
-          - artifact_paths
-        DONE:
-          - result_code
-          - evidence_refs
-        SUPERSEDED:
-          - superseded_by_issue_or_artifact
-          - reason
-        INVALIDATED:
-          - reason
-          - remediation_issue_or_path
+        HANDOFF_READY: [work_sha, handoff_path]
+        REVIEW_READY: [work_sha, artifact_paths, acceptance_evidence_refs]
+        VERIFICATION_READY: [candidate_work_sha, manifest_identity, artifact_paths]
+        DONE: [result_code, evidence_refs]
+        SUPERSEDED: [superseded_by_issue_or_artifact, superseding_integration_status_comment_id, reason]
+        INVALIDATED: [reason, remediation_issue_or_path, authorizing_comment_id]
       authority_effect: recorded_task_state
 
     REVIEW_STATUS:
-      required_fields:
-        - state
-        - ownership_generation_comment_id
-        - reviewed_work_shas
-        - disposition
-        - findings_artifact
-        - blocker_count
-        - major_count
+      required_fields: [state, ownership_generation_comment_id, reviewed_work_shas, disposition, findings_artifact, blocker_count, major_count]
       enums:
-        state:
-          - DONE
-          - INVALIDATED
-        disposition:
-          - PASS_FOR_SYNTHESIS
-          - CHANGES_REQUIRED
-          - INVALIDATED
+        state: [DONE, INVALIDATED]
+        disposition: [PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, INVALIDATED]
       transition_constraints:
-        disposition_PASS_FOR_SYNTHESIS_requires_state: DONE
-        disposition_CHANGES_REQUIRED_requires_state: DONE
-        disposition_INVALIDATED_requires_state: INVALIDATED
+        PASS_FOR_SYNTHESIS: {required_state: DONE}
+        CHANGES_REQUIRED: {required_state: DONE}
+        INVALIDATED: {required_state: INVALIDATED}
       downstream_effect:
         PASS_FOR_SYNTHESIS: declared_synthesis_may_become_ready
         CHANGES_REQUIRED: declared_synthesis_revision_may_become_ready
         INVALIDATED: only_declared_recovery_or_replanning_may_become_ready
 
     VERIFICATION_STATUS:
-      required_fields:
-        - state
-        - ownership_generation_comment_id
-        - result
-        - candidate_work_sha
-        - manifest_identity
-        - adopted_wave_1_contract_blob_sha
-        - verified_base_main_sha
-        - report_path
-        - blocker_count
-        - major_count
-      field_constraints:
-        state: DONE
-      enums:
-        result:
-          - PASS
-          - FAIL
+      required_fields: [state, ownership_generation_comment_id, result, candidate_work_sha, manifest_identity, adopted_wave_1_contract_blob_sha, verified_base_main_sha, report_path, blocker_count, major_count]
+      constants: {state: DONE}
+      enums: {result: [PASS, FAIL]}
       validity:
         PASS_requires_blocker_count: 0
         PASS_requires_major_count: 0
         PASS_requires_fresh_independent_context: true
         candidate_manifest_and_adopted_blob_must_match_exact_verified_payload: true
-      downstream_effect:
-        PASS: declared_canonicalization_issue_may_become_ready
-        FAIL: only_bounded_remediation_may_become_ready
+      downstream_effect: {PASS: declared_canonicalization_issue_may_become_ready, FAIL: only_bounded_remediation_may_become_ready}
 
     INTEGRATION_STATUS:
-      required_fields:
-        - state
-        - ownership_generation_comment_id
-        - verification_status_comment_id
-        - verified_candidate_work_sha
-        - verified_manifest_identity
-        - verified_base_main_sha
-        - expected_pre_merge_head_sha
-        - main_sha
-        - merge_method
-        - result_code
-        - canonicality
-      field_constraints:
-        state: DONE
-        merge_method: squash
+      required_fields: [state, ownership_generation_comment_id, verification_status_comment_id, verified_candidate_work_sha, verified_manifest_identity, verified_base_main_sha, expected_pre_merge_head_sha, main_sha, merge_method, result_code, canonicality]
+      constants: {state: DONE, merge_method: squash}
       validity:
         referenced_verification_must_be_valid_PASS: true
         expected_pre_merge_head_must_match_merged_PR_head: true
@@ -424,14 +285,9 @@ transition_table:
     complete_pass: REVIEW_STATUS_DONE_PASS_FOR_SYNTHESIS
     complete_changes: REVIEW_STATUS_DONE_CHANGES_REQUIRED
     invalidate: REVIEW_STATUS_INVALIDATED_INVALIDATED
-  verification_task:
-    pass: VERIFICATION_STATUS_DONE_PASS
-    fail: VERIFICATION_STATUS_DONE_FAIL
-  integration_task:
-    terminal_after_squash: INTEGRATION_STATUS_DONE
-  retirement:
-    supersede: STATUS_SUPERSEDED
-    invalidate: STATUS_INVALIDATED
+  verification_task: {pass: VERIFICATION_STATUS_DONE_PASS, fail: VERIFICATION_STATUS_DONE_FAIL}
+  integration_task: {terminal_after_squash: INTEGRATION_STATUS_DONE}
+  retirement: {supersede: STATUS_SUPERSEDED, invalidate: STATUS_INVALIDATED}
 
 mutation_fence:
   before_every_task_branch_mutation:
@@ -455,6 +311,7 @@ verification_scenarios_required_after_remediation:
   - domain_synthesis_REVIEW_READY_vs_final_VERIFICATION_READY
   - context_budget_unknown_window_fallback
   - no_READY_liveness
+  - post_merge_pre_terminal_activation_window
   - mechanical_canonical_promotion_with_post_transform_assertions
   - main_advances_after_PASS
   - pre_activation_wave_1_claim
