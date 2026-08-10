@@ -1,0 +1,54 @@
+version: 1
+issue: 5
+mission_id: BOOTSTRAP-VERIFY-05
+verification_episode: issue5-degraded-verifier-20260810-03
+ownership_generation_comment_id: 5245171960
+ownership_kind: VERIFICATION_RESTART
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+reopen_condition: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_EVIDENCE
+verified_base_main_sha: a611c4540df1693fb3536a59f032f1a79b51cdc5
+verification_branch_head_before_evidence: 657f4d24f364d91ca8e8fee12f59182447544de6
+payload:
+  candidate_path: docs/planning/12-planning-program-v1-bootstrap-safe-candidate.md
+  candidate_work_sha: 00df46cae3230f380bcee9dd24442d984c73fea0
+  candidate_blob_sha: 261d7e5f7f9f1412415116b3e0f127f3e3f1bec7
+  manifest_path: docs/planning/12-planning-program-v1-canonicalization-manifest.yaml
+  manifest_blob_sha: f4e65f408b77a917d1fc61a1dbaee808e978f072
+  base_issue16_candidate_path: docs/planning/11-planning-program-v1-bootstrap-final-candidate.md
+  base_issue16_candidate_blob_sha: d083e5bfa108360818898f9628e939f50b4f3940
+  base_issue16_manifest_path: docs/planning/11-planning-program-v1-canonicalization-manifest.yaml
+  base_issue16_manifest_blob_sha: bca34638a054d725239b936dd8232a7d274e814d
+  adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+authoritative_entry_inputs:
+  - AGENTS.md@main
+  - docs/planning/START-HERE.md@main
+  - GitHub Issue #5 contract and schema-3 operational comments
+  - docs/planning/12-planning-program-v1-bootstrap-safe-candidate.md@main
+  - docs/planning/12-planning-program-v1-canonicalization-manifest.yaml@main
+  - exact inherited base blobs named above
+initial_required_scenarios:
+  - cold_start_phase_and_queue_derivation
+  - simultaneous_claim_and_recovery_fencing
+  - branch_orphan_and_stale_writer
+  - review_rejection_and_dependency_invalidation
+  - no_READY_liveness
+  - stale_planned_work_retirement
+  - premature_implementation_block
+  - self_canonicalization_block
+  - schema3_type_nullability_and_owner_fencing
+  - deterministic_composition_no_hidden_partition
+  - canonical_unbound_activation_window
+  - canonical_binding_mismatch
+  - post_terminal_CANONICAL_ACTIVE_single_queue
+  - bootstrap_numbered_clause_provenance_only
+  - generic_VERIFICATION_RESTART_after_activation
+  - generic_VERIFICATION_REFRESH_after_activation
+  - later_main_merge_preserves_binding
+  - current_base_verification_selection
+  - squash_only_integration
+  - reviewed_23_mission_wave_graph
+judgment_rule: PASS only with zero BLOCKER and zero MAJOR after all required scenarios pass; otherwise FAIL and route bounded remediation
