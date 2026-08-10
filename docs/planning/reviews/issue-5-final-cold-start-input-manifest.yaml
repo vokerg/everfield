@@ -1,0 +1,87 @@
+version: 1
+issue: 5
+mission_id: BOOTSTRAP-VERIFY-05
+verification_episode: issue5-degraded-verifier-20260810-01
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+reopen_condition: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_EVIDENCE
+verified_base_main_sha: c822934c74cc5903b057e6d081f5e0a4c3e58226
+verifier_branch: planning/issue-5
+ownership_generation_comment_id: 5244621850
+legacy_predecessor_comment_id: 5244618992
+initial_branch_head_sha: a8256a0f61eb2d74875a099e75d4df4e7b06acf8
+
+authoritative_inputs:
+  - kind: repository_file
+    path: AGENTS.md
+    ref: main@c822934c74cc5903b057e6d081f5e0a4c3e58226
+    blob_sha: cfc64a460578a82a6ec1083767ba66c71402aef4
+  - kind: repository_file
+    path: docs/planning/START-HERE.md
+    ref: main@c822934c74cc5903b057e6d081f5e0a4c3e58226
+    blob_sha: 347684b86592067496e201cf531068e97f2c86b9
+  - kind: github_issue
+    issue: 5
+    purpose: verification_contract
+  - kind: github_issue
+    issue: 6
+    purpose: canonicalization_contract
+  - kind: repository_file
+    path: docs/planning/10-planning-program-v1-final-bootstrap-candidate.md
+    ref: main@c822934c74cc5903b057e6d081f5e0a4c3e58226
+    blob_sha: 9829975eb3b8ac12b7dd8338a3569ff1a50cf309
+  - kind: repository_file
+    path: docs/planning/10-planning-program-v1-canonicalization-manifest.yaml
+    ref: main@c822934c74cc5903b057e6d081f5e0a4c3e58226
+    blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c
+  - kind: git_blob
+    blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+    purpose: adopted_wave_1_contract_source
+  - kind: github_comment
+    comment_id: 5244416013
+    purpose: single_agent_resource_constraint
+  - kind: github_comment
+    comment_id: 5244618992
+    purpose: legacy_bridge_predecessor
+  - kind: github_comment
+    comment_id: 5244621850
+    purpose: schema_3_bootstrap_ownership_generation
+
+initial_evidence_scenarios_before_prior_rationale:
+  - simultaneous_new_claimants
+  - legacy_issue_5_BOOTSTRAP_RESUME_competition
+  - branch_created_then_claim_comment_crash
+  - orphan_competing_recovery
+  - handoff_competing_resume
+  - stale_owner_continues_after_recovery
+  - stale_reviewer_or_verifier_terminal_attempt
+  - wrong_type_illegal_null_unknown_kind_edited_capsule
+  - external_retirement_never_claimed_work
+  - review_disposition_routing
+  - domain_REVIEW_READY_vs_final_VERIFICATION_READY
+  - degraded_single_agent_profile
+  - context_unknown_window_fallback
+  - no_READY_liveness
+  - mechanical_AGENTS_phase_transition
+  - post_merge_pre_terminal_window
+  - later_unrelated_main_merge_preserves_binding
+  - changed_program_blob_with_old_binding_yields_binding_mismatch
+  - later_program_version_new_header_binding
+  - main_advances_after_PASS_before_issue_6_claim_or_merge
+  - pre_activation_wave_1_claim
+  - squash_only_integration
+
+prior_rationale_forbidden_until_initial_evidence_complete:
+  - docs/planning/reviews/planning-program-v1-cold-start-verification.md
+  - docs/planning/reviews/planning-program-v1-cold-start-reverification.md
+  - docs/planning/reviews/issue-5-finding-dispositions.md
+  - docs/planning/reviews/issue-5-reverification-finding-dispositions.md
+  - producer_private_chat_or_scratch_context
+
+mutation_rule:
+  candidate_and_manifest_on_main_are_read_only_for_this_episode: true
+  any_defect_requires_separate_remediation_issue_branch: true
+  every_verifier_branch_write_requires_owner_and_expected_parent_recheck: true
