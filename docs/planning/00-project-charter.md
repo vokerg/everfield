@@ -1,6 +1,6 @@
 # Project Charter — Seed
 
-**State:** SEED
+**State:** SEED, except explicitly marked canonical human directives
 
 ## 1. Project
 
@@ -171,3 +171,20 @@ Do not yet:
 ## 12. Success Condition for Leaving the Planning Bootstrap Phase
 
 The bootstrap phase is complete only when the repository contains a reviewed process that can autonomously produce, criticize, revise, and validate the detailed plans required for implementation.
+
+## 13. Main-Branch Integration Policy — Canonical Human Directive
+
+This section is a binding human directive even while the surrounding charter remains a SEED artifact.
+
+**Every pull request or task integrated into `main` must be integrated using squash merge.**
+
+Consequences:
+
+- task branches may preserve many WIP/review/correction commits during execution;
+- accepted work lands on `main` as one squash commit per integrated PR/task outcome;
+- merge commits are not an allowed normal integration method;
+- rebase-merge is not an allowed normal integration method;
+- agents must not bypass this rule merely because repository settings expose other merge buttons or APIs;
+- future branch, PR, merge-queue, reviewer, and integration protocols must preserve squash-only integration to `main` unless a later explicit human directive supersedes it.
+
+This directive exists to keep `main` history task-oriented while allowing agents to work iteratively and leave recoverable WIP history on task branches.
