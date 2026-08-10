@@ -1,0 +1,223 @@
+version: 4
+state: REVIEWED_CANDIDATE_SUPPORT
+bootstrap_remediation_issue: 16
+candidate_path: docs/planning/11-planning-program-v1-bootstrap-final-candidate.md
+dispositions_path: docs/planning/reviews/issue-5-final-verification-finding-dispositions.md
+
+supersedes_for_verification:
+  - {path: docs/planning/10-planning-program-v1-final-bootstrap-candidate.md, blob_sha: 9829975eb3b8ac12b7dd8338a3569ff1a50cf309, state: SUPERSEDED_FOR_VERIFICATION}
+  - {path: docs/planning/10-planning-program-v1-canonicalization-manifest.yaml, blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c, state: SUPERSEDED_FOR_VERIFICATION}
+
+composition:
+  base_candidate:
+    path: docs/planning/10-planning-program-v1-final-bootstrap-candidate.md
+    blob_sha: 9829975eb3b8ac12b7dd8338a3569ff1a50cf309
+    adopted_sections: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    excluded_sections: [1, 24, 25]
+    section_overrides:
+      13: overlay_candidate_sections_3_through_5_extend_terminal_verification_reentry
+      19: overlay_candidate_sections_2_5_6_replace_verification_binding_and_issue6_selection
+  base_manifest:
+    path: docs/planning/10-planning-program-v1-canonicalization-manifest.yaml
+    blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c
+  operation_semantics:
+    source_paths_resolve_in: this_overlay_manifest_document
+    target_paths_resolve_in: effective_manifest_tree_after_all_prior_operations
+    source_path_must_exist_exactly_once: true
+    replace_path: target_path_must_exist_and_is_replaced_entirely
+    extend_mapping: target_path_must_be_mapping_and_added_keys_must_not_exist
+    append_unique_sequence: target_path_must_be_sequence_and_each_added_value_must_be_absent
+    invalid_on_target_mismatch_source_mismatch_or_key_collision: true
+    operations_apply_in_list_order: true
+
+verification_contract:
+  verifier_issue: 5
+  required_result: PASS
+  effective_payload:
+    overlay_candidate_work_sha: from_valid_issue_5_verification_result
+    overlay_manifest_identity: exact_blob_sha_of_this_manifest_at_verified_work_state
+    base_candidate_blob_sha: 9829975eb3b8ac12b7dd8338a3569ff1a50cf309
+    base_manifest_blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c
+    adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+  allowed_independence_modes: [FULL_INDEPENDENT_CONTEXT, DEGRADED_SINGLE_AGENT]
+  PASS_requires: {blocker_count: 0, major_count: 0}
+
+verification_binding_selection:
+  result_kinds: [VERIFICATION_STATUS, BOOTSTRAP_VERIFICATION_STATUS]
+  identity_fields: [candidate_work_sha, manifest_identity, adopted_wave_1_contract_blob_sha, verified_base_main_sha]
+  select: highest_comment_id_among_valid_results_for_exact_identity_fields
+  current_authority_requires_verified_base_equals_current_main: true
+  PASS_authority_requires: {result: PASS, blocker_count: 0, major_count: 0}
+  older_base_results: IMMUTABLE_PROVENANCE_ONLY
+  later_valid_result_same_exact_tuple_and_base_supersedes_earlier_result: true
+
+operational_overlay:
+  protocol: planning-v1
+  schema: 3
+  field_type_additions:
+    source_verification_comment_id: positive_integer
+    source_verification_result: nonempty_string
+    old_candidate_work_sha: sha40
+    old_manifest_identity: sha40
+    old_adopted_wave_1_contract_blob_sha: sha40
+    new_candidate_work_sha: sha40
+    new_manifest_identity: sha40
+    new_adopted_wave_1_contract_blob_sha: sha40
+    old_verified_base_main_sha: sha40
+    new_verified_base_main_sha: sha40
+    remediation_or_revision_issue: positive_integer
+
+  kind_additions:
+    VERIFICATION_RESTART:
+      required_fields: [state, source_verification_comment_id, source_verification_result, observed_head_sha, previous_ownership_comment_id, old_candidate_work_sha, old_manifest_identity, old_adopted_wave_1_contract_blob_sha, new_candidate_work_sha, new_manifest_identity, new_adopted_wave_1_contract_blob_sha, new_verified_base_main_sha, remediation_or_revision_issue]
+      constants: {state: IN_PROGRESS}
+      enums: {source_verification_result: [PASS, FAIL]}
+      predecessor:
+        source_kind: [VERIFICATION_STATUS, BOOTSTRAP_VERIFICATION_STATUS]
+        source_is_valid_terminal_result: true
+        source_result_equals_source_verification_result: true
+        source_is_latest_valid_result_for_its_exact_tuple_and_base: true
+        old_candidate_work_sha_equals_source: true
+        old_manifest_identity_equals_source: true
+        old_adopted_wave_1_contract_blob_sha_equals_source: true
+      changed_payload:
+        at_least_one_new_identity_differs_from_old: true
+        remediation_or_revision_issue_is_closed_completed: true
+        new_candidate_manifest_and_adopted_blob_exist: true
+        new_payload_is_selected_current_verification_payload: true
+        new_verified_base_main_sha_must_equal_current_main: true
+      ownership:
+        observed_head_sha_must_equal_current_verification_branch_head: true
+        previous_ownership_comment_id_must_equal_source_result_ownership_generation: true
+        winner: lowest_comment_id_for_same_source_new_tuple_base_and_head
+        only_first_valid_winner_grant_creates_owner: true
+      effect: new_ownership_generation
+      required_verification_strength: FULL_NORMAL_VERIFICATION
+
+    VERIFICATION_REFRESH:
+      required_fields: [state, source_verification_comment_id, observed_head_sha, previous_ownership_comment_id, candidate_work_sha, manifest_identity, adopted_wave_1_contract_blob_sha, old_verified_base_main_sha, new_verified_base_main_sha]
+      constants: {state: IN_PROGRESS}
+      predecessor:
+        source_kind: [VERIFICATION_STATUS, BOOTSTRAP_VERIFICATION_STATUS]
+        source_result: PASS
+        source_is_valid_terminal_result: true
+        source_is_latest_valid_PASS_for_source_tuple_and_old_base: true
+      unchanged_payload:
+        candidate_work_sha_equals_source: true
+        manifest_identity_equals_source: true
+        adopted_wave_1_contract_blob_sha_equals_source: true
+        current_selected_payload_equals_source_tuple: true
+        current_main_contains_same_candidate_and_manifest_identity: true
+      base_drift:
+        old_verified_base_main_sha_equals_source: true
+        old_verified_base_is_strict_ancestor_of_new_base: true
+        new_verified_base_main_sha_equals_current_main: true
+      ownership:
+        observed_head_sha_equals_current_verification_branch_head: true
+        previous_ownership_comment_id_equals_source_result_ownership_generation: true
+        winner: lowest_comment_id_for_same_source_new_base_and_head
+        only_first_valid_winner_grant_creates_owner: true
+      effect: new_ownership_generation
+      required_verification_strength: FULL_NORMAL_VERIFICATION
+      changed_candidate_or_manifest: INVALID_USE_VERIFICATION_RESTART
+
+  bootstrap_verification_status_rule_replacement:
+    target_path: operational_capsules.kinds.BOOTSTRAP_VERIFICATION_STATUS.rules
+    value:
+      - generation_is_winning_BOOTSTRAP_RESUME_or_VERIFICATION_RESTART_or_VERIFICATION_REFRESH
+      - current_unexpired_owner_required
+      - current_head_equals_head_sha
+      - work_sha_ancestor_or_equal_head_sha
+      - legacy_predecessor_matches_original_bootstrap_bridge_chain
+      - report_and_simulation_exist_at_work_sha
+      - exact_candidate_tuple_match
+      - independence_profile_valid
+      - current_main_at_publication_equals_verified_base_main_sha
+
+transition_table_additions:
+  terminal_verification_payload_changed_to_IN_PROGRESS: VERIFICATION_RESTART
+  terminal_PASS_base_drift_to_IN_PROGRESS: VERIFICATION_REFRESH
+  VERIFICATION_RESTART_to_terminal: VERIFICATION_STATUS_or_BOOTSTRAP_VERIFICATION_STATUS
+  VERIFICATION_REFRESH_to_terminal: VERIFICATION_STATUS_or_BOOTSTRAP_VERIFICATION_STATUS
+
+bootstrap_bridge:
+  issue_5_reentry_after_issue_16:
+    issue: 5
+    mission_id: BOOTSTRAP-VERIFY-05
+    source_status_kind: BOOTSTRAP_VERIFICATION_STATUS
+    source_status_comment_id: 5244679631
+    source_result: FAIL
+    required_kind: VERIFICATION_RESTART
+    remediation_or_revision_issue: 16
+    new_candidate_path: docs/planning/11-planning-program-v1-bootstrap-final-candidate.md
+    new_manifest_path: docs/planning/11-planning-program-v1-canonicalization-manifest.yaml
+  issue_6_eligibility_replacement:
+    issue: 6
+    mission_id: BOOTSTRAP-CANON-06
+    source_kind: BOOTSTRAP_VERIFICATION_STATUS
+    selected_result_must_match_effective_payload: true
+    selected_verified_base_main_sha_equals_current_main: true
+    selected_result_requires: {result: PASS, blocker_count: 0, major_count: 0}
+    no_current_base_PASS:
+      unchanged_payload_with_ancestor_base_PASS: VERIFICATION_REFRESH_READY
+      changed_candidate_or_manifest: VERIFICATION_RESTART_REQUIRED
+      current_base_FAIL: DECLARED_REMEDIATION_REQUIRED
+
+bootstrap_canonicalization:
+  inherited_base_paths:
+    - bootstrap_canonicalization.pre_merge
+    - bootstrap_canonicalization.agents_transform
+    - bootstrap_canonicalization.start_here_replacement
+    - bootstrap_canonicalization.post_merge_sequence
+    - bootstrap_canonicalization.wave_1_creation_before_merge
+  program_promotion_replacement:
+    target_path: bootstrap_canonicalization.program_promotion
+    value:
+      source: docs/planning/11-planning-program-v1-bootstrap-final-candidate.md
+      destination: docs/planning/PLANNING-PROGRAM-v1.md
+      transform:
+        type: exact_literal_replacements_then_byte_identical_remainder
+        every_from_literal_matches_exactly_once: true
+        replacements:
+          - {from: "# Planning Program v1 — Bootstrap Final Candidate", to: "# Planning Program v1 — Canonical"}
+          - {from: "**State:** REVIEWED-CANDIDATE-BOOTSTRAP-FINAL", to: "**State:** CANONICAL"}
+          - {from: "**Bootstrap remediation issue:** #16", to: "**Canonicalized by:** Bootstrap Issue #6"}
+          - {from: "**Authority:** NON-CANONICAL until Bootstrap Issue #5 records PASS for this exact effective candidate/manifest state and Bootstrap Issue #6 performs verified squash-only promotion and terminal activation.", to: "**Authority:** CANONICAL planning operating model for the current pre-implementation PLANNING phase."}
+
+composition_operations:
+  - {op: replace_path, target: verification_contract, source: verification_contract}
+  - {op: extend_mapping, target: operational_capsules.field_types, source: operational_overlay.field_type_additions}
+  - {op: extend_mapping, target: operational_capsules.kinds, source: operational_overlay.kind_additions}
+  - {op: replace_path, target: operational_capsules.kinds.BOOTSTRAP_VERIFICATION_STATUS.rules, source: operational_overlay.bootstrap_verification_status_rule_replacement.value}
+  - {op: extend_mapping, target: transition_table, source: transition_table_additions}
+  - {op: replace_path, target: bootstrap_bridge.issue_6.eligibility, source: bootstrap_bridge.issue_6_eligibility_replacement}
+  - {op: replace_path, target: bootstrap_canonicalization.program_promotion, source: bootstrap_canonicalization.program_promotion_replacement.value}
+  - {op: append_unique_sequence, target: verification_scenarios_required, source: required_verification_scenario_additions}
+
+required_verification_scenario_additions:
+  - changed_candidate_after_FAIL_uses_VERIFICATION_RESTART
+  - changed_candidate_after_PASS_cannot_use_VERIFICATION_REFRESH
+  - simultaneous_VERIFICATION_RESTART_contenders_one_owner
+  - simultaneous_VERIFICATION_REFRESH_contenders_one_owner
+  - unchanged_candidate_PASS_base_A_main_B_refreshes_to_full_verification
+  - refreshed_PASS_B_unblocks_issue_6_only_while_main_equals_B
+  - main_advances_again_after_refreshed_PASS_requires_another_refresh
+  - refresh_FAIL_routes_remediation
+  - old_PASS_A_cannot_override_current_base_result_B
+  - candidate_identity_change_invalidates_refresh
+  - composition_target_mismatch_fails_closed
+
+preserved_effective_base_paths:
+  - resource_constraint
+  - canonical_binding
+  - bootstrap_bridge.issue_5.legacy_predecessor
+  - wave_1_contract_adoption
+  - operational_capsules.authority_metadata
+  - operational_capsules.types
+  - operational_capsules.structured_types
+  - operational_capsules.common_required
+  - operational_capsules.common_rules
+  - mutation_fence
+  - next_wave_governor
+
+V5_B08_disposition: ACCEPTED_AND_CORRECTED
