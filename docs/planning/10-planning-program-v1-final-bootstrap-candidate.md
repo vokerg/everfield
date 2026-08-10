@@ -7,126 +7,122 @@
 
 ## 1. Status
 
-This candidate supersedes the Issue #11 remediation **for verification** while preserving Issue #11 as immutable provenance. It closes the five boundary defects found by the second Issue #5 cold-start pass:
+This candidate supersedes the Issue #11 remediation **for verification**, not for provenance. It closes:
 
-- `V5-B03` — activation incorrectly tied to current HEAD;
-- `V5-B04` — root `AGENTS.md` phase remained `PLAN-THE-PLAN` after canonicalization;
+- `V5-B03` — activation tied to current HEAD;
+- `V5-B04` — root phase remained `PLAN-THE-PLAN` after canonicalization;
 - `V5-B05` — no deterministic legacy-bootstrap → mature-status bridge;
-- `V5-B06` — mature status typing/ownership/provenance was incomplete;
+- `V5-B06` — status typing/ownership/provenance remained incomplete;
 - `V5-B07` — mandatory review/verification could deadlock in the recorded single-agent environment.
 
 Exact dispositions are in `docs/planning/reviews/issue-5-reverification-finding-dispositions.md`.
 
-The normative machine-readable contract is `docs/planning/10-planning-program-v1-canonicalization-manifest.yaml`. When prose and manifest disagree, verification MUST fail rather than invent policy.
+The normative machine contract is `docs/planning/10-planning-program-v1-canonicalization-manifest.yaml`. A prose/manifest contradiction is a verification failure, not permission to improvise.
 
-## 2. Authority and phase model
+## 2. Phase and authority model
 
-There are three distinct states:
+The project moves through:
 
-1. **BOOTSTRAP / PLAN-THE-PLAN** — current state before Issue #6 canonical activation completes.
-2. **PLANNING** — canonical Planning Program v1 is active and bounded planning missions may execute.
-3. **IMPLEMENTATION-READY** — a later independently verified decision may authorize high-throughput implementation. Planning Program v1 does not make that decision.
+1. **BOOTSTRAP / PLAN-THE-PLAN** — before Issue #6 terminal canonical activation.
+2. **PLANNING** — canonical Planning Program v1 is active; bounded factory, technical, evaluation, and game-design planning may execute.
+3. **IMPLEMENTATION-READY** — a later independently/degraded-independently verified transition may authorize high-throughput implementation.
 
-Issue #6 promotion MUST deterministically update the root entry documents so `AGENTS.md`, `START-HERE.md`, and this program all report **PLANNING** after activation. No stale `PLAN-THE-PLAN` phase declaration may remain authoritative after Issue #6 terminal activation.
+Issue #6 promotion MUST deterministically update `AGENTS.md`, `START-HERE.md`, and this program so all authoritative entry surfaces report **PLANNING**. Gameplay/high-throughput implementation remains blocked.
 
-## 3. Immutable provenance inputs
-
-This candidate consumes:
+## 3. Immutable inputs
 
 - Issue #11 remediation work SHA `7ed2d734645adf93910ce60156ec8b45d528fa73`;
 - Issue #11 candidate blob `5e60d827ab99fe04e8a23c4addfc59d6f418d281`;
 - Issue #11 manifest blob `9ecad20d9332eb1b649dfcb16beece5cda3fa330`;
-- Issue #5 second FAIL report work SHA `44b93171fcd0734bf8181f75120e52d4c7873ab6`;
+- Issue #5 second FAIL work SHA `44b93171fcd0734bf8181f75120e52d4c7873ab6`;
 - reviewed Wave 1 contract source blob `d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd`;
-- remediation base `main@fce7218a1e7a4b03bae04aead80f12f5039848fb`;
-- repository-visible single-agent resource constraint recorded on Bootstrap Issue #5 comment `5244416013`.
+- Issue #14 base `main@fce7218a1e7a4b03bae04aead80f12f5039848fb`;
+- repository-visible single-agent resource constraint on Issue #5 comment `5244416013`.
 
-No prior conversation is project authority.
+Repository + GitHub state outrank chat history.
 
-## 4. Canonical binding — durable across later main movement
+## 4. Durable canonical binding
 
-A canonical Planning Program file contains a header field naming the issue that canonicalized that exact program version:
+Every canonical Planning Program version has a header:
 
-`**Canonicalized by:** <issue reference>`
+`**Canonicalized by:** <canonicalization issue>`
 
-A fresh agent resolves the **active canonical binding** as follows:
+A fresh agent resolves the **active canonical binding**:
 
-1. Read current `docs/planning/PLANNING-PROGRAM-v1.md` and parse its `Canonicalized by` issue reference.
-2. Compute/read the current canonical-program Git blob SHA.
-3. Fetch that canonicalization issue's operational comments.
-4. Select its valid terminal `INTEGRATION_STATUS` whose:
+1. Read current `docs/planning/PLANNING-PROGRAM-v1.md`.
+2. Parse its `Canonicalized by` issue reference.
+3. Determine the current canonical-program Git blob SHA.
+4. Fetch that issue's operational comments.
+5. Select the highest-comment-ID valid terminal `INTEGRATION_STATUS` for which:
    - `canonicality == CANONICAL_PLANNING_PROGRAM`;
-   - `canonical_program_blob_sha` equals the current canonical-program blob;
-   - `main_sha` is an ancestor of or equal to current `main`;
-   - referenced verification and squash merge are valid.
-5. If exactly one latest valid binding exists, bootstrap/canonicalization for that program version is complete even when current `main` has advanced through later unrelated squash merges.
-6. If the canonical program header names a canonicalization issue but no valid matching binding exists, the repository is in that issue's bounded post-merge/pre-terminal activation window. Only that canonicalization issue's verified post-merge activation steps may proceed; normal liveness recovery and normal `[PLAN-v1]` work remain inactive.
+   - `canonical_program_blob_sha` equals the current program blob;
+   - status `main_sha` is an ancestor of or equal to current `main`;
+   - verification reference, squash PR/head, and base compatibility are valid.
 
-Current-HEAD equality is **not** an activation predicate after canonicalization.
+Outcomes:
 
-A future canonical program revision MUST update the `Canonicalized by` header and publish a new terminal `INTEGRATION_STATUS`; the new binding supersedes the old program version by identity rather than by guessed recency.
+- **Exactly one selected matching binding:** that program version is active even after later unrelated squash merges move `main` forward.
+- **No matching binding and the named canonicalization issue has never published any valid canonical binding:** bounded post-merge/pre-terminal activation window; only that canonicalization issue's verified post-merge steps may run.
+- **No matching binding but the named issue has a prior valid canonical binding for a different program blob:** `CANONICAL_BINDING_MISMATCH`; fail closed and route to canonical recovery/reverification. Do **not** repeat the old post-merge activation sequence and do not run normal `[PLAN-v1]` work.
+
+Current-HEAD equality is never the long-lived activation predicate.
+
+A future canonical program revision changes the header to its own canonicalization issue and publishes a new binding.
 
 ## 5. Canonical cold-start entry
 
-When the file is `CANONICAL` and the active canonical binding in Section 4 resolves, a fresh planning agent MUST:
+When this file is `CANONICAL` and Section 4 resolves an active binding:
 
 1. read `/AGENTS.md`;
-2. read `docs/planning/START-HERE.md`;
-3. read the current canonical program;
-4. resolve the active canonical binding;
+2. read canonical `docs/planning/START-HERE.md`;
+3. read current canonical Planning Program v1;
+4. resolve the active binding;
 5. query open `[PLAN-v1]` issues;
 6. validate issue contracts and schema-3 operational comments;
 7. derive prerequisites, ownership, lease, recovery, terminal state, and conflicts;
-8. prefer queue classes: recoverable/handoff → review/revision/verification/integration → new proposal/research;
-9. within a class choose lower `priority_rank`, then lower issue number;
-10. re-read the selected issue immediately before claim/resume/recovery;
-11. load only its bounded context packet;
-12. apply the mutation fence before every branch write;
-13. leave committed handoff/status before stopping.
+8. queue class order: recoverable/handoff → review/revision/verification/integration → new proposal/research;
+9. within class: lower `priority_rank`, then lower issue number;
+10. re-read selected issue immediately before ownership acquisition;
+11. load only the bounded authoritative packet;
+12. apply mutation fencing before every branch write;
+13. commit useful state and leave structured handoff/status before stopping.
 
-If the file is non-canonical, or its active binding does not resolve, normal Wave 1 selection is inactive.
+If there is a bounded activation window or binding mismatch, normal Wave 1 selection is inactive.
 
 ## 6. Core constraints
 
-1. `main` is the stable canonical base.
-2. Normal task branches are deterministic: `planning/issue-N`.
-3. One task has at most one valid ownership generation.
-4. Branch writes are expected-parent/fast-forward only; force-push is forbidden.
-5. Upstream non-main work is consumed by immutable SHA.
-6. `BLOCKED`, `READY`, `ORPHANED_BRANCH`, and `STALE_OWNER` are derived states.
-7. Operational authority is schema-versioned, append-only, and fail-closed.
-8. Lease age uses GitHub server time, never a self-authored timestamp.
-9. Canonicality is explicit and cannot be inferred from PR, merge, issue closure, or path alone.
-10. Every integration into `main` is squash-only.
-11. Wave 1 is created only after Issue #6's squash commit exists.
-12. Gameplay/high-throughput implementation remains blocked until a later verified implementation-readiness decision.
+1. `main` is stable canonical base.
+2. Normal task branches are `planning/issue-N`.
+3. One task has at most one current valid ownership generation.
+4. Writes are expected-parent/fast-forward; force-push forbidden.
+5. Non-main upstream work is consumed at immutable SHA.
+6. `BLOCKED`, `READY`, `ORPHANED_BRANCH`, `STALE_OWNER`, and `IN_PROGRESS` are derived.
+7. Authority comments are schema-versioned, append-only, typed, and fail closed.
+8. Lease age uses GitHub server time.
+9. Canonicality is explicit, never inferred from merge/path/PR/closure.
+10. Every `main` integration is squash-only.
+11. Wave 1 issue creation happens only after Issue #6 squash SHA exists.
+12. High-throughput implementation stays blocked until a later verified readiness transition.
 
 ## 7. State model
 
-Derived states:
+Derived:
 
-- `BLOCKED` — at least one hard prerequisite is unsatisfied.
-- `READY` — prerequisites satisfied, no terminal result, no active valid owner.
-- `ORPHANED_BRANCH` — deterministic branch exists, no valid ownership grant, mature orphan probe.
-- `STALE_OWNER` — latest ownership/renewal lease expired without later valid completion/handoff/terminal result.
-- `IN_PROGRESS` — current valid ownership generation with unexpired lease.
+- `BLOCKED` — hard prerequisite unsatisfied.
+- `READY` — prerequisites satisfied, no terminal result, no active owner.
+- `ORPHANED_BRANCH` — deterministic branch exists, no owner, mature orphan probe.
+- `STALE_OWNER` — ownership/renewal lease expired with no later valid handoff/completion.
+- `IN_PROGRESS` — valid current owner with unexpired lease.
 
-Recorded result states:
+Recorded result states: `HANDOFF_READY`, `REVIEW_READY`, `VERIFICATION_READY`, `DONE`, `SUPERSEDED`, `INVALIDATED`.
 
-- `HANDOFF_READY`;
-- `REVIEW_READY`;
-- `VERIFICATION_READY`;
-- `DONE`;
-- `SUPERSEDED`;
-- `INVALIDATED`.
-
-Review disposition and verification result are typed fields, not overloaded state names.
+Review disposition and verification result are separate typed fields.
 
 ## 8. Schema-3 operational protocol
 
-The complete registry is `operational_capsules` in the manifest. Every field has a declared type and nullability. Unknown kinds, unknown authority fields, illegal nulls, malformed values, edited comments, invalid predecessors, stale-owner result publications, losing contention records, and invalid SHAs fail closed.
+The manifest declares every field type/nullability, every registered kind, exact required/conditional fields, predecessor rules, tie rules, owner requirements, immutable work/head bindings, and downstream effects.
 
-Normal operational kinds:
+Normal kinds:
 
 1. `CLAIM`
 2. `ORPHAN_PROBE`
@@ -139,164 +135,129 @@ Normal operational kinds:
 9. `VERIFICATION_STATUS`
 10. `INTEGRATION_STATUS`
 
-Bootstrap bridge kind:
+One-time bootstrap bridge kinds:
 
-11. `BOOTSTRAP_VERIFICATION_STATUS`
+11. `BOOTSTRAP_RESUME`
+12. `BOOTSTRAP_VERIFICATION_STATUS`
 
-The bridge kind is valid only for Bootstrap Issue #5 under the exact bridge contract in the manifest. It does not become a general escape hatch.
+Bridge kinds are valid only for Bootstrap Issue #5 under the exact manifest overlay. They are not general workflow escapes.
 
-## 9. Ownership and mutation fence
+Unknown kind/field, wrong type, illegal null, edited comment, wrong issue/mission/branch, stale owner, losing contention record, invalid SHA/reference, or illegal predecessor has zero authority effect.
 
-`CLAIM`, `RESUME`, and `RECOVER` create ownership generations. `PROGRESS` may renew but cannot create a generation.
+## 9. Ownership and fencing
 
-Before **every** task-branch mutation:
+`CLAIM`, `BOOTSTRAP_RESUME`, `RESUME`, and `RECOVER` create ownership generations. `PROGRESS` renews an existing generation only.
+
+Before every branch mutation:
 
 1. re-fetch valid operational comments;
-2. prove the actor holds the current unexpired ownership generation;
-3. fetch remote task-branch head;
-4. require it equals the exact proposed commit parent;
-5. create the commit from that parent;
-6. update the ref with `force=false` only;
-7. abort on any mismatch/non-fast-forward.
+2. prove current unexpired ownership generation;
+3. fetch remote head;
+4. require remote head == proposed parent;
+5. create commit with that parent;
+6. update ref with `force=false`;
+7. abort on mismatch/non-fast-forward.
 
-Every owner-authored `STATUS`, `REVIEW_STATUS`, `VERIFICATION_STATUS`, and `INTEGRATION_STATUS` publication also requires the current unexpired owner generation and exact current branch head unless the manifest explicitly declares an external-authority path.
+Owner-authored terminal/result comments also require the current unexpired owner and exact current branch head. A stale/recovered actor cannot publish a valid terminal result using an old generation ID.
 
-## 10. Claim/resume/recovery
+## 10. New claim and recovery
 
-### New work
+- New READY work: create deterministic branch from current main → winning `CLAIM`.
+- Orphan branch: `ORPHAN_PROBE` → ten-minute server-time maturity → competing `RESUME_INTENT(ORPHAN)` → winning `RECOVER`.
+- Intentional handoff: `STATUS(HANDOFF_READY)` → competing `RESUME_INTENT(HANDOFF)` → winning `RESUME`.
+- Stale owner: lease expiry → competing `RESUME_INTENT(STALE)` → winning `RECOVER` if source/head still hold.
 
-Derived READY + absent deterministic branch → create branch from current main → `CLAIM` → re-fetch → only winning valid grant may edit.
+Lowest valid GitHub comment ID wins contention for one exact source/head. Only the first valid grant from the winning intent is valid.
 
-### Orphan branch
+## 11. Completion records
 
-Branch exists without owner → `ORPHAN_PROBE`; after ten GitHub-server minutes, valid `RESUME_INTENT(reason=ORPHAN)` contenders compete; lowest valid comment ID wins; winner may `RECOVER` if source/head still match.
+- Root/domain synthesis → owner `STATUS(REVIEW_READY)` with exact work/head.
+- Final synthesis → owner `STATUS(VERIFICATION_READY)`.
+- Review → owner `REVIEW_STATUS` with own work/head, reviewed input SHAs, disposition, findings, independence profile.
+- Normal verification → owner `VERIFICATION_STATUS` with own work/head, exact candidate/manifest/base tuple, simulation artifact, independence profile.
+- Bootstrap Issue #5 → `BOOTSTRAP_RESUME` creates a real schema-3 owner from its exact legacy HANDOFF predecessor; that owner writes verification artifacts and then publishes `BOOTSTRAP_VERIFICATION_STATUS`.
+- Integration → owner `INTEGRATION_STATUS` after squash, bound to verification record, own work/head, PR/head/base/main SHA, compatibility evidence, canonical artifacts, and canonicality result.
 
-### Intentional handoff
+## 12. External retirement
 
-`STATUS(HANDOFF_READY)` → competing `RESUME_INTENT(reason=HANDOFF)` → lowest valid intent → one valid `RESUME`.
+`STATUS.authority_mode` is:
 
-### Stale owner
+- `OWNER` — current owner required; `ownership_generation_comment_id` and `head_sha` non-null.
+- `EXTERNAL` — only `SUPERSEDED|INVALIDATED`; ownership ID is null; typed external authorization required; `head_sha` may be null only if branch does not exist.
 
-Expired owner → competing `RESUME_INTENT(reason=STALE)` → lowest valid intent → one valid `RECOVER` if stale condition/head still hold.
-
-## 11. Task/review/verification completion
-
-- Root producer → owner-authored `STATUS(REVIEW_READY)` bound to exact `work_sha` and `head_sha`.
-- Domain synthesis → `STATUS(REVIEW_READY)`.
-- Final synthesis → `STATUS(VERIFICATION_READY)`.
-- Review → current-owner `REVIEW_STATUS` bound to its own review `work_sha/head_sha` and exact reviewed input SHAs.
-- Normal verification → current-owner `VERIFICATION_STATUS` bound to its own report `work_sha/head_sha`, candidate/manifest/base tuple, and independence profile.
-- Bootstrap Issue #5 verification → bridge `BOOTSTRAP_VERIFICATION_STATUS` because its branch predates schema 3.
-- Integration → current-owner `INTEGRATION_STATUS` after squash, bound to verification record, PR/head/base/main SHA, canonical artifacts, and canonicality result.
-
-A stale or superseded writer cannot publish a valid terminal result merely by naming an old ownership comment.
-
-## 12. External retirement/invalidation
-
-`STATUS` has explicit `authority_mode`:
-
-- `OWNER` — requires current unexpired owner generation and exact branch head.
-- `EXTERNAL` — ownership generation MUST be null and a typed `external_authorization_comment_id` MUST reference a valid review/integration result that authorizes `SUPERSEDED` or `INVALIDATED`.
-
-This permits deterministic retirement of never-claimed stale work without fabricating ownership.
+Thus never-claimed stale work can be retired without fabricated ownership.
 
 ## 13. Bootstrap bridge
 
-### 13.1 Issue #5 legacy verification branch
+### Issue #5
 
-Existing `planning/issue-5` predates schema 3. It MUST NOT be forced through an impossible synthetic schema-3 ownership history.
+The existing `planning/issue-5` branch predates schema 3. The manifest overlays mission ID `BOOTSTRAP-VERIFY-05` and defines an exact legacy `STATUS(HANDOFF_READY)` predecessor shape.
 
-The manifest assigns:
+Valid verifier acquisition is a competing schema-3 `BOOTSTRAP_RESUME` against that exact predecessor/head. Lowest valid comment ID wins and creates a normal fenced ownership generation. All subsequent Issue #5 report/simulation/handoff writes use the mutation fence.
 
-- bridge mission ID `BOOTSTRAP-VERIFY-05`;
-- exact branch `planning/issue-5`;
-- accepted legacy source status comment(s);
-- exact `BOOTSTRAP_VERIFICATION_STATUS` fields and validation rules.
+Final `BOOTSTRAP_VERIFICATION_STATUS` requires current bridge owner, exact report work/head, exact candidate/manifest/Wave1/base tuple, zero BLOCKER/MAJOR for PASS, and a valid independence profile.
 
-A bridge PASS is valid only when:
+### Issue #6
 
-- exact candidate/manifest/adopted-Wave1/base tuple is bound;
-- report `work_sha/head_sha` exist on `planning/issue-5`;
-- BLOCKER and MAJOR counts are zero;
-- the selected independence mode is valid;
-- the source legacy handoff/status is the declared bridge predecessor;
-- no later FAIL/blocking status supersedes the verified episode.
+Issue #6 has no existing branch. The manifest overlays mission ID `BOOTSTRAP-CANON-06`. A valid Issue #5 bridge PASS plus exact current-main equality with the PASS base makes Issue #6 READY; it enters schema 3 through normal `CLAIM` and remains schema-3-owned through terminal integration.
 
-### 13.2 Issue #6 schema-3 canonicalizer
-
-Issue #6 has not been claimed. The manifest overlays a bootstrap contract:
-
-- mission ID `BOOTSTRAP-CANON-06`;
-- branch `planning/issue-6`;
-- schema-3 `CLAIM` from current verified base when Issue #5 bridge PASS is valid;
-- schema-3 ownership thereafter;
-- terminal `INTEGRATION_STATUS` may reference `BOOTSTRAP_VERIFICATION_STATUS` rather than normal `VERIFICATION_STATUS`.
-
-No other bootstrap issue receives this bridge authority.
+Issue #6 `INTEGRATION_STATUS` may reference the bootstrap verification kind. No other issue receives bootstrap bridge privileges.
 
 ## 14. Independence modes
 
-### 14.1 Full independent mode
+### FULL_INDEPENDENT_CONTEXT
 
-Use when a distinct execution context without producer private context is available. It requires machine-visible context/run provenance when exposed, producer-role exclusions, and independent evidence acquisition.
+Requires a distinct execution context without producer private context, exact cold-start input manifest, producer-role exclusions, candidate-edit prohibition, and independent evidence acquisition.
 
-### 14.2 Degraded single-agent mode
+### DEGRADED_SINGLE_AGENT
 
-The initial canonical program records a repository-visible resource constraint: the project currently has one available agent (Bootstrap Issue #5 comment `5244416013`). While that constraint is active, required review/verification may use `DEGRADED_SINGLE_AGENT` only if all of the following hold:
+The initial program records the repository-visible single-agent constraint at Issue #5 comment `5244416013`. While active, mandatory review/verification may use degraded mode only when:
 
-1. a new role episode/`actor_session_id` is used;
-2. the candidate under test is immutable during the verification episode;
-3. the verifier/reviewer does not edit the candidate it is judging;
-4. a cold-start input manifest lists exact repository/GitHub inputs before judgment;
-5. fresh adversarial/mechanical evidence is recorded before reconciling prior rationale/findings;
-6. result artifacts explicitly say independence is degraded;
+1. a new role episode/actor-session is used;
+2. candidate under judgment is immutable for that episode;
+3. reviewer/verifier never edits the candidate it judges;
+4. a cold-start input manifest fixes exact repository/GitHub inputs before judgment;
+5. fresh adversarial/mechanical evidence is acquired before prior rationale is reconciled;
+6. report labels trust as `DEGRADED`;
 7. self-authored assertion alone cannot satisfy evidence checks;
-8. any defect routes to a separate remediation issue/branch/episode;
-9. the result records the resource-constraint comment ID;
-10. `MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE` is a mandatory reopen condition.
+8. defects route to a separate remediation issue/branch/episode;
+9. resource-constraint comment ID is recorded;
+10. `MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE` is mandatory reopen condition.
 
-This mode is a liveness fallback, **not** full independence. Factory/trust planning must prioritize stronger isolation. A later repository-visible owner directive or canonical governance decision that provides multiple/isolated agents disables this degraded mode.
+This is a liveness fallback, not full independence. A later repository-visible owner/canonical governance decision enabling multiple or isolated agents disables degraded mode.
 
-## 15. Review disposition routing
+## 15. Review routing
 
 - `PASS_FOR_SYNTHESIS` → declared synthesis may become eligible.
 - `CHANGES_REQUIRED` → declared synthesis/revision may become eligible and must disposition findings.
 - `INVALIDATED` → only declared recovery/replanning may become eligible.
 
-Review completion alone never unlocks downstream work without an allowed disposition.
+Review completion without allowed disposition unlocks nothing.
 
 ## 16. Context and evidence budget
 
-Always read:
+Always read: `/AGENTS.md`, canonical `START-HERE`, selected issue, canonical program, issue-declared authoritative packet. Other planning context is forbidden-by-default unless a declared trigger is met.
 
-- `/AGENTS.md`;
-- canonical `START-HERE.md`;
-- selected issue;
-- canonical program;
-- issue-declared authoritative packet.
+Root Review Index ≤4,000 UTF-8 chars. Simultaneously mandatory review/synthesis packet ≤100,000 UTF-8 chars; if known context window <200,000 chars, cap at 50%. Unknown window → 100,000 fallback. Silent truncation forbidden.
 
-Everything else is forbidden-by-default unless a declared retrieval trigger is satisfied.
-
-Every root proposal has a Review Index ≤4,000 UTF-8 characters. Simultaneously mandatory review/synthesis context is capped at 100,000 UTF-8 characters; if a known execution context is smaller than 200,000 characters, cap at 50% of that window. Unknown window → deterministic 100,000 fallback. Silent truncation is forbidden.
-
-Evidence, inference, recommendation/decision, and assumption are explicitly separated.
+Artifacts distinguish observed evidence, inference, recommendation/decision, and assumption.
 
 ## 17. No-READY liveness
 
-When no normal READY task exists:
+When no normal READY work exists:
 
-1. active owner can unblock graph → graph live;
+1. active owner can unblock graph → live;
 2. handoff/mature orphan/stale owner → recover;
 3. eligible review/revision/verification/integration → execute;
-4. otherwise classify cycle, orphan prerequisite, invalidated dependency, missing transition, or corrupted status.
+4. otherwise classify cycle/orphan prerequisite/invalidated dependency/missing transition/corrupted status.
 
-`W1-REC-01` is a single-use recovery task for case 4 and cannot waive review/verification/canonicalization/squash integration.
+`W1-REC-01` is single-use recovery for case 4 and cannot waive review/verification/canonicalization/squash integration.
 
-A canonical program with no active binding is a bounded canonicalization activation window, not a normal liveness defect.
+A **new** canonicalization issue named by the program header with no prior valid binding is an activation window, not normal liveness. A prior binding for a different current blob is `CANONICAL_BINDING_MISMATCH` and requires recovery/reverification.
 
-## 18. First-wave mission graph
+## 18. First-wave graph
 
-Wave 1 contracts are immutably adopted from Issue #4 manifest blob `d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd`, limited to:
+Reviewed Wave 1 contracts are adopted immutably from Issue #4 manifest blob `d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd`, only sections:
 
 - `issue_compiler`;
 - `universal_root_acceptance`;
@@ -304,111 +265,90 @@ Wave 1 contracts are immutably adopted from Issue #4 manifest blob `d7ba9d5e9f6a
 - `non_root_optional_retrieval`;
 - `next_wave_candidate_schema`.
 
-Issue #4 bootstrap verification/canonicalization clauses are not adopted.
+Old bootstrap verification/canonicalization clauses are not adopted.
 
-Initial graph: 23 missions — 12 roots, 3 domain reviews, 3 domain syntheses, cross review, final synthesis, verifier, canonicalizer, and one recovery task.
+Initial graph is exactly 23 missions: 12 roots, 3 domain reviews, 3 domain syntheses, cross review, final synthesis, verifier, canonicalizer, recovery.
 
-Issue #6 creates them **after** its squash commit using that concrete activation SHA. They remain operationally blocked until Issue #6 terminal integration binding is published. Then the 12 roots become derived READY.
+Issue #6 creates/validates them after its squash SHA exists. They remain blocked until terminal canonical binding is published; then 12 roots become derived READY.
 
-## 19. Canonicalization
+## 19. Verification and canonicalization
 
-Issue #5 PASS binds:
+Issue #5 PASS binds exact:
 
-- exact Issue #14 candidate work SHA;
-- exact Issue #14 manifest identity;
-- adopted Wave 1 source blob;
+- Issue #14 candidate work SHA;
+- Issue #14 manifest identity;
+- adopted Wave 1 blob;
 - verified base main SHA;
-- simulated generated issue graph;
-- verification report work/head SHA;
-- explicit independence mode/provenance.
+- verification report work/head;
+- simulation artifact blob;
+- independence profile.
 
-Issue #6 may only apply transformations enumerated in the verified manifest. Immediately before merge it rechecks expected head and verified base/current-main compatibility. Base drift requires an explicit typed compatibility/reverification evidence record.
+Issue #6 claim requires current main == PASS verified base. Before merge it rechecks expected PR head and typed base compatibility evidence. Any drift must be explicitly reverified; otherwise integration is invalid.
 
-Every main integration is squash-only.
+Issue #6 applies only manifest-enumerated program/entry transformations. Every main merge is squash-only.
 
-After squash, Issue #6:
+Post-squash Issue #6:
 
-1. obtains squash `main_sha`;
-2. verifies promoted program + entry transformations at that SHA;
-3. records canonical program blob identity;
-4. instantiates/validates exactly 23 Wave 1 issues with the activation SHA;
+1. obtains squash main SHA;
+2. verifies promoted program and root entry transforms;
+3. computes canonical program blob;
+4. instantiates/validates exactly 23 Wave 1 issues with activation SHA;
 5. posts mission-ID→issue mapping;
-6. posts terminal schema-3 `INTEGRATION_STATUS` with `canonicality=CANONICAL_PLANNING_PROGRAM`.
+6. posts terminal schema-3 `INTEGRATION_STATUS(canonicality=CANONICAL_PLANNING_PROGRAM)`.
 
-Only step 6 activates normal Wave 1 selection.
+Only step 6 creates active canonical binding and activates normal Wave 1 selection.
 
 ## 20. Root entry transformation
 
-Issue #6's verified manifest deterministically transforms root entry state by section boundaries:
+Verified Issue #6 transformation:
 
+- replace `AGENTS.md` title;
 - replace `AGENTS.md` `## Status` section;
-- replace `AGENTS.md` `## Current Phase` section with `PLANNING` rules;
+- replace `AGENTS.md` `## Current Phase` section with PLANNING rules;
 - replace `AGENTS.md` `## Mandatory Cold-Start Entry Point` section;
-- replace `docs/planning/START-HERE.md` entirely with canonical entry text;
-- promote this candidate to `docs/planning/PLANNING-PROGRAM-v1.md` with only verified header substitutions and otherwise byte-identical body.
+- replace `START-HERE.md` entirely;
+- promote this candidate to `PLANNING-PROGRAM-v1.md` using exact header substitutions and byte-identical remainder.
 
-Every section replacement MUST match exactly one source heading interval or canonicalization fails.
+Every source interval/literal must match exactly once or canonicalization fails.
 
-## 21. Backlog retirement and next-wave governor
+## 21. Backlog retirement / wave governor
 
-Obsolete work is `SUPERSEDED`/`INVALIDATED` or closed with provenance. Unselected candidates remain data, not active issues.
+Obsolete work is superseded/invalidated/closed with provenance; unselected candidates remain data.
 
-Per later activation:
-
-- max 24 newly instantiated issues;
-- max 12 initially READY issues.
-
-Compiler validates unique IDs, acyclic hard dependencies, ownership conflicts, review routes, output collisions, and activation prerequisites.
+Per later activation: maximum 24 new issues, maximum 12 initially READY. Compiler validates unique IDs, acyclic hard dependencies, ownership conflicts, review routes, output collisions, activation prerequisites.
 
 ## 22. Observability
 
-Track at minimum:
-
-- cold-start success/failure;
-- active canonical-binding resolution failures;
-- invalid capsules by kind/reason/type;
-- duplicate claims/intents/grants;
-- orphan/stale recovery;
-- mutation-fence aborts;
-- stale terminal-publication attempts;
-- handoff reconstruction;
-- context packet size/splits;
-- review findings/escape rate;
-- degraded-independence uses;
-- liveness incidents;
-- retired/created work;
-- base-drift invalidations;
-- non-squash integration attempts.
+Track cold-start/binding failures, invalid capsules by type/reason, duplicate claims/intents, orphan/stale recovery, mutation-fence aborts, stale terminal attempts, handoff reconstruction, context packet sizes, review findings/escapes, degraded-independence uses, liveness incidents, retirement/creation, base-drift invalidations, non-squash attempts.
 
 No single metric is a quality oracle.
 
-## 23. Risks and reopen conditions
+## 23. Reopen conditions
 
-Reopen this program when any of the following holds:
+Reopen if:
 
-- a fresh agent cannot resolve exactly one active canonical binding;
-- a later main merge incorrectly re-enters bootstrap activation;
-- root entry files disagree on phase;
-- bootstrap bridge requires invented policy;
+- fresh agent cannot resolve exactly one active binding;
+- later main movement re-enters completed bootstrap;
+- current program blob disagrees with its prior binding;
+- entry files disagree on phase;
+- bootstrap bridge needs invented policy;
 - any schema field lacks deterministic type/null semantics;
 - stale writers can publish terminal results;
-- degraded independence hides or increases escaped defects;
-- multiple agents or isolated execution contexts become available;
-- context budgets repeatedly induce shallow review;
+- degraded mode increases escaped defects or hides trust loss;
+- multiple/isolated agents become available;
+- context budget repeatedly induces shallow review;
 - useful READY frontier collapses;
-- wave governors starve useful work or fail to control WIP;
-- a later explicit human directive supersedes a binding constraint.
+- wave governors starve work or fail to control WIP;
+- later explicit human directive supersedes a binding constraint.
 
-## 24. Bootstrap provenance invariant
+## 24. Bootstrap provenance
 
-The authority chain is provenance:
+`#2 proposal → #3 review → #4 candidate → #5 FAIL → #11 remediation → #5 FAIL → #14 final remediation → #5 verification → #6 canonicalization`
 
-`#2 proposal → #3 review → #4 candidate → #5 FAIL → #11 remediation → #5 FAIL → #14 final bootstrap remediation → #5 verification → #6 canonicalization`
-
-Before this file is canonical, open bootstrap issue state controls the queue. After this file is canonical **and** its active canonical binding resolves, bootstrap Issues #2–#6, #11, and #14 are provenance only.
+Before active canonical binding, bootstrap issue state controls the queue. After active binding, Issues #2–#6, #11, and #14 are provenance only.
 
 ## 25. Downstream gate
 
-Completion of Issue #14 unblocks only Bootstrap Issue #5 re-verification. A valid PASS unblocks Issue #6. Issue #6 terminal activation unblocks the first bounded planning wave.
+Issue #14 completion unblocks only Issue #5 re-verification. Valid PASS unblocks Issue #6. Issue #6 terminal binding unblocks Wave 1.
 
-No transition in this chain authorizes gameplay implementation.
+Nothing here authorizes gameplay implementation.
