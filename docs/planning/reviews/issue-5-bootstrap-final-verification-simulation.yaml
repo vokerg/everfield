@@ -1,0 +1,78 @@
+version: 1
+issue: 5
+mission_id: BOOTSTRAP-VERIFY-05
+episode: issue5-degraded-verifier-20260810-02
+independence_mode: DEGRADED_SINGLE_AGENT
+input_manifest_blob_sha: af6f2f9972948cc3533cd1dbf81361e3e9470dd9
+overlay_candidate_blob_sha: d083e5bfa108360818898f9628e939f50b4f3940
+overlay_manifest_blob_sha: bca34638a054d725239b936dd8232a7d274e814d
+base_candidate_blob_sha: 9829975eb3b8ac12b7dd8338a3569ff1a50cf309
+base_manifest_blob_sha: 1f062de59afcfe8496b4cff0fdff594c2d5fd50c
+adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+verified_base_main_sha: 03140f8875392450198c22d864664810e03d6865
+result: FAIL
+blocker_count: 1
+major_count: 0
+
+composition_checks:
+  base_candidate_sections_2_through_23_exist: PASS
+  excluded_base_sections_1_24_25_not_effective: PASS
+  base_manifest_blob_matches: PASS
+  overlay_replace_targets_exist: PASS
+  overlay_extend_keys_do_not_collide: PASS
+  overlay_append_scenarios_unique: PASS
+  source_paths_resolve_in_overlay_target_paths_in_effective_base: PASS
+
+scenarios:
+  simultaneous_new_claimants: PASS
+  bootstrap_initial_resume_bridge: PASS
+  changed_candidate_after_FAIL_uses_VERIFICATION_RESTART: PASS
+  simultaneous_VERIFICATION_RESTART_contenders_one_owner: PASS
+  changed_candidate_after_PASS_cannot_use_VERIFICATION_REFRESH: PASS
+  unchanged_candidate_PASS_base_A_main_B_uses_VERIFICATION_REFRESH: PASS
+  simultaneous_VERIFICATION_REFRESH_contenders_one_owner: PASS
+  refreshed_PASS_B_unblocks_issue_6_only_while_main_equals_B: PASS
+  repeated_base_drift_requires_another_refresh: PASS
+  refresh_FAIL_routes_remediation: PASS
+  older_base_PASS_cannot_override_current_base_result: PASS
+  orphan_recovery: PASS
+  intentional_handoff_resume_race: PASS
+  stale_owner_and_stale_terminal_writer: PASS
+  wrong_type_illegal_null_unknown_kind_edited_capsule: PASS
+  external_retirement_never_claimed_work: PASS
+  review_disposition_routing: PASS
+  domain_REVIEW_READY_vs_final_VERIFICATION_READY: PASS
+  degraded_single_agent_profile: PASS
+  context_unknown_window_fallback: PASS
+  no_READY_liveness: PASS
+  mechanical_AGENTS_phase_transition: PASS
+  post_merge_pre_terminal_activation_window: PASS
+  later_unrelated_main_merge_preserves_canonical_binding: PASS
+  changed_program_blob_with_old_binding_fails_closed: PASS
+  wave_1_graph_compile_23_no_hard_cycle: PASS
+  pre_activation_wave_1_claim: PASS
+  squash_only_integration: PASS
+  canonical_promotion_post_terminal_work_selection:
+    result: FAIL
+    finding: V5-B09
+    evidence:
+      - header-only promotion changes wrapper title/state/authority but preserves body bytes
+      - wrapper body retains present-tense sentence: next Issue #5 episode after Issue #16 uses VERIFICATION_RESTART
+      - wrapper body retains Issue #6 current-base selection instructions
+      - wrapper body retains sentence: Issue #16 completion unblocks only Issue #5
+      - after terminal Issue #6 binding, root AGENTS/START-HERE and adopted canonical cold-start route to open PLAN-v1 work
+      - no explicit wrapper applicability guard says bootstrap-numbered clauses become provenance-only after active binding
+    conclusion: a canonical cold-start reader can observe competing active-looking work-selection instructions
+
+regression_findings:
+  V5-B03: PASS_CORRECTED
+  V5-B04: PASS_CORRECTED
+  V5-B05: PASS_CORRECTED
+  V5-B06: PASS_CORRECTED
+  V5-B07: PASS_CORRECTED
+  V5-B08: PASS_CORRECTED
+  V5-B09: BLOCKER
+
+required_remediation:
+  issue: 18
+  requirement: add explicit canonical-state applicability guard while keeping generic restart_refresh active
