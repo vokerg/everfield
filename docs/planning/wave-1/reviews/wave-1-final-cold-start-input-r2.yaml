@@ -1,0 +1,79 @@
+version: 2
+verification_issue: 42
+mission_id: W1-VERIFY-01
+verification_episode: w1-verify-01-verifier-20260811-02
+ownership_generation_comment_id: 5249541059
+ownership_kind: VERIFICATION_RESTART
+source_verification_fail_comment_id: 5249468791
+remediation_issue: 66
+role: verifier
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_EVIDENCE
+verified_base_main_sha: e95f5e833a9713aa6aa8d5af9c69dc3cd37bcc66
+canonical_entry:
+  agents_blob_sha: 9f65e73a1f16eb731d4068066998361c060f74bf
+  start_here_blob_sha: 515dc7b12e1a85f66e780901c1caa0d9afbc55d5
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonicalized_by_issue: 6
+  active_binding_comment_id: 5245368879
+  active_binding_activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  current_main_is_descendant_of_activation: true
+  active_binding_merge_method: squash
+  active_binding_canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+revised_final_payload:
+  candidate_work_sha: 6e5b7fd926bd59a6910a2982ec82a94957e8ff49
+  remediation_status_comment_id: 5249532288
+  remediation_pr: 67
+  remediation_squash_main_sha: e95f5e833a9713aa6aa8d5af9c69dc3cd37bcc66
+  revision_input_path: docs/planning/wave-1/synthesis/wave-1-final-input.yaml
+  revision_input_blob_sha: de10bb67d94ed6c10176ae571bdd9cea22a342c9
+  candidate_path: docs/planning/wave-1/synthesis/wave-1-canonicalization-candidate.md
+  candidate_blob_sha: 4b4c409dc23538f23aba3709e4af7fafc8f37280
+  dependency_map_path: docs/planning/wave-1/synthesis/dependency-map.yaml
+  dependency_map_blob_sha: 1e00057a2d0ab966aee59965682ee29a6ca2be60
+  promotion_manifest_path: docs/planning/wave-1/synthesis/next-wave-promotion-manifest.yaml
+  promotion_manifest_blob_sha: 28146606ff3334ae1ddbb036a48969afb76acb85
+  finding_dispositions_path: docs/planning/wave-1/reviews/wave-1-final-verification-finding-dispositions.md
+  finding_dispositions_blob_sha: bfcf5f9242cf90ad80e9c1f9ba93dac243d5072c
+  foundation_candidate_changed_from_failed_episode: false
+  promotion_manifest_changed_from_failed_episode: false
+  dependency_map_changed_from_failed_episode: true
+  candidate_work_identity_changed_from_failed_episode: true
+adopted_wave_1_contract_blob_sha: d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd
+current_open_plan_graph:
+  - {issue: 21, mission_id: W1-REC-01, derived_state: BLOCKED_CONDITIONAL_RECOVERY}
+  - {issue: 42, mission_id: W1-VERIFY-01, derived_state: IN_PROGRESS_VERIFICATION_RESTART, owner_comment_id: 5249541059}
+  - {issue: 43, mission_id: W1-CANON-01, derived_state: BLOCKED_PENDING_CURRENT_BASE_VERIFICATION_PASS}
+retired_accidental_issues:
+  - {issue: 59, state: CLOSED_NOT_PLANNED, graph_authority: NONE}
+  - {issue: 60, state: CLOSED_NOT_PLANNED, graph_authority: NONE}
+durable_human_directive:
+  source_comment_id: 5249227987
+  scope: existing_agent_lease_continuation_by_current_master
+  empirical_pass_authority: false
+  independence_upgrade_authority: false
+verification_questions:
+  - exact_payload_and_current_base_binding
+  - active_canonical_entry_binding_survives_noncanonical_provenance_merges
+  - prior_cross_review_dispositions_still_intact
+  - planning_experiment_nonproduction_barrier
+  - singular_evidence_acceptance_chain
+  - directive_cannot_fabricate_empirical_pass
+  - lease_continuation_does_not_upgrade_independence
+  - four_global_implementation_readiness_blockers_remain_open
+  - evidence_required_decisions_remain_unverified
+  - promotion_manifest_18_total_12_ready_10_experiments_0_production
+  - queue_prefix_visible_to_current_PLAN-v1_dispatcher
+  - required_candidate_fields_and_known_output_schemas
+  - output_and_conflict_surfaces_unique
+  - dependency_map_uses_only_registered_readiness_relation_type
+  - dependency_map_has_44_BLOCKED_BY_edges
+  - dependency_map_tokens_resolve_exactly_once
+  - dependency_map_manifest_hard_prerequisite_set_parity_for_all_18_missions
+  - resolved_hard_graph_acyclic_and_expected_topological_layers
+  - promotion_destinations_reconstructable
+  - schema3_and_squash_only_remain_authoritative
+  - accidental_issues_excluded
