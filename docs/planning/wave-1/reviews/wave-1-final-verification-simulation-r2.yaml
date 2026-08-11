@@ -1,0 +1,116 @@
+version: 2
+verification_issue: 42
+mission_id: W1-VERIFY-01
+episode: w1-verify-01-verifier-20260811-02
+verified_base_main_sha: e95f5e833a9713aa6aa8d5af9c69dc3cd37bcc66
+input_manifest_blob_sha: 3ce5ef463783e5181d33f4a0b5a5bbf7b2d85c20
+candidate:
+  candidate_work_sha: 6e5b7fd926bd59a6910a2982ec82a94957e8ff49
+  foundations_blob_sha: 4b4c409dc23538f23aba3709e4af7fafc8f37280
+  dependency_map_blob_sha: 1e00057a2d0ab966aee59965682ee29a6ca2be60
+  promotion_manifest_blob_sha: 28146606ff3334ae1ddbb036a48969afb76acb85
+  revision_input_blob_sha: de10bb67d94ed6c10176ae571bdd9cea22a342c9
+  remediation_disposition_blob_sha: bfcf5f9242cf90ad80e9c1f9ba93dac243d5072c
+checks:
+  canonical_entry_binding:
+    result: PASS
+    evidence: canonical program blob e3120ec203c4156328770aa86c12fbb7187966dc still matches Issue6 terminal binding 5245368879; activation main 413e729e8d2d5ac2eb138903f3f2ace07283b23e is ancestor of current main e95f5e833a9713aa6aa8d5af9c69dc3cd37bcc66
+  restart_authority:
+    result: PASS
+    evidence: VERIFICATION_RESTART comment 5249541059 references latest valid FAIL 5249468791, closed remediation Issue66, changed candidate work identity, current verification branch head, prior owner generation, and current main base
+  exact_payload_base:
+    result: PASS
+    evidence: revised dependency/input/disposition artifacts are present on current main from squash PR67; foundation and promotion manifest identities are unchanged; candidate work identity 6e5b7fd926bd59a6910a2982ec82a94957e8ff49 identifies the remediation payload
+  cross_review_dispositions:
+    result: PASS
+    evidence: foundation candidate remains byte-identical and retains all CD-B01/CD-M02..CD-M12 dispositions
+  planning_experiment_barrier:
+    result: PASS
+    evidence: PlanningExperiment remains disposable, bounded, non-production, no canonical game-content authority, no engine lock-in authority, and later verified promotion is required before production dependency
+  singular_acceptance_chain:
+    result: PASS
+    evidence: TaskClaimContract/EvidenceRequirement -> CheckPlan -> ExecutionEvidenceEnvelope -> derived EvidenceSatisfaction -> review/verification/decision remains singular
+  directive_empirical_boundary:
+    result: PASS
+    evidence: directive 5249227987 changes lease-continuation policy only; candidate forbids directives from fabricating evidence satisfaction or rewriting observations
+  independence_resource_boundary:
+    result: PASS
+    evidence: ResourceCapabilityState keeps isolated_or_multi_agent_context unavailable and DEGRADED_SINGLE_AGENT trust; lease continuation does not alter capability
+  implementation_readiness_barrier:
+    result: PASS
+    evidence: IR-BLOCKER-ENGINE-DECISION, IR-BLOCKER-PLATFORM-SCOPE, IR-BLOCKER-ACCESSIBILITY-CURRENT, and IR-BLOCKER-EVIDENCE-FOUNDATION remain OPEN for PRODUCTION_IMPLEMENTATION
+  evidence_required_state:
+    result: PASS
+    evidence: engine choice, mature GitHub CAS, cross-runtime hash authority, concrete ordering/migration/protected/evaluator/model/CI decisions remain EVIDENCE_REQUIRED or DEFERRED
+  promotion_manifest_counts:
+    result: PASS
+    observed_total: 18
+    observed_initial_ready: 12
+    observed_planning_experiments: 10
+    observed_production_features: 0
+    limits: {max_total: 24, max_initial_ready: 12}
+  promotion_queue_visibility:
+    result: PASS
+    evidence: issue_title_template is [PLAN-v1][{mission_id}], visible to current canonical dispatcher
+  required_candidate_fields:
+    result: PASS
+    evidence: all 18 mission records retain original next_wave_candidate_schema required fields
+  output_schema_set:
+    result: PASS
+    evidence: only proposal_research_v1, adversarial_review_v1, synthesis_v1, verification_v1
+  output_and_conflict_uniqueness:
+    result: PASS
+    evidence: mission IDs/conflict keys unique and owned output surfaces noncolliding except the one W2-SYN-01 directory owner for its own declared two files
+  verifier_finding_W1V_M01:
+    result: PASS
+    evidence:
+      - dependency-map readiness uses only BLOCKED_BY
+      - decision/readiness effects use registered BLOCKS_DECISION and BLOCKS_IMPLEMENTATION_SCOPE
+      - SYNTHESIZES_AFTER_REVIEW is absent from revised readiness graph
+      - undeclared_relation_type_count target is zero
+  verifier_finding_W1V_M02:
+    result: PASS
+    evidence:
+      - hard_dependency_semantics defines task_to_prerequisite_token and literal-set parity against unchanged promotion manifest
+      - dependency map enumerates exactly 44 BLOCKED_BY edges
+      - hard_prerequisite_parity contains all 18 missions
+      - per-mission BLOCKED_BY targets equal promotion-manifest hard_prerequisites tokens
+  prerequisite_token_resolution:
+    result: PASS
+    evidence:
+      - W1-CANON-01_TERMINAL_BINDING is one closed external literal
+      - W2 mission status tokens resolve by mutually exclusive REVIEW_READY, PASS_OR_CHANGES_REQUIRED, or VERIFICATION_READY patterns
+      - internal pattern target must name an existing W2 mission
+      - unknown or multiply resolved token is invalid
+  resolved_hard_graph:
+    result: PASS
+    hard_edge_count: 44
+    hard_cycle: false
+    topological_layers_after_W1_CANON_binding:
+      - [W2-AUTH-01, W2-GH-01, W2-ENG-01, W2-ENG-02, W2-HASH-01, W2-MIG-01, W2-ORDER-01, W2-PROTECT-01, W2-CI-01, W2-EVAL-01, W2-PLAT-01, W2-RIGHTS-01]
+      - [W2-ACC-01, W2-ENG-03]
+      - [W2-SIM-01]
+      - [W2-REV-01]
+      - [W2-SYN-01]
+      - [W2-READY-01]
+  promotion_reconstructability:
+    result: PASS
+    evidence: candidate names exact destinations WAVE-1-FOUNDATIONS-v1.md, WAVE-1-DEPENDENCY-MAP-v1.yaml, WAVE-2-PROMOTION-MANIFEST-v1.yaml; dispatcher remains PLANNING-PROGRAM-v1
+  squash_only:
+    result: PASS
+    evidence: canonical program, candidate, W1-CANON-01 contract, and repository history preserve squash-only main integration
+  accidental_issues_excluded:
+    result: PASS
+    evidence: Issues59/60 remain closed not_planned and excluded from map/manifest validation
+  current_open_graph:
+    result: PASS
+    evidence: W1-REC-01 remains conditional, this verifier is current restart owner, and W1-CANON-01 is blocked pending this current-base PASS
+summary:
+  result: PASS
+  blocker_count: 0
+  major_count: 0
+  minor_count: 0
+  unresolved_material_findings: []
+  candidate_edit_prohibited_this_episode: true
+  trust_level: DEGRADED
+  next_gate: W1-CANON-01
