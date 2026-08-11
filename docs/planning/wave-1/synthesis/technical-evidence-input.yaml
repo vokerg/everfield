@@ -1,0 +1,45 @@
+version: 1
+synthesis_issue: 38
+mission_id: W1-SYN-TECH
+synthesis_episode: w1-syn-tech-synthesizer-20260811-01
+activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+claim_comment_id: 5249292304
+resource_constraint_comment_id: 5244416013
+producer_and_reviewer_branches_immutable: true
+producer_inputs:
+  - {mission_id: W1-FAC-02, issue: 24, status_comment_id: 5245532215, work_sha: 095372a41498e8d7e3b25364cba89dbc647b8839, artifact: docs/planning/wave-1/proposals/github-control-plane-and-scheduler.md}
+  - {mission_id: W1-FAC-03, issue: 25, status_comment_id: 5245577951, work_sha: 70b763a965cdec0fa1f6c025a5b7492b844288fc, artifact: docs/planning/wave-1/proposals/review-verification-and-trust.md}
+  - {mission_id: W1-FAC-04, issue: 26, status_comment_id: 5245629575, work_sha: 99b0c7b3bddbad1a71e05f085fd0bd9f2c74e566, artifact: docs/planning/wave-1/proposals/ci-evidence-and-factory-measurement.md}
+  - {mission_id: W1-TEC-01, issue: 27, status_comment_id: 5249255787, work_sha: 3b1e159932b2d23d6641e0ba3e97dfa72da10219, artifact: docs/planning/wave-1/proposals/engine-evaluation-program.md}
+  - {mission_id: W1-TEC-02, issue: 28, status_comment_id: 5248845557, work_sha: c13389cf1df7ab8e2515a5267bd56869082df1b2, artifact: docs/planning/wave-1/proposals/runtime-data-foundation.md}
+  - {mission_id: W1-EVAL-01, issue: 33, status_comment_id: 5248979052, work_sha: a29a9c08f64947b383f4ca6a19fb88032d93777d, artifact: docs/planning/wave-1/proposals/automated-game-evaluation.md}
+review_input:
+  mission_id: W1-REV-TECH
+  issue: 35
+  review_status_comment_id: 5249289275
+  disposition: CHANGES_REQUIRED
+  work_sha: 3bbd540b5e3718c3483aa8d1ba6dc1c8ae1ca2b2
+  head_sha: dbfecf85d9421988b6e6e315611f0c5cbf48a368
+  artifact: docs/planning/wave-1/reviews/technical-and-evidence.md
+  blocker_count: 0
+  major_count: 12
+required_dispositions:
+  - TE-M01
+  - TE-M02
+  - TE-M03
+  - TE-M04
+  - TE-M05
+  - TE-M06
+  - TE-M07
+  - TE-M08
+  - TE-M09
+  - TE-M10
+  - TE-M11
+  - TE-M12
+invariants:
+  - no_engine_selection
+  - no_gameplay_implementation
+  - no_unrun_experiment_promoted_to_fact
+  - current_schema3_authority_remains_until_replacement_is_verified
+  - implementation_readiness_remains_blocked
+  - squash_only_main_integration_preserved
