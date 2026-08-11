@@ -1,9 +1,10 @@
-version: 1
+version: 2
 state: VERIFICATION_CANDIDATE
 source_mission: W1-SYN-FINAL
-activation_main_sha: RESOLVE_FROM_W1_CANON_01_SQUASH_SHA
-issue_title_template: "[PLAN-v2][{mission_id}] {title}"
 wave: 2
+activation_main_sha: RESOLVE_FROM_W1_CANON_01_SQUASH_SHA
+issue_title_template: "[PLAN-v1][{mission_id}] {title}"
+queue_prefix_reason: canonical_PLANNING_PROGRAM_v1_dispatches_open_PLAN-v1_issues; wave identity is carried by W2 mission IDs, not a new queue prefix
 instantiated_candidate_count: 18
 initial_ready_count: 12
 max_instantiated: 24
@@ -15,11 +16,24 @@ canonical_foundations_after_promotion:
   - docs/planning/WAVE-1-FOUNDATIONS-v1.md
   - docs/planning/WAVE-1-DEPENDENCY-MAP-v1.yaml
   - docs/planning/WAVE-2-PROMOTION-MANIFEST-v1.yaml
-common:
-  branch_rule: "Use planning/issue-N from current main after the concrete W1-CANON-01 activation SHA is satisfied."
-  stopping_rule: "Commit useful state; update docs/planning/handoffs/issue-N.md; publish exact schema-3 terminal status with current branch head."
-  forbidden_context: "Planning context not listed as authoritative input is forbidden-by-default unless a declared retrieval trigger is satisfied."
-  integration_rule: "No artifact becomes canonical by authorship or PR existence; every main integration is squash-only and follows the declared review/verification route. PLANNING_EXPERIMENT code is non-production and may not become a production dependency without later verified promotion."
+
+compiler_contract:
+  required_fields: [mission_id, role, priority_rank, objective, hard_prerequisites, ownership_surface, authoritative_inputs, output_paths, output_schema, evidence_requirements, acceptance_criteria, required_review, downstream, integration_rule]
+  allowed_root_output_schema: proposal_research_v1
+  review_output_schema: adversarial_review_v1
+  synthesis_output_schema: synthesis_v1
+  verification_output_schema: verification_v1
+  common_branch_rule: "Use planning/issue-N from current main after concrete W1-CANON-01 activation SHA is satisfied."
+  common_stopping_rule: "Commit useful state; update docs/planning/handoffs/issue-N.md; publish exact schema-3 terminal status at current branch head."
+  common_forbidden_context: "Planning context not listed as authoritative input is forbidden-by-default unless a declared retrieval trigger is satisfied."
+  common_integration_rule: "No artifact becomes canonical by authorship or PR existence; every main integration is squash-only and follows the declared review/verification route. PLANNING_EXPERIMENT code is non-production and may not become a production dependency without later verified promotion."
+  prerequisite_tokens:
+    W1-CANON-01_TERMINAL_BINDING: valid terminal W1-CANON-01 integration status whose main SHA is ancestor/equal current main and whose canonical Wave-1 foundation blob matches current canonical foundation
+    MISSION_REVIEW_READY: valid owner STATUS(REVIEW_READY) for exact mission current work/head
+    REVIEW_PASS_OR_CHANGES_REQUIRED: valid REVIEW_STATUS disposition PASS_FOR_SYNTHESIS or CHANGES_REQUIRED
+    MISSION_VERIFICATION_READY: valid owner STATUS(VERIFICATION_READY) for exact mission current work/head
+  initial_ready_rule: only W1-CANON-01_TERMINAL_BINDING prerequisite may remain after activation
+  blocked_rule: every additional mission prerequisite must be satisfied by exact current terminal capsule before READY
   planning_experiment_rules:
     disposable: true
     production_dependency_allowed: false
@@ -37,16 +51,15 @@ missions:
     task_class: PLANNING_RESEARCH
     decision_state: CANONICAL_CANDIDATE
     initial_state: READY
-    objective: Specify and mechanically validate the singular TaskClaimContract → EvidenceRequirement → CheckPlan → ExecutionEvidenceEnvelope → EvidenceSatisfaction chain, ActiveDirectiveSet, ResourceCapabilityState, RiskFloor, ArtifactIdentity, and ImplementationReadinessLedger interfaces.
+    objective: Specify and validate the singular TaskClaimContract → EvidenceRequirement → CheckPlan → ExecutionEvidenceEnvelope → EvidenceSatisfaction chain plus ActiveDirectiveSet, ResourceCapabilityState, RiskFloor, ArtifactIdentity, and ImplementationReadinessLedger.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/foundations/authority-evidence-contract.md
     conflict_keys: [wave2:authority-evidence-contract]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, docs/planning/WAVE-1-DEPENDENCY-MAP-v1.yaml, docs/planning/PLANNING-PROGRAM-v1.md]
-    optional_retrieval_triggers: Earlier Wave 1 factory/technical synthesis only to trace a disputed field/provenance rule.
     output_paths: [docs/planning/wave-2/foundations/authority-evidence-contract.md]
     output_schema: proposal_research_v1
-    evidence_requirements: Define closed machine schemas, compile direction, invalid-state examples, directive-vs-evidence cases, degraded trust cases, and a validator fixture set; no policy field may independently create empirical PASS.
-    acceptance_criteria: Exact contract and fixtures exist; original evidence authority is singular; current master directive is represented without upgrading independence; readiness ledger compilation is deterministic; Review Index <=4000 UTF-8 chars; no production implementation.
+    evidence_requirements: Closed machine shapes, compile direction, invalid cases, directive-vs-evidence cases, degraded trust cases, validator fixtures; no object other than derived EvidenceSatisfaction may independently create empirical PASS.
+    acceptance_criteria: Exact contract/fixtures; one acceptance authority; master lease directive represented without independence upgrade; deterministic readiness-ledger compilation; Review Index <=4000 UTF-8 chars; no production implementation.
     required_review: W2-REV-01
     downstream: [W2-ENG-03, W2-SIM-01, W2-REV-01]
     integration_rule: USE_COMMON
@@ -61,16 +74,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Empirically test proposed GitHub multi-ref CAS ownership/conflict locks, crash reconciliation, lease recovery, ruleset interaction, GC, and stale-writer fencing in the actual repository environment without replacing schema-3 authority.
+    objective: Empirically test multi-ref CAS ownership/conflict locks, crash reconciliation, lease recovery, rulesets, GC, and stale-writer fencing in the actual repository without replacing schema-3 authority.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/github-cas-lock-experiment.md
     conflict_keys: [wave2:evidence:github-cas-lock]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, docs/planning/PLANNING-PROGRAM-v1.md]
-    optional_retrieval_triggers: Current official GitHub documentation only for a concrete tested capability; repository experiment results outrank assumptions.
     output_paths: [docs/planning/wave-2/evidence/github-cas-lock-experiment.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: Execute duplicate-claim, multi-ref expected-OID/nonexistence, event-loss, permission/ruleset, lease, recovery, deadlock ordering, GC, and squash compatibility cases with immutable attempt lineage.
-    acceptance_criteria: All attempts/failures retained; observed capability separated from inference; current schema-3 remains authority; decision result is PASS/FAIL/INCONCLUSIVE for MATURE_GITHUB_LOCK_CAS_ADOPTION only.
+    output_schema: proposal_research_v1
+    evidence_requirements: Duplicate-claim, expected-OID/nonexistence, event-loss, permissions/ruleset, lease, recovery, deadlock ordering, GC, and squash cases with immutable attempt lineage; current GitHub claims sourced from official docs or observed runs.
+    acceptance_criteria: Failures retained; observed/inferred separated; current schema-3 remains authority; bounded PASS/FAIL/INCONCLUSIVE only for mature lock-CAS adoption.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -85,16 +97,15 @@ missions:
     task_class: PLANNING_RESEARCH
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Build a bounded, current-primary-source engine candidate set with inclusion/exclusion rationale, exact versions/channels, target assumptions, licensing/terms, material unknowns, and admission evidence without selecting a winner.
+    objective: Build a bounded current-primary-source engine candidate set with inclusion/exclusion rationale, exact versions, target assumptions, terms, and material unknowns without selecting a winner.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/engine-candidate-admission.md
     conflict_keys: [wave2:evidence:engine-admission]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, docs/planning/WAVE-1-DEPENDENCY-MAP-v1.yaml]
-    optional_retrieval_triggers: Current official engine/vendor/project documentation and source/release/license material required for every material capability/terms claim.
     output_paths: [docs/planning/wave-2/evidence/engine-candidate-admission.md]
-    output_schema: research_evidence_v1
-    evidence_requirements: Source/version/date per material claim; UNKNOWN not PASS; plausible exclusions explained; target assumptions explicit; no familiarity/popularity preference.
-    acceptance_criteria: Bounded candidate matrix reconstructable from current sources; every omission/risk reason explicit; no engine selection; freshness triggers recorded.
+    output_schema: proposal_research_v1
+    evidence_requirements: Source/version/date per material external claim; UNKNOWN not PASS; plausible exclusions explained; freshness triggers and target assumptions explicit.
+    acceptance_criteria: Candidate matrix reconstructable from current primary sources; omissions/risk reasons explicit; no engine selection.
     required_review: W2-REV-01
     downstream: [W2-ENG-03, W2-REV-01]
     integration_rule: USE_COMMON
@@ -109,16 +120,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Implement/specify the engine-neutral S1-S10 scenario harness, adaptation manifest, evidence schema, repeated-run policy, and equivalence review fixtures without preferring a candidate engine.
+    objective: Define and exercise the engine-neutral S1-S10 scenario harness, adaptation manifest, evidence identity, repeated-run policy, and equivalence fixtures without candidate scoring.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/engine-spike-harness.md
     conflict_keys: [wave2:evidence:engine-harness]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, docs/planning/WAVE-1-DEPENDENCY-MAP-v1.yaml]
-    optional_retrieval_triggers: Candidate engine documentation only to test whether the neutral harness can be adapted; no candidate scoring in this mission.
     output_paths: [docs/planning/wave-2/evidence/engine-spike-harness.md]
-    output_schema: experiment_protocol_v1
-    evidence_requirements: S1-S10 intent/acceptance/evidence parity, candidate adaptation manifest, failure injection, repeated attempts, operator/recovery/cost traces, fresh continuation protocol.
-    acceptance_criteria: Equivalent claim intent is explicit; candidate-specific convenience cannot weaken acceptance; experimental code is disposable/non-production; W2-REV-01 can audit harness bias.
+    output_schema: proposal_research_v1
+    evidence_requirements: S1-S10 intent/acceptance/evidence parity, adaptation manifest, failure injection, repeated attempts, operator/recovery/cost traces, fresh continuation protocol.
+    acceptance_criteria: Equivalent claims explicit; candidate adaptation cannot weaken acceptance; experimental code disposable/non-production; review can detect harness bias.
     required_review: W2-REV-01
     downstream: [W2-ENG-03, W2-REV-01]
     integration_rule: USE_COMMON
@@ -133,16 +143,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Specify canonical semantic encoding and execute adversarial cross-implementation conformance vectors for ordering, numbers, strings, defaults, references, schema/content identity, and hash scope.
+    objective: Specify canonical semantic encoding and run adversarial cross-implementation conformance for ordering, numbers, strings, defaults, references, schema/content identity, and hash scope.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/canonical-hash-conformance.md
     conflict_keys: [wave2:evidence:hash-conformance]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: Primary language/runtime serialization documentation only for concrete conformance behavior.
     output_paths: [docs/planning/wave-2/evidence/canonical-hash-conformance.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: At least two independent adapter implementations or equivalent isolated implementations; shared fixture corpus; all mismatch cases retained; exact encoding/hash version.
-    acceptance_criteria: Result clearly PASS/FAIL/INCONCLUSIVE for cross-runtime canonical hash authority; local hashes not misrepresented; fixtures retained through ArtifactIdentity.
+    output_schema: proposal_research_v1
+    evidence_requirements: At least two independent adapter/isolated implementations; shared fixture corpus; mismatches retained; exact encoding/hash version.
+    acceptance_criteria: Bounded PASS/FAIL/INCONCLUSIVE for cross-runtime hash authority; local hashes not overclaimed; fixtures retained by ArtifactIdentity.
     required_review: W2-REV-01
     downstream: [W2-ENG-03, W2-REV-01]
     integration_rule: USE_COMMON
@@ -151,22 +160,21 @@ missions:
     risk_floor: R2_CANONICAL_STATE_EVIDENCE
 
   - mission_id: W2-MIG-01
-    title: Historical schema/content migration fixture experiment
+    title: Historical schema and content migration fixture experiment
     role: persistence migration experimenter
     priority_rank: 60
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Exercise source/target save-schema-content tuples across renames, removals, splits, semantic changes, corruption, multi-hop composition, rollback/recovery, and unsupported downgrade cases.
+    objective: Exercise save/schema/content version tuples across renames, removals, splits, semantic changes, corruption, multi-hop composition, rollback/recovery, and unsupported downgrade cases.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/migration-fixture-experiment.md
     conflict_keys: [wave2:evidence:migration]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: Technical implementation sources only for a concrete disposable migration harness.
     output_paths: [docs/planning/wave-2/evidence/migration-fixture-experiment.md]
-    output_schema: experiment_evidence_v1
+    output_schema: proposal_research_v1
     evidence_requirements: Deterministic fixtures, source/target tuple identity, semantic loss reports, multi-hop composition, orphan policy, corruption recovery, attempt lineage.
-    acceptance_criteria: Migration claims remain bounded to fixture evidence; no final save encoding selected; failures preserved; production migration architecture not promoted automatically.
+    acceptance_criteria: No final physical save encoding selected; failures retained; result bounded to migration architecture evidence.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -186,11 +194,10 @@ missions:
     ownership_surface: docs/planning/wave-2/evidence/ordering-replay-experiment.md
     conflict_keys: [wave2:evidence:ordering]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: Primary runtime/concurrency sources only for concrete candidate implementations.
     output_paths: [docs/planning/wave-2/evidence/ordering-replay-experiment.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: Explicit causal graphs/tie-breakers, deterministic replay, concurrent domain cases, throughput/contention measurements, mismatches and race failures retained.
-    acceptance_criteria: No untested total-order mandate; decision evidence distinguishes semantic correctness from performance; result scopes concrete event-scheduling decision only.
+    output_schema: proposal_research_v1
+    evidence_requirements: Explicit causal graphs/tie-breakers, deterministic replay, concurrent-domain cases, throughput/contention measurements, mismatches/races retained.
+    acceptance_criteria: No untested total-order mandate; correctness/performance evidence separated; result scopes concrete scheduling decision only.
     required_review: W2-REV-01
     downstream: [W2-SIM-01, W2-REV-01]
     integration_rule: USE_COMMON
@@ -205,16 +212,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Test protected-result envelopes, artifact identity, selective diagnostics, access/change/reveal audit, unavailable-store behavior, holdout compromise/rotation, and producer/verifier permission boundaries.
+    objective: Test protected-result envelopes, ArtifactIdentity, bounded diagnostics, access/change/reveal audit, unavailable-store behavior, holdout compromise/rotation, and producer/verifier permission boundaries.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/protected-evidence-experiment.md
     conflict_keys: [wave2:evidence:protected]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: Current provider/GitHub/CI permission documentation only for a concrete protected-storage design under test.
     output_paths: [docs/planning/wave-2/evidence/protected-evidence-experiment.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: Result envelope reproducibility, candidate/base/evaluator/oracle identity, bounded diagnostics, leak probe, unavailable/corrupt cases, audit/rotation evidence, trust profile.
-    acceptance_criteria: Protected failure is debuggable without revealing full holdout; unavailable evidence is INCONCLUSIVE; producer cannot self-weaken sole oracle; no provider choice becomes canonical without review.
+    output_schema: proposal_research_v1
+    evidence_requirements: Reproducible result envelope, candidate/base/evaluator/oracle identity, leak probe, unavailable/corrupt cases, audit/rotation evidence, trust profile.
+    acceptance_criteria: Debuggable without full holdout reveal; unavailable protected evidence INCONCLUSIVE; producer cannot self-weaken sole gate.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -229,16 +235,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Exercise compiled required/conditional/NA checks, retry lineage, injected flakes/infra failures, quarantine expiry/replacement evidence, artifact retention loss/restoration, and aggregate EvidenceSatisfaction.
+    objective: Exercise required/conditional/NA checks, retry lineage, injected flakes/infra failures, quarantine expiry/replacement, retention loss/restoration, and aggregate EvidenceSatisfaction.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/ci-reliability-experiment.md
     conflict_keys: [wave2:evidence:ci-reliability]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: CI/provider documentation only for concrete experiment execution; semantics come from canonical foundations.
     output_paths: [docs/planning/wave-2/evidence/ci-reliability-experiment.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: Required-check truth table, NOT_APPLICABLE vs NOT_RUN, repeated attempts, infra/product classification, quarantine lifecycle, artifact GC loss/recovery, exact candidate/base evidence.
-    acceptance_criteria: Retry cannot launder failure; missing required evidence cannot PASS; retention loss reopens authority; provider-specific mechanics remain experimental.
+    output_schema: proposal_research_v1
+    evidence_requirements: Applicability truth table, NOT_APPLICABLE vs NOT_RUN, repeated attempts, infra/product classes, quarantine lifecycle, artifact loss/recovery, exact candidate/base evidence.
+    acceptance_criteria: Retry cannot launder failure; missing required evidence cannot PASS; retention loss reopens authority; provider mechanics remain experimental.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -253,16 +258,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Benchmark mutable/pinnable evaluator fingerprints, frozen calibration corpora, repeated distributions, correlation, provider/model drift, thresholds, and reopen behavior without granting any evaluator universal authority.
+    objective: Benchmark evaluator fingerprints, frozen calibration corpora, repeated distributions, correlation, provider/model drift, thresholds, and reopen behavior without granting universal evaluator authority.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/evidence/evaluator-drift-calibration.md
     conflict_keys: [wave2:evidence:evaluator-drift]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: Current model/provider/tool documentation only for exact evaluator identity/capability claims under experiment.
     output_paths: [docs/planning/wave-2/evidence/evaluator-drift-calibration.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: Fingerprints, calibration corpus identity, repeated results/disagreement, correlated-panel cases, simulated/provider drift cases, reopen thresholds, protected variants where risk warrants.
-    acceptance_criteria: Missing fingerprint cannot become high-impact PASS; panel size does not imply independence; result is bounded to evaluator authority questions.
+    output_schema: proposal_research_v1
+    evidence_requirements: Fingerprints, calibration corpus, repeated results/disagreement, correlation cases, drift cases, reopen thresholds, protected variants where risk warrants.
+    acceptance_criteria: Missing fingerprint cannot high-impact PASS; panel size is not independence; result bounded to evaluator authority.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -277,16 +281,15 @@ missions:
     task_class: PLANNING_RESEARCH
     decision_state: EVIDENCE_REQUIRED
     initial_state: READY
-    objective: Produce a bounded target-platform/product-scope candidate set and decision inputs sufficient to drive engine fit, accessibility, packaging, input, localization, and evidence requirements without pretending final release commitments are already known.
+    objective: Produce a bounded platform/product-scope candidate set sufficient to drive engine fit, accessibility, packaging, input, localization, and evidence requirements without pretending release commitments are settled.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING]
     ownership_surface: docs/planning/wave-2/research/target-platform-scope.md
     conflict_keys: [wave2:research:platform-scope]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: Current authoritative platform/vendor requirements and market/technical evidence only for explicit scope questions.
     output_paths: [docs/planning/wave-2/research/target-platform-scope.md]
-    output_schema: research_evidence_v1
-    evidence_requirements: Current sources/date/version, assumptions, alternatives, engine/accessibility implications, open commitments and freshness triggers.
-    acceptance_criteria: Scope is sufficient for downstream research but does not overclaim release commitment; current external facts cited; tradeoffs/reopen conditions explicit.
+    output_schema: proposal_research_v1
+    evidence_requirements: Current authoritative sources/date/version, assumptions, alternatives, engine/accessibility implications, open commitments and freshness triggers.
+    acceptance_criteria: Scope sufficient for downstream research without false release commitment; external facts sourced; tradeoffs/reopen conditions explicit.
     required_review: W2-REV-01
     downstream: [W2-ACC-01, W2-ENG-03, W2-REV-01]
     integration_rule: USE_COMMON
@@ -306,11 +309,10 @@ missions:
     ownership_surface: docs/planning/wave-2/research/originality-rights-and-terms.md
     conflict_keys: [wave2:research:rights]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md]
-    optional_retrieval_triggers: Current primary/provider terms and authoritative legal/regulatory sources for concrete applicable questions; legal uncertainty remains uncertainty.
     output_paths: [docs/planning/wave-2/research/originality-rights-and-terms.md]
-    output_schema: research_evidence_v1
-    evidence_requirements: Source/version/date, artifact/reference-use taxonomy, provider/tool terms matrix, originality/similarity evidence policy, quarantine/research escalation, freshness triggers.
-    acceptance_criteria: Provenance and originality are separated; unknown/restricted material cannot silently ship; no unsupported legal conclusion; review route explicit.
+    output_schema: proposal_research_v1
+    evidence_requirements: Source/version/date, reference-use taxonomy, provider terms matrix, originality/similarity evidence policy, quarantine/escalation and freshness triggers.
+    acceptance_criteria: Provenance/originality separated; unknown/restricted material cannot silently ship; no unsupported legal conclusion.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -325,16 +327,15 @@ missions:
     task_class: PLANNING_RESEARCH
     decision_state: EVIDENCE_REQUIRED
     initial_state: BLOCKED
-    objective: Map current authoritative accessibility and selected target-platform requirements to Everfield input, UI, text, media, timing, save/pause, interaction, and evidence obligations.
+    objective: Map current authoritative accessibility and selected target-platform requirements to input, UI, text, media, timing, save/pause, interaction, and evidence obligations.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING, W2-PLAT-01_REVIEW_READY]
     ownership_surface: docs/planning/wave-2/research/accessibility-current-requirements.md
     conflict_keys: [wave2:research:accessibility]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, W2-PLAT-01@work_sha]
-    optional_retrieval_triggers: Current authoritative accessibility standards/guidelines and target-platform requirements applicable to the selected product scope.
     output_paths: [docs/planning/wave-2/research/accessibility-current-requirements.md]
-    output_schema: research_evidence_v1
-    evidence_requirements: Exact source/version/date, applicability rationale, architecture mapping, task/evidence mapping, unmet requirements/blockers, freshness triggers.
-    acceptance_criteria: Every applicable requirement has mapped evidence or explicit gap; no remembered/stale checklist accepted; current blocker resolution conditions are machine-identifiable.
+    output_schema: proposal_research_v1
+    evidence_requirements: Exact source/version/date, applicability rationale, architecture/task evidence mapping, unmet gaps/blockers, freshness triggers.
+    acceptance_criteria: Every applicable requirement has mapped evidence or gap; no stale remembered checklist; blocker resolution machine-identifiable.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -349,16 +350,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: BLOCKED
-    objective: Execute equivalent S1-S10 autonomous-development spikes across admitted engine candidates with repeated attempts, failures, recovery, CI/player-state evidence, merge conflicts, profiling, packaging, and continuation; produce no winner by familiarity.
+    objective: Execute equivalent S1-S10 autonomous-development spikes across admitted engines with repeated attempts, failures, recovery, CI/state/capture, merge conflicts, profiling, packaging, and continuation; no winner by familiarity.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING, W2-AUTH-01_REVIEW_READY, W2-ENG-01_REVIEW_READY, W2-ENG-02_REVIEW_READY, W2-HASH-01_REVIEW_READY, W2-PLAT-01_REVIEW_READY]
     ownership_surface: docs/planning/wave-2/evidence/engine-comparative-spikes.md
     conflict_keys: [wave2:evidence:engine-comparative-spikes]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, W2-AUTH-01@work_sha, W2-ENG-01@work_sha, W2-ENG-02@work_sha, W2-HASH-01@work_sha, W2-PLAT-01@work_sha]
-    optional_retrieval_triggers: Candidate primary documentation only for spike execution/diagnosis; all candidate-specific deviations recorded.
     output_paths: [docs/planning/wave-2/evidence/engine-comparative-spikes.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: Exact candidate/toolchain/environment, equivalent harness review, all attempts, failures/retries/manual interventions, state/capture/profile/merge/recovery/package evidence, costs, sensitivity/Pareto analysis, exit risks.
-    acceptance_criteria: No hard-gate failure hidden; UNKNOWN remains unknown; experiment code non-production; result supports engine decision evidence but does not self-authorize an ADR.
+    output_schema: proposal_research_v1
+    evidence_requirements: Exact candidate/toolchain/environment, equivalent harness review, all attempts/manual interventions, state/capture/profile/merge/recovery/package evidence, costs, sensitivity/Pareto, exit risks.
+    acceptance_criteria: No hard failure hidden; UNKNOWN remains unknown; experiment code non-production; evidence does not self-authorize engine ADR.
     required_review: W2-REV-01
     downstream: [W2-SIM-01, W2-REV-01]
     integration_rule: USE_COMMON
@@ -373,16 +373,15 @@ missions:
     task_class: PLANNING_EXPERIMENT
     decision_state: EVIDENCE_REQUIRED
     initial_state: BLOCKED
-    objective: Compare abstract/model economy/progression/synthetic simulations against the chosen representative shared-kernel candidate on a frozen differential corpus and quantify divergence/admissible claim classes.
+    objective: Compare abstract economy/progression/synthetic models against the representative shared-kernel candidate on a frozen differential corpus and bound admissible claim classes.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING, W2-AUTH-01_REVIEW_READY, W2-ORDER-01_REVIEW_READY, W2-ENG-03_REVIEW_READY]
     ownership_surface: docs/planning/wave-2/evidence/model-shared-kernel-parity.md
     conflict_keys: [wave2:evidence:simulation-parity]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, W2-AUTH-01@work_sha, W2-ORDER-01@work_sha, W2-ENG-03@work_sha]
-    optional_retrieval_triggers: Earlier model/simulation proposal only to trace a disputed abstraction assumption.
     output_paths: [docs/planning/wave-2/evidence/model-shared-kernel-parity.md]
-    output_schema: experiment_evidence_v1
-    evidence_requirements: Frozen scenarios/rules/content identity, model vs shared-kernel runs, state/trajectory differences, uncertainty/coverage, model update/reopen policy.
-    acceptance_criteria: Model simulations are granted only the claim authority supported by measured parity; divergence retained; no abstract model can self-certify production correctness.
+    output_schema: proposal_research_v1
+    evidence_requirements: Frozen scenarios/rules/content identity, model/shared-kernel runs, trajectory/state differences, uncertainty/coverage, update/reopen policy.
+    acceptance_criteria: Model gets only measured claim authority; divergence retained; no abstract model self-certifies production correctness.
     required_review: W2-REV-01
     downstream: [W2-REV-01]
     integration_rule: USE_COMMON
@@ -397,16 +396,15 @@ missions:
     task_class: ADVERSARIAL_REVIEW
     decision_state: CANONICAL_CANDIDATE
     initial_state: BLOCKED
-    objective: Independently attack exact Wave 2 authority/compiler, engine, runtime, CI, protected-evidence, evaluator, platform, accessibility, rights, and simulation evidence for invalid promotion, bias, missing attempts, stale sources, trust gaps, or implementation-readiness leakage.
+    objective: Attack exact Wave 2 authority/compiler, engine, runtime, CI, protected-evidence, evaluator, platform, accessibility, rights, and simulation evidence for invalid promotion, bias, stale sources, trust gaps, missing attempts, or readiness leakage.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING, W2-AUTH-01_REVIEW_READY, W2-GH-01_REVIEW_READY, W2-ENG-01_REVIEW_READY, W2-ENG-02_REVIEW_READY, W2-HASH-01_REVIEW_READY, W2-MIG-01_REVIEW_READY, W2-ORDER-01_REVIEW_READY, W2-PROTECT-01_REVIEW_READY, W2-CI-01_REVIEW_READY, W2-EVAL-01_REVIEW_READY, W2-PLAT-01_REVIEW_READY, W2-RIGHTS-01_REVIEW_READY, W2-ACC-01_REVIEW_READY, W2-ENG-03_REVIEW_READY, W2-SIM-01_REVIEW_READY]
     ownership_surface: docs/planning/wave-2/reviews/evidence-and-readiness.md
     conflict_keys: [wave2:review:evidence-readiness]
-    authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, exact_terminal_work_shas_for_W2_Authority_Evidence_Missions]
-    optional_retrieval_triggers: Earlier Wave 2 task evidence only through exact refs; primary sources only to challenge a current claim.
+    authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, exact_terminal_work_shas_for_all_Wave2_root_and_evidence_missions]
     output_paths: [docs/planning/wave-2/reviews/evidence-and-readiness.md]
     output_schema: adversarial_review_v1
-    evidence_requirements: Bind exact work/evidence identities; independent/degraded-independent attack plan before rationale; findings and blocker/major counts; no candidate edits; test engine bias, readiness leakage, evidence algebra, trust, freshness, and failed-run retention.
-    acceptance_criteria: Disposition PASS_FOR_SYNTHESIS, CHANGES_REQUIRED, or INVALIDATED; every BLOCKER/MAJOR has correction/evidence question; exact trust profile/status/handoff; no engine/readiness decision self-certified.
+    evidence_requirements: Exact work/evidence identity; degraded/full independence profile; attack plan before rationale; failed-run retention, engine bias, trust, freshness, evidence algebra, and readiness leakage.
+    acceptance_criteria: PASS_FOR_SYNTHESIS/CHANGES_REQUIRED/INVALIDATED only; every BLOCKER/MAJOR corrected/bounded; no engine/readiness self-certification.
     required_review: THIS_IS_THE_REQUIRED_INDEPENDENT_ADVERSARIAL_REVIEW
     downstream: [W2-SYN-01]
     integration_rule: USE_COMMON
@@ -421,16 +419,15 @@ missions:
     task_class: SYNTHESIS
     decision_state: CANONICAL_CANDIDATE
     initial_state: BLOCKED
-    objective: Disposition W2-REV-01 material findings, synthesize exact engine/evidence/platform/accessibility/rights results, update decision states and ImplementationReadinessLedger, and emit a candidate engine ADR only if evidence actually supports it.
+    objective: Disposition W2-REV-01 material findings, synthesize engine/evidence/platform/accessibility/rights results, update decision states/readiness ledger, and emit an engine ADR candidate only if evidence supports it.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING, W2-REV-01_PASS_OR_CHANGES_REQUIRED]
     ownership_surface: docs/planning/wave-2/synthesis/
     conflict_keys: [wave2:synthesis:decision-readiness]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, W2-REV-01@work_sha, exact_reviewed_Wave2_evidence_work_shas]
-    optional_retrieval_triggers: Earlier evidence only to trace disputed finding/provenance; current external source only when a disposition depends on freshness.
     output_paths: [docs/planning/wave-2/synthesis/decision-and-readiness-candidate.md, docs/planning/wave-2/synthesis/readiness-ledger.yaml]
     output_schema: synthesis_v1
-    evidence_requirements: Explicit disposition of every BLOCKER/MAJOR; exact decision-state transitions; evidence refs for any engine ADR; unresolved/open blockers retained; no scalar score as sole decision.
-    acceptance_criteria: Candidate and readiness ledger internally consistent; no OPEN production blocker silently cleared; any engine decision has exact evidence/review/exit/reopen route; terminal state VERIFICATION_READY only if suitable for W2-READY-01.
+    evidence_requirements: Every review BLOCKER/MAJOR dispositioned; exact decision transitions; evidence refs for engine ADR; OPEN blockers retained; no scalar score sole authority.
+    acceptance_criteria: Candidate/ledger internally consistent; no OPEN production blocker silently cleared; engine decision has evidence/review/exit/reopen route; terminal VERIFICATION_READY only for W2-READY-01.
     required_review: W2-READY-01
     downstream: [W2-READY-01]
     integration_rule: USE_COMMON
@@ -445,16 +442,15 @@ missions:
     task_class: INDEPENDENT_VERIFICATION
     decision_state: CANONICAL_CANDIDATE
     initial_state: BLOCKED
-    objective: Cold-start verify the exact Wave 2 decision/readiness candidate, engine evidence if any, readiness ledger, evidence authority chain, current base, implementation barrier, and proposed next transition; return PASS/FAIL without itself implementing gameplay.
+    objective: Cold-start verify exact Wave 2 decision/readiness candidate, engine evidence if any, readiness ledger, evidence authority chain, current base, implementation barrier, and proposed next transition; never implement gameplay itself.
     hard_prerequisites: [W1-CANON-01_TERMINAL_BINDING, W2-SYN-01_VERIFICATION_READY]
     ownership_surface: docs/planning/wave-2/reviews/implementation-readiness-verification.md
     conflict_keys: [wave2:verify:implementation-readiness]
     authoritative_inputs: [docs/planning/WAVE-1-FOUNDATIONS-v1.md, W2-SYN-01@work_sha, W2-SYN-01_readiness_ledger, complete_current_PLAN_issue_graph]
-    optional_retrieval_triggers: Earlier Wave 2 evidence only to verify exact contradiction/provenance; current external sources only for freshness checks.
     output_paths: [docs/planning/wave-2/reviews/implementation-readiness-verification.md]
     output_schema: verification_v1
-    evidence_requirements: Fresh repository/GitHub cold start; exact candidate/base/evidence binding; simulate implementation barrier and dispatcher; zero unresolved BLOCKER/MAJOR for PASS; DEGRADED_SINGLE_AGENT explicit until stronger capability exists.
-    acceptance_criteria: PASS only if exact ledger/payload/base coherent and no OPEN blocker covers the claimed readiness scope; otherwise FAIL with bounded remediation; terminal verification status exact.
+    evidence_requirements: Fresh repo/GitHub cold start; exact payload/base/evidence binding; simulate dispatcher/implementation barrier; zero unresolved BLOCKER/MAJOR for PASS; DEGRADED_SINGLE_AGENT explicit until stronger capability exists.
+    acceptance_criteria: PASS only if exact ledger/payload/base coherent and no OPEN blocker covers claimed readiness scope; otherwise FAIL with bounded remediation.
     required_review: THIS_IS_THE_INDEPENDENT_VERIFICATION_GATE
     downstream: [bounded_next_canonicalization_or_planning_wave_only_after_result]
     integration_rule: USE_COMMON
@@ -465,6 +461,7 @@ missions:
 validation:
   required_schema_fields_present_for_every_mission: true
   mission_ids_unique: true
+  queue_prefix_matches_current_canonical_dispatcher: true
   output_paths_nonoverlapping_except_declared_directory_owner: true
   conflict_keys_unique: true
   initial_ready_missions: [W2-AUTH-01, W2-GH-01, W2-ENG-01, W2-ENG-02, W2-HASH-01, W2-MIG-01, W2-ORDER-01, W2-PROTECT-01, W2-CI-01, W2-EVAL-01, W2-PLAT-01, W2-RIGHTS-01]
@@ -472,6 +469,7 @@ validation:
   total_count: 18
   hard_dependency_graph_acyclic: true
   production_feature_count: 0
-  planning_experiment_count: 9
+  planning_experiment_count: 10
+  unknown_output_schema_count: 0
   accidental_issues_excluded: [59, 60]
   activation_before_issue_creation_forbidden: true
