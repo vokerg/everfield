@@ -1,0 +1,67 @@
+version: 1
+review_issue: 36
+mission_id: W1-REV-GAME
+review_episode: w1-rev-game-reviewer-20260811-01
+role: independent_adversarial_reviewer
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_ATTACK_PLAN
+activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+review_claim_comment_id: 5248983825
+inputs:
+  - mission_id: W1-TEC-02
+    issue: 28
+    status_comment_id: 5248845557
+    work_sha: c13389cf1df7ab8e2515a5267bd56869082df1b2
+    head_sha: eef7c5c009fce5e8c5c9c674c32ad2fe3c31cb60
+    artifact: docs/planning/wave-1/proposals/runtime-data-foundation.md
+  - mission_id: W1-DES-01
+    issue: 29
+    status_comment_id: 5248873867
+    work_sha: 10e1f3cda1f77be81210f769c2224f943810c97b
+    head_sha: ba2d6bfd6710a83d587184101a2aa5d68a615e03
+    artifact: docs/planning/wave-1/proposals/game-design-foundation.md
+  - mission_id: W1-DES-02
+    issue: 30
+    status_comment_id: 5248900711
+    work_sha: 498679b5c3a473d220723794e66799463ed3ba6f
+    head_sha: f954d5121e34bb0a629f4461fec88508f1ec32fc
+    artifact: docs/planning/wave-1/proposals/economy-progression-automation.md
+  - mission_id: W1-DES-03
+    issue: 31
+    status_comment_id: 5248925530
+    work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+    head_sha: d7cae4d5e61c95be11544f7da88a6599f2310604
+    artifact: docs/planning/wave-1/proposals/world-social-narrative-content.md
+  - mission_id: W1-EXP-01
+    issue: 32
+    status_comment_id: 5248949220
+    work_sha: 64be52c55d751b37e8d8c4a1758873f4dec64998
+    head_sha: 6058d0d58f41d73da93012a9604df2e50edea509
+    artifact: docs/planning/wave-1/proposals/experience-accessibility-media.md
+  - mission_id: W1-EVAL-01
+    issue: 33
+    status_comment_id: 5248979052
+    work_sha: a29a9c08f64947b383f4ca6a19fb88032d93777d
+    head_sha: f41238e948f7ef96718b290012e11210a9e6bba3
+    artifact: docs/planning/wave-1/proposals/automated-game-evaluation.md
+attack_plan:
+  - fake sandbox diversity and hidden foundational/mandatory routes
+  - universal-currency or progression dominance despite nominal lifestyle choice
+  - automation that either becomes compulsory optimizer play or removes meaningful play
+  - discovery/UX/accessibility conflicts with hidden systems, timing, secrets, and broad possibility space
+  - narrative/quest/world-state requirements that silently force one canonical progression path
+  - technical determinism/persistence boundaries that distort world/NPC/narrative/experience design
+  - content growth that inflates counts while semantic interaction and identity stay shallow
+  - generated-content grounding, provenance, similarity, and semantic-sameness failure
+  - synthetic-player/persona and semantic-coverage Goodhart paths
+  - protected/subjective evaluator blind spots, correlation, drift, and player-representation laundering
+  - player-surface versus simulation-surface contradictions
+  - late-game resource/sink/automation escalation that erases small-scale/cozy/direct-play viability
+severity_rule:
+  BLOCKER: proceeding_to_synthesis_would_make_game_candidate_logically_or_quality_invalid
+  MAJOR: material_cross_proposal_or_evidence_gap_requires_correction_or_bounded_evidence_before_acceptance
+  MINOR: useful_correction_not_required_to_establish_core_synthesis_viability
+  NOTE: nonblocking_observation_or_future_measurement
