@@ -1,0 +1,47 @@
+version: 1
+review_issue: 40
+mission_id: W1-REV-CROSS
+review_episode: w1-rev-cross-reviewer-20260811-01
+role: independent_cross_domain_reviewer
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_ATTACK_PLAN
+activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+review_claim_comment_id: 5249316118
+inputs:
+  - mission_id: W1-SYN-FAC
+    issue: 37
+    status_comment_id: 5248788825
+    work_sha: 896cb799024e5d3c2ce451196f85b67e29edd3bc
+    head_sha: 57ff630d3b93a6fd83c81848960cba8291f88a35
+    artifact: docs/planning/wave-1/synthesis/factory-governance-candidate.md
+  - mission_id: W1-SYN-TECH
+    issue: 38
+    status_comment_id: 5249311403
+    work_sha: 99805527fa192805b683722e27d72e19aa964fd0
+    head_sha: fd56974310aaa72c6656b6f2bbdeff255e4e7b7b
+    artifact: docs/planning/wave-1/synthesis/technical-evidence-candidate.md
+  - mission_id: W1-SYN-GAME
+    issue: 39
+    status_comment_id: 5249051313
+    work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+    head_sha: c5ab9b04ff9342e4c1faebfe965196535284b4a7
+    artifact: docs/planning/wave-1/synthesis/game-experience-candidate.md
+attack_plan:
+  - authority collision between factory TaskContract/Trust/Evidence state and technical ExecutionEvidenceEnvelope/CheckPlan/decision state
+  - circular readiness where evidence work requires engine/game interfaces that themselves require implementation readiness or a settled engine
+  - game progression/time/generative-state contracts that do not map cleanly onto technical canonical state, replay, and migration boundaries
+  - protected evidence and subjective panels that cannot satisfy factory permission/trust semantics under degraded single-agent operation
+  - shared schema/registry/evidence structures that centralize ownership and collapse concurrency despite distributed-namespace intent
+  - scheduler treating EVIDENCE_REQUIRED experiments as ordinary prerequisites and serializing all work or allowing unproven decisions through
+  - implementation-readiness leakage through conditional engine selection, prototype spikes, accessibility deferrals, or factory protocol changes
+  - inconsistent lifecycle semantics for external/current research freshness, evaluator drift, evidence retention, and reopening old decisions
+  - next-wave promotion candidates that are not typed strongly enough to preserve dependencies, conflicts, review routes, and evidence gates
+  - final synthesis being unable to deterministically distinguish canonical candidate decisions from deferred empirical work
+severity_rule:
+  BLOCKER: proceeding_to_final_synthesis_would_leave_a_logically_circular_ambiguous_or_unverifiable_cross_domain_authority
+  MAJOR: material_interface_parallelism_or_readiness_gap_requires_correction_or_bounded_evidence_before_final_acceptance
+  MINOR: useful_cross_domain_correction_not_required_to_establish_final_synthesis_viability
+  NOTE: nonblocking_observation_or_future_measurement
