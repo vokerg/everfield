@@ -9,47 +9,47 @@
 
 ### SR-M01 — MAJOR — machine shapes not closed
 
-**CORRECTED.** The remediated contract defines `PrimitiveRegistryV1`, closed enums, `IdentityRef`, `ImmutableRefV1`, `RuleRegistry`, `RuleInvocationV1`, and a closed `PredicateV1` AST with exact bindings, typed operators, `TRUE|FALSE|ERROR`, and fail-closed context semantics. Unknown fields/operators/rules or under/over-bound registered-rule invocations are invalid.
+**CORRECTED.** The remediated contract defines a primitive registry, closed enums, exact identity/immutable-reference shapes, `RuleRegistry`, `RuleInvocationV1`, and a closed `PredicateV1` AST with exact bindings and fail-closed errors. Unknown fields/operators/rules or under/over-bound registered-rule invocations are invalid.
 
-Evidence: contract Sections 2–4; fixtures V04–V05, V11–V12, V35, V39.
+Evidence: contract Sections 3–4; fixtures V04–V05, V11–V13, V39.
 
 ### SR-M02 — MAJOR — retry/attempt policy not representable
 
-**CORRECTED.** `AttemptPolicyV1` is separate from `CheckAggregationRuleV1`. Built-in modes define all-attempts and latest-after-retryable-failure semantics with contiguous lineage, max attempts, retryable failure classes, retry predicates, and explicit behavior for PRODUCT/INFRA/FLAKY/INCONCLUSIVE/NOT_RUN. Registered rules use exact typed invocations with immutable input bindings and cannot weaken lineage/risk/result constraints.
+**CORRECTED.** `AttemptPolicyV1` is separate from alternative-check aggregation. Retry semantics are contiguous, bounded, class/predicate-gated, append-only, and any accepted later PASS is recorded as explicit replacement evidence. A mandatory failure can never be hidden by aggregation.
 
-Evidence: contract Section 7.2 and Section 7.8; fixtures V06–V12, V32, V39.
+Evidence: contract Sections 7.2–7.3 and 8; fixtures V06–V09, V33–V36, V43.
 
 ### SR-M03 — MAJOR — RiskFloor only partially enforced
 
-**CORRECTED.** `RiskFloor` has deterministic applicability and `EffectiveRiskConstraint` compiles every dimension: strictest trust, OR protection, maximum distinct surfaces, and greatest review-route rank. Requirement/plan/satisfaction/promotion/readiness carry these constraints; producer downgrade invalidates compilation.
+**CORRECTED.** `EffectiveRiskConstraint` deterministically compiles strictest trust, OR protection, maximum distinct surfaces, and greatest review-route rank. Requirement/plan/satisfaction/promotion/readiness carry these constraints; producer downgrade invalidates compilation.
 
-Evidence: contract Section 6, Sections 7.4–8; fixtures V20–V25, V33, V38.
+Evidence: contract Section 6 and Sections 7–9; fixtures V21–V26, V37, V42.
 
 ### SR-m01 — MINOR — trust cannot represent not evaluated
 
-**CORRECTED.** Normative `TrustLevel` is distinct from `TrustAssessment=[NOT_EVALUATED,DEGRADED,FULL]`. `TrustDerivationV1` is capability-bound and defines when FULL is possible. No evaluable evidence yields NOT_EVALUATED, which cannot satisfy a required claim.
+**CORRECTED.** Normative `TrustLevel` is distinct from `TrustAssessment=[NOT_EVALUATED,DEGRADED,FULL]`; capability-bound derivation defines when FULL is possible. No evaluable evidence yields NOT_EVALUATED and cannot satisfy a required claim.
 
-Evidence: contract Sections 2.2 and 5.3; fixtures V17–V19.
+Evidence: contract Section 5.2; fixtures V18–V20.
 
 ### SR-m02 — MINOR — allowed result classes implicit
 
-**CORRECTED.** Satisfaction derivation explicitly requires every observation used as a passing empirical input to be in `allowed_result_classes`; disallowed observations remain retained history but cannot contribute to SATISFIED. Aggregation cannot bypass the check.
+**CORRECTED.** Every observation used as passing empirical evidence must be in `allowed_result_classes`; disallowed observations remain retained history but cannot contribute to SATISFIED. Neither retry nor aggregation can bypass the check.
 
-Evidence: contract Sections 7.4 and 7.8; fixtures V26 and V32.
+Evidence: contract Sections 7.5 and 8; fixtures V27 and V36.
 
 ## Additional pre-terminal closure corrections
 
-The remediation author-side attacks also closed these defects instead of deferring them:
+Author-side adversarial passes also closed defects discovered while repairing the source findings:
 
-- defined the rule registry itself, including class/output/conformance semantics;
-- added `RuleInvocationV1` so retry/aggregation/freshness evaluators are bound to one exact rule plus one exact ordered immutable input map; missing/extra/duplicate/wrong-type inputs fail closed;
-- replaced vague immutable references with `ImmutableRefV1`;
-- made substitution evidence explicit in the same plan and satisfaction object;
-- made freshness a typed registered invocation with immutable inputs and fail-closed STALE/ERROR behavior;
-- closed independence mode as an enum and made FULL trust capability-derived;
-- fixed substitution original-object typing;
-- added deterministic RiskFloor applicability; predicate ERROR blocks compilation;
-- removed producer/output identity cycles from `TaskClaimContract` by using a unique `requirement_key` and deriving downstream objects one-way.
+- `RuleInvocationV1` binds every retry/aggregation/freshness evaluator to one exact ordered immutable input map; missing/extra/duplicate/wrong-type inputs fail closed.
+- Check roles are a closed enum `MANDATORY | ALTERNATIVE | REPLACEMENT`, eliminating ambiguous boolean combinations.
+- ANY/QUORUM aggregation applies only to explicitly declared ALTERNATIVE checks after every MANDATORY check has passed or been exactly replaced; a mandatory FAIL/FLAKY/INCONCLUSIVE/NOT_RUN cannot be outvoted.
+- Accepted retry PASSes are explicit replacement evidence recorded in `EvidenceSatisfaction`; prior attempts remain append-only history.
+- Substitution evidence is explicit in the same plan and satisfaction object.
+- Freshness is a typed registered invocation with immutable inputs and fail-closed STALE/ERROR behavior.
+- Independence mode is closed and FULL trust is capability-derived.
+- RiskFloor applicability is deterministic; predicate ERROR blocks compilation.
+- Producer/output identity cycles were removed from `TaskClaimContract` via a unique `requirement_key` and one-way downstream derivation.
 
 ## Preservation checks
 
@@ -64,4 +64,4 @@ The remediation author-side attacks also closed these defects instead of deferri
 
 ## Required second self-review
 
-Re-attack every source finding plus the additional closure corrections above. A clean remediation authoring pass requires zero unresolved BLOCKER/MAJOR in Issue #87 scope and a Review Index <=4000 UTF-8 chars.
+Re-attack every source finding plus all additional closure corrections above. A clean remediation authoring pass requires zero unresolved BLOCKER/MAJOR in Issue #87 scope and a Review Index <=4000 UTF-8 chars.
