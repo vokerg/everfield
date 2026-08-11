@@ -34,14 +34,14 @@ Out of scope in v1: floats/NaN/Infinity, arbitrary precision integers, decimal s
 
 ## 3. Experiment
 
-Shared corpus: 29 adversarial fixtures (18 accepted, 11 rejected). Two independently written adapter implementations consumed the same transport corpus:
+Shared corpus: 32 adversarial fixtures (18 accepted, 14 rejected). Two independently written adapter implementations consumed the same transport corpus:
 
 1. Python `3.13.5`, Unicode data `15.1.0`, `hashlib`, strict UTF-8.
 2. Node `v22.16.0`, ICU `77.1`, Unicode `16.0`, `crypto`, explicit Unicode-scalar validation.
 
 The adapters share no canonicalization code. Final comparison was exact equality of every case's accepted canonical bytes/hash or standardized rejection code.
 
-**Final result:** Python and Node match on all **29/29** cases.
+**Final result:** Python and Node match on all **32/32** cases.
 
 Key accepted relations/differences:
 
@@ -55,20 +55,21 @@ Key accepted relations/differences:
 - content A/B: `f92bb31ea53fdfd9add5a12a42d27587e7f30ae198786f5cb28f2b71c9a5c30b` / `b3445a65d64254b98385a673ec50a5d7682d23cd06bedaf7917a72207e033359`.
 - i64 min/max accepted; negative zero decimal canonicalizes to `0@0`; control characters + emoji agree.
 
-Rejected in both implementations with the same class: ambiguous integer syntax, i64 overflow, exponent decimal, excessive decimal scale, unpaired surrogate, unknown schema field, raw JSON number, empty reference component, malformed content hash, and empty schema version.
+Rejected in both implementations with the same class: ambiguous integer syntax (including repeated sign, plus sign, and negative leading zero), i64 overflow, exponent decimal, excessive decimal scale, unpaired surrogate, unknown schema field, raw JSON number, empty reference component, malformed content hash, and empty schema version.
 
 ## 4. Retained mismatch evidence
 
-Two implementation hazards were discovered rather than hidden:
+Three implementation hazards were discovered rather than hidden:
 
 1. **Unpaired surrogate divergence.** Python strict UTF-8 rejected `U+D800`; naive Node UTF-8 encoded replacement character `U+FFFD`. `ef-sem-1` therefore requires explicit Unicode-scalar validation before UTF-8. The retained fixture now produces `NON_SCALAR_STRING` in both adapters.
-2. **Falsy defaulting bug.** An early Node `||` default would have changed explicit empty `schema_version` into version `1`. Presence-based defaulting fixed it; both adapters now reject `schema_version: ""` as `SCHEMA_VERSION`.
+2. **Malformed integer parser divergence.** Numeric-syntax fuzzing found Python accepted the grammar check for `--1` far enough to throw an uncaught runtime conversion error while Node rejected it. Both adapters now use the same explicit integer grammar `^-?(0|[1-9]\d*)$` plus `-0` rejection; retained cases cover `--1`, `+1`, and `-01`.
+3. **Falsy defaulting bug.** An early Node `||` default would have changed explicit empty `schema_version` into version `1`. Presence-based defaulting fixed it; both adapters now reject `schema_version: ""` as `SCHEMA_VERSION`.
 
 These are evidence that native runtime behavior must not substitute for the semantic contract.
 
 ## 5. Evidence vs inference and bounded disposition
 
-Observed: all 29 final result objects agree; accepted bytes/hashes agree; rejection classes agree; Unicode runtime versions differ without affecting exact scalar-sequence identity; adversarial cases found two real adapter hazards before the final run.
+Observed: all 32 final result objects agree; accepted bytes/hashes agree; rejection classes agree; Unicode runtime versions differ without affecting exact scalar-sequence identity; adversarial cases found two real adapter hazards before the final run.
 
 Inference: this supports **cross-runtime semantic hash authority only for values conforming exactly to reviewed `ef-sem-1` plus the same schema/content materialization rules**. It does not authorize local/native serializer hashes, untested value classes, implicit normalization, engine selection, or implementation readiness.
 
@@ -82,29 +83,60 @@ Still unresolved: production schema registry/versioning, production content-pack
 
 Downstream: after required review, this is the `W2-HASH-01` evidence input for `W2-ENG-03` and `W2-REV-01`. No downstream authority is created by authorship alone.
 
-## 7. Retained ArtifactIdentity records
+## 7. Retained ArtifactIdentity records and execution hashes
 
-| artifact_id | SHA-256 content_hash | retention |
-|---|---|---|
-| `w2-hash-01-corpus-v1` | `527a5b70cf04ef5fef1ec3247c42364fe766792d0525105e62510656681aa2b7` | exact Appendix A |
-| `w2-hash-01-python-adapter-v1` | `2b3619343d1d3a70da27070414f013c51392e4031224a455f81bb87a5bad3902` | exact Appendix B |
-| `w2-hash-01-node-adapter-v1` | `791479f5a8d004da4dd6c111e05e89917ac87b840ff8dc02be7e6f6c0a3a89dc` | exact Appendix C |
-| `w2-hash-01-python-run-v1` | `cf643bf2e5e76d27b3e29016954c04135477d7e0d6c3aa241ee5a5d765657f61` | final stdout JSON identity; reproducible from A+B |
-| `w2-hash-01-node-run-v1` | `48ac0a2f952c178d2099f426c0669bd74f0ddf654f5121565b610ba4096a4e20` | final stdout JSON identity; reproducible from A+C |
+The retained corpus and adapter sources use the Wave 1 `ArtifactIdentity` shape. Their `content_hash` is SHA-256 over the exact Appendix payload bytes (not the Markdown fence).
 
-All are NORMAL planning-evidence fixtures, rights/terms `NOT_APPLICABLE`; adapter code is disposable and `production_dependency_allowed: false`. The corpus and adapter sources are retained byte-for-byte below; hashes above are their exact file hashes.
+```yaml
+artifacts:
+  - artifact_id: w2-hash-01-corpus-v1
+    content_hash: e0f797eb3ada91e1758874f7306682d5cd55dd582cbd3601c60f351aceea487b
+    kind: FIXTURE_CORPUS
+    storage_refs: [docs/planning/wave-2/evidence/canonical-hash-conformance.md#appendix-a--exact-corpus]
+    produced_by_ref: issue:73#comment:5256845092
+    provenance_refs: [issue:73, docs/planning/WAVE-1-FOUNDATIONS-v1.md]
+    rights_or_terms_state: NOT_APPLICABLE
+    visibility: NORMAL
+    retention_class: PLANNING_EVIDENCE_FIXTURE
+    access_policy_ref: null
+    supersedes: []
+  - artifact_id: w2-hash-01-python-adapter-v1
+    content_hash: 0dadbddbf5a2c16f933c43b24260ba21f7af91566f8b712748a05ed746e89eda
+    kind: EXPERIMENT_ADAPTER
+    storage_refs: [docs/planning/wave-2/evidence/canonical-hash-conformance.md#appendix-b--exact-python-adapter]
+    produced_by_ref: issue:73#comment:5256845092
+    provenance_refs: [w2-hash-01-corpus-v1]
+    rights_or_terms_state: NOT_APPLICABLE
+    visibility: NORMAL
+    retention_class: PLANNING_EVIDENCE_FIXTURE
+    access_policy_ref: null
+    supersedes: []
+  - artifact_id: w2-hash-01-node-adapter-v1
+    content_hash: bf9ce7116d8051e814eab544e6127c4f3833ccb210562a51b6f30e540d99074e
+    kind: EXPERIMENT_ADAPTER
+    storage_refs: [docs/planning/wave-2/evidence/canonical-hash-conformance.md#appendix-c--exact-node-adapter]
+    produced_by_ref: issue:73#comment:5256845092
+    provenance_refs: [w2-hash-01-corpus-v1]
+    rights_or_terms_state: NOT_APPLICABLE
+    visibility: NORMAL
+    retention_class: PLANNING_EVIDENCE_FIXTURE
+    access_policy_ref: null
+    supersedes: []
+```
 
-Reproduction: run each adapter with Appendix A reconstructed as its input, then compare only the emitted `results` objects; runtime metadata intentionally differs.
+The adapter code is disposable planning-experiment code and is not permitted as a production dependency. Exact final stdout JSON content hashes are `9eec1d5111c14294eb4eec27adbdb1bce69ca79ea1d0ccbee34b6137b0d185ae` (Python) and `8ee5a9626fc96468e235fa63490ea29427ef5671671308d1c6234852292791ab` (Node). They are reproducible from the retained corpus/adapters; the report does not falsely claim those stdout files are separately retained artifacts.
+
+Reproduction: reconstruct Appendices A-C byte-for-byte, run each adapter with Appendix A as input, and compare only emitted `results` objects; runtime metadata intentionally differs.
 
 ## Appendix A — exact corpus
 
 ```json
-{"version":"fixture-transport-1","cases":[{"id":"baseline","input":{"name":"iron","quantity":{"@i":"10"},"price":{"@d":"1.2300"},"target":{"@ref":["item","ore.iron"]},"tags":["ore","metal"],"meta":{"z":"last","a":"first","\u00e9":"composed-key","e\u0301":"decomposed-key"}}},{"id":"map-reordered","input":{"meta":{"e\u0301":"decomposed-key","\u00e9":"composed-key","a":"first","z":"last"},"tags":["ore","metal"],"target":{"@ref":["item","ore.iron"]},"price":{"@d":"1.23"},"quantity":{"@i":"10"},"name":"iron"}},{"id":"defaults-explicit","input":{"name":"defaults","enabled":true,"quantity":{"@i":"0"},"price":{"@d":"0.000"}}},{"id":"defaults-omitted","input":{"name":"defaults"}},{"id":"i64-min","input":{"name":"min","quantity":{"@i":"-9223372036854775808"}}},{"id":"i64-max","input":{"name":"max","quantity":{"@i":"9223372036854775807"}}},{"id":"int-negzero-reject","input":{"name":"bad","quantity":{"@i":"-0"}}},{"id":"int-leadingzero-reject","input":{"name":"bad","quantity":{"@i":"01"}}},{"id":"decimal-normal-a","input":{"name":"dec","price":{"@d":"001.2300"}}},{"id":"decimal-normal-b","input":{"name":"dec","price":{"@d":"1.23"}}},{"id":"decimal-negzero","input":{"name":"dz","price":{"@d":"-0.000"}}},{"id":"string-control-emoji","input":{"name":"line\n\u0000\ud83d\ude42"}},{"id":"unicode-composed","input":{"name":"\u00e9"}},{"id":"unicode-decomposed","input":{"name":"e\u0301"}},{"id":"string-unpaired-surrogate-reject","input":{"name":"\ud800"}},{"id":"list-order-a","input":{"name":"list","tags":["a","b"]}},{"id":"list-order-b","input":{"name":"list","tags":["b","a"]}},{"id":"schema-v1","schema_version":"v1","input":{"name":"identity"}},{"id":"schema-v2","schema_version":"v2","input":{"name":"identity"}},{"id":"content-a","content_hash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","input":{"name":"identity"}},{"id":"content-b","content_hash":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","input":{"name":"identity"}},{"id":"unknown-field-reject","input":{"name":"bad","surprise":true}},{"id":"raw-number-reject","input":{"name":"bad","quantity":1}},{"id":"i64-overflow-reject","input":{"name":"bad","quantity":{"@i":"9223372036854775808"}}},{"id":"decimal-exp-reject","input":{"name":"bad","price":{"@d":"1e3"}}},{"id":"decimal-scale-overflow-reject","input":{"name":"bad","price":{"@d":"0.0000000000000000001"}}},{"id":"ref-empty-reject","input":{"name":"bad","target":{"@ref":["item",""]}}},{"id":"content-hash-invalid-reject","content_hash":"xyz","input":{"name":"bad"}},{"id":"schema-empty-reject","schema_version":"","input":{"name":"bad"}}]}```
+{"version":"fixture-transport-1","cases":[{"id":"baseline","input":{"name":"iron","quantity":{"@i":"10"},"price":{"@d":"1.2300"},"target":{"@ref":["item","ore.iron"]},"tags":["ore","metal"],"meta":{"z":"last","a":"first","\u00e9":"composed-key","e\u0301":"decomposed-key"}}},{"id":"map-reordered","input":{"meta":{"e\u0301":"decomposed-key","\u00e9":"composed-key","a":"first","z":"last"},"tags":["ore","metal"],"target":{"@ref":["item","ore.iron"]},"price":{"@d":"1.23"},"quantity":{"@i":"10"},"name":"iron"}},{"id":"defaults-explicit","input":{"name":"defaults","enabled":true,"quantity":{"@i":"0"},"price":{"@d":"0.000"}}},{"id":"defaults-omitted","input":{"name":"defaults"}},{"id":"i64-min","input":{"name":"min","quantity":{"@i":"-9223372036854775808"}}},{"id":"i64-max","input":{"name":"max","quantity":{"@i":"9223372036854775807"}}},{"id":"int-negzero-reject","input":{"name":"bad","quantity":{"@i":"-0"}}},{"id":"int-leadingzero-reject","input":{"name":"bad","quantity":{"@i":"01"}}},{"id":"int-double-sign-reject","input":{"name":"bad","quantity":{"@i":"--1"}}},{"id":"int-plus-reject","input":{"name":"bad","quantity":{"@i":"+1"}}},{"id":"int-negative-leadingzero-reject","input":{"name":"bad","quantity":{"@i":"-01"}}},{"id":"decimal-normal-a","input":{"name":"dec","price":{"@d":"001.2300"}}},{"id":"decimal-normal-b","input":{"name":"dec","price":{"@d":"1.23"}}},{"id":"decimal-negzero","input":{"name":"dz","price":{"@d":"-0.000"}}},{"id":"string-control-emoji","input":{"name":"line\n\u0000\ud83d\ude42"}},{"id":"unicode-composed","input":{"name":"\u00e9"}},{"id":"unicode-decomposed","input":{"name":"e\u0301"}},{"id":"string-unpaired-surrogate-reject","input":{"name":"\ud800"}},{"id":"list-order-a","input":{"name":"list","tags":["a","b"]}},{"id":"list-order-b","input":{"name":"list","tags":["b","a"]}},{"id":"schema-v1","schema_version":"v1","input":{"name":"identity"}},{"id":"schema-v2","schema_version":"v2","input":{"name":"identity"}},{"id":"content-a","content_hash":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","input":{"name":"identity"}},{"id":"content-b","content_hash":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","input":{"name":"identity"}},{"id":"unknown-field-reject","input":{"name":"bad","surprise":true}},{"id":"raw-number-reject","input":{"name":"bad","quantity":1}},{"id":"i64-overflow-reject","input":{"name":"bad","quantity":{"@i":"9223372036854775808"}}},{"id":"decimal-exp-reject","input":{"name":"bad","price":{"@d":"1e3"}}},{"id":"decimal-scale-overflow-reject","input":{"name":"bad","price":{"@d":"0.0000000000000000001"}}},{"id":"ref-empty-reject","input":{"name":"bad","target":{"@ref":["item",""]}}},{"id":"content-hash-invalid-reject","content_hash":"xyz","input":{"name":"bad"}},{"id":"schema-empty-reject","schema_version":"","input":{"name":"bad"}}]}```
 
 ## Appendix B — exact Python adapter
 
 ```python
-import json, hashlib, sys, unicodedata
+import json, hashlib, sys, unicodedata, re
 from dataclasses import dataclass
 
 I64_MIN=-(2**63); I64_MAX=2**63-1
@@ -144,7 +176,7 @@ def parse(x):
     if isinstance(x,dict):
         if len(x)==1 and '@i' in x:
             s=x['@i']
-            if not isinstance(s,str) or not s or s=='-0' or (s.startswith('0') and s!='0') or s.startswith('-0') or not s.lstrip('-').isdigit(): fail('INTEGER_SYNTAX')
+            if not isinstance(s,str) or not re.fullmatch(r'-?(0|[1-9]\d*)',s) or s=='-0': fail('INTEGER_SYNTAX')
             v=int(s)
             if not I64_MIN<=v<=I64_MAX: fail('I64_RANGE')
             return I(v)
@@ -208,7 +240,7 @@ class E extends Error{constructor(code){super(code);this.code=code}}; class I{co
 const DEFAULTS={enabled:true,quantity:new I(0n),price:new D(0n,0)},KNOWN=new Set(['name','enabled','quantity','price','target','notes','tags','meta']);
 const fail=c=>{throw new E(c)};
 function decimal(s){if(typeof s!=='string')fail('DECIMAL_TRANSPORT_TYPE');if(/[eE]/.test(s))fail('DECIMAL_EXPONENT_FORBIDDEN');let neg=false;if(s[0]=='+'||s[0]=='-'){neg=s[0]=='-';s=s.slice(1)}if(!s||(s.match(/\./g)||[]).length>1)fail('DECIMAL_SYNTAX');let [a,b='']=s.includes('.')?s.split('.',2):[s,''];if(!a)a='0';if(!/^\d+$/.test(a)||(b&&!/^\d+$/.test(b)))fail('DECIMAL_SYNTAX');let coeff=BigInt((a+b).replace(/^0+/,'')||'0'),scale=b.length;if(neg)coeff=-coeff;if(coeff===0n)return new D(0n,0);while(scale>0&&coeff%10n===0n){coeff/=10n;scale--}if(coeff<MIN||coeff>MAX)fail('DECIMAL_COEFF_RANGE');if(scale>18)fail('DECIMAL_SCALE_RANGE');return new D(coeff,scale)}
-function parse(x){if(x===null||typeof x==='boolean'||typeof x==='string')return x;if(typeof x==='number')fail('RAW_JSON_NUMBER_FORBIDDEN');if(Array.isArray(x))return x.map(parse);if(typeof x==='object'){let ks=Object.keys(x);if(ks.length===1&&ks[0]==='@i'){let s=x['@i'];if(typeof s!=='string'||!s||s==='-0'||(s.startsWith('0')&&s!=='0')||s.startsWith('-0')||!s.replace(/^-/,'').match(/^\d+$/))fail('INTEGER_SYNTAX');let v=BigInt(s);if(v<MIN||v>MAX)fail('I64_RANGE');return new I(v)}if(ks.length===1&&ks[0]==='@d')return decimal(x['@d']);if(ks.length===1&&ks[0]==='@ref'){let a=x['@ref'];if(!Array.isArray(a)||a.length!==2||!a.every(z=>typeof z==='string'&&z.length))fail('REF_SYNTAX');return new R(a[0],a[1])}let o={};for(let k of ks)o[k]=parse(x[k]);return o}fail('TRANSPORT_TYPE')}
+function parse(x){if(x===null||typeof x==='boolean'||typeof x==='string')return x;if(typeof x==='number')fail('RAW_JSON_NUMBER_FORBIDDEN');if(Array.isArray(x))return x.map(parse);if(typeof x==='object'){let ks=Object.keys(x);if(ks.length===1&&ks[0]==='@i'){let s=x['@i'];if(typeof s!=='string'||! /^-?(0|[1-9]\d*)$/.test(s)||s==='-0')fail('INTEGER_SYNTAX');let v=BigInt(s);if(v<MIN||v>MAX)fail('I64_RANGE');return new I(v)}if(ks.length===1&&ks[0]==='@d')return decimal(x['@d']);if(ks.length===1&&ks[0]==='@ref'){let a=x['@ref'];if(!Array.isArray(a)||a.length!==2||!a.every(z=>typeof z==='string'&&z.length))fail('REF_SYNTAX');return new R(a[0],a[1])}let o={};for(let k of ks)o[k]=parse(x[k]);return o}fail('TRANSPORT_TYPE')}
 function materialize(x){if(x===null||Array.isArray(x)||typeof x!=='object'||x instanceof I||x instanceof D||x instanceof R)fail('RECORD_REQUIRED');for(let k of Object.keys(x))if(!KNOWN.has(k))fail('UNKNOWN_FIELD');if(typeof x.name!=='string')fail('NAME_REQUIRED');let y={...x};for(let [k,v] of Object.entries(DEFAULTS))if(!(k in y))y[k]=v;return y}
 function scalarBytes(s){if(typeof s!=='string')fail('STRING_REQUIRED');for(const ch of s){const cp=ch.codePointAt(0);if(cp>=0xD800&&cp<=0xDFFF)fail('NON_SCALAR_STRING')}return Buffer.from(s,'utf8')}
 const B=s=>Buffer.from(s,'ascii'),atom=(tag,p)=>Buffer.concat([B(tag),B(String(p.length)),B(':'),p]);
