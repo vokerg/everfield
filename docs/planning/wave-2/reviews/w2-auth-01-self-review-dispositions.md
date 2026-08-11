@@ -3,61 +3,64 @@
 **Remediation mission:** `W2-REM-AUTH-01` / Issue #87  
 **Source candidate work:** `4f2baf8f97a531ac38491343098ac10c81c12a6b`  
 **Source finding comment:** Issue #69 comment `5251524689`  
-**Authority:** remediation evidence only; does not replace `W2-REV-01`.
+**Authority:** remediation evidence only; does not replace independent `W2-REV-01`.
 
-## Dispositions
+## Source finding dispositions
 
 ### SR-M01 — MAJOR — machine shapes not closed
 
-**Disposition: CORRECTED.**
+**CORRECTED.** The remediated contract defines `PrimitiveRegistryV1`, closed enums, `IdentityRef`, `ImmutableRefV1`, `RuleRegistry`, and a closed `PredicateV1` AST with exact bindings, typed operators, `TRUE|FALSE|ERROR`, and fail-closed context semantics. Unknown fields/operators/rules are invalid.
 
-The remediated contract adds `PrimitiveRegistryV1`, removes undefined `scalar`/`predicate`/`stable_ref` placeholders, defines all closed enums, adds `IdentityRef` and `VersionedRuleRef`, and specifies `PredicateV1` as a closed AST with exact input bindings, typed literals, fixed operators, `TRUE|FALSE|ERROR` result domain, and context-specific fail-closed error behavior. Unknown fields/operators/rules are invalid.
-
-Mechanical evidence: contract Sections 3–4; fixtures V04, V05, V10, V25, V28.
+Evidence: contract Sections 2–4; fixtures V04–V05, V11–V12, V35.
 
 ### SR-M02 — MAJOR — retry/attempt policy not representable
 
-**Disposition: CORRECTED.**
+**CORRECTED.** `AttemptPolicyV1` is separate from `CheckAggregationRuleV1`. Built-in modes define all-attempts and latest-after-retryable-failure semantics with contiguous lineage, max attempts, retryable failure classes, retry predicates, and explicit behavior for PRODUCT/INFRA/FLAKY/INCONCLUSIVE/NOT_RUN. Registered rules are exact typed registry entries and cannot weaken lineage/risk/result constraints.
 
-The remediated contract separates `AttemptPolicyV1` from `CheckAggregationRuleV1`. Built-in attempt modes explicitly define `ALL_ATTEMPTS_MUST_PASS` and `LATEST_AFTER_RETRYABLE_FAILURE`, including contiguous lineage, max attempts, retryable failure classes, retry predicates, and failure-laundering behavior. Registered extension rules are exact `VersionedRuleRef` objects and fail closed when absent/mismatched.
+Evidence: contract Section 7.2 and Section 7.8; fixtures V06–V12, V32.
 
-Mechanical evidence: contract Sections 6.2 and 6.7; fixtures V06–V10 and V30.
+### SR-M03 — MAJOR — RiskFloor only partially enforced
 
-### SR-M03 — MAJOR — RiskFloor partially enforced
+**CORRECTED.** `RiskFloor` has deterministic applicability and `EffectiveRiskConstraint` compiles every dimension: strictest trust, OR protection, maximum distinct surfaces, and greatest review-route rank. Requirement/plan/satisfaction/promotion/readiness carry these constraints; producer downgrade invalidates compilation.
 
-**Disposition: CORRECTED.**
-
-The remediated contract introduces `ReviewRouteRegistry` with a deterministic unique strictness rank and `EffectiveRiskConstraint`, compiled from every applicable floor. Trust uses strictest value, protection uses OR, distinct surfaces use max, and review route uses greatest unique rank. The effective constraint is referenced by claim, requirement, plan, satisfaction, promotion, and readiness; requirement/plan downgrade attempts are invalid.
-
-Mechanical evidence: contract Sections 5.4–5.6, 6.3–6.7, 7; fixtures V18–V22, V26, V30.
+Evidence: contract Section 6, Sections 7.4–8; fixtures V20–V25, V33, V38.
 
 ### SR-m01 — MINOR — trust cannot represent not evaluated
 
-**Disposition: CORRECTED.**
+**CORRECTED.** Normative `TrustLevel` is distinct from `TrustAssessment=[NOT_EVALUATED,DEGRADED,FULL]`. `TrustDerivationV1` is capability-bound and defines when FULL is possible. No evaluable evidence yields NOT_EVALUATED, which cannot satisfy a required claim.
 
-`TrustAssessment` is now `[NOT_EVALUATED, DEGRADED, FULL]`, distinct from normative `TrustLevel`. NOT_APPLICABLE and evidence-absent derivations use `NOT_EVALUATED`, which never satisfies a minimum trust floor.
+Evidence: contract Sections 2.2 and 5.3; fixtures V17–V19.
 
-Mechanical evidence: contract Sections 3.2, 6.7, 10; fixtures V03 and V17.
+### SR-m02 — MINOR — allowed result classes implicit
 
-### SR-m02 — MINOR — allowed result classes only implicit
+**CORRECTED.** Satisfaction derivation explicitly requires every observation used as a passing empirical input to be in `allowed_result_classes`; disallowed observations remain retained history but cannot contribute to SATISFIED. Aggregation cannot bypass the check.
 
-**Disposition: CORRECTED.**
+Evidence: contract Sections 7.4 and 7.8; fixtures V26 and V32.
 
-The satisfaction derivation now has an explicit pre-aggregation step requiring every consumed envelope result to be in `allowed_result_classes`; disallowed results invalidate the evidence set and cannot be rescued by retry/check aggregation.
+## Additional pre-terminal closure corrections
 
-Mechanical evidence: contract Section 6.7 step 5; fixtures V23 and V30.
+Before publishing the remediated candidate, the author-side adversarial pass also closed these defects rather than deferring them:
+
+- defined the previously referenced rule registry itself, including class/output/conformance semantics;
+- replaced vague immutable references with `ImmutableRefV1`;
+- made substitution evidence explicit in the same plan and satisfaction object;
+- made freshness a typed registered rule with immutable inputs and fail-closed STALE/ERROR behavior;
+- closed independence mode as an enum and made FULL trust capability-derived;
+- fixed substitution original-object typing (exactly one check ID or artifact `IdentityRef`);
+- added deterministic RiskFloor applicability; predicate ERROR blocks compilation;
+- removed producer/output identity cycles from `TaskClaimContract` by using unique `requirement_key` and deriving downstream objects one-way.
 
 ## Preservation checks
 
-- `EvidenceSatisfaction` remains the sole empirical acceptance authority.
-- Directives still cannot rewrite empirical observations.
-- Current lease continuation does not upgrade isolation/independence/trust.
+- `EvidenceSatisfaction` remains sole empirical acceptance authority.
+- Directives cannot rewrite observations.
+- Lease continuation does not upgrade capability/trust.
 - `DEGRADED_SINGLE_AGENT` remains degraded trust debt.
 - `IR-BLOCKER-EVIDENCE-FOUNDATION` remains OPEN.
-- `W2-HASH-01` retains concrete canonical serialization/hash selection.
-- `W2-REV-01` remains the required independent adversarial review.
+- `W2-HASH-01` retains algorithm/encoding selection authority.
+- `W2-REV-01` remains mandatory independent adversarial review.
 - Production implementation remains unauthorized.
 
-## Self-review target
+## Required second self-review
 
-A clean remediation self-review requires zero unresolved BLOCKER/MAJOR against Issue #87 scope, explicit re-attack of all five source findings, and no new authority path introduced by the repairs.
+Re-attack every source finding plus the additional closure corrections above. A clean remediation authoring pass requires zero unresolved BLOCKER/MAJOR in Issue #87 scope and a Review Index <=4000 UTF-8 chars.
