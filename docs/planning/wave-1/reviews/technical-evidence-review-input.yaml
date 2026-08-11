@@ -1,0 +1,67 @@
+version: 1
+review_issue: 35
+mission_id: W1-REV-TECH
+review_episode: w1-rev-tech-reviewer-20260811-01
+role: independent_adversarial_reviewer
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_ATTACK_PLAN
+activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+review_claim_comment_id: 5249262963
+inputs:
+  - mission_id: W1-FAC-02
+    issue: 24
+    status_comment_id: 5245532215
+    work_sha: 095372a41498e8d7e3b25364cba89dbc647b8839
+    head_sha: 67aaf055e0ca5479e5af0b86f8876e5cb848ad90
+    artifact: docs/planning/wave-1/proposals/github-control-plane-and-scheduler.md
+  - mission_id: W1-FAC-03
+    issue: 25
+    status_comment_id: 5245577951
+    work_sha: 70b763a965cdec0fa1f6c025a5b7492b844288fc
+    head_sha: 9f3646b7e4d280ce4ef102d30284f9e631a1a389
+    artifact: docs/planning/wave-1/proposals/review-verification-and-trust.md
+  - mission_id: W1-FAC-04
+    issue: 26
+    status_comment_id: 5245629575
+    work_sha: 99b0c7b3bddbad1a71e05f085fd0bd9f2c74e566
+    head_sha: 8f90b251c5d7736caed53781ae69b0b19787e8b3
+    artifact: docs/planning/wave-1/proposals/ci-evidence-and-factory-measurement.md
+  - mission_id: W1-TEC-01
+    issue: 27
+    status_comment_id: 5249255787
+    work_sha: 3b1e159932b2d23d6641e0ba3e97dfa72da10219
+    head_sha: 5120db7ed4e7dad59765be74a82fe2939276ac08
+    artifact: docs/planning/wave-1/proposals/engine-evaluation-program.md
+  - mission_id: W1-TEC-02
+    issue: 28
+    status_comment_id: 5248845557
+    work_sha: c13389cf1df7ab8e2515a5267bd56869082df1b2
+    head_sha: eef7c5c009fce5e8c5c9c674c32ad2fe3c31cb60
+    artifact: docs/planning/wave-1/proposals/runtime-data-foundation.md
+  - mission_id: W1-EVAL-01
+    issue: 33
+    status_comment_id: 5248979052
+    work_sha: a29a9c08f64947b383f4ca6a19fb88032d93777d
+    head_sha: f41238e948f7ef96718b290012e11210a9e6bba3
+    artifact: docs/planning/wave-1/proposals/automated-game-evaluation.md
+attack_plan:
+  - engine evaluation can launder a preferred engine through harness deviations, scoring, or unmeasured adapter burden
+  - runtime/data proposal can claim determinism while leaving physics, ordering, numeric, time, or external-input boundaries untestable
+  - save/content/schema design can centralize ownership or make migrations/replays impossible to verify under continuous expansion
+  - GitHub control-plane design can claim atomicity, leases, rulesets, or merge safety beyond actually enforceable authority
+  - review/trust model can permit same-context or self-authored evidence to masquerade as independent verification
+  - protected evidence can become opaque, mutable, or unavailable to reproducible debugging
+  - CI/evidence topology can retry flaky failures into green, lose provenance, or make retention/cost unbounded
+  - factory/evaluator metrics can become direct optimization targets with no escape/holdout detection
+  - automated game evaluation can execute duplicate test logic rather than production/shared rules or let one evaluator family dominate
+  - candidate/version/evaluator/toolchain drift can silently invalidate prior results
+  - cross-proposal evidence identities can be incompatible, making exact reproduction impossible despite locally strong schemas
+  - required experiments can be described but have no explicit promotion barrier preventing assumptions from hardening before evidence
+severity_rule:
+  BLOCKER: proceeding_to_synthesis_would_make_technical_or_evidence_candidate_logically_invalid_or_unverifiable
+  MAJOR: material_cross_proposal_or_evidence_gap_requires_correction_or_bounded_evidence_before_acceptance
+  MINOR: useful_correction_not_required_to_establish_core_synthesis_viability
+  NOTE: nonblocking_observation_or_future_measurement
