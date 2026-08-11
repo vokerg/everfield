@@ -1,0 +1,109 @@
+version: 1
+verification_issue: 42
+mission_id: W1-VERIFY-01
+episode: w1-verify-01-verifier-20260811-01
+verified_base_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+input_manifest_blob_sha: 70d2b472b14da70572087c652fa29a7080250d7f
+candidate:
+  issue41_status_comment_id: 5249425339
+  issue41_head_sha: 346bb9df14bbe5dfbd18fbabd05bcbe3b949b3a2
+  candidate_work_sha: 434633abe311c48715aa6d610112e798208b020b
+  foundations_blob_sha: 4b4c409dc23538f23aba3709e4af7fafc8f37280
+  dependency_map_blob_sha: 1319c92a7a0f35a931ad6a70e87da753a5008f39
+  promotion_manifest_blob_sha: 28146606ff3334ae1ddbb036a48969afb76acb85
+checks:
+  canonical_entry_binding:
+    result: PASS
+    evidence: canonical program blob e3120ec203c4156328770aa86c12fbb7187966dc matches Issue6 terminal binding 5245368879; binding main SHA 413e729e8d2d5ac2eb138903f3f2ace07283b23e equals current main
+  exact_payload_base:
+    result: PASS
+    evidence: Issue41 VERIFICATION_READY binds exact candidate work/head, three payload identities, and current main remains unchanged
+  cross_review_dispositions:
+    result: PASS
+    evidence: candidate section 21 explicitly dispositions CD-B01 and CD-M02 through CD-M12
+  planning_experiment_barrier:
+    result: PASS
+    evidence: candidate section 4 requires disposable bounded evidence question, forbids production dependency/content authority/engine lock-in, and requires later verified promotion
+  singular_acceptance_chain:
+    result: PASS
+    evidence: candidate section 5 defines TaskClaimContract/EvidenceRequirement -> CheckPlan -> ExecutionEvidenceEnvelope -> derived EvidenceSatisfaction -> review/verification/decision
+  directive_empirical_boundary:
+    result: PASS
+    evidence: candidate section 7 records directive 5249227987 and explicitly forbids directives from altering observed evidence or fabricating EvidenceSatisfaction
+  independence_resource_boundary:
+    result: PASS
+    evidence: candidate section 8 and dependency map preserve DEGRADED_SINGLE_AGENT; ownership continuation does not imply isolation/multi-agent capability
+  implementation_readiness_barrier:
+    result: PASS
+    evidence: four global production blockers remain OPEN: ENGINE-DECISION, PLATFORM-SCOPE, ACCESSIBILITY-CURRENT, EVIDENCE-FOUNDATION
+  evidence_required_state:
+    result: PASS
+    evidence: engine choice, GitHub mature lock/CAS, cross-runtime hash authority, concrete ordering, migration/protected/evaluator/simulation/CI mechanisms remain EVIDENCE_REQUIRED or DEFERRED
+  promotion_manifest_counts:
+    result: PASS
+    observed_total: 18
+    observed_initial_ready: 12
+    observed_planning_experiments: 10
+    observed_production_features: 0
+    limits: {max_total: 24, max_initial_ready: 12}
+  promotion_queue_visibility:
+    result: PASS
+    evidence: issue_title_template uses [PLAN-v1][{mission_id}], matching current canonical dispatcher queue prefix
+  required_candidate_fields:
+    result: PASS
+    evidence: all 18 mission records expose the original next_wave_candidate_schema required fields through manifest version 2
+  output_schema_set:
+    result: PASS
+    evidence: proposal_research_v1, adversarial_review_v1, synthesis_v1, verification_v1 only
+  output_and_conflict_uniqueness:
+    result: PASS
+    evidence: 18 mission IDs and conflict keys are unique; output paths do not collide except the single declared W2-SYN-01 directory owner for its own two files
+  manifest_hard_graph:
+    result: PASS
+    topological_layers:
+      - [W2-AUTH-01, W2-GH-01, W2-ENG-01, W2-ENG-02, W2-HASH-01, W2-MIG-01, W2-ORDER-01, W2-PROTECT-01, W2-CI-01, W2-EVAL-01, W2-PLAT-01, W2-RIGHTS-01]
+      - [W2-ACC-01, W2-ENG-03]
+      - [W2-SIM-01]
+      - [W2-REV-01]
+      - [W2-SYN-01]
+      - [W2-READY-01]
+    hard_cycle: false
+  dependency_map_type_registry:
+    result: FAIL
+    severity: MAJOR
+    finding_id: W1V-M01
+    evidence:
+      - canonical candidate section 10 registers BLOCKED_BY, BLOCKS_DECISION, BLOCKS_IMPLEMENTATION_SCOPE, BLOCKS_RELEASE_SCOPE, INFORMS_DECISION, CALIBRATES_EVALUATOR, REOPENS_ON_FAILURE, REVIEW_OF, SYNTHESIZES, VERIFIES, CANONICALIZES, INTERFACE_WITH, CONFLICTS_WITH, SUPERSEDES, INVALIDATES
+      - dependency map uses undeclared edge type SYNTHESIZES_AFTER_REVIEW
+    correction: use only registered edge kinds or explicitly extend the verified registry before canonicalization
+  dependency_map_manifest_parity:
+    result: FAIL
+    severity: MAJOR
+    finding_id: W1V-M02
+    evidence:
+      - promotion manifest declares W2-REV-01 hard prerequisites on all 15 root/evidence missions, W2-SYN-01 hard prerequisite on qualifying W2-REV-01 result, and W2-READY-01 hard prerequisite on W2-SYN-01 VERIFICATION_READY
+      - dependency map represents review inputs as REVIEW_OF and SYN/READY progression as SYNTHESIZES_AFTER_REVIEW / VERIFIES instead of complete BLOCKED_BY hard edges
+      - therefore a consumer using dependency-map hard edges alone derives a weaker graph than the promotion manifest
+    correction: make dependency map mechanically equivalent to manifest hard_prerequisites using BLOCKED_BY edges for every hard prerequisite; relation edges may remain supplemental only if registered
+  prerequisite_token_convention:
+    result: PASS_WITH_MINOR_NOTE
+    finding_id: W1V-m01
+    evidence: symbolic suffixes such as W2-PLAT-01_REVIEW_READY are consistently used and compiler_contract defines the terminal meanings, but a future compiler should formalize the suffix grammar rather than rely on string convention
+    blocking: false
+  promotion_reconstructability:
+    result: PASS
+    evidence: candidate section 22 names exact source/destination files, allows only bounded foundation-header provenance transform, and keeps PLANNING-PROGRAM-v1 dispatcher unchanged
+  squash_only:
+    result: PASS
+    evidence: AGENTS, canonical program, candidate, manifest, and W1-CANON-01 contract all preserve squash-only main integration
+  accidental_issues_excluded:
+    result: PASS
+    evidence: Issues 59 and 60 are CLOSED/not_planned and explicitly excluded from dependency/manifest validation
+summary:
+  result: FAIL
+  blocker_count: 0
+  major_count: 2
+  minor_count: 1
+  note_count: 0
+  remediation_scope: dependency_map_and_manifest_parity_only
+  candidate_edit_prohibited_this_episode: true
