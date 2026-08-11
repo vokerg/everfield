@@ -1,0 +1,73 @@
+version: 1
+verification_issue: 42
+mission_id: W1-VERIFY-01
+verification_episode: w1-verify-01-verifier-20260811-01
+role: verifier
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+resource_constraint_comment_id: 5244416013
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_EVIDENCE
+verified_base_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+claim_comment_id: 5249434402
+canonical_entry:
+  agents_blob_sha: 9f65e73a1f16eb731d4068066998361c060f74bf
+  start_here_blob_sha: 515dc7b12e1a85f66e780901c1caa0d9afbc55d5
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonicalized_by_issue: 6
+  active_binding_comment_id: 5245368879
+  active_binding_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  active_binding_merge_method: squash
+  active_binding_canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+final_synthesis:
+  issue: 41
+  status_comment_id: 5249425339
+  branch: planning/issue-41
+  head_sha: 346bb9df14bbe5dfbd18fbabd05bcbe3b949b3a2
+  candidate_work_sha: 434633abe311c48715aa6d610112e798208b020b
+  input_manifest_blob_sha: 62773e3145dea2594ada316e6e8814782f0936db
+  candidate_path: docs/planning/wave-1/synthesis/wave-1-canonicalization-candidate.md
+  candidate_blob_sha: 4b4c409dc23538f23aba3709e4af7fafc8f37280
+  dependency_map_path: docs/planning/wave-1/synthesis/dependency-map.yaml
+  dependency_map_blob_sha: 1319c92a7a0f35a931ad6a70e87da753a5008f39
+  promotion_manifest_path: docs/planning/wave-1/synthesis/next-wave-promotion-manifest.yaml
+  promotion_manifest_blob_sha: 28146606ff3334ae1ddbb036a48969afb76acb85
+  pr: 65
+cross_review:
+  issue: 40
+  status_comment_id: 5249340288
+  work_sha: d8cd8d16d9a1ca9eae9e51987f86b767992584c2
+  disposition: CHANGES_REQUIRED
+  blocker_count: 1
+  major_count: 11
+current_open_plan_graph:
+  - {issue: 21, mission_id: W1-REC-01, derived_state: BLOCKED_CONDITIONAL_RECOVERY}
+  - {issue: 42, mission_id: W1-VERIFY-01, derived_state: IN_PROGRESS_THIS_EPISODE}
+  - {issue: 43, mission_id: W1-CANON-01, derived_state: BLOCKED_PENDING_VERIFICATION_PASS}
+retired_accidental_issues:
+  - {issue: 59, state: CLOSED_NOT_PLANNED, graph_authority: NONE}
+  - {issue: 60, state: CLOSED_NOT_PLANNED, graph_authority: NONE}
+durable_human_directive:
+  source_comment_id: 5249227987
+  scope: existing_agent_lease_continuation_by_current_master
+  empirical_pass_authority: false
+  independence_upgrade_authority: false
+verification_questions:
+  - exact_payload_and_base_binding
+  - active_canonical_entry_and_dispatcher
+  - all_cross_review_blocker_major_dispositions
+  - planning_experiment_nonproduction_barrier
+  - singular_evidence_acceptance_chain
+  - directive_cannot_fabricate_empirical_pass
+  - lease_continuation_does_not_upgrade_independence
+  - four_global_implementation_readiness_blockers_remain_open
+  - evidence_required_decisions_remain_unverified
+  - dependency_graph_typed_and_acyclic
+  - manifest_18_total_12_ready_10_experiments_0_production
+  - queue_prefix_visible_to_current_PLAN-v1_dispatcher
+  - output_and_conflict_surfaces_unique
+  - output_schemas_known
+  - prerequisite_tokens_closed_and_deterministic
+  - promotion_destinations_reconstructable
+  - schema3_and_squash_only_remain_authoritative
+  - accidental_issues_excluded
