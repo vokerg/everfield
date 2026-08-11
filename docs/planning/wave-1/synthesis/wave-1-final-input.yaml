@@ -1,0 +1,29 @@
+version: 1
+synthesis_issue: 41
+mission_id: W1-SYN-FINAL
+episode: w1-syn-final-synthesizer-20260811-01
+activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+claim_comment_id: 5249348414
+resource_constraint_comment_id: 5244416013
+current_master_directive_comment_id: 5249227987
+inputs:
+  - {mission_id: W1-SYN-FAC, issue: 37, status_comment_id: 5248788825, work_sha: 896cb799024e5d3c2ce451196f85b67e29edd3bc, head_sha: 57ff630d3b93a6fd83c81848960cba8291f88a35, artifact: docs/planning/wave-1/synthesis/factory-governance-candidate.md}
+  - {mission_id: W1-SYN-TECH, issue: 38, status_comment_id: 5249311403, work_sha: 99805527fa192805b683722e27d72e19aa964fd0, head_sha: fd56974310aaa72c6656b6f2bbdeff255e4e7b7b, artifact: docs/planning/wave-1/synthesis/technical-evidence-candidate.md}
+  - {mission_id: W1-SYN-GAME, issue: 39, status_comment_id: 5249051313, work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e, head_sha: c5ab9b04ff9342e4c1faebfe965196535284b4a7, artifact: docs/planning/wave-1/synthesis/game-experience-candidate.md}
+  - {mission_id: W1-REV-CROSS, issue: 40, review_status_comment_id: 5249340288, work_sha: d8cd8d16d9a1ca9eae9e51987f86b767992584c2, head_sha: 056cdb0f33fdb7a2627cbcec344ff3e77e72b211, disposition: CHANGES_REQUIRED, blocker_count: 1, major_count: 11, artifact: docs/planning/wave-1/reviews/cross-domain-interface-and-parallelism.md}
+required_dispositions: [CD-B01, CD-M02, CD-M03, CD-M04, CD-M05, CD-M06, CD-M07, CD-M08, CD-M09, CD-M10, CD-M11, CD-M12]
+wave_governor:
+  max_instantiated: 24
+  max_initial_ready: 12
+  compiler_required_fields: [mission_id, role, priority_rank, objective, hard_prerequisites, ownership_surface, authoritative_inputs, output_paths, output_schema, evidence_requirements, acceptance_criteria, required_review, downstream, integration_rule]
+invariants:
+  - no_gameplay_or_production_implementation_authority
+  - planning_experiments_bounded_and_disposable
+  - no_engine_selected
+  - no_evidence_required_decision_promoted_without_exact_predicate
+  - current_schema3_authority_retained_until_verified_replacement
+  - active_directive_does_not_create_empirical_pass
+  - degraded_single_agent_trust_debt_remains_open
+  - implementation_readiness_ledger_has_open_global_blockers
+  - next_wave_at_most_24_and_initial_ready_at_most_12
+  - squash_only_main_integration

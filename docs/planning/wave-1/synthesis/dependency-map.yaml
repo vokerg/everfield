@@ -1,0 +1,267 @@
+version: 2
+mission_id: W1-SYN-FINAL
+state: VERIFICATION_CANDIDATE
+canonicality: NON_CANONICAL
+base_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+source_work_shas:
+  W1-SYN-FAC: 896cb799024e5d3c2ce451196f85b67e29edd3bc
+  W1-SYN-TECH: 99805527fa192805b683722e27d72e19aa964fd0
+  W1-SYN-GAME: e74e0b0c95e85f69718868eedae324a298f02f3e
+  W1-REV-CROSS: d8cd8d16d9a1ca9eae9e51987f86b767992584c2
+
+phase:
+  current: PLANNING
+  production_implementation_ready: false
+  planning_experiments_allowed: true
+  planning_experiment_contract: docs/planning/wave-1/synthesis/wave-1-canonicalization-candidate.md#4
+
+active_directives:
+  - directive_id: CURRENT-MASTER-LEASE-CONTINUATION
+    source_ref: issue:27#comment:5249227987
+    effect: current_master_may_continue_existing_agent_leases
+    empirical_pass_authority: false
+    independence_upgrade_authority: false
+
+resource_capability:
+  one_agent_constraint_source: issue:5#comment:5244416013
+  isolated_or_multi_agent_context_available: false
+  trust_level_for_mandatory_independent_work: DEGRADED_SINGLE_AGENT
+  ownership_continuation_directive_changes_capability: false
+
+implementation_readiness_ledger:
+  - blocker_id: IR-BLOCKER-ENGINE-DECISION
+    category: TECHNICAL
+    scope: GLOBAL
+    blocks: [PRODUCTION_IMPLEMENTATION]
+    state: OPEN
+    resolution_requires: [W2-ENG-03, W2-REV-01, W2-SYN-01, W2-READY-01]
+  - blocker_id: IR-BLOCKER-PLATFORM-SCOPE
+    category: PLATFORM
+    scope: GLOBAL
+    blocks: [PRODUCTION_IMPLEMENTATION]
+    state: OPEN
+    resolution_requires: [W2-PLAT-01, W2-SYN-01, W2-READY-01]
+  - blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
+    category: ACCESSIBILITY
+    scope: GLOBAL
+    blocks: [PRODUCTION_IMPLEMENTATION]
+    state: OPEN
+    resolution_requires: [W2-ACC-01, W2-REV-01, W2-SYN-01, W2-READY-01]
+  - blocker_id: IR-BLOCKER-EVIDENCE-FOUNDATION
+    category: EVIDENCE
+    scope: GLOBAL
+    blocks: [PRODUCTION_IMPLEMENTATION]
+    state: OPEN
+    resolution_requires: [W2-AUTH-01, W2-HASH-01, W2-PROTECT-01, W2-CI-01, W2-EVAL-01, W2-REV-01, W2-SYN-01, W2-READY-01]
+
+scoped_debts_and_blocks:
+  - id: TRUST-DEBT-DEGRADED-W1
+    category: FACTORY_TRUST
+    state: OPEN
+    blocks: []
+    reopen_trigger: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE
+    source_ref: issue:5#comment:5244416013
+  - id: TECH-EV-GH-CAS
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: MATURE_GITHUB_LOCK_CAS_ADOPTION
+  - id: TECH-EV-HASH-CONFORMANCE
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: CROSS_RUNTIME_CANONICAL_HASH_AUTHORITY
+  - id: TECH-EV-ORDERING
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: CONCRETE_EVENT_SCHEDULING_ARCHITECTURE
+  - id: TECH-EV-MIGRATION
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: PRODUCTION_SAVE_MIGRATION_ARCHITECTURE
+  - id: TECH-EV-PROTECTED
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: PROTECTED_EVIDENCE_INFRASTRUCTURE_ADOPTION
+  - id: TECH-EV-EVALUATOR-DRIFT
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: HIGH_IMPACT_MUTABLE_EVALUATOR_AUTHORITY
+  - id: TECH-EV-SIM-PARITY
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: MODEL_SIMULATION_ACCEPTANCE_AUTHORITY
+  - id: TECH-EV-CI-RELIABILITY
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: IMPLEMENTATION_CI_EVIDENCE_STACK
+  - id: TECH-EV-ENGINE-ADMISSION
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: ENGINE_CANDIDATE_SET
+  - id: TECH-EV-ENGINE-SPIKES
+    decision_state: EVIDENCE_REQUIRED
+    blocks_decision: ENGINE_DECISION
+
+shared_authority_types:
+  ActiveDirectiveSet: governance_factory
+  PolicyEpoch: governance_factory
+  ResourceCapabilityState: governance_factory
+  TaskClaimContract: governance_factory
+  EvidenceRequirement: governance_factory
+  RiskFloor: governance_factory
+  CheckPlan: technical_evidence
+  ExecutionEvidenceEnvelope: technical_evidence
+  EvidenceSatisfaction: governance_factory_derived_from_technical_evidence
+  EvaluatorFingerprint: technical_evidence
+  ArtifactIdentity: shared_governance_evidence
+  RetentionEdge: shared_governance_evidence
+  ImplementationReadinessLedger: final_cross_domain
+  GameTimePolicy: game_design
+  GameSemanticGraph: game_design
+  ProgressionGateContract: game_design
+  LifestyleViabilityEvidence: game_design
+  canonical_schema_content_migration: technical_runtime
+  next_wave_dependency_compiler: canonical_planning_program
+
+compatibility_vocabulary: [EXACT, COMPATIBLE, MIGRATION_REQUIRED, INCOMPATIBLE, UNKNOWN]
+
+wave_2_nodes:
+  - mission_id: W2-AUTH-01
+    task_class: PLANNING_RESEARCH
+    initial_state: READY
+    priority_rank: 10
+    owns: [docs/planning/wave-2/foundations/authority-evidence-contract.md]
+  - mission_id: W2-GH-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 20
+    owns: [docs/planning/wave-2/evidence/github-cas-lock-experiment.md]
+  - mission_id: W2-ENG-01
+    task_class: PLANNING_RESEARCH
+    initial_state: READY
+    priority_rank: 30
+    owns: [docs/planning/wave-2/evidence/engine-candidate-admission.md]
+  - mission_id: W2-ENG-02
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 40
+    owns: [docs/planning/wave-2/evidence/engine-spike-harness.md]
+  - mission_id: W2-HASH-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 50
+    owns: [docs/planning/wave-2/evidence/canonical-hash-conformance.md]
+  - mission_id: W2-MIG-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 60
+    owns: [docs/planning/wave-2/evidence/migration-fixture-experiment.md]
+  - mission_id: W2-ORDER-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 70
+    owns: [docs/planning/wave-2/evidence/ordering-replay-experiment.md]
+  - mission_id: W2-PROTECT-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 80
+    owns: [docs/planning/wave-2/evidence/protected-evidence-experiment.md]
+  - mission_id: W2-CI-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 90
+    owns: [docs/planning/wave-2/evidence/ci-reliability-experiment.md]
+  - mission_id: W2-EVAL-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: READY
+    priority_rank: 100
+    owns: [docs/planning/wave-2/evidence/evaluator-drift-calibration.md]
+  - mission_id: W2-PLAT-01
+    task_class: PLANNING_RESEARCH
+    initial_state: READY
+    priority_rank: 110
+    owns: [docs/planning/wave-2/research/target-platform-scope.md]
+  - mission_id: W2-RIGHTS-01
+    task_class: PLANNING_RESEARCH
+    initial_state: READY
+    priority_rank: 120
+    owns: [docs/planning/wave-2/research/originality-rights-and-terms.md]
+  - mission_id: W2-ACC-01
+    task_class: PLANNING_RESEARCH
+    initial_state: BLOCKED
+    priority_rank: 130
+    owns: [docs/planning/wave-2/research/accessibility-current-requirements.md]
+  - mission_id: W2-ENG-03
+    task_class: PLANNING_EXPERIMENT
+    initial_state: BLOCKED
+    priority_rank: 140
+    owns: [docs/planning/wave-2/evidence/engine-comparative-spikes.md]
+  - mission_id: W2-SIM-01
+    task_class: PLANNING_EXPERIMENT
+    initial_state: BLOCKED
+    priority_rank: 150
+    owns: [docs/planning/wave-2/evidence/model-shared-kernel-parity.md]
+  - mission_id: W2-REV-01
+    task_class: ADVERSARIAL_REVIEW
+    initial_state: BLOCKED
+    priority_rank: 220
+    owns: [docs/planning/wave-2/reviews/evidence-and-readiness.md]
+  - mission_id: W2-SYN-01
+    task_class: SYNTHESIS
+    initial_state: BLOCKED
+    priority_rank: 320
+    owns: [docs/planning/wave-2/synthesis/decision-and-readiness-candidate.md, docs/planning/wave-2/synthesis/readiness-ledger.yaml]
+  - mission_id: W2-READY-01
+    task_class: INDEPENDENT_VERIFICATION
+    initial_state: BLOCKED
+    priority_rank: 420
+    owns: [docs/planning/wave-2/reviews/implementation-readiness-verification.md]
+
+wave_2_edges:
+  - {from: W2-ACC-01, to: W2-PLAT-01, type: BLOCKED_BY, semantics: target_platform_scope_required_for_accessibility_mapping}
+  - {from: W2-ENG-03, to: W2-AUTH-01, type: BLOCKED_BY, semantics: evidence_envelope_and_planning_experiment_contract_required}
+  - {from: W2-ENG-03, to: W2-ENG-01, type: BLOCKED_BY, semantics: candidate_set_required}
+  - {from: W2-ENG-03, to: W2-ENG-02, type: BLOCKED_BY, semantics: common_harness_required}
+  - {from: W2-ENG-03, to: W2-HASH-01, type: BLOCKED_BY, semantics: cross_candidate_determinism_comparison_contract_required}
+  - {from: W2-ENG-03, to: W2-PLAT-01, type: BLOCKED_BY, semantics: target_scope_required_for_candidate_fit}
+  - {from: W2-SIM-01, to: W2-ENG-03, type: BLOCKED_BY, semantics: shared_kernel_candidate_required}
+  - {from: W2-SIM-01, to: W2-AUTH-01, type: BLOCKED_BY, semantics: evidence_identity_required}
+  - {from: W2-SIM-01, to: W2-ORDER-01, type: BLOCKED_BY, semantics: replay_causality_contract_required}
+
+  - {from: W2-GH-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-ENG-03, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-HASH-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-MIG-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-ORDER-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-PROTECT-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-CI-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-EVAL-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-ACC-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-RIGHTS-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-SIM-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-AUTH-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-ENG-01, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-ENG-02, to: W2-REV-01, type: REVIEW_OF}
+  - {from: W2-PLAT-01, to: W2-REV-01, type: REVIEW_OF}
+
+  - {from: W2-REV-01, to: W2-SYN-01, type: SYNTHESIZES_AFTER_REVIEW}
+  - {from: W2-SYN-01, to: W2-READY-01, type: VERIFIES}
+
+  - {from: W2-GH-01, to: MATURE_GITHUB_LOCK_CAS_ADOPTION, type: BLOCKS_DECISION}
+  - {from: W2-HASH-01, to: CROSS_RUNTIME_CANONICAL_HASH_AUTHORITY, type: BLOCKS_DECISION}
+  - {from: W2-MIG-01, to: PRODUCTION_SAVE_MIGRATION_ARCHITECTURE, type: BLOCKS_DECISION}
+  - {from: W2-ORDER-01, to: CONCRETE_EVENT_SCHEDULING_ARCHITECTURE, type: BLOCKS_DECISION}
+  - {from: W2-PROTECT-01, to: PROTECTED_EVIDENCE_INFRASTRUCTURE_ADOPTION, type: BLOCKS_DECISION}
+  - {from: W2-CI-01, to: IMPLEMENTATION_CI_EVIDENCE_STACK, type: BLOCKS_DECISION}
+  - {from: W2-EVAL-01, to: HIGH_IMPACT_MUTABLE_EVALUATOR_AUTHORITY, type: BLOCKS_DECISION}
+  - {from: W2-ENG-01, to: ENGINE_CANDIDATE_SET, type: BLOCKS_DECISION}
+  - {from: W2-ENG-03, to: ENGINE_DECISION, type: BLOCKS_DECISION}
+  - {from: W2-SIM-01, to: MODEL_SIMULATION_ACCEPTANCE_AUTHORITY, type: BLOCKS_DECISION}
+  - {from: W2-ACC-01, to: IR-BLOCKER-ACCESSIBILITY-CURRENT, type: BLOCKS_IMPLEMENTATION_SCOPE}
+  - {from: W2-PLAT-01, to: IR-BLOCKER-PLATFORM-SCOPE, type: BLOCKS_IMPLEMENTATION_SCOPE}
+  - {from: W2-ENG-03, to: IR-BLOCKER-ENGINE-DECISION, type: BLOCKS_IMPLEMENTATION_SCOPE}
+
+validation:
+  node_count: 18
+  initial_ready_count: 12
+  max_nodes: 24
+  max_initial_ready: 12
+  mission_ids_unique: true
+  ownership_surfaces_unique: true
+  hard_dependency_edge_type: BLOCKED_BY
+  hard_dependency_cycle_expected: false
+  production_implementation_nodes: 0
+  planning_experiment_nodes: 10
+  experimental_nodes_require_planning_experiment_contract: true
+  current_schema3_remains_control_plane: true
+  accidental_issues_excluded: [59, 60]
