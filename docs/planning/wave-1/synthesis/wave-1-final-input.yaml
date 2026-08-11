@@ -1,9 +1,17 @@
-version: 1
+version: 2
 synthesis_issue: 41
 mission_id: W1-SYN-FINAL
-episode: w1-syn-final-synthesizer-20260811-01
-activation_main_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
-claim_comment_id: 5249348414
+episode: w1-rem-final-graph-20260811-01
+source_failed_candidate_main_sha: e911ba321667064d57f26c38c2e155327e5e2e6e
+source_candidate_work_sha: 434633abe311c48715aa6d610112e798208b020b
+source_candidate_head_sha: 346bb9df14bbe5dfbd18fbabd05bcbe3b949b3a2
+source_candidate_status_comment_id: 5249425339
+source_verifier_fail_comment_id: 5249468791
+source_verifier_work_sha: 02251284ed221b0f3fee965413202d865ccc71a9
+source_verifier_simulation_blob_sha: e9179df108fa1741d7a426a34f450f16dfdd2486
+remediation_issue: 66
+remediation_claim_comment_id: 5249488501
+verified_revision_base_main_sha: e911ba321667064d57f26c38c2e155327e5e2e6e
 resource_constraint_comment_id: 5244416013
 current_master_directive_comment_id: 5249227987
 inputs:
@@ -11,11 +19,20 @@ inputs:
   - {mission_id: W1-SYN-TECH, issue: 38, status_comment_id: 5249311403, work_sha: 99805527fa192805b683722e27d72e19aa964fd0, head_sha: fd56974310aaa72c6656b6f2bbdeff255e4e7b7b, artifact: docs/planning/wave-1/synthesis/technical-evidence-candidate.md}
   - {mission_id: W1-SYN-GAME, issue: 39, status_comment_id: 5249051313, work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e, head_sha: c5ab9b04ff9342e4c1faebfe965196535284b4a7, artifact: docs/planning/wave-1/synthesis/game-experience-candidate.md}
   - {mission_id: W1-REV-CROSS, issue: 40, review_status_comment_id: 5249340288, work_sha: d8cd8d16d9a1ca9eae9e51987f86b767992584c2, head_sha: 056cdb0f33fdb7a2627cbcec344ff3e77e72b211, disposition: CHANGES_REQUIRED, blocker_count: 1, major_count: 11, artifact: docs/planning/wave-1/reviews/cross-domain-interface-and-parallelism.md}
-required_dispositions: [CD-B01, CD-M02, CD-M03, CD-M04, CD-M05, CD-M06, CD-M07, CD-M08, CD-M09, CD-M10, CD-M11, CD-M12]
+verification_findings_to_remediate:
+  - {finding_id: W1V-M01, severity: MAJOR, correction: dependency_map_uses_only_registered_relation_types}
+  - {finding_id: W1V-M02, severity: MAJOR, correction: dependency_map_BLOCKED_BY_tokens_exactly_equal_promotion_manifest_hard_prerequisites}
+  - {finding_id: W1V-m01, severity: MINOR, correction: dependency_map_defines_closed_prerequisite_token_resolution_grammar}
+required_cross_dispositions: [CD-B01, CD-M02, CD-M03, CD-M04, CD-M05, CD-M06, CD-M07, CD-M08, CD-M09, CD-M10, CD-M11, CD-M12]
 wave_governor:
   max_instantiated: 24
   max_initial_ready: 12
   compiler_required_fields: [mission_id, role, priority_rank, objective, hard_prerequisites, ownership_surface, authoritative_inputs, output_paths, output_schema, evidence_requirements, acceptance_criteria, required_review, downstream, integration_rule]
+revision_scope:
+  foundation_candidate_semantics_changed: false
+  promotion_manifest_mission_contracts_changed: false
+  dependency_map_hard_graph_changed: true
+  prerequisite_token_resolution_metadata_added: true
 invariants:
   - no_gameplay_or_production_implementation_authority
   - planning_experiments_bounded_and_disposable
@@ -25,5 +42,7 @@ invariants:
   - active_directive_does_not_create_empirical_pass
   - degraded_single_agent_trust_debt_remains_open
   - implementation_readiness_ledger_has_open_global_blockers
-  - next_wave_at_most_24_and_initial_ready_at_most_12
+  - next_wave_exactly_18_and_initial_ready_exactly_12
+  - next_wave_planning_experiments_exactly_10
+  - next_wave_production_features_zero
   - squash_only_main_integration
