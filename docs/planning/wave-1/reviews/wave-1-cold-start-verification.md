@@ -1,81 +1,143 @@
 # Wave 1 Cold-Start / Coherence Verification
 
 **Mission:** `W1-VERIFY-01`  
-**Episode:** `w1-verify-01-verifier-20260811-01`  
+**Episode:** `w1-verify-01-verifier-20260811-02`  
+**Ownership:** `VERIFICATION_RESTART` comment `5249541059`  
 **Independence:** `DEGRADED_SINGLE_AGENT` / DEGRADED  
-**Result:** **FAIL**  
-**Counts:** **0 BLOCKER / 2 MAJOR / 1 MINOR**
+**Result:** **PASS**  
+**Counts:** **0 BLOCKER / 0 MAJOR / 0 MINOR**
 
-## 1. Exact payload verified
+## 1. Exact restarted payload
 
-Verification started from repository + GitHub state and froze its input before substantive judgment in `docs/planning/wave-1/reviews/wave-1-final-cold-start-input.yaml` (blob `70d2b472b14da70572087c652fa29a7080250d7f`).
+This is a full new verification episode after the earlier FAIL `5249468791` and closed remediation Issue #66. It does not inherit PASS authority from the earlier episode.
 
-Current base: `main@413e729e8d2d5ac2eb138903f3f2ace07283b23e`.
+Current verified base:
 
-Canonical entry remains valid:
+`main@e95f5e833a9713aa6aa8d5af9c69dc3cd37bcc66`
 
-- `AGENTS.md` blob `9f65e73a1f16eb731d4068066998361c060f74bf`;
-- `START-HERE.md` blob `515dc7b12e1a85f66e780901c1caa0d9afbc55d5`;
-- canonical program blob `e3120ec203c4156328770aa86c12fbb7187966dc`;
-- Issue #6 terminal binding comment `5245368879`, squash main SHA `413e729e8d2d5ac2eb138903f3f2ace07283b23e`.
+Exact revised candidate tuple:
 
-Exact W1-SYN-FINAL payload:
+- candidate work SHA: `6e5b7fd926bd59a6910a2982ec82a94957e8ff49`;
+- foundations candidate blob: `4b4c409dc23538f23aba3709e4af7fafc8f37280`;
+- dependency map blob: `1e00057a2d0ab966aee59965682ee29a6ca2be60`;
+- promotion manifest identity/blob: `28146606ff3334ae1ddbb036a48969afb76acb85`;
+- revision input blob: `de10bb67d94ed6c10176ae571bdd9cea22a342c9`;
+- remediation finding-disposition blob: `bfcf5f9242cf90ad80e9c1f9ba93dac243d5072c`;
+- adopted Wave 1 contract blob: `d7ba9d5e9f6afe6b83837f2da13831873a5b8ddd`.
 
-- Issue #41 `STATUS(VERIFICATION_READY)` comment `5249425339`;
-- branch head `346bb9df14bbe5dfbd18fbabd05bcbe3b949b3a2`;
-- candidate work SHA `434633abe311c48715aa6d610112e798208b020b`;
-- foundations candidate blob `4b4c409dc23538f23aba3709e4af7fafc8f37280`;
-- dependency map blob `1319c92a7a0f35a931ad6a70e87da753a5008f39`;
-- promotion manifest blob `28146606ff3334ae1ddbb036a48969afb76acb85`.
+Cold-start input manifest:
+
+`docs/planning/wave-1/reviews/wave-1-final-cold-start-input-r2.yaml` blob `3ce5ef463783e5181d33f4a0b5a5bbf7b2d85c20`.
+
+Simulation artifact:
+
+`docs/planning/wave-1/reviews/wave-1-final-verification-simulation-r2.yaml` blob `70dc863d202bfa1e844af5be7d715f890fc11b67`.
 
 The candidate was immutable during this episode.
 
-## 2. Cold-start and dispatcher result
+## 2. Canonical entry and current graph
 
 PASS.
 
-A fresh reader derives:
+- `AGENTS.md` remains canonical PLANNING entry.
+- `START-HERE.md` routes to canonical Planning Program v1.
+- canonical program blob remains `e3120ec203c4156328770aa86c12fbb7187966dc`.
+- Issue #6 terminal binding `5245368879` remains active because its activation main SHA `413e729e8d2d5ac2eb138903f3f2ace07283b23e` is an ancestor of current main.
+- open `[PLAN-v1]` graph at restart consists of conditional recovery #21, this current verifier #42, and canonicalizer #43 blocked on current-base PASS.
+- the failed-candidate and remediation squash merges did not modify the canonical dispatcher or activate Wave 2.
 
-1. canonical program active under Issue #6 binding;
-2. current queue is open `[PLAN-v1]`;
-3. open graph before this verifier contains conditional recovery #21, this verifier #42, and blocked canonicalizer #43;
-4. exact W1-SYN-FINAL VERIFICATION_READY makes #42 eligible;
-5. #43 remains blocked until valid verifier PASS;
-6. high-throughput/gameplay implementation remains blocked.
+## 3. Full candidate-contract verification
 
-The Wave 2 issue title template correctly stays `[PLAN-v1][W2-*]`, so the current dispatcher can see the next wave after canonicalization.
+PASS.
 
-## 3. Candidate-contract checks that PASS
+The full prior suite was rerun against the revised current-base payload and confirms:
 
-The candidate successfully closes the prior cross-review architecture findings at the candidate-contract level:
+1. all cross-review CD-B01/CD-M02..CD-M12 dispositions remain present;
+2. `PLANNING_EXPERIMENT` remains bounded/disposable and cannot authorize production/gameplay dependencies, canonical content, or engine lock-in;
+3. one acceptance chain exists: TaskClaimContract/EvidenceRequirement → CheckPlan → ExecutionEvidenceEnvelope → derived EvidenceSatisfaction → review/verification/decision;
+4. directives can change policy/ownership constraints but cannot fabricate empirical PASS;
+5. the master lease-continuation directive `5249227987` does not upgrade independent-context capability;
+6. DEGRADED_SINGLE_AGENT trust debt remains explicit;
+7. four global `PRODUCTION_IMPLEMENTATION` blockers remain OPEN:
+   - `IR-BLOCKER-ENGINE-DECISION`;
+   - `IR-BLOCKER-PLATFORM-SCOPE`;
+   - `IR-BLOCKER-ACCESSIBILITY-CURRENT`;
+   - `IR-BLOCKER-EVIDENCE-FOUNDATION`;
+8. engine choice, mature GitHub lock/CAS, cross-runtime hash authority, concrete ordering/migration/protected/evaluator/model/CI mechanisms remain `EVIDENCE_REQUIRED` or `DEFERRED`;
+9. exact game-time, semantic-graph, generative-runtime, canonical-state, replay, artifact, trust, and evidence mappings remain coherent;
+10. current schema-3 dispatcher/ownership authority and squash-only `main` integration remain in force.
 
-- bounded `PLANNING_EXPERIMENT` permits disposable evidence spikes but forbids production dependency/content authority/engine lock-in;
-- one acceptance path exists: TaskClaimContract/EvidenceRequirement → CheckPlan → ExecutionEvidenceEnvelope → derived EvidenceSatisfaction → review/verification/decision;
-- one durable `ArtifactIdentity` prevents locator aliases from bypassing provenance/quarantine;
-- directives may change goals/policy/resource/ownership assumptions but may not alter observed evidence or fabricate EvidenceSatisfaction;
-- the current master lease-continuation directive `5249227987` does not upgrade independent-context capability;
-- DEGRADED_SINGLE_AGENT trust debt remains visible;
-- four global `PRODUCTION_IMPLEMENTATION` blockers remain OPEN: engine decision, platform scope, current accessibility mapping, evidence foundation;
-- engine choice, mature GitHub lock/CAS, cross-runtime hash authority, concrete ordering/migration/protected/evaluator/simulation/CI mechanisms remain `EVIDENCE_REQUIRED` or `DEFERRED`;
-- game-time, semantic-graph, generative-runtime and technical replay/evidence identities are explicitly mapped;
-- current schema-3 and squash-only integration remain authoritative;
-- retired accidental Issues #59/#60 are excluded.
+## 4. Promotion manifest mechanical verification
 
-## 4. Promotion-manifest mechanical checks that PASS
+PASS.
 
-Independent derivation from manifest version 2 confirms:
+The unchanged promotion manifest still contains:
 
-- 18 unique missions (≤24);
-- exactly 12 initially READY (≤12);
+- 18 unique Wave 2 missions, below the max 24;
+- exactly 12 initially READY, at the max 12;
 - 10 `PLANNING_EXPERIMENT` missions;
-- zero production-feature missions;
-- current `[PLAN-v1]` queue prefix;
-- known output schemas only (`proposal_research_v1`, `adversarial_review_v1`, `synthesis_v1`, `verification_v1`);
-- unique conflict keys and noncolliding output surfaces (apart from the single mission owning its own synthesis directory/two files);
-- original `next_wave_candidate_schema` required fields are present on every mission;
-- manifest hard-prerequisite graph is acyclic.
+- zero production/gameplay feature missions;
+- `[PLAN-v1][W2-*]` issue title prefix, visible to the current dispatcher;
+- only known output schemas: `proposal_research_v1`, `adversarial_review_v1`, `synthesis_v1`, `verification_v1`;
+- original `next_wave_candidate_schema` required fields on every mission;
+- unique conflict keys and noncolliding output ownership;
+- no Issues #59/#60.
 
-Independent topological layers:
+## 5. W1V-M01 remediation verification
+
+PASS.
+
+The revised dependency map uses:
+
+- `BLOCKED_BY` as the sole readiness relation;
+- `BLOCKS_DECISION` and `BLOCKS_IMPLEMENTATION_SCOPE` only for their registered non-readiness effects.
+
+The undeclared `SYNTHESIZES_AFTER_REVIEW` relation is removed. Alternate `REVIEW_OF`/`VERIFIES` readiness-like edges were also removed from the hard graph, so there is no second readiness interpretation.
+
+Observed unresolved/undeclared readiness relation types: **0**.
+
+## 6. W1V-M02 remediation verification
+
+PASS.
+
+The dependency map now defines hard-edge direction exactly as:
+
+`task -> prerequisite_token`.
+
+For all 18 missions, the set of `BLOCKED_BY.to` values equals the unchanged promotion-manifest `hard_prerequisites` set literally.
+
+Total hard prerequisite tokens / hard edges: **44**.
+
+Breakdown:
+
+- 18 terminal W1 canonical-binding prerequisites;
+- +1 ACC prerequisite;
+- +5 ENG-03 prerequisites;
+- +3 SIM prerequisites;
+- +15 REV prerequisites;
+- +1 SYN prerequisite;
+- +1 READY prerequisite.
+
+No manifest/dependency-map mismatch remains.
+
+## 7. Prerequisite token resolution
+
+PASS.
+
+The revised dependency map mechanically closes the previous minor suffix-convention concern:
+
+- `W1-CANON-01_TERMINAL_BINDING` is one external literal;
+- `W2-*_REVIEW_READY` resolves to exact mission `STATUS(REVIEW_READY)`;
+- `W2-*_PASS_OR_CHANGES_REQUIRED` resolves to exact mission `REVIEW_STATUS` with qualifying disposition;
+- `W2-*_VERIFICATION_READY` resolves to exact mission `STATUS(VERIFICATION_READY)`;
+- internal targets must identify an existing W2 mission;
+- unknown or multiply resolved tokens are invalid.
+
+## 8. Resolved dependency graph
+
+PASS; no hard cycle.
+
+Independent topological layering after W1-CANON-01 terminal binding:
 
 ```text
 Layer 0: AUTH, GH, ENG-01, ENG-02, HASH, MIG, ORDER, PROTECT, CI, EVAL, PLAT, RIGHTS
@@ -86,68 +148,36 @@ Layer 4: SYN
 Layer 5: READY
 ```
 
-## 5. MAJOR finding W1V-M01 — dependency-map edge type registry mismatch
+This matches the unchanged promotion manifest.
 
-The final foundations candidate registers typed dependency relations including:
+## 9. Promotion and integration safety
 
-`BLOCKED_BY`, `BLOCKS_DECISION`, `BLOCKS_IMPLEMENTATION_SCOPE`, `BLOCKS_RELEASE_SCOPE`, `INFORMS_DECISION`, `CALIBRATES_EVALUATOR`, `REOPENS_ON_FAILURE`, `REVIEW_OF`, `SYNTHESIZES`, `VERIFIES`, `CANONICALIZES`, `INTERFACE_WITH`, `CONFLICTS_WITH`, `SUPERSEDES`, and `INVALIDATES`.
+PASS.
 
-The exact verified dependency map instead contains an undeclared edge type:
+The verified candidate can be promoted only by W1-CANON-01 after this current-base PASS. Promotion destinations remain mechanically named:
 
-`SYNTHESIZES_AFTER_REVIEW`.
+- `docs/planning/WAVE-1-FOUNDATIONS-v1.md`;
+- `docs/planning/WAVE-1-DEPENDENCY-MAP-v1.yaml`;
+- `docs/planning/WAVE-2-PROMOTION-MANIFEST-v1.yaml`.
 
-A fresh compiler cannot treat an unregistered relation as equivalent to `SYNTHESIZES` or `BLOCKED_BY` without inventing policy. Because the dependency map is a canonicalization output and final verification explicitly requires typed dependency correctness, PASS is forbidden.
+`docs/planning/PLANNING-PROGRAM-v1.md` remains the canonical dispatcher unless a separately verified canonical revision changes it.
 
-**Required remediation:** use only registered relation kinds, or deliberately revise the foundations type registry through the same review/verification route.
+Every `main` integration remains squash-only. Wave 2 issues may be instantiated only after the canonicalizer squash SHA exists and must use that activation provenance. This verifier does not canonicalize or create them.
 
-## 6. MAJOR finding W1V-M02 — dependency-map hard graph is weaker than promotion manifest
+## 10. Result
 
-The promotion manifest correctly declares hard prerequisites for:
+**PASS — 0 BLOCKER / 0 MAJOR / 0 MINOR.**
 
-- `W2-REV-01`: all 15 root/evidence missions at REVIEW_READY;
-- `W2-SYN-01`: qualifying W2-REV-01 result;
-- `W2-READY-01`: W2-SYN-01 VERIFICATION_READY.
+The exact current-base revised candidate is eligible for W1-CANON-01. PASS authority is valid only while the verified base remains current; any new `main` drift before canonicalizer claim requires the canonical verification refresh/reverification lifecycle.
 
-The dependency map does not encode those as complete `BLOCKED_BY` hard edges. It uses `REVIEW_OF` for review inputs and `SYNTHESIZES_AFTER_REVIEW` / `VERIFIES` for the final chain.
+## 11. Independence profile
 
-A consumer deriving the hard graph from `BLOCKED_BY` edges in `WAVE-1-DEPENDENCY-MAP-v1.yaml` would therefore see only ACC/ENG-03/SIM prerequisites and a weaker graph than the promotion manifest.
+This result remains **DEGRADED_SINGLE_AGENT**, not full independence:
 
-This violates the candidate's goal of singular, mechanically composable authority and makes the two promotion artifacts non-equivalent.
-
-**Required remediation:** make the dependency map mechanically mirror **every** promotion-manifest hard prerequisite using `BLOCKED_BY` edges in `task → prerequisite` direction. Supplemental relation edges may remain only if they are registered and cannot change readiness semantics.
-
-## 7. MINOR W1V-m01 — symbolic prerequisite suffix grammar
-
-Manifest prerequisites consistently use literals such as `W2-PLAT-01_REVIEW_READY`, `W2-REV-01_PASS_OR_CHANGES_REQUIRED`, and `W2-SYN-01_VERIFICATION_READY`; the compiler contract defines the corresponding terminal meanings.
-
-This is sufficient to understand the current bounded manifest, but a later compiler should formalize the string grammar or use structured prerequisite objects rather than rely indefinitely on suffix convention.
-
-This is nonblocking for the current remediation because the exact strings and meanings are unambiguous in one bounded manifest.
-
-## 8. Simulation evidence
-
-Immutable simulation artifact:
-
-`docs/planning/wave-1/reviews/wave-1-final-verification-simulation.yaml` blob `e9179df108fa1741d7a426a34f450f16dfdd2486`.
-
-It records PASS/FAIL per verification obligation, independent topological layering, counts, and exact findings.
-
-## 9. Result and routing
-
-**FAIL** — 0 BLOCKER / 2 MAJOR / 1 MINOR.
-
-The failure is narrow: foundations semantics, promotion manifest, readiness barriers, and Wave 2 composition are otherwise acceptable. Remediation should modify only the dependency-map/compiler-parity surface (and, if desired, formalize the nonblocking prerequisite grammar) on a separate remediation issue/branch. The verifier must not edit the candidate it judges.
-
-After remediation is integrated as noncanonical provenance and a new exact candidate/dependency/manifest tuple exists on current main/provenance as required by the workflow, W1-VERIFY-01 should re-enter through the canonical verification restart path and rerun the full suite.
-
-## 10. Independence profile
-
-This is **DEGRADED_SINGLE_AGENT**, not full independence:
-
-- distinct verifier episode from W1-SYN-FINAL and W1-REV-CROSS;
-- candidate immutable;
-- cold-start input manifest frozen before judgment;
-- repository/GitHub evidence acquired before reconciling prior rationale;
-- source candidate never edited by verifier;
+- new verifier actor/episode distinct from final synthesizer, cross reviewer, remediation agent, and the earlier failed verifier episode;
+- candidate immutable during judgment;
+- fresh r2 cold-start input manifest frozen before verdict;
+- repository/GitHub state and mechanical evidence acquired before prior rationale reconciliation;
+- verifier edited only Issue #42 evidence/report artifacts;
 - resource constraint comment `5244416013` retained;
 - reopen condition remains `MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE`.
