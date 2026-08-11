@@ -1,4 +1,4 @@
-version: 1
+version: 2
 mission_id: W1-SYN-FINAL
 state: VERIFICATION_CANDIDATE
 canonicality: NON_CANONICAL
@@ -13,7 +13,7 @@ phase:
   current: PLANNING
   production_implementation_ready: false
   planning_experiments_allowed: true
-  planning_experiment_contract: docs/planning/wave-1/synthesis/wave-1-canonicalization-candidate.md#4-planning_experiment--correction-of-cd-b01
+  planning_experiment_contract: docs/planning/wave-1/synthesis/wave-1-canonicalization-candidate.md#4
 
 active_directives:
   - directive_id: CURRENT-MASTER-LEASE-CONTINUATION
@@ -208,15 +208,15 @@ wave_2_nodes:
     owns: [docs/planning/wave-2/reviews/implementation-readiness-verification.md]
 
 wave_2_edges:
-  - {from: W2-PLAT-01, to: W2-ACC-01, type: BLOCKED_BY_INVERSE, semantics: target_platform_scope_required_for_accessibility_mapping}
-  - {from: W2-AUTH-01, to: W2-ENG-03, type: BLOCKED_BY_INVERSE, semantics: evidence_envelope_and_planning_experiment_contract_required}
-  - {from: W2-ENG-01, to: W2-ENG-03, type: BLOCKED_BY_INVERSE, semantics: candidate_set_required}
-  - {from: W2-ENG-02, to: W2-ENG-03, type: BLOCKED_BY_INVERSE, semantics: common_harness_required}
-  - {from: W2-HASH-01, to: W2-ENG-03, type: BLOCKED_BY_INVERSE, semantics: cross_candidate_determinism_comparison_contract_required}
-  - {from: W2-PLAT-01, to: W2-ENG-03, type: BLOCKED_BY_INVERSE, semantics: target_scope_required_for_candidate_fit}
-  - {from: W2-ENG-03, to: W2-SIM-01, type: BLOCKED_BY_INVERSE, semantics: shared_kernel_candidate_required}
-  - {from: W2-AUTH-01, to: W2-SIM-01, type: BLOCKED_BY_INVERSE, semantics: evidence_identity_required}
-  - {from: W2-ORDER-01, to: W2-SIM-01, type: BLOCKED_BY_INVERSE, semantics: replay_causality_contract_required}
+  - {from: W2-ACC-01, to: W2-PLAT-01, type: BLOCKED_BY, semantics: target_platform_scope_required_for_accessibility_mapping}
+  - {from: W2-ENG-03, to: W2-AUTH-01, type: BLOCKED_BY, semantics: evidence_envelope_and_planning_experiment_contract_required}
+  - {from: W2-ENG-03, to: W2-ENG-01, type: BLOCKED_BY, semantics: candidate_set_required}
+  - {from: W2-ENG-03, to: W2-ENG-02, type: BLOCKED_BY, semantics: common_harness_required}
+  - {from: W2-ENG-03, to: W2-HASH-01, type: BLOCKED_BY, semantics: cross_candidate_determinism_comparison_contract_required}
+  - {from: W2-ENG-03, to: W2-PLAT-01, type: BLOCKED_BY, semantics: target_scope_required_for_candidate_fit}
+  - {from: W2-SIM-01, to: W2-ENG-03, type: BLOCKED_BY, semantics: shared_kernel_candidate_required}
+  - {from: W2-SIM-01, to: W2-AUTH-01, type: BLOCKED_BY, semantics: evidence_identity_required}
+  - {from: W2-SIM-01, to: W2-ORDER-01, type: BLOCKED_BY, semantics: replay_causality_contract_required}
 
   - {from: W2-GH-01, to: W2-REV-01, type: REVIEW_OF}
   - {from: W2-ENG-03, to: W2-REV-01, type: REVIEW_OF}
@@ -258,8 +258,10 @@ validation:
   max_initial_ready: 12
   mission_ids_unique: true
   ownership_surfaces_unique: true
+  hard_dependency_edge_type: BLOCKED_BY
   hard_dependency_cycle_expected: false
   production_implementation_nodes: 0
+  planning_experiment_nodes: 10
   experimental_nodes_require_planning_experiment_contract: true
   current_schema3_remains_control_plane: true
   accidental_issues_excluded: [59, 60]
