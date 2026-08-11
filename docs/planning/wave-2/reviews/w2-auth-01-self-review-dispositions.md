@@ -9,15 +9,15 @@
 
 ### SR-M01 — MAJOR — machine shapes not closed
 
-**CORRECTED.** The remediated contract defines `PrimitiveRegistryV1`, closed enums, `IdentityRef`, `ImmutableRefV1`, `RuleRegistry`, and a closed `PredicateV1` AST with exact bindings, typed operators, `TRUE|FALSE|ERROR`, and fail-closed context semantics. Unknown fields/operators/rules are invalid.
+**CORRECTED.** The remediated contract defines `PrimitiveRegistryV1`, closed enums, `IdentityRef`, `ImmutableRefV1`, `RuleRegistry`, `RuleInvocationV1`, and a closed `PredicateV1` AST with exact bindings, typed operators, `TRUE|FALSE|ERROR`, and fail-closed context semantics. Unknown fields/operators/rules or under/over-bound registered-rule invocations are invalid.
 
-Evidence: contract Sections 2–4; fixtures V04–V05, V11–V12, V35.
+Evidence: contract Sections 2–4; fixtures V04–V05, V11–V12, V35, V39.
 
 ### SR-M02 — MAJOR — retry/attempt policy not representable
 
-**CORRECTED.** `AttemptPolicyV1` is separate from `CheckAggregationRuleV1`. Built-in modes define all-attempts and latest-after-retryable-failure semantics with contiguous lineage, max attempts, retryable failure classes, retry predicates, and explicit behavior for PRODUCT/INFRA/FLAKY/INCONCLUSIVE/NOT_RUN. Registered rules are exact typed registry entries and cannot weaken lineage/risk/result constraints.
+**CORRECTED.** `AttemptPolicyV1` is separate from `CheckAggregationRuleV1`. Built-in modes define all-attempts and latest-after-retryable-failure semantics with contiguous lineage, max attempts, retryable failure classes, retry predicates, and explicit behavior for PRODUCT/INFRA/FLAKY/INCONCLUSIVE/NOT_RUN. Registered rules use exact typed invocations with immutable input bindings and cannot weaken lineage/risk/result constraints.
 
-Evidence: contract Section 7.2 and Section 7.8; fixtures V06–V12, V32.
+Evidence: contract Section 7.2 and Section 7.8; fixtures V06–V12, V32, V39.
 
 ### SR-M03 — MAJOR — RiskFloor only partially enforced
 
@@ -39,16 +39,17 @@ Evidence: contract Sections 7.4 and 7.8; fixtures V26 and V32.
 
 ## Additional pre-terminal closure corrections
 
-Before publishing the remediated candidate, the author-side adversarial pass also closed these defects rather than deferring them:
+The remediation author-side attacks also closed these defects instead of deferring them:
 
-- defined the previously referenced rule registry itself, including class/output/conformance semantics;
+- defined the rule registry itself, including class/output/conformance semantics;
+- added `RuleInvocationV1` so retry/aggregation/freshness evaluators are bound to one exact rule plus one exact ordered immutable input map; missing/extra/duplicate/wrong-type inputs fail closed;
 - replaced vague immutable references with `ImmutableRefV1`;
 - made substitution evidence explicit in the same plan and satisfaction object;
-- made freshness a typed registered rule with immutable inputs and fail-closed STALE/ERROR behavior;
+- made freshness a typed registered invocation with immutable inputs and fail-closed STALE/ERROR behavior;
 - closed independence mode as an enum and made FULL trust capability-derived;
-- fixed substitution original-object typing (exactly one check ID or artifact `IdentityRef`);
+- fixed substitution original-object typing;
 - added deterministic RiskFloor applicability; predicate ERROR blocks compilation;
-- removed producer/output identity cycles from `TaskClaimContract` by using unique `requirement_key` and deriving downstream objects one-way.
+- removed producer/output identity cycles from `TaskClaimContract` by using a unique `requirement_key` and deriving downstream objects one-way.
 
 ## Preservation checks
 

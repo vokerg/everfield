@@ -28,7 +28,7 @@ Non-goals: engine/runtime/provider selection, canonical serialization/hash algor
 
 ## 2. Closed contract-layer type system
 
-All machine objects below are closed schemas. Unknown fields are invalid except through the explicit registered-rule extension point. Every authority-bearing field resolves to a primitive, a closed enum, a structured type defined here, `IdentityRef`, `ImmutableRefV1`, or a validated `VersionedRuleRef`. No free `predicate`, `scalar`, `stable_ref`, or undefined authority type exists.
+All machine objects below are closed schemas. Unknown fields are invalid except through the explicit registered-rule extension point. Every authority-bearing field resolves to a primitive, a closed enum, a structured type defined here, `IdentityRef`, `ImmutableRefV1`, or a validated `RuleInvocationV1`. No free `predicate`, `scalar`, `stable_ref`, or undefined authority type exists.
 
 ### 2.1 Primitive registry v1
 
@@ -111,6 +111,16 @@ VersionedRuleRef:
   evaluator_identity: IdentityRef
   conformance_fixture_set_identity: IdentityRef
 
+RuleInputBindingV1:
+  alias: stable_id
+  object_identity: IdentityRef
+  object_type: stable_type
+
+RuleInvocationV1:
+  rule_ref: VersionedRuleRef
+  input_bindings: [RuleInputBindingV1]
+  invocation_identity: IdentityRef
+
 RuleRegistry:
   registry_id: IdentityRef
   registry_version: stable_version
@@ -128,7 +138,9 @@ RuleRegistry:
       may_ignore_attempt_lineage_or_max: false
 ```
 
-`(rule_id, rule_version)` is unique and `output_contract` must match `rule_class`. A rule ref is valid only against the exact current registry and matching evaluator/fixture/input identities. Evaluators consume only explicitly supplied immutable inputs: ambient wall time, hidden chat state, mutable network state, and unbound environment values are forbidden. `ERROR` always fails closed. The three `may_*` fields are constants false; any registry that changes them is invalid.
+`(rule_id, rule_version)` is unique and `output_contract` must match `rule_class`. A rule ref is valid only against the exact current registry and matching evaluator/fixture/input-schema identities. A `RuleInvocationV1` is valid only when binding aliases are unique, every bound object exists at the exact identity/type, and the complete ordered binding map validates exactly against the registry entry's `exact_input_schema_identity`: no missing, extra, duplicate, implicit, or ambient input is permitted. `invocation_identity` binds the exact rule ref plus exact ordered input bindings.
+
+Evaluators consume only those bound immutable inputs: ambient wall time, hidden chat state, mutable network state, and unbound environment values are forbidden. `ERROR` always fails closed. The three `may_*` fields are constants false; any registry that changes them is invalid.
 
 Registered rules may specialize semantics but cannot bypass result-class checks, artifact constraints, effective risk constraints, or lineage/max-attempt bounds.
 
@@ -323,23 +335,23 @@ AttemptPolicyV1:
   require_contiguous_lineage: bool
   retryable_failure_classes: [AttemptFailureClass]
   retry_eligibility: null | PredicateV1
-  registered_rule: null | VersionedRuleRef
+  registered_rule: null | RuleInvocationV1
 
 CheckAggregationRuleV1:
   mode: CheckAggregationMode
   quorum_required: null | positive_uint
-  registered_rule: null | VersionedRuleRef
+  registered_rule: null | RuleInvocationV1
 ```
 
 - ALL_ATTEMPTS_MUST_PASS: every executed attempt in the check lineage must PASS; FAIL is non-passing; FLAKY/INCONCLUSIVE/NOT_RUN is inconclusive; no registered rule.
 - LATEST_AFTER_RETRYABLE_FAILURE: only prior FAIL attempts may be retried; each failure class is listed retryable; retry predicate passes when present; lineage contiguous; attempt count <= max; latest PASS. PRODUCT/non-retryable FAIL is non-passing. FLAKY/INCONCLUSIVE/NOT_RUN cannot use this built-in retry and remain inconclusive.
-- REGISTERED_VERSIONED attempt mode requires rule class RETRY and still obeys lineage/max/risk/result constraints.
+- REGISTERED_VERSIONED attempt mode requires a valid invocation whose rule class is RETRY and still obeys lineage/max/risk/result constraints.
 - ALL_CHECKS: all applicable non-replacement required checks execute and pass.
 - ANY_CHECK: all applicable non-replacement required checks execute; at least one passes.
 - QUORUM: all applicable non-replacement required checks execute; quorum is present, positive, <= check count, and at least quorum passes.
-- registered aggregation requires rule class CHECK_AGGREGATION and cannot bypass result/artifact/risk checks.
+- registered aggregation requires a valid invocation whose rule class is CHECK_AGGREGATION and cannot bypass result/artifact/risk checks.
 
-Unknown mode/rule/class, lineage gap/cycle/duplicate attempt ID, retry beyond max, or retry after ineligible failure -> invalid evidence set.
+Unknown mode/rule/class, missing/extra/duplicate invocation binding, invocation-schema mismatch, lineage gap/cycle/duplicate attempt ID, retry beyond max, or retry after ineligible failure -> invalid evidence set.
 
 ### 7.3 `SubstitutionRuleV1`
 
@@ -377,10 +389,10 @@ EvidenceRequirement:
   substitution_rules: [SubstitutionRuleV1]
   attempt_policy: AttemptPolicyV1
   check_aggregation_rule: CheckAggregationRuleV1
-  freshness_rule: null | VersionedRuleRef
+  freshness_rule: null | RuleInvocationV1
 ```
 
-Contract/requirement key/claim/resource capability must exactly match the producing `TaskClaimContract`. The four risk-derived fields equal or exceed `EffectiveRiskConstraint`; downgrade is invalid. `freshness_rule`, if present, is class FRESHNESS; STALE/ERROR prevents acceptance. `allowed_result_classes` are result classes permitted to contribute a passing empirical input; disallowed observations are retained but cannot contribute to SATISFIED. `QUARANTINED` is never directly acceptable even if mistakenly listed in allowed rights states.
+Contract/requirement key/claim/resource capability must exactly match the producing `TaskClaimContract`. The four risk-derived fields equal or exceed `EffectiveRiskConstraint`; downgrade is invalid. `freshness_rule`, if present, must be a valid invocation whose rule class is FRESHNESS; STALE/ERROR prevents acceptance. `allowed_result_classes` are result classes permitted to contribute a passing empirical input; disallowed observations are retained but cannot contribute to SATISFIED. `QUARANTINED` is never directly acceptable even if mistakenly listed in allowed rights states.
 
 ### 7.5 `CheckPlan`
 
@@ -505,9 +517,9 @@ Ordered derivation:
 1. validate closed schemas and exact contract/requirement/risk/plan/capability/candidate/base/policy identities;
 2. re-evaluate applicability: ERROR -> no satisfaction; FALSE -> NOT_APPLICABLE, trust NOT_EVALUATED, zero surfaces, protected=false;
 3. validate check set and exact risk/surface/protection/review-route propagation;
-4. validate attempt IDs, lineage/max, retry eligibility, rule class/identity; malformed input -> no satisfaction;
+4. validate attempt IDs, lineage/max, retry eligibility, registered rule class/identity, and every `RuleInvocationV1` exact input binding; malformed or under/over-bound input -> no satisfaction;
 5. derive per-check attempt outcome. Any observation used as a passing empirical input must have result in `allowed_result_classes`; a disallowed result remains historical but cannot contribute to SATISFIED;
-6. evaluate freshness rule using exact immutable inputs; STALE/ERROR -> INCONCLUSIVE;
+6. evaluate the exact freshness invocation when present using only its bound immutable inputs; STALE/ERROR -> INCONCLUSIVE;
 7. validate artifacts: required integrity PRESENT, rights state allowed, never QUARANTINED, and exact identity/provenance. Deficiency is non-satisfying unless a valid substitution independently passes all constraints;
 8. if protection required, accepted required evidence includes at least one PROTECTED artifact; else INCONCLUSIVE/PROTECTED_EVIDENCE_FLOOR_UNMET;
 9. apply cross-check aggregation only after steps 4–8; aggregation cannot rescue disallowed results, invalid artifacts, freshness, or risk floors;
@@ -515,7 +527,7 @@ Ordered derivation:
 11. derive trust by `TrustDerivationV1`; NOT_EVALUATED or below minimum -> INCONCLUSIVE/TRUST_FLOOR_UNMET;
 12. missing/NOT_RUN required execution -> INCONCLUSIVE/MISSING_REQUIRED_EXECUTION;
 13. non-replaced PRODUCT/ORACLE/HARNESS FAIL -> UNSATISFIED; INFRA FAIL follows only the exact attempt policy; unresolved retry state -> INCONCLUSIVE;
-14. FLAKY/INCONCLUSIVE remains INCONCLUSIVE unless a valid registered rule returns a permitted stricter resolution without bypassing steps 5–11;
+14. FLAKY/INCONCLUSIVE remains INCONCLUSIVE unless a valid registered invocation returns a permitted stricter resolution without bypassing steps 5–11;
 15. SATISFIED only when aggregation passes and every applicable normative result/freshness/artifact/substitution/risk/trust constraint passes.
 
 `required_review_route` is propagated authority, not empirical truth. SATISFIED alone never authorizes promotion/readiness.
@@ -575,14 +587,14 @@ durable directives + exact capability evidence + immutable registries
   -> EvidenceRequirement
   -> CheckPlan(exact candidate/head/base/capability)
   -> append-only ExecutionEvidenceEnvelope attempts + ArtifactIdentity
-  -> AttemptPolicyV1 + exact substitutions + freshness
+  -> AttemptPolicyV1 + exact RuleInvocationV1 inputs + substitutions + freshness
   -> CheckAggregationRuleV1
   -> EvidenceSatisfaction
   -> mandatory review/verification PromotionGateInput
   -> decision transition + ImplementationReadinessLedger
 ```
 
-Unknown type/field/rule/route, unresolved identity, predicate ERROR, stale freshness, artifact deficiency, invalid policy transition, ambiguous prerequisite, or floor downgrade fails closed.
+Unknown type/field/rule/route, unresolved identity, missing/extra/duplicate registered-rule input, predicate ERROR, stale freshness, artifact deficiency, invalid policy transition, ambiguous prerequisite, or floor downgrade fails closed.
 
 ## 10. Directive and degraded-trust cases
 
@@ -641,12 +653,13 @@ Later stronger capability supports a new episode; it never relabels old evidence
 | V36 | duplicate claim/requirement key or zero risk floors | invalid TaskClaimContract |
 | V37 | applied substitution has both/neither original check/artifact IDs | invalid satisfaction object |
 | V38 | RiskFloor applicability predicate ERROR | no effective constraint/requirement compilation |
+| V39 | registered-rule invocation omits/adds/duplicates a binding or binds wrong object type | invalid invocation; evaluator has no authority |
 
 ## 12. Observability and failure controls
 
-Every stage emits immutable input IDs, policy epoch, exact candidate/head/base/capability, predicate outcomes, required/missing checks, attempt lineage/failure classes, rule identities/decisions, substitutions, freshness, artifact integrity/rights/visibility, achieved-vs-required surfaces/protection/trust, review route/independence, and reason codes. Protected payloads may be redacted; authority-relevant availability/corruption cannot be hidden.
+Every stage emits immutable input IDs, policy epoch, exact candidate/head/base/capability, predicate outcomes, required/missing checks, attempt lineage/failure classes, rule and invocation identities/decisions, substitutions, freshness, artifact integrity/rights/visibility, achieved-vs-required surfaces/protection/trust, review route/independence, and reason codes. Protected payloads may be redacted; authority-relevant availability/corruption cannot be hidden.
 
-Controls: closed predicates prevent evaluator ambiguity; new epochs prevent policy laundering; append-only lineage prevents retry laundering; exact registries prevent extension laundering; planned/recorded replacement evidence prevents substitution laundering; result/artifact/risk checks dominate aggregation; capability-bound trust prevents lease/label laundering; `EffectiveRiskConstraint` closes all four floor dimensions; exact promotion routes and compiled ledger prevent readiness laundering.
+Controls: closed predicates prevent evaluator ambiguity; exact `RuleInvocationV1` bindings prevent registered-rule input ambiguity; new epochs prevent policy laundering; append-only lineage prevents retry laundering; exact registries prevent extension laundering; planned/recorded replacement evidence prevents substitution laundering; result/artifact/risk checks dominate aggregation; capability-bound trust prevents lease/label laundering; `EffectiveRiskConstraint` closes all four floor dimensions; exact promotion routes and compiled ledger prevent readiness laundering.
 
 ## 13. Interfaces, delegated questions, and reopen conditions
 
@@ -654,17 +667,17 @@ Primary consumers remain `W2-ENG-03`, `W2-SIM-01`, and `W2-REV-01`. `W2-CI-01`, 
 
 Delegated concrete decisions: serialization/hash selection -> W2-HASH-01; protected storage/access -> W2-PROTECT-01; CI execution/retention -> W2-CI-01; evaluator calibration/fingerprint mechanics -> W2-EVAL-01; engine/platform/product scope -> declared evidence/review missions.
 
-Reopen if conforming predicate evaluators can disagree; any undefined authority field/rule exists; retries/aggregation/substitution bypass evidence; any producer lowers trust/protection/surface/review floor; disallowed result/artifact reaches SATISFIED; lease continuation upgrades independence; weak review resolves promotion/readiness; or readiness resolves without exact satisfaction plus required review/verification.
+Reopen if conforming predicate evaluators can disagree; any undefined authority field/rule/invocation input exists; retries/aggregation/substitution bypass evidence; any producer lowers trust/protection/surface/review floor; disallowed result/artifact reaches SATISFIED; lease continuation upgrades independence; weak review resolves promotion/readiness; or readiness resolves without exact satisfaction plus required review/verification.
 
 ## 14. Review Index
 
-1. **Closure:** Sections 2–4 define primitives, immutable refs, exact rule registry, and predicate AST/error behavior; V04–V05/V11–V12/V35 attack escapes.
+1. **Closure:** Sections 2–4 define primitives, immutable refs, exact rule registry/invocations, and predicate AST/error behavior; V04–V05/V11–V12/V35/V39 attack escapes.
 2. **Retry vs aggregation:** Sections 7.2/7.8 separate attempt and check layers; V06–V10/V32 attack laundering.
-3. **Substitution/freshness:** Sections 7.3–7.8 require planned replacement evidence and exact freshness rules; V27–V31/V37 attack ambiguity.
+3. **Substitution/freshness:** Sections 7.3–7.8 require planned replacement evidence and exact freshness invocation; V27–V31/V37/V39 attack ambiguity.
 4. **All RiskFloor dimensions:** Section 6 compiles trust/protection/surfaces/review route; V20–V25/V38 attack downgrade/applicability paths.
 5. **Single empirical authority:** only Section 7.8 creates SATISFIED; downstream review/readiness only consume it.
 6. **Trust absence/capability:** Section 5.3 defines deterministic NOT_EVALUATED/DEGRADED/FULL derivation; V17–V19 attack trust laundering.
 7. **Allowed result/artifact states:** requirement + satisfaction steps explicitly gate acceptance; V26–V27 attack bypass.
 8. **Current state:** lease continuation leaves degraded trust unchanged; evidence-foundation blocker remains OPEN; no production implementation authorized.
 
-Suggested `W2-REV-01` attacks: predicate divergence; malicious rule registry; retry-launder PRODUCT failure; substitution without planned replacement; aggregation floor bypass; independent review-route downgrade; false FULL trust from weak capability; or readiness resolution with a weak/missing review record.
+Suggested `W2-REV-01` attacks: predicate divergence; registered-rule input substitution; malicious rule registry; retry-launder PRODUCT failure; substitution without planned replacement; aggregation floor bypass; independent review-route downgrade; false FULL trust from weak capability; or readiness resolution with a weak/missing review record.
