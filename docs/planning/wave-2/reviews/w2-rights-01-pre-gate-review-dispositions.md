@@ -6,16 +6,16 @@
 **Source report blob:** `bda0551c446c93492c9d8e809d087d592dfcdae3`  
 **Producer terminal status:** `5270525266`  
 **Independent pre-gate review:** `5271490456`  
-**Corrected report blob:** `11d34de5859ad85d7df825590eab9dd51b00c6f7`  
-**Machine-readable policy blob:** `aaee1e14ee6d5a2ca55447e56611f0bfc58e8de6`  
+**Corrected report blob:** `06e04f7d707b9694f58fbe9c534bc7a99f5ed14e`  
+**Machine-readable policy blob:** `db2eb5fe36be4ac7ed0204832a3537db0f97e1df`  
 **Authority:** noncanonical bounded remediation; formal `W2-REV-01` remains required.
 
 ## Disposition summary
 
 | Finding | Severity | Disposition | Corrected evidence |
 |---|---:|---|---|
-| `PG-RIGHTS-M01` | MAJOR | ACCEPTED / CORRECTED | exact `ReferenceUseRecord` identity binds candidate/reference identities, purpose, allowed/prohibited reuse, provider/license/current-rights evidence, release scope, policy/requirement, originality review, and freshness; `OriginalityReviewRecord` + `ReleaseRightsAssessment` consume it |
-| `PG-RIGHTS-M02` | MAJOR | ACCEPTED / CORRECTED | exact `ORP-RISK-v1` compiles `REQUIRED | CONDITIONAL | NOT_APPLICABLE` originality evidence before assessment; unknown/unmatched/unknown conditional trigger fails closed; output binds an exact check plan/evidence requirement |
+| `PG-RIGHTS-M01` | MAJOR | ACCEPTED / CORRECTED | acyclic `ReferenceUseContextRecord -> OriginalityReviewRecord -> ReferenceUseRecord`; final record binds exact pre-review purpose/reuse/rights context plus exact review and is consumed by release assessment |
+| `PG-RIGHTS-M02` | MAJOR | ACCEPTED / CORRECTED | exact `ORP-RISK-v1` compiles `REQUIRED | CONDITIONAL | NOT_APPLICABLE` originality evidence before assessment; unknown/unmatched/unknown conditional trigger fails closed; output binds exact check plan/evidence requirement |
 | `PG-RIGHTS-m01` | MINOR | ACCEPTED / CORRECTED | deterministic `RESTRICTED > QUARANTINED > UNKNOWN > CLEAR` precedence; stale evidence alone -> `UNKNOWN(STALE_REQUIRED_EVIDENCE)`; prior assessment retained; independent stronger triggers retain their higher state |
 
 ## PG-RIGHTS-M01
@@ -26,16 +26,21 @@ Wave-1 §18 requires originality/reference-use records to bind candidate `Artifa
 
 ### Correction
 
-Policy blob `aaee1e14ee6d5a2ca55447e56611f0bfc58e8de6` introduces `ReferenceUseRecord` with a content-addressed identity over all authority-bearing fields. A change to candidate/reference identity, purpose, allowed/prohibited reuse, provider/license/current-rights evidence, release scope, risk policy, evidence requirement, originality review, or freshness refs requires a new record identity.
+Policy blob `db2eb5fe36be4ac7ed0204832a3537db0f97e1df` uses an acyclic three-stage construction:
 
-The corrected `OriginalityReviewRecord` includes `reference_use_record_ref`, and the corrected `ReleaseRightsAssessment` consumes `reference_use_record_refs`. Thus an originality result cannot be mechanically transplanted from factual research to direct incorporation, from one permission set to another, or from one release scope to another merely because candidate bytes are unchanged.
+1. `ReferenceUseContextRecord` is content-addressed **before review** over candidate/reference identities, origin/reference class, purpose, allowed/prohibited reuse, provider/license/current-rights evidence, exact release scope, policy/evidence requirement, and freshness refs.
+2. `OriginalityReviewRecord` binds that exact context plus its compiled check/evidence identities and results.
+3. After the review identity exists, final `ReferenceUseRecord` is content-addressed over `context_ref + originality_review_ref`. `ReleaseRightsAssessment` consumes this final identity.
+
+Changing any context field requires a new context, review, and final reference-use identity. Changing the review also changes the final identity. The review does **not** point back to the final record, so the identities are mechanically constructible rather than circular.
 
 A bounded `LicenseOrPermissionRecord` minimum shape is also defined so license/permission refs have exact authority source, version/grant date, allowed/prohibited uses, obligations, scope, recheck, and immutable evidence.
 
 ### Mechanical checks
 
-- `SC-R01`: same originality result + changed reference purpose -> reject reuse; new `ReferenceUseRecord` required.
-- `SC-R02`: same originality result + changed release scope -> reject reuse; new `ReferenceUseRecord` required.
+- `SC-R00`: context -> review -> final record constructs acyclic identities.
+- `SC-R01`: changed reference purpose -> reject reuse; new context/review/final record required.
+- `SC-R02`: changed release scope -> reject reuse; new context/review/final record required.
 - `SC-R08`: low similarity score + missing license -> no `CLEAR`.
 
 **Disposition:** corrected; no residual MAJOR in remediation scope.
@@ -48,7 +53,7 @@ The source candidate said originality review was “optional/required by risk po
 
 ### Correction
 
-Policy blob `aaee1e14ee6d5a2ca55447e56611f0bfc58e8de6` defines `ORP-RISK-v1` with explicit evidence kinds, reference/origin-class rules, conditional triggers, and compilation semantics. Applicability is resolved before originality execution/release assessment.
+Policy blob `db2eb5fe36be4ac7ed0204832a3537db0f97e1df` defines `ORP-RISK-v1` with explicit evidence kinds, reference/origin-class rules, conditional triggers, and compilation semantics. Applicability is resolved before originality execution/release assessment.
 
 Fail-closed cases are explicit:
 
@@ -58,7 +63,7 @@ Fail-closed cases are explicit:
 - no matching rule -> `UNKNOWN_POLICY`;
 - unknown conditional-trigger truth -> treat as `REQUIRED`.
 
-When multiple rules apply, `REQUIRED > CONDITIONAL > NOT_APPLICABLE` wins per evidence kind. The generated `OriginalityCheckPlan` binds policy, exact evidence requirement, candidate, reference-use record, scope, applicable rule IDs, applicability results, and conditional-trigger resolutions. `NOT_APPLICABLE` is decided before execution; `NOT_RUN` remains an unsatisfied execution result.
+When multiple rules apply, `REQUIRED > CONDITIONAL > NOT_APPLICABLE` wins per evidence kind. The generated `OriginalityCheckPlan` binds policy, exact evidence requirement, candidate, exact context, scope, applicable rule IDs, applicability results, and conditional-trigger resolutions. `NOT_APPLICABLE` is decided before execution; `NOT_RUN` remains an unsatisfied execution result.
 
 The policy keeps tool/algorithm selection and qualified legal interpretation conditional where appropriate; it does not turn a planning policy into a legal oracle.
 
@@ -93,6 +98,10 @@ Stale evidence alone is exactly `UNKNOWN(STALE_REQUIRED_EVIDENCE)`. Historical `
 - `SC-R07`: explicit license-scope restriction -> `RESTRICTED`.
 
 **Disposition:** corrected; no correction-requiring MINOR remains in remediation scope.
+
+## Producer self-review correction inside remediation
+
+An initial remediation draft made the final `ReferenceUseRecord` content-address over `originality_review_ref` while also making the review point to that final record. Cold self-review identified the hash-identity cycle before handoff. The corrected policy/report now use the acyclic context -> review -> final record sequence and add `SC-R00` explicitly. The superseded draft blobs are branch history only and are not acceptance evidence.
 
 ## Source recheck
 
