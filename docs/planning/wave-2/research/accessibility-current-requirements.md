@@ -68,7 +68,7 @@ The normalized facts below are frozen by the eventual Git blob of this report. L
 | `ACC-SRC-XAG-113` | Microsoft XAG 113 UI focus handling | current v3.2 page last updated 2026-03-04; observed 2026-08-12 | visible focus indicator on focused UI; focus must not disappear/move to invisible/offscreen controls | same |
 | `ACC-SRC-XAG-114` | Microsoft XAG 114 UI context | current v3.2 page observed 2026-08-12 | UI must provide sufficient purpose/action/outcome context before interaction | same |
 | `ACC-SRC-XAG-115` | Microsoft XAG 115 Error messages and destructive actions | current v3.2 page last updated 2026-03-04; observed 2026-08-12 | identify/correct input errors before permanent/destructive action; do not make button-hold the only destructive confirmation route | same |
-| `ACC-SRC-XAG-116` | Microsoft XAG 116 Time limits | current v3.2 page observed 2026-08-12 | provide sufficient time; avoid a precise/timed interaction as the only route where alternatives/pause/skip can remove the barrier | same |
+| `ACC-SRC-XAG-116` | Microsoft XAG 116 Time limits | current v3.2 page observed 2026-08-12 | applies to time-limited UI/non-core interactions such as disappearing messages, notifications, UI input windows, and pause-at-rest behavioral menus; provide sufficient time and timer controls where applicable; the current page explicitly excludes core gameplay mechanics and platform-specific timing windows | same |
 | `ACC-SRC-XAG-117` | Microsoft XAG 117 Visual distractions and motion settings | current v3.2 page last updated 2026-03-04; observed 2026-08-12 | pause/stop moving/blinking/auto-updating content; configurable camera/screen motion such as shake/bob/motion effects where relevant | same |
 | `ACC-SRC-XAG-118` | Microsoft XAG 118 Photosensitivity | current v3.2 page last updated 2026-03-03; observed 2026-08-12 | all games should be tested for photosensitive seizure triggers, including unintended flashing; avoid dangerous flash/pattern conditions | same |
 | `ACC-SRC-XAG-119` | Microsoft XAG 119 Speech-to-text/text-to-speech chat | current v3.2 page last updated 2026-03-04; observed 2026-08-12 | if communication exists, provide accessible text/voice transformations, accessible text entry, and narration of incoming text where applicable | same |
@@ -127,7 +127,7 @@ The XAG authority class is best-practice, not legal compliance. The matrix is in
 | 105 | Audio accessibility | `APPLICABLE_IF_FEATURE_PRESENT` | separate relevant volume categories; mono option where stereo content matters; essential information has non-audio route; pause/ducking policy for interruptive media | condition: final audio categories/content unknown |
 | 106 | Screen narration | `APPLICABLE_BASELINE` as architecture/evidence target | semantic UI structure, labels, values, state changes, focus and necessary visual information expose a narration-capable representation; representative no-vision UI flow test after engine choice | `ACC-GAP-NARRATION-01` engine/framework narration support and gameplay-semantic coverage unmeasured |
 | 107 | Input | `APPLICABLE_BASELINE` | semantic actions; remapping; visible bindings/glyph refresh; configurable alternatives for holds/rapid repeat/simultaneous inputs; sensitivity where analog/precision exists; keyboard and controller paths for core functionality | `ACC-GAP-INPUT-01` concrete action vocabulary and assist settings await gameplay/engine evidence |
-| 108 | Difficulty/options/save/pause | `APPLICABLE_BASELINE` as design-system constraint, feature details conditional | challenges/assists represented as separable parameters rather than one irreversible mode; difficulty changes do not corrupt progress; regular save/recovery; single-player/local gameplay and cinematics pausable outside bounded save/load operations | `ACC-GAP-DIFFICULTY-01` core challenge model unknown; `ACC-GAP-SAVEPause-01` save/autosave/pause policy not yet specified/implemented |
+| 108 | Difficulty/options/save/pause | `APPLICABLE_BASELINE` as design-system constraint, feature details conditional | challenges/assists represented as separable parameters rather than one irreversible mode; difficulty changes do not corrupt progress; regular save/recovery; single-player/local gameplay and cinematics pausable outside bounded save/load operations; core-gameplay timing barriers are handled here through difficulty/assist design rather than being attributed to XAG 116 | `ACC-GAP-DIFFICULTY-01` core challenge model unknown; `ACC-GAP-SAVEPAUSE-01` save/autosave/pause policy not yet specified/implemented |
 | 109 | Objective clarity | `APPLICABLE_IF_FEATURE_PRESENT` | if progression/objectives exist, expose current objective/progress/history so returning players need not rely on memory | condition: objective/progression presentation not yet defined |
 | 110 | Haptic feedback | `APPLICABLE_IF_FEATURE_PRESENT` | haptics disable/intensity control; no required information only in haptics | condition: haptics not yet selected |
 | 111 | Audio description | `APPLICABLE_IF_FEATURE_PRESENT` | if FMV/scripted cinematics carry essential visual narrative/context, provide optional audio-description path or explicitly reviewed alternative | condition: cinematic model unknown |
@@ -135,7 +135,7 @@ The XAG authority class is best-practice, not legal compliance. The matrix is in
 | 113 | UI focus handling | `APPLICABLE_BASELINE` | one clear visible focus; never focus hidden/offscreen controls; dialog/modal focus constrained/restored deterministically | same `ACC-GAP-UI-01` plus focus-state capture required |
 | 114 | UI context | `APPLICABLE_BASELINE` | controls expose purpose, state, consequences and destination before activation; semantic labels independent of icons/color alone | `ACC-GAP-UI-CONTEXT-01` semantic-label/context contract not yet implemented |
 | 115 | Errors/destructive actions | `APPLICABLE_BASELINE` | errors identify recovery; destructive/permanent actions are confirmable/correctable; button-hold is not the only confirmation route; delete/overwrite/reset operations retain recoverability policy | `ACC-GAP-DESTRUCTIVE-01` destructive action catalog/recovery policy not yet frozen |
-| 116 | Time limits | `APPLICABLE_IF_FEATURE_PRESENT` with baseline timing architecture | UI/gameplay timers must declare why they exist and whether pause/extension/disable/skip is allowed; precise timed input cannot become an accidental sole route | `ACC-GAP-TIMING-01` timed mechanics/notification lifetimes unknown |
+| 116 | Time limits | `APPLICABLE_IF_FEATURE_PRESENT` | non-core UI/presentation timers (for example notifications, auto-advancing messages, UI input windows, and pause-at-rest behavioral menus) declare adequate-time/disable/extension/replay behavior as applicable; do not attribute core gameplay timing to XAG 116 | `ACC-GAP-TIMING-01` actual non-core timers unknown; core timed challenges belong under XAG 108 difficulty/assist mapping |
 | 117 | Visual distractions/motion | `APPLICABLE_IF_FEATURE_PRESENT` | moving/blinking/auto-updating presentation can be paused/stopped where guidance applies; camera shake/bob/motion effects have reduction/disable controls where present | `ACC-GAP-MOTION-01` camera/effects stack not selected |
 | 118 | Photosensitivity | `APPLICABLE_BASELINE` | every representative build/content set gets photosensitivity analysis even without intentional flashing; failures quarantine affected content until corrected/retested | `ACC-GAP-PHOTO-01` tool/process and retained evidence format not selected |
 | 119 | STT/TTS communication | `APPLICABLE_IF_FEATURE_PRESENT` | if player communication exists, speech-to-text/text-to-speech/text-entry/narration paths are mapped and configurable | condition: multiplayer/chat/product scope unknown |
@@ -199,8 +199,10 @@ Timing/pause/save is part of the accessibility architecture, not solely a qualit
 
 Required design hooks:
 
-- distinguish simulation/gameplay time, presentation time, UI timeout, network/real-time authority, and non-pausable save/load critical sections;
-- every time limit/auto-dismiss declares accessibility behavior (extend/disable/pause/replay/skip/not applicable with reason);
+- distinguish simulation/gameplay time, presentation time, non-core UI timeout, network/real-time authority, and non-pausable save/load critical sections;
+- classify every timer by authority and purpose before assigning a requirement: `XAG116_NONCORE_UI` for applicable UI/non-core limits, `XAG108_CORE_DIFFICULTY_ASSIST` for core gameplay timing barriers, or another explicit platform/project rule;
+- for applicable XAG 116 UI/non-core time limits, define adequate-time/extend/disable/replay/skip behavior as appropriate to the interaction; do **not** cite XAG 116 as authority for core gameplay mechanics or platform-specific timing windows;
+- as an Everfield project architecture rule derived from the combined accessibility mapping, every timer/auto-dismiss still declares its accessibility behavior and source authority so scope cannot be laundered;
 - single-player/local gameplay and cinematics must have a pause design unless an explicit reviewed exception exists;
 - save/autosave/recovery points preserve enough progress that difficulty/accessibility adjustment does not require destructive restart;
 - destructive save/delete/overwrite operations follow XAG 115 recovery/confirmation semantics;
@@ -233,7 +235,7 @@ The downstream evidence model should instantiate explicit checks rather than a s
 | `ACC-EV-CAPTIONS-01` | spoken/non-speech information coverage | dialogue/audio cue corpus + subtitle/caption mapping + display settings | applicable missing information = FAIL; feature absent = explicit N/A |
 | `ACC-EV-AUDIO-01` | audio categories/mono/essential-info alternatives | settings manifest + playback fixtures | feature-dependent |
 | `ACC-EV-SAVE-PAUSE-01` | pause/save/difficulty continuity | deterministic pause/resume + save/reload + difficulty-change fixtures | progress loss or inaccessible non-pausable route = FAIL unless reviewed exception |
-| `ACC-EV-TIMING-01` | timers/auto-dismiss/timed input | timer registry + alternative policy + fixture | unexplained required timing-only route = FAIL |
+| `ACC-EV-TIMING-01` | timer authority and applicable alternatives | timer registry with authority class (`XAG116_NONCORE_UI`, `XAG108_CORE_DIFFICULTY_ASSIST`, or other exact source), purpose, applicability and alternative policy + fixtures | missing/misattributed authority or failed applicable policy = FAIL/INCONCLUSIVE; no blanket XAG 116 claim over core gameplay |
 | `ACC-EV-MOTION-01` | motion/distraction controls | settings + capture/replay with effects on/off | feature-dependent |
 | `ACC-EV-PHOTO-01` | photosensitivity | tool/version/config + retained analyzed capture + result | required `NOT_RUN`/FAIL gates; tool uncertainty -> INCONCLUSIVE |
 | `ACC-EV-DECK-PERF-01` | default 30 fps at 800p | exact device/build/settings/scenario frame evidence | platform FAIL if not met |
@@ -267,7 +269,7 @@ accessibility_gap_register:
     closes_when: semantic action/remap/alternative-input model passes keyboard-mouse and controller core flows
   ACC-GAP-DIFFICULTY-01:
     state: CONDITIONAL_OPEN
-    closes_when: core challenge/barrier mechanics are defined and adjustable/assist policies are mapped
+    closes_when: core challenge/barrier mechanics are defined and adjustable/assist policies are mapped, including any core gameplay timing barriers
   ACC-GAP-SAVEPAUSE-01:
     state: OPEN
     closes_when: pause/save/autosave/recovery/difficulty-change fixtures pass or exact reviewed exceptions exist
@@ -282,7 +284,7 @@ accessibility_gap_register:
     closes_when: destructive/error action catalog has correction/confirmation/recovery evidence
   ACC-GAP-TIMING-01:
     state: CONDITIONAL_OPEN
-    closes_when: all actual timers/timed mechanics have explicit accessibility policy and passing evidence
+    closes_when: timer registry distinguishes non-core XAG116 timers from core XAG108 difficulty/assist timing and all applicable policies have passing evidence
   ACC-GAP-MOTION-01:
     state: CONDITIONAL_OPEN
     closes_when: actual camera/motion/auto-updating effects have disable/reduction/pause evidence
@@ -362,6 +364,7 @@ Future implementation tasks should not be “make game accessible” monoliths. 
 | Deck hard floor confused with broad accessibility target | 9 px becomes universal design target | separate target-specific Valve floor and XAG best-practice evidence |
 | `NOT_RUN` changed to N/A because feature not implemented yet | missing accessibility work disappears | explicit applicability state + gap register |
 | accessibility reduced to menu settings | gameplay/save/timing/cues remain barriers | cross-cutting semantic/timing/save evidence requirements |
+| XAG timing scope conflated | XAG 116 incorrectly presented as governing core gameplay mechanics | timer registry binds source authority; XAG 116 only for applicable non-core UI limits; core gameplay timing under XAG 108 difficulty/assist policy |
 | controller checkbox theater | menus/text/error flows still require mouse | controller-only full representative core-flow replay |
 | screen narration bolt-on | rendered pixels lack semantics | semantic UI contract before engine-specific narration adapter |
 | photosensitivity only checked when flashing is intentional | accidental hazard ships | XAG-118 baseline check for representative content |
@@ -411,5 +414,7 @@ Against Issue #81 acceptance criteria:
 - legal/certification conclusions outside current authority: **NOT CLAIMED**;
 - implementation/readiness/canonicalization authority: **NOT CLAIMED**;
 - required independent critique: **`W2-REV-01` remains required**.
+
+Producer self-review correction before terminalization: the initial draft overstated XAG 116 by allowing it to read as a rule for core gameplay timing. The final mapping explicitly limits XAG 116 to its current non-core/UI scope and maps core gameplay timing barriers through XAG 108 difficulty/assist design instead.
 
 **Producer disposition:** `REVIEW_READY_CANDIDATE / EVIDENCE_REQUIRED`. The mapping is ready for independent adversarial review after exact terminal provenance is bound; it is not a legal compliance certificate, Valve compatibility result, or implementation-readiness decision.
