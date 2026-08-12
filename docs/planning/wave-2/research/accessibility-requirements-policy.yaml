@@ -1,0 +1,795 @@
+version: 1
+state: REMEDIATED_CANDIDATE
+mission_id: W2-REM-ACC-01
+issue: 96
+source_candidate:
+  issue: 81
+  mission_id: W2-ACC-01
+  work_sha: e009dd2e2deb9006f864e851ea84880ecc64cec2
+  report_blob_sha: cd97806a06cd2aa3f97689ab7c32b3b631449b09
+  handoff_blob_sha: a480ece0eb0cc4d3c2f674f3577c1a4f6a07f7aa
+  terminal_status_comment_id: 5270745594
+pre_gate_review_comment_id: 5271715858
+observed_date: 2026-08-12
+scope:
+  current_platforms:
+  - WINDOWS_11_64_DESKTOP
+  - STEAM_DECK_WINDOWS_BUILD_VIA_PROTON_EVIDENCE_TARGET
+  deferred_platforms:
+  - MACOS
+  - NATIVE_LINUX_DESKTOP
+  - CONSOLES
+  - MOBILE
+  legal_compliance_claimed: false
+  valve_verified_result_claimed: false
+authority_classes:
+  CURRENT_ACCESSIBILITY_BEST_PRACTICE:
+    source_family: Microsoft Xbox Accessibility Guidelines v3.2
+    legal_or_certification_authority: false
+  PLATFORM_COMPATIBILITY_REQUIRED:
+    source_family: Valve Steam Deck compatibility checklist
+    legal_or_accessibility_authority: false
+  PROJECT_SELECTED_PLATFORM_EVIDENCE:
+    source_family: corrected PLAT-PC-FIRST-R1 plus supporting first-party platform behavior
+    legal_or_certification_authority: false
+  LEGAL_OR_PARTNER_CERTIFICATION_UNKNOWN:
+    source_family: not established in current scope
+    legal_or_certification_authority: false
+source_register:
+  XAG-INDEX:
+    authority: Microsoft
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/guidelines
+    version: XAG-v3.2
+    published: 2023-06-08
+    page_last_updated: 2026-03-04
+    observed_date: 2026-08-12
+  XAG-101:
+    authority: Microsoft
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101
+    version: XAG-v3.2
+    page_last_updated: 2026-03-04
+    observed_date: 2026-08-12
+  XAG-107:
+    authority: Microsoft
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+    version: XAG-v3.2
+    observed_date: 2026-08-12
+  XAG-108:
+    authority: Microsoft
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/108
+    version: XAG-v3.2
+    page_last_updated: 2026-03-04
+    observed_date: 2026-08-12
+  XAG-116:
+    authority: Microsoft
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116
+    version: XAG-v3.2
+    page_last_updated: 2026-03-04
+    observed_date: 2026-08-12
+  VALVE-DECK-COMPAT:
+    authority: Valve
+    url: https://partner.steamgames.com/doc/steamhardware/compat
+    version: LIVE_PUBLIC_CHECKLIST
+    observed_date: 2026-08-12
+catalog_contract:
+  applicability_states:
+  - APPLICABLE_BASELINE
+  - APPLICABLE_IF_FEATURE_PRESENT
+  - APPLICABLE_RELEASE_SURFACE
+  - DEFERRED_PLATFORM_SCOPE
+  - UNKNOWN_LEGAL_SCOPE
+  evidence_states:
+  - NOT_RUN
+  - SATISFIED
+  - FAIL
+  - INCONCLUSIVE
+  - NOT_APPLICABLE
+  source_page_expansion_states:
+  - ATOMICALLY_EXPANDED
+  - GUIDELINE_SUMMARY_ONLY
+  - DEFERRED_PLATFORM_ONLY
+  rules:
+    source_clause_is_atomic_acceptance_unit: true
+    guideline_summary_may_not_create_clause_pass: true
+    applicable_clause_requires_evidence_or_gap_refs: true
+    conditional_clause_requires_trigger_and_evidence_or_gap_refs: true
+    threshold_or_semantic_rule_must_be_explicit_when_source_provides_one: true
+    unknown_or_unmapped_clause_result: MAPPING_INCOMPLETE
+    summary_only_source_page_result: MAPPING_INCOMPLETE
+    not_run_is_not_not_applicable: true
+    aggregate_mapping_complete_is_derived: true
+  mapping_complete_when:
+  - every_current_scope_source_page_is_ATOMICALLY_EXPANDED_or_explicitly_DEFERRED_PLATFORM_ONLY
+  - every_atomic_clause_has_deterministic_applicability
+  - every_applicable_or_triggered_clause_has_nonempty_evidence_requirement_refs_or_gap_refs
+  - every_source_threshold_or_required_semantic_is_preserved_in_the_clause_record
+  aggregate:
+    mapping_complete: false
+    reason_codes:
+    - XAG_102_TO_106_NOT_ATOMICALLY_EXPANDED
+    - XAG_108_TO_123_NOT_ATOMICALLY_EXPANDED
+    blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
+    blocker_authority_state: OPEN
+    mapping_state: PARTIAL_ATOMIC_MAPPING_REMEDIATED_PENDING_EXPANSION_AND_INDEPENDENT_REVIEW
+    required_next_authority: W2-REV-01
+guideline_inventory:
+  XAG-101:
+    expansion_state: ATOMICALLY_EXPANDED
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+  XAG-102:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/102
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-103:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-104:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/104
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-105:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/105
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-106:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/106
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-107:
+    expansion_state: ATOMICALLY_EXPANDED
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+  XAG-108:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/108
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-109:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-110:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/110
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-111:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/111
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-112:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-113:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-114:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-115:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-116:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-117:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/117
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-118:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/118
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-119:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/119
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-120:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/120
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-121:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/121
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-122:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/122
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+  XAG-123:
+    expansion_state: GUIDELINE_SUMMARY_ONLY
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    source_url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/123
+    source_version: XAG-v3.2
+    producer_observed_date: 2026-08-12
+    atomic_expansion_required_before_mapping_complete: true
+evidence_requirements:
+  ACC-EV-TEXT-DESKTOP-01:
+    state: NOT_RUN
+    purpose: PC text size, glyph size, 200-percent scaling, overflow and layout behavior
+  ACC-EV-TEXT-STYLE-01:
+    state: NOT_RUN
+    purpose: sans-serif/non-stylized font alternatives and complete supported-language character sets
+  ACC-EV-TEXT-SPACING-01:
+    state: NOT_RUN
+    purpose: text-block spacing configurability or source minimum bounds
+  ACC-EV-TEXT-LANGUAGE-01:
+    state: NOT_RUN
+    purpose: sentence-case and language-aware alignment behavior
+  ACC-EV-INPUT-NAV-01:
+    state: NOT_RUN
+    purpose: digital/analog UI navigation and single non-simultaneous UI operation
+  ACC-EV-INPUT-REMAP-01:
+    state: NOT_RUN
+    purpose: complete in-game remap, axis inversion, label synchronization and digital equivalents
+  ACC-EV-INPUT-ALTERNATIVES-01:
+    state: NOT_RUN
+    purpose: alternatives for rapid, held, simultaneous, gesture and nontraditional input barriers
+  ACC-EV-INPUT-POINTER-01:
+    state: NOT_RUN
+    purpose: pointer activation/cancel/undo behavior
+  ACC-EV-INPUT-KBM-01:
+    state: NOT_RUN
+    purpose: keyboard-only start, settings, gameplay and exit flow when keyboard input is supported
+  ACC-EV-INPUT-SENSITIVITY-01:
+    state: NOT_RUN
+    purpose: per-analog-control sensitivity range
+  ACC-EV-INPUT-CUSTOMIZATION-01:
+    state: NOT_RUN
+    purpose: accessibility of the input customization process itself
+  ACC-EV-TEXT-ENTRY-DICTATION-01:
+    state: NOT_RUN
+    purpose: speech-to-text or dictation for applicable text-entry/chat surfaces
+  ACC-EV-INPUT-CONTROLLER-01:
+    state: NOT_RUN
+    purpose: controller-only representative core flow including settings, errors and required text entry
+  ACC-EV-GLYPH-01:
+    state: NOT_RUN
+    purpose: active device/remap glyph correctness
+  ACC-EV-DECK-PERF-01:
+    state: NOT_RUN
+    purpose: exact Deck default-configuration 30 fps at 800p performance evidence
+  ACC-EV-DECK-LAUNCH-01:
+    state: NOT_RUN
+    purpose: Deck launch and unsupported-device-warning scan
+  ACC-EV-DECK-LAUNCHER-01:
+    state: NOT_RUN
+    purpose: launcher controller/accessibility compatibility when a launcher exists
+  ACC-EV-DECK-DISPLAY-01:
+    state: NOT_RUN
+    purpose: Deck-supported resolution behavior including 1280x800 target coverage
+  ACC-EV-TEXT-DECK-01:
+    state: NOT_RUN
+    purpose: Deck 1280x800 text floor and readability evidence
+  ACC-EV-DECK-PROTON-01:
+    state: NOT_RUN
+    purpose: project-selected Windows-build-on-Deck/SteamOS via Proton launch/core-flow evidence
+gaps:
+  ACC-GAP-TEXT-01:
+    state: OPEN
+  ACC-GAP-TEXT-STYLE-01:
+    state: OPEN
+  ACC-GAP-TEXT-SPACING-01:
+    state: OPEN
+  ACC-GAP-TEXT-LANGUAGE-01:
+    state: OPEN
+  ACC-GAP-INPUT-01:
+    state: OPEN
+  ACC-GAP-INPUT-NAV-01:
+    state: OPEN
+  ACC-GAP-INPUT-REMAP-01:
+    state: OPEN
+  ACC-GAP-INPUT-ALTERNATIVES-01:
+    state: OPEN
+  ACC-GAP-INPUT-POINTER-01:
+    state: OPEN
+  ACC-GAP-INPUT-SENSITIVITY-01:
+    state: OPEN
+  ACC-GAP-INPUT-CUSTOMIZATION-01:
+    state: OPEN
+  ACC-GAP-TEXT-ENTRY-DICTATION-01:
+    state: CONDITIONAL_OPEN
+atomic_clauses:
+  XAG101-PC-DEFAULT-SIZE:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Text size
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      pc_vr_minimum_default_px_1080p: 18
+      pc_vr_minimum_default_px_4k: 36
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-DESKTOP-01
+    gap_refs:
+    - ACC-GAP-TEXT-01
+  XAG101-GLYPH-CONTAINED-TEXT:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Icons and glyph sizes
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      contained_text_meets_platform_text_minimum: true
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-DESKTOP-01
+    gap_refs:
+    - ACC-GAP-TEXT-01
+  XAG101-GLYPH-SCALE-200:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Icons and glyph sizes
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      glyphs_scale_with_text_to_percent_of_minimum: 200
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-DESKTOP-01
+    gap_refs:
+    - ACC-GAP-TEXT-01
+  XAG101-TEXT-SCALE-200:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Text scaling
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      scale_to_percent_of_minimum: 200
+      no_loss_of:
+      - content
+      - functionality
+      - meaning
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-DESKTOP-01
+    gap_refs:
+    - ACC-GAP-TEXT-01
+  XAG101-SCALED-OVERFLOW:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Text scaling
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      overflow_remains_readable: true
+      simultaneous_horizontal_and_vertical_scroll_for_one_ui_forbidden: true
+      scaled_headers_remain_distinguishable: true
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-DESKTOP-01
+    gap_refs:
+    - ACC-GAP-TEXT-01
+  XAG101-SANS-SERIF:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Font style
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      at_least_one_sans_serif_option: true
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-STYLE-01
+    gap_refs:
+    - ACC-GAP-TEXT-STYLE-01
+  XAG101-NONSTYLIZED-FONT:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Font style
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: stylistic_fonts_are_used
+    semantics:
+      non_stylized_option_required_when_triggered: true
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-STYLE-01
+    gap_refs:
+    - ACC-GAP-TEXT-STYLE-01
+  XAG101-COMPLETE-CHARSETS:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Font style
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      all_fonts_cover_all_supported_language_character_sets: true
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-STYLE-01
+    gap_refs:
+    - ACC-GAP-TEXT-STYLE-01
+  XAG101-TEXT-BLOCK-SPACING:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Text spacing
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: text_block_has_more_than_two_lines
+    semantics:
+      acceptable_modes:
+      - player_configurable_spacing
+      - source_minimum_spacing_bounds
+      source_minimum_spacing_bounds:
+        line_width_max_characters: 80
+        line_width_max_characters_cjk: 40
+        line_spacing_min_multiplier: 1.5
+        paragraph_spacing_min_multiple_of_line_spacing: 2
+        letter_spacing_min_multiple_of_font_size: 0.12
+        word_spacing_min_multiple_of_font_size: 0.16
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-SPACING-01
+    gap_refs:
+    - ACC-GAP-TEXT-SPACING-01
+  XAG101-SENTENCE-CASE:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Text case and alignment
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: lines_of_text_use_full_caps_or_full_lowercase
+    semantics:
+      sentence_case_option_required: true
+      one_or_two_word_labels_exempt: true
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-LANGUAGE-01
+    gap_refs:
+    - ACC-GAP-TEXT-LANGUAGE-01
+  XAG101-LANGUAGE-ALIGNMENT:
+    source_id: XAG-101
+    source_section: Implementation guidelines / Text case and alignment
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      alignment_follows_player_language_direction_or_is_player_configurable: true
+      centered_or_fully_justified_default_for_lines_of_text: false
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-LANGUAGE-01
+    gap_refs:
+    - ACC-GAP-TEXT-LANGUAGE-01
+  XAG107-UI-DIGITAL-ANALOG:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      ui_supports_digital_and_analog_navigation: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-NAV-01
+    gap_refs:
+    - ACC-GAP-INPUT-NAV-01
+  XAG107-UI-SINGLE-PRESS:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      ui_navigable_with_single_non_simultaneous_key_presses: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-NAV-01
+    gap_refs:
+    - ACC-GAP-INPUT-NAV-01
+  XAG107-REMAP-ALL:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      in_game_remap_all_controls: true
+      includes_analog_and_digital: true
+      invert_x_and_y_individually_per_stick: true
+      pc_escape_key_remappable: true
+      prefer_action_remap_over_only_button_swap: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-REMAP-01
+    gap_refs:
+    - ACC-GAP-INPUT-REMAP-01
+  XAG107-REMAP-LABELS:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      hints_tips_tutorials_and_control_maps_follow_current_mapping: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-REMAP-01
+    gap_refs:
+    - ACC-GAP-INPUT-REMAP-01
+  XAG107-DIGITAL-EQUIVALENTS:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      interface_functions_operable_with_digital_input_even_if_primary_input_is_analog: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-REMAP-01
+    gap_refs:
+    - ACC-GAP-INPUT-REMAP-01
+  XAG107-RAPID-INPUT:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: rapid_or_repeated_input_mechanic_exists
+    semantics:
+      avoid_or_provide_less_demanding_alternative_or_bypass: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-ALTERNATIVES-01
+    gap_refs:
+    - ACC-GAP-INPUT-ALTERNATIVES-01
+  XAG107-PROLONGED-HOLD:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: prolonged_hold_mechanic_exists
+    semantics:
+      avoid_or_provide_less_demanding_alternative_or_bypass: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-ALTERNATIVES-01
+    gap_refs:
+    - ACC-GAP-INPUT-ALTERNATIVES-01
+  XAG107-SIMULTANEOUS:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: simultaneous_button_mechanic_exists
+    semantics:
+      avoid_or_provide_less_demanding_alternative_or_bypass: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-ALTERNATIVES-01
+    gap_refs:
+    - ACC-GAP-INPUT-ALTERNATIVES-01
+  XAG107-MULTIPOINT-GESTURES:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: multipoint_gesture_input_exists
+    semantics:
+      equivalent_non_multipoint_method_required: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-ALTERNATIVES-01
+    gap_refs:
+    - ACC-GAP-INPUT-ALTERNATIVES-01
+  XAG107-PATH-GESTURES:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: path_based_mouse_cursor_or_touch_gesture_exists
+    semantics:
+      equivalent_non_path_method_required: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-ALTERNATIVES-01
+    gap_refs:
+    - ACC-GAP-INPUT-ALTERNATIVES-01
+  XAG107-POINTER-UP-CANCEL:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: single_pointer_activation_surface_exists
+    semantics:
+      default_activation_occurs_on_up_event: true
+      cancellation_before_completion_or_simple_undo_required: true
+      essential_down_event_exception_must_be_explicit: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-POINTER-01
+    gap_refs:
+    - ACC-GAP-INPUT-POINTER-01
+  XAG107-NONTRADITIONAL-ALT:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: gameplay_critical_speech_or_motion_input_is_default
+    semantics:
+      alternative_digital_input_required: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-ALTERNATIVES-01
+    gap_refs:
+    - ACC-GAP-INPUT-ALTERNATIVES-01
+  XAG107-TWO-STICK:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: mechanic_normally_uses_two_analog_sticks_or_stick_plus_dpad
+    semantics:
+      mechanic_must_not_require_two_analog_controls_without_alternative: true
+      second_stick_click_or_dpad_actions_remappable_or_alternative: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-ALTERNATIVES-01
+    gap_refs:
+    - ACC-GAP-INPUT-ALTERNATIVES-01
+  XAG107-KEYBOARD-FULL-PATH:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: keyboard_input_is_supported
+    semantics:
+      keyboard_alone_can_start_adjust_settings_play_and_exit_to_platform_home: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-KBM-01
+    gap_refs:
+    - ACC-GAP-INPUT-01
+  XAG107-SENSITIVITY:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: analog_input_exists
+    semantics:
+      adjustable_individually_per_analog_control: true
+      minimum_increase_percent_from_default: 50
+      minimum_decrease_percent_from_default: 50
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-SENSITIVITY-01
+    gap_refs:
+    - ACC-GAP-INPUT-SENSITIVITY-01
+  XAG107-DICTATION:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_IF_FEATURE_PRESENT
+    trigger: text_entry_or_text_chat_surface_exists
+    semantics:
+      speech_to_text_or_dictation_input_supported: true
+    evidence_requirement_refs:
+    - ACC-EV-TEXT-ENTRY-DICTATION-01
+    gap_refs:
+    - ACC-GAP-TEXT-ENTRY-DICTATION-01
+  XAG107-CUSTOMIZATION-ACCESSIBLE:
+    source_id: XAG-107
+    source_section: Implementation guidelines
+    authority_class: CURRENT_ACCESSIBILITY_BEST_PRACTICE
+    applicability: APPLICABLE_BASELINE
+    semantics:
+      input_customization_process_itself_is_accessible: true
+    evidence_requirement_refs:
+    - ACC-EV-INPUT-CUSTOMIZATION-01
+    gap_refs:
+    - ACC-GAP-INPUT-CUSTOMIZATION-01
+platform_requirements:
+  direct_valve_compatibility:
+    ACC-DECK-01:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics: default_controller_configuration_accesses_all_content
+      evidence_requirement_refs:
+      - ACC-EV-INPUT-CONTROLLER-01
+    ACC-DECK-02:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics: on_screen_glyphs_match_active_input
+      evidence_requirement_refs:
+      - ACC-EV-GLYPH-01
+    ACC-DECK-03:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics: required_text_entry_usable_in_player_language_with_controller
+      evidence_requirement_refs:
+      - ACC-EV-INPUT-CONTROLLER-01
+    ACC-DECK-04:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics:
+        default_configuration_minimum_playable_fps: 30
+        target_vertical_resolution: 800p
+      evidence_requirement_refs:
+      - ACC-EV-DECK-PERF-01
+    ACC-DECK-05:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics: no_deck_linux_software_or_hardware_unsupported_warning
+      evidence_requirement_refs:
+      - ACC-EV-DECK-LAUNCH-01
+    ACC-DECK-06:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      applicability: APPLICABLE_IF_FEATURE_PRESENT
+      trigger: launcher_exists
+      semantics: launcher_meets_applicable_compatibility_requirements
+      evidence_requirement_refs:
+      - ACC-EV-DECK-LAUNCHER-01
+    ACC-DECK-07:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics:
+        supported_resolution_required: true
+        recommended_native_resolutions:
+        - 1280x800
+        - 1280x720
+      evidence_requirement_refs:
+      - ACC-EV-DECK-DISPLAY-01
+    ACC-DECK-08:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics:
+        text_legible_distance_cm: 30
+        minimum_character_height_px_at_1280x800: 9
+        recommended_character_height_px_at_1280x800: 12
+      evidence_requirement_refs:
+      - ACC-EV-TEXT-DECK-01
+  project_selected:
+    ACC-PROJECT-DECK-PROTON-01:
+      authority_class: PROJECT_SELECTED_PLATFORM_EVIDENCE
+      source_refs:
+      - VALVE-DECK-COMPAT
+      project_input_refs:
+      - issue: 92
+        work_sha: 9d51099be4d53eff876104f482e3c163d34519e3
+        decision_ref: PLAT-PC-FIRST-R1
+      semantics:
+        windows_build_is_exercised_on_selected_deck_steamos_target_via_proton_when_no_native_linux_build_is_selected: true
+      evidence_requirement_refs:
+      - ACC-EV-DECK-PROTON-01
+freshness:
+  recheck_before:
+  - W2-REV-01
+  - engine_ADR_or_readiness_verification
+  - release_or_accessibility_marketing_claim
+  reopen_triggers:
+  - Microsoft_XAG_version_or_load_bearing_page_change
+  - Valve_Deck_compatibility_checklist_change
+  - selected_platform_scope_change
+  - feature_trigger_change
+  - release_jurisdiction_or_service_scope_becomes_concrete
