@@ -7,7 +7,7 @@
 **Source terminal status:** Issue #80 comment `5270525266`  
 **Independent pre-gate review:** Issue #80 comment `5271490456`  
 **Canonical foundation:** `docs/planning/WAVE-1-FOUNDATIONS-v1.md` blob `a252e3c93702f3ebaecd3e888944a23dbe1b0e1d`  
-**Machine-readable policy:** `docs/planning/wave-2/research/originality-rights-policy.yaml` blob `aaee1e14ee6d5a2ca55447e56611f0bfc58e8de6`  
+**Machine-readable policy:** `docs/planning/wave-2/research/originality-rights-policy.yaml` blob `db2eb5fe36be4ac7ed0204832a3537db0f97e1df`  
 **External source recheck:** 2026-08-12  
 **State:** `PLANNING_REVISION / EVIDENCE_REQUIRED / NONCANONICAL`
 
@@ -33,9 +33,11 @@ The fail-closed invariant remains:
 
 The frozen Issue #80 candidate remains immutable provenance. This revision corrects only the three pre-gate findings:
 
-- **PG-RIGHTS-M01:** the prior `OriginalityReviewRecord` did not bind reference purpose, allowed/prohibited reuse, or exact current rights/terms evidence as required by Wave-1 §18. This revision introduces `ReferenceUseRecord` as the exact join identity across candidate artifact, references, purpose, reuse permissions, rights/terms/license evidence, scope, risk policy, and originality review.
+- **PG-RIGHTS-M01:** the prior `OriginalityReviewRecord` did not bind reference purpose, allowed/prohibited reuse, or exact current rights/terms evidence as required by Wave-1 §18. This revision uses an acyclic context -> review -> final-reference-use construction so one final `ReferenceUseRecord` binds the exact context and exact originality review without a content-identity cycle.
 - **PG-RIGHTS-M02:** the prior release gate delegated originality-review applicability to an undefined “risk policy.” This revision binds exact `ORP-RISK-v1` and compiles a deterministic `OriginalityCheckPlan` before execution/assessment. Unknown/unmatched applicability fails closed.
 - **PG-RIGHTS-m01:** stale evidence previously allowed either `UNKNOWN` or `QUARANTINED` without precedence. This revision defines deterministic state precedence and reason codes; stale evidence alone derives `UNKNOWN(STALE_REQUIRED_EVIDENCE)`, while an independent stronger conflict/risk trigger can derive `QUARANTINED` or `RESTRICTED`.
+
+Producer self-review correction during this remediation also rejected an initial circular identity design before terminal handoff: the final record no longer hashes a review that itself points back to the same final record.
 
 No source candidate branch is edited and no formal `W2-REV-01` disposition is claimed.
 
@@ -57,17 +59,19 @@ Rights/originality evidence follows the same chain. `ORP-R1-2026-08-12` is a pla
 
 Changing a judge-affecting policy or applicability rule creates a new policy/requirement identity; it does not rewrite historical evidence.
 
-## 4. Exact reference-use identity — correction of PG-RIGHTS-M01
+## 4. Acyclic exact reference-use identity — correction of PG-RIGHTS-M01
 
-### 4.1 `ReferenceUseRecord`
+Wave-1 §18 requires originality/reference-use records to bind the candidate `ArtifactIdentity`, reference purpose, allowed/prohibited reuse, similarity/adversarial evidence, and current rights/terms research. The corrected construction has three stages.
 
-The normative field contract is machine-readable in policy blob `aaee1e14ee6d5a2ca55447e56611f0bfc58e8de6`. The conceptual form is:
+### 4.1 Stage A — `ReferenceUseContextRecord`
+
+The context exists **before** originality execution and is content-addressed over all authority-bearing pre-review fields:
 
 ```yaml
-ReferenceUseRecord:
-  record_id: <content-addressed over all identity fields>
+ReferenceUseContextRecord:
+  context_id: <content-addressed over fields below>
   candidate_artifact_id: <ArtifactIdentity>
-  reference_artifact_ids: [<exact ArtifactIdentity or exact external source identity>]
+  reference_artifact_ids: [<exact retained ArtifactIdentity or exact non-retained source identity>]
   origin_class: <typed>
   reference_class: <typed>
   reference_purpose: <typed>
@@ -79,17 +83,59 @@ ReferenceUseRecord:
   release_scope_ref: <exact>
   originality_risk_policy_id: ORP-RISK-v1
   originality_evidence_requirement_ref: <exact>
-  originality_review_ref: <exact>
   freshness_requirement_refs: []
 ```
 
-A record is **not reusable** if any identity field changes. In particular, the same candidate bytes reviewed as a `FACT_RESEARCH` reference under one permission/release scope cannot reuse that record when the purpose becomes `DIRECT_INCORPORATION`, when the allowed/prohibited reuse set changes, or when the release scope changes.
+For retained source/content/media/evidence, the Wave-1 `ArtifactIdentity` rule applies. A non-retained external authority page may use an exact source/citation identity, but retaining its content creates an `ArtifactIdentity` rather than a second durable artifact identity system.
 
-This closes the prior alias path where an originality result could be carried into a materially different reference-use context merely because `candidate_artifact_id` was unchanged.
+A context is **not reusable** if any identity field changes. In particular, the same candidate bytes considered as `FACT_RESEARCH` under one permission/release scope cannot reuse that context when the purpose becomes `DIRECT_INCORPORATION`, allowed/prohibited reuse changes, or release scope changes.
 
-### 4.2 Reference-use taxonomy
+### 4.2 Stage B — `OriginalityReviewRecord`
 
-The producer taxonomy is preserved, now with exact record binding:
+The review references the already-existing context:
+
+```yaml
+OriginalityReviewRecord:
+  review_id: <stable/content-addressed>
+  candidate_artifact_id: <exact>
+  reference_use_context_ref: <exact>
+  policy_id: ORP-RISK-v1
+  evidence_requirement_ref: <exact>
+  check_plan_ref: <exact>
+  reference_corpus_ref: <content-addressed set>
+  exact_duplicate_checks: []
+  normalized_identity_checks: []
+  known_reference_checks: []
+  near_duplicate_checks: []
+  targeted_external_search_refs: []
+  judgment_panel_ref: <optional/required per compiled plan>
+  qualified_legal_review_ref: <optional/required per compiled plan>
+  material_signals: []
+  blind_spots: []
+  result: NO_MATERIAL_SIGNAL_FOUND | MATERIAL_SIGNAL | NEAR_DUPLICATE | EXACT_DUPLICATE | INCONCLUSIVE | NOT_RUN
+  legal_conclusion: NONE
+```
+
+The review never references the final `ReferenceUseRecord`, which does not exist yet. This breaks the potential hash cycle.
+
+### 4.3 Stage C — final `ReferenceUseRecord`
+
+After the review identity exists, the final release-assessment reference-use identity is constructed:
+
+```yaml
+ReferenceUseRecord:
+  record_id: <content-addressed(context_ref, originality_review_ref)>
+  context_ref: <exact ReferenceUseContextRecord>
+  originality_review_ref: <exact OriginalityReviewRecord>
+```
+
+The review must bind the same `context_ref`. `ReleaseRightsAssessment` consumes this **final** record. Changing either context or review creates a new final record ID.
+
+Thus the final record binds candidate/reference identity, purpose, allowed/prohibited reuse, provider/license/current-rights evidence, release scope, policy/requirement, freshness, and exact originality review while remaining mechanically constructible and acyclic.
+
+### 4.4 Reference-use taxonomy
+
+The producer taxonomy is preserved, now bound through the exact context/final record:
 
 | Reference class | Meaning | Default project posture |
 |---|---|---|
@@ -105,7 +151,7 @@ The producer taxonomy is preserved, now with exact record binding:
 
 This is a **project risk-control taxonomy**, not a statement that every named-style reference is unlawful or that every factual/functional use is legally safe.
 
-### 4.3 `LicenseOrPermissionRecord`
+### 4.5 `LicenseOrPermissionRecord`
 
 The release chain previously referred to license/permission refs without defining their minimum evidence shape. The corrected policy defines a bounded record containing source/artifact identity, authority source, license/permission kind, version or grant date, observed time, allowed/prohibited uses, obligations, jurisdiction/scope, expiration/recheck trigger, and immutable evidence ref.
 
@@ -145,11 +191,9 @@ These are current-source observations, not proof of which account contract gover
 
 ## 6. Originality applicability policy — correction of PG-RIGHTS-M02
 
-### 6.1 Exact policy identity
+The exact policy is `ORP-RISK-v1`, inside machine-readable policy blob `db2eb5fe36be4ac7ed0204832a3537db0f97e1df`.
 
-The exact policy is `ORP-RISK-v1`, inside machine-readable policy blob `aaee1e14ee6d5a2ca55447e56611f0bfc58e8de6`.
-
-It recognizes the following evidence kinds:
+It recognizes these evidence kinds:
 
 - `EXACT_IDENTITY`;
 - `NORMALIZED_IDENTITY`;
@@ -171,9 +215,7 @@ Fail-closed compiler rules are normative:
 
 If multiple rules apply, the most restrictive applicability wins per evidence kind (`REQUIRED > CONDITIONAL > NOT_APPLICABLE`).
 
-### 6.2 Bounded rule intent
-
-The policy intentionally distinguishes evidence applicability from legal truth:
+The bounded rules preserve the producer's intended distinctions:
 
 - generated artifacts with no declared external reference still require exact/normalized/project-known-reference and near-duplicate evidence; external search/judgment/legal review are trigger-dependent;
 - factual/conceptual references require exact source identity and known-reference comparison, with stronger evidence triggered by expressive convergence/material signals;
@@ -183,9 +225,9 @@ The policy intentionally distinguishes evidence applicability from legal truth:
 - confidential/restricted material is `RESTRICTED` first and cannot become release-clear merely by running similarity checks;
 - a public-domain claim requires exact source/status/jurisdiction evidence and current targeted authoritative research; age or lack of notice is not a sufficient shortcut.
 
-`QUALIFIED_LEGAL_REVIEW` is **conditional**, not an assertion that every artifact requires counsel. It is triggered only where the project policy identifies an unresolved legal interpretation material to the intended release/use.
+`QUALIFIED_LEGAL_REVIEW` is conditional, not a claim that every artifact requires counsel. It is triggered only when unresolved legal interpretation is material to intended release/use.
 
-### 6.3 `OriginalityCheckPlan`
+### 6.1 `OriginalityCheckPlan`
 
 The compiler output binds:
 
@@ -194,7 +236,7 @@ OriginalityCheckPlan:
   policy_id: ORP-RISK-v1
   evidence_requirement_ref: <exact>
   candidate_artifact_id: <exact>
-  reference_use_record_ref: <exact>
+  reference_use_context_ref: <exact>
   release_scope_ref: <exact>
   applicable_rule_ids: []
   evidence_kind_applicability: {}
@@ -202,32 +244,6 @@ OriginalityCheckPlan:
 ```
 
 `NOT_APPLICABLE` is resolved before execution. `NOT_RUN` is an execution result and never aliases `NOT_APPLICABLE`. A required `NOT_RUN`/`INCONCLUSIVE` cannot satisfy the evidence requirement.
-
-### 6.4 Corrected `OriginalityReviewRecord`
-
-```yaml
-OriginalityReviewRecord:
-  review_id: <stable>
-  candidate_artifact_id: <exact>
-  reference_use_record_ref: <exact>
-  policy_id: ORP-RISK-v1
-  evidence_requirement_ref: <exact>
-  check_plan_ref: <exact>
-  reference_corpus_ref: <content-addressed set>
-  exact_duplicate_checks: []
-  normalized_identity_checks: []
-  known_reference_checks: []
-  near_duplicate_checks: []
-  targeted_external_search_refs: []
-  judgment_panel_ref: <optional/required per compiled plan>
-  qualified_legal_review_ref: <optional/required per compiled plan>
-  material_signals: []
-  blind_spots: []
-  result: NO_MATERIAL_SIGNAL_FOUND | MATERIAL_SIGNAL | NEAR_DUPLICATE | EXACT_DUPLICATE | INCONCLUSIVE | NOT_RUN
-  legal_conclusion: NONE
-```
-
-The `reference_use_record_ref` must bind the same candidate artifact and exact reference-use context. This makes purpose/permission/scope part of the originality authority rather than an adjacent prose assumption.
 
 ## 7. Similarity evidence remains escalation evidence, never a clearance oracle
 
@@ -245,8 +261,6 @@ A score or “no match found” may trigger or inform review. It may not prove o
 
 ## 8. Deterministic rights-state derivation — correction of PG-RIGHTS-m01
 
-### 8.1 Precedence
-
 For one exact release scope, the corrected derivation uses this precedence:
 
 1. `RESTRICTED` — evidence establishes a known scope limitation/prohibited use or the recorded permission is narrower than intended release scope.
@@ -256,15 +270,13 @@ For one exact release scope, the corrected derivation uses this precedence:
 
 Every derived state retains reason codes and a derivation trace.
 
-### 8.2 Stale evidence rule
-
 Stale required provider/legal evidence **by itself** derives:
 
 ```text
 UNKNOWN(STALE_REQUIRED_EVIDENCE)
 ```
 
-A stale event does not rewrite the historical assessment; `prior_assessment_ref` preserves the earlier state/evidence. If the same assessment also has an independent stronger trigger — for example a newly discovered material similarity conflict — the normal precedence yields `QUARANTINED` while retaining the stale-evidence reason in history/diagnostics. A known explicit permission restriction yields `RESTRICTED`.
+A stale event does not rewrite the historical assessment; `prior_assessment_ref` preserves the earlier state/evidence. If the same assessment also has an independent stronger trigger — for example a newly discovered material-similarity conflict — normal precedence yields `QUARANTINED` while retaining the stale-evidence reason. A known explicit permission restriction yields `RESTRICTED`.
 
 This gives one mechanical outcome rather than permitting implementations to choose `UNKNOWN` or `QUARANTINED` for the same facts.
 
@@ -293,7 +305,7 @@ For every release/package artifact where rights/terms are applicable, the gate r
 
 1. exact `ArtifactIdentity`;
 2. complete provenance;
-3. exact `ReferenceUseRecord` for every material reference/use context;
+3. exact final `ReferenceUseRecord` for every material reference/use context, each constructed from an exact context + exact review;
 4. exact provider/product/account contract evidence if provider permission/data-use terms matter;
 5. fresh provider terms for the actual episode epoch;
 6. exact license/permission/public-domain-basis evidence for incorporated external material;
@@ -337,35 +349,37 @@ Admission for one provider product/account does not inherit to another. `ChatGPT
 
 Third-party output never inherits a wrapper provider's output-allocation clause; it retains its own origin/terms/source requirements.
 
-## 12. Failure modes retained and corrected controls
+## 12. Failure modes and corrected controls
 
 | Failure mode | Corrected control |
 |---|---|
 | provider assignment treated as release clearance | provider/contract allocation remains orthogonal; never sole state authority |
-| reference-purpose laundering | `ReferenceUseRecord.record_id` changes when purpose/reuse/scope/evidence changes |
-| originality-result reuse across permission scope | review binds exact `reference_use_record_ref`; mismatch rejects reuse |
+| reference-purpose laundering | `ReferenceUseContextRecord.context_id` changes when purpose/reuse/scope/evidence changes |
+| circular reference-use/review identity | context is hashed first; review points to context; final record then hashes context + review |
+| originality-result reuse across permission scope | changed context requires new review and final record |
 | undefined “risk policy” silently marks review optional | exact `ORP-RISK-v1` compilation before execution; unknown/unmatched fails closed |
 | low-similarity Goodharting | similarity evidence escalation-only; required evidence/coverage gaps retained |
 | missing/ambiguous license | exact `LicenseOrPermissionRecord`; missing/unsatisfied cannot clear |
 | stale provider/legal source | deterministic `UNKNOWN(STALE_REQUIRED_EVIDENCE)` plus prior-state retention |
 | stale evidence plus independent material conflict | higher precedence `QUARANTINED`; both reasons retained |
 | known permission narrower than release | `RESTRICTED`; cannot silently broaden scope |
-| reference/artifact laundering through new locator | shared `ArtifactIdentity` + reference-use provenance; wrapper hash/name does not reset state |
+| reference/artifact laundering through new locator | shared `ArtifactIdentity` + context/final reference-use provenance; wrapper hash/name does not reset state |
 | correlated AI reviewers mistaken for independence | `JudgmentPanelRecord` evaluator/correlation/trust semantics remain required |
 | scope/jurisdiction drift | exact release scope + freshness reopen |
 
 ## 13. Deterministic self-check cases
 
-Policy blob `aaee1e14ee6d5a2ca55447e56611f0bfc58e8de6` declares eight mechanical cases:
+Policy blob `db2eb5fe36be4ac7ed0204832a3537db0f97e1df` declares these mechanical cases:
 
-- changing reference purpose while reusing an originality result -> reject; new `ReferenceUseRecord` required;
-- changing release scope while reusing the same record -> reject;
-- no matching originality policy rule -> `UNKNOWN_POLICY`, never `CLEAR`;
-- unresolved conditional trigger -> treat evidence as `REQUIRED`;
-- stale terms only after prior `CLEAR` -> `UNKNOWN(STALE_REQUIRED_EVIDENCE)` with prior assessment retained;
-- stale terms plus material-similarity conflict -> `QUARANTINED` with both facts retained;
-- explicit license scope restriction dominates missing optional similarity tooling -> `RESTRICTED`;
-- low similarity score with missing license -> cannot clear.
+- `SC-R00`: construct context -> review -> final reference-use record; identities are acyclic;
+- `SC-R01`: changing reference purpose while reusing an originality result -> reject; new context/review/final record required;
+- `SC-R02`: changing release scope while reusing the same record -> reject;
+- `SC-R03`: no matching originality policy rule -> `UNKNOWN_POLICY`, never `CLEAR`;
+- `SC-R04`: unresolved conditional trigger -> treat evidence as `REQUIRED`;
+- `SC-R05`: stale terms only after prior `CLEAR` -> `UNKNOWN(STALE_REQUIRED_EVIDENCE)` with prior assessment retained;
+- `SC-R06`: stale terms plus material-similarity conflict -> `QUARANTINED` with both facts retained;
+- `SC-R07`: explicit license scope restriction dominates missing optional similarity tooling -> `RESTRICTED`;
+- `SC-R08`: low similarity score with missing license -> cannot clear.
 
 These are planning-policy conformance examples, not proof that a future implementation exists or is correct.
 
@@ -389,11 +403,11 @@ These unknowns intentionally prevent stronger release/readiness claims; they do 
 Against Issue #95 acceptance criteria:
 
 - immutable provenance to Issue #80 work/status/review: **PASS**;
-- PG-RIGHTS-M01 reference-use authority corrected: **PASS**;
+- PG-RIGHTS-M01 reference-use authority corrected with acyclic final identity: **PASS**;
 - PG-RIGHTS-M02 exact risk-policy/applicability authority corrected: **PASS**;
 - PG-RIGHTS-m01 deterministic stale-evidence state corrected: **PASS**;
-- purpose/allowed-prohibited reuse/current rights/terms/scope/artifact/originality bound by one exact reference-use identity: **PASS**;
-- changed use/scope cannot reuse prior record identity: **PASS**;
+- purpose/allowed-prohibited reuse/current rights/terms/scope/artifact/originality bound by one exact final reference-use identity: **PASS**;
+- changed use/scope cannot reuse prior context/review/final identity: **PASS**;
 - applicability compiles `REQUIRED | CONDITIONAL | NOT_APPLICABLE` before execution; unknown fails closed: **PASS**;
 - required evidence remains in requirement -> check-plan -> evidence -> satisfaction chain: **PASS**;
 - current provider/legal source facts rechecked and kept conditional/bounded: **PASS**;
@@ -402,4 +416,4 @@ Against Issue #95 acceptance criteria:
 - release/implementation/canonicalization authority: **not claimed**;
 - formal independent review: **W2-REV-01 remains required**.
 
-**Remediation candidate disposition:** `REVIEW_READY_CANDIDATE / EVIDENCE_REQUIRED`, subject to self-review of the exact final branch state and later required independent `W2-REV-01`.
+**Remediation candidate disposition:** `REVIEW_READY_CANDIDATE / EVIDENCE_REQUIRED`, subject to cold self-review of the exact final branch state and later required independent `W2-REV-01`.
