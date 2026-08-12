@@ -53,6 +53,8 @@ The project must never collapse these into one “rights score.”
 
 A fifth question — **copyrightability/protectability** — is jurisdiction- and facts-specific and remains separate from the release-control state. A work can have uncertain protectability without that fact alone proving infringement, and a provider assignment cannot create rights that applicable law does not recognize.
 
+Provider **data-use/training/confidentiality permissions** are also separate from output ownership. An account contract that assigns output can still impose materially different rules on how input/repository/content may be used by the provider. That difference is especially relevant before feeding confidential, licensed, or purpose-restricted material into a generative service.
+
 ## 4. Project record types
 
 ### 4.1 `RightsProvenanceRecord`
@@ -86,12 +88,13 @@ ProviderTermsRecord:
   terms_version_or_effective_date: <exact>
   observed_at: <date/time>
   normalized_facts_used: []
+  data_use_or_training_facts: []
   additional_terms_refs: []
   applicability: APPLIES | CONDITIONAL | NOT_APPLICABLE | UNKNOWN
   invalidation_triggers: []
 ```
 
-The account/contract class is not inferred from an operator's geographic location, a model name, or a provider marketing page. Business/API/enterprise and individual services may use different agreements.
+The account/contract class is not inferred from an operator's geographic location, a model name, or a provider marketing page. Business/API/enterprise and individual services may use different agreements, including materially different content-use/training defaults.
 
 ### 4.3 `OriginalityReviewRecord`
 
@@ -153,11 +156,11 @@ The table records first-party terms checked on 2026-08-12. Applicability to actu
 
 | Terms ID | Current first-party source/version | Normalized facts consumed | Everfield applicability now |
 |---|---|---|---|
-| `OPENAI-EEA-INDIVIDUAL-2026-01-16` | OpenAI Europe Terms of Use, updated 2026-01-16 | user is responsible for Content and must have rights/licenses/permissions for Input; as between user/OpenAI and to extent permitted by law user retains Input rights and owns Output; Output may be non-unique; Third Party Services/Output have their own terms; output must be evaluated for the use case | `CONDITIONAL` — applies only to episodes actually governed by these individual EEA/Swiss/UK terms |
-| `OPENAI-BUSINESS-2026-01-01` | OpenAI Services Agreement, updated 2025-12-01, effective 2026-01-01 | agreement is for API/Enterprise/Business and other business/developer services; Customer retains Input rights/owns Output as between parties to extent permitted by law; Customer is responsible for Input rights and Output use; applicable policy version can depend on agreement/order/renewal/service timing | `CONDITIONAL` — exact business/account/order contract not established here |
+| `OPENAI-EEA-INDIVIDUAL-2026-01-16` | OpenAI Europe Terms of Use, updated 2026-01-16 | user is responsible for Content and must have rights/licenses/permissions for Input; as between user/OpenAI and to extent permitted by law user retains Input rights and owns Output; Output may be non-unique; Third Party Services/Output have their own terms; OpenAI may use Content to provide/maintain/develop/improve services and the individual account offers a training opt-out; output must be evaluated for the use case | `CONDITIONAL` — applies only to episodes actually governed by these individual EEA/Swiss/UK terms; exact account/data-control state still belongs in episode evidence |
+| `OPENAI-BUSINESS-2026-01-01` | OpenAI Services Agreement, updated 2025-12-01, effective 2026-01-01 | agreement is for API/Enterprise/Business and other business/developer services; Customer retains Input rights/owns Output as between parties to extent permitted by law; Customer is responsible for Input rights and Output use; OpenAI states it will not use Customer Content to develop/improve Services unless Customer explicitly agrees; applicable policy version can depend on agreement/order/renewal/service timing | `CONDITIONAL` — exact business/account/order contract not established here |
 | `OPENAI-SERVICE-TERMS-2026-06-12` | OpenAI Service Terms, updated 2026-06-12 | API IP indemnity exists only under the applicable Agreement and has material exclusions, including known/likely infringement, ignored safeguards, certain modifications/combinations, lack of Input rights, trademark-related trade/commerce claims, and Third Party Offering output | `CONDITIONAL`; **never** general project clearance |
 | `OPENAI-USAGE-2025-10-29` | OpenAI Usage Policies, effective 2025-10-29 | current policies prohibit attempts to infringe others' IP rights and may be updated | applies to OpenAI-service use according to the governing agreement/policy version; freshness required |
-| `GITHUB-TOS-2026-04-27` | GitHub Terms of Service, effective 2026-04-27 | user owns/responsible for their content; must have right to post third-party content and comply with licenses; public-repository settings grant service-level viewing/forking permissions; GitHub AI Feature output can resemble third-party/open-source material and user must determine needed licenses and review/validate output | `CONDITIONAL` — standard ToS path is current research; exact GitHub account/customer agreement must be bound before a release-sensitive contract claim |
+| `GITHUB-TOS-2026-04-27` | GitHub Terms of Service, effective 2026-04-27 | user owns/responsible for their content; must have right to post third-party content and comply with licenses; under the standard ToS the license granted to GitHub/Affiliates for `Your Content` includes service development/improvement and AI/ML training; public-repository settings grant service-level viewing/forking permissions; individual AI Feature inputs/outputs also have an AI-development-use license unless opted out, while the ToS states that opt-out does not remove the separate Section D content license; GitHub AI Feature output can resemble third-party/open-source material and user must determine needed licenses and review/validate output | `CONDITIONAL` — standard ToS path is current research; exact GitHub account/customer agreement, repository visibility, and relevant settings must be bound before a release-sensitive contract/data-use claim |
 | `GITHUB-AI-CONTRACT-PATH-2026-03-05` | GitHub Customer Terms updates + Additional Product Terms | individual/non-business Copilot use can be governed by ToS Section J; business/enterprise contract paths differ; for new/renewed direct GitHub business subscriptions from 2026-03-05 GitHub Generative AI Services Terms replace the deprecated Copilot Product Specific Terms path | `NOT_ADMITTED_AS_USED` — no Copilot/other GitHub AI generation episode is established by this mission; if used later, exact product/license/subscription date is mandatory evidence |
 | `USCO-AI-COPYRIGHTABILITY-2025-01-29` | U.S. Copyright Office, Copyright and AI Part 2 announcement, 2025-01-29 | under U.S. Copyright Office analysis, generative-AI output is protectable only where sufficient expressive elements are human-authored; human-authored arrangement/modification can matter; mere prompting by itself is not enough; AI assistance does not automatically bar protection of a larger human-authored work | `LEGAL_RESEARCH_ONLY`; U.S.-specific and not an Everfield ownership/non-infringement conclusion |
 
@@ -173,17 +176,27 @@ The table records first-party terms checked on 2026-08-12. Applicability to actu
 
 These normalized source records are frozen by this report's Git blob. The live URLs remain external authorities and must be rechecked when a freshness trigger fires.
 
+### 6.2 Data-use terms are an input-admission concern
+
+A reference can be lawful to inspect yet still be inappropriate to upload to a particular provider under its license, confidentiality, data-use, or purpose restrictions. Therefore provider admission must evaluate both:
+
+1. whether the project may use/incorporate the source; and
+2. whether the project may transmit that source to the selected provider/account under the exact provider and source terms.
+
+This is why `CONFIDENTIAL_PRIVATE_RESTRICTED` defaults to `RESTRICTED`, and why moving between individual/business/provider products requires a new terms record rather than inheriting prior admission.
+
 ## 7. Provider-output ownership is not release clearance
 
 The project MUST treat the following propositions separately:
 
 1. **Provider contract allocation:** a provider may state that, as between provider and customer/user and to the extent permitted by law, the customer/user owns or is assigned output rights.
 2. **Input authority:** the user/customer may still be responsible for having rights to the supplied input/reference material.
-3. **Output uniqueness:** providers may expressly warn that output is not unique or may resemble third-party content.
-4. **Third-party material:** third-party outputs, packages, code, assets, or services may carry separate terms/licenses.
-5. **Copyrightability:** applicable law may or may not recognize protectable authorship in a particular generated artifact.
-6. **Non-infringement:** neither provider assignment nor copyrightability answers whether a particular output infringes third-party rights.
-7. **Release suitability:** Everfield's project gate must evaluate the exact artifact, provenance, terms, licenses, similarity signals, and declared release scope.
+3. **Provider data-use rights:** provider contracts/settings may differ materially in how input/output/repository content can be used for service or model development.
+4. **Output uniqueness:** providers may expressly warn that output is not unique or may resemble third-party content.
+5. **Third-party material:** third-party outputs, packages, code, assets, or services may carry separate terms/licenses.
+6. **Copyrightability:** applicable law may or may not recognize protectable authorship in a particular generated artifact.
+7. **Non-infringement:** neither provider assignment nor copyrightability answers whether a particular output infringes third-party rights.
+8. **Release suitability:** Everfield's project gate must evaluate the exact artifact, provenance, terms, licenses, similarity signals, and declared release scope.
 
 Therefore these are invalid shortcuts:
 
@@ -309,13 +322,14 @@ For every artifact included in a release/package scope where rights/terms are ap
 2. exact provenance record exists and is complete;
 3. actual generation/tool provider contract is identified if relevant;
 4. provider terms evidence is fresh for that exact product/account/service epoch;
-5. all external incorporated material has exact license/permission/public-domain-basis evidence;
-6. license obligations are compiled into packaging/distribution requirements and satisfied;
-7. risk policy says whether originality review is required, and required review is not `NOT_RUN`/`INCONCLUSIVE`;
-8. no material unresolved similarity signal exists;
-9. no applicable mark/likeness/persona/confidentiality trigger remains unresolved;
-10. `ArtifactIdentity.rights_or_terms_state == CLEAR` for the exact release scope;
-11. the derivation is reconstructable and has explicit freshness/reopen triggers.
+5. provider input/data-use terms permit the exact source material to be transmitted for the declared purpose;
+6. all external incorporated material has exact license/permission/public-domain-basis evidence;
+7. license obligations are compiled into packaging/distribution requirements and satisfied;
+8. risk policy says whether originality review is required, and required review is not `NOT_RUN`/`INCONCLUSIVE`;
+9. no material unresolved similarity signal exists;
+10. no applicable mark/likeness/persona/confidentiality trigger remains unresolved;
+11. `ArtifactIdentity.rights_or_terms_state == CLEAR` for the exact release scope;
+12. the derivation is reconstructable and has explicit freshness/reopen triggers.
 
 If a release candidate contains one required artifact in `UNKNOWN`, `RESTRICTED`, or `QUARANTINED`, the rights gate is **not satisfied**. The project may narrow/remove the artifact or release scope, obtain new evidence, or record a later owner/legal policy decision through the normal authority chain; it may not fabricate clearance.
 
@@ -327,14 +341,14 @@ Because providers and tool contracts can change independently, every generative 
 
 - `ADMITTED_FOR_RESEARCH` — may produce disposable/non-release planning artifacts under known terms.
 - `ADMITTED_FOR_BUILD_CANDIDATES` — may produce candidates, but release still requires artifact-level rights/provenance policy.
-- `ADMITTED_FOR_RELEASE_PIPELINE` — exact account/product terms and project data/use constraints are current for the declared scope.
+- `ADMITTED_FOR_RELEASE_PIPELINE` — exact account/product terms, provider data-use settings, and project data/use constraints are current for the declared scope.
 - `NOT_ADMITTED` — provider/product terms unknown, stale, incompatible, or not yet evaluated.
 
 ### 11.2 No inherited admission
 
 Admission for `ChatGPT individual` does not imply admission for `API`, `Business`, a third-party model exposed inside another product, or third-party output returned through browsing/connectors. Admission for one GitHub AI contract path does not imply another customer/subscription path.
 
-The exact provider/service/account contract belongs in the generation envelope. A human-readable model name is insufficient identity.
+The exact provider/service/account contract and relevant data-use controls belong in the generation envelope. A human-readable model name is insufficient identity.
 
 ## 12. U.S. AI copyrightability research — bounded use
 
@@ -355,7 +369,7 @@ No conclusion is made here about Everfield's eventual copyright registration, pr
 
 **Rule:** if provider terms assign Output, mark artifact clear.
 
-**Rejected.** It conflates bilateral provider allocation with input authority, uniqueness, third-party rights, copyrightability, and release suitability. Both current OpenAI and GitHub terms contain facts that make this shortcut unsafe.
+**Rejected.** It conflates bilateral provider allocation with input authority, uniqueness, provider data-use rights, third-party rights, copyrightability, and release suitability. Current OpenAI and GitHub contract paths themselves demonstrate why the exact provider/account terms matter.
 
 ### B. Similarity-score clearance
 
@@ -379,7 +393,7 @@ The evidence chain should retain at minimum:
 
 - exact artifact ID/content hash;
 - origin class and source/generation lineage;
-- exact provider, product/service, account-contract class, and terms epoch;
+- exact provider, product/service, account-contract class, terms epoch, and relevant data-use settings;
 - input/reference artifact IDs;
 - license/permission IDs and obligations;
 - declared use/release scope;
@@ -396,6 +410,8 @@ If protected/private evidence is required, retain a protected evidence envelope 
 | Failure mode | Consequence | Control |
 |---|---|---|
 | provider assignment treated as legal clearance | third-party/copyrightability issues hidden | orthogonal records; provider clause never sole gate |
+| provider account class ignored | wrong output/data-use terms assumed | exact account/product/order/renewal terms binding |
+| confidential/reference input sent under incompatible provider terms | source license/confidentiality breach risk | input-admission check includes provider data-use terms/settings |
 | low similarity score Goodharted | false negative becomes release PASS | escalation-only score semantics; coverage/blind spots retained |
 | reference laundering | quarantined source reappears under new hash/name | ArtifactIdentity provenance refs + blocked corpus comparison |
 | stale provider terms | output created under wrong/unknown contract assumption | provider terms freshness + generation-epoch binding |
@@ -414,6 +430,7 @@ Recheck when any of these changes:
 
 - provider or product/service;
 - account/subscription/customer-contract class;
+- repository visibility or provider data-use/training settings where relevant;
 - terms effective/version date;
 - order/renewal date where it selects policy version;
 - model/service moves through a third-party offering;
@@ -434,13 +451,14 @@ No arbitrary maximum age is assigned where contract version/effective date or le
 ## 17. Open questions
 
 1. Which exact OpenAI account/product contract governs each future release-content generation pipeline: individual EEA terms, Business/Enterprise, API, or another agreement/order?
-2. Will GitHub AI Features/Copilot generate any release artifact, and if so under which exact individual/customer/subscription terms epoch?
-3. Which external asset/code/font/audio/model/data licenses will be admitted, and how will their obligations compile into package/release checks?
-4. Which media-specific duplicate/near-duplicate mechanisms provide useful warning coverage without becoming false clearance oracles?
-5. What risk classes require targeted external search and/or qualified legal determination before a release state can become `CLEAR`?
-6. Which release jurisdictions/storefronts will make trademark, likeness/persona, moral-rights, database-right, or other local questions material?
-7. What project policy is appropriate if a valuable AI-generated artifact has no known infringement signal but protectability/exclusivity is uncertain?
-8. What protected-evidence mechanism should hold confidential license agreements or legal analysis without leaking them into public project state?
+2. Which OpenAI/GitHub provider data-use/training controls and repository visibility states apply to project content at each generation/storage epoch?
+3. Will GitHub AI Features/Copilot generate any release artifact, and if so under which exact individual/customer/subscription terms epoch?
+4. Which external asset/code/font/audio/model/data licenses will be admitted, and how will their obligations compile into package/release checks?
+5. Which media-specific duplicate/near-duplicate mechanisms provide useful warning coverage without becoming false clearance oracles?
+6. What risk classes require targeted external search and/or qualified legal determination before a release state can become `CLEAR`?
+7. Which release jurisdictions/storefronts will make trademark, likeness/persona, moral-rights, database-right, or other local questions material?
+8. What project policy is appropriate if a valuable AI-generated artifact has no known infringement signal but protectability/exclusivity is uncertain?
+9. What protected-evidence mechanism should hold confidential license agreements or legal analysis without leaking them into public project state?
 
 ## 18. Reopen conditions
 
@@ -448,6 +466,7 @@ Reopen this candidate or dependent rights states if:
 
 - any load-bearing provider terms/policy source changes;
 - actual provider/account contract contradicts the conditional matrix here;
+- repository visibility/data-use controls change in a way relevant to project inputs/content;
 - a new release provider/tool is introduced without terms admission;
 - a license/permission is revoked, expires, or is discovered to have different scope;
 - a material similarity/duplicate signal or third-party complaint appears;
@@ -462,6 +481,7 @@ Against Issue #80 acceptance criteria:
 - source/version/date for current provider/legal sources: **PASS**;
 - reference-use taxonomy: **PASS**;
 - provider terms matrix: **PASS**, with actual account applicability explicitly conditional/unknown where not evidenced;
+- provider data-use/training differences captured as input-admission evidence: **PASS**;
 - originality/similarity evidence policy: **PASS**;
 - similarity score prevented from becoming legal truth/sole clearance: **PASS**;
 - provenance separated from originality and release-sensitive rights state: **PASS**;
