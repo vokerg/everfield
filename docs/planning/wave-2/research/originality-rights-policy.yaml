@@ -27,11 +27,11 @@ authority_limits:
   similarity_score_can_clear: false
   provider_output_assignment_can_clear: false
 
-reference_use_record:
-  type: ReferenceUseRecord
-  identity_rule: content_addressed_over_all_identity_fields
+reference_use_context_record:
+  type: ReferenceUseContextRecord
+  identity_rule: content_addressed_over_all_identity_fields_before_originality_execution
   required_fields:
-    - record_id
+    - context_id
     - candidate_artifact_id
     - reference_artifact_ids
     - origin_class
@@ -45,7 +45,6 @@ reference_use_record:
     - release_scope_ref
     - originality_risk_policy_id
     - originality_evidence_requirement_ref
-    - originality_review_ref
     - freshness_requirement_refs
   identity_fields:
     - candidate_artifact_id
@@ -61,7 +60,6 @@ reference_use_record:
     - release_scope_ref
     - originality_risk_policy_id
     - originality_evidence_requirement_ref
-    - originality_review_ref
     - freshness_requirement_refs
   enums:
     origin_class:
@@ -96,13 +94,32 @@ reference_use_record:
       - PUBLIC_DOMAIN_BASIS
       - CONFIDENTIAL_RESTRICTED_RESEARCH
   invariants:
-    - a_record_is_not_reusable_if_any_identity_field_changes
+    - context_is_not_reusable_if_any_identity_field_changes
     - candidate_artifact_id_must_resolve_to_ArtifactIdentity
-    - every_reference_artifact_id_must_resolve_to_ArtifactIdentity_or_exact_external_source_identity
+    - each_retained_reference_must_resolve_to_ArtifactIdentity_and_external_only_nonretained_sources_must_have_exact_source_identity
     - allowed_reuse_and_prohibited_reuse_must_not_conflict
     - release_scope_ref_must_be_exact_and_nonempty_for_release_sensitive_assessment
     - current_rights_research_refs_must_be_fresh_for_the_declared_scope
-    - originality_review_ref_must_bind_this_record_id
+
+reference_use_record:
+  type: ReferenceUseRecord
+  construction_stage: after_originality_review
+  identity_rule: content_addressed_over_context_ref_and_originality_review_ref
+  required_fields:
+    - record_id
+    - context_ref
+    - originality_review_ref
+  identity_fields:
+    - context_ref
+    - originality_review_ref
+  invariants:
+    - context_ref_must_resolve_to_ReferenceUseContextRecord
+    - originality_review_ref_must_bind_the_same_context_ref
+    - final_record_is_the_single_release_assessment_reference_use_identity
+    - changing_context_or_review_requires_a_new_record_id
+  cycle_avoidance:
+    - OriginalityReviewRecord references context_ref, never final ReferenceUseRecord
+    - final ReferenceUseRecord is constructed only after the review identity exists
 
 license_or_permission_record:
   type: LicenseOrPermissionRecord
@@ -129,7 +146,7 @@ originality_review_record:
   required_fields:
     - review_id
     - candidate_artifact_id
-    - reference_use_record_ref
+    - reference_use_context_ref
     - policy_id
     - evidence_requirement_ref
     - check_plan_ref
@@ -152,7 +169,7 @@ originality_review_record:
     - INCONCLUSIVE
     - NOT_RUN
   invariants:
-    - reference_use_record_ref_must_bind_the_same_candidate_artifact_id
+    - reference_use_context_ref_must_bind_the_same_candidate_artifact_id
     - evidence_requirement_ref_must_be_compiled_from_this_policy_id_before_execution
     - NOT_RUN_or_INCONCLUSIVE_cannot_satisfy_REQUIRED_evidence
     - material_signal_cannot_be_averaged_away
@@ -325,7 +342,7 @@ check_plan_compiler:
     - policy_id
     - evidence_requirement_ref
     - candidate_artifact_id
-    - reference_use_record_ref
+    - reference_use_context_ref
     - release_scope_ref
     - applicable_rule_ids
     - evidence_kind_applicability
@@ -425,12 +442,15 @@ freshness_binding:
   stale_effect: dependent_assessment_OPEN_and_state_UNKNOWN_unless_higher_precedence_trigger_applies
 
 self_checks:
+  - id: SC-R00
+    case: construct_context_then_review_then_final_reference_use_record
+    expected: ACYCLIC_IDENTITIES_CONTEXT_TO_REVIEW_TO_FINAL_RECORD
   - id: SC-R01
     case: same_originality_review_with_changed_reference_purpose
-    expected: REJECT_REUSE_NEW_REFERENCE_USE_RECORD_REQUIRED
+    expected: REJECT_REUSE_NEW_CONTEXT_REVIEW_AND_REFERENCE_USE_RECORD_REQUIRED
   - id: SC-R02
     case: same_originality_review_with_changed_release_scope
-    expected: REJECT_REUSE_NEW_REFERENCE_USE_RECORD_REQUIRED
+    expected: REJECT_REUSE_NEW_CONTEXT_REVIEW_AND_REFERENCE_USE_RECORD_REQUIRED
   - id: SC-R03
     case: no_matching_originality_policy_rule
     expected: UNKNOWN_POLICY_AND_NO_CLEAR
