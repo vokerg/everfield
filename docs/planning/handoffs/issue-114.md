@@ -2,7 +2,7 @@
 
 ## Status
 
-Bounded remediation authored on `planning/issue-114` from exact `main@042d140b5d2e0b951da4528e1867514983418d6f`.
+Bounded remediation authored on `planning/issue-114` from exact `main@042d140b5d2e0b951da4528e1867514983418d6f`. Draft PR #116 is the required review-visibility surface and remains non-authoritative for integration.
 
 ## Immutable inputs
 
@@ -19,17 +19,18 @@ Bounded remediation authored on `planning/issue-114` from exact `main@042d140b5d
 - Added deterministic stale-evidence precedence: material-risk quarantine first; otherwise stale required evidence -> `UNKNOWN(STALE_EVIDENCE)`.
 - Added explicit finding-disposition artifact; all three pre-gate findings are `RESOLVED`.
 - Self-review result: `0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR` within remediation scope.
+- Opened draft PR #116 from the exact task branch to `main` for review visibility.
 
-## Remaining before terminal status
+## Exact artifact identities before terminal freeze
 
-- Open the mandatory draft PR from `planning/issue-114` to `main`.
-- Re-fetch/verify the PR is open + draft and its exact head equals the terminal branch head.
-- Publish schema-3 `STATUS(REVIEW_READY)` only after that verification.
+- corrected report blob: `124866c20a6082624d3beba624859273b0d5572a`
+- finding-disposition blob: `8cb5c60a9c0db2536194504325559d6bf25ca228`
+- this handoff must be re-fetched after this finalization commit for its final blob identity.
 
 ## Known limitations / authority boundary
 
 This packet is planning evidence only. It does not provide legal clearance, release approval, production authority, implementation readiness, integration, verification, or canonicalization. Formal aggregate `W2-REV-01` remains required.
 
-## Recommended next action
+## Next lifecycle action
 
-Verify exact branch head/artifact blobs, open draft review-visibility PR, verify PR head equality, then freeze Issue #114 at terminal `REVIEW_READY`. Any later `main` integration remains squash-only and separately authorized.
+Re-fetch PR #116 and this branch after the final handoff commit. If PR #116 is still open + draft and its `head_sha` equals the exact branch head, publish terminal schema-3 `STATUS(REVIEW_READY)` on Issue #114 with exact artifact refs. Do not merge the PR from this author episode. Any later `main` integration remains squash-only and separately authorized.
