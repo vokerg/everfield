@@ -1,0 +1,15 @@
+{
+  "schema":"core_game_automation_decisions_v4",
+  "scope":"bounded fictional game planning evidence",
+  "mission_id":"W2-GAME-EV-REM-03",
+  "attempt_id":"CORE-v4-REM-03",
+  "affected_id":"GDF-E4",
+  "predecessor":{"issue":217,"head":"ac03b002fa8ce7237d5f9236d1cbcc1891d0124d","v3_blob":"50f64d428a5261e9b319acb51b30ccbce0c34a39","review_issue":219,"review_work":"713fe301a74dd67e40c4947bcbf6e429d9ff7154","finding":"W2-REV4-m01"},
+  "retained_payback":{"winner_counts":{"manual":1,"partial":3,"strong":5},"tested_cells":9,"disposition":"UNCHANGED_NOT_RERUN_NOT_UPGRADED"},
+  "fictional_state_fields":["food","materials","coin","standing","quality","capacity"],
+  "choice_surfaces":{"allocation":{"food_focus":{"food":3,"materials":-1},"material_focus":{"food":-1,"materials":3}},"configuration":{"standard_batch":{"coin":2},"quality_batch":{"coin":-1,"quality":2}},"logistics":{"local_route":{"coin":1,"standing":1},"market_route":{"coin":4,"standing":-1}},"expansion":{"hold":{"coin":0,"capacity":0},"expand":{"coin":-6,"capacity":1}},"quality":{"fast":{"quality":-1},"careful":{"coin":-2,"quality":2}}},
+  "tier_surfaces":{"manual":["allocation"],"partial":["allocation","configuration","logistics"],"strong":["allocation","configuration","logistics","expansion","quality"]},
+  "noop_semantics":{"declared_noop_options":["expansion.hold"],"rule":"a declared no-op may intentionally preserve all fictional state fields; it remains a distinct modeled choice only when paired with a different option on the same named surface"},
+  "mechanical_result":{"surface_counts":{"manual":1,"partial":3,"strong":5},"partial_is_strict_superset_of_manual":true,"strong_is_strict_superset_of_partial":true,"every_surface_has_two_distinct_options":true,"every_option_changes_at_least_one_fictional_state_field":false,"every_non_noop_option_changes_at_least_one_fictional_state_field":true,"declared_noop_options_are_zero_delta":true,"each_tier_retains_at_least_one_payback_win":true,"result":"PASS","record_correction":"W2-REV4-m01 addressed without changing option model or payback evidence; no GDF-E4 rerun required"},
+  "authority":"planning evidence only; no human-preference, gameplay implementation, readiness, verification-PASS, release, engine-selection, legal/provider, or canonical authority"
+}
