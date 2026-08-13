@@ -24,11 +24,11 @@ Non-goals remain unchanged: this packet does not select a CI provider, define a 
 The exact validator and complete synthetic corpus are one frozen repository artifact:
 
 - path: `docs/planning/wave-2/evidence/ci-reliability-validator.py`;
-- Git blob: `436eb437051c1acc6a813fd66b152b09e4300c46`;
+- Git blob: `f872f8082592be8e2f067fdf4772034d25483c5e`;
 - validator version: `ci-reliability-reference-v4`;
 - dependencies: Python standard library only;
 - source identity algorithm: `sha256-source-with-digest-line-sentinel-v1`;
-- declared/recomputed source identity: `sha256:97a8fa00d338907e32cd97a7ca662b81ea1fc8336ffd7a9e6541b00162c91b5d`.
+- declared/recomputed source identity: `sha256:96a016c998d4b1af30f2a1803c6723cdfbad64d6ad23e9ed2b3e83f5a5e5f346`.
 
 The source identity algorithm reads the exact source bytes, replaces only the `VALIDATOR_SOURCE_DIGEST = "..."` declaration with the fixed sentinel `__SOURCE_DIGEST__`, and hashes the resulting UTF-8 bytes. The validator recomputes this identity before evaluating any fixture. This avoids a self-referential hash while still making every executable byte outside the single digest-value field content-addressed. The exact Git blob provides the ordinary repository content identity in addition to that executable self-check.
 
@@ -46,11 +46,11 @@ Canonical structured-object digests use UTF-8 JSON with sorted keys and compact 
 
 Exact successful execution produced:
 
-- validator source identity: `sha256:97a8fa00d338907e32cd97a7ca662b81ea1fc8336ffd7a9e6541b00162c91b5d`;
+- validator source identity: `sha256:96a016c998d4b1af30f2a1803c6723cdfbad64d6ad23e9ed2b3e83f5a5e5f346`;
 - fixture-manifest digest: `sha256:08d009ef6648366835bd2f2c3866572b73b00510c924460471210c10acb20701`;
-- fixture-cases digest: `sha256:dd7273115702957d9c6c60f1902ca77e7d012a87189142fe102d369cf34ae97f`;
-- harness-contract digest: `sha256:a2a0e914060c1d6dab233763e53acb7f462a33a53e4f5b57c3a046cee840c923`;
-- result-object digest: `sha256:87fbf99c40a0a93580cb82b7be8b2a1691844976197378a97eacb915af47c5e0`;
+- fixture-cases digest: `sha256:cfef6f1dfe721504480b6a7f3d6983edeae3f335a507b547511773f0543a97fe`;
+- harness-contract digest: `sha256:1a9a14a261047cefdcded2be739af3659b70329fecfa2e8df12a92e47fceb475`;
+- result-object digest: `sha256:7b0a8659b0c505bdca1f4cbc2b62e2e9b03d4031b05a01dc1ecb543cf4bb8438`;
 - predecessor-evidence artifact digest: `sha256:46f6e1dfd6b56eb2d62c689e0c20de7021ff51123002655550834abd04d8107d`;
 - predecessor-evidence root: `sha256:46f6e1dfd6b56eb2d62c689e0c20de7021ff51123002655550834abd04d8107d`.
 
@@ -67,23 +67,24 @@ The former dangling `source_envelope_id: env-flaky-1` boundary is replaced by a 
 - results/failure classes;
 - exact artifact keys, `ArtifactIdentity`, and authoritative hashes.
 
-The transition now binds:
+The transition binds the exact expected values for:
 
 - `transition_id`;
 - predecessor candidate;
 - successor candidate;
-- changed-work identity and reason;
+- changed-work identity;
+- remediation reason;
 - predecessor evidence artifact digest;
 - root algorithm version;
 - predecessor evidence root.
 
-`sha256-canonical-json-sorted-compact-v1` computes the predecessor evidence root directly from the exact embedded predecessor artifact. The validator recomputes the artifact digest and root, confirms the artifact candidate equals the transition predecessor, confirms predecessor differs from successor, confirms the case candidate equals the successor, and checks both the transition root and independently supplied observed-root claim against the recomputed value.
+`sha256-canonical-json-sorted-compact-v1` computes the predecessor evidence root directly from the exact embedded predecessor artifact. The validator recomputes the artifact digest and root, requires the artifact digest to equal the frozen predecessor artifact rather than merely a producer-updated digest, and requires every transition identity field to equal the frozen transition contract. It separately checks the claimed observed root against the recomputed value.
 
 The result object retains the exact predecessor artifact, artifact digest, transition, algorithm, and recomputed root, so a reviewer can reconstruct the proof without trusting a producer-provided matching pair of root strings.
 
 ## 5. Executed regression corpus
 
-All 22 exact cases are evaluated by generic contract functions rather than a scenario-ID switch.
+All 26 exact cases are evaluated by generic contract functions rather than a scenario-ID switch.
 
 | ID | Attack / condition | Derived aggregate | Required property |
 |---|---|---|---|
@@ -107,24 +108,30 @@ All 22 exact cases are evaluated by generic contract functions rather than a sce
 | S18 | quarantine evaluated at declared expiry boundary | `INCONCLUSIVE` | expired quarantine cannot satisfy |
 | S19 | required replacement member missing | `INCONCLUSIVE` | exact replacement-set equality enforced |
 | S20 | extra replacement member supplied | `INCONCLUSIVE` | exact replacement-set equality enforced |
-| S21 | member key/record replacement identity disagree | `INCONCLUSIVE` | wrong replacement member rejected |
+| S21 | wrong replacement-set member supplied | `INCONCLUSIVE` | exact replacement-set equality enforced |
 | S22 | declared and claimed-observed predecessor roots both substituted while predecessor bytes stay fixed | `INCONCLUSIVE` | recomputation defeats matching-root laundering |
+| S23 | changed-work identity substituted | `INCONCLUSIVE` | exact changed-work binding enforced |
+| S24 | transition ID substituted | `INCONCLUSIVE` | exact transition identity enforced |
+| S25 | remediation reason substituted | `INCONCLUSIVE` | exact reason binding enforced |
+| S26 | predecessor evidence bytes substituted and producer updates digest/root consistently | `INCONCLUSIVE` | exact frozen predecessor artifact remains authoritative |
 
-The S18-S21 cases close the executable regression gap called out in `PG-REM-CI2-M01`. S22 is the exact double-root-substitution attack required by `PG-REM-CI2-M02`.
+S18-S21 close the executable regression gap called out in `PG-REM-CI2-M01`. S22 is the exact double-root-substitution attack required by `PG-REM-CI2-M02`. S23-S26 close the stricter successor-admission requirement that changed work, transition identity/reason, and predecessor evidence bytes themselves cannot be replaced while keeping a self-consistent producer-authored packet.
 
 ## 6. Finding dispositions
 
 ### `PG-REM-CI2-M01` — RESOLVED
 
-The exact frozen Python artifact now contains the evaluator and complete runnable corpus. Its own source identity is content-bound into the harness/result evidence and additionally fixed by Git blob identity. The result object is produced from exact fixture inputs by execution, and all S1-S22 expectations are asserted before output. New S18-S21 cases mechanically cover expiry and missing/extra/wrong replacement-set regressions.
+The exact frozen Python artifact now contains the evaluator and complete runnable corpus. Its own source identity is content-bound into the harness/result evidence and additionally fixed by Git blob identity. The result object is produced from exact fixture inputs by execution, and all S1-S26 expectations are asserted before output. New S18-S21 cases mechanically cover expiry and missing/extra/wrong replacement-set regressions.
 
 A source-byte mutation outside the digest declaration was also executed as a self-binding attack and exited nonzero with `validator source identity mismatch`.
 
 ### `PG-REM-CI2-M02` — RESOLVED
 
-The exact predecessor evidence bytes and root algorithm are now part of the frozen executable packet and emitted result. The transition binds the predecessor artifact digest and recomputed root. S22 changes both producer-facing root strings to the same false value while keeping predecessor evidence fixed; the validator recomputes from the bytes and returns `INCONCLUSIVE`.
+The exact predecessor evidence bytes and root algorithm are now part of the frozen executable packet and emitted result. Successor admission recomputes the predecessor artifact digest/root and verifies exact predecessor, successor, changed-work identity, reason, transition ID, and the frozen predecessor artifact identity itself.
 
-No root field can therefore be accepted merely because two producer-supplied strings agree.
+S22 changes both producer-facing root strings to the same false value while keeping predecessor evidence fixed; the validator recomputes from the bytes and returns `INCONCLUSIVE`. S23-S25 reject changed-work, transition-ID, and reason substitution. S26 changes predecessor evidence bytes and updates the producer-facing digest/root consistently; it still returns `INCONCLUSIVE` because the validator binds to the exact frozen predecessor artifact.
+
+No root or transition field can therefore be accepted merely because a producer updates all mutually-consistent declarations together.
 
 ## 7. Preserved behavior and authority boundaries
 
@@ -161,6 +168,7 @@ Reopen if a descendant can:
 - satisfy replacement evidence with missing/wrong ArtifactIdentity or authoritative hash;
 - satisfy a claimed successor without the exact predecessor evidence bytes and recomputed root;
 - substitute both declared/observed roots while fixed predecessor evidence remains unchanged;
+- substitute changed-work identity, transition ID/reason, or predecessor evidence bytes while retaining successor authority;
 - erase required `NOT_RUN`, PRODUCT failure, FLAKY, same-candidate reset, or retention-loss evidence;
 - silently grant provider, production, readiness, integration, implementation, or canonical authority.
 
