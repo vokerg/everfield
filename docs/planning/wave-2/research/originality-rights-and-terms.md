@@ -27,7 +27,7 @@ Issue #114 `ORIGINALITY-RISK-v1` is superseded for policy compilation by `ORIGIN
 
 `docs/planning/wave-2/evidence/originality-rights-policy-fixtures.py`
 
-Its exact source SHA-256 is `9d60aab9e548d0f55ccc2c86e70de133198e97304c24c569890daf4c982667ff`.
+Its exact Git blob is `5f821bdfce5c3e75869dcddedfe816fbda17d97c` and exact source SHA-256 is `8c19575ad09769515dee74ae8462233184cf1aece07cd7e27450ba1a63aaaa8a`.
 
 ### 2.1 Exact compiler input
 
@@ -252,13 +252,16 @@ Exact fixture identity and expected result:
 
 ```yaml
 path: docs/planning/wave-2/evidence/originality-rights-policy-fixtures.py
-source_sha256: 9d60aab9e548d0f55ccc2c86e70de133198e97304c24c569890daf4c982667ff
+git_blob_sha: 5f821bdfce5c3e75869dcddedfe816fbda17d97c
+source_sha256: 8c19575ad09769515dee74ae8462233184cf1aece07cd7e27450ba1a63aaaa8a
 policy_id: ORIGINALITY-RISK-v2
 policy_epoch: 2
 serialization_version: EVERFIELD-RIGHTS-CANONICAL-JSON-v1
 result_digest_sha256: 4530e561ffc8ccc85bba22ce02932300b4b7995ceb5b5979196e9dad5d588ced
 tests_passed: 9
 ```
+
+The exact frozen blob syntax-compiles. Two fresh executions were byte-identical and emitted the result digest above.
 
 The nine deterministic checks are:
 
@@ -272,7 +275,7 @@ The nine deterministic checks are:
 8. `T08_CLEAR_REQUIRES_ALL_REQUIRED_SATISFIED` — `CLEAR` requires all compiled required kinds satisfied;
 9. `T09_ALL_AUTHORITY_RECORD_IDS_RECOMPUTABLE` — all authority-bearing record types recompute and reject bound-payload mutation.
 
-A fresh reviewer can execute the exact frozen fixture and compare the printed canonical summary and source SHA-256 with the values above.
+A fresh reviewer can execute the exact frozen fixture and compare the printed canonical summary, Git blob identity, and source SHA-256 with the values above.
 
 ## 6. Finding disposition
 
