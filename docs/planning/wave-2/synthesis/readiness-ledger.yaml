@@ -1,0 +1,183 @@
+schema: implementation_readiness_ledger_v1
+mission_id: W2-SYN-01
+issue: 85
+claim_base_main_sha: 3828d50d3345ef0bc5a61321509f590b2e7b2ae1
+canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+bounded_remediation:
+  mission_id: W2-REM-SYN-01
+  issue: 200
+  source_candidate_head_sha: 824273df8a8908c52fd5814d1a50b14b629ed195
+  finding: W2-READY-M01
+  correction_scope: PREREQUISITE_LIFECYCLE_AUTHORITY_REFERENCES_ONLY
+prerequisite_review:
+  mission_id: W2-REV-01
+  issue: 84
+  terminal_status_comment_id: 5281030303
+  review_status_comment_id: 5281028970
+  head_sha: 25ecff8252a0065a6d54f819df9e114a269edbbf
+  work_sha: 0b4212cfdccc60f76b588464d71c94527a1d6e53
+  disposition: CHANGES_REQUIRED
+  blocker_count: 0
+  major_count: 3
+lifecycle:
+  synthesis_state: CANDIDATE
+  verification_target: W2-READY-01
+  verification_input_ready: true
+  production_implementation_ready: false
+  release_ready: false
+  canonical: false
+  engine_selected: false
+review_finding_dispositions:
+  - finding_id: W2-REV-M01
+    severity: MAJOR
+    review_state: OPEN_BOUNDED
+    synthesis_disposition: OPEN_RETAINED
+    blocks:
+      - ENGINE_SELECTION
+      - PRODUCTION_IMPLEMENTATION
+    resolution_predicate: >-
+      Equivalent real-toolchain S1-S10 execution under the reviewed harness in a
+      capable or reproducibly pre-seeded environment, preserving the failed
+      episode and completing the required independent authority route.
+    evidence_refs:
+      - 98506154ed10bddaec90966b147793b86f3f1f37
+      - 1575cb3a18c9c7be1776b64c9ec92cc8990a97e0
+  - finding_id: W2-REV-M02
+    severity: MAJOR
+    review_state: OPEN_BOUNDED
+    synthesis_disposition: OPEN_RETAINED
+    blocks:
+      - PRODUCTION_IMPLEMENTATION
+      - ACCESSIBILITY_CLEARANCE
+      - RELEASE_CLEARANCE
+    resolution_predicate: >-
+      Atomic mapping of all remaining applicable current source clauses plus
+      required empirical accessibility evidence and the required independent
+      authority route.
+    evidence_refs:
+      - 50e6770cc490ef74c44faa3ae9eba115b4c1eb7a
+      - 1643b7b9cc3f9ba05ec371220f06d1539ed0b8ba
+  - finding_id: W2-REV-M03
+    severity: MAJOR
+    review_state: OPEN_BOUNDED
+    synthesis_disposition: OPEN_RETAINED
+    blocks:
+      - PRODUCTION_IMPLEMENTATION
+      - EVIDENCE_PROVIDER_READINESS
+    resolution_predicate: >-
+      Provider-specific empirical proof of credential and permission separation,
+      protected-artifact handling, retention/restoration, audit integrity, leak
+      resistance, operational rotation/revocation, and dependent evaluator/CI
+      behavior, followed by the required independent authority route.
+    evidence_refs:
+      - 9f0c42bb82a1bddd97f028b9ba8e94c791e3705a
+readiness_entries:
+  - blocker_id: IR-BLOCKER-ENGINE-DECISION
+    category: TECHNICAL
+    scope: GLOBAL
+    blocks:
+      - ENGINE_SELECTION
+      - PRODUCTION_IMPLEMENTATION
+    source_requirement_refs:
+      - W2-REV-M01
+      - W2-ENG-03
+    evidence_satisfaction_refs: []
+    state: OPEN
+    rationale: 50 required candidate/scenario cells remain NOT_RUN; no comparative engine authority exists.
+  - blocker_id: IR-BLOCKER-PLATFORM-SCOPE
+    category: PLATFORM
+    scope: GLOBAL
+    blocks:
+      - PRODUCTION_IMPLEMENTATION
+      - RELEASE_SCOPE
+    source_requirement_refs:
+      - W1-FOUNDATIONS-IR
+      - W2-REM-PLAT-01
+    evidence_satisfaction_refs:
+      - 9d51099be4d53eff876104f482e3c163d34519e3
+    state: OPEN
+    rationale: PLAT-PC-FIRST-R1 is a reversible planning candidate, not final production or release authority.
+  - blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
+    category: ACCESSIBILITY
+    scope: GLOBAL
+    blocks:
+      - PRODUCTION_IMPLEMENTATION
+      - ACCESSIBILITY_CLEARANCE
+      - RELEASE_CLEARANCE
+    source_requirement_refs:
+      - W2-REV-M02
+      - W2-REM-ACC-02
+    evidence_satisfaction_refs:
+      - 50e6770cc490ef74c44faa3ae9eba115b4c1eb7a
+    state: OPEN
+    rationale: mapping_complete is false, summary-only source clauses remain, and empirical accessibility PASS is absent.
+  - blocker_id: IR-BLOCKER-EVIDENCE-FOUNDATION
+    category: EVIDENCE
+    scope: GLOBAL
+    blocks:
+      - PRODUCTION_IMPLEMENTATION
+      - EVIDENCE_PROVIDER_READINESS
+    source_requirement_refs:
+      - W2-REV-M03
+      - W2-PROTECT-01
+    evidence_satisfaction_refs:
+      - 9f0c42bb82a1bddd97f028b9ba8e94c791e3705a
+    state: OPEN
+    rationale: logical fail-closed contracts are bounded evidence; production-specific provider/control enforcement is unproven.
+  - blocker_id: IR-BLOCKER-RIGHTS-SCOPED
+    category: RIGHTS
+    scope: FEATURE_CLASS
+    applies_to:
+      - GENERATED_CONTENT
+      - EXTERNAL_REFERENCE_CONTENT
+      - PROVIDER_TERMS_DEPENDENT_CONTENT
+    blocks:
+      - AFFECTED_CONTENT_PRODUCTION_USE
+      - AFFECTED_CONTENT_RELEASE
+    source_requirement_refs:
+      - W2-REM-RIGHTS-06
+    evidence_satisfaction_refs:
+      - a23d355c3dd8cb385f893baa199a4c700c885b92
+      - f5aa7c65ac610d0a5c57cd869212a998b140b6eb
+    state: OPEN
+    rationale: reviewed policy mechanics are fail-closed but do not grant legal clearance, provider permission, or universal content rights.
+trust_debt:
+  state: OPEN
+  mode: DEGRADED_SINGLE_AGENT
+  authority_effect: QUALITY_DEBT_ONLY
+  does_not_authorize:
+    - FULL_INDEPENDENCE
+    - PRODUCTION_IMPLEMENTATION
+  reopen_condition: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE
+decisions:
+  engine:
+    state: EVIDENCE_REQUIRED
+    selected: null
+    adr_candidate: null
+    authority: NONE
+  platform:
+    state: RECOMMENDED_PLANNING_CANDIDATE
+    candidate: PLAT-PC-FIRST-R1
+    production_commitment: false
+    release_commitment: false
+  accessibility:
+    state: PARTIAL_BOUNDED_EVIDENCE
+    mapping_complete: false
+    empirical_pass: false
+  rights:
+    state: MECHANICALLY_CLOSED_POLICY_FIXTURE
+    legal_clearance: false
+    provider_permission: false
+  evidence_foundation:
+    state: BOUNDED_CONTRACT_EVIDENCE
+    production_provider_selected: false
+    production_enforcement_proven: false
+next_transition:
+  allowed_state: VERIFICATION_READY
+  target_mission: W2-READY-01
+  meaning: Exact corrected synthesis packet is ready for fresh independent verification only.
+  does_not_mean:
+    - PRODUCTION_IMPLEMENTATION_READY
+    - ENGINE_SELECTED
+    - RELEASE_READY
+    - CANONICAL
