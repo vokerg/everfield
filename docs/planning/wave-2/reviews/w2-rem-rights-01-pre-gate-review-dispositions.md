@@ -14,9 +14,11 @@
 policy_id: ORIGINALITY-RISK-v2
 policy_epoch: 2
 serialization_version: EVERFIELD-RIGHTS-CANONICAL-JSON-v1
-fixture_source_sha256: 9d60aab9e548d0f55ccc2c86e70de133198e97304c24c569890daf4c982667ff
+fixture_git_blob_sha: 5f821bdfce5c3e75869dcddedfe816fbda17d97c
+fixture_source_sha256: 8c19575ad09769515dee74ae8462233184cf1aece07cd7e27450ba1a63aaaa8a
 fixture_result_digest_sha256: 4530e561ffc8ccc85bba22ce02932300b4b7995ceb5b5979196e9dad5d588ced
 fixture_tests_passed: 9
+fixture_execution: syntax_compile_passed_and_two_runs_byte_identical
 ```
 
 No finding below is waived by prose. `RESOLVED` means the exact corrected contract plus executable evidence closes the reviewed defect while preserving the issue's authority boundary.
@@ -71,7 +73,7 @@ Consumers must recompute and compare each claimed record ID/root before it can c
 
 - `T02_NO_CONDITIONAL_TERMINAL`: no unresolved terminal contextual state.
 - `T03_UNKNOWN_FAILS_CLOSED`: undeclared contextual enum fails closed.
-- `T04_SET_ORDER_CANONICAL`: semantic-set reorder is stable and duplicate membership is rejected by the canonicalizer.
+- `T04_SET_ORDER_CANONICAL`: semantic-set reorder is stable; the canonicalizer rejects duplicate semantic-set members.
 - `T05_BOUND_FIELDS_CHANGE_REFERENCE_USE_ID`: purpose, release scope, provider terms, license/permission, and source/reference substitution changes identity.
 - `T06_SOURCE_ROOT_RECOMPUTABLE`: exact evidence-set reorder remains stable while evidence-content substitution changes the root.
 - `T09_ALL_AUTHORITY_RECORD_IDS_RECOMPUTABLE`: each authority-bearing record type recomputes; bound-payload mutation changes the identity.
@@ -111,7 +113,7 @@ Independent material-risk triggers (`MATERIAL_SIMILARITY_SIGNAL`, `CREDIBLE_COMP
 
 ## Self-review
 
-Fresh self-review against the bounded Issue #119 contract and the exact Issue #118 findings records:
+The exact frozen fixture blob syntax-compiles and two fresh executions produce byte-identical output with the published result digest. Fresh self-review against the bounded Issue #119 contract and the exact Issue #118 findings records:
 
 ```yaml
 unresolved_blocker: 0
