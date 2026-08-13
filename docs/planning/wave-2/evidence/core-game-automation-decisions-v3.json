@@ -1,1 +1,14 @@
-{"schema":"core_game_automation_decisions_v3","scope":"bounded fictional game planning evidence","affected_id":"GDF-E4","status":"planning_only"}
+{
+  "schema":"core_game_automation_decisions_v3",
+  "scope":"bounded fictional game planning evidence",
+  "mission_id":"W2-GAME-EV-REM-02",
+  "attempt_id":"CORE-v3-REM-02",
+  "affected_id":"GDF-E4",
+  "predecessor_run_blob":"eb6cde95d7232f8fec28b17561a457aa716dfb5e",
+  "retained_payback":{"winner_counts":{"manual":1,"partial":3,"strong":5},"tested_cells":9},
+  "fictional_state_fields":["food","materials","coin","standing","quality","capacity"],
+  "choice_surfaces":{"allocation":{"food_focus":{"food":3,"materials":-1},"material_focus":{"food":-1,"materials":3}},"configuration":{"standard_batch":{"coin":2},"quality_batch":{"coin":-1,"quality":2}},"logistics":{"local_route":{"coin":1,"standing":1},"market_route":{"coin":4,"standing":-1}},"expansion":{"hold":{"coin":0,"capacity":0},"expand":{"coin":-6,"capacity":1}},"quality":{"fast":{"quality":-1},"careful":{"coin":-2,"quality":2}}},
+  "tier_surfaces":{"manual":["allocation"],"partial":["allocation","configuration","logistics"],"strong":["allocation","configuration","logistics","expansion","quality"]},
+  "mechanical_result":{"surface_counts":{"manual":1,"partial":3,"strong":5},"partial_is_strict_superset_of_manual":true,"strong_is_strict_superset_of_partial":true,"every_surface_has_two_distinct_options":true,"every_option_changes_at_least_one_fictional_state_field":true,"each_tier_retains_at_least_one_payback_win":true,"result":"PASS"},
+  "authority":"planning evidence only; no human-preference or implementation authority"
+}
