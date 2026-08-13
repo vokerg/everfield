@@ -16,3 +16,4 @@ If you are a fresh agent with no prior conversation context:
 All accepted changes integrated into `main` use **squash merge**. Task branches may contain iterative/WIP commits, but normal merge-commit and rebase-merge integration into `main` are prohibited by the project operating directive.
 
 Repository + GitHub state is the project memory. Prior chat history must not be required.
+
