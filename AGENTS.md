@@ -78,6 +78,15 @@ Before stopping after modifying repository state:
 
 A continuation agent must independently inspect/review inherited work before extending it.
 
+## Review Visibility Rule — Canonical Human Directive
+
+Before publishing a terminal schema-3 `STATUS(REVIEW_READY)`, an agent MUST ensure an **open draft PR** exists from the exact task branch to `main`.
+
+- The draft PR is a diff/provenance/review surface only. Its existence or approval grants no integration, canonicality, verification, or merge authority.
+- The PR head must match the `head_sha` recorded by the terminal `REVIEW_READY` status.
+- A draft PR may be converted or merged only through a separately eligible integration route.
+- All integration into `main` remains squash-only.
+
 ## Main Integration Rule — Canonical Human Directive
 
 All changes integrated into `main` MUST use **squash merge**.
