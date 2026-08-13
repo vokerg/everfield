@@ -1,0 +1,14 @@
+{
+  "schema":"core_game_results_v4",
+  "scope":"bounded fictional game planning evidence",
+  "mission_id":"W2-GAME-EV-REM-03",
+  "attempt_id":"CORE-v4-REM-03",
+  "lineage":{"v1_results":"35939edbb2b7580360bd3c5157dfa24d9657e9bf","v2_results":"c57be3ef32cb2b915aa736d4c007e671e42680b6","v3_results":"b901850128c0aaad84f3ddb5679108a13dc60088","v3_head":"ac03b002fa8ce7237d5f9236d1cbcc1891d0124d","review_v4_input":"713fe301a74dd67e40c4947bcbf6e429d9ff7154"},
+  "evidence":{"policy_search_v3":"fa02ab4c13b247bc2df954db8b0c9ef74a9e84d9","progression_transition_v3":"39d5deab192cf49a41566e5cfc70f5a658296b22","transition_search_v4":"7768d407413bdc2762a7589d6942a0274c443b44","automation_choices_v4":"4894f429f98143a264a7b88f5a2758dabfa1845e"},
+  "reviewed_v3_clean_not_rerun":{"GDF-E2":{"status":"PASS","source":"W2-REV-04 clean policy/search reproduction"},"GDF-E4":{"status":"PASS","source":"W2-REV-04 clean tier-surface result with v4 record-only no-op invariant correction"},"EPA-E3":{"status":"PASS","source":"W2-REV-04 clean policy/search reproduction"},"EPA-E7":{"status":"PASS","source":"W2-REV-04 clean progression mutation validation"},"AGE-E3":{"status":"PASS","source":"W2-REV-04 clean behavior-mechanism reproduction"}},
+  "rerun":{"AGE-E4":{"status":"PASS","basis":"closed TRANSITION-CHECK-v4 machine semantics plus all 83 retained feasible depth-1..3 rows reproduce frontier counts 4/16/63 and first generated findings: advance_stage gate violation, market_trade allowed opportunity consumption, free_step/free_step repeatable free-gain violation, buy_unlock/reset refund violation"}},
+  "record_correction":{"GDF-E4":{"finding":"W2-REV4-m01","rerun_required":false,"basis":"choice model and payback evidence unchanged; expansion.hold is explicitly declared zero-delta no-op, false all-options-change assertion corrected, and non-no-op invariant is true"}},
+  "unaffected_v2":{"ids":["GDF-E1","GDF-E3","EPA-E1","EPA-E2","EPA-E4","EPA-E5"],"source_results":"c57be3ef32cb2b915aa736d4c007e671e42680b6","disposition":"UNCHANGED_NOT_RERUN_NOT_UPGRADED"},
+  "summary":{"affected_PASS":6,"affected_FAIL":0,"affected_INCONCLUSIVE":0,"affected_NOT_RUN":0,"fresh_review":"REQUIRED","game_evidence_blocker":"OPEN","human_preference":"OUT_OF_SCOPE","producer_findings":{"W2-REV4-M01":"ADDRESSED_PENDING_FRESH_REVIEW","W2-REV4-m01":"ADDRESSED_PENDING_FRESH_REVIEW"}},
+  "authority":"planning evidence only; no readiness, gameplay implementation, release, verification completion, engine-selection, legal/provider, or canonical status"
+}
