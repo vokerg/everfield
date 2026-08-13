@@ -1,20 +1,40 @@
 schema: implementation_readiness_ledger_v1
-mission_id: W2-SYN-REM-01
-issue: 201
-claim_base_main_sha: f4cd3125531450d44ed397d7dd830b55d01b5254
+mission_id: W2-SYN-REM-03
+issue: 234
+claim_base_main_sha: c7bc9dbfeae43ea43b1de8215008c37b4d643867
 canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
-source_candidate:
-  mission_id: W2-SYN-01
-  issue: 85
-  terminal_comment_id: 5281092788
-  head_sha: 824273df8a8908c52fd5814d1a50b14b629ed195
-  work_sha: 0d460e72cd2e6b04fe468c850bfbea06798e89ff
-source_verification:
-  mission_id: W2-READY-01
-  issue: 86
-  terminal_comment_id: 5281171817
-  result: FAIL
-  finding_id: W2-READY-M01
+authoritative_baseline:
+  mission_id: W2-SYN-REM-01
+  issue: 199
+  terminal_comment_id: 5281258640
+  head_sha: 39745853d625210b77b4f7413f5096f9a9a1ef20
+  work_sha: aef9ce2f2a7daefef143264eddcfc5256611b084
+  ledger_blob_sha: 54fa660ede655d49f8174adc5c8b712820b692a0
+  unaffected_state_rule: EXACT_BASELINE_VALUES_PRESERVED
+  main_duplicate_issue_201_authority: NONE
+accepted_scoped_delta:
+  mission_id: W2-SYN-REM-02
+  issue: 230
+  terminal_comment_id: 5285317520
+  head_sha: 34be7bb04b03bfcc7a5c4b9a41085bfdf55b5335
+  work_sha: f6b5f9c52cd1368d818f76422fe98c419fe01164
+  decision_blob_sha: 664db6abdba16a6c4711618840269144d80ebb44
+  ledger_blob_sha: 81a7e8b6e810fc500a708ef2272d1f7e25f6c4e7
+  accepted_delta_only: IR-BLOCKER-GAME-EVIDENCE
+source_verifications:
+  - mission_id: W2-READY-02
+    issue: 205
+    terminal_comment_id: 5281448387
+    result: FAIL
+    finding_id: W2-READY-M02
+    historical_result_preserved: true
+  - mission_id: W2-READY-03
+    issue: 232
+    terminal_comment_id: 5285396137
+    result: FAIL
+    finding_id: W2-READY-M03
+    report_blob_sha: a6d4a39e5e174e4b9628d755db532eac14481528
+    historical_result_preserved: true
 prerequisite_review:
   mission_id: W2-REV-01
   issue: 84
@@ -25,16 +45,47 @@ prerequisite_review:
   disposition: CHANGES_REQUIRED
   blocker_count: 0
   major_count: 3
+domain_evidence_review:
+  contract_issue: 196
+  contract_blob: 3601a6d0f5e94fafb76806055947a8593bfb39f1
+  contract_review_issue: 208
+  evidence_issue: 226
+  evidence_head_sha: 90d22fe25eab7734523a10090ade7d609f021335
+  final_results_blob: cf06a935c5f07238efd9c32a33584bf2fee36fb6
+  aggregate_review_issue: 228
+  aggregate_review_status_comment_id: 5285197066
+  aggregate_review_head_sha: e6983050c6e87f637d39b690838da9334ddc079c
+  aggregate_review_blob: 223e148ee284fc20782de306c5fed66ae852107f
+  disposition: PASS_FOR_SYNTHESIS
+  blocker_count: 0
+  major_count: 0
+  correction_requiring_minor_count: 0
 lifecycle:
   synthesis_state: CORRECTED_CANDIDATE
-  verification_target: W2-READY-01
-  verification_issue: 86
-  verification_restart_required: true
+  verification_target: W2-READY
+  verification_issue: null
   verification_input_ready: true
   production_implementation_ready: false
   release_ready: false
   canonical: false
   engine_selected: false
+verification_finding_dispositions:
+  - finding_id: W2-READY-M01
+    source_issue: 86
+    state: RESOLVED_BY_W2_SYN_REM_01
+    predecessor_issue: 199
+  - finding_id: W2-READY-M02
+    source_issue: 205
+    state: RESOLVED_BY_W2_SYN_REM_02_RETAINED
+    resolution: >-
+      The scoped core-game evidence dependency, exact resolution predicate, and
+      reviewed evidence lineage remain bound by the accepted Issue #230 delta.
+  - finding_id: W2-READY-M03
+    source_issue: 232
+    state: RESOLVED_BY_W2_SYN_REM_03
+    resolution: >-
+      Every unrelated readiness field is reconstructed from the exact Issue #199
+      baseline; only the accepted scoped game-evidence delta is overlaid.
 review_finding_dispositions:
   - finding_id: W2-REV-M01
     severity: MAJOR
@@ -148,7 +199,63 @@ readiness_entries:
       - a23d355c3dd8cb385f893baa199a4c700c885b92
       - f5aa7c65ac610d0a5c57cd869212a998b140b6eb
     state: OPEN
-    rationale: reviewed policy mechanics do not grant legal clearance, provider permission, or universal content rights.
+    rationale: reviewed policy mechanics are fail-closed but do not grant legal clearance, provider permission, or universal content rights.
+  - blocker_id: IR-BLOCKER-GAME-EVIDENCE
+    category: PRODUCT
+    scope: DOMAIN
+    scope_id: SCOPE-CORE-GAMEPLAY-v1
+    blocks:
+      - CORE_GAMEPLAY_IMPLEMENTATION
+      - GAMEPLAY_IMPLEMENTATION_READINESS_DECISION
+    does_not_globally_block:
+      - NON_GAMEPLAY_PLANNING_EXPERIMENTS
+      - UNRELATED_TOOLING_PLANNING
+    source_requirement_refs:
+      - W2-GAME-GATE-01
+      - W2-GAME-EV-CORE-v1
+      - W2-REV-06
+    evidence_satisfaction_refs:
+      - c57be3ef32cb2b915aa736d4c007e671e42680b6
+      - fc3c32abf038e2a90b44495b43c012eb1196039f
+      - fa02ab4c13b247bc2df954db8b0c9ef74a9e84d9
+      - 39d5deab192cf49a41566e5cfc70f5a658296b22
+      - f6a17045b99ee7960c94bdb9380b273e2f1fd038
+      - 4894f429f98143a264a7b88f5a2758dabfa1845e
+      - 09a0cbdaeb295cd64c1a2a9e48b5d12fc3671b4a
+      - b07049b4c775f7c468153b411b32f6ab0ff3cc8e
+      - cf06a935c5f07238efd9c32a33584bf2fee36fb6
+      - 223e148ee284fc20782de306c5fed66ae852107f
+    required_members:
+      - GDF-E1
+      - GDF-E2
+      - GDF-E3
+      - GDF-E4
+      - EPA-E1
+      - EPA-E2
+      - EPA-E3
+      - EPA-E4
+      - EPA-E5
+      - EPA-E7
+      - AGE-E3
+      - AGE-E4
+    unaffected_not_rerun_not_upgraded:
+      - GDF-E1
+      - GDF-E3
+      - EPA-E1
+      - EPA-E2
+      - EPA-E4
+      - EPA-E5
+    resolution_predicate_checks:
+      bounded_exact_tranche_and_attempt_lineage: SATISFIED
+      per_member_result_records: SATISFIED
+      negative_or_missing_results_fail_closed: SATISFIED
+      required_domain_evidence_properties: SATISFIED_BY_REVIEWED_LINEAGE
+      independent_aggregate_review: SATISFIED_ISSUE_228
+      fresh_synthesis_disposition: SATISFIED_ISSUE_230_RETAINED
+    state: RESOLVED
+    resolution_scope_id: SCOPE-CORE-GAMEPLAY-v1
+    resolved_by_issue: 230
+    rationale: Exact Issue #196 predicate is satisfied by the accepted reviewed lineage; resolution is scope-bounded.
 trust_debt:
   state: OPEN
   mode: DEGRADED_SINGLE_AGENT
@@ -180,12 +287,23 @@ decisions:
     state: BOUNDED_CONTRACT_EVIDENCE
     production_provider_selected: false
     production_enforcement_proven: false
+  core_domain_evidence:
+    scope_id: SCOPE-CORE-GAMEPLAY-v1
+    state: REVIEWED_PREDICATE_SATISFIED
+    blocker_state: RESOLVED
+    authority: SCOPED_READINESS_EVIDENCE_ONLY
+preservation_checks:
+  issue_199_unaffected_review_findings_exact: true
+  issue_199_unaffected_readiness_entries_exact: true
+  issue_199_unaffected_decisions_exact: true
+  issue_199_trust_debt_exact: true
+  issue_230_game_evidence_delta_retained: true
+  game_evidence_rerun: false
 next_transition:
   allowed_state: VERIFICATION_READY
-  target_mission: W2-READY-01
-  target_issue: 86
-  ownership_transition: VERIFICATION_RESTART
-  meaning: Corrected synthesis packet is ready for full fresh independent verification only.
+  target_mission: W2-READY
+  target_issue: null
+  meaning: Exact corrected successor is ready for one fresh independent verification episode only.
   does_not_mean:
     - PRODUCTION_IMPLEMENTATION_READY
     - ENGINE_SELECTED
