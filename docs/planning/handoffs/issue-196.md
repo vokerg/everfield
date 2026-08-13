@@ -4,7 +4,8 @@
 - task class / decision state: `PLANNING_REVISION / CANONICAL_CANDIDATE`
 - ownership generation: Issue #196 comment `5281157735`
 - claim base: `f4cd3125531450d44ed397d7dd830b55d01b5254`
-- substantive work: `892c87ec9ef73717ee50f8a6df73d32d1d581f01`
+- pre-terminal frontier refresh: `0838298033347d7234f13ba05e9ad08c244a1f69`
+- substantive work: `d32aa80fd77c7caf6995ecb71b311da5a457c3b6`
 - canonical Planning Program blob: `e3120ec203c4156328770aa86c12fbb7187966dc`
 - immutable W1-SYN-GAME input: `e74e0b0c95e85f69718868eedae324a298f02f3e`
 - required next gate: fresh/authorized formal aggregate `W2-REV-01`
@@ -34,11 +35,13 @@ The packet introduces `IR-BLOCKER-GAME-EVIDENCE` as an OPEN `PRODUCT / DOMAIN` b
 
 The first bounded empirical frontier is `W2-GAME-EV-CORE-v1` / successor hint `W2-GAME-EV-01`, containing 12 load-bearing sandbox/economy/progression/evaluator questions. One versioned bounded model/run family may answer multiple questions, but every experiment ID retains its own result and failures may not be averaged away. No successor issue was created by this task.
 
-## Consumer behavior
+## Current consumer chain
 
-Issue #85 / W2-SYN-01 predates this revision and remains immutable historical synthesis. Any fresh synthesis claiming full core-game/product implementation readiness must consume the OPEN game-evidence blocker or an independently reviewed equivalent.
+Issue #86 / W2-READY-01 terminal comment `5281171817` is `FAIL` with `W2-READY-M01`; that failure concerned invalid Issue #84 lifecycle references and did not review this later #196 game-evidence omission.
 
-W2-READY-01 must cold-start from the complete current `[PLAN-v1]` graph. While this packet is pending its required fresh aggregate review, the pre-existing #85 ledger cannot alone establish complete full core-game/product implementation readiness. Narrower verification remains possible only when its declared scope excludes the blocked core-gameplay scope.
+The authoritative remediation candidate is Issue #199 / `W2-SYN-REM-01`, ownership comment `5281190886`, terminal `VERIFICATION_READY` comment `5281258640`, head `39745853d625210b77b4f7413f5096f9a9a1ef20`, work `aef9ce2f2a7daefef143264eddcfc5256611b084`. Current `main` also contains later losing duplicate Issue #201 provenance; Issue #86 recovery `5281316480` and Issue #199 recovery `5281318333` explicitly prohibit using #201 as the verification restart candidate.
+
+After #196 receives its required aggregate review, any full core-game/product readiness remediation must apply the reviewed game-evidence disposition to the authoritative #199 lineage (or a valid later successor) before a fresh W2-READY episode can positively advance that scope. While #196 review is unresolved, the pre-#196 #199 ledger cannot alone establish full core-game/product readiness. Narrower verification remains possible only when the declared scope excludes `SCOPE-CORE-GAMEPLAY-v1`.
 
 ## Authority boundary
 
