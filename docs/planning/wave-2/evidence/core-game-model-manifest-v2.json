@@ -1,0 +1,177 @@
+{
+  "schema":"core_game_model_manifest_v2",
+  "mission_id":"W2-GAME-EV-REM-01",
+  "tranche":"W2-GAME-EV-CORE-v1",
+  "authority":"bounded engine-neutral abstract planning evidence only",
+  "model_identity":{
+    "model_version":"CORE-GAME-MODEL-v2",
+    "game_semantic_graph_version":"GSG-CORE-v2",
+    "simulation_suite_version":"CORE-SIM-v2",
+    "simulation_rules_version":"CORE-RULES-v2",
+    "game_time_policy_version":"ABSTRACT-TURN-v2",
+    "content_set_version":"CORE-CONTENT-v2",
+    "output_schema_version":"CORE-RUN-EVIDENCE-v2",
+    "rng_mode":"NONE_DETERMINISTIC",
+    "seed_set":["seed-0"],
+    "horizon_turns":24,
+    "long_run_cycles":4
+  },
+  "source_binding":{
+    "issue_196_status":5281402332,
+    "issue_196_head":"c9caa318a3a5293f538a3dbd911fae4c667b6a12",
+    "issue_196_work":"d32aa80fd77c7caf6995ecb71b311da5a457c3b6",
+    "dependency_map_blob":"e4f4e964f9b972ebbc22700c7b0a4e23b1c97593",
+    "issue_197_status":5281620570,
+    "issue_197_head":"19c1266434b9e2c600f3e072e79e7c6840a235d5",
+    "issue_197_work":"7716657e8594f61cddd5818150130d52d6238785",
+    "predecessor_corpus_blob":"d1a13be94dc1e37fa9d3990886f70ecf71130c0a",
+    "predecessor_evaluator_blob":"1131ea7b3367bfe1585c03d89ca04897e0b286ce",
+    "predecessor_results_blob":"35939edbb2b7580360bd3c5157dfa24d9657e9bf",
+    "issue_208_review_status":5283739001,
+    "issue_208_terminal_status":5283741196,
+    "issue_208_review_blob":"a52dac557cf96a8412d3c88bcf16217aeab67243"
+  },
+  "attempt_lineage":[
+    {"attempt_id":"CORE-v1-HISTORICAL","producer_issue":197,"head":"19c1266434b9e2c600f3e072e79e7c6840a235d5","result_summary":"6_PASS_6_FAIL_BUT_PASS_AUTHORITY_REJECTED_BY_W2_REV2_M01_M02","immutable":true},
+    {"attempt_id":"CORE-v2-REM-01","producer_issue":210,"predecessor_attempt_id":"CORE-v1-HISTORICAL","changed_work_reason":"close W2-REV2-M01/M02/M03 with exact model identity, source-faithful predicates, structural corrections and rerun","immutable_after_terminal":true}
+  ],
+  "canonicalization_contract":{
+    "encoding":"UTF-8 JSON",
+    "object_key_order":"lexicographic when semantic hashing is required",
+    "array_order":"authoritative unless field explicitly declares set semantics",
+    "numeric_mode":"finite decimal values only",
+    "git_blob_identity":"authoritative retained byte identity"
+  },
+  "initial_state":{"food":6,"materials":4,"coin":6,"skill":0,"standing":0,"insight":0},
+  "resource_classes":{
+    "stock_resources":["food","materials","coin"],
+    "capability_metrics":["skill","standing","insight"],
+    "nonnegative_state":true
+  },
+  "actions":{
+    "forage":{"system":"production","low_decision":true,"effects":{"food":4,"insight":1}},
+    "gather":{"system":"production","low_decision":true,"effects":{"materials":4}},
+    "craft":{"system":"crafting","low_decision":false,"effects":{"materials":-2,"coin":3,"skill":1}},
+    "trade":{"system":"economy","low_decision":false,"effects":{"food":-1,"materials":-1,"coin":5,"standing":1}},
+    "service":{"system":"social","low_decision":false,"effects":{"coin":2,"standing":3}},
+    "learn":{"system":"progression","low_decision":false,"effects":{"coin":-1,"skill":2,"insight":1}},
+    "explore":{"system":"exploration","low_decision":false,"effects":{"food":-1,"materials":1,"insight":3}},
+    "community_project":{"system":"social","low_decision":false,"effects":{"materials":-2,"coin":-1,"standing":4}},
+    "batch_harvest":{"system":"production","low_decision":false,"effects":{"food":6,"materials":1}},
+    "masterwork":{"system":"crafting","low_decision":false,"effects":{"materials":-3,"coin":5,"standing":2}},
+    "broker_network":{"system":"economy","low_decision":false,"effects":{"coin":-2,"standing":3,"insight":1}},
+    "regional_trade":{"system":"economy","low_decision":false,"effects":{"materials":-1,"coin":6,"standing":1}},
+    "mentor":{"system":"social","low_decision":false,"effects":{"coin":-1,"standing":4,"skill":1}},
+    "pantry_sink":{"system":"production","low_decision":false,"effects":{"food":-6,"materials":-1,"standing":3},"meaning":"community reserve / food security ambition"},
+    "workshop_sink":{"system":"crafting","low_decision":false,"effects":{"materials":-3,"coin":-2,"skill":2},"meaning":"workshop expansion / tooling ambition"},
+    "market_sink":{"system":"economy","low_decision":false,"effects":{"coin":-7,"standing":3},"meaning":"market network / property ambition"},
+    "festival_sink":{"system":"social","low_decision":false,"effects":{"materials":-2,"food":-2,"standing":5},"meaning":"community festival / relationship ambition"}
+  },
+  "trajectory_algorithm":{
+    "version":"SCHEDULE-REPLAY-v2",
+    "rule":"start from initial_state; for each schedule action in order add the declared action effects; any negative state invalidates the run; capture state after every action; no hidden actions or wall time",
+    "checkpoints":[8,16,24]
+  },
+  "persona_policies":{
+    "grower":{"policy_version":"POL-GROWER-v2","primary_system":"production","schedule_csv":"forage,gather,craft,forage,community_project,forage,batch_harvest,pantry_sink,explore,forage,gather,craft,forage,batch_harvest,service,pantry_sink,forage,explore,gather,community_project,forage,batch_harvest,trade,pantry_sink"},
+    "crafter":{"policy_version":"POL-CRAFTER-v2","primary_system":"crafting","schedule_csv":"gather,craft,learn,forage,gather,craft,service,workshop_sink,gather,masterwork,forage,learn,gather,craft,trade,workshop_sink,gather,masterwork,forage,service,gather,craft,learn,workshop_sink"},
+    "trader":{"policy_version":"POL-TRADER-v2","primary_system":"economy","schedule_csv":"forage,gather,trade,service,trade,broker_network,regional_trade,market_sink,forage,trade,service,regional_trade,gather,trade,broker_network,market_sink,forage,regional_trade,service,trade,gather,regional_trade,trade,market_sink"},
+    "social":{"policy_version":"POL-SOCIAL-v2","primary_system":"social","schedule_csv":"service,forage,gather,community_project,learn,service,mentor,festival_sink,forage,service,gather,mentor,community_project,learn,service,festival_sink,forage,mentor,gather,service,community_project,mentor,learn,festival_sink"}
+  },
+  "goal_contract":{
+    "foundational_checkpoint_predicate":"food>=5 AND materials>=1 AND (skill+standing+insight)>=2 at turns 8,16,24",
+    "medium_goals":{
+      "grower":"turn16 food>=20 AND standing>=10 AND pantry_sink_count>=2",
+      "crafter":"turn16 skill>=10 AND coin>=15 AND workshop_sink_count>=2",
+      "trader":"turn16 coin>=20 AND standing>=15 AND market_sink_count>=2",
+      "social":"turn16 standing>=30 AND skill>=5 AND festival_sink_count>=2"
+    },
+    "long_goals":{
+      "grower":"turn24 food>=25 AND standing>=18 AND pantry_sink_count>=3",
+      "crafter":"turn24 skill>=14 AND coin>=25 AND workshop_sink_count>=3",
+      "trader":"turn24 coin>=35 AND standing>=30 AND market_sink_count>=3",
+      "social":"turn24 standing>=50 AND skill>=8 AND festival_sink_count>=3"
+    },
+    "route_distinctness":"each lifestyle must satisfy foundational+medium+long predicates, use at least 3 systems, and have a distinct specialization sink/primary system; route labels alone do not satisfy"
+  },
+  "optimizer_search":{
+    "version":"FINITE-POLICY-SEARCH-v2",
+    "candidate_policies":["grower","crafter","trader","social"],
+    "objectives":{
+      "wealth":"coin + 0.5*materials",
+      "self_sufficiency":"food + materials + 3*pantry_sink_count - 2*(trade_count+regional_trade_count)",
+      "mastery":"2*skill + insight + 3*masterwork_count",
+      "social_capital":"standing + 2*(community_project_count+mentor_count+festival_sink_count)",
+      "joint_balanced":"min(food/5, materials/2, max(coin,1)/3, (skill+standing+insight)/5)"
+    },
+    "dominance_pass":"no policy wins more than 2 of 5 independent/joint objectives; every objective winner must have at least one material opportunity-cost deficit versus another policy; no invariant-violating exploit may be accepted as ordinary efficiency"
+  },
+  "automation_model":{
+    "amortization_turns":12,
+    "utility_formula":"output*scale - setup/amortization_turns - maintenance - attention_value*attention*scale",
+    "tiers":{
+      "manual":{"setup":0,"maintenance":0.1,"attention":4.0,"output":3.2,"new_decisions":1},
+      "partial":{"setup":16,"maintenance":0.5,"attention":2.2,"output":3.8,"new_decisions":3},
+      "strong":{"setup":60,"maintenance":2.0,"attention":0.8,"output":4.6,"new_decisions":5}
+    },
+    "cells":[[1,0.5],[1,1.5],[1,3.0],[3,0.5],[3,1.5],[3,3.0],[8,0.5],[8,1.5],[8,3.0]],
+    "pass":"manual, partial, strong each win >=1 tested cell; new_decisions strictly increases; no tier is universal"
+  },
+  "sink_policy":{
+    "version":"AMBITION-SINK-v2",
+    "cycle_boundary_turns":24,
+    "stock_soft_caps":{"food":20,"materials":10,"coin":25},
+    "rule":"after each 24-turn cycle, stock above each soft cap is converted to named ambition progress rather than deleted: food->community_reserve, materials->infrastructure_expansion, coin->ambition_fund; then next cycle continues from post-conversion state",
+    "pass":"four repeated cycles complete without negative state and post-conversion stock remains <= caps; each stock resource has both source and meaningful sink"
+  },
+  "switching_model":{
+    "version":"SWITCH-BRIDGE-v2",
+    "viable_entry_goals":{
+      "grower":"food>=14 AND materials>=3",
+      "crafter":"skill>=3 AND materials>=2",
+      "trader":"coin>=12 AND standing>=10",
+      "social":"standing>=15 AND skill>=1"
+    },
+    "cases":[
+      {"from":"grower","to":"trader","stage_turn":8,"recovery_actions":"trade,service,broker_network"},
+      {"from":"grower","to":"crafter","stage_turn":16,"recovery_actions":"gather,learn,craft,masterwork"},
+      {"from":"trader","to":"crafter","stage_turn":16,"recovery_actions":"gather,learn,craft,masterwork"},
+      {"from":"crafter","to":"social","stage_turn":16,"recovery_actions":"service,mentor,community_project"},
+      {"from":"social","to":"grower","stage_turn":16,"recovery_actions":"forage,gather,batch_harvest,pantry_sink"},
+      {"from":"social","to":"trader","stage_turn":24,"recovery_actions":"trade,service,broker_network,regional_trade"},
+      {"from":"trader","to":"social","stage_turn":24,"recovery_actions":"service,mentor,community_project,festival_sink"},
+      {"from":"crafter","to":"grower","stage_turn":24,"recovery_actions":"forage,gather,batch_harvest,pantry_sink"}
+    ],
+    "pass":"every case has nonzero recovery cost/turns, no negative state, reaches target viable-entry goal within <=8 recovery turns, and preserves predecessor investment rather than refund duplication"
+  },
+  "progression_graph":{
+    "graph_version":"PROGRESSION-GRAPH-v2",
+    "nodes":["start","grower_foundation","crafter_foundation","trader_foundation","social_foundation","grower_goal","crafter_goal","trader_goal","social_goal","mature_goal"],
+    "edges":[["start","grower_foundation"],["start","crafter_foundation"],["start","trader_foundation"],["start","social_foundation"],["grower_foundation","grower_goal"],["crafter_foundation","crafter_goal"],["trader_foundation","trader_goal"],["social_foundation","social_goal"],["grower_goal","mature_goal"],["crafter_goal","mature_goal"],["trader_goal","mature_goal"],["social_goal","mature_goal"]],
+    "required_branch_goals":["grower_goal","crafter_goal","trader_goal","social_goal","mature_goal"],
+    "intentional_exclusions":[{"from":"social_foundation","goal":"crafter_goal","reason":"specialization identity; switching bridge is the explicit route"}],
+    "search_algorithm":"sorted-node DFS reachability plus gray-stack cycle detection and closed requirement-symbol validation",
+    "mutation_cases":[
+      {"id":"missing_requirement","mutation":"trader_foundation->trader_goal requires RESOURCE_GHOST","expected":"DETECT_UNREACHABLE_OR_UNKNOWN_REQUIREMENT"},
+      {"id":"cycle_injection","mutation":"crafter_goal requires trader_goal AND trader_goal requires crafter_goal","expected":"DETECT_CYCLE"},
+      {"id":"edge_removal","mutation":"remove grower_goal->mature_goal","expected":"DETECT_GROWER_PATH_LOSS_WHILE_OTHER_PATHS_REMAIN"}
+    ]
+  },
+  "exploit_search":{
+    "version":"BOUNDED-INVARIANT-SEARCH-v2",
+    "algorithm":"enumerate seeded transition fixtures and cycles to depth<=4 in stable id order; classify DEFECT only when a declared invariant is violated; otherwise BENIGN",
+    "invariants":["no zero-cost repeatable net-positive resource cycle","no stage advance without declared gate","reset cannot refund setup while retaining unlock","high efficiency with resource+opportunity cost is not itself an exploit"],
+    "fixtures":[
+      {"id":"cost_free_positive_cycle","expected":"DEFECT","trace":"free_step->free_step","violation":"zero-cost repeatable net-positive resource cycle"},
+      {"id":"ungated_stage_advance","expected":"DEFECT","trace":"stage1->stage2 without gate","violation":"stage advance without declared gate"},
+      {"id":"reset_duplication","expected":"DEFECT","trace":"buy_unlock->reset_refund->unlock_retained","violation":"refund setup while retaining unlock"},
+      {"id":"efficient_trade","expected":"BENIGN","trace":"spend4->gain10_with_market_opportunity_cost","violation":null}
+    ]
+  },
+  "persona_benchmark":{
+    "version":"PERSONA-PORTFOLIO-v2",
+    "policy_bindings":{"scripted":"POL-GROWER-v2","bounded_rational":"POL-SOCIAL-v2","optimizer":"POL-TRADER-v2","fuzz_seed17":"POL-CRAFTER-v2"},
+    "pass":"all four policy classes retain full action traces and produce >=3 distinct primary-system trajectory families; aggregation preserves each class separately"
+  },
+  "coverage_limits":["abstract engine-neutral model only","no human preference/fun inference","no final balance/content authority","finite four-policy optimizer universe","24-turn main horizon plus four-cycle stock lifecycle","no real gameplay kernel"]
+}
