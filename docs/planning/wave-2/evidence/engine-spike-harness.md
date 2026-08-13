@@ -1,4 +1,4 @@
-# W2-REM-ENG-05 — Engine spiike harness v5
+# W2-REM-ENG-05 — Engine spike harness v5
 
 **Mission:** `W2-REM-ENG-05` / Issue #126  
 **Task class:** bounded engine-harness remediation / `EVIDENCE_REQUIRED`  
@@ -11,7 +11,7 @@
 
 This v5 packet changes only the three findings from independent review #122:
 
-- `PG-REM4-M01` — make the closed `result Ô failure_class` envelope total over malformed value types, including list/dict/container values.
+- `PG-REM4-M01` — make the closed `result × failure_class` envelope total over malformed value types, including list/dict/container values.
 - `PG-REM4-M02` — enforce one-to-one unique retained-attempt registry/reference identity instead of set-only equality.
 - `PG-REM4-m01` — reject malformed adaptation/registry container shapes deterministically instead of raising.
 
@@ -26,7 +26,7 @@ The executable source is:
 Local fresh execution on the exact bytes used for this packet produced:
 
 - source bytes: `28352`;
-- predicted Git blob identity from `sha1("blob 28352\x00" + bytes)`: `2c646988dc16e212f43df6a4ee5ce646622ac2a6`;
+- predicted Git blob identity from `sha1("blob 28352\0" + bytes)`: `2c646988dc16e212f43df6a4ee5ce646622ac2a6`;
 - raw validator source SHA-256: `9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea`;
 - validator contract SHA-256: `ed1de63a02872c18981259a15eb8393b3d94d5f7af774b4b1f771c1c4e2e77ef`;
 - feature-slice SHA-256: `9a2523c4870146b09233397f3773f7a27b1e0135c24a6767d16e34a791aab104`;
