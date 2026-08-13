@@ -1,35 +1,32 @@
-# W2-REM-ENG-02 — Engine spike harness v2
+# W2-REM-ENG-02 — Engine spike harness v2.1
 
 **Source mission:** `W2-ENG-02` / Issue #72  
 **Remediation mission:** `W2-REM-ENG-02` / Issue #94  
-**Source frozen head/work:** `af914fa147f22af1f544f7cdeb07a5e4234c9f8c`  
-**Source harness blob:** `da29b1b867f01f0efaeda28616f4f5dc329ee2c9`  
-**Source handoff blob:** `3857e514f786b404c1c6948bdf7b3ed68c168920`  
+**Frozen source head/work:** `af914fa147f22af1f544f7cdeb07a5e4234c9f8c`  
+**Frozen source harness blob:** `da29b1b867f01f0efaeda28616f4f5dc329ee2c9`  
+**Frozen source handoff blob:** `3857e514f786b404c1c6948bdf7b3ed68c168920`  
 **Source terminal status:** Issue #72 comment `5255039768`  
 **Independent pre-gate review:** Issue #72 comment `5270974506`  
-**Remediation base main:** `c7ba185ed9667b717794c19eaa0834ca41aa4c78`  
-**Authoritative foundation:** `docs/planning/WAVE-1-FOUNDATIONS-v1.md` blob `a252e3c93702f3ebaecd3e888944a23dbe1b0e1d`  
-**Harness ID:** `W2-ENG-HARNESS-v2`  
+**Remediation base:** `main@c7ba185ed9667b717794c19eaa0834ca41aa4c78`  
+**Harness ID:** `W2-ENG-HARNESS-v2.1`  
 **Feature slice ID:** `W2-ENG-FEATURE-SLICE-v2`  
 **Scenario manifest ID:** `W2-ENG-SCENARIO-INPUTS-v2`  
-**Executable fixture:** `docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py`  
-**Task class / decision state:** `PLANNING_REVISION / EVIDENCE_REQUIRED`  
-**Required independent review:** `W2-REV-01`
+**Validator ID:** `W2-ENG-PROTOCOL-VALIDATOR-v2.1`  
+**Required formal review:** `W2-REV-01`
 
-## 1. Scope and authority
+## 1. Scope, status, and authority
 
-This remediation preserves the useful W2-ENG-02 experiment protocol and closes two auditability defects before W2-ENG-03 executes any candidate:
+This bounded remediation closes the W2-ENG-02 pre-gate defects without executing, ranking, or selecting an engine.
 
-1. the common workload is now an exact engine-neutral feature-slice/input manifest rather than intent-level prose; and
-2. the equivalence/retry/reset truth cases are now executable deterministic fixtures rather than a Markdown-only assertion table.
+It changes the evidence protocol in three ways:
 
-The harness remains a **comparative experiment protocol**. It does not score or select an engine, does not become production game logic, does not authorize implementation readiness, and does not grant canonicality.
+1. one exact engine-neutral feature slice and scenario-input manifest exist before candidate adaptation;
+2. candidate-native adaptation is accepted only through explicit common-ref, obligation, lower-bound, resource, failure-injection, package, and context checks; and
+3. equivalence plus attempt/reset/retry/repair-generation semantics are executable and content-addressed.
 
-Candidate-specific physical representation is allowed only after a candidate binds the common slice through an `AdaptationManifest` that preserves or strengthens every required obligation and measurable bound.
+The validator is `PLANNING_EXPERIMENT` evidence only. Neither this document nor the validator is production game logic, implementation readiness, engine-selection authority, release authority, formal `W2-REV-01`, verification, integration, or canonicalization.
 
-## 2. Frozen engine-neutral feature slice
-
-`W2-ENG-FEATURE-SLICE-v2` is synthetic planning input. It fixes **logical work**, not engine-specific scene files, component APIs, serialization formats, profiler formats, or build-system syntax.
+## 2. Frozen engine-neutral `FeatureSliceContract`
 
 ```yaml
 feature_slice_id: W2-ENG-FEATURE-SLICE-v2
@@ -106,41 +103,13 @@ continuation_fixture:
   negative_missing_field: next_acceptance_step
 ```
 
-Canonical feature-slice digest: `sha256:9a25209da5cf037f84955a834f4e8bda5b1e1de8085ee9fc4a07679f194699d2`.
+Semantic digest: `sha256:9a2523c4870146b09233397f3773f7a27b1e0135c24a6767d16e34a791aab104`.
 
-### 2.1 What a candidate may translate
+Physical engine representation is candidate-native. Logical work is not. An engine may translate scenes/nodes/components/resources/saves/profilers/build targets, but may not reduce common entity, asset, state, action, UI, conflict, workload, package, or continuation obligations to obtain an easier comparison.
 
-A candidate may represent the common slice using native concepts: scenes, entities, nodes, resources, prefabs, ECS data, C# objects, Rust components, engine-native saves, build targets, or profiler adapters.
+## 3. `ScenarioInputManifest`
 
-It may **not** reduce the common logical obligations because its native representation is inconvenient. Examples of illegal weakening include:
-
-- fewer than 32 logical entities for a scenario whose bound is 32;
-- fewer than eight logical assets when the scenario binds the asset fixture;
-- replacing the ten-action S3 deterministic input vocabulary with a smaller synthetic input;
-- replacing the two exact S5 semantic overlap locations with disjoint edits;
-- replacing the common S9 Windows x64 development package with an easier candidate-native target;
-- giving S10 a richer hidden handoff context than the frozen partial-state fixture.
-
-Additional evidence or larger work is allowed only when it does not change the common acceptance rule or resource-parity class.
-
-## 3. Common start and resource profile
-
-Every normal attempt starts from:
-
-```yaml
-profile_id: W2-ENG-START-COLD-v2
-cache_mode: COLD
-generated_state_policy: REGENERATE_FROM_REPO
-resource_class: W2-ENG-HOST-COMMON-v2
-```
-
-The exact physical host/container image, CPU/RAM/storage cap, OS build, and toolchain installation record are bound by W2-ENG-03 before execution and must be identical or explicitly unresolved for all candidates in a comparison cohort.
-
-An attempt that secretly uses warm caches, hidden generated state, undeclared manual preparation, or a stronger resource class is not comparable. A declared resource exception is visible evidence but remains `INCONCLUSIVE` for the common comparison until the cohort is rebalanced.
-
-## 4. Scenario contracts with exact common input refs
-
-The following logical refs resolve to §2 and to the executable fixture:
+Exact common refs:
 
 - `SLICE:logical_state`
 - `SLICE:action_vocabulary`
@@ -153,236 +122,252 @@ The following logical refs resolve to §2 and to the executable fixture:
 - `SLICE:package_fixture`
 - `SLICE:continuation_fixture`
 
-| Scenario | Common fixed input refs | Required obligations | Measurable lower bounds / exact authority |
+| Scenario | Exact fixed input refs | Minimum mechanical bounds | Required injection |
 |---|---|---|---|
-| `S1` clean bootstrap/build | state, actions, surface, assets | clean reconstruct; build; launch; cold start; incremental observation | 32 entities; 8 assets; 3 screens; `FI-S1-CACHE-MISS-v2` |
-| `S2` editor-independent bounded change | state, actions, surface, assets | fresh-agent change; visible/state-visible change; reviewable diff; automated verification | 32 entities; 8 assets; 3 screens; >=1 changed logical location; `FI-S2-STALE-META-v2` |
-| `S3` shared-kernel deterministic evidence | state, actions | real/shared production rules; exact seed/input; repeatable state/events; perturbation distinguishable | 32 entities; 600 ticks; 10 actions; mechanism authority exactly `REAL_OR_SHARED_RULES`; `FI-S3-INPUT-PERTURB-v2` |
-| `S4` save/load/schema evolution | state, save | round trip; schema evolution; explicit migration; malformed tuple diagnostic | 32 entities; 5 v1 fields; >=1 v2 added field; `FI-S4-INCOMPAT-TUPLE-v2` |
-| `S5` parallel change/merge | state, surface, merge | parallel non-overlap; intentional overlap; visible conflict; post-merge checks | exact two semantic overlap locations; >=1 non-overlap per branch; `FI-S5-OVERLAP-v2` |
-| `S6` controlled player-surface capture | state, surface, capture | reach known state; identity-bound capture; state-vs-capture failure separated | 3 screens; >=1 frame; 1280×720 common capture surface; `FI-S6-CAPTURE-DOWN-v2` |
-| `S7` malformed project/asset recovery | assets, state | broken-reference injection; repo/CLI diagnosis; bounded repair; rerun | 8 assets; exactly identified `ASSET-08` broken-ref fixture; `FI-S7-BROKEN-REF-v2` |
-| `S8` observability/profiling | state, profile | representative workload; parseable profile; locate injected hotspot; resource observations | 19,200 logical updates + 3,200 injected hotspot updates; `FI-S8-HOTSPOT-v2` |
-| `S9` packaging | state, surface, assets, package | common package target; exact repro inputs; clean-extract launch; typed package failure | 3 screens; 8 assets; target exactly `WINDOWS_X64_DEV_PACKAGE-v1`; `FI-S9-PACKAGE-CONFIG-v2` |
-| `S10` fresh-agent continuation | continuation, state, surface | repo-only handoff; fresh-context reconstruct; complete remaining actions; rerun evidence | exactly 3 remaining action IDs; 7 required handoff fields; hidden context forbidden; `FI-S10-HANDOFF-GAP-v2` |
+| S1 bootstrap/build | logical_state, action_vocabulary, player_surface, assets | 32 entities; 8 assets; 3 screens | `FI-S1-CACHE-MISS-v2` |
+| S2 bounded change | logical_state, action_vocabulary, player_surface, assets | 32 entities; 8 assets; 3 screens; >=1 changed logical location | `FI-S2-STALE-META-v2` |
+| S3 deterministic evidence | logical_state, action_vocabulary | 32 entities; 600 ticks; 10 actions; `REAL_OR_SHARED_RULES` | `FI-S3-INPUT-PERTURB-v2` |
+| S4 save/schema | logical_state, save_schema | 32 entities; 5 v1 fields; >=1 v2 field | `FI-S4-INCOMPAT-TUPLE-v2` |
+| S5 parallel merge | logical_state, player_surface, merge_fixture | exact 2 semantic overlaps; >=1 non-overlap each branch | `FI-S5-OVERLAP-v2` |
+| S6 capture | logical_state, player_surface, capture_fixture | 3 screens; >=1 frame; 1280×720 | `FI-S6-CAPTURE-DOWN-v2` |
+| S7 malformed asset | assets, logical_state | 8 assets; exact broken `ASSET-08` fixture | `FI-S7-BROKEN-REF-v2` |
+| S8 profiling | logical_state, profiling_fixture | 19,200 normal + 3,200 hotspot updates | `FI-S8-HOTSPOT-v2` |
+| S9 packaging | logical_state, player_surface, assets, package_fixture | 3 screens; 8 assets; exact `WINDOWS_X64_DEV_PACKAGE-v1` | `FI-S9-PACKAGE-CONFIG-v2` |
+| S10 continuation | continuation_fixture, logical_state, player_surface | 3 remaining actions; 7 handoff fields; no hidden context | `FI-S10-HANDOFF-GAP-v2` |
 
-Canonical scenario-manifest digest: `sha256:be4f1ca72f4861325783f8975101314823648977549ddf281b73fb5a64e389eb`.
+Every row also has a closed obligation set in the executable `SCENARIOS` object. A missing obligation mapping is rejection. Semantic digest: `sha256:be4d7473b01da6b428cd5f3be48de083abd161a4899471303f3ccfeef45c725f`.
 
-## 5. AdaptationManifest v2
+## 4. Candidate adaptation and equivalence
 
-Before any candidate scenario execution, the candidate publishes an exact adaptation object:
+Each candidate/scenario publishes:
 
 ```yaml
 AdaptationManifest:
   candidate_id: <exact>
   scenario_id: S1..S10
-  harness_id: W2-ENG-HARNESS-v2
+  harness_id: W2-ENG-HARNESS-v2.1
   feature_slice_id: W2-ENG-FEATURE-SLICE-v2
-  fixed_input_refs: [<all common refs for scenario>]
+  fixed_input_refs: [<all required common refs>]
   mappings:
-    <required obligation>: EQUIVALENT | STRICTLY_STRONGER
+    <every required obligation>: EQUIVALENT | STRICTLY_STRONGER
   bounds:
-    <scenario metric>: <candidate value>
-  failure_injections: [<all required scenario injection ids>]
+    <every declared scenario minimum>: <candidate value>
+  failure_injections: [<every required injection>]
   start_profile:
     cache_mode: COLD
     generated_state_policy: REGENERATE_FROM_REPO
     resource_class: W2-ENG-HOST-COMMON-v2
   resource_exception: false
   undocumented_manual_intervention: false
-  mechanism_authority: <S3 must be REAL_OR_SHARED_RULES>
-  package_target: <S9 common target>
+  mechanism_authority: <S3 REAL_OR_SHARED_RULES>
+  package_target: <S9 WINDOWS_X64_DEV_PACKAGE-v1>
   hidden_context_transfer: false
   extra_evidence: []
 ```
 
-### 5.1 Mechanical equivalence rule
+The executable validator rejects missing common refs, missing/weaker obligations, shrunk numeric bounds, missing injections, hidden/warm start state, stronger/different resource class, unresolved resource exceptions, hidden manual intervention, abstract S3 substitution, S9 package substitution, and hidden S10 context.
 
-The executable validator rejects an adaptation when any of these is true:
+Extra evidence or larger work is permitted only if common acceptance and resource parity are unchanged.
 
-1. harness or feature-slice identity differs;
-2. any required common input ref is absent;
-3. any required obligation is absent or mapped below `EQUIVALENT`;
-4. any bounded logical input/work metric is below the scenario minimum;
-5. required failure injection is absent;
-6. start state is not cold/repository-regenerated;
-7. resource class is not the common class or an unresolved exception exists;
-8. an undocumented manual intervention is required;
-9. S3 uses an abstract simulator rather than real/shared production rules;
-10. S9 replaces the common package target;
-11. S10 transfers hidden context.
+## 5. Start state, attempt identity, and immutable lineage
 
-This replaces the v1 phrase “materially shrinks scenario scale/input” with explicit executable checks. A candidate may add evidence or candidate-native work without gaining weaker acceptance.
+Common normal start profile:
 
-## 6. Attempt, reset, retry, and lineage policy
+```yaml
+profile_id: W2-ENG-START-COLD-v2
+cache_mode: COLD
+generated_state_policy: REGENERATE_FROM_REPO
+resource_class: W2-ENG-HOST-COMMON-v2
+```
 
-Every scenario uses at least two **normal** attempts under independently reset start states plus every required failure-injection attempt.
+W2-ENG-03 must bind the exact physical host/container/toolchain profile behind that logical class before runs and use one comparison-cohort rule.
 
-Each attempt retains:
+Each executable attempt record binds:
 
 ```yaml
 AttemptRecord:
   attempt_id: <stable>
   scenario_id: <S1..S10>
-  candidate_id: <exact candidate>
+  candidate_id: <exact>
   candidate_generation_id: <exact>
   kind: NORMAL | FAILURE_INJECTION
-  normal_index: <1..n or null>
-  injection_id: <exact or null>
+  normal_index: <integer-or-null>
+  injection_id: <exact-or-null>
+  result: PASS | FAIL | INCONCLUSIVE | NOT_RUN
+  failure_class: NONE | PRODUCT | INFRA | HARNESS | UNKNOWN
   reset_id: <exact>
+  reset_verified: true | false
+  workspace_id: <exact>
   resource_class: W2-ENG-HOST-COMMON-v2
-  result: PASS | FAIL | FLAKY | INCONCLUSIVE | NOT_RUN
-  artifact_refs: []
-  diagnostics_refs: []
-  manual_interventions: []
 ```
 
-The attempt ledger also retains a run-registry reference set and an `all_attempt_refs` set. They must equal the retained attempt IDs. A missing failed attempt is `INCONCLUSIVE`, not a clean retry.
+The generation object additionally binds `candidate_work_id`, optional predecessor generation, exact repair-change reference, the run-registry set, and the retained-attempt set.
 
-### 6.1 Aggregate semantics
+Mechanical invariants:
 
-- fewer than two normal attempts -> `NOT_RUN`;
-- first two normal attempts not independently reset -> `INCONCLUSIVE`;
-- non-common resource class -> `INCONCLUSIVE`;
-- required failure-injection attempt absent -> `NOT_RUN`;
-- normal PASS/FAIL disagreement -> `FLAKY`;
-- any required injection recovery assertion fails -> `FAIL`;
-- two normal PASS attempts + all required injection PASS -> `PASS_FOR_COMPARISON`;
-- a failed candidate generation may be superseded by a new exact generation, but its historical attempts remain retained and may not be erased.
+- run registry == retained attempt IDs == `all_attempt_refs`;
+- every attempt's generation/scenario/identity matches the generation object;
+- at least two normal attempts are required;
+- the first two normal attempts require distinct reset IDs, distinct workspaces, and verified resets;
+- every required failure-injection attempt is retained;
+- every attempt uses the common resource class for a comparable result;
+- failed/flaky/inconclusive attempts remain in history after repair.
 
-Retry is therefore evidence, not a laundering mechanism.
+An omitted historical failed attempt is `INCONCLUSIVE`; it can never become a clean PASS by retry.
 
-## 7. Scenario-specific authority limits preserved
+## 6. Aggregate and repair-generation semantics
 
-### S3 hash authority
+For one immutable generation:
 
-A deterministic hash/digest proves only exact identity of the declared normalized state/event object. It does not prove semantic correctness. S3 still requires at least one independent expected-state/invariant assertion and the input-perturbation fixture. An abstract simulator that does not execute the candidate's real/shared rules is rejected even if its hashes are stable.
+- `<2` normal attempts → `NOT_RUN`;
+- unverified/reused reset or workspace → `NOT_RUN`;
+- stronger/different resource class → `INCONCLUSIVE`;
+- required injection absent → `NOT_RUN`;
+- any INFRA/HARNESS/UNKNOWN failure classification → `INCONCLUSIVE`;
+- normal PASS/FAIL disagreement, including a PASS/FAIL/PASS adjudication sequence → `FLAKY`;
+- required recovery injection failure → `FAIL`;
+- all normal attempts FAIL product behavior → `FAIL`;
+- all normal attempts PASS plus required injection PASS → `PASS_FOR_COMPARISON`;
+- explicit harness defect → `INCONCLUSIVE` and `reopen_scope=ALL_CANDIDATES_FOR_SCENARIO`.
 
-### S9 platform scope
+A repaired product state is a **new generation**, not a rewrite. A valid successor must:
 
-The common target is only `WINDOWS_X64_DEV_PACKAGE-v1` for cross-candidate packaging comparability. A candidate may additionally package other platforms as extra evidence. Later corrected platform requirements may add required target-specific probes in W2-ENG-03, but may not remove the common package obligation without a new harness version.
+1. use a new generation ID;
+2. point to the exact predecessor generation;
+3. use a changed candidate-work identity; and
+4. bind an exact repair-change ref.
 
-### S10 fresh context
+The validator rejects generation-ID reuse, missing/wrong predecessor linkage, or a “repair” that keeps the same work identity. Thus `FAIL(g1) -> PASS(g2)` is allowed only as two retained records; `g1` is never rewritten to PASS.
 
-The continuation agent receives only the exact repository/handoff evidence declared by `CONT-PARTIAL-v2`. Private chat context, hidden notes, prior-agent memory, or undisclosed local state is forbidden. The negative fixture omits `next_acceptance_step` and must fail closed.
+## 7. Scenario-specific authority limits
 
-## 8. Executable protocol fixture and deterministic evidence
+**S3:** state/event hashes prove declared object identity only. They do not prove semantic correctness. Real/shared rules plus expected-state/invariant assertions and the perturbation fixture remain required; an abstract simulator is rejected.
 
-The planning-only reference validator is:
+**S9:** `WINDOWS_X64_DEV_PACKAGE-v1` is the common comparison package, not a final release-platform commitment. Corrected platform/accessibility evidence may add probes; it may not silently remove the common package obligation. Platform changes reopen applicability.
+
+**S10:** continuation receives only repository/GitHub/handoff evidence from the frozen partial-state fixture. Private chat, hidden notes, unrecorded memory, or undisclosed local state rejects a clean comparison claim.
+
+**Manual intervention:** intervention remains evidence and cannot be renamed setup. Candidate-native/editor automation is allowed only when invokable/inspectable and fully recorded.
+
+## 8. Executable evidence
+
+Executable artifact:
 
 `docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py`
 
-It uses only the Python standard library and does not execute an engine. Its explicit semantic identity is content-addressed independently of source formatting.
+The continuation episode executed it locally with Python 3 standard library only. All embedded assertions passed.
 
-- validator contract digest: `sha256:e533414f48080e3546f928576c1af5bb31de91d7f8e44ed433f3c2c51f158ee4`
-- feature-slice digest: `sha256:9a25209da5cf037f84955a834f4e8bda5b1e1de8085ee9fc4a07679f194699d2`
-- scenario-manifest digest: `sha256:be4f1ca72f4861325783f8975101314823648977549ddf281b73fb5a64e389eb`
-- synthetic fixture-input digest: `sha256:022bd504f69b60c35ce1f037ac225b9bbf498159481fd3df6aee4e514dfeec01`
-- deterministic result-object digest: `sha256:5cbb2a4443840ccb2e66b6b1336e6f18049436138c808d473773482828505ae4`
+Content-addressed semantic evidence:
 
-### 8.1 Equivalence fixture outcomes
+- validator contract: `sha256:48bd4df89b653699f5ae94db267b14a5243a8f02b10a79f4c175a61eb8173e5f`
+- feature slice: `sha256:9a2523c4870146b09233397f3773f7a27b1e0135c24a6767d16e34a791aab104`
+- scenario manifest: `sha256:be4d7473b01da6b428cd5f3be48de083abd161a4899471303f3ccfeef45c725f`
+- fixture inputs: `sha256:9ad8207e1cecdf8d0933881290888e4c1a6d85e83ccb6e377dd0ab3a52b9e565`
+- result object: `sha256:ff0163f3e9e185e9eb43519bb67f2f0f138ec8f2391d97a36a8916433f5912a8`
 
-| ID | Attack / adaptation | Expected | Executable result |
-|---|---|---|---|
-| EQ-01 | native S2 runner, obligations/bounds preserved | ACCEPT | ACCEPT |
-| EQ-02 | omit S7 failure injection | REJECT | REJECT |
-| EQ-03 | substitute abstract simulator for S3 | REJECT | REJECT |
-| EQ-04 | native S6 capture + stronger identity evidence | ACCEPT | ACCEPT |
-| EQ-05 | hidden warm/prebuilt S1 state | REJECT | REJECT |
-| EQ-06 | candidate-native S8 profiler adapter preserving workload | ACCEPT | ACCEPT |
-| EQ-07 | omit a known failed S9 attempt from retained ledger | REJECT | REJECT |
-| EQ-08 | add extra S9 platform while retaining common package | ACCEPT | ACCEPT |
-| EQ-09 | remove required S5 semantic overlap | REJECT | REJECT |
-| EQ-10 | hide required S2 manual click as setup | REJECT | REJECT |
-| EQ-11 | candidate-native S4 serialization preserving fixture/diagnostics | ACCEPT | ACCEPT |
-| EQ-12 | pass S10 private hidden context | REJECT | REJECT |
-| EQ-13 | shrink S3 common entity bound from 32 to 16 | REJECT | REJECT |
-| EQ-14 | give S8 an undeclared stronger host class | REJECT | REJECT |
-| EQ-15 | omit required S1 `launch` obligation mapping | REJECT | REJECT |
+A code/contract/fixture/result change requires re-execution and new digests before reliance.
 
-The original EQ-01…EQ-12 truth set remains 5 ACCEPT / 7 REJECT. The v2 additions are three explicit rejection cases for the review findings.
+### 8.1 Equivalence fixtures
 
-### 8.2 Aggregate fixture outcomes
+The original EQ-01…EQ-12 set remains 5 ACCEPT / 7 REJECT. Added negative attacks remain REJECT:
 
-| ID | Case | Result |
+- EQ-13: shrink S3 entity bound 32 → 16;
+- EQ-14: give S8 a stronger undeclared host;
+- EQ-15: omit S1 `launch` obligation.
+
+The executable set also proves hidden prewarm, failure-injection omission, abstract S3, failed-attempt omission, semantic-overlap removal, hidden manual intervention, and hidden S10 context are rejected.
+
+### 8.2 Retry/reset/aggregate fixtures
+
+| Fixture | Original truth class / attack | Executable result |
 |---|---|---|
-| AG-01 | two clean independently reset normal PASS + injection PASS | `PASS_FOR_COMPARISON` |
-| AG-02 | normal attempts disagree PASS/FAIL | `FLAKY` |
-| AG-03 | only one normal attempt | `NOT_RUN` |
-| AG-04 | required failure-injection attempt missing | `NOT_RUN` |
-| AG-05 | two normal attempts reuse same reset identity | `INCONCLUSIVE` |
-| AG-06 | run registry contains a failed attempt missing from retained ledger | `INCONCLUSIVE` |
+| AG-01 | R-01 PASS/PASS + injection PASS | `PASS_FOR_COMPARISON` |
+| HIST-01 | R-02 product FAIL generation then repaired generation | `GEN-1=FAIL`, linked `GEN-2=PASS_FOR_COMPARISON` |
+| AG-13 | R-03 PASS/FAIL/PASS adjudication | `FLAKY` |
+| AG-07 | R-04 INFRA failure then PASS | `INCONCLUSIVE` |
+| AG-08 | R-05 required recovery injection FAIL | `FAIL` |
+| AG-03 | R-06 only one normal PASS | `NOT_RUN` |
+| AG-12 | R-07 stronger resource class | `INCONCLUSIVE` |
+| AG-09 | R-08 harness defect | `INCONCLUSIVE` + all-candidate scenario reopen |
+| AG-05 | same reset identity reused | `NOT_RUN` |
+| AG-10 | reset not verified | `NOT_RUN` |
+| AG-11 | mutated workspace reused | `NOT_RUN` |
+| AG-04 | required injection omitted | `NOT_RUN` |
+| AG-06 | failed run omitted from retained ledger | `INCONCLUSIVE` |
 
-A change to the validator, feature slice, scenario manifest, fixture inputs, or result object requires new exact digests and re-execution before W2-ENG-03 may rely on it.
+History negatives reject generation reuse, missing predecessor linkage, and same-work “repair” masquerade.
 
 ## 9. W2-ENG-03 execution packet
 
-Before starting candidate work, W2-ENG-03 must freeze one comparison cohort record containing:
+Before candidate execution, W2-ENG-03 must freeze:
 
-- `W2-ENG-HARNESS-v2` identity and the five digests in §8;
-- exact admitted candidate set and corrected W2-ENG-01 provenance;
-- exact current platform/accessibility provenance;
-- physical common host/container resource profile behind `W2-ENG-HOST-COMMON-v2`;
-- candidate-specific toolchain/account/plugin/terms baselines;
-- exact candidate AdaptationManifest for every S1–S10 scenario;
-- equivalence-validator PASS for every adaptation;
-- run registry and reset strategy;
-- exact manual-intervention recording policy;
-- evidence output paths/retention policy.
+- this exact harness/validator identity and five digests;
+- corrected W2-ENG-01 admission provenance;
+- exact platform/accessibility provenance;
+- common physical host/container resource profile;
+- exact toolchain/account/plugin/terms baselines;
+- one adaptation manifest per candidate/scenario;
+- validator ACCEPT for every adaptation;
+- run registry, reset verification, workspace lineage, and evidence-retention policy;
+- manual-intervention policy;
+- exact attempt-generation and repair-lineage records.
 
-If a candidate cannot satisfy a common bound because the engine's physical model differs, the candidate must either provide an equivalent/stronger translation that passes the validator or remain `INCONCLUSIVE` for that scenario. The common workload is not silently reduced.
+A candidate unable to preserve a common bound is `INCONCLUSIVE` for that claim unless it supplies an equivalent/stronger mapping that passes the exact validator. The workload is never silently reduced.
 
-## 10. Bias controls
+## 10. Bias/failure controls
 
-| Bias/failure mode | Control |
+| Failure mode | Control |
 |---|---|
-| candidate gets a smaller/easier slice | common logical refs + executable minimum bounds |
-| editor-heavy candidate gets prebuilt state | cold/repository-regenerated start profile |
-| faster machine hides tooling cost | exact common resource class |
-| failed retry disappears | run registry must equal retained ledger |
-| candidate-specific failure mode omitted | required injection IDs bound by scenario |
-| native representation excuses missing assertion | every obligation maps EQUIVALENT/STRICTLY_STRONGER |
-| S3 simulator produces convenient hashes | real/shared-rules authority check |
-| candidate packages an easier platform | common Windows x64 dev package retained |
-| continuation uses private agent memory | hidden-context rejection + exact partial-state fixture |
-| one aggregate score masks hard failure | scenario/attempt results retained separately; no scalar engine score |
+| easier candidate-specific slice | frozen common refs + lower bounds |
+| candidate-native mechanism drops assertion | closed obligation mappings |
+| hidden warm/editor state | cold/repository-regenerated profile + adaptation reject |
+| reset reuses mutated workspace | exact reset/workspace identities + verification |
+| stronger machine hides tooling cost | exact common resource class |
+| failed retry disappears | registry/retained-set equality |
+| repair rewrites old failure | immutable linked generations |
+| infra failure is called product or vice versa | explicit failure class; non-product ambiguity is INCONCLUSIVE |
+| harness defect benefits one candidate | scenario reopens across candidates |
+| failure mode omitted | exact required injection IDs |
+| S3 proxy produces convenient hashes | `REAL_OR_SHARED_RULES` authority |
+| candidate packages easier target | exact common package target |
+| continuation uses private memory | hidden-context rejection |
+| one score hides hard failures | scenario/generation/attempt evidence retained; no scalar score |
 
 ## 11. Freshness and reopen conditions
 
-Reopen/reversion the harness when:
+Reopen/version the harness when:
 
-- corrected W2-ENG-01 changes the admitted hypothesis set enough that a scenario no longer measures comparable decision information;
-- platform/accessibility evidence requires a common scenario workload that cannot be represented by v2 without weakening or disproportionate engine-specific work;
-- W2-ENG-03 finds that a common logical bound systematically favors/penalizes one architecture for a non-decision-relevant reason;
-- executable fixture results/digests no longer reproduce;
-- a validator defect allows one of the declared negative fixtures to ACCEPT;
-- attempt registry/reset/resource evidence cannot be retained as specified;
-- W2-REV-01 finds a BLOCKER/MAJOR against equivalence, input parity, retry lineage, or authority limits.
+- W2-ENG-01 admission evidence changes the hypothesis set materially;
+- platform/accessibility evidence makes the common slice invalid or unfair;
+- W2-ENG-03 demonstrates a non-decision-relevant architecture bias in a bound;
+- any executable negative fixture unexpectedly accepts;
+- any declared digest stops reproducing;
+- attempt/reset/resource/history evidence cannot be retained;
+- W2-REV-01 finds a BLOCKER/MAJOR in parity, retry lineage, failure classification, or authority limits.
 
-Any modified harness becomes a new exact version; evidence from incompatible harness versions is not silently pooled.
+Evidence from incompatible harness versions is never silently pooled.
 
-## 12. Remediation acceptance check
+## 12. Remediation acceptance and self-review
 
-Against Issue #94:
+Issue #94 acceptance:
 
-- exact Issue #72 source provenance retained: **PASS**;
-- one exact common feature slice exists before adaptation: **PASS**;
-- every S1–S10 binds exact common input refs: **PASS**;
-- measurable logical/workload bounds replace vague shrink language: **PASS**;
-- candidate-native translations require explicit obligation/bound mapping: **PASS**;
-- executable deterministic validator exists: **PASS**;
-- original EQ-01…EQ-12 truth cases executable: **PASS**;
-- smaller-workload attack rejected: **PASS**;
-- stronger-resource attack rejected: **PASS**;
-- omitted-obligation attack rejected: **PASS**;
-- failed-attempt omission rejected: **PASS**;
-- hidden warm state rejected: **PASS**;
-- omitted failure injection rejected: **PASS**;
-- abstract S3 substitution rejected: **PASS**;
-- hidden S10 context rejected: **PASS**;
-- retry/reset aggregate outcomes executable: **PASS**;
-- validator and results content-addressed: **PASS**;
-- no engine execution/scoring/selection authority: **PASS**;
-- formal independent review remains `W2-REV-01`: **PASS**.
+- immutable provenance to frozen Issue #72 and pre-gate review: **PASS**
+- exact feature slice exists before adaptation: **PASS**
+- S1–S10 exact common refs and measurable bounds: **PASS**
+- candidate-native adaptation weakening mechanically rejected: **PASS**
+- executable validator consumes adaptation/attempt/history objects: **PASS**
+- original EQ-01…12 executable: **PASS**
+- original retry/reset truth classes executable: **PASS**
+- smaller input, hidden prewarm, stronger resource, missing obligation/injection, abstract S3, failed-attempt omission, hidden S10 context rejected or fail-closed: **PASS**
+- repaired generation cannot erase predecessor failure: **PASS**
+- harness defect reopens all candidates for the scenario: **PASS**
+- validator/results content-addressed and reproduced: **PASS**
+- no engine executed/scored/selected: **PASS**
+- no readiness/canonicalization authority: **PASS**
+- formal aggregate review remains W2-REV-01: **PASS**
 
-**Producer remediation disposition:** `REVIEW_READY_CANDIDATE / EVIDENCE_REQUIRED`. This v2 packet may supersede the frozen Issue #72 harness as the substantive W2-ENG-02 input to W2-ENG-03 once terminal provenance is bound; it is not an engine decision or implementation artifact.
+Continuation self-review found one material defect in inherited Issue #94 work: its executable v2 fixture did not reproduce several original retry/reset truth classes while claiming full executable coverage. That defect was corrected in v2.1 before terminal status.
+
+**Final bounded self-review:** 0 unresolved BLOCKER / 0 unresolved MAJOR / 0 correction-requiring MINOR.
+
+**Producer remediation disposition:** `REVIEW_READY_CANDIDATE / EVIDENCE_REQUIRED`. This exact v2.1 packet may supersede frozen Issue #72 as the substantive W2-ENG-02 input for W2-ENG-03/W2-REV-01 only after Issue #94 terminal provenance is published. It creates no stronger authority.
