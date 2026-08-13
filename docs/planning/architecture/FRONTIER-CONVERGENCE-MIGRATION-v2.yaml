@@ -1,0 +1,140 @@
+protocol: planning-v1
+schema: 3
+kind: STAGE_B_POLICY_EPOCH_MIGRATION_CANDIDATE
+mission_id: ARCH-CONVERGENCE-CANON-01
+producer_issue: 181
+producer_base_main_sha: 082740ff455b2dd81966bdb06a413000d2e704bc
+state: CANDIDATE_INACTIVE
+policy_epoch_name: PLAN-STAGE-B-v2
+current_canonical_binding_unchanged: true
+
+provenance:
+  revision3_issue: 174
+  revision3_blob: 4c9543671f2d650ee1c45797d1eee3c1cd3145e0
+  independent_review_issue: 176
+  independent_review_head_sha: d723b791fee6c4ffcf509f5dd7b21657da57e08d
+  independent_review_blob: 56a3a07a0265ee8ea2e07cd7786197ce6d3b2813
+  independent_review_disposition: PASS_FOR_CANONICAL_REVISION
+
+candidate_control:
+  integration_control_issue: 181
+  control_namespace: PLAN-STAGE-B-v2/MAIN_INTEGRATION_COORDINATION
+  singleton_key: repo:vokerg/everfield:refs/heads/main
+  integration_unit_coordination_ttl_seconds: 900
+  global_coordination_ttl_seconds: 300
+  coordination_is_mutation_authority: false
+
+candidate_publication:
+  primitive: GIT_RECEIVE_PACK_EXACT_OLD_REF
+  required_request_shape:
+    ref: refs/heads/main
+    expected_old: checked_base_main_sha
+    new: squash_commit_sha
+  repository_capability_state: UNPROVEN_PENDING_INDEPENDENT_VERIFICATION
+  fallback_if_unproven: PUBLICATION_CAPABILITY_BLOCKED
+  forbidden_unproven_fallbacks:
+    - GENERIC_REST_REF_UPDATE_FORCE_FALSE
+    - ORDINARY_PR_MERGE_OR_SQUASH
+    - FORCE_PUSH_WITHOUT_EXPECTED_OLD
+    - READ_THEN_WRITE_WITHOUT_SERVER_EXPECTED_OLD
+
+migration_required_fields:
+  - source_issue
+  - source_work_sha
+  - source_head_sha
+  - exact_terminal_H
+  - integration_class
+  - exact_path_set
+  - declared_dependency_set
+  - reviewed_identity_or_null
+  - historical_result_state
+  - historical_trust_mode
+  - prior_publication_marker_state
+
+migration_classifications:
+  - MIGRATABLE_EXACT
+  - MIGRATABLE_PROVEN_DISJOINT
+  - ALREADY_INTEGRATED_NONCANONICAL
+  - MIGRATION_BLOCKED_REFRESH_REQUIRED
+
+migration_rules:
+  immutable_terminal_H_required: true
+  live_pr_head_never_substitutes_for_H: true
+  independent_review_never_inferred: true
+  missing_dependencies_never_treated_as_disjoint: true
+  historical_fail_preserved: true
+  historical_inconclusive_preserved: true
+  historical_not_run_preserved: true
+  historical_trust_preserved: true
+  negative_review_acceptance_authority: NONE
+  recursive_review_of_review_forbidden: true
+  storage_state_never_implies_canonicality: true
+  storage_state_never_implies_readiness: true
+  storage_state_never_implies_production: true
+
+compatibility_outcomes:
+  - COMPATIBLE_EXACT
+  - COMPATIBLE_DISJOINT
+  - REFRESH_REQUIRED
+  - MIGRATION_BLOCKED
+  - PUBLICATION_BLOCKED
+  - ALREADY_INTEGRATED
+
+publication_outcomes:
+  - PUBLISHED_EXACT
+  - EXPECTED_OLD_MISMATCH
+  - POLICY_OR_PERMISSION_BLOCKED
+  - TRANSPORT_FAILED_NO_PUBLICATION
+  - TRANSPORT_AMBIGUOUS
+  - ALREADY_PUBLISHED_MARKER_FOUND
+
+verification_required: true
+verification_must_be_independent_of:
+  - issue_181_producer_episode
+  - issue_176_review_episode
+verification_required_attacks:
+  - SAME_UNIT_SAME_BASE_DOUBLE_PUBLISH
+  - UNRELATED_UNITS_GLOBAL_COORDINATION_EXPIRY
+  - STALE_AND_RECOVERED_OWNER_OVERLAP
+  - LIVE_PR_ADVANCES_AFTER_FROZEN_H
+  - MAIN_FORWARD_ADVANCE_AFTER_PREPARE
+  - MAIN_REWIND_AFTER_PREPARE
+  - MAIN_DELETE_RECREATE_OR_UNRELATED_REPLACEMENT
+  - RELEVANT_PATH_DEPENDENCY_POLICY_DRIFT
+  - PROVEN_DISJOINT_MAIN_DRIFT
+  - TRANSPORT_FAILURE_BEFORE_UPDATE
+  - AMBIGUOUS_RESPONSE_AFTER_SUCCESS
+  - PR_DIVERGENCE_OR_CLOSE_FAILURE
+  - NEGATIVE_REVIEW_PROVENANCE_AUTHORITY_LEAK
+  - PRODUCER_SELF_REVIEW_DOWNGRADE
+  - LEGACY_PACKET_MISSING_REQUIRED_AUTHORITY_FIELDS
+  - HISTORICAL_RESULT_AND_TRUST_PRESERVATION
+  - CONCRETE_REPOSITORY_EXPECTED_OLD_CAPABILITY
+  - MAIN_BOUND_POLICY_EPOCH_ACTIVATION
+
+verification_pass_requirements:
+  unresolved_blocker: 0
+  unresolved_major: 0
+  correction_requiring_minor: 0
+  publication_capability_state: PROVEN
+  repository_permission_policy_compatibility: PROVEN
+
+activation:
+  authorized_by_this_candidate: false
+  required_candidate_terminal_state: REVIEW_READY
+  required_candidate_work_head_exact: true
+  required_policy_doc_blob_exact: true
+  required_migration_blob_exact: true
+  required_independent_verification_disposition: PASS
+  required_publication_capability_state: PROVEN
+  required_current_canonical_binding_revalidation: true
+  required_exact_activation_main_parent: true
+  activation_is_separate_scoped_transition: true
+
+non_authority:
+  implementation_readiness: NONE
+  production: NONE
+  release: NONE
+  engine_selection: NONE
+  legal_provider: NONE
+  gameplay: NONE
