@@ -3,6 +3,7 @@
 **Mission:** `W2-GAME-GATE-01` / Issue #196  
 **Task class / decision state:** `PLANNING_REVISION / CANONICAL_CANDIDATE`  
 **Claim base:** `main@f4cd3125531450d44ed397d7dd830b55d01b5254`  
+**Pre-terminal frontier refresh:** `main@0838298033347d7234f13ba05e9ad08c244a1f69`  
 **Canonical Planning Program blob:** `e3120ec203c4156328770aa86c12fbb7187966dc`  
 **Immutable W1-SYN-GAME input:** `e74e0b0c95e85f69718868eedae324a298f02f3e`  
 **Authority:** noncanonical planning/readiness structure only. No gameplay implementation, production, release, engine, verification, or canonical authority is created.
@@ -134,44 +135,50 @@ The dependency map keeps later work bounded by purpose:
 
 Runtime questions such as engine-adapter parity, RNG isolation, long accelerated simulation, and workload reproducibility remain `DEFERRED` until their declared executable surface exists. Deferral preserves debt; it is not PASS.
 
-## 8. W2-SYN-01 consumption
+## 8. Current synthesis/remediation authority
 
-Issue #85 / W2-SYN-01 terminalized before Issue #196 was created. Its exact packet is immutable historical synthesis input and must not be edited in place.
+Issue #85 / W2-SYN-01 is immutable historical synthesis work. The first W2-READY-01 verification episode, Issue #86 status comment `5281171817`, correctly terminalized `FAIL` with finding `W2-READY-M01`; that finding concerned invalid Issue #84 lifecycle references and did **not** review or resolve this later-created game-evidence omission.
 
-For any **fresh** synthesis that claims full product/core-game implementation readiness:
+The authoritative bounded remediation for that failure is Issue #199 / `W2-SYN-REM-01`, ownership comment `5281190886`, terminal `VERIFICATION_READY` comment `5281258640`, head `39745853d625210b77b4f7413f5096f9a9a1ef20`, work `aef9ce2f2a7daefef143264eddcfc5256611b084`. Current `main` also contains later losing duplicate Issue #201 provenance, but Issue #86 recovery comment `5281316480` and Issue #199 recovery comment `5281318333` explicitly preserve #199 as the authoritative remediation candidate. The #201 bytes are historical duplicate provenance only and may not become the verification restart candidate.
 
-1. `IR-BLOCKER-GAME-EVIDENCE` (or an independently reviewed superseding entry) must appear in the readiness ledger;
-2. the blocker remains OPEN until its exact evidence/review predicate is satisfied;
-3. technical/factory/engine/accessibility/rights/platform evidence cannot silently clear it;
-4. a narrower synthesis may omit the blocker only when its declared readiness scope excludes `SCOPE-CORE-GAMEPLAY-v1`.
+Issue #199 also predates this #196 packet. Therefore any **fresh** synthesis/remediation that claims full core-game/product implementation readiness must:
 
-Because the existing #85 ledger predates this correction, it is insufficient by itself to establish current full core-game/product implementation readiness. That does not rewrite #85's historical terminal state.
+1. preserve #199 as the current authoritative remediation lineage unless a valid later successor supersedes it;
+2. consume `IR-BLOCKER-GAME-EVIDENCE` (or an independently reviewed superseding entry) after this packet passes its required review;
+3. keep the blocker OPEN until its exact evidence/review predicate is satisfied;
+4. not let technical/factory/engine/accessibility/rights/platform evidence silently clear it;
+5. omit it only when the declared readiness scope explicitly excludes `SCOPE-CORE-GAMEPLAY-v1`.
+
+The pre-#196 #85/#199 ledger lineage is therefore insufficient by itself to establish current **full core-game/product** implementation readiness. This does not rewrite the historical #85 or #199 terminal states.
 
 ## 9. W2-READY-01 consumption
 
-W2-READY-01 is required to cold-start from the complete current `[PLAN-v1]` graph. Therefore:
+A fresh W2-READY-01 episode must cold-start from the complete current `[PLAN-v1]` graph and bind the authoritative Issue #199 terminal packet, not losing duplicate Issue #201.
 
-- it must inspect Issue #196 rather than verifying only the frozen #85 files;
-- while this revision is pending required aggregate review, it cannot positively establish that the #85 ledger is complete for full core-game/product implementation readiness;
-- after this revision is independently reviewed, a candidate ledger that omits the OPEN game-evidence blocker (or reviewed equivalent) fails closed for the covered core-game scope;
-- a positive verification may still be possible for an explicitly narrower scope that excludes the blocked core-gameplay implementation scope.
+For the game-evidence correction:
 
-If #86 has already frozen an outcome before this revision becomes review-authoritative, the current graph change is a reopen/reverification trigger for any claim whose scope includes core gameplay readiness.
+- while #196 remains pending required fresh aggregate review, full core-game/product readiness cannot be positively established from the #199 ledger alone because the discovered readiness omission itself is unresolved;
+- after #196 receives its required aggregate review, a full-core-game candidate ledger that omits the accepted OPEN game-evidence blocker (or reviewed equivalent) fails closed;
+- if review changes/rejects the proposed blocker or tranche, fresh synthesis/remediation must consume that reviewed disposition rather than these producer assertions;
+- a positive verification may still be possible for an explicitly narrower scope that excludes the blocked core-gameplay implementation scope;
+- the Issue #86 FAIL remains historical verification evidence; it cannot be upgraded to PASS by remediation or by integrating its provenance.
+
+Because #86/#199 changed while #196 was in progress, this packet refreshed those exact authorities before terminalization instead of treating the original claim-base graph as frozen project truth.
 
 ## 10. Review and lifecycle
 
 Required independent critique remains **formal aggregate `W2-REV-01`**. The already-completed aggregate review episode predates this packet and therefore cannot be treated as review of these bytes.
 
-The lifecycle is:
+The current convergence route is:
 
 `W2-GAME-GATE-01 REVIEW_READY`
 → required fresh/authorized W2-REV-01 aggregate review episode
-→ disposition findings
-→ fresh synthesis/readiness revision if the blocker is accepted or modified
-→ W2-READY-01 verification of the exact updated ledger
+→ disposition all material findings
+→ bounded revision of the authoritative #199 synthesis/remediation lineage (or a valid later successor) if the game-evidence blocker is accepted/modified
+→ fresh W2-READY-01 verification against that exact updated ledger and the then-current issue graph
 → only then can a covered readiness decision advance.
 
-No step is skipped merely because a PR is mergeable or provenance has been integrated.
+No step is skipped merely because a PR is mergeable, losing duplicate bytes are present on `main`, or provenance has been integrated.
 
 ## 11. Self-review
 
@@ -183,6 +190,8 @@ No step is skipped merely because a PR is mergeable or provenance has been integ
 - first empirical tranche size: **12**
 - one-issue-per-experiment fanout created: **NO**
 - synthetic players treated as human fun oracle: **NO**
+- current authoritative remediation lineage resolved: **Issue #199, not losing #201**
+- first W2-READY result preserved: **FAIL / W2-READY-M01**
 - engine selected: **NO**
 - gameplay implementation authorized: **NO**
 - production implementation authorized: **NO**
