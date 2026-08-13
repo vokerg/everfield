@@ -1,0 +1,21 @@
+{
+  "schema":"core_game_viability_evaluator_v1",
+  "input":"docs/planning/wave-2/evidence/core-game-viability-corpus.json",
+  "output":"docs/planning/wave-2/evidence/core-game-viability-results.json",
+  "deterministic_rules":[
+    {"ids":["GDF-E1","EPA-E2"],"pass":"at least two lifestyle runs reach min_stage and at least three unique primary families exist"},
+    {"ids":["GDF-E2","EPA-E3"],"pass":"maximum frequency of any objective primary family is at most max_same_objective_primary"},
+    {"ids":["GDF-E3"],"pass":"maximum lifestyle low_run is at most max_low_decision_run"},
+    {"ids":["GDF-E4","EPA-E4"],"formula":"utility=output*scale-setup/amortization_turns-maintenance-attention_value*attention*scale","pass":"manual partial and strong each win at least one cell and new_decisions increases by tier"},
+    {"ids":["EPA-E1"],"pass":"every terminal resource stock is at most max_terminal_stock"},
+    {"ids":["EPA-E5"],"pass":"every switching recovery is non-null and at most max_switch_recovery"},
+    {"ids":["EPA-E7"],"pass":"three monotonic stages, at least three alternatives per stage, zero unknown resource requirements"},
+    {"ids":["AGE-E3"],"pass":"at least min_persona_primary_families unique primary families across policy classes"},
+    {"ids":["AGE-E4"],"pass":"every seeded check has observed classification equal to its expected classification"}
+  ],
+  "tie_break":"lexicographic tier name",
+  "missing_input":"FAIL",
+  "aggregate_scalar_oracle":false,
+  "human_fun_or_preference":"INCONCLUSIVE_OUT_OF_SCOPE",
+  "authority":"bounded engine-neutral abstract evidence only"
+}
