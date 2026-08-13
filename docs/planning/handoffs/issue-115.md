@@ -30,9 +30,9 @@ Independent bounded pre-gate review of Issue #107 is complete. Disposition: `CLE
 - replacement-envelope set: `sha256:2ac80d5dd1f8e08de84d9409b37c20d99d2251420dc81c50b9ffbfbd4692b9d5`
 - predecessor evidence artifact/root: `sha256:46f6e1dfd6b56eb2d62c689e0c20de7021ff51123002655550834abd04d8107d`
 
-## Remaining lifecycle step
+## Review visibility
 
-Before terminal schema-3 `STATUS(REVIEW_READY)`, an open draft PR from `planning/issue-115` to `main` must exist and its head must match the terminal `head_sha`. The PR is review visibility only and grants no integration authority.
+Draft PR #117 is open from `planning/issue-115` to `main` solely for review visibility. The PR follows the branch head and grants no integration, verification, readiness, release, or canonicalization authority. Before terminal status, the exact final PR head must be checked against that status `head_sha`.
 
 ## Downstream
 
