@@ -15,6 +15,8 @@ Fresh verification of authoritative Issue #199 is complete.
 
 `W2-READY-M02` is a separate barrier-model omission. Canonical Wave-1 game provenance retains 54 core game/player-experience experiment identities as UNRUN / REQUIRED EVIDENCE, while the current Wave-2 promotion graph and Issue #199 ledger do not compile that debt into typed decision/readiness dependencies.
 
-Existing owned Issue #196 / `W2-GAME-GATE-01` is the bounded correction route. Do not interfere with its branch. After #196 validly terminalizes, one bounded synthesis refresh should consume the resulting typed game-evidence state and then route to one fresh readiness verification.
+During this verification, Issue #196 / `W2-GAME-GATE-01` validly terminalized `REVIEW_READY` at comment `5281402332`, head `c9caa318a3a5293f538a3dbd911fae4c667b6a12`, with all 54 identities accounted for and explicit OPEN `IR-BLOCKER-GAME-EVIDENCE` scoped to `SCOPE-CORE-GAMEPLAY-v1`. Its required next gate is a fresh authorized W2-REV-01 aggregate review. That review must adjudicate #196 before any synthesis refresh consumes its producer assertions.
+
+Correct continuation: fresh authorized W2-REV-01 review of #196 → bounded refresh of the authoritative #199 synthesis lineage according to that review → fresh readiness verification. Do not create an issue per experiment or an all-experiments global gate.
 
 Issue #201/main synthesis bytes are losing-duplicate noncanonical provenance and are not candidate authority.
