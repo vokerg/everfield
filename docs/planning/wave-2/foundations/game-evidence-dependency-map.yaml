@@ -1,0 +1,487 @@
+schema: game_evidence_dependency_map_v1
+mission_id: W2-GAME-GATE-01
+issue: 196
+claim_base_main_sha: f4cd3125531450d44ed397d7dd830b55d01b5254
+canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+wave1_game_synthesis_work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+authority: NONCANONICAL_PLANNING_CANDIDATE
+accounting:
+  expected: 54
+  observed: 54
+  unique: true
+  grouped: 42
+  superseded: 4
+  deferred: 8
+  retained: 0
+  omitted: 0
+  duplicated: 0
+readiness_blocker:
+  id: IR-BLOCKER-GAME-EVIDENCE
+  category: PRODUCT
+  scope: DOMAIN
+  scope_id: SCOPE-CORE-GAMEPLAY-v1
+  state: OPEN
+  blocks:
+  - CORE_GAMEPLAY_IMPLEMENTATION
+  - GAMEPLAY_IMPLEMENTATION_READINESS_DECISION
+  does_not_globally_block:
+  - NON_GAMEPLAY_PLANNING_EXPERIMENTS
+  - UNRELATED_TOOLING_PLANNING
+  resolve_requires:
+  - exact W2-GAME-EV-CORE-v1 execution with immutable attempt lineage and per-experiment outcomes
+  - no required FAIL, INCONCLUSIVE, or NOT_RUN in evidence consumed for the covered claim
+  - evidence for at least two materially viable lifestyles, no unexplained universal dominant route, bounded low-decision burden with non-passive automation, reachable supported progression, and adequate synthetic-policy diversity
+  - required independent aggregate review plus fresh synthesis/readiness disposition
+  resolution_scope_only: SCOPE-CORE-GAMEPLAY-v1
+first_frontier:
+  id: W2-GAME-EV-CORE-v1
+  successor_mission_hint: W2-GAME-EV-01
+  state: DERIVED_NOT_RUN
+  members:
+  - AGE-E3
+  - AGE-E4
+  - EPA-E1
+  - EPA-E2
+  - EPA-E3
+  - EPA-E4
+  - EPA-E5
+  - EPA-E7
+  - GDF-E1
+  - GDF-E2
+  - GDF-E3
+  - GDF-E4
+  execution_rule: One bounded versioned abstract/shared model and run family may cover multiple questions, but every experiment ID retains an independent result record and failure cannot be averaged away.
+  synthetic_player_rule: Versioned synthetic policies are evaluation models, not human preference proxies or a universal fun oracle.
+  issue_creation_state: NOT_CREATED_BY_W2-GAME-GATE-01
+consumer_contract:
+  W2-SYN-01: 'Historical Issue #85 predates this revision and remains immutable. Any fresh synthesis claiming full core-game/product implementation readiness must consume IR-BLOCKER-GAME-EVIDENCE or an independently reviewed superseding entry; technical/factory/engine/accessibility/rights/platform evidence cannot silently clear it.'
+  W2-READY-01: 'Verification must cold-start from the complete current PLAN-v1 graph. While this revision lacks its required fresh aggregate review, the pre-existing Issue #85 ledger cannot alone establish complete full core-game/product implementation readiness. A narrower verification scope may proceed only if it explicitly excludes the blocked core-gameplay scope.'
+required_review:
+  mission_id: W2-REV-01
+  fresh_for_this_packet: true
+  prior_review_episode_satisfies: false
+source_families:
+  RDF:
+    mission: W1-TEC-02
+    work_sha: c13389cf1df7ab8e2515a5267bd56869082df1b2
+    path: docs/planning/wave-1/proposals/runtime-data-foundation.md
+    section: §18
+    count: 8
+  GDF:
+    mission: W1-DES-01
+    work_sha: 10e1f3cda1f77be81210f769c2224f943810c97b
+    path: docs/planning/wave-1/proposals/game-design-foundation.md
+    section: §18
+    count: 9
+  EPA:
+    mission: W1-DES-02
+    work_sha: 498679b5c3a473d220723794e66799463ed3ba6f
+    path: docs/planning/wave-1/proposals/economy-progression-automation.md
+    section: §18
+    count: 9
+  WSN:
+    mission: W1-DES-03
+    work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+    path: docs/planning/wave-1/proposals/world-social-narrative-content.md
+    section: §18
+    count: 9
+  EXP:
+    mission: W1-EXP-01
+    work_sha: 64be52c55d751b37e8d8c4a1758873f4dec64998
+    path: docs/planning/wave-1/proposals/experience-accessibility-media.md
+    section: §18
+    count: 9
+  AGE:
+    mission: W1-EVAL-01
+    work_sha: a29a9c08f64947b383f4ca6a19fb88032d93777d
+    path: docs/planning/wave-1/proposals/automated-game-evaluation.md
+    section: §18
+    count: 10
+question_reconstruction_rule: For every experiment, the exact originating hypothesis/evidence question and pass/failure semantics are the immutable §18 heading/body at source_families[source].work_sha/path plus the entry anchor; title/anchor below must match that source exactly.
+experiment_columns:
+- id
+- title
+- source
+- original_state
+- accounting
+- route
+- edges
+experiments:
+- - RDF-E1
+  - Deterministic kernel replay
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:A smallest shared/engine-independent gameplay simulation kernel plus exact content/snapshot/command evidence surface exists under implementation-authorized planning scope.
+  - BLOCKS_DECISION(DECISION-DETERMINISTIC-GAMEPLAY-BOUNDARY-v1)
+- - RDF-E2
+  - Presentation-adapter separation
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:An admitted/selected engine adapter and the same canonical simulation scenario both exist; engine selection alone is insufficient.
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-ENGINE-ADAPTER-GAMEPLAY-PARITY-v1)
+- - RDF-E3
+  - RNG isolation
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:Versioned RNG stream implementation exists on a shared gameplay kernel.
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-DETERMINISTIC-RNG-GAMEPLAY-v1)
+- - RDF-E4
+  - Save migration matrix
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - SUPERSEDED
+  - stronger:W2-MIG-01@700fe468f119cece9c4b060cda93e576de50f468|result:BOUNDED_PASS_LOGICAL_MIGRATION_CONTRACT|original_remains:UNRUN_REQUIRED_EVIDENCE
+  - INFORMS_DECISION(DECISION-SAVE-MIGRATION-ARCHITECTURE-v1)
+- - RDF-E5
+  - Content conflict/compile spike
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:A versioned content compiler/package/namespace implementation exists on a bounded non-production or implementation-authorized surface.
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CONTENT-COMPILER-v1)
+- - RDF-E6
+  - Corruption recovery drill
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:A persistence/recovery implementation with versioned diagnostics exists.
+  - BLOCKS_RELEASE_SCOPE(SCOPE-PERSISTENCE-RECOVERY-v1)
+- - RDF-E7
+  - Long accelerated simulation
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:A shared canonical gameplay kernel supports both normal and accelerated advancement.
+  - INFORMS_DECISION(DECISION-LONG-HORIZON-SIMULATION-EVIDENCE-v1)
+- - RDF-E8
+  - Performance workload reproducibility
+  - RDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:Representative executable workload classes and a stable measured environment exist.
+  - BLOCKS_RELEASE_SCOPE(SCOPE-GAME-PERFORMANCE-v1)
+- - GDF-E1
+  - Lifestyle trajectory viability simulation
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-LIFESTYLE-VIABILITY-v1)
+- - GDF-E2
+  - Dominant-route red team
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-DOMINANT-ROUTE-RESISTANCE-v1)
+- - GDF-E3
+  - Chore-burden traces
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-BURDEN-AUTOMATION-v1)
+- - GDF-E4
+  - Automation escalation test
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-BURDEN-AUTOMATION-v1)
+- - GDF-E5
+  - Discovery-cadence / recontextualization audit
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-PLAYER-SURFACE-v1
+  - INFORMS_DECISION(DECISION-DISCOVERY-CADENCE-v1);BLOCKS_RELEASE_SCOPE(SCOPE-CORE-PLAYER-EXPERIENCE-v1)
+- - GDF-E6
+  - System-coupling graph audit
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-STRUCTURE-v1
+  - BLOCKS_DECISION(DECISION-GAME-SYSTEM-BOUNDARIES-v1);BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-SHARED-GAME-SYSTEM-BOUNDARIES-v1)
+- - GDF-E7
+  - Late-game sink/ambition simulation
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-MATURE-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-MATURE-GAME-v1);INFORMS_DECISION(DECISION-LATE-GAME-AMBITION-v1)
+- - GDF-E8
+  - Content-depth sample review
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CONTENT-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-HIGH-VOLUME-GAME-CONTENT-v1);INFORMS_DECISION(DECISION-CONTENT-DEPTH-v1)
+- - GDF-E9
+  - Sandbox comprehension test
+  - GDF
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-PLAYER-SURFACE-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-CORE-PLAYER-EXPERIENCE-v1);INFORMS_DECISION(DECISION-SANDBOX-COMPREHENSION-v1)
+- - EPA-E1
+  - Source/sink lifecycle simulation
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-ECONOMY-LIFECYCLE-v1)
+- - EPA-E2
+  - Lifestyle viability tournament
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-LIFESTYLE-VIABILITY-v1)
+- - EPA-E3
+  - Dominant-route exploit search
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-DOMINANT-ROUTE-RESISTANCE-v1)
+- - EPA-E4
+  - Automation payback/burden sweep
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-BURDEN-AUTOMATION-v1)
+- - EPA-E5
+  - Switching/catch-up simulation
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-SWITCHING-RECOVERY-v1)
+- - EPA-E6
+  - Inflation/sink long-run simulation
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-MATURE-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-MATURE-GAME-v1);INFORMS_DECISION(DECISION-MATURE-ECONOMY-v1)
+- - EPA-E7
+  - Progression graph reachability/fuzz
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-PROGRESSION-REACHABILITY-v1)
+- - EPA-E8
+  - Sensitivity/robustness analysis
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-MATURE-v1
+  - INFORMS_DECISION(DECISION-BALANCE-ROBUSTNESS-v1);BLOCKS_RELEASE_SCOPE(SCOPE-BALANCED-ECONOMY-v1)
+- - EPA-E9
+  - Simulation/model bias audit
+  - EPA
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-EVALUATOR-v1
+  - CALIBRATES_EVALUATOR(EVAL-ECONOMY-SIMULATION-PERSONAS-v1)
+- - WSN-E1
+  - Contradiction injection
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-WORLD-STRUCT-v1
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-WORLD-NARRATIVE-STATE-v1)
+- - WSN-E2
+  - Knowledge/secret leakage
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-WORLD-STRUCT-v1
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-WORLD-NARRATIVE-STATE-v1);BLOCKS_RELEASE_SCOPE(SCOPE-NARRATIVE-SECRETS-v1)
+- - WSN-E3
+  - Quest solvability search
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-WORLD-STRUCT-v1
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-QUEST-STRUCTURE-v1)
+- - WSN-E4
+  - NPC schedule conflict simulation
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-WORLD-STRUCT-v1
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-NPC-SCHEDULES-v1)
+- - WSN-E5
+  - Branching consequence persistence
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-WORLD-STRUCT-v1
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-BRANCHING-WORLD-PERSISTENCE-v1)
+- - WSN-E6
+  - Generated-content grounding tournament
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-WORLD-CONTENT-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-GENERATED-NARRATIVE-CONTENT-v1)
+- - WSN-E7
+  - Semantic-sameness audit
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CONTENT-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-HIGH-VOLUME-GAME-CONTENT-v1)
+- - WSN-E8
+  - Long-horizon social/NPC simulation
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-WORLD-CONTENT-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-LONG-HORIZON-NPC-SOCIAL-v1)
+- - WSN-E9
+  - Narrative critic disagreement calibration
+  - WSN
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-EVALUATOR-v1
+  - CALIBRATES_EVALUATOR(EVAL-NARRATIVE-CRITIC-v1)
+- - EXP-E1
+  - Progressive-disclosure task test
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-PLAYER-SURFACE-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-CORE-PLAYER-EXPERIENCE-v1)
+- - EXP-E2
+  - Input substitution/rebinding test
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-PLAYER-SURFACE-v1
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-PLAYER-INPUT-ABSTRACTION-v1);BLOCKS_RELEASE_SCOPE(SCOPE-CORE-PLAYER-EXPERIENCE-v1)
+- - EXP-E3
+  - Accessibility architecture matrix
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - SUPERSEDED
+  - stronger:W2-REM-ACC-02@50e6770cc490ef74c44faa3ae9eba115b4c1eb7a|result:OPEN_INCOMPLETE|original_remains:UNRUN_REQUIRED_EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-ACCESSIBLE-PLAYER-EXPERIENCE-v1);BLOCKS_RELEASE_SCOPE(SCOPE-ACCESSIBLE-PLAYER-EXPERIENCE-v1)
+- - EXP-E4
+  - Visual style production tournament
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-MEDIA-v1
+  - BLOCKS_DECISION(DECISION-VISUAL-STYLE-v1);BLOCKS_RELEASE_SCOPE(SCOPE-PRODUCTION-MEDIA-v1)
+- - EXP-E5
+  - Audio identity/fatigue test
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-MEDIA-v1
+  - BLOCKS_DECISION(DECISION-AUDIO-IDENTITY-v1);BLOCKS_RELEASE_SCOPE(SCOPE-PRODUCTION-MEDIA-v1)
+- - EXP-E6
+  - Provenance loss injection
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-MEDIA-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-PRODUCTION-MEDIA-v1)
+- - EXP-E7
+  - Controlled capture replay
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-PLAYER-SURFACE-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-PLAYER-SURFACE-REGRESSION-v1)
+- - EXP-E8
+  - Multimodal judge calibration
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-EVALUATOR-v1
+  - CALIBRATES_EVALUATOR(EVAL-MULTIMODAL-MEDIA-v1)
+- - EXP-E9
+  - Localization/layout stress
+  - EXP
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-PLAYER-SURFACE-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-LOCALIZED-PLAYER-SURFACE-v1)
+- - AGE-E1
+  - Seeded defect/oracle portfolio
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-EVALUATOR-v1
+  - CALIBRATES_EVALUATOR(EVAL-GAME-ORACLE-PORTFOLIO-v1)
+- - AGE-E2
+  - Semantic coverage mutation
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-EVALUATOR-v1
+  - CALIBRATES_EVALUATOR(EVAL-SEMANTIC-COVERAGE-v1)
+- - AGE-E3
+  - Persona diversity benchmark
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);CALIBRATES_EVALUATOR(EVAL-SYNTHETIC-PERSONA-PORTFOLIO-v1)
+- - AGE-E4
+  - Exploit search benchmark
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-CORE-v1;load_bearing:IR-BLOCKER-GAME-EVIDENCE
+  - BLOCKS_IMPLEMENTATION_SCOPE(SCOPE-CORE-GAMEPLAY-v1);BLOCKS_DECISION(DECISION-DOMINANT-ROUTE-RESISTANCE-v1)
+- - AGE-E5
+  - Protected leakage/overfit test
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - SUPERSEDED
+  - stronger:W2-PROTECT-01@9f0c42bb82a1bddd97f028b9ba8e94c791e3705a|result:BOUNDED_PASS_WITH_OPEN_PRODUCTION_QUESTIONS|original_remains:UNRUN_REQUIRED_EVIDENCE
+  - CALIBRATES_EVALUATOR(EVAL-PROTECTED-GAME-HOLDOUT-v1)
+- - AGE-E6
+  - Evaluator drift replay
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - SUPERSEDED
+  - stronger:W2-EVAL-01@50723345e6fffddebdbcd7bff1de6458b5989cf1|result:BOUNDED_PASS_WITH_MATERIAL_DRIFT_DETECTED|original_remains:UNRUN_REQUIRED_EVIDENCE
+  - CALIBRATES_EVALUATOR(EVAL-MUTABLE-GAME-JUDGES-v1)
+- - AGE-E7
+  - Subjective disagreement tournament
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-EVALUATOR-v1
+  - CALIBRATES_EVALUATOR(EVAL-SUBJECTIVE-GAME-PANEL-v1)
+- - AGE-E8
+  - Long deterministic simulation reproducibility
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - DEFERRED
+  - deferred_until:A shared deterministic gameplay kernel and long-horizon scenario/policy/seed package exist.
+  - CALIBRATES_EVALUATOR(EVAL-LONG-DETERMINISTIC-SIMULATION-v1)
+- - AGE-E9
+  - Player-surface versus simulation mismatch
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-PLAYER-SURFACE-v1
+  - BLOCKS_RELEASE_SCOPE(SCOPE-PLAYER-SURFACE-REGRESSION-v1);CALIBRATES_EVALUATOR(EVAL-PAIRED-PLAYER-SIMULATION-SURFACE-v1)
+- - AGE-E10
+  - Evaluator cost/frontier benchmark
+  - AGE
+  - UNRUN_REQUIRED_EVIDENCE
+  - GROUPED
+  - tranche:W2-GAME-EV-EVALUATOR-v1
+  - CALIBRATES_EVALUATOR(EVAL-GAME-ROUTING-FRONTIER-v1)
