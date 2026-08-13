@@ -1,0 +1,26 @@
+schema: w2_review_input_manifest_v1
+mission_id: W2-REV-01
+issue: 84
+review_episode_id: w2-rev-01-gpt56sol-20260813-1501-run
+independence_mode: DEGRADED_SINGLE_AGENT
+trust_level: DEGRADED
+candidate_edit_prohibited: true
+prior_rationale_gate: AFTER_INITIAL_EVIDENCE
+resource_constraint_comment_id: 5244416013
+claim_base_main_sha: 082740ff455b2dd81966bdb06a413000d2e704bc
+canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+inputs:
+  authority_work_sha: 28cbecc13f679da0b43793525a9befd384df9a6d
+  engine_report_blob_sha: 98506154ed10bddaec90966b147793b86f3f1f37
+  accessibility_report_blob_sha: 50e6770cc490ef74c44faa3ae9eba115b4c1eb7a
+  protected_evidence_blob_sha: 9f0c42bb82a1bddd97f028b9ba8e94c791e3705a
+  rights_work_sha: a23d355c3dd8cb385f893baa199a4c700c885b92
+  rights_review_sha: f5aa7c65ac610d0a5c57cd869212a998b140b6eb
+attack_order:
+  - identity
+  - failed_run_retention
+  - engine_bias
+  - trust_boundary
+  - accessibility_completeness
+  - authority_leakage
+  - rights_boundary
