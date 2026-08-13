@@ -1,76 +1,60 @@
-# W2-REM-RIGHTS-04 — Total rights-authority scalar/domain validation
+# W2-REM-RIGHTS-05 — Duplicate derived-trigger fail-closed remediation
 
-**Mission:** `W2-REM-RIGHTS-04` / Issue #142  
-**Branch:** `planning/issue-142`  
+**Mission:** `W2-REM-RIGHTS-05` / Issue #148  
+**Branch:** `planning/issue-148`  
 **Base main:** `042d140b5d2e0b951da4528e1867514983418d6f`  
-**Frozen substantive predecessor:** Issue #129 work/head `714394de603dd425a2cb9d2fd2eea1b7cb6135ca`, report blob `c141b4f0db79390228c4088439f2396db56d26b8`, fixture blob `8777e6eb45a47fd82b3dc976ab2a5a416fb909fb`  
-**Independent review:** Issue #141 terminal comment `5277452429`, work/head `9033fec21c5f48935923c1eda3fee5d8694aba1a`, finding `PG-REM3-RIGHTS-M01`  
-**Authority:** noncanonical Wave-2 remediation input only. A fresh independent pre-gate review remains mandatory before formal `W2-REV-01` may treat the rights lane as clean.
+**Frozen remediation predecessor:** Issue #142 terminal `5277675462`, work/head `4b61b276bb28bb114a650e003a7a5d0aeb77411a`, fixture Git blob `39fcdc292cd37661a061c6d3027715106b3a3d27`  
+**Independent finding:** Issue #145 terminal `5277781009`, work/head `99cb77f283f5e903cd46cec230833b4c7efee431`, `PG-REM4-RIGHTS-M01`  
+**Authority:** noncanonical Wave-2 remediation input only. A fresh independently owned pre-gate review remains mandatory before formal `W2-REV-01` can consume this lane as clean.
 
-## Scope and preserved semantics
+## Bounded correction
 
-This is a bounded successor overlay over exact Issue #129. It repairs only the fresh totality defect identified by Issue #141: externally supplied scalar/domain values could reach Python set/dict membership or indexing before their scalar/string type was proven, so malformed JSON-shaped lists or objects could raise `TypeError` rather than fail closed.
+Issue #145 showed that the exact Issue #142 `derive_state()` typed/domain guard admitted duplicate members in the set-like `material_triggers` list. Because downstream logic converted the list with `set(material_triggers)`, duplicate non-quarantine trigger values such as `TERMS_AMBIGUITY` could reach positive `CLEAR / ALL_REQUIRED_EVIDENCE_SATISFIED` when all required evidence was satisfied.
 
-The following Issue #129 semantics are preserved unchanged: `ORIGINALITY-RISK-v2` epoch `2`; the finite rule lattice and `REQUIRED > NOT_APPLICABLE` join; order-independent compiler results; stale-evidence and independent-risk quarantine precedence; the canonical JSON/domain-separated content-ID contract; complete authority-record field sets; `SourceEvidenceRoot` valid ordering; and Issue #95 as prior parallel immutable provenance. This remediation does not reinterpret provider permission, originality, legal meaning, release scope, or any readiness decision.
+This remediation changes only that malformed structural surface. If `material_triggers` is a list whose members are all valid closed-domain trigger strings, uniqueness is now required before the inherited derived-state decision. Any duplicate member returns exact `UNKNOWN / POLICY_UNRESOLVED`. Existing null/bool/number/list/dict/nested-member handling continues through the inherited typed fail-closed guard, so malformed members do not reach set conversion. Valid unique trigger ordering remains non-authoritative.
 
-No legal clearance, release approval, provider permission, production/readiness authority, implementation authority, integration authority, verification authority, release authority, or canonical status is created here.
+The inherited policy semantics remain unchanged: `ORIGINALITY-RISK-v2` epoch `2`; the finite rule lattice and `REQUIRED > NOT_APPLICABLE` join; rule-order-independent compilation; stale-evidence and independent-risk quarantine precedence; canonical JSON/domain-separated content IDs; closed authority schemas; valid `SourceEvidenceRoot` ordering; and Issue #95 as immutable parallel provenance.
 
-## Total scalar/domain guard
+No legal clearance, provider permission, release approval, production/readiness authority, implementation authority, integration authority, verification authority, release authority, merge authority, or canonical status is created here.
 
-The executable reference remains `docs/planning/wave-2/evidence/originality-rights-policy-fixtures.py`. The corrected implementation introduces typed membership helpers that prove `type(value) is str` before any membership or mapping lookup whose key domain is a closed string vocabulary.
+## Executable provenance model
 
-The compiler now rejects malformed values before policy evaluation or indexing for all closed scalar/domain inputs, including at minimum:
+`docs/planning/wave-2/evidence/originality-rights-policy-fixtures.py` is a bounded delta capsule. It loads the exact frozen Issue #142 fixture by Git blob, independently verifies that blob's byte SHA-256 and Git object identity, executes the immutable base, and overlays only the duplicate-trigger guard plus the expanded malformed/regression evidence.
 
-- `origin_class`;
-- `reference_class`;
-- `release_scope_class`;
-- `media_kind`;
-- `policy_id` and exact integer `policy_epoch`;
-- exact boolean policy predicates;
-- every `material_trigger_set` member.
+The current task branch deliberately preserves the exact Issue #142 tree as its direct parent commit (`7621f6fbf1b08d8ea6a904f8e3bf60ab53b5a898`), so the base Git object is durable in the review branch history. A consumer executing this noncanonical planning fixture must fetch branch history sufficient for `git cat-file blob 39fcdc292cd37661a061c6d3027715106b3a3d27`; this artifact is not represented as a standalone production runtime dependency.
 
-Malformed inputs return exactly `{"status":"UNKNOWN","reason":"POLICY_UNRESOLVED"}`. Lists, dictionaries, nulls, booleans in non-boolean domains, numbers, empty strings, and unknown strings cannot reach authority-bearing set/dict membership.
+Direct hashing of the exact predecessor Git bytes produced SHA-256 `6d078060db7f6a1f43fccc1c3d86cc8bacae51d61dfe40dd6e85d76bf19772f5`. The Issue #142 terminal packet published `2238b83bed5a298eb4dc9721a1d75831aa768bc70e2be3c451ff0e3126efa690`; that published source-SHA field does not reproduce from the exact Git blob and is therefore retained only as predecessor metadata, not reused as current evidence. The predecessor Git blob itself is exact and unambiguous.
 
-The same rule is applied to the closed authority schema and derived-state surfaces, including:
+## Mechanical evidence
 
-- the `record_type` dispatch key itself;
-- `ReferenceUseRecord.reference_class` and policy-ref scalar;
-- `OriginalityReviewRecord.result`, policy-ref scalar, and legal-conclusion scalar;
-- `ReleaseRightsAssessment.derived_rights_or_terms_state`, `reason_code`, and policy-ref scalar;
-- every `OriginalityEvidenceRequirementSet.requirements` value plus policy ID/epoch;
-- every `SourceEvidenceRoot.evidence_entries[].kind`;
-- externally supplied evidence-state and material-trigger values consumed by `derive_state`.
-
-Invalid record/root values are rejected through the declared validation API. `content_id(...)` still refuses invalid records, and `validate_claimed_id(...)` still returns false rather than upgrading malformed data.
-
-## Generated malformed-value matrix
-
-`EVERFIELD-RIGHTS-MALFORMED-SCALAR-MATRIX-v1` is generated from the closed authority scalar/domain surfaces rather than hand-picking only the Issue #141 examples. It substitutes malformed JSON-shaped values across those fields and requires deterministic rejection without an uncaught exception.
-
-The exact corrected executable evidence is:
+The corrected fixture source is:
 
 ```yaml
 fixture_path: docs/planning/wave-2/evidence/originality-rights-policy-fixtures.py
-fixture_git_blob_sha: 39fcdc292cd37661a061c6d3027715106b3a3d27
-fixture_source_sha256: 2238b83bed5a298eb4dc9721a1d75831aa768bc70e2be3c451ff0e3126efa690
+fixture_git_blob_sha: 3318f773b675e1bc0c5e5b41064bb1a1a2db7eea
+fixture_source_sha256: bfa69936ce34a204b74a8d2a359257b73e8e917adaa4c79b2e0987d6615df09b
+predecessor_fixture_git_blob_sha: 39fcdc292cd37661a061c6d3027715106b3a3d27
+predecessor_fixture_actual_source_sha256: 6d078060db7f6a1f43fccc1c3d86cc8bacae51d61dfe40dd6e85d76bf19772f5
 policy_id: ORIGINALITY-RISK-v2
 policy_epoch: 2
 serialization_version: EVERFIELD-RIGHTS-CANONICAL-JSON-v1
 schema_version: EVERFIELD-RIGHTS-AUTHORITY-SCHEMA-v1
-malformed_matrix_version: EVERFIELD-RIGHTS-MALFORMED-SCALAR-MATRIX-v1
-tests_passed: 15
-malformed_scalar_cases: 462
+malformed_matrix_version: EVERFIELD-RIGHTS-MALFORMED-SCALAR-MATRIX-v2
+tests_passed: 16
+malformed_scalar_cases: 468
 uncaught_exception_count: 0
-result_digest_sha256: b4d401765ae8447a6a5afeccdcd28e8bbbca9a21d8b84e85b81edb5ec8fe7c9b
-stdout_sha256: 09609122666dfb040188661aaf362ee6af66fae56bf9dd43271275ccff3b7cd4
-two_fresh_stdout_runs_byte_identical: true
+malformed_matrix_digest_sha256: a1fc1fd2c78b11a5a81d8bf7b24d8ffaf3133876d70f7d5ea0400b84fd90daba
+result_digest_sha256: be8f6df19367545ff2136d5c5db9c2a4c93f11f865f6d09ad4af067cb41efd4f
+stdout_sha256: fef07eaaaa37b43221977b9d4eb5bbe5d22a7f9a115aa7e38c6d503886a167e1
 ```
 
-Tests `T01`–`T14` retain the Issue #129 regression groups. `T15_ALL_AUTHORITY_SCALARS_TOTAL_FAIL_CLOSED` adds the generated malformed-domain attack. The resulting matrix has 462 substitutions and zero uncaught exceptions.
+Inherited `T01`–`T15` remain green. `T16_DERIVED_TRIGGER_SET_TOTAL_FAIL_CLOSED` adds all six duplicate closed-domain triggers, valid unique trigger reorder invariance, and nested malformed trigger members. The generated malformed/structural matrix expands from 462 to 468 cases and has zero uncaught exceptions.
+
+All six duplicate trigger values now return exact `UNKNOWN / POLICY_UNRESOLVED` under the strongest positive-evidence setup (all requirements `REQUIRED`, all evidence `SATISFIED`): `CONFLICTING_SOURCE`, `CREDIBLE_COMPLAINT`, `MATERIAL_SIMILARITY_SIGNAL`, `PERMISSION_AMBIGUITY`, `SCOPE_AMBIGUITY`, and `TERMS_AMBIGUITY`.
 
 ## Finite-domain regression
 
-The complete valid epoch-2 lattice was re-run after the scalar hardening:
+The complete 802,816 valid epoch-2 combinations were independently re-executed with an optimized enumerator preserving the exact inherited domains, tuple order, canonical audit payload, and rule-order comparison. It reproduced the inherited audit digest exactly:
 
 ```yaml
 valid_domain_combinations_checked: 802816
@@ -79,10 +63,10 @@ nonclosed_requirement_outputs: 0
 audit_digest_sha256: 166aebf1871a10768694790bcb936ec9ec119350676cf38fb055203259d3466c
 ```
 
-Thus the correction strengthens malformed-input rejection without narrowing or changing legitimate epoch-2 policy results. The audit also retains deterministic rule-order independence.
+Thus the malformed duplicate-set rejection changes no legitimate epoch-2 policy result and does not disturb order independence.
 
-## Finding disposition
+## Finding disposition and stopping rule
 
-`PG-REM3-RIGHTS-M01` is **RESOLVED** mechanically. No externally supplied authority scalar/domain covered by the closed contract may reach the relevant set/dict membership/indexing operation before type/domain rejection. The generated matrix proves the malformed list/dict/null/bool/number/string classes fail closed with zero uncaught exceptions, while all inherited tests and the 802,816-tuple valid-domain audit remain green.
+`PG-REM4-RIGHTS-M01` is **RESOLVED** mechanically. Self-review found 0 unresolved BLOCKER, 0 unresolved MAJOR, and 0 correction-requiring MINOR within this bounded remediation.
 
-This author episode is not the independent judge of the correction. One fresh independently owned pre-gate review must attack the exact frozen Issue #142 packet. If that review is clean, the rights lane proceeds to formal `W2-REV-01`; optional review churn is not authorized by this remediation. Any eventual `main` integration is separately authorized and squash-only.
+This author episode is not an independent judge. After the exact Issue #148 packet is frozen at `REVIEW_READY`, one fresh independently owned pre-gate review must attack the duplicate-trigger guard, the Git-blob provenance reconstruction, the 468-case matrix, and the inherited finite-domain preservation. If that independent review is clean, the rights lane proceeds to formal `W2-REV-01`; optional review churn is not authorized. Any eventual `main` integration remains separately authorized and squash-only.
