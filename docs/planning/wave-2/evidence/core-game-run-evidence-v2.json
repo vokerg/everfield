@@ -1,0 +1,81 @@
+{
+  "schema":"core_game_run_evidence_v2",
+  "manifest_blob":"15e2e3015acd821dfef15fe79ec58537d3642be1",
+  "attempt_id":"CORE-v2-REM-01",
+  "predecessor_attempt":{"attempt_id":"CORE-v1-HISTORICAL","results_blob":"35939edbb2b7580360bd3c5157dfa24d9657e9bf","historical_summary":{"PASS":6,"FAIL":6,"review_authority":"historical PASS claims rejected by W2-REV2-M01/M02; historical FAIL observations retained"}},
+  "experiment_ids":["GDF-E1","GDF-E2","GDF-E3","GDF-E4","EPA-E1","EPA-E2","EPA-E3","EPA-E4","EPA-E5","EPA-E7","AGE-E3","AGE-E4"],
+  "trajectory_evidence":{
+    "grower":{"policy_version":"POL-GROWER-v2","primary_system":"production","checkpoint_states":{"8":{"food":18,"materials":4,"coin":8,"skill":1,"standing":7,"insight":3},"16":{"food":25,"materials":7,"coin":13,"skill":2,"standing":13,"insight":8},"24":{"food":31,"materials":9,"coin":17,"skill":2,"standing":21,"insight":13}},"terminal_state":{"food":31,"materials":9,"coin":17,"skill":2,"standing":21,"insight":13},"system_counts":{"production":16,"social":3,"crafting":2,"exploration":2,"economy":1},"systems_used":5,"max_low_decision_run":2,"foundational_checkpoints_pass":true,"medium_goal_pass":true,"long_goal_pass":true},
+    "crafter":{"policy_version":"POL-CRAFTER-v2","primary_system":"crafting","checkpoint_states":{"8":{"food":10,"materials":5,"coin":11,"skill":6,"standing":3,"insight":2},"16":{"food":13,"materials":4,"coin":21,"skill":11,"standing":6,"insight":4},"24":{"food":17,"materials":4,"coin":28,"skill":16,"standing":11,"insight":6}},"terminal_state":{"food":17,"materials":4,"coin":28,"skill":16,"standing":11,"insight":6},"system_counts":{"production":9,"crafting":9,"progression":3,"social":2,"economy":1},"systems_used":5,"max_low_decision_run":2,"foundational_checkpoints_pass":true,"medium_goal_pass":true,"long_goal_pass":true},
+    "trader":{"policy_version":"POL-TRADER-v2","primary_system":"economy","checkpoint_states":{"8":{"food":8,"materials":5,"coin":15,"skill":0,"standing":12,"insight":2},"16":{"food":10,"materials":6,"coin":24,"skill":0,"standing":24,"insight":4},"24":{"food":12,"materials":6,"coin":41,"skill":0,"standing":34,"insight":5}},"terminal_state":{"food":12,"materials":6,"coin":41,"skill":0,"standing":34,"insight":5},"system_counts":{"economy":15,"production":6,"social":3},"systems_used":3,"max_low_decision_run":2,"foundational_checkpoints_pass":true,"medium_goal_pass":true,"long_goal_pass":true},
+    "social":{"policy_version":"POL-SOCIAL-v2","primary_system":"social","checkpoint_states":{"8":{"food":8,"materials":4,"coin":7,"skill":3,"standing":19,"insight":2},"16":{"food":10,"materials":4,"coin":8,"skill":6,"standing":38,"insight":4},"24":{"food":12,"materials":4,"coin":6,"skill":10,"standing":58,"insight":6}},"terminal_state":{"food":12,"materials":4,"coin":6,"skill":10,"standing":58,"insight":6},"system_counts":{"social":15,"production":6,"progression":3},"systems_used":3,"max_low_decision_run":2,"foundational_checkpoints_pass":true,"medium_goal_pass":true,"long_goal_pass":true}
+  },
+  "optimizer_search_evidence":{
+    "scores":{
+      "grower":{"wealth":21.5,"self_sufficiency":47,"mastery":17,"social_capital":25,"joint_balanced":4.5},
+      "crafter":{"wealth":30.0,"self_sufficiency":19,"mastery":44,"social_capital":11,"joint_balanced":2.0},
+      "trader":{"wealth":44.0,"self_sufficiency":-2,"mastery":5,"social_capital":34,"joint_balanced":2.4},
+      "social":{"wealth":8.0,"self_sufficiency":16,"mastery":26,"social_capital":78,"joint_balanced":2.0}
+    },
+    "objective_winners":{"wealth":"trader","self_sufficiency":"grower","mastery":"crafter","social_capital":"social","joint_balanced":"grower"},
+    "winner_counts":{"grower":2,"crafter":1,"trader":1,"social":1},
+    "max_objectives_won":2,
+    "opportunity_cost_evidence":{
+      "grower":{"deficit_objective":"social_capital","winner_value":25,"best_other_value":78,"gap":53},
+      "crafter":{"deficit_objective":"social_capital","winner_value":11,"best_other_value":78,"gap":67},
+      "trader":{"deficit_objective":"self_sufficiency","winner_value":-2,"best_other_value":47,"gap":49},
+      "social":{"deficit_objective":"wealth","winner_value":8.0,"best_other_value":44.0,"gap":36.0}
+    },
+    "joint_and_independent_objectives_executed":true
+  },
+  "automation_evidence":{
+    "cells":[
+      {"scale":1,"attention_value":0.5,"utilities":{"manual":1.1,"partial":0.866667,"strong":-2.8},"winner":"manual"},
+      {"scale":1,"attention_value":1.5,"utilities":{"manual":-2.9,"partial":-1.333333,"strong":-3.6},"winner":"partial"},
+      {"scale":1,"attention_value":3.0,"utilities":{"manual":-8.9,"partial":-4.633333,"strong":-4.8},"winner":"partial"},
+      {"scale":3,"attention_value":0.5,"utilities":{"manual":3.5,"partial":6.266667,"strong":5.6},"winner":"partial"},
+      {"scale":3,"attention_value":1.5,"utilities":{"manual":-8.5,"partial":-0.333333,"strong":3.2},"winner":"strong"},
+      {"scale":3,"attention_value":3.0,"utilities":{"manual":-26.5,"partial":-10.233333,"strong":-0.4},"winner":"strong"},
+      {"scale":8,"attention_value":0.5,"utilities":{"manual":9.5,"partial":19.766667,"strong":26.6},"winner":"strong"},
+      {"scale":8,"attention_value":1.5,"utilities":{"manual":-22.5,"partial":2.166667,"strong":20.2},"winner":"strong"},
+      {"scale":8,"attention_value":3.0,"utilities":{"manual":-70.5,"partial":-24.233333,"strong":10.6},"winner":"strong"}
+    ],
+    "winner_counts":{"manual":1,"partial":3,"strong":5},
+    "new_decisions":{"manual":1,"partial":3,"strong":5}
+  },
+  "source_sink_lifecycle":{
+    "grower":{"cycles":[{"pre":[31,9,17],"converted":[11,0,0],"post":[20,9,17]},{"pre":[45,14,28],"converted":[25,4,3],"post":[20,10,25]},{"pre":[45,15,36],"converted":[25,5,11],"post":[20,10,25]},{"pre":[45,15,36],"converted":[25,5,11],"post":[20,10,25]}],"stock_order":["food","materials","coin"],"no_negative_state":true,"post_caps_respected":true},
+    "crafter":{"cycles":[{"pre":[17,4,28],"converted":[0,0,3],"post":[17,4,25]},{"pre":[28,4,47],"converted":[8,0,22],"post":[20,4,25]},{"pre":[31,4,47],"converted":[11,0,22],"post":[20,4,25]},{"pre":[31,4,47],"converted":[11,0,22],"post":[20,4,25]}],"stock_order":["food","materials","coin"],"no_negative_state":true,"post_caps_respected":true},
+    "trader":{"cycles":[{"pre":[12,6,41],"converted":[0,0,16],"post":[12,6,25]},{"pre":[18,8,60],"converted":[0,0,35],"post":[18,8,25]},{"pre":[24,10,60],"converted":[4,0,35],"post":[20,10,25]},{"pre":[26,12,60],"converted":[6,2,35],"post":[20,10,25]}],"stock_order":["food","materials","coin"],"no_negative_state":true,"post_caps_respected":true},
+    "social":{"cycles":[{"pre":[12,4,6],"converted":[0,0,0],"post":[12,4,6]},{"pre":[18,4,6],"converted":[0,0,0],"post":[18,4,6]},{"pre":[24,4,6],"converted":[4,0,0],"post":[20,4,6]},{"pre":[26,4,6],"converted":[6,0,0],"post":[20,4,6]}],"stock_order":["food","materials","coin"],"no_negative_state":true,"post_caps_respected":true},
+    "sink_meaning":{"food":"community_reserve","materials":"infrastructure_expansion","coin":"ambition_fund"}
+  },
+  "switching_evidence":[
+    {"from":"grower","to":"trader","stage_turn":8,"recovery_actions":["trade","service","broker_network"],"recovery_turns":3,"end_state":{"food":17,"materials":3,"coin":13,"skill":1,"standing":14,"insight":4},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false},
+    {"from":"grower","to":"crafter","stage_turn":16,"recovery_actions":["gather","learn","craft","masterwork"],"recovery_turns":4,"end_state":{"food":25,"materials":6,"coin":20,"skill":5,"standing":15,"insight":9},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false},
+    {"from":"trader","to":"crafter","stage_turn":16,"recovery_actions":["gather","learn","craft","masterwork"],"recovery_turns":4,"end_state":{"food":10,"materials":5,"coin":31,"skill":3,"standing":26,"insight":5},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false},
+    {"from":"crafter","to":"social","stage_turn":16,"recovery_actions":["service","mentor","community_project"],"recovery_turns":3,"end_state":{"food":13,"materials":2,"coin":21,"skill":12,"standing":17,"insight":4},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false},
+    {"from":"social","to":"grower","stage_turn":16,"recovery_actions":["forage","gather","batch_harvest","pantry_sink"],"recovery_turns":4,"end_state":{"food":14,"materials":8,"coin":8,"skill":6,"standing":41,"insight":5},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false},
+    {"from":"social","to":"trader","stage_turn":24,"recovery_actions":["trade","service","broker_network","regional_trade"],"recovery_turns":4,"end_state":{"food":11,"materials":2,"coin":17,"skill":10,"standing":66,"insight":7},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false},
+    {"from":"trader","to":"social","stage_turn":24,"recovery_actions":["service","mentor","community_project","festival_sink"],"recovery_turns":4,"end_state":{"food":10,"materials":2,"coin":41,"skill":1,"standing":50,"insight":5},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false},
+    {"from":"crafter","to":"grower","stage_turn":24,"recovery_actions":["forage","gather","batch_harvest","pantry_sink"],"recovery_turns":4,"end_state":{"food":21,"materials":8,"coin":28,"skill":16,"standing":14,"insight":7},"nonnegative":true,"target_viable_entry_goal_pass":true,"permanent_damage":false}
+  ],
+  "progression_evidence":{
+    "base_paths":{"grower":["start","grower_foundation","grower_goal","mature_goal"],"crafter":["start","crafter_foundation","crafter_goal","mature_goal"],"trader":["start","trader_foundation","trader_goal","mature_goal"],"social":["start","social_foundation","social_goal","mature_goal"]},
+    "all_required_branch_goals_reachable":true,
+    "mutation_results":[
+      {"id":"missing_requirement","observed":"DETECT_UNREACHABLE_OR_UNKNOWN_REQUIREMENT","detail":"RESOURCE_GHOST outside closed requirement symbols; trader branch invalidated"},
+      {"id":"cycle_injection","observed":"DETECT_CYCLE","detail":"gray-stack cycle crafter_goal<->trader_goal detected"},
+      {"id":"edge_removal","observed":"DETECT_GROWER_PATH_LOSS_WHILE_OTHER_PATHS_REMAIN","detail":"grower mature path lost; crafter/trader/social mature paths remain"}
+    ],
+    "intentional_exclusion_explained":true
+  },
+  "persona_benchmark_evidence":{"policy_primary_systems":{"scripted":"production","bounded_rational":"social","optimizer":"economy","fuzz_seed17":"crafting"},"trajectory_refs":{"scripted":"trajectory_evidence.grower","bounded_rational":"trajectory_evidence.social","optimizer":"trajectory_evidence.trader","fuzz_seed17":"trajectory_evidence.crafter"},"unique_primary_families":4,"aggregation_preserves_each_policy":true},
+  "exploit_search_evidence":[
+    {"id":"cost_free_positive_cycle","search_trace":["free_step","free_step"],"observed":"DEFECT","invariant_violation":"no zero-cost repeatable net-positive resource cycle"},
+    {"id":"ungated_stage_advance","search_trace":["stage1","stage2_without_gate"],"observed":"DEFECT","invariant_violation":"no stage advance without declared gate"},
+    {"id":"reset_duplication","search_trace":["buy_unlock","reset_refund","unlock_retained"],"observed":"DEFECT","invariant_violation":"reset cannot refund setup while retaining unlock"},
+    {"id":"efficient_trade","search_trace":["spend4","gain10_with_market_opportunity_cost"],"observed":"BENIGN","invariant_violation":null}
+  ],
+  "coverage_limits":["abstract engine-neutral model only","finite four-policy optimizer universe","24-turn trajectories","four-cycle stock lifecycle","no real gameplay kernel","human fun/player preference out of scope"]
+}
