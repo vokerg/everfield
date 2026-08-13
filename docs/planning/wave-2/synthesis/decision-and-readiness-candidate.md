@@ -10,7 +10,7 @@
 
 ## Bounded correction
 
-Issue #86 found that the frozen Issue #85 artifacts cited Issue #84 comments `5280974426` and `5281005814`, which have zero lifecycle authority because they belong to invalid resumed ownership generation `5280882773`. Issue #84 later rebound the unchanged substantive review packet under original valid ownership generation `5280748633` as authoritative `REVIEW_STATUS(DONE)` `5281028970` and terminal `STATUS(REVIEW_READY)` `5281030303`.
+Issue #86 found that the frozen Issue #85 artifacts bound W2-REV-01 through non-authoritative lifecycle comments. Issue #84 subsequently rebound the unchanged substantive review packet under original valid ownership generation `5280748633` as authoritative `REVIEW_STATUS(DONE)` `5281028970` and terminal `STATUS(REVIEW_READY)` `5281030303`.
 
 This remediation changes that authority binding only. The reviewed work set, substantive `CHANGES_REQUIRED` judgment, three MAJOR findings, all OPEN blockers, evidence limits, and no-authority boundaries from source blob `46e52bf14f426f4f4b7807fcc92361f30de6a0e3` remain unchanged.
 
@@ -46,8 +46,7 @@ The corrected packet may transition only to `VERIFICATION_READY` for one fresh W
 
 ## Bounded self-review
 
-- invalid review-status reference `5280974426`: removed
-- invalid terminal-status reference `5281005814`: removed
+- source non-authoritative prerequisite lifecycle bindings: removed
 - authoritative review-status `5281028970`: bound
 - authoritative terminal-status `5281030303`: bound
 - W2-REV-01 MAJOR findings retained OPEN: 3/3
