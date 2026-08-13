@@ -1,0 +1,176 @@
+version: 2
+state: REMEDIATED_CANDIDATE
+mission_id: W2-REM-ACC-02
+issue: 135
+observed_date: 2026-08-13
+
+composition_contract:
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v2
+  base_issue: 96
+  base_work_sha: 3937f65ae4eb495420d1240c2b739841aa14a037
+  base_policy_blob_sha: 78690cf658967b2ded35e738df125959a56f0d86
+  rule: apply only the patches below to the exact base policy; all unpatched records and authority boundaries remain byte-identical logical inputs
+
+review_provenance:
+  issue: 134
+  terminal_status_comment_id: 5277197150
+  head_sha: 771cec9d69483b5d2411b40b3d133b024d1e7aba
+  disposition: CHANGES_NEEDED
+  findings: [PG-REM-ACC-M01, PG-REM-ACC-M02]
+
+preserved_state:
+  mapping_complete: false
+  blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
+  blocker_authority_state: OPEN
+  summary_only_pages:
+  - XAG-102
+  - XAG-103
+  - XAG-104
+  - XAG-105
+  - XAG-106
+  - XAG-108
+  - XAG-109
+  - XAG-110
+  - XAG-111
+  - XAG-112
+  - XAG-113
+  - XAG-114
+  - XAG-115
+  - XAG-116
+  - XAG-117
+  - XAG-118
+  - XAG-119
+  - XAG-120
+  - XAG-121
+  - XAG-122
+  - XAG-123
+  formal_review_required: W2-REV-01
+  legal_compliance_claimed: false
+  valve_verified_result_claimed: false
+  empirical_accessibility_pass_claimed: false
+
+source_register_patch:
+  XAG-INDEX:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/guidelines
+    version: XAG-v3.2
+    page_last_updated: 2026-03-04
+    observed_date: 2026-08-13
+  XAG-101:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101
+    version: XAG-v3.2
+    page_last_updated: 2026-03-04
+    observed_date: 2026-08-13
+  VALVE-DECK-COMPAT:
+    url: https://partner.steamgames.com/doc/steamhardware/compat
+    version: LIVE_PUBLIC_CHECKLIST
+    observed_date: 2026-08-13
+
+expected_source_clause_inventory:
+  XAG-101:
+  - XAG101-PC-DEFAULT-SIZE
+  - XAG101-GLYPH-CONTAINED-TEXT
+  - XAG101-GLYPH-SCALE-200
+  - XAG101-TEXT-SCALE-200
+  - XAG101-SCALED-OVERFLOW
+  - XAG101-SANS-SERIF
+  - XAG101-NONSTYLIZED-FONT
+  - XAG101-COMPLETE-CHARSETS
+  - XAG101-TEXT-BLOCK-SPACING
+  - XAG101-SENTENCE-CASE
+  - XAG101-LANGUAGE-ALIGNMENT
+  XAG-107:
+  - XAG107-UI-DIGITAL-ANALOG
+  - XAG107-UI-SINGLE-PRESS
+  - XAG107-REMAP-ALL
+  - XAG107-REMAP-LABELS
+  - XAG107-DIGITAL-EQUIVALENTS
+  - XAG107-RAPID-INPUT
+  - XAG107-PROLONGED-HOLD
+  - XAG107-SIMULTANEOUS
+  - XAG107-MULTIPOINT-GESTURES
+  - XAG107-PATH-GESTURES
+  - XAG107-POINTER-UP-CANCEL
+  - XAG107-NONTRADITIONAL-ALT
+  - XAG107-TWO-STICK
+  - XAG107-KEYBOARD-FULL-PATH
+  - XAG107-SENSITIVITY
+  - XAG107-DICTATION
+  - XAG107-CUSTOMIZATION-ACCESSIBLE
+
+catalog_contract_patch:
+  atomically_expanded_requires_exact_expected_clause_inventory: true
+  atomically_expanded_requires_required_semantic_contracts: true
+  duplicate_extra_or_missing_clause_invalidates_expansion: true
+  missing_expected_inventory_invalidates_expansion: true
+  dangling_evidence_or_gap_ref_invalidates_expansion: true
+  conditional_clause_without_trigger_invalidates_expansion: true
+  aggregate_mapping_complete_is_derived_only_after_all_checks: true
+
+atomic_clause_patch:
+  XAG101-TEXT-BLOCK-SPACING:
+    source_id: XAG-101
+    required_semantics:
+      line_width_max_characters: 80
+      line_width_max_characters_cjk: 40
+      line_width_measurement_text_resize_percent: 100
+      line_width_character_count_excludes_spaces: true
+      line_spacing_min_multiplier: 1.5
+      paragraph_spacing_min_multiple_of_line_spacing: 2
+      letter_spacing_min_multiple_of_font_size: 0.12
+      word_spacing_min_multiple_of_font_size: 0.16
+
+platform_requirement_patch:
+  direct_valve_compatibility:
+    ACC-DECK-09:
+      source_id: VALVE-DECK-COMPAT
+      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
+      semantics:
+        no_in_game_setting_change_required_to_enable_controller_support_or_default_configuration: true
+      evidence_requirement_refs: [ACC-EV-INPUT-CONTROLLER-01]
+  project_selected:
+    ACC-PROJECT-DECK-PROTON-01:
+      authority_class: PROJECT_SELECTED_PLATFORM_EVIDENCE
+      preserve_from_base_policy: true
+
+mechanical_validation:
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v2
+  steps:
+  - fetch exact base policy blob and apply overlay patches
+  - for every ATOMICALLY_EXPANDED page require an expected inventory
+  - compare actual clause IDs to expected IDs by exact set and exact count
+  - require unique clause IDs and valid source IDs
+  - require deterministic applicability and a trigger for conditional clauses
+  - require all evidence and gap references to resolve
+  - require exact semantic values declared in atomic_clause_patch
+  - require ACC-DECK-09 in direct Valve compatibility mapping
+  - derive mapping_complete only after all prior checks
+  expected_result:
+    expected_atomic_clause_count: 28
+    XAG_101_inventory: PASS
+    XAG_107_inventory: PASS
+    XAG101_text_spacing_semantics: PASS
+    reference_integrity: PASS
+    applicability_trigger_totality: PASS
+    direct_valve_ACC_DECK_09: PASS
+    summary_only_pages_fail_closed: PASS
+    mapping_complete: false
+    blocker_authority_state: OPEN
+  adversarial_fixtures:
+    OMIT_EXPECTED_XAG101_CLAUSE: REJECT_ATOMIC_EXPANSION
+    OMIT_LINE_WIDTH_RESIZE_PERCENT: REJECT_REQUIRED_SEMANTIC_MISMATCH
+    ALTER_LINE_WIDTH_RESIZE_PERCENT: REJECT_REQUIRED_SEMANTIC_MISMATCH
+    OMIT_SPACE_EXCLUSION: REJECT_REQUIRED_SEMANTIC_MISMATCH
+    SET_SPACE_EXCLUSION_FALSE: REJECT_REQUIRED_SEMANTIC_MISMATCH
+    DANGLING_EVIDENCE_REF: REJECT_REFERENCE_INTEGRITY
+    CONDITIONAL_WITHOUT_TRIGGER: REJECT_APPLICABILITY_TOTALITY
+    SUMMARY_PAGE_FALSELY_ATOMIC_WITHOUT_INVENTORY: REJECT_ATOMIC_EXPANSION
+    OMIT_ACC_DECK_09: REJECT_DIRECT_VALVE_COMPLETENESS
+
+freshness:
+  recheck_before: [W2-REV-01, engine_ADR_or_readiness_verification, release_or_accessibility_marketing_claim]
+  reopen_triggers:
+  - Microsoft_XAG_version_or_load_bearing_page_change
+  - Valve_Deck_compatibility_checklist_change
+  - selected_platform_scope_change
+  - feature_trigger_change
+  - release_jurisdiction_or_service_scope_becomes_concrete
