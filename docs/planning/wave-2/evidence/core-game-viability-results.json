@@ -1,0 +1,33 @@
+{
+  "schema":"core_game_viability_result_v1",
+  "tranche":"W2-GAME-EV-CORE-v1",
+  "input_blob":"d1a13be94dc1e37fa9d3990886f70ecf71130c0a",
+  "evaluator_blob":"1131ea7b3367bfe1585c03d89ca04897e0b286ce",
+  "experiment_results":{
+    "GDF-E1":{"status":"PASS","evidence":["lifestyle"]},
+    "GDF-E2":{"status":"PASS","evidence":["dominance"]},
+    "GDF-E3":{"status":"FAIL","evidence":["burden"],"failure":"low-decision burden exceeds threshold"},
+    "GDF-E4":{"status":"FAIL","evidence":["automation"],"failure":"manual, partial, and strong automation are not each rational in a tested region"},
+    "EPA-E1":{"status":"FAIL","evidence":["lifecycle"],"failure":"bounded terminal resource stock threshold exceeded"},
+    "EPA-E2":{"status":"PASS","evidence":["lifestyle"]},
+    "EPA-E3":{"status":"PASS","evidence":["dominance"]},
+    "EPA-E4":{"status":"FAIL","evidence":["automation"],"failure":"automation rationality collapses toward stronger tiers"},
+    "EPA-E5":{"status":"FAIL","evidence":["switching"],"failure":"one tested route pivot does not recover inside the bounded horizon"},
+    "EPA-E7":{"status":"PASS","evidence":["progression"]},
+    "AGE-E3":{"status":"FAIL","evidence":["persona"],"failure":"four policy classes collapse to only two primary trajectory families"},
+    "AGE-E4":{"status":"PASS","evidence":["adversarial_checks"]}
+  },
+  "evidence":{
+    "lifestyle":{"viable_stage3":["grower","crafter","trader","social"],"primary_families":["grower","crafter","trader","social"],"trace_source":"input_blob.lifestyle_runs.actions"},
+    "dominance":{"objective_primaries":{"wealth":"crafter","self_sufficiency":"grower","mastery":"crafter","social_capital":"social","balanced":"grower"},"max_same_primary":2},
+    "burden":{"max_low_decision_run":{"grower":21,"crafter":21,"trader":4,"social":3},"threshold":5},
+    "automation":{"winner_counts":{"manual":0,"partial":1,"strong":8},"winners_present":["partial","strong"],"decision_growth":true},
+    "lifecycle":{"threshold":85,"excessive_terminal_stocks":[{"persona":"grower","resource":"food","stock":94},{"persona":"crafter","resource":"materials","stock":88},{"persona":"trader","resource":"coin","stock":97}]},
+    "switching":{"runs":[["grower","trader",2],["trader","crafter",5],["crafter","social",2],["social","grower",null]],"failed_pairs":[["social","grower"]],"threshold":12},
+    "progression":{"stages":3,"alternatives_per_stage":[4,4,4],"unknown_resource_requirements":0,"monotonic":true},
+    "persona":{"primary_families":{"scripted":"grower","bounded":"grower","optimizer":"crafter","fuzz":"crafter"},"unique_primary_families":2,"threshold":3},
+    "adversarial_checks":{"all_expected_equal_observed":true,"case_count":4}
+  },
+  "summary":{"PASS":6,"FAIL":6,"INCONCLUSIVE":0,"NOT_RUN":0,"all_12_executed":true,"game_evidence_blocker_resolved_by_this_packet":false,"human_fun_or_preference_claim":"INCONCLUSIVE_OUT_OF_SCOPE"},
+  "authority":"bounded engine-neutral abstract evidence only; no engine, implementation, production, release, readiness, verification, or canonical authority"
+}
