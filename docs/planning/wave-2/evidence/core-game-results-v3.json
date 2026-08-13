@@ -1,1 +1,12 @@
-{"schema":"core_game_results_v3","scope":"bounded fictional game planning evidence","mission_id":"W2-GAME-EV-REM-02","status":"draft_result_surface"}
+{
+  "schema":"core_game_results_v3",
+  "scope":"bounded fictional game planning evidence",
+  "mission_id":"W2-GAME-EV-REM-02",
+  "attempt_id":"CORE-v3-REM-02",
+  "lineage":{"v1_results":"35939edbb2b7580360bd3c5157dfa24d9657e9bf","v2_results":"c57be3ef32cb2b915aa736d4c007e671e42680b6","v2_head":"b387a7f27733b52daa0d36f40d2e066041ae90b0","review_v3_input":"fc3c32abf038e2a90b44495b43c012eb1196039f"},
+  "evidence":{"policy_search":"fa02ab4c13b247bc2df954db8b0c9ef74a9e84d9","progression_transition":"39d5deab192cf49a41566e5cfc70f5a658296b22","automation_choices":"50f64d428a5261e9b319acb51b30ccbce0c34a39"},
+  "rerun":{"GDF-E2":{"status":"PASS","basis":"generated cross-system search: depth counts 7/49/339/2327, five objective winner traces, no universal winner, material tradeoffs retained"},"GDF-E4":{"status":"PASS","basis":"named fictional choice surfaces increase 1/3/5 by tier, are strict supersets, and every option has a declared state delta; predecessor payback winners remain 1/3/5"},"EPA-E3":{"status":"PASS","basis":"five independent/joint objectives are searched over generated action sequences rather than four fixed lifestyle schedules"},"EPA-E7":{"status":"PASS","basis":"closed progression requirements, exact mutation operations, deterministic symbol/cycle/reachability checks reproduce all three mutation findings"},"AGE-E3":{"status":"PASS","basis":"four distinct versioned behavioral rules generate four retained traces on one shared fictional state/action model"},"AGE-E4":{"status":"PASS","basis":"deterministic breadth-first transition enumeration retains complete depth counts 4/16/63 and generated first findings"}},
+  "unaffected_v2":{"ids":["GDF-E1","GDF-E3","EPA-E1","EPA-E2","EPA-E4","EPA-E5"],"source_results":"c57be3ef32cb2b915aa736d4c007e671e42680b6","disposition":"UNCHANGED_NOT_RERUN_NOT_UPGRADED"},
+  "summary":{"affected_PASS":6,"affected_FAIL":0,"affected_INCONCLUSIVE":0,"affected_NOT_RUN":0,"fresh_review":"REQUIRED","game_evidence_blocker":"OPEN","human_preference":"OUT_OF_SCOPE"},
+  "authority":"planning evidence only; no readiness, implementation, release, verification completion, or canonical status"
+}
