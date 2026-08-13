@@ -1,0 +1,261 @@
+schema: platform_source_records_v1
+mission_id: W2-REM-PLAT-01
+source_mission: W2-PLAT-01
+source_issue: 79
+remediation_issue: 92
+observed_at: "2026-08-12T19:37:30+02:00"
+source_candidate:
+  work_sha: 695d3cd1bc5a017e780db8016ffefa2379d4103d
+  report_blob: f47ad96baea765580ad9d016d527c932ce3b2768
+  handoff_blob: 479a0b6dfeeec838b60593819ff355c2fb66ec2e
+pre_gate_review_comment_id: 5270240728
+record_policy:
+  purpose: >-
+    Preserve an immutable project-side record of the exact external facts consumed by
+    the remediated platform-scope report without copying unnecessary third-party page text.
+  mutable_source_rule: >-
+    A live/versionless external page may support a frozen project claim only through this
+    immutable normalized record, which binds source identity, observation time, explicit
+    version/month/last-updated data when available, the exact facts consumed, and a
+    freshness/reopen rule.
+  monthly_current_rule: >-
+    A monthly source may be labeled CURRENT only when its recorded month equals the newest
+    first-party month available at observed_at. If a newer first-party month is visible,
+    an older record is STALE and cannot support a current-source acceptance claim.
+  inference_rule: >-
+    These records contain external facts only. Project recommendations and sequencing
+    inferences are kept in target-platform-scope.md and may not be represented as source facts.
+records:
+  - id: PLAT-SRC-STEAM-OS
+    authority: Valve / Steamworks
+    title: Platforms
+    url: https://partner.steamgames.com/doc/store/application/platforms
+    source_version: versionless_live_documentation
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Steam release workflows support Windows, macOS, and Linux/SteamOS.
+      - Additional operating-system releases use platform-specific depots/build testing.
+      - The page contains historical operating-system minimum language that is not used as a 2026 support baseline.
+    freshness_rule: Recheck if Valve changes platform/depot workflow or before a shipping-platform commitment.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-STEAM-DECK
+    authority: Valve / Steamworks
+    title: Steam Deck and Steam Machine Compatibility Review
+    url: https://partner.steamgames.com/doc/steamhardware/compat
+    source_version: versionless_live_compatibility_checklist
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - The default controller configuration must provide access to all content.
+      - On-screen glyphs must match the active input.
+      - Required text entry must have a controller-usable path.
+      - Steam Deck default configuration must provide a playable 30 fps at 800p.
+      - Device-compatibility warning and launcher behavior are review criteria.
+      - Windows games without native Linux builds can run through Proton, a Windows compatibility layer.
+      - Steam Deck display guidance includes 1280x800 as the preferred native resolution and a minimum text-legibility criterion.
+    freshness_rule: Recheck before engine comparison, Milestone Zero, readiness verification, or when Valve changes compatibility criteria/hardware.
+    drift_from_issue79: >-
+      Current page now presents joint Deck/Steam Machine criteria; the Deck facts consumed by the
+      producer remain materially supported. The remediation does not promote Steam Machine into scope.
+
+  - id: PLAT-SRC-STEAM-SURVEY
+    authority: Valve / Steam
+    title: Steam Hardware & Software Survey
+    url: https://store.steampowered.com/hwsurvey/
+    source_version: July 2026
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_LATEST_MONTH_AVAILABLE
+    latest_month_check:
+      newest_first_party_month_visible: July 2026
+      record_month: July 2026
+      current: true
+    facts_used:
+      - Participation is optional and anonymous.
+      - Windows represents 93.67 percent of participating systems in the July 2026 survey.
+      - Windows 11 64-bit represents 70.26 percent of participating systems in the July 2026 survey.
+      - The survey is directional Steam-user evidence, not total-market or product-demand evidence.
+    freshness_rule: Recheck newest available month before commercial platform commitment or whenever survey data is used as current evidence.
+    drift_from_issue79: >-
+      MATERIAL_FRESHNESS_CORRECTION: Issue #79 recorded June 2026 at 94.10 percent Windows
+      and 70.44 percent Windows 11 64-bit while July 2026 was already available on the
+      claimed 2026-08-12 observation date. This record supersedes those values.
+
+  - id: PLAT-SRC-STEAM-LANG
+    authority: Valve / Steamworks
+    title: Languages Supported on Steam
+    url: https://partner.steamgames.com/doc/store/localization/languages
+    source_version: versionless_live_documentation
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Steam distinguishes Full Platform Support languages from Game Support Only languages.
+      - Declared game language support is surfaced in Steam store metadata.
+      - This source does not define Everfield shipping languages or localization budget.
+    freshness_rule: Recheck when shipping-language/store-metadata commitments are proposed.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-WIN10
+    authority: Microsoft Lifecycle
+    title: Windows 10 Home and Pro
+    url: https://learn.microsoft.com/en-us/lifecycle/products/windows-10-home-and-pro
+    source_version: lifecycle_table_observed_2026-08-12
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Windows 10 Home and Pro support ended on 2025-10-14.
+      - Version 22H2 was the final Windows 10 Home/Pro version.
+      - LTSC lifecycle is separate and is not used as the normal consumer baseline here.
+    freshness_rule: Recheck only if Microsoft lifecycle guidance changes or legacy-support scope is promoted.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-WIN11
+    authority: Microsoft Lifecycle
+    title: Windows 11 Home and Pro
+    url: https://learn.microsoft.com/en-us/lifecycle/products/windows-11-home-and-pro
+    source_version: lifecycle_table_observed_2026-08-12
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Windows 11 Home and Pro is in support under Microsoft's lifecycle table.
+      - Supported-version windows are version-specific and therefore must be rechecked before freezing a test matrix or minimum OS.
+    freshness_rule: Recheck active versions before engine ADR, implementation-readiness verification, or a minimum-OS commitment.
+    drift_from_issue79: >-
+      Current lifecycle table includes newer Windows 11 releases than the producer wording needed to enumerate;
+      the report consumes only the family-in-support and version-specific-lifecycle facts.
+
+  - id: PLAT-SRC-XAG
+    authority: Microsoft Game Dev
+    title: Xbox Accessibility Guidelines
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/guidelines
+    source_version: XAG v3.2; page last updated 2026-03-04
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - XAG v3.2 is the published guideline version.
+      - XAGs are best-practice guidance for design/development/testing and are not presented as a legal-compliance checklist.
+      - The guideline set spans text, contrast, subtitles/captions, audio, narration, input, difficulty, UI navigation/focus/context, destructive actions, timing, motion/photosensitivity, communication, documentation/support, and mental-health practices.
+    freshness_rule: W2-ACC-01 must recheck current XAG version/history and map actual applicable requirements rather than inherit this list as compliance authority.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-XAG-INPUT
+    authority: Microsoft Game Dev
+    title: Xbox Accessibility Guideline 107 - Input
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+    source_version: guideline_107_live_page_observed_2026-08-12
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - The stated goal is that a player can operate the gaming interface through input mechanisms of their choice.
+      - The guideline recommends alternative configurable input options rather than unnecessary single-mechanism assumptions.
+    freshness_rule: Recheck with XAG version changes; W2-ACC-01 owns applicability and evidence mapping.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-MSSTORE
+    authority: Microsoft Learn / Windows apps
+    title: Publish PC games to the Microsoft Store using the GDK
+    url: https://learn.microsoft.com/en-us/windows/apps/publish/whats-new-game-publishing
+    source_version: page last updated 2026-06-19
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - A self-service path exists for Win32 PC-only games on Microsoft Store using GDK and MSIXVC without managed partner enrollment or concept approval.
+      - Xbox console publishing requires enrollment in the appropriate managed Xbox program.
+      - Xbox services are optional for this PC-only publishing path.
+    freshness_rule: Recheck if Microsoft Store/GDK publishing becomes a promoted distribution target.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-APPLE-PORT
+    authority: Apple Developer
+    title: Game Porting Toolkit
+    url: https://developer.apple.com/games/game-porting-toolkit
+    source_version: Game Porting Toolkit 4
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Game Porting Toolkit 4 is the current toolkit presented on the page.
+      - Its evaluation environment supports Metal 4.
+      - It can evaluate an unmodified Windows executable on Apple silicon and provides shader conversion, profiling/debugging, and remote-development workflows.
+      - Tool availability does not itself establish acceptable port performance, cost, or release readiness.
+    freshness_rule: Recheck before a macOS target is promoted or comparative engine evidence is frozen.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-APPLE-NOTARY
+    authority: Apple Developer Documentation
+    title: Notarizing macOS software before distribution
+    url: https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution
+    source_version: versionless_live_documentation_observed_2026-08-12
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Developer ID distributed macOS software uses Apple's notarization path; Mac App Store distribution has a different submission path.
+      - Automated/custom workflows can use notarytool and the Notary API.
+    freshness_rule: Recheck signing/notarization requirements before a macOS packaging commitment.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-APPLE-INPUT
+    authority: Apple Developer Documentation
+    title: Game Controller
+    url: https://developer.apple.com/documentation/gamecontroller
+    source_version: versionless_live_framework_documentation_observed_2026-08-12
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Apple's Game Controller framework supports physical and virtual game controllers.
+      - The framework documentation also covers common controller families plus mouse and keyboard input devices.
+      - API availability does not establish engine abstraction quality; comparative spikes must test that separately.
+    freshness_rule: Recheck when macOS/input support becomes a hard target or Apple framework requirements materially change.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-NINTENDO
+    authority: Nintendo Developer Portal
+    title: The Process
+    url: https://developer.nintendo.com/the-process
+    source_version: versionless_live_portal_page_observed_2026-08-12
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - Platform SDK/developer information follows portal registration plus NDA/terms acceptance.
+      - Nintendo Switch information requires a separate application after registration.
+      - Release preparation includes submitting the game for Nintendo review.
+    freshness_rule: Detailed platform/certification obligations remain UNKNOWN until official access and explicit scope promotion; recheck public process when that occurs.
+    drift_from_issue79: none_material_for_used_facts
+
+  - id: PLAT-SRC-PLAYSTATION
+    authority: Sony Interactive Entertainment
+    title: Showing your Game to PlayStation
+    url: https://sonyinteractive.com/en/news/blog/showing-your-game-to-playstation/
+    source_version: published 2026-04-07
+    observed_at: "2026-08-12T19:37:30+02:00"
+    mutable: true
+    verification_status: VERIFIED_CURRENT_FOR_USED_FACTS
+    facts_used:
+      - The public indie roadmap begins with becoming a PlayStation Partner through registration.
+      - Detailed development/publishing documentation and tools are available through the partner path rather than fully public certification documentation.
+    freshness_rule: Recheck if PlayStation scope is promoted or partner access becomes available.
+    drift_from_issue79: none_material_for_used_facts
+source_drift_summary:
+  material:
+    - source_id: PLAT-SRC-STEAM-SURVEY
+      old: "June 2026; Windows 94.10%; Windows 11 64-bit 70.44%"
+      corrected: "July 2026; Windows 93.67%; Windows 11 64-bit 70.26%"
+      recommendation_effect: >-
+        No change by itself. The survey is directional evidence only and is not allowed to override
+        support status, required evidence coverage, reversibility, partner-gated uncertainty, or measured platform/engine cost.
+  non_material:
+    - Steam Deck documentation now jointly describes Steam Deck and Steam Machine compatibility; only Deck facts are consumed by the current Everfield scope.
+    - Windows 11 lifecycle tables contain newer version rows, but the report consumes only current-family support and the need for version-specific revalidation.
