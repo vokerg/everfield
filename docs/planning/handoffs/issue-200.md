@@ -2,7 +2,7 @@
 
 ## State
 
-Bounded remediation for Issue #86 finding `W2-READY-M01`. The only substantive correction is prerequisite lifecycle authority: invalid Issue #84 comments `5280974426` / `5281005814` are replaced by authoritative comments `5281028970` / `5281030303`.
+Bounded remediation for Issue #86 finding `W2-READY-M01`. The only substantive correction is prerequisite lifecycle authority: the source synthesis's non-authoritative Issue #84 lifecycle bindings are replaced by authoritative review comment `5281028970` and terminal comment `5281030303`.
 
 ## Immutable inputs
 
