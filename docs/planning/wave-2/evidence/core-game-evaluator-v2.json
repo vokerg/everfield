@@ -1,0 +1,23 @@
+{
+  "schema":"core_game_evaluator_v2",
+  "manifest_blob":"15e2e3015acd821dfef15fe79ec58537d3642be1",
+  "run_evidence_blob":"eb6cde95d7232f8fec28b17561a457aa716dfb5e",
+  "evaluation_contract":"source-faithful Wave-1 §18 semantics specialized to exact CORE-GAME-MODEL-v2; specialization may add diagnostics but may not weaken source predicates",
+  "missing_or_malformed_required_input":"FAIL",
+  "aggregate_scalar_oracle":false,
+  "rules":[
+    {"id":"GDF-E1","pass":"at least two trajectory_evidence records, each foundational_checkpoints_pass AND medium_goal_pass AND long_goal_pass; at least two distinct primary systems; every counted trajectory systems_used>=3; exact model/graph/policy identities bound by manifest"},
+    {"id":"EPA-E2","pass":"same sustained foundational/medium/long trajectory evidence as GDF-E1, with >=3 materially distinct policy/primary-system route mixes and distinct specialization goals; labels alone insufficient"},
+    {"id":"GDF-E2","pass":"optimizer_search_evidence executes independent+joint objectives; max_objectives_won<=2; every winning policy has material opportunity_cost_evidence; exploit_search_evidence contains no seeded DEFECT classified BENIGN"},
+    {"id":"EPA-E3","pass":"same finite optimizer/search evidence as GDF-E2, including joint_and_independent_objectives_executed=true, opportunity-cost evidence, and anomaly/exploit distinction"},
+    {"id":"GDF-E3","pass":"all four trajectory traces are bound to early/mid/mature checkpoints 8/16/24 and max_low_decision_run<=5 for every trajectory; no hidden actions"},
+    {"id":"GDF-E4","pass":"automation winner_counts contains manual>=1, partial>=1, strong>=1; new_decisions strictly increases manual<partial<strong; no tier is universal"},
+    {"id":"EPA-E1","pass":"for every persona, four source_sink_lifecycle cycles complete with no_negative_state=true and post_caps_respected=true; all three stock resources have declared source actions and meaningful ambition sink conversion"},
+    {"id":"EPA-E4","pass":"same automation sweep as GDF-E4 plus exact setup/maintenance/output/attention model identity; different tiers are rational in different tested regions"},
+    {"id":"EPA-E5","pass":"switching_evidence covers multiple source/target pairs and stages; every case has 1..8 recovery turns, nonnegative=true, target_viable_entry_goal_pass=true, permanent_damage=false"},
+    {"id":"EPA-E7","pass":"all required branch goals have retained base paths; every declared mutation result equals its expected detector class; intentional_exclusion_explained=true"},
+    {"id":"AGE-E3","pass":"persona_benchmark_evidence retains four policy-class trajectory refs, unique_primary_families>=3, aggregation_preserves_each_policy=true"},
+    {"id":"AGE-E4","pass":"each exploit fixture has an actual search_trace, observed classification equals expected from manifest fixture, seeded defect cases identify a declared invariant violation, benign efficient case has no violation"}
+  ],
+  "authority":"bounded engine-neutral abstract planning evidence only; PASS is not human fun/preference, final balance, production, release, engine, readiness, verification, or canonical authority"
+}
