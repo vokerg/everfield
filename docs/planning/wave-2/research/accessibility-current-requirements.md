@@ -1,109 +1,140 @@
-# W2-REM-ACC-05 — remove subjective XAG 106 pronunciation applicability gate
+# W2-REM-ACC-07 — restore XAG 116 default-over-20-hours exemption
 
-**Mission:** `W2-REM-ACC-05` / Issue #252  
-**Claim base:** `main@9b044059df07170f8db0f430451d15e1c6800f82`  
-**Source review:** Issue #250 terminal `CHANGES_NEEDED` comment `5290193719`, head/work `57bb9a75e6b2cba600d75fe74d180283712abcae`  
-**Finding:** `W2-REV-ACC04-M01` / MAJOR  
-**Immutable reviewed producer:** Issue #247 terminal comment `5290154417`, head/work `fdc93c894e39e10a20dba81e910212dc56151441`  
-**Immutable v4 policy blob:** `96a074e9c708d4ae2f86e8a70b7b4ade8202c799`  
-**Authority:** bounded noncanonical remediation only; fresh independent scoped review remains mandatory.
+**Mission:** `W2-REM-ACC-07` / Issue #264  
+**Winning claim:** comment `5291862878`  
+**Claim base:** `main@6eacb5b81e414686028e5a50c9250a0b80a16c94`  
+**Source review:** Issue #262 terminal `CHANGES_NEEDED` comment `5290467457`, head `1992c8b65fcc45d19cf951f0265fd5272a32d315`, work `508689bcfb6172bbd46b6aa5edbe60f16f0da9b4`  
+**Finding:** `W2-REV-ACC06-M01` / MAJOR  
+**Immutable reviewed producer:** Issue #259 terminal comment `5290417804`, head `b8553ac83dd11193ad1f57f8b552827768ba3338`, work `14dee0852546eec43677312ce3066b811533df61`  
+**Immutable v6 policy blob:** `80e278315d6b7a108d89da3f5a99086a8ef91bf7`  
+**Immutable v6 report blob:** `ec901acaf36ed4d398b127eac058537e6387a92e`  
+**Authority:** bounded noncanonical remediation only; fresh independent/degraded-independent scoped review remains mandatory.
 
 ## 1. Scope
 
-Issue #250 independently reproduced one remaining source-semantic defect in the exact Issue #247 packet: `XAG106-PROPER-NAME-PRONUNCIATION` inherited the v3 trigger
+Issue #262 independently reproduced one material source-fidelity defect in the exact Issue #259 packet. Microsoft XAG 116 provides an exception block for content-imposed time limits and explicitly includes the case where the default time limit exceeds 20 hours. Exact v6 models the other duration-modification exceptions but contains no `default_time_limit_exceeds_20_hours` predicate anywhere, while its validator can still report PASS.
 
-`proper_name_technical_term_or_word_of_indeterminate_language_requires_pronunciation_help`
+This remediation uses exact v6 policy blob `80e278315d6b7a108d89da3f5a99086a8ef91bf7` as an immutable logical input. It replaces only the two XAG 116 records in v6 that already carry the source exception block and extends only the validator assertions/fixtures needed to make omission or inversion of the >20-hour exception rejectable.
 
-The trailing `requires_pronunciation_help` predicate is not present in the Microsoft XAG 106 implementation guideline. It can suppress a source-covered obligation based on a subjective product-side judgment while leaving clause identity, references, and structural validation apparently valid.
-
-This remediation changes only that atomic record and the minimum semantic-regression contract required to prevent recurrence. The six Issue #247 corrections are immutable logical inputs through exact v4 blob `96a074e9c708d4ae2f86e8a70b7b4ade8202c799`; they are not rewritten here.
+No unrelated XAG 108–123 or inherited XAG 101–107 record is rewritten.
 
 ## 2. Fresh first-party source recheck
 
-Microsoft XAG 106 was re-read on `2026-08-14`. The current page still reports last updated `2026-03-04` and its implementation guideline states that a mechanism should be provided so the player can understand the pronunciation of a proper name, technical term, or word of indeterminate language.
+Microsoft XAG 116 was re-read on `2026-08-14`:
 
-The covered term classes themselves establish applicability. The source does not add a separate condition that a designer or evaluator first decide the term `requires pronunciation help`.
+`https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116`
 
-This source is accessibility best-practice evidence, not legal/compliance or platform certification.
+The page reports last updated `2026-03-04` and remains XAG v3.2 best-practice guidance.
+
+The current source continues to distinguish non-core-gameplay UI timing from core gameplay timing. For applicable UI time limits it preserves the existing modification alternatives:
+
+- request a longer or absent session limit before the limit starts;
+- pre-adjust to at least 10× the default;
+- warn before expiry, provide at least 20 seconds for a simple extension action, and allow at least ten extensions;
+- turn the time limit off.
+
+For important on-screen element duration it preserves the alternatives of pre-adjusting to at least 10× the default or disabling the duration limit and allowing dismissal/advance on input.
+
+The source exception block says a content-imposed time limit is exempt when at least one listed condition is true. The listed conditions include:
+
+- a required real-time event with no alternative;
+- the time limit being essential to the task;
+- **the default time limit exceeding 20 hours**.
+
+Core gameplay timing remains outside this XAG's scope.
 
 ## 3. Correction
 
-`ACCESSIBILITY-POLICY-OVERLAY-v5` composes over the exact v4 policy blob and replaces exactly one record:
+`ACCESSIBILITY-POLICY-OVERLAY-v7` composes over the exact v6 blob and replaces only:
+
+- `XAG116-UI-TIME-LIMIT-MODIFIABLE`;
+- `XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE`.
+
+The first record now carries:
 
 ```yaml
-XAG106-PROPER-NAME-PRONUNCIATION:
-  source_id: XAG-106
-  authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
-  applicability: CONDITIONAL
-  trigger: proper_name_or_technical_term_or_word_of_indeterminate_language_is_present
-  required_semantics:
-    pronunciation_mechanism_provided: true
-  evidence_requirement_refs: [ACC-EV-NARRATION]
-  gap_ref: ACC-GAP-XAG106
+exceptions:
+  - real_time_event_with_no_alternative
+  - time_limit_is_essential_to_task
+  - default_time_limit_exceeds_20_hours
+  - core_gameplay_timing
 ```
 
-The corrected trigger is deterministic and based only on the source term classes. The required pronunciation mechanism is unchanged. Evidence and gap routing are unchanged.
+The important-element duration record now carries:
+
+```yaml
+exceptions:
+  - real_time_event_with_no_alternative
+  - duration_is_essential_to_task
+  - default_time_limit_exceeds_20_hours
+  - core_gameplay_timing
+```
+
+Every pre-existing alternative, threshold, trigger, evidence reference, gap reference, and source authority class in those records is preserved. `XAG116-UI-TIME-LIMIT-ESSENTIAL-ONLY` and `XAG116-UI-TIME-LIMIT-ADVANCE-WARNING` remain exact logical inputs from v6; this bounded patch does not reinterpret unrelated XAG 116 semantics that the negative review did not find defective.
 
 ## 4. Validator hardening
 
-`ACCESSIBILITY-POLICY-VALIDATOR-v5` first requires exact v4 reconstruction, including the six already-reviewed Issue #243 correction records and the exact 77-new / 105-composed inventory. Only then may it replace the pronunciation record.
+`ACCESSIBILITY-POLICY-VALIDATOR-v7` first requires exact v6 reconstruction over the exact v5 blob and verifies the existing 110-record XAG 108–123 inventory / 215-record composed inventory before applying the two-record patch.
 
-The new semantic guard requires exact trigger equality and rejects both the literal `requires_pronunciation_help` gate and any equivalent subjective product-judgment precondition. It also requires all three source term classes and `pronunciation_mechanism_provided: true`.
+The validator now requires `default_time_limit_exceeds_20_hours` to be present as an exception in both duration-modification records and forbids it from appearing as a trigger, required semantic, or positive requirement.
 
-New adversarial cases are:
+Load-bearing adversarial fixtures include:
 
-- `SUBJECTIVE_PRONUNCIATION_APPLICABILITY_GATE` → `REJECT_INVENTED_PRECONDITION`;
-- `PRONUNCIATION_TERM_CLASS_DROPPED` → `REJECT_SEMANTIC_NARROWING`;
-- `PRONUNCIATION_MECHANISM_DROPPED` → `REJECT_REQUIRED_SEMANTIC_LOSS`;
-- `V4_CORRECTION_REDEFINED` → `REJECT_SCOPE_LEAKAGE`.
+- `XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED` → `REJECT_EXCEPTION_LOSS`;
+- `XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_INVERTED_TO_REQUIREMENT` → `REJECT_EXCEPTION_INVERSION`;
+- `XAG116_EXISTING_EXCEPTION_DROPPED` → `REJECT_EXCEPTION_LOSS`;
+- `XAG116_MODIFICATION_ALTERNATIVE_DROPPED` → `REJECT_SEMANTIC_NARROWING`;
+- `XAG116_THRESHOLD_WEAKENED` → `REJECT_THRESHOLD_DRIFT`;
+- `V6_UNRELATED_RECORD_REDEFINED` → `REJECT_SCOPE_LEAKAGE`.
 
-The existing fail-closed aggregate cases for XAG 108–123 promotion, empirical PASS laundering, and `mapping_complete: true` remain required.
+Fail-closed evidence and aggregate-state fixtures remain mandatory.
 
 ## 5. Preservation proof
 
-The v5 overlay does not add, remove, split, or rename any atomic clause. The inventory remains:
+The v7 overlay adds, removes, splits, or renames no atomic clause identity.
 
-- XAG 102: 12;
-- XAG 103: 8;
-- XAG 104: 29;
-- XAG 105: 5;
-- XAG 106: 23;
-- new XAG 102–106 total: 77;
-- inherited XAG 101/XAG 107: 28;
-- composed atomic total: 105.
+Preserved inventory:
 
-All six v4 corrections remain logical inputs from the exact v4 blob and are outside this patch surface. XAG 108–123 remain `GUIDELINE_SUMMARY_ONLY`; no empirical accessibility evidence is produced.
+- inherited XAG 101–107 atomic clauses: 105;
+- XAG 108–123 atomic clauses: 110;
+- XAG 116 atomic clauses: 4;
+- composed XAG 101–123 atomic total: 215.
+
+The exact v6 policy blob remains the only logical source for all records except the two declared XAG 116 corrections. Source registrations, evidence/gap records, all non-XAG116 records, and the v6 authority boundary remain unchanged.
+
+The existing XAG 116 semantics remain preserved, including core-gameplay exclusion, real-time/no-alternative and essential-task exceptions where already source-covered, 10× adjustment, 20-second minimum action window, at least ten extensions, turn-off, and important-element disable/dismiss-or-advance behavior.
 
 ## 6. Finding disposition
 
-`W2-REV-ACC04-M01` is **RESOLVED_PENDING_FRESH_REVIEW** in this producer packet:
+`W2-REV-ACC06-M01` is **RESOLVED_PENDING_FRESH_REVIEW** in this producer packet:
 
-- subjective applicability gate removed: **YES**;
-- all three source term classes preserved: **YES**;
-- pronunciation mechanism preserved: **YES**;
-- evidence/gap refs preserved: **YES**;
-- clause identity/count changed: **NO**;
-- six v4 corrections rewritten: **NO**;
+- default-over-20-hours exception restored to the two source-exception-bearing duration-modification records: **YES**;
+- exception-loss fixture present: **YES**;
+- exception-inversion fixture present: **YES**;
+- existing XAG 116 alternatives/thresholds changed: **NO**;
+- unrelated v6 records rewritten: **NO**;
+- XAG identity/count changed: **NO**;
 - empirical accessibility PASS claimed: **NO**;
 - aggregate blocker cleared: **NO**.
 
-Producer self-review is not acceptance. A fresh independent/degraded-independent scoped reviewer must reconstruct exact v4 plus this v5 overlay, re-read current XAG 106, attack the new semantic fixtures, and verify the six v4 corrections remain unchanged before any integration eligibility can be considered.
+Bounded producer self-review finds 0 unresolved BLOCKER, 0 unresolved MAJOR, and 0 correction-requiring MINOR in this remediation scope. Producer self-review is not independent acceptance.
 
 ## 7. Preserved fail-closed state
 
 ```yaml
-xag_108_123: GUIDELINE_SUMMARY_ONLY
 empirical_accessibility_evidence: NOT_RUN
 mapping_complete: false
 IR-BLOCKER-ACCESSIBILITY-CURRENT: OPEN
 W2-REV-M02: OPEN_BOUNDED
 production_implementation_ready: false
+legal_compliance_claimed: false
+platform_certification_claimed: false
 integration_authorized: false
 canonicality: NOT_CANONICAL
 ```
 
-This task does not establish accessibility quality in the product, readiness, implementation, release, legal/compliance status, platform certification, verification PASS, decision authority, integration authority, or canonical status.
+This task does not establish accessibility quality in a target build, readiness, implementation, release, legal/compliance status, platform certification, verification PASS, decision authority, integration authority, or canonical status.
 
 ## 8. Required next transition
 
-Freeze this remediation at an exact terminal head with an exact-head draft PR to `main`, then route a fresh scoped review. CLEAN review would only make the exact corrected packet eligible for separately authorized squash-only noncanonical integration; it would not close aggregate `W2-REV-M02` or `IR-BLOCKER-ACCESSIBILITY-CURRENT`.
+Freeze this remediation at an exact terminal head with an exact-head draft PR to `main`, then route a fresh independent/degraded-independent scoped review of that exact packet. A CLEAN review would only make the exact corrected provenance eligible for separately authorized squash-only integration; it would not close `W2-REV-M02` or `IR-BLOCKER-ACCESSIBILITY-CURRENT`.

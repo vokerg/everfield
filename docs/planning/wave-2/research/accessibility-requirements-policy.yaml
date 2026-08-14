@@ -1,51 +1,32 @@
-version: 5
+version: 7
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-05
-issue: 252
+mission_id: W2-REM-ACC-07
+issue: 264
 observed_date: '2026-08-14'
 
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v5
-  base_issue: 247
-  base_terminal_comment_id: 5290154417
-  base_head_sha: fdc93c894e39e10a20dba81e910212dc56151441
-  base_policy_blob_sha: 96a074e9c708d4ae2f86e8a70b7b4ade8202c799
-  source_review_issue: 250
-  source_review_terminal_comment_id: 5290193719
-  source_review_head_sha: 57bb9a75e6b2cba600d75fe74d180283712abcae
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v7
+  base_issue: 259
+  base_terminal_comment_id: 5290417804
+  base_head_sha: b8553ac83dd11193ad1f57f8b552827768ba3338
+  base_work_sha: 14dee0852546eec43677312ce3066b811533df61
+  base_policy_blob_sha: 80e278315d6b7a108d89da3f5a99086a8ef91bf7
+  base_report_blob_sha: ec901acaf36ed4d398b127eac058537e6387a92e
+  source_review_issue: 262
+  source_review_terminal_comment_id: 5290467457
+  source_review_head_sha: 1992c8b65fcc45d19cf951f0265fd5272a32d315
+  source_review_work_sha: 508689bcfb6172bbd46b6aa5edbe60f16f0da9b4
   source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC04-M01
-  source_review_integration_main_sha: 9b044059df07170f8db0f430451d15e1c6800f82
-  rule: load the exact v4 policy blob, replace only XAG106-PROPER-NAME-PRONUNCIATION with the correction below, and extend only the semantic validator contract needed to reject subjective pronunciation applicability narrowing; every other v4 correction, clause identity, evidence/gap record, inventory count, blocker state, and authority boundary remains logically unchanged
+  source_review_finding: W2-REV-ACC06-M01
+  source_review_integration_main_sha: 6eacb5b81e414686028e5a50c9250a0b80a16c94
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  rule: load exact v6 policy blob, replace only the two XAG 116 duration-modification records below to restore the source exception for a default limit exceeding 20 hours, and extend only the semantic validator contract needed to reject exception loss or inversion; every other v6 record, identity, count, source registration, evidence/gap record, blocker state, and authority boundary remains logically unchanged
 
-preserved_v4_state:
-  issue_243_corrections_preserved_exactly: true
-  inherited_atomic_clause_count: 28
-  xag_102_106_new_atomic_clause_count: 77
-  composed_atomic_clause_count: 105
-  per_page_new_clause_counts:
-    XAG-102: 12
-    XAG-103: 8
-    XAG-104: 29
-    XAG-105: 5
-    XAG-106: 23
-  summary_only_pages:
-    - XAG-108
-    - XAG-109
-    - XAG-110
-    - XAG-111
-    - XAG-112
-    - XAG-113
-    - XAG-114
-    - XAG-115
-    - XAG-116
-    - XAG-117
-    - XAG-118
-    - XAG-119
-    - XAG-120
-    - XAG-121
-    - XAG-122
-    - XAG-123
+preserved_v6_state:
+  prior_xag_101_107_atomic_clause_count: 105
+  xag_108_123_atomic_clause_count: 110
+  composed_atomic_clause_count: 215
+  xag_116_atomic_clause_count: 4
   empirical_accessibility_evidence: NOT_RUN
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
@@ -59,41 +40,86 @@ preserved_v4_state:
   integration_authorized: false
 
 source_recheck:
-  XAG-106:
-    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/106
+  XAG-116:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
-    load_bearing_source_semantics: provide a mechanism for the player to understand how to pronounce a proper name, technical term, or word of indeterminate language
-    rejected_extra_predicate: requires_pronunciation_help
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+    exception_block_semantics:
+      applies_to: content_imposed_time_limit_expectations
+      any_one_exception_is_sufficient: true
+      exceptions:
+        - real_time_event_with_no_alternative
+        - time_or_duration_limit_is_essential_to_task
+        - default_time_limit_exceeds_20_hours
+    core_gameplay_scope_exclusion: core_gameplay_timing
 
 atomic_clause_correction_patch:
-  XAG106-PROPER-NAME-PRONUNCIATION:
-    source_id: XAG-106
+  XAG116-UI-TIME-LIMIT-MODIFIABLE:
+    source_id: XAG-116
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
     applicability: CONDITIONAL
-    trigger: proper_name_or_technical_term_or_word_of_indeterminate_language_is_present
+    trigger: non_core_gameplay_ui_interaction_has_time_limit
     required_semantics:
-      pronunciation_mechanism_provided: true
-    evidence_requirement_refs: [ACC-EV-NARRATION]
-    gap_ref: ACC-GAP-XAG106
+      modification_alternatives_minimum: 1
+      allowed_alternatives:
+        - request_longer_or_no_session_limit_before_start: true
+        - adjust_before_start_up_to_at_least_multiplier: 10
+        - warn_before_expiry: true
+          minimum_extension_action_window_seconds: 20
+          simple_action_extends_limit: true
+          minimum_extension_uses: 10
+        - turn_time_limit_off: true
+    exceptions:
+      - real_time_event_with_no_alternative
+      - time_limit_is_essential_to_task
+      - default_time_limit_exceeds_20_hours
+      - core_gameplay_timing
+    evidence_requirement_refs:
+      - ACC-EV-XAG116
+    gap_ref: ACC-GAP-XAG116
+
+  XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE:
+    source_id: XAG-116
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: important_element_has_display_duration_limit
+    required_semantics:
+      duration_control_alternatives_minimum: 1
+      allowed_alternatives:
+        - adjust_before_encounter_up_to_at_least_multiplier: 10
+        - disable_duration_limit_and_dismiss_or_advance_on_input: true
+    exceptions:
+      - real_time_event_with_no_alternative
+      - duration_is_essential_to_task
+      - default_time_limit_exceeds_20_hours
+      - core_gameplay_timing
+    evidence_requirement_refs:
+      - ACC-EV-XAG116
+    gap_ref: ACC-GAP-XAG116
 
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v5
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v7
   composition_steps:
-    - load exact v4 policy blob 96a074e9c708d4ae2f86e8a70b7b4ade8202c799
-    - verify the v4 composition still reconstructs exact v3 blob 9c21efdeed2ddff96d6cc1d0ccf2893b9304ccc4 plus exactly the six Issue 243 correction records
-    - verify the v4 77-member XAG 102-106 inventory and 105-member composed inventory before this patch
-    - replace exactly XAG106-PROPER-NAME-PRONUNCIATION with atomic_clause_correction_patch.XAG106-PROPER-NAME-PRONUNCIATION
-    - preserve every other v4 record, XAG 108-123 summary-only state, empirical NOT_RUN state, OPEN blocker state, and authority boundary
+    - load exact v6 policy blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7
+    - verify v6 reconstructs exact v5 blob c7c3f72fb3bbd2d0e961aee94b33ce2ac93c5615 plus exactly the 110 XAG 108-123 identities declared by v6
+    - verify the v6 XAG 108-123 inventory has 110 identities and the composed XAG 101-123 inventory has 215 identities before this patch
+    - replace exactly XAG116-UI-TIME-LIMIT-MODIFIABLE and XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE with atomic_clause_correction_patch records
+    - preserve XAG116-UI-TIME-LIMIT-ESSENTIAL-ONLY and XAG116-UI-TIME-LIMIT-ADVANCE-WARNING byte-for-byte as logical inputs from v6
+    - preserve every non-XAG116 v6 record, source registration, evidence/gap record, empirical NOT_RUN state, OPEN blocker state, and authority boundary
   required_semantic_assertions:
-    - XAG106-PROPER-NAME-PRONUNCIATION trigger equals proper_name_or_technical_term_or_word_of_indeterminate_language_is_present
-    - XAG106-PROPER-NAME-PRONUNCIATION trigger contains no requires_pronunciation_help or equivalent subjective product judgment predicate
-    - XAG106-PROPER-NAME-PRONUNCIATION required_semantics has pronunciation_mechanism_provided=true
-    - the six v4 Issue 243 correction records are byte-for-byte logical inputs from exact v4 blob and are not redefined by this overlay
+    - XAG116-UI-TIME-LIMIT-MODIFIABLE exceptions contain real_time_event_with_no_alternative, time_limit_is_essential_to_task, default_time_limit_exceeds_20_hours, and core_gameplay_timing
+    - XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE exceptions contain real_time_event_with_no_alternative, duration_is_essential_to_task, default_time_limit_exceeds_20_hours, and core_gameplay_timing
+    - default_time_limit_exceeds_20_hours appears only as an exception predicate in this patch and never as a trigger, required_semantics field, or positive requirement
+    - XAG116-UI-TIME-LIMIT-MODIFIABLE retains one-of-four modification alternatives, including at-least-10x adjustment, at-least-20-second expiry action window, at least ten extensions, and turn-off
+    - XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE retains at-least-10x adjustment and disable-duration/dismiss-or-advance alternatives
+    - all four XAG 116 clause identities remain present and no new source requirement identity is introduced
   aggregate_assertions:
-    - exact XAG 102-106 clause identity and per-page counts remain unchanged
-    - XAG 108-123 remain GUIDELINE_SUMMARY_ONLY
+    - exact XAG 108-123 clause identity and per-page counts remain unchanged
+    - composed atomic inventory remains 215
     - all empirical accessibility evidence remains NOT_RUN
     - mapping_complete remains false
     - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
@@ -103,23 +129,23 @@ mechanical_validation:
     - integration_authorized remains false
     - canonicality remains NOT_CANONICAL
   expected_result:
-    W2-REV-ACC04-M01: RESOLVED_PENDING_FRESH_REVIEW
-    issue_243_six_corrections: PRESERVED
-    xag_102_106_inventory: PASS
-    reference_integrity: PASS
-    pronunciation_semantic_fixture: PASS
-    xag_108_123_summary_only: PASS
+    W2-REV-ACC06-M01: RESOLVED_PENDING_FRESH_REVIEW
+    xag_116_default_over_20_hours_exception: PASS
+    xag_116_existing_alternatives_and_thresholds: PRESERVED
+    xag_108_123_inventory: PASS
+    composed_inventory: PASS
     empirical_accessibility_evidence: NOT_RUN
     mapping_complete: false
     blocker_authority_state: OPEN
     fresh_independent_scoped_review_required: true
     integration_authorized: false
   adversarial_fixtures:
-    SUBJECTIVE_PRONUNCIATION_APPLICABILITY_GATE: REJECT_INVENTED_PRECONDITION
-    PRONUNCIATION_TERM_CLASS_DROPPED: REJECT_SEMANTIC_NARROWING
-    PRONUNCIATION_MECHANISM_DROPPED: REJECT_REQUIRED_SEMANTIC_LOSS
-    V4_CORRECTION_REDEFINED: REJECT_SCOPE_LEAKAGE
-    UPGRADE_XAG108_123_WITHOUT_INVENTORY: REJECT_ATOMIC_EXPANSION
+    XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_EXCEPTION_LOSS
+    XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_INVERTED_TO_REQUIREMENT: REJECT_EXCEPTION_INVERSION
+    XAG116_EXISTING_EXCEPTION_DROPPED: REJECT_EXCEPTION_LOSS
+    XAG116_MODIFICATION_ALTERNATIVE_DROPPED: REJECT_SEMANTIC_NARROWING
+    XAG116_THRESHOLD_WEAKENED: REJECT_THRESHOLD_DRIFT
+    V6_UNRELATED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
     CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
     SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
 
@@ -130,14 +156,13 @@ freshness:
     - readiness verification
     - release or accessibility marketing claim
   reopen_triggers:
-    - Microsoft XAG 106 version or load-bearing pronunciation implementation-guideline change
+    - Microsoft XAG 116 version or load-bearing exception semantics change
     - selected platform scope change
-    - feature/content trigger change
     - empirical accessibility evidence production
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC04-M01
+  closes_only_finding: W2-REV-ACC06-M01
   closes_w2_rev_m02: false
   empirical_accessibility_pass: false
   readiness_authority: false
