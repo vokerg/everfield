@@ -1,0 +1,44 @@
+protocol: planning-v1
+schema: 3
+kind: REVIEW_COLD_START_INPUT_MANIFEST
+mission_id: W2-REV-ACC-04
+issue: 251
+reviewer_actor_session_id: w2-rev-acc-04-gpt56sol-20260814-frontier
+independence_mode: DEGRADED_SINGLE_AGENT
+resource_constraint_comment_id: 5244416013
+frozen_before_judgment: true
+current_main_sha_at_freeze: 262013df3bdc5db2da63eb48f2e1365906be3c12
+canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+reviewed_packet:
+  issue: 247
+  terminal_status_comment_id: 5290154417
+  head_sha: fdc93c894e39e10a20dba81e910212dc56151441
+  work_sha: fdc93c894e39e10a20dba81e910212dc56151441
+  pr: 249
+  pr_state_expected: DRAFT_OPEN
+  v3_policy_blob_sha: 9c21efdeed2ddff96d6cc1d0ccf2893b9304ccc4
+  v4_policy_blob_sha: 96a074e9c708d4ae2f86e8a70b7b4ade8202c799
+  report_blob_sha: 218cd69d400e14bca55620ef30968fe37e46db58
+  handoff_blob_sha: 1c531769cb01dcfa816f55e3ce49970eebacebe7
+source_review:
+  issue: 243
+  terminal_comment_id: 5290059882
+  disposition: CHANGES_NEEDED
+  integrated_review_provenance_comment_id: 5290064752
+narrower_review_risk:
+  issue: 242
+  terminal_comment_id: 5290068415
+  risk: XAG106-PROPER-NAME-PRONUNCIATION applicability may contain a non-source subjective narrowing predicate
+retired_route:
+  issue: 245
+  terminal_status_comment_id: 5290106078
+  state: SUPERSEDED
+  evidentiary_effect: ROUTING_ONLY_NOT_SUBSTANTIVE_DISPOSITION
+fresh_source_surfaces_to_read_before_reconciling_producer_rationale:
+  - XAG-102
+  - XAG-104
+  - XAG-105
+  - XAG-106
+review_rule: producer assertions alone satisfy no review check
+verdict: NOT_YET_FORMED
