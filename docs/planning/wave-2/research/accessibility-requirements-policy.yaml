@@ -1,57 +1,59 @@
-version: 13
+version: 14
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-14
-issue: 303
+mission_id: W2-REM-ACC-15
+issue: 310
 observed_date: '2026-08-14'
 
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v13
-  base_main_sha: 7631dee0a166c91e383a8c2e7bd641b46e6b9821
-  base_policy_version: 12
-  base_policy_blob_sha: 4c10dc8969a8080a14e8f46e0d2e126bd8a1ee5e
-  base_report_blob_sha: 197a20ec3fd3cd859c4e7d96e51f7337ea7583d3
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v14
+  base_main_sha: 65d4eb8144e33d8e247c0dc0a688f6811a4225bb
+  base_policy_version: 13
+  base_policy_blob_sha: 3dcdaa400ffd43cea390c331f5b4f8ea62750a5c
+  base_report_blob_sha: e5f1f491a91499bef96861d2878e4fb5552a207b
   inherited_xag_108_123_origin_blob_sha: 80e278315d6b7a108d89da3f5a99086a8ef91bf7
-  source_review_issue: 302
-  source_review_claim_comment_id: 5296669009
-  source_review_terminal_comment_id: 5296708193
-  source_review_head_sha: 6327b6b6708f5159b20e37ffe5b348963bd5d8bb
-  source_review_work_sha: 1e33561de0e2afa76836910cd947b06934c0cfd4
+  source_review_issue: 308
+  source_review_claim_comment_id: 5296830252
+  source_review_terminal_comment_id: 5296868370
+  source_review_head_sha: 024efaa4cc97b5af6e669cf9100b5172a2096bd4
+  source_review_work_sha: ed51563510cee7cd24463a6d1a169ec3f0f2ea3e
   source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC17-M01
-  source_review_finding_class: SOURCE_MODALITY_WEAKENING_AND_ACCEPTANCE_AUTHORITY_DRIFT
+  source_review_finding: W2-REV-ACC19-M01
+  source_review_finding_class: EXAMPLE_TO_REQUIREMENT_PROMOTION_AND_FEATURE_EXISTENCE_INFLATION
   canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
   canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
   rule: >-
-    Load exact v12 policy/report as immutable inputs and resolve their full composed
-    lineage. Replace only the inherited authority class and source modality of
-    XAG117-CAMERA-VIEW-CHOICE so the applicable camera-view-choice implementation
-    guideline is represented with the same required-if-applicable SHOULD strength
-    used by the sibling unqualified XAG 117 directives. Preserve the atom identity,
-    source id, conditional applicability, trigger, semantic payload, evidence/gap
-    routing, every other v12-composed semantic record, all reviewed corrections,
-    inventory identities/counts, and fail-closed aggregate state. Add only the
-    minimum validator/report metadata needed to reject regression to advisory-only
-    authority and reject unrelated authority inflation.
+    Load exact v13 policy/report as immutable inputs and resolve their full composed
+    lineage. Replace only the inherited semantic encoding of
+    XAG120-COMM-NOTIFICATION-SETTINGS so accessibility of applicable notification-
+    management UI remains required while source examples of duration adjustment and
+    notification on/off controls no longer become universal product-feature
+    existence requirements. Preserve the atom identity, source id, best-practice
+    authority/modality, conditional applicability, trigger, evidence/gap routing,
+    every other v13-composed semantic record, all reviewed corrections, inventory
+    identities/counts, and fail-closed aggregate state. Add only the minimum
+    validator/report metadata needed to reject both example-to-requirement inflation
+    and weakening of accessibility for notification-management controls that exist.
 
-preserved_v12_state:
+preserved_v13_state:
   inherited_xag_101_107_atomic_clause_count: 105
   xag_112_atomic_clause_count: 14
   xag_114_atomic_clause_count: 16
   xag_108_123_atomic_clause_count: 113
   composed_xag_101_123_atomic_clause_count: 218
-  xag_112_reviewed_corrections: PRESERVED_FROM_V12_LINEAGE
-  xag_114_title_exception_correction: PRESERVED_FROM_V12_LINEAGE
-  xag_115_stored_data_operator_correction: PRESERVED_REVIEWED_FROM_V12
-  xag_115_permanent_action_conjunction_correction: PRESERVED_REVIEWED_FROM_V12
-  xag_115_button_hold_record: PRESERVED_FROM_V12_LINEAGE
-  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V12_LINEAGE
+  xag_112_reviewed_corrections: PRESERVED_FROM_V13_LINEAGE
+  xag_114_title_exception_correction: PRESERVED_FROM_V13_LINEAGE
+  xag_115_stored_data_operator_correction: PRESERVED_REVIEWED_FROM_V13
+  xag_115_permanent_action_conjunction_correction: PRESERVED_REVIEWED_FROM_V13
+  xag_115_button_hold_record: PRESERVED_FROM_V13_LINEAGE
+  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V13_LINEAGE
+  xag_117_camera_view_authority_correction: PRESERVED_REVIEWED_FROM_V13
   empirical_accessibility_evidence: NOT_RUN
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
   blocker_authority_state: OPEN
   w2_rev_m02: OPEN_BOUNDED
   full_xag_108_123_review_complete: false
-  xag_118_123_accepted_by_issue_302: false
+  xag_121_123_accepted_by_issue_308: false
   production_implementation_ready: false
   legal_compliance_claimed: false
   platform_certification_claimed: false
@@ -61,96 +63,129 @@ preserved_v12_state:
   integration_authorized: false
 
 source_recheck:
-  XAG-117:
-    url: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/117
-    title: Visual distractions and motion settings
+  XAG-120:
+    url: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/120
+    title: Communication experiences
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
     normative_scope: implementation_guidelines
     authority_class: ACCESSIBILITY_BEST_PRACTICE
-    corrected_semantic: camera_view_choice_source_modality
-    source_directive: allow players to choose between first-person and third-person camera views
-    source_directive_qualified_as_consider: false
-    source_directive_qualified_as_ideal_or_example_only: false
+    corrected_semantic: notification_management_examples_do_not_imply_feature_existence
+    source_directive: necessary UI or settings used to manage communication-related notifications should be usable by a player with a disability
+    source_examples:
+      - adjust_how_long_communication_notifications_appear
+      - turn_certain_communication_notifications_on_or_off
+    source_examples_are_universal_feature_requirements: false
     repository_native_modality: SHOULD
     repository_native_authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
 
 atomic_clause_correction_patch:
-  XAG117-CAMERA-VIEW-CHOICE:
-    source_id: XAG-117
+  XAG120-COMM-NOTIFICATION-SETTINGS:
+    source_id: XAG-120
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
     source_modality: SHOULD
     applicability: CONDITIONAL
-    trigger: game_supports_first_person_or_third_person_camera_presentation
+    trigger: communication_notifications_are_available
     required_semantics:
-      first_person_and_third_person_view_choice_available: true
+      notification_settings_accessible: true
+    conditional_semantics:
+      - when: notification_duration_adjustment_control_is_present
+        required:
+          notification_duration_adjustment_control_accessible: true
+      - when: notification_on_off_control_is_present
+        required:
+          notification_on_off_control_accessible: true
+    source_examples:
+      - notification_display_duration_adjustment
+      - notification_on_off_control
+    source_fidelity_note: >-
+      The example controls identify notification-management settings whose UI must be
+      accessible when present. Their absence does not by itself fail XAG 120 and this
+      atom does not require a title to create either feature.
     evidence_requirement_refs:
-      - ACC-EV-XAG117
-    gap_ref: ACC-GAP-XAG117
+      - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
 
 preserved_reviewed_contracts:
+  XAG112-REVIEWED-CORRECTIONS:
+    preservation_rule: SCALED_NAVIGATION_SUBMENU_RETURN_AND_FOCUS_ESCAPE_UNCHANGED_FROM_EXACT_V13_LINEAGE
+  XAG114-CRITICAL-TEXT-READING-LEVEL:
+    preservation_rule: TITLES_EXCEPTION_UNCHANGED_FROM_EXACT_V13_LINEAGE
   XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE:
-    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V12_COMPOSED_LINEAGE
+    preservation_rule: REVIEW_AND_CORRECT_OR_COMPLETE_REVERSAL_OPERATOR_UNCHANGED_FROM_EXACT_V13_LINEAGE
   XAG115-PERMANENT-ACTION-CONFIRM-OR-UNDO:
-    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V12_COMPOSED_LINEAGE
+    preservation_rule: REVIEW_AND_CONFIRMATION_AND_UNDO_CONJUNCTION_UNCHANGED_FROM_EXACT_V13_LINEAGE
   XAG115-NO-BUTTON-HOLD-DESTRUCTIVE-CONFIRMATION:
-    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V12_COMPOSED_LINEAGE
+    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V13_LINEAGE
   XAG116-REVIEWED-CORRECTION:
     preservation_rule: DEFAULT_OVER_20_HOURS_EXCEPTION_AND_REVIEWED_TIMING_SEMANTICS_UNCHANGED
+  XAG117-CAMERA-VIEW-CHOICE:
+    preservation_rule: REQUIRED_IF_APPLICABLE_SHOULD_AUTHORITY_TRIGGER_AND_SEMANTICS_UNCHANGED_FROM_EXACT_V13
 
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v13
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v14
   composition_steps:
-    - load exact v12 policy blob 4c10dc8969a8080a14e8f46e0d2e126bd8a1ee5e
-    - load exact v12 report blob 197a20ec3fd3cd859c4e7d96e51f7337ea7583d3
-    - resolve v12 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all reviewed bounded overlays
-    - verify inherited XAG117-CAMERA-VIEW-CHOICE identity exists exactly once
-    - verify inherited source id, applicability, trigger, semantic payload, evidence reference, and gap reference match exact v12 lineage
-    - replace exactly authority_class BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE with BEST_PRACTICE_REQUIRED_IF_APPLICABLE
-    - replace exactly source_modality CONSIDER with SHOULD
-    - verify no trigger broadening and no requirement that a title introduce a camera paradigm outside the inherited conditional applicability boundary
-    - verify every other v12-composed semantic record is byte-logically unchanged by this overlay
-    - verify reviewed XAG 112, XAG 114, both XAG 115 corrections, and XAG 116 correction remain unchanged
+    - load exact v13 policy blob 3dcdaa400ffd43cea390c331f5b4f8ea62750a5c
+    - load exact v13 report blob e5f1f491a91499bef96861d2878e4fb5552a207b
+    - resolve v13 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all reviewed bounded overlays
+    - verify inherited XAG120-COMM-NOTIFICATION-SETTINGS identity exists exactly once
+    - verify inherited source id, authority class, source modality, applicability, trigger, evidence reference, and gap reference match exact v13 lineage
+    - replace only the semantic payload that promoted source examples into universal feature-existence requirements
+    - require notification_settings_accessible whenever the atom trigger applies
+    - require accessibility of duration-adjustment UI only when a duration-adjustment control is present
+    - require accessibility of notification on/off UI only when an on/off control is present
+    - verify absence of either example control does not independently fail this atom
+    - verify no communication, notification, duration-adjustment, or notification-toggle feature is newly required to exist
+    - verify every other v13-composed semantic record is byte-logically unchanged by this overlay
+    - verify reviewed XAG 112, XAG 114, both XAG 115 corrections, XAG 116 correction, and XAG 117 correction remain unchanged
     - verify final XAG 112 count is 14, XAG 114 count is 16, XAG 108-123 count is 113, inherited XAG 101-107 count is 105, and composed XAG 101-123 count is 218
     - preserve all evidence/gap routing and fail-closed aggregate/authority state
   required_semantic_assertions:
-    - the XAG 117 camera-view-choice directive is not represented as advisory-only CONSIDER authority
-    - the applicable camera-view-choice atom is represented as BEST_PRACTICE_REQUIRED_IF_APPLICABLE with SHOULD modality
-    - the conditional trigger is preserved exactly and is not broadened into a requirement that every game implement both camera paradigms
-    - the semantic payload first_person_and_third_person_view_choice_available remains unchanged
-    - the evidence requirement remains ACC-EV-XAG117 and the gap route remains ACC-GAP-XAG117
-    - no sibling XAG 117 atom or unrelated v12-composed record is redefined
-    - no authority stronger than repository-native SHOULD best-practice authority is invented
+    - XAG 120 remains conditional on communication experiences and notification management that exist; no communication capability is invented
+    - applicable notification-management UI remains required to be accessible
+    - source examples of duration adjustment and notification on/off controls do not become universal feature-existence requirements
+    - when either example control exists, its UI remains covered by the accessibility obligation and may not become fail-open
+    - atom identity, source id, authority class, SHOULD modality, applicability, trigger, evidence requirement, and gap route remain unchanged
+    - no sibling XAG 120 atom or unrelated v13-composed record is redefined
+    - no legal/compliance, MUST, or platform-certification authority is invented
   load_bearing_fixtures:
-    XAG117_CAMERA_VIEW_SOURCE_FAITHFUL:
+    XAG120_NOTIFICATION_ACCESSIBLE_WITHOUT_EXAMPLE_CONTROLS:
       candidate:
-        authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
-        source_modality: SHOULD
-        applicability: CONDITIONAL
-        trigger: game_supports_first_person_or_third_person_camera_presentation
-        first_person_and_third_person_view_choice_available: true
+        communication_notifications_are_available: true
+        notification_settings_accessible: true
+        notification_duration_adjustment_control_is_present: false
+        notification_on_off_control_is_present: false
       expected: PASS
-    XAG117_CAMERA_VIEW_ADVISORY_REGRESSION:
+    XAG120_DURATION_CONTROL_PRESENT_AND_ACCESSIBLE:
       candidate:
-        authority_class: BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE
-        source_modality: CONSIDER
-      expected: REJECT_SOURCE_MODALITY_WEAKENING
-    XAG117_CAMERA_VIEW_CONSIDER_ONLY_MODALITY:
+        communication_notifications_are_available: true
+        notification_settings_accessible: true
+        notification_duration_adjustment_control_is_present: true
+        notification_duration_adjustment_control_accessible: true
+      expected: PASS
+    XAG120_DURATION_CONTROL_PRESENT_BUT_INACCESSIBLE:
       candidate:
-        authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
-        source_modality: CONSIDER
-      expected: REJECT_SOURCE_MODALITY_WEAKENING
-    XAG117_CAMERA_VIEW_RECOMMENDED_ONLY_AUTHORITY:
+        communication_notifications_are_available: true
+        notification_duration_adjustment_control_is_present: true
+        notification_duration_adjustment_control_accessible: false
+      expected: REJECT_EXISTING_NOTIFICATION_CONTROL_INACCESSIBLE
+    XAG120_TOGGLE_PRESENT_BUT_INACCESSIBLE:
       candidate:
-        authority_class: BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE
-        source_modality: SHOULD
-      expected: REJECT_ACCEPTANCE_AUTHORITY_DRIFT
-    XAG117_CAMERA_VIEW_OVERSTATED_AUTHORITY:
+        communication_notifications_are_available: true
+        notification_on_off_control_is_present: true
+        notification_on_off_control_accessible: false
+      expected: REJECT_EXISTING_NOTIFICATION_CONTROL_INACCESSIBLE
+    XAG120_EXAMPLE_FEATURE_EXISTENCE_INFLATION:
+      candidate_mapping_requires:
+        notification_duration_adjustment_control_exists: true
+        notification_on_off_control_exists: true
+      expected: REJECT_EXAMPLE_TO_REQUIREMENT_PROMOTION
+    XAG120_NOTIFICATION_SETTINGS_INACCESSIBLE:
       candidate:
-        authority_class: MANDATORY_COMPLIANCE_REQUIREMENT
-        source_modality: MUST
-      expected: REJECT_AUTHORITY_INFLATION
+        communication_notifications_are_available: true
+        notification_settings_accessible: false
+      expected: REJECT_NOTIFICATION_MANAGEMENT_ACCESSIBILITY_WEAKENING
   aggregate_assertions:
     - XAG 112 count equals 14
     - XAG 114 count equals 16
@@ -161,39 +196,43 @@ mechanical_validation:
     - mapping_complete remains false
     - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
     - W2-REV-M02 remains OPEN_BOUNDED
-    - full corrected XAG 108-123 review remains incomplete because Issue 302 terminalized early at XAG 117
-    - XAG 118-123 remain unaccepted by Issue 302
+    - full corrected XAG 108-123 review remains incomplete because Issue 308 terminalized early at XAG 120
+    - XAG 121-123 remain unaccepted by Issue 308
     - fresh independent scoped review of this exact remediation remains required
     - production_implementation_ready remains false
     - integration_authorized remains false
     - canonicality remains NOT_CANONICAL
   adversarial_fixtures:
-    XAG117_CAMERA_VIEW_REGRESSED_TO_CONSIDER: REJECT_SOURCE_MODALITY_WEAKENING
-    XAG117_CAMERA_VIEW_REGRESSED_TO_RECOMMENDED_ONLY: REJECT_ACCEPTANCE_AUTHORITY_DRIFT
-    XAG117_CAMERA_VIEW_INFLATED_TO_MUST_OR_COMPLIANCE: REJECT_AUTHORITY_INFLATION
-    XAG117_CAMERA_VIEW_IDENTITY_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG117_CAMERA_VIEW_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG117_CAMERA_VIEW_APPLICABILITY_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG117_CAMERA_VIEW_SEMANTIC_PAYLOAD_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG117_CAMERA_VIEW_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
-    ANY_OTHER_V12_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    XAG120_DURATION_EXAMPLE_PROMOTED_TO_REQUIRED_FEATURE: REJECT_EXAMPLE_TO_REQUIREMENT_PROMOTION
+    XAG120_TOGGLE_EXAMPLE_PROMOTED_TO_REQUIRED_FEATURE: REJECT_EXAMPLE_TO_REQUIREMENT_PROMOTION
+    XAG120_EXISTING_DURATION_CONTROL_ACCESSIBILITY_DROPPED: REJECT_NOTIFICATION_MANAGEMENT_ACCESSIBILITY_WEAKENING
+    XAG120_EXISTING_TOGGLE_CONTROL_ACCESSIBILITY_DROPPED: REJECT_NOTIFICATION_MANAGEMENT_ACCESSIBILITY_WEAKENING
+    XAG120_NOTIFICATION_SETTINGS_ACCESSIBILITY_DROPPED: REJECT_NOTIFICATION_MANAGEMENT_ACCESSIBILITY_WEAKENING
+    XAG120_IDENTITY_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG120_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG120_AUTHORITY_OR_MODALITY_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG120_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
+    ANY_OTHER_V13_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
     XAG112_REVIEWED_CORRECTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG114_TITLE_EXCEPTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG115_STORED_DATA_OPERATOR_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG115_PERMANENT_ACTION_CONJUNCTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_PRESERVED_CORRECTION_REGRESSION
+    XAG117_CAMERA_VIEW_AUTHORITY_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
     SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
     CLAIM_FULL_XAG_108_123_REVIEW_COMPLETE_AFTER_EARLY_NEGATIVE: REJECT_REVIEW_SCOPE_INFLATION
   expected_result:
-    W2-REV-ACC17-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+    W2-REV-ACC19-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+    W2-REV-ACC17-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
     W2-REV-ACC15-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
     W2-REV-ACC13-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
-    xag_117_camera_view_modality: SHOULD
-    xag_117_camera_view_authority: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
-    xag_117_camera_view_identity: PRESERVED
-    xag_117_camera_view_trigger: PRESERVED
-    xag_117_camera_view_semantics: PRESERVED
+    xag_120_notification_settings_accessibility: REQUIRED_IF_APPLICABLE
+    xag_120_duration_example_feature_existence: NOT_REQUIRED
+    xag_120_toggle_example_feature_existence: NOT_REQUIRED
+    xag_120_existing_example_controls_accessibility: REQUIRED_WHEN_PRESENT
+    xag_120_identity: PRESERVED
+    xag_120_trigger: PRESERVED
     xag_112_inventory: PASS_14
     xag_114_inventory: PASS_16
     xag_108_123_inventory: PASS_113
@@ -203,7 +242,7 @@ mechanical_validation:
     mapping_complete: false
     blocker_authority_state: OPEN
     full_xag_108_123_review_complete: false
-    xag_118_123_acceptance: NOT_ACCEPTED_BY_ISSUE_302
+    xag_121_123_acceptance: NOT_ACCEPTED_BY_ISSUE_308
     fresh_independent_scoped_review_required: true
     integration_authorized: false
 
@@ -211,20 +250,20 @@ freshness:
   recheck_before:
     - fresh independent scoped review
     - any later integration decision
-    - resumed full corrected XAG 118-123 review continuation
+    - resumed full corrected XAG 121-123 review continuation
     - empirical accessibility evidence successor
     - readiness verification
   reopen_triggers:
-    - Microsoft XAG 117 version or load-bearing camera-view-choice semantics change
-    - any change to exact v12 input identity
-    - selected platform scope change
+    - Microsoft XAG 120 version or load-bearing communication-notification semantics change
+    - any change to exact v13 input identity
+    - selected platform communication scope change
     - empirical accessibility evidence production
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC17-M01
+  closes_only_finding: W2-REV-ACC19-M01
   finding_state: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
-  preserves_reviewed_finding: W2-REV-ACC15-M01
+  preserves_reviewed_finding: W2-REV-ACC17-M01
   closes_w2_rev_m02: false
   full_xag_108_123_review_complete: false
   empirical_accessibility_pass: false
