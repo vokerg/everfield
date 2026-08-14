@@ -1,52 +1,52 @@
-version: 5
+version: 6
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-05
-issue: 252
+mission_id: W2-REM-ACC-06
+issue: 259
 observed_date: '2026-08-14'
-
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v5
-  base_issue: 247
-  base_terminal_comment_id: 5290154417
-  base_head_sha: fdc93c894e39e10a20dba81e910212dc56151441
-  base_policy_blob_sha: 96a074e9c708d4ae2f86e8a70b7b4ade8202c799
-  source_review_issue: 250
-  source_review_terminal_comment_id: 5290193719
-  source_review_head_sha: 57bb9a75e6b2cba600d75fe74d180283712abcae
-  source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC04-M01
-  source_review_integration_main_sha: 9b044059df07170f8db0f430451d15e1c6800f82
-  rule: load the exact v4 policy blob, replace only XAG106-PROPER-NAME-PRONUNCIATION with the correction below, and extend only the semantic validator contract needed to reject subjective pronunciation applicability narrowing; every other v4 correction, clause identity, evidence/gap record, inventory count, blocker state, and authority boundary remains logically unchanged
-
-preserved_v4_state:
-  issue_243_corrections_preserved_exactly: true
-  inherited_atomic_clause_count: 28
-  xag_102_106_new_atomic_clause_count: 77
-  composed_atomic_clause_count: 105
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v6
+  base_main_sha: 2d3307cdc52db6e8783f7c4c4025996685934fa7
+  base_policy_blob_sha: c7c3f72fb3bbd2d0e961aee94b33ce2ac93c5615
+  base_policy_version: 5
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  rule: load exact v5 policy blob, preserve every XAG 101-107 record and reviewed semantic correction, atomically add only
+    XAG 108-123 plus page-scoped evidence/gap records and validator assertions; no prior record is replaced by this overlay
+finding_route:
+  formal_review_issue: 84
+  formal_review_mission: W2-REV-01
+  finding: W2-REV-M02
+  finding_state: OPEN_BOUNDED
+  bounded_subcondition_addressed: remaining source-clause atomization for XAG 108-123
+  source_clause_component_after_this_packet: RESOLVED_PENDING_FRESH_REVIEW
+  not_addressed:
+  - required target-build empirical accessibility evidence
+  - fresh independent/degraded-independent scoped review of this exact packet
+  - aggregate accessibility authority
+preserved_state:
+  prior_atomic_clause_count: 105
+  new_xag_108_123_atomic_clause_count: 110
+  composed_atomic_clause_count: 215
   per_page_new_clause_counts:
-    XAG-102: 12
-    XAG-103: 8
-    XAG-104: 29
-    XAG-105: 5
-    XAG-106: 23
-  summary_only_pages:
-    - XAG-108
-    - XAG-109
-    - XAG-110
-    - XAG-111
-    - XAG-112
-    - XAG-113
-    - XAG-114
-    - XAG-115
-    - XAG-116
-    - XAG-117
-    - XAG-118
-    - XAG-119
-    - XAG-120
-    - XAG-121
-    - XAG-122
-    - XAG-123
+    XAG-108: 9
+    XAG-109: 12
+    XAG-110: 4
+    XAG-111: 3
+    XAG-112: 11
+    XAG-113: 2
+    XAG-114: 16
+    XAG-115: 6
+    XAG-116: 4
+    XAG-117: 7
+    XAG-118: 4
+    XAG-119: 9
+    XAG-120: 7
+    XAG-121: 6
+    XAG-122: 2
+    XAG-123: 8
+  summary_only_pages_after_patch: []
+  source_clause_mapping_candidate_complete: true
   empirical_accessibility_evidence: NOT_RUN
+  empirical_mapping_complete: false
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
   blocker_authority_state: OPEN
@@ -57,87 +57,1877 @@ preserved_v4_state:
   canonicality: NOT_CANONICAL
   fresh_independent_scoped_review_required: true
   integration_authorized: false
-
-source_recheck:
-  XAG-106:
-    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/106
+source_register_patch:
+  XAG-108:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/108
+    title: Game difficulty options
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
-    load_bearing_source_semantics: provide a mechanism for the player to understand how to pronounce a proper name, technical term, or word of indeterminate language
-    rejected_extra_predicate: requires_pronunciation_help
-
-atomic_clause_correction_patch:
-  XAG106-PROPER-NAME-PRONUNCIATION:
-    source_id: XAG-106
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-109:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+    title: Objective clarity
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-110:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/110
+    title: Haptic feedback
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-111:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/111
+    title: Audio descriptions
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-112:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+    title: UI navigation
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-113:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113
+    title: UI focus handling
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-114:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
+    title: UI context
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-115:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+    title: Error messages and destructive actions
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-116:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116
+    title: Time limits
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-117:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/117
+    title: Visual distractions and motion settings
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-118:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/118
+    title: Photosensitivity
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-119:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/119
+    title: Speech-to-text and text-to-speech chat
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-120:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/120
+    title: Communication experiences
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-121:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/121
+    title: Accessible feature documentation
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-122:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/122
+    title: Accessible customer support
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+  XAG-123:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/123
+    title: Mental health best practices
+    version: XAG-v3.2
+    page_last_updated: '2026-03-04'
+    observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
+    authority_class: ACCESSIBILITY_BEST_PRACTICE
+page_expansion_patch:
+  XAG-108: ATOMICALLY_EXPANDED
+  XAG-109: ATOMICALLY_EXPANDED
+  XAG-110: ATOMICALLY_EXPANDED
+  XAG-111: ATOMICALLY_EXPANDED
+  XAG-112: ATOMICALLY_EXPANDED
+  XAG-113: ATOMICALLY_EXPANDED
+  XAG-114: ATOMICALLY_EXPANDED
+  XAG-115: ATOMICALLY_EXPANDED
+  XAG-116: ATOMICALLY_EXPANDED
+  XAG-117: ATOMICALLY_EXPANDED
+  XAG-118: ATOMICALLY_EXPANDED
+  XAG-119: ATOMICALLY_EXPANDED
+  XAG-120: ATOMICALLY_EXPANDED
+  XAG-121: ATOMICALLY_EXPANDED
+  XAG-122: ATOMICALLY_EXPANDED
+  XAG-123: ATOMICALLY_EXPANDED
+expected_source_clause_inventory_patch:
+  XAG-108:
+  - XAG108-MULTIPLE-DIFFICULTY-PRESETS
+  - XAG108-CHANGE-DIFFICULTY-ANYTIME
+  - XAG108-REGULAR-SAVING
+  - XAG108-DISCRETE-MECHANIC-DIFFICULTY
+  - XAG108-ULTRA-LOW-DIFFICULTY
+  - XAG108-REDUCED-CONTROL-SCHEME
+  - XAG108-DIFFICULTY-LABEL-LANGUAGE
+  - XAG108-PAUSE-ACTIVE-GAMEPLAY
+  - XAG108-PAUSE-CINEMATICS
+  XAG-109:
+  - XAG109-OBJECTIVES-REVIEW-ANYTIME
+  - XAG109-OBJECTIVES-CLEAR
+  - XAG109-COMPLETED-OBJECTIVES-LOGGED
+  - XAG109-ASSISTED-WAYFINDING-AFTER-NO-PROGRESS
+  - XAG109-PREREQUISITE-PROGRESS-DESCRIBED
+  - XAG109-INTERRUPTIONS-POSTPONABLE
+  - XAG109-NARRATIVE-REVISIT
+  - XAG109-DESCRIPTIVE-SAVES
+  - XAG109-TUTORIALS-AVAILABLE
+  - XAG109-TUTORIALS-DEMONSTRATIVE
+  - XAG109-TUTORIALS-ON-DEMAND
+  - XAG109-TUTORIAL-SUBTITLES
+  XAG-110:
+  - XAG110-HAPTICS-DISABLE
+  - XAG110-HAPTICS-STRENGTH
+  - XAG110-HAPTICS-NOT-SOLE-CHANNEL
+  - XAG110-HAPTIC-ADDITIONAL-CUES
+  XAG-111:
+  - XAG111-PREEXISTING-AUDIO-DESCRIPTION
+  - XAG111-LOCALIZED-SCRIPTED-MEDIA-DESCRIPTION
+  - XAG111-DESCRIPTION-TIMING
+  XAG-112:
+  - XAG112-INITIAL-ACCESSIBILITY-PATH
+  - XAG112-LOGICAL-CONSISTENT-NAVIGATION-ORDER
+  - XAG112-KEYBOARD-CONTROLLER-DIGITAL-NAVIGATION
+  - XAG112-MULTI-INPUT-NAVIGATION
+  - XAG112-REPEATED-COMPONENT-ORDER
+  - XAG112-SEQUENTIAL-FOCUS-ORDER
+  - XAG112-FOCUS-ALIGNS-MEANING-OR-VISUAL-FLOW
+  - XAG112-LINEAR-MENU-LOOP
+  - XAG112-MULTIPLE-CONTENT-LOCATION-METHODS
+  - XAG112-NAVIGATION-UPDATES-WITH-LAYOUT
+  - XAG112-SCALED-TEXT-ONE-DIRECTION-SCROLL
+  XAG-113:
+  - XAG113-VISIBLE-FOCUS-INDICATOR
+  - XAG113-FOCUS-ALWAYS-VISIBLE
+  XAG-114:
+  - XAG114-UI-HIERARCHY-CONTEXT
+  - XAG114-CONTEXT-CHANGE-PLAYER-INITIATED
+  - XAG114-CROSS-APP-FOCUS-INDICATION
+  - XAG114-PURPOSE-OPERATION-ALTERNATIVES
+  - XAG114-LABEL-ASSOCIATION
+  - XAG114-ASSISTIVE-TECH-EQUIVALENT-FUNCTION
+  - XAG114-FORM-CONTROL-EXPECTATION
+  - XAG114-CONSISTENT-COMPONENT-IDENTIFICATION
+  - XAG114-DESCRIPTIVE-LINK-TEXT
+  - XAG114-MEANINGFUL-GROUP-LABELS
+  - XAG114-CONTEXT-SENSITIVE-HELP
+  - XAG114-ACCELERATED-FORM-INPUT
+  - XAG114-LONG-TEXT-HEADINGS
+  - XAG114-TERM-DEFINITIONS
+  - XAG114-CRITICAL-TEXT-READING-LEVEL
+  - XAG114-SETTING-EFFECT-PREVIEW
+  XAG-115:
+  - XAG115-INPUT-ERROR-DESCRIPTION-CORRECTION
+  - XAG115-ERROR-WARNING-DISTINGUISHABLE
+  - XAG115-ERROR-LOCATION-EMPHASIZED
+  - XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE
+  - XAG115-PERMANENT-ACTION-CONFIRM-OR-UNDO
+  - XAG115-NO-BUTTON-HOLD-DESTRUCTIVE-CONFIRMATION
+  XAG-116:
+  - XAG116-UI-TIME-LIMIT-ESSENTIAL-ONLY
+  - XAG116-UI-TIME-LIMIT-ADVANCE-WARNING
+  - XAG116-UI-TIME-LIMIT-MODIFIABLE
+  - XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE
+  XAG-117:
+  - XAG117-AUTO-UPDATING-CONTENT-CONTROL
+  - XAG117-MOVING-BLINKING-SCROLLING-CONTROL
+  - XAG117-CAMERA-EFFECT-DISABLE
+  - XAG117-REPETITIVE-MOTION-AVOID
+  - XAG117-FIELD-OF-VIEW-ADJUST
+  - XAG117-CAMERA-MOVEMENT-SETTINGS
+  - XAG117-CAMERA-VIEW-CHOICE
+  XAG-118:
+  - XAG118-PHOTOSENSITIVITY-TEST-AND-AVOID
+  - XAG118-LUMINANCE-FLASH-LIMITS
+  - XAG118-RED-FLASH-LIMITS
+  - XAG118-SPATIAL-PATTERN-LIMITS
+  XAG-119:
+  - XAG119-STT-INCOMING-VOICE
+  - XAG119-TTS-OUTGOING-TEXT
+  - XAG119-TEXT-ENTRY-ALL-COMMUNICATION
+  - XAG119-INCOMING-TEXT-NARRATION
+  - XAG119-NON-TEXT-COMM-NARRATION
+  - XAG119-CHARACTER-VOICE-INTENT-STT
+  - XAG119-PREDEFINED-MESSAGE-PREVIEW-NARRATION
+  - XAG119-PLATFORM-COMM-ACCESSIBILITY-DEFAULTS
+  - XAG119-IN-GAME-COMM-ACCESSIBILITY-OVERRIDES
+  XAG-120:
+  - XAG120-COMMUNICATION-ACCESS-LAUNCH-USE-PATH
+  - XAG120-MAIN-MENU-COMM-PATH
+  - XAG120-PRECOMM-ENTRY-PATH
+  - XAG120-COMM-SETTINGS-MANAGEMENT
+  - XAG120-COMM-NOTIFICATION-SETTINGS
+  - XAG120-PLAYER-SOCIAL-ACTIONS
+  - XAG120-CHAT-OPERATIONS
+  XAG-121:
+  - XAG121-ONLINE-ACCESSIBILITY-DOCS
+  - XAG121-WEBSITE-WCAG-AA
+  - XAG121-PER-GAME-ACCESSIBILITY-PAGE
+  - XAG121-DOCS-LOCALIZED
+  - XAG121-IN-GAME-ACCESSIBILITY-HELP
+  - XAG121-RESPECTFUL-TERMINOLOGY
+  XAG-122:
+  - XAG122-SUPPORT-NO-EXTRA-COST
+  - XAG122-MULTIPLE-ACCESSIBLE-SUPPORT-METHODS
+  XAG-123:
+  - XAG123-HARMFUL-CONTENT-DESCRIPTIONS
+  - XAG123-LAUNCH-CONTENT-WARNINGS
+  - XAG123-CONTEXTUAL-CONTENT-WARNINGS
+  - XAG123-HARMFUL-CONTENT-CUSTOMIZATION
+  - XAG123-SKIP-CHALLENGING-CONTENT
+  - XAG123-MENTAL-HEALTH-RESOURCES
+  - XAG123-WARNINGS-SETTINGS-ACCESSIBLE
+  - XAG123-RESPECTFUL-MENTAL-HEALTH-REPRESENTATION
+atomic_clause_patch:
+  XAG108-MULTIPLE-DIFFICULTY-PRESETS:
+    source_id: XAG-108
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
-    applicability: CONDITIONAL
-    trigger: proper_name_or_technical_term_or_word_of_indeterminate_language_is_present
+    source_modality: SHOULD
+    applicability: ALWAYS_FOR_GAMES_WITH_DIFFICULTY
+    trigger: game_uses_difficulty_configuration
     required_semantics:
-      pronunciation_mechanism_provided: true
-    evidence_requirement_refs: [ACC-EV-NARRATION]
-    gap_ref: ACC-GAP-XAG106
-
+      multiple_difficulty_presets_provided: true
+    recommended_semantics:
+      ideal_minimum_presets: 4
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-CHANGE-DIFFICULTY-ANYTIME:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_changeable_difficulty
+    required_semantics:
+      change_difficulty_during_play: true
+      progress_loss_on_change: false
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-REGULAR-SAVING:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_persistent_progress
+    required_semantics:
+      progress_saved_regularly: true
+    recommended_semantics:
+      manual_and_automatic_save_methods: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-DISCRETE-MECHANIC-DIFFICULTY:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_multiple_adjustable_mechanics_or_assists
+    required_semantics:
+      mechanics_or_assists_can_be_adjusted_independently: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-ULTRA-LOW-DIFFICULTY:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_narrative_progression_and_difficulty_can_block_progress
+    required_semantics:
+      ultra_low_mode_allows_narrative_progress: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-REDUCED-CONTROL-SCHEME:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE
+    source_modality: CONSIDER
+    applicability: CONDITIONAL
+    trigger: game_completion_normally_requires_complex_control_scheme
+    required_semantics:
+      reduced_control_scheme_completion_mode_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-DIFFICULTY-LABEL-LANGUAGE:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: difficulty_choices_are_present
+    required_semantics:
+      labels_are_descriptive: true
+      labels_are_non_denigrating: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-PAUSE-ACTIVE-GAMEPLAY:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: single_player_or_local_multiplayer_or_local_split_screen_active_gameplay_is_running
+    required_semantics:
+      pause_available_any_time: true
+    exceptions:
+    - saving_or_loading_is_in_progress
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG108-PAUSE-CINEMATICS:
+    source_id: XAG-108
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: single_player_or_local_multiplayer_or_local_split_screen_cinematic_is_running
+    required_semantics:
+      pause_available_any_time: true
+    exceptions:
+    - saving_or_loading_is_in_progress
+    evidence_requirement_refs:
+    - ACC-EV-XAG108
+    gap_ref: ACC-GAP-XAG108
+  XAG109-OBJECTIVES-REVIEW-ANYTIME:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_tasks_or_objectives
+    required_semantics:
+      current_tasks_and_objectives_reviewable_any_time: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-OBJECTIVES-CLEAR:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_tasks_or_objectives
+    required_semantics:
+      objective_descriptions_are_clear_and_straightforward: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-COMPLETED-OBJECTIVES-LOGGED:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_completed_tasks_or_objectives
+    required_semantics:
+      completed_tasks_and_objectives_logged: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-ASSISTED-WAYFINDING-AFTER-NO-PROGRESS:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: player_can_make_no_progress_toward_objective
+    required_semantics:
+      assistance_options_available: true
+      allowed_assistance:
+      - waypoint_marker
+      - path_marker
+      - hint
+      - reminder
+      - directional_cue
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-PREREQUISITE-PROGRESS-DESCRIBED:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: objective_has_prerequisites
+    required_semantics:
+      progress_toward_prerequisites_clearly_described: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-INTERRUPTIONS-POSTPONABLE:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: unrelated_interruption_can_occur_during_objective_progress
+    required_semantics:
+      unrelated_interruptions_can_be_postponed_or_suppressed: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-NARRATIVE-REVISIT:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_narrative_content
+    required_semantics:
+      mechanism_to_revisit_narrative: true
+      allowed_methods:
+      - replay_cutscene
+      - written_summary
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-DESCRIPTIVE-SAVES:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_exposes_save_entries_to_player
+    required_semantics:
+      save_entries_are_descriptive: true
+    recommended_semantics:
+      include_screenshot: true
+      include_timestamp: true
+      include_progress_or_objective_summary: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-TUTORIALS-AVAILABLE:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_learnable_gameplay_or_controls
+    required_semantics:
+      gameplay_tutorials_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-TUTORIALS-DEMONSTRATIVE:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: gameplay_tutorial_is_provided
+    required_semantics:
+      tutorial_demonstrates_gameplay_or_controls: true
+      allowed_methods:
+      - interactive_tutorial
+      - video_demonstration
+      static_controls_or_controller_mapping_alone_is_sufficient: false
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-TUTORIALS-ON-DEMAND:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: gameplay_tutorial_is_provided
+    required_semantics:
+      tutorial_revisitable_on_demand: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG109-TUTORIAL-SUBTITLES:
+    source_id: XAG-109
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: tutorial_contains_voiced_or_narrated_or_dialogue_audio
+    required_semantics:
+      subtitle_option_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG109
+    gap_ref: ACC-GAP-XAG109
+  XAG110-HAPTICS-DISABLE:
+    source_id: XAG-110
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_supports_haptic_feedback
+    required_semantics:
+      haptic_feedback_can_be_turned_off: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG110
+    gap_ref: ACC-GAP-XAG110
+  XAG110-HAPTICS-STRENGTH:
+    source_id: XAG-110
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_supports_haptic_feedback
+    required_semantics:
+      haptic_feedback_strength_adjustable: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG110
+    gap_ref: ACC-GAP-XAG110
+  XAG110-HAPTICS-NOT-SOLE-CHANNEL:
+    source_id: XAG-110
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_communicates_information_using_haptics
+    required_semantics:
+      haptics_not_sole_information_channel: true
+      accompanying_channels_include_at_least_one:
+      - visual
+      - auditory
+    evidence_requirement_refs:
+    - ACC-EV-XAG110
+    gap_ref: ACC-GAP-XAG110
+  XAG110-HAPTIC-ADDITIONAL-CUES:
+    source_id: XAG-110
+    authority_class: BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE
+    source_modality: CONSIDER
+    applicability: CONDITIONAL
+    trigger: important_information_is_presented_visually_or_audibly
+    required_semantics:
+      optional_haptic_cue_can_be_enabled_as_additional_channel: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG110
+    gap_ref: ACC-GAP-XAG110
+  XAG111-PREEXISTING-AUDIO-DESCRIPTION:
+    source_id: XAG-111
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: previously_broadcast_media_with_existing_audio_description_is_included_in_game_or_related_site
+    required_semantics:
+      existing_audio_description_is_preserved_or_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG111
+    gap_ref: ACC-GAP-XAG111
+  XAG111-LOCALIZED-SCRIPTED-MEDIA-DESCRIPTION:
+    source_id: XAG-111
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: full_motion_video_or_scripted_cinematic_is_present_and_audio_description_is_enabled
+    required_semantics:
+      audio_description_available: true
+      audio_description_localized_appropriately: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG111
+    gap_ref: ACC-GAP-XAG111
+  XAG111-DESCRIPTION-TIMING:
+    source_id: XAG-111
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: audio_description_is_present
+    required_semantics:
+      descriptions_use_natural_dialogue_gaps_when_available: true
+      extended_audio_description_or_pause_used_when_gaps_insufficient: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG111
+    gap_ref: ACC-GAP-XAG111
+  XAG112-INITIAL-ACCESSIBILITY-PATH:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: title_can_be_launched_to_accessibility_settings
+    required_semantics:
+      launch_to_accessibility_settings_path_accessible: true
+      acceptable_strategies_minimum: 1
+      acceptable_strategies:
+      - first_screen_allows_accessibility_configuration
+      - defaults_meet_relevant_xags_until_settings_reached
+      - defaults_reflect_platform_accessibility_settings_until_settings_reached
+      if_platform_narration_setting_cannot_be_read_screen_narration_default_on: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-LOGICAL-CONSISTENT-NAVIGATION-ORDER:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_ui_navigation
+    required_semantics:
+      navigation_order_logical: true
+      navigation_order_consistent_across_game: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-KEYBOARD-CONTROLLER-DIGITAL-NAVIGATION:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_ui_navigation_and_platform_supports_keyboard_or_controller_digital_input
+    required_semantics:
+      ui_navigable_by_keyboard_alone: true
+      ui_navigable_by_controller_digital_input_alone: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-MULTI-INPUT-NAVIGATION:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_menu_or_gameplay_navigation_and_platform_supports_multiple_input_methods
+    required_semantics:
+      all_aspects_navigable_by_multiple_platform_supported_input_methods: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-REPEATED-COMPONENT-ORDER:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_contains_repeated_components
+    required_semantics:
+      repeated_components_keep_same_relative_or_programmatic_order: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-SEQUENTIAL-FOCUS-ORDER:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_uses_sequential_navigation
+    required_semantics:
+      focus_order_logical: true
+      focus_order_preserves_meaning_and_purpose: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-FOCUS-ALIGNS-MEANING-OR-VISUAL-FLOW:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_has_focusable_elements
+    required_semantics:
+      focus_order_aligned_with_meaning_or_operation_or_visual_flow: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-LINEAR-MENU-LOOP:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: menu_is_linear_on_one_axis
+    required_semantics:
+      last_item_navigation_advances_to_first: true
+      first_item_reverse_navigation_goes_to_last: true
+    exceptions:
+    - multidirectional_menu
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-MULTIPLE-CONTENT-LOCATION-METHODS:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: complex_multi_page_content_set_is_present
+    required_semantics:
+      content_location_methods_minimum: 2
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-NAVIGATION-UPDATES-WITH-LAYOUT:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: visual_layout_change_alters_element_order_or_position
+    required_semantics:
+      navigation_order_updates_to_match_new_layout: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG112-SCALED-TEXT-ONE-DIRECTION-SCROLL:
+    source_id: XAG-112
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: text_or_ui_scaling_causes_content_overflow
+    required_semantics:
+      two_dimensional_scrolling_required: false
+    evidence_requirement_refs:
+    - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
+  XAG113-VISIBLE-FOCUS-INDICATOR:
+    source_id: XAG-113
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_element_receives_input_focus
+    required_semantics:
+      highly_visible_focus_indicator_present: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG113
+    gap_ref: ACC-GAP-XAG113
+  XAG113-FOCUS-ALWAYS-VISIBLE:
+    source_id: XAG-113
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: input_focus_exists
+    required_semantics:
+      focus_indicator_visible_on_screen: true
+      invisible_or_offscreen_focus_prohibited: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG113
+    gap_ref: ACC-GAP-XAG113
+  XAG114-UI-HIERARCHY-CONTEXT:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_screen_or_element_is_present
+    required_semantics:
+      sufficient_context_for_ui_hierarchy: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-CONTEXT-CHANGE-PLAYER-INITIATED:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_context_change_can_occur
+    required_semantics:
+      context_change_player_initiated: true
+      otherwise_player_notified: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-CROSS-APP-FOCUS-INDICATION:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: interaction_shifts_focus_to_another_application
+    required_semantics:
+      focus_shift_clearly_indicated: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-PURPOSE-OPERATION-ALTERNATIVES:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_element_requires_identification_or_operation
+    required_semantics:
+      text_alternative_or_narration_or_tooltip_conveys_purpose_and_operation: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-LABEL-ASSOCIATION:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_control_has_visible_label
+    required_semantics:
+      label_visually_near_associated_control: true
+      association_programmatically_exposed_for_narration: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-ASSISTIVE-TECH-EQUIVALENT-FUNCTION:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: feature_or_functionality_is_used_with_assistive_technology
+    required_semantics:
+      same_feature_or_functionality_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-FORM-CONTROL-EXPECTATION:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: form_or_control_requests_player_data
+    required_semantics:
+      expected_data_is_understandable_without_extra_navigation: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-CONSISTENT-COMPONENT-IDENTIFICATION:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: same_function_component_is_reused
+    required_semantics:
+      component_identified_consistently: true
+      identification_may_use:
+      - iconography
+      - label
+      - text
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-DESCRIPTIVE-LINK-TEXT:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: link_is_present
+    required_semantics:
+      link_text_alone_describes_destination: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-MEANINGFUL-GROUP-LABELS:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: information_is_grouped
+    required_semantics:
+      groups_meaningfully_and_uniquely_labeled: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-CONTEXT-SENSITIVE-HELP:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: task_or_control_requires_help_to_understand_or_complete
+    required_semantics:
+      context_sensitive_help_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-ACCELERATED-FORM-INPUT:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: form_input_can_be_repetitive_or_burdensome
+    required_semantics:
+      mechanism_to_accelerate_form_input: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-LONG-TEXT-HEADINGS:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: long_block_of_text_is_present
+    required_semantics:
+      text_sectioned_with_descriptive_headings: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-TERM-DEFINITIONS:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_uses_game_specific_or_unusual_or_restricted_idiom_jargon_acronym_or_abbreviation
+    required_semantics:
+      definition_mechanism_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-CRITICAL-TEXT-READING-LEVEL:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: critical_ui_or_settings_text_is_present
+    required_semantics:
+      reading_level_no_more_advanced_than_lower_secondary: true
+      lower_secondary_reference_school_years: 7-9
+    exceptions:
+    - narrative_or_story_text
+    - proper_names
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG114-SETTING-EFFECT-PREVIEW:
+    source_id: XAG-114
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: setting_changes_visual_or_presentational_effect
+    required_semantics:
+      visual_simulation_preview_available: true
+    recommended_semantics:
+      preview_uses_realistic_context_when_possible: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
+  XAG115-INPUT-ERROR-DESCRIPTION-CORRECTION:
+    source_id: XAG-115
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: input_error_is_automatically_detected
+    required_semantics:
+      error_described: true
+      correction_method_described: true
+      description_uses_multiple_methods: true
+    exceptions:
+    - disclosure_would_compromise_security_or_purpose
+    evidence_requirement_refs:
+    - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
+  XAG115-ERROR-WARNING-DISTINGUISHABLE:
+    source_id: XAG-115
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: error_or_warning_is_present
+    required_semantics:
+      visually_distinguishable: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
+  XAG115-ERROR-LOCATION-EMPHASIZED:
+    source_id: XAG-115
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: input_error_occurs_at_specific_field_or_location
+    required_semantics:
+      error_location_visually_emphasized: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
+  XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE:
+    source_id: XAG-115
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: player_action_deletes_or_modifies_player_controlled_stored_data
+    required_semantics:
+      opportunity_to_review_or_correct_or_reverse_before_commit: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
+  XAG115-PERMANENT-ACTION-CONFIRM-OR-UNDO:
+    source_id: XAG-115
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: action_is_permanent_or_destructive
+    required_semantics:
+      review_or_confirmation_or_undo_mechanism_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
+  XAG115-NO-BUTTON-HOLD-DESTRUCTIVE-CONFIRMATION:
+    source_id: XAG-115
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: permanent_or_destructive_action_requires_confirmation
+    required_semantics:
+      button_hold_not_required_as_only_confirmation_method: true
+      non_hold_alternative_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
+  XAG116-UI-TIME-LIMIT-ESSENTIAL-ONLY:
+    source_id: XAG-116
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: non_core_gameplay_ui_interaction_has_time_limit
+    required_semantics:
+      time_limit_is_essential_or_unavoidable: true
+    exceptions:
+    - core_gameplay_timing
+    evidence_requirement_refs:
+    - ACC-EV-XAG116
+    gap_ref: ACC-GAP-XAG116
+  XAG116-UI-TIME-LIMIT-ADVANCE-WARNING:
+    source_id: XAG-116
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: non_core_gameplay_ui_interaction_has_time_limit
+    required_semantics:
+      player_informed_before_time_limit: true
+      warning_uses_multiple_methods: true
+    exceptions:
+    - core_gameplay_timing
+    evidence_requirement_refs:
+    - ACC-EV-XAG116
+    gap_ref: ACC-GAP-XAG116
+  XAG116-UI-TIME-LIMIT-MODIFIABLE:
+    source_id: XAG-116
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: non_core_gameplay_ui_interaction_has_time_limit
+    required_semantics:
+      modification_alternatives_minimum: 1
+      allowed_alternatives:
+      - request_longer_or_no_session_limit_before_start: true
+      - adjust_before_start_up_to_at_least_multiplier: 10
+      - warn_before_expiry: true
+        minimum_extension_action_window_seconds: 20
+        simple_action_extends_limit: true
+        minimum_extension_uses: 10
+      - turn_time_limit_off: true
+    exceptions:
+    - real_time_event_with_no_alternative
+    - time_limit_is_essential_to_task
+    - core_gameplay_timing
+    evidence_requirement_refs:
+    - ACC-EV-XAG116
+    gap_ref: ACC-GAP-XAG116
+  XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE:
+    source_id: XAG-116
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: important_element_has_display_duration_limit
+    required_semantics:
+      duration_control_alternatives_minimum: 1
+      allowed_alternatives:
+      - adjust_before_encounter_up_to_at_least_multiplier: 10
+      - disable_duration_limit_and_dismiss_or_advance_on_input: true
+    exceptions:
+    - real_time_event_with_no_alternative
+    - duration_is_essential_to_task
+    - core_gameplay_timing
+    evidence_requirement_refs:
+    - ACC-EV-XAG116
+    gap_ref: ACC-GAP-XAG116
+  XAG117-AUTO-UPDATING-CONTENT-CONTROL:
+    source_id: XAG-117
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_with_text_contains_auto_updating_content
+    required_semantics:
+      update_frequency_controllable: true
+      pause_or_stop_or_hide_available: true
+    exceptions:
+    - ancillary_gameplay_around_text_ui
+    evidence_requirement_refs:
+    - ACC-EV-XAG117
+    gap_ref: ACC-GAP-XAG117
+  XAG117-MOVING-BLINKING-SCROLLING-CONTROL:
+    source_id: XAG-117
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: ui_with_text_contains_moving_blinking_scrolling_or_flashing_content
+    required_semantics:
+      can_disable_entirely: true
+      pause_or_hide_available: true
+    exceptions:
+    - ancillary_gameplay_around_text_ui
+    evidence_requirement_refs:
+    - ACC-EV-XAG117
+    gap_ref: ACC-GAP-XAG117
+  XAG117-CAMERA-EFFECT-DISABLE:
+    source_id: XAG-117
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_uses_camera_shake_bobbing_motion_blur_or_mouse_blur
+    required_semantics:
+      effect_can_be_turned_off: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG117
+    gap_ref: ACC-GAP-XAG117
+  XAG117-REPETITIVE-MOTION-AVOID:
+    source_id: XAG-117
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: non_core_gameplay_presentation_uses_repetitive_side_to_side_or_up_down_motion
+    required_semantics:
+      repetitive_motion_avoided_or_disableable: true
+    exceptions:
+    - core_gameplay_movement
+    evidence_requirement_refs:
+    - ACC-EV-XAG117
+    gap_ref: ACC-GAP-XAG117
+  XAG117-FIELD-OF-VIEW-ADJUST:
+    source_id: XAG-117
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_uses_player_camera_with_configurable_field_of_view
+    required_semantics:
+      field_of_view_adjustable: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG117
+    gap_ref: ACC-GAP-XAG117
+  XAG117-CAMERA-MOVEMENT-SETTINGS:
+    source_id: XAG-117
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_uses_player_controlled_or_automatic_camera
+    required_semantics:
+      horizontal_sensitivity_adjustable: true
+      vertical_sensitivity_adjustable: true
+      automatic_camera_movement_can_be_disabled: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG117
+    gap_ref: ACC-GAP-XAG117
+  XAG117-CAMERA-VIEW-CHOICE:
+    source_id: XAG-117
+    authority_class: BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE
+    source_modality: CONSIDER
+    applicability: CONDITIONAL
+    trigger: game_supports_first_person_or_third_person_camera_presentation
+    required_semantics:
+      first_person_and_third_person_view_choice_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG117
+    gap_ref: ACC-GAP-XAG117
+  XAG118-PHOTOSENSITIVITY-TEST-AND-AVOID:
+    source_id: XAG-118
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: ALWAYS_FOR_GAMES
+    trigger: game_contains_visual_content
+    required_semantics:
+      photosensitive_seizure_trigger_testing_performed: true
+      adverse_reaction_visual_experiences_avoided: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG118
+    gap_ref: ACC-GAP-XAG118
+  XAG118-LUMINANCE-FLASH-LIMITS:
+    source_id: XAG-118
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: visual_content_contains_luminance_change_or_flash
+    required_semantics:
+      flash_luminance_change_percent_threshold: 10
+      darker_luminance_threshold: 0.8
+      failure_frequency_per_second_greater_than_about: 3
+      failure_area_percent_about_or_greater: 20
+      extended_lower_intensity_flashing_can_fail: true
+      mitigation_options:
+      - reduce_contrast
+      - reduce_frequency
+      - reduce_area
+    source_fidelity_note: Threshold bundle retained as one conjunctive test criterion rather than splitting definitions from failure logic.
+    evidence_requirement_refs:
+    - ACC-EV-XAG118
+    gap_ref: ACC-GAP-XAG118
+  XAG118-RED-FLASH-LIMITS:
+    source_id: XAG-118
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: visual_content_contains_saturated_red_flash
+    required_semantics:
+      saturated_red_ratio_threshold: R/(R+G+B)>=0.8
+      red_flash_change_formula: (R-G-B)*320
+      red_flash_change_threshold_greater_than: 20
+      failure_frequency_per_second_greater_than_about: 3
+      failure_area_percent_about_or_greater: 20
+      extended_lower_intensity_flashing_can_fail: true
+      mitigation_options:
+      - desaturate_red
+      - reduce_contrast
+      - reduce_frequency
+      - reduce_area
+    evidence_requirement_refs:
+    - ACC-EV-XAG118
+    gap_ref: ACC-GAP-XAG118
+  XAG118-SPATIAL-PATTERN-LIMITS:
+    source_id: XAG-118
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: visual_content_contains_alternating_high_contrast_spatial_pattern
+    required_semantics:
+      contrast_difference_percent_failure_threshold_greater_than: 10
+      failure_area_percent_about_or_greater: 20
+      mitigation_options:
+      - reduce_contrast
+      - reduce_pattern_area
+    evidence_requirement_refs:
+    - ACC-EV-XAG118
+    gap_ref: ACC-GAP-XAG118
+  XAG119-STT-INCOMING-VOICE:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_supports_voice_communication_from_other_players
+    required_semantics:
+      speech_to_text_transcribes_incoming_voice_in_real_time: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-TTS-OUTGOING-TEXT:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_supports_voice_communication_channel
+    required_semantics:
+      entered_text_can_be_synthesized_in_real_time_and_broadcast_to_voice_channel: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-TEXT-ENTRY-ALL-COMMUNICATION:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: player_communication_is_available
+    required_semantics:
+      text_entry_box_available_everywhere_communication_is_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-INCOMING-TEXT-NARRATION:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: incoming_text_communication_is_received_and_screen_narration_is_enabled
+    required_semantics:
+      incoming_text_voiced_locally_in_real_time: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-NON-TEXT-COMM-NARRATION:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: incoming_non_text_phrase_emoji_or_emote_is_received_and_screen_narration_is_enabled
+    required_semantics:
+      non_text_communication_voiced_locally_in_real_time: true
+      emoji_names_use_friendly_cldr_short_names: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-CHARACTER-VOICE-INTENT-STT:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: player_initiated_character_voice_conveys_player_intent_and_speech_to_text_is_enabled
+    required_semantics:
+      character_voice_transcribed_locally_in_real_time: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-PREDEFINED-MESSAGE-PREVIEW-NARRATION:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: predefined_communication_message_receives_focus_and_screen_narration_is_enabled
+    required_semantics:
+      message_preview_narrated_on_focus: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-PLATFORM-COMM-ACCESSIBILITY-DEFAULTS:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: platform_exposes_supported_speech_to_text_or_text_to_speech_accessibility_settings
+    required_semantics:
+      platform_settings_read_and_supported_as_defaults: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG119-IN-GAME-COMM-ACCESSIBILITY-OVERRIDES:
+    source_id: XAG-119
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_supports_speech_to_text_or_text_to_speech_or_narration_for_communication
+    required_semantics:
+      in_game_override_controls_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG119
+    gap_ref: ACC-GAP-XAG119
+  XAG120-COMMUNICATION-ACCESS-LAUNCH-USE-PATH:
+    source_id: XAG-120
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_offers_one_to_one_or_one_to_many_communication
+    required_semantics:
+      ui_path_to_access_launch_and_use_communications_is_accessible: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
+  XAG120-MAIN-MENU-COMM-PATH:
+    source_id: XAG-120
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: communication_is_reached_from_main_menu
+    required_semantics:
+      selection_launch_and_subsequent_menus_accessible: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
+  XAG120-PRECOMM-ENTRY-PATH:
+    source_id: XAG-120
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: character_selection_creation_server_join_or_other_ui_is_required_before_communication
+    required_semantics:
+      all_prerequisite_ui_accessible: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
+  XAG120-COMM-SETTINGS-MANAGEMENT:
+    source_id: XAG-120
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: communication_settings_are_available
+    required_semantics:
+      settings_management_ui_accessible: true
+      accessibility_communication_settings_accessible: true
+      audio_settings_affecting_communication_accessible: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
+  XAG120-COMM-NOTIFICATION-SETTINGS:
+    source_id: XAG-120
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: communication_notifications_are_available
+    required_semantics:
+      notification_settings_accessible: true
+      notification_duration_adjustable_when_timed: true
+      notifications_can_be_turned_on_or_off: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
+  XAG120-PLAYER-SOCIAL-ACTIONS:
+    source_id: XAG-120
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: communication_experience_supports_friend_search_requests_status_or_player_actions
+    required_semantics:
+      friend_and_player_social_actions_accessible: true
+      covered_examples:
+      - friend_request
+      - friend_search
+      - player_status
+      - mute
+      - block
+    evidence_requirement_refs:
+    - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
+  XAG120-CHAT-OPERATIONS:
+    source_id: XAG-120
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: communication_experience_supports_chat_window_operations
+    required_semantics:
+      chat_operations_accessible: true
+      covered_examples:
+      - navigate_chat
+      - select_message
+      - report_abuse
+    evidence_requirement_refs:
+    - ACC-EV-XAG120
+    gap_ref: ACC-GAP-XAG120
+  XAG121-ONLINE-ACCESSIBILITY-DOCS:
+    source_id: XAG-121
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_accessibility_features_functionality_guides_or_support_information
+    required_semantics:
+      free_online_documentation_accessible: true
+      documentation_easy_to_discover: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG121
+    gap_ref: ACC-GAP-XAG121
+  XAG121-WEBSITE-WCAG-AA:
+    source_id: XAG-121
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_accessibility_documentation_is_published_on_website
+    required_semantics:
+      website_conforms_to_wcag_2_level_aa: true
+    source_fidelity_note: Source cross-reference is retained as best-practice semantics; this packet does not create legal/compliance certification.
+    evidence_requirement_refs:
+    - ACC-EV-XAG121
+    gap_ref: ACC-GAP-XAG121
+  XAG121-PER-GAME-ACCESSIBILITY-PAGE:
+    source_id: XAG-121
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: accessibility_documentation_covers_a_game_title
+    required_semantics:
+      designated_accessibility_page_for_each_game: true
+      single_page_for_multiple_titles_avoided: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG121
+    gap_ref: ACC-GAP-XAG121
+  XAG121-DOCS-LOCALIZED:
+    source_id: XAG-121
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_is_localized_into_relevant_local_languages
+    required_semantics:
+      accessibility_documentation_localized_to_same_relevant_languages: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG121
+    gap_ref: ACC-GAP-XAG121
+  XAG121-IN-GAME-ACCESSIBILITY-HELP:
+    source_id: XAG-121
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_has_accessibility_features
+    required_semantics:
+      in_game_help_explains_accessibility_features_in_accessible_format: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG121
+    gap_ref: ACC-GAP-XAG121
+  XAG121-RESPECTFUL-TERMINOLOGY:
+    source_id: XAG-121
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: accessibility_documentation_refers_to_disability_or_accessibility
+    required_semantics:
+      terminology_up_to_date_and_respectful: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG121
+    gap_ref: ACC-GAP-XAG121
+  XAG122-SUPPORT-NO-EXTRA-COST:
+    source_id: XAG-122
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: customer_support_or_call_center_support_is_offered
+    required_semantics:
+      product_and_accessibility_support_available_without_extra_cost: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG122
+    gap_ref: ACC-GAP-XAG122
+  XAG122-MULTIPLE-ACCESSIBLE-SUPPORT-METHODS:
+    source_id: XAG-122
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: customer_support_is_offered
+    required_semantics:
+      multiple_accessible_support_methods_available: true
+      supported_examples:
+      - phone
+      - tty
+      - email
+      - chat
+    evidence_requirement_refs:
+    - ACC-EV-XAG122
+    gap_ref: ACC-GAP-XAG122
+  XAG123-HARMFUL-CONTENT-DESCRIPTIONS:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_contains_content_that_may_cause_adverse_emotional_or_psychological_response
+    required_semantics:
+      detailed_content_descriptions_available: true
+      free_online_pre_purchase_description_available: true
+      in_game_description_available: true
+      online_description_accessible: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+  XAG123-LAUNCH-CONTENT-WARNINGS:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_contains_content_that_may_cause_adverse_emotional_or_psychological_response
+    required_semantics:
+      content_warnings_present_at_game_launch: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+  XAG123-CONTEXTUAL-CONTENT-WARNINGS:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_contains_specific_areas_cutscenes_or_dialogue_that_may_cause_adverse_emotional_or_psychological_response
+    required_semantics:
+      option_to_enable_in_game_warning_before_relevant_content: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+  XAG123-HARMFUL-CONTENT-CUSTOMIZATION:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: potentially_harmful_content_can_be_lessened_or_removed_without_defeating_core_purpose
+    required_semantics:
+      customization_to_lessen_or_remove_content_available: true
+      covered_examples:
+      - gore
+      - profanity
+      - animal_killing
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+  XAG123-SKIP-CHALLENGING-CONTENT:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: cutscene_or_mission_contains_psychologically_or_emotionally_challenging_content
+    required_semantics:
+      skip_option_available: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+  XAG123-MENTAL-HEALTH-RESOURCES:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_contains_content_related_to_mental_health_self_harm_suicide_eating_disorders_addiction_or_other_serious_psychological_risk
+    required_semantics:
+      in_game_resources_for_support_or_learning_more_available: true
+      resources_localized_or_region_appropriate_when_applicable: true
+    source_fidelity_note: Source semantics only; no live helpline identities are asserted by this planning packet.
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+  XAG123-WARNINGS-SETTINGS-ACCESSIBLE:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: content_warnings_or_mental_health_related_settings_are_present
+    required_semantics:
+      warnings_and_settings_fully_accessible_under_relevant_xags: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+  XAG123-RESPECTFUL-MENTAL-HEALTH-REPRESENTATION:
+    source_id: XAG-123
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: game_depicts_characters_with_mental_health_conditions_or_cognitive_disabilities
+    required_semantics:
+      portrayal_accurate_and_respectful: true
+      stigmatized_or_stereotyped_portrayal_avoided: true
+    recommended_semantics:
+      work_with_relevant_disability_community: true
+    evidence_requirement_refs:
+    - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
+evidence_requirement_patch:
+  ACC-EV-XAG108:
+    source_id: XAG-108
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG109:
+    source_id: XAG-109
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG110:
+    source_id: XAG-110
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG111:
+    source_id: XAG-111
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG112:
+    source_id: XAG-112
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG113:
+    source_id: XAG-113
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG114:
+    source_id: XAG-114
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG115:
+    source_id: XAG-115
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG116:
+    source_id: XAG-116
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG117:
+    source_id: XAG-117
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG118:
+    source_id: XAG-118
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG119:
+    source_id: XAG-119
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG120:
+    source_id: XAG-120
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG121:
+    source_id: XAG-121
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG122:
+    source_id: XAG-122
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+  ACC-EV-XAG123:
+    source_id: XAG-123
+    state: NOT_RUN
+    required_evidence: empirical target-build evidence for every applicable atomic clause on this page
+    pass_authority: false
+gap_patch:
+  ACC-GAP-XAG108:
+    source_id: XAG-108
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG109:
+    source_id: XAG-109
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG110:
+    source_id: XAG-110
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG111:
+    source_id: XAG-111
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG112:
+    source_id: XAG-112
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG113:
+    source_id: XAG-113
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG114:
+    source_id: XAG-114
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG115:
+    source_id: XAG-115
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG116:
+    source_id: XAG-116
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG117:
+    source_id: XAG-117
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG118:
+    source_id: XAG-118
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG119:
+    source_id: XAG-119
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG120:
+    source_id: XAG-120
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG121:
+    source_id: XAG-121
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG122:
+    source_id: XAG-122
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
+  ACC-GAP-XAG123:
+    source_id: XAG-123
+    state: OPEN
+    reason: atomic source mapping is produced here but target-build empirical evidence has not been run
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v5
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v6
   composition_steps:
-    - load exact v4 policy blob 96a074e9c708d4ae2f86e8a70b7b4ade8202c799
-    - verify the v4 composition still reconstructs exact v3 blob 9c21efdeed2ddff96d6cc1d0ccf2893b9304ccc4 plus exactly the six Issue 243 correction records
-    - verify the v4 77-member XAG 102-106 inventory and 105-member composed inventory before this patch
-    - replace exactly XAG106-PROPER-NAME-PRONUNCIATION with atomic_clause_correction_patch.XAG106-PROPER-NAME-PRONUNCIATION
-    - preserve every other v4 record, XAG 108-123 summary-only state, empirical NOT_RUN state, OPEN blocker state, and authority boundary
+  - load exact v5 policy blob c7c3f72fb3bbd2d0e961aee94b33ce2ac93c5615
+  - reconstruct and validate the exact 105-record XAG 101-107 composition before applying this overlay
+  - assert this overlay adds exactly the 110 expected XAG 108-123 identities and replaces zero prior atomic records
+  - assert every new source_id resolves to the registered current Microsoft XAG v3.2 page
+  - assert every new evidence_requirement_ref and gap_ref resolves to this overlay
+  - assert every applicability trigger is nonempty and UNKNOWN/indeterminate trigger state fails closed
+  - assert all empirical evidence remains NOT_RUN and all new page gaps remain OPEN
   required_semantic_assertions:
-    - XAG106-PROPER-NAME-PRONUNCIATION trigger equals proper_name_or_technical_term_or_word_of_indeterminate_language_is_present
-    - XAG106-PROPER-NAME-PRONUNCIATION trigger contains no requires_pronunciation_help or equivalent subjective product judgment predicate
-    - XAG106-PROPER-NAME-PRONUNCIATION required_semantics has pronunciation_mechanism_provided=true
-    - the six v4 Issue 243 correction records are byte-for-byte logical inputs from exact v4 blob and are not redefined by this overlay
+  - load exact v5 policy blob and preserve all XAG 101-107 identities and reviewed semantic corrections before applying this overlay
+  - XAG108 pause obligations cover active gameplay and cinematics for single-player/local multiplayer/local split-screen, with saving/loading as the declared exception
+  - XAG109 static controls/controller mapping alone cannot satisfy the gameplay tutorial demonstration record
+  - XAG110 haptics are never the sole information channel when they communicate game information
+  - XAG111 audio description preserves localization and natural-gap timing with extended description/pause when gaps are insufficient
+  - XAG112 initial accessibility path preserves the three source strategies and defaults screen narration on when the platform narration setting cannot be read
+  - XAG112 linear-menu wrap applies only to one-axis linear menus and does not silently apply to multidirectional menus
+  - XAG113 focus can never be invisible or offscreen
+  - XAG114 critical UI/settings reading-level rule retains narrative/story and proper-name exceptions and does not become a legal/compliance claim
+  - XAG115 input-error detail preserves the security/purpose exception and destructive-action confirmation cannot require a button hold as the only method
+  - XAG116 excludes core gameplay timing and treats the four time-limit modification mechanisms as alternatives, not four simultaneous requirements
+  - XAG116 retains at-least-10x adjustment, at-least-20-second expiry action window, and at-least-10 extension-use semantics
+  - XAG117 ancillary gameplay around text UI and core-gameplay movement exemptions remain explicit
+  - XAG118 luminance, saturated-red, and spatial-pattern thresholds remain bundled with their source definitions and failure logic
+  - XAG119 incoming STT, outgoing TTS, local narration, character-intent transcription, platform defaults, and in-game overrides remain distinct
+  - XAG120 communication accessibility is conditional on communication being offered and covers access/launch, prerequisite pathways, settings, notifications, social actions, and chat operations
+  - XAG121 WCAG 2 Level AA remains a source cross-reference in best-practice documentation semantics and grants no legal certification
+  - XAG123 harmful-content applicability remains content-triggered; warnings, customization, skip, resources, accessibility, and respectful representation remain distinct
   aggregate_assertions:
-    - exact XAG 102-106 clause identity and per-page counts remain unchanged
-    - XAG 108-123 remain GUIDELINE_SUMMARY_ONLY
-    - all empirical accessibility evidence remains NOT_RUN
-    - mapping_complete remains false
-    - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
-    - W2-REV-M02 remains OPEN_BOUNDED
-    - fresh independent scoped review remains required
-    - production_implementation_ready remains false
-    - integration_authorized remains false
-    - canonicality remains NOT_CANONICAL
+  - exact new XAG 108-123 clause count equals 110
+  - exact composed XAG 101-123 atomic clause count equals 215
+  - summary_only_pages_after_patch is empty
+  - source_clause_mapping_candidate_complete is true only for source-clause inventory coverage
+  - empirical_accessibility_evidence remains NOT_RUN
+  - empirical_mapping_complete remains false
+  - mapping_complete remains false
+  - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
+  - W2-REV-M02 remains OPEN_BOUNDED pending empirical evidence and fresh independent authority
+  - fresh independent scoped review remains required
+  - production_implementation_ready remains false
+  - integration_authorized remains false
+  - canonicality remains NOT_CANONICAL
   expected_result:
-    W2-REV-ACC04-M01: RESOLVED_PENDING_FRESH_REVIEW
-    issue_243_six_corrections: PRESERVED
-    xag_102_106_inventory: PASS
-    reference_integrity: PASS
-    pronunciation_semantic_fixture: PASS
-    xag_108_123_summary_only: PASS
+    xag_101_107_prior_composition: PASS_PRESERVED
+    xag_108_123_inventory: PASS
+    new_atomic_clause_count: 110
+    composed_atomic_clause_count: 215
+    source_reference_integrity: PASS
+    evidence_gap_reference_integrity: PASS
+    applicability_totality: PASS_FAIL_CLOSED
+    semantic_fidelity_fixtures: PASS
+    source_clause_component: RESOLVED_PENDING_FRESH_REVIEW
     empirical_accessibility_evidence: NOT_RUN
     mapping_complete: false
     blocker_authority_state: OPEN
     fresh_independent_scoped_review_required: true
     integration_authorized: false
   adversarial_fixtures:
-    SUBJECTIVE_PRONUNCIATION_APPLICABILITY_GATE: REJECT_INVENTED_PRECONDITION
-    PRONUNCIATION_TERM_CLASS_DROPPED: REJECT_SEMANTIC_NARROWING
-    PRONUNCIATION_MECHANISM_DROPPED: REJECT_REQUIRED_SEMANTIC_LOSS
-    V4_CORRECTION_REDEFINED: REJECT_SCOPE_LEAKAGE
-    UPGRADE_XAG108_123_WITHOUT_INVENTORY: REJECT_ATOMIC_EXPANSION
+    MISSING_XAG108_123_CLAUSE: REJECT_EXPECTED_SET_MISMATCH
+    EXTRA_OR_DUPLICATE_XAG108_123_CLAUSE: REJECT_EXPECTED_SET_OR_UNIQUENESS_MISMATCH
+    DANGLING_SOURCE_EVIDENCE_OR_GAP_REF: REJECT_REFERENCE_INTEGRITY
+    UNKNOWN_TRIGGER_TREATED_AS_NOT_APPLICABLE: REJECT_FAIL_OPEN_APPLICABILITY
+    XAG116_ALTERNATIVES_PROMOTED_TO_ALL_REQUIRED: REJECT_SOURCE_MODALITY_INFLATION
+    XAG116_CORE_GAMEPLAY_TIMING_INCLUDED: REJECT_SCOPE_INFLATION
+    XAG118_THRESHOLD_OR_DEFINITION_DROPPED: REJECT_PHOTOSENSITIVITY_SEMANTIC_LOSS
+    XAG121_WCAG_CROSSREF_PROMOTED_TO_LEGAL_CERTIFICATION: REJECT_AUTHORITY_INFLATION
+    XAG123_SUPPORT_RESOURCE_REPLACED_WITH_UNVERIFIED_LIVE_CONTACT: REJECT_UNBOUND_EXTERNAL_EVIDENCE
+    PRIOR_XAG101_107_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
     CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
-    SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
-
+    SET_MAPPING_COMPLETE_TRUE_WITHOUT_EMPIRICAL_AND_REVIEW_AUTHORITY: REJECT_AGGREGATE_STATE
 freshness:
   recheck_before:
-    - fresh independent scoped review
-    - any later integration decision
-    - readiness verification
-    - release or accessibility marketing claim
+  - fresh independent scoped review
+  - any later integration decision
+  - target-build empirical accessibility evidence production
+  - readiness verification
+  - release or accessibility marketing claim
   reopen_triggers:
-    - Microsoft XAG 106 version or load-bearing pronunciation implementation-guideline change
-    - selected platform scope change
-    - feature/content trigger change
-    - empirical accessibility evidence production
-
+  - Microsoft XAG 108-123 version or load-bearing implementation-guideline change
+  - selected platform scope change
+  - feature/content trigger change
+  - target-build empirical evidence production
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC04-M01
+  closes_only_source_clause_subcondition_of_w2_rev_m02: PENDING_FRESH_REVIEW
   closes_w2_rev_m02: false
   empirical_accessibility_pass: false
   readiness_authority: false
