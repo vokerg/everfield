@@ -1,98 +1,109 @@
-# W2-REM-ACC-14 — restore XAG 117 camera-view source modality
+# W2-REM-ACC-15 — correct XAG 120 notification-setting example inflation
 
-**Mission:** `W2-REM-ACC-14` / Issue #303  
-**Winning claim:** comment `5296717456`  
-**Claim base:** `main@7631dee0a166c91e383a8c2e7bd641b46e6b9821`  
-**Required full-review continuation:** Issue #302 winning claim `5296669009`, terminal `CHANGES_NEEDED` comment `5296708193`, review head `6327b6b6708f5159b20e37ffe5b348963bd5d8bb`, work `1e33561de0e2afa76836910cd947b06934c0cfd4`  
-**Finding:** `W2-REV-ACC17-M01` / MAJOR — `SOURCE_MODALITY_WEAKENING_AND_ACCEPTANCE_AUTHORITY_DRIFT`  
-**Immutable producer input:** policy v12 blob `4c10dc8969a8080a14e8f46e0d2e126bd8a1ee5e`, report v12 blob `197a20ec3fd3cd859c4e7d96e51f7337ea7583d3`  
+**Mission:** `W2-REM-ACC-15` / Issue #310  
+**Winning claim:** comment `5296883667`  
+**Claim base:** `main@65d4eb8144e33d8e247c0dc0a688f6811a4225bb`  
+**Required full-review continuation:** Issue #308 winning claim `5296830252`, terminal `CHANGES_NEEDED` comment `5296868370`, review head `024efaa4cc97b5af6e669cf9100b5172a2096bd4`, work `ed51563510cee7cd24463a6d1a169ec3f0f2ea3e`  
+**Finding:** `W2-REV-ACC19-M01` / MAJOR — `EXAMPLE_TO_REQUIREMENT_PROMOTION_AND_FEATURE_EXISTENCE_INFLATION`  
+**Immutable producer input:** policy v13 blob `3dcdaa400ffd43cea390c331f5b4f8ea62750a5c`, report v13 blob `e5f1f491a91499bef96861d2878e4fb5552a207b`  
 **Authority:** bounded noncanonical remediation only; fresh independent/degraded-independent scoped review remains mandatory.
 
 ## 1. Scope and source binding
 
-Issue #302 resumed the still-unaccepted XAG 115 button-hold and XAG 116–123 mapping remainder. It established no new material finding in the XAG 115 button-hold or XAG 116 attack, then terminated early on the first reproducible material defect at XAG 117. XAG 118–123 therefore remain unaccepted by that episode.
+Issue #308 resumed the still-unaccepted XAG 118–123 mapping remainder. It established no material finding in its XAG 118 photosensitivity or XAG 119 speech/text communication attacks, then terminated early on the first reproducible material defect at XAG 120. XAG 121–123 therefore remain unaccepted by that episode.
 
-Fresh first-party Microsoft XAG 117 was re-read on `2026-08-14`:
+Fresh first-party Microsoft XAG 120 was re-read on `2026-08-14`:
 
-- `https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/117`
+- `https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/120`
 - XAG v3.2 lineage; page last updated `2026-03-04`.
 
-Within **Implementation guidelines**, the camera-view choice appears as an unqualified directive to allow player choice between first-person and third-person camera views. It is not introduced by `consider`, `ideally`, or example-only language. The XAG collection itself remains accessibility best-practice guidance rather than a legal/compliance standard, so the source-faithful repository-native representation is the same best-practice `SHOULD` / required-if-applicable strength used for the sibling unqualified XAG 117 directives—not `MUST` or compliance authority.
+The source makes accessibility/usability of the necessary communication configuration UI the applicable obligation. In the notification-management subsection, controls such as adjusting notification display duration and turning certain notifications on/off are introduced as examples. They identify settings whose UI should be accessible when those settings exist; the examples do not universally require every title with communication notifications to create both capabilities.
 
 ## 2. Exact inherited defect
 
-The exact XAG 108–123 origin policy blob `80e278315d6b7a108d89da3f5a99086a8ef91bf7` contains:
+The exact inherited XAG 120 atom resolved through current v13 is:
 
 ```yaml
-XAG117-CAMERA-VIEW-CHOICE:
-  source_id: XAG-117
-  authority_class: BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE
-  source_modality: CONSIDER
-  applicability: CONDITIONAL
-  trigger: game_supports_first_person_or_third_person_camera_presentation
-  required_semantics:
-    first_person_and_third_person_view_choice_available: true
-  evidence_requirement_refs:
-    - ACC-EV-XAG117
-  gap_ref: ACC-GAP-XAG117
-```
-
-The semantic payload and conditional applicability boundary are not the finding. The defect is only the advisory downgrade: `BEST_PRACTICE_RECOMMENDED_IF_APPLICABLE` / `CONSIDER` weakens the current unqualified implementation guideline and can let a consumer treat an applicable mapped expectation as optional while still claiming source-faithful mapping.
-
-## 3. Bounded v13 correction
-
-The v13 overlay changes exactly two fields on that existing atom:
-
-```yaml
-XAG117-CAMERA-VIEW-CHOICE:
-  source_id: XAG-117
+XAG120-COMM-NOTIFICATION-SETTINGS:
+  source_id: XAG-120
   authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
   source_modality: SHOULD
   applicability: CONDITIONAL
-  trigger: game_supports_first_person_or_third_person_camera_presentation
+  trigger: communication_notifications_are_available
   required_semantics:
-    first_person_and_third_person_view_choice_available: true
+    notification_settings_accessible: true
+    notification_duration_adjustable_when_timed: true
+    notifications_can_be_turned_on_or_off: true
   evidence_requirement_refs:
-    - ACC-EV-XAG117
-  gap_ref: ACC-GAP-XAG117
+    - ACC-EV-XAG120
+  gap_ref: ACC-GAP-XAG120
 ```
 
-Preserved unchanged:
+The identity, source, best-practice authority, `SHOULD` modality, conditional applicability, trigger, evidence route, and gap route are not the finding. The defect is the semantic payload: once any communication notification exists, the atom requires both example capabilities as product features. That can false-fail a source-faithful implementation whose actual notification-management UI is accessible but which does not offer one or both example controls.
 
-- atom identity `XAG117-CAMERA-VIEW-CHOICE`;
-- source id `XAG-117`;
-- `CONDITIONAL` applicability;
-- trigger `game_supports_first_person_or_third_person_camera_presentation`;
-- semantic payload `first_person_and_third_person_view_choice_available: true`;
-- evidence requirement `ACC-EV-XAG117`;
-- gap route `ACC-GAP-XAG117`.
+## 3. Bounded v14 correction
 
-The correction does **not** broaden the trigger into a requirement that every game introduce both camera paradigms. It preserves the inherited applicability boundary and only restores the source strength when that mapped condition applies.
+The v14 overlay keeps the source's applicable accessibility obligation and converts the examples into conditional source-faithful semantics:
+
+```yaml
+XAG120-COMM-NOTIFICATION-SETTINGS:
+  source_id: XAG-120
+  authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+  source_modality: SHOULD
+  applicability: CONDITIONAL
+  trigger: communication_notifications_are_available
+  required_semantics:
+    notification_settings_accessible: true
+  conditional_semantics:
+    - when: notification_duration_adjustment_control_is_present
+      required:
+        notification_duration_adjustment_control_accessible: true
+    - when: notification_on_off_control_is_present
+      required:
+        notification_on_off_control_accessible: true
+  source_examples:
+    - notification_display_duration_adjustment
+    - notification_on_off_control
+  evidence_requirement_refs:
+    - ACC-EV-XAG120
+  gap_ref: ACC-GAP-XAG120
+```
+
+This preserves two distinct source truths simultaneously:
+
+1. If the game offers applicable communication-notification management, that management UI remains required to be accessible.
+2. The source examples do not require the game to add duration-adjustment or notification-toggle features. If those controls do exist, they remain inside the accessibility obligation.
+
+The correction does not weaken XAG 120 into an advisory-only mapping and does not invent new communication capabilities.
 
 ## 4. Load-bearing mechanical oracles
 
-`ACCESSIBILITY-POLICY-VALIDATOR-v13` makes the modality correction mechanically load-bearing:
+`ACCESSIBILITY-POLICY-VALIDATOR-v14` makes the correction mechanically load-bearing:
 
 | Candidate | Expected |
 | --- | --- |
-| `BEST_PRACTICE_REQUIRED_IF_APPLICABLE` + `SHOULD` | `PASS` |
-| recommended-if-applicable + `CONSIDER` | `REJECT_SOURCE_MODALITY_WEAKENING` |
-| required-if-applicable + `CONSIDER` | `REJECT_SOURCE_MODALITY_WEAKENING` |
-| recommended-if-applicable + `SHOULD` | `REJECT_ACCEPTANCE_AUTHORITY_DRIFT` |
-| compliance/`MUST` inflation | `REJECT_AUTHORITY_INFLATION` |
+| notifications exist; management UI accessible; neither example control exists | `PASS` |
+| duration control exists and is accessible | `PASS` |
+| duration control exists but is inaccessible | `REJECT_EXISTING_NOTIFICATION_CONTROL_INACCESSIBLE` |
+| notification toggle exists but is inaccessible | `REJECT_EXISTING_NOTIFICATION_CONTROL_INACCESSIBLE` |
+| mapping universally requires both example controls to exist | `REJECT_EXAMPLE_TO_REQUIREMENT_PROMOTION` |
+| notification-management UI is inaccessible | `REJECT_NOTIFICATION_MANAGEMENT_ACCESSIBILITY_WEAKENING` |
 
-Additional adversarial assertions reject identity, trigger, applicability, semantic-payload, evidence/gap, or unrelated-record mutation. The validator therefore closes the exact review finding without laundering it into either advisory-only mapping or invented mandatory/compliance authority.
+Additional adversarial assertions reject mutation of the atom identity, trigger, authority/modality, evidence/gap routing, any unrelated v13 record, or any previously reviewed correction. The validator therefore prevents both directions of semantic drift: false feature-existence inflation and fail-open accessibility weakening.
 
 ## 5. Preservation proof
 
-The v13 overlay consumes exact v12 as immutable input. It preserves all reviewed correction lineage:
+The v14 overlay consumes exact v13 as immutable input and replaces only the XAG 120 notification-setting semantic encoding described above.
+
+Reviewed correction lineage remains unchanged:
 
 - XAG 112 scaled/zoomed-map non-scrolling alternative navigation, universal submenu return coverage, and same-input focus escape;
 - XAG 114 `titles` reading-level exception;
 - XAG 115 stored-data protection operator `(review AND correct) OR complete reverse/cancel`;
 - XAG 115 permanent/destructive-action conjunction `review AND confirmation AND undo`;
-- XAG 115 no-button-hold destructive-confirmation record;
-- XAG 116 default-over-20-hours exception and reviewed timing semantics.
+- XAG 115 no-button-hold destructive-confirmation semantics;
+- XAG 116 default-over-20-hours exception and reviewed timing semantics;
+- XAG 117 camera-view `BEST_PRACTICE_REQUIRED_IF_APPLICABLE / SHOULD` correction with the inherited conditional trigger and semantic payload.
 
 Inventory is unchanged:
 
@@ -102,21 +113,24 @@ Inventory is unchanged:
 - inherited XAG 101–107: **105** atomic records;
 - composed XAG 101–123: **218** atomic records.
 
-No identity is added, removed, split, or renamed. No sibling XAG 117 atom and no unrelated v12-composed record is redefined.
+No identity is added, removed, split, or renamed. No sibling XAG 120 atom and no unrelated v13-composed record is redefined.
 
 ## 6. Finding disposition and producer self-review
 
-`W2-REV-ACC17-M01` is **RESOLVED_PENDING_FRESH_SCOPED_REVIEW** in this producer packet:
+`W2-REV-ACC19-M01` is **RESOLVED_PENDING_FRESH_SCOPED_REVIEW** in this producer packet:
 
-- camera-view authority restored to required-if-applicable best-practice strength: **YES**;
-- source modality restored from `CONSIDER` to `SHOULD`: **YES**;
-- identity changed: **NO**;
+- notification-management accessibility remains required when applicable: **YES**;
+- duration-adjustment example promoted to universal feature existence: **NO**;
+- notification-toggle example promoted to universal feature existence: **NO**;
+- existing duration-control accessibility allowed to fail open: **NO**;
+- existing toggle-control accessibility allowed to fail open: **NO**;
+- atom identity changed: **NO**;
 - source id changed: **NO**;
+- authority/modality changed: **NO**;
 - applicability or trigger broadened: **NO**;
-- semantic payload changed: **NO**;
 - evidence or gap route changed: **NO**;
-- unrelated XAG 117 or other v12 record changed: **NO**;
-- reviewed XAG 112/XAG 114/XAG 115/XAG 116 corrections changed: **NO**;
+- sibling XAG 120 or unrelated v13 record changed: **NO**;
+- reviewed XAG 112–117 corrections changed: **NO**;
 - atomic counts changed: **NO**;
 - `MUST`, legal/compliance, or platform-certification authority invented: **NO**;
 - empirical accessibility PASS claimed: **NO**;
@@ -132,7 +146,7 @@ mapping_complete: false
 IR-BLOCKER-ACCESSIBILITY-CURRENT: OPEN
 W2-REV-M02: OPEN_BOUNDED
 full_xag_108_123_review_complete: false
-xag_118_123_accepted_by_issue_302: false
+xag_121_123_accepted_by_issue_308: false
 production_implementation_ready: false
 legal_compliance_claimed: false
 platform_certification_claimed: false
@@ -141,10 +155,10 @@ integration_authorized: false
 canonicality: NOT_CANONICAL
 ```
 
-Issue #302's early-negative boundary remains controlling. This bounded repair does not accept XAG 118–123, make empirical accessibility evidence work eligible, clear the aggregate blocker, create readiness/implementation/release authority, or grant verification, integration, decision, or canonical authority.
+Issue #308's early-negative boundary remains controlling. This bounded repair does not accept XAG 121–123, make empirical accessibility evidence work eligible, clear the aggregate blocker, create readiness/implementation/release authority, or grant verification, integration, decision, or canonical authority.
 
 ## 8. Required next transition
 
-Freeze this exact remediation in an exact-head draft PR and perform a fresh independent/degraded-independent scoped review. The review must independently re-read current XAG 117, verify the `SHOULD`/required-if-applicable correction, attack advisory regression and authority inflation, prove identity/trigger/semantic/evidence/gap preservation, and verify all inventory/fail-closed invariants.
+Freeze this exact remediation in an exact-head draft PR and perform a fresh independent/degraded-independent scoped review. The review must independently re-read current XAG 120, attack both example-to-required-feature inflation and accessibility weakening, prove identity/authority/trigger/evidence/gap preservation, and verify all inventory/fail-closed invariants.
 
-A clean scoped review may make this exact producer packet eligible only for the separately authorized squash-only noncanonical integration route. After the bounded correction chain is integrated as authorized, the required full mapping review must resume from the still-unaccepted XAG 118–123 remainder before any empirical-accessibility successor can be derived.
+A clean scoped review may make this exact producer packet eligible only for the separately authorized squash-only noncanonical integration route. After the bounded correction chain is integrated as authorized, the required full mapping review must resume from the still-unaccepted XAG 121–123 remainder before any empirical-accessibility successor can be derived.
