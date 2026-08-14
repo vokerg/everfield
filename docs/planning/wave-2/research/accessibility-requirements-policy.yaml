@@ -17,6 +17,7 @@ review_provenance:
   issue: 243
   mission_id: W2-REV-ACC-03
   terminal_status_comment_id: 5290059882
+  integration_status_comment_id: 5290064752
   review_head_sha: e7fab153735b90cae4a175fb42b0546dba728f7b
   review_work_sha: f2a87552756d6f9897e6349fa5b7e4cc5f677fda
   disposition: CHANGES_NEEDED
@@ -26,14 +27,17 @@ review_provenance:
     - W2-REV-ACC03-m01
     - W2-REV-ACC03-m02
 
-parallel_review_notice:
+narrower_review_provenance:
   issue: 242
   mission_id: W2-PG-REM-ACC-03
   terminal_status_comment_id: 5290068415
+  integration_status_comment_id: 5290087735
   integrated_main_sha: d7d4273fbcbc32b1c8fcc02f175d4a7c976452f6
   disposition: CHANGES_NEEDED
-  successor_issue: 245
-  effect: Issue 247 does not disposition or claim resolution of Issue 242 findings; in particular XAG106 proper-name-pronunciation applicability remains on the separate Issue 245 route
+  retired_successor_issue: 245
+  retirement_status_comment_id: 5290106078
+  authority_effect: NONAUTHORITATIVE_NARROWER_REVIEW_PROVENANCE_FOR_THIS_TASK
+  effect: Issue 247 remains contractually bounded to the four Issue 243 findings; Issue 242 findings are not marked resolved by this task, Issue 245 has been externally superseded into Issue 247, and a fresh independent scoped review must re-attack XAG106 proper-name-pronunciation applicability and reopen routing if the narrower defect is independently reproduced
 
 preserved_state:
   inherited_atomic_clause_count: 28
@@ -212,6 +216,8 @@ mechanical_validation:
     - fresh independent scoped review remains required
     - integration_authorized remains false
     - Issue 242 findings are not marked resolved by this task
+    - Issue 245 remains externally superseded and is not recreated by this task
+    - fresh independent review explicitly re-attacks XAG106 proper-name-pronunciation applicability and reopens a correction route if independently reproduced
   expected_result:
     target_issue_243_findings_resolved:
       - W2-REV-ACC03-M01
@@ -250,7 +256,7 @@ freshness:
     - selected platform scope change
     - feature trigger change
     - empirical accessibility evidence production
-    - resolution of parallel Issue 245 alters an overlapping corrected record
+    - fresh independent review reproduces the narrower Issue 242 XAG106 proper-name-pronunciation applicability defect
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE

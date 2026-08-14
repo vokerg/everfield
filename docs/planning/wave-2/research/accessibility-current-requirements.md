@@ -14,7 +14,7 @@ This packet closes only the four Issue #243 finding IDs `W2-REV-ACC03-M01`, `W2-
 
 The 77-member XAG 102–106 inventory remains identity-stable and still composes with the inherited 28 XAG 101/XAG 107 records to 105 atomic records. No XAG 108–123 page is promoted; empirical accessibility evidence remains `NOT_RUN`; `mapping_complete` remains false; and `IR-BLOCKER-ACCESSIBILITY-CURRENT` remains OPEN.
 
-A second scoped review, Issue #242, was terminalized and integrated on `main` after this branch was claimed. That review routes an additional XAG 106 proper-name-pronunciation applicability defect to Issue #245. This Issue #247 packet does **not** disposition that parallel finding and does not claim the whole XAG 106 surface clean. This preserves scoped completion without laundering a separate negative review into acceptance.
+A second, narrower scoped review, Issue #242, was terminalized and integrated on `main` after this branch was claimed. It recorded an additional XAG 106 proper-name-pronunciation applicability finding and initially routed Issue #245. Issue #245 was subsequently externally retired by schema-3 status comment `5290106078` in favor of the already-live Issue #247 route because the required Issue #243 review is the controlling successor authority. That retirement does **not** widen Issue #247's explicit contract: this packet does not edit `XAG106-PROPER-NAME-PRONUNCIATION` and does not claim the narrower Issue #242 finding resolved. The mandatory fresh scoped review must re-attack that applicability and reopen a correction route if the defect is independently reproduced.
 
 ## 2. Fresh source recheck
 
@@ -61,7 +61,7 @@ The source threshold is typed `AMBIGUOUS_RANGE_NOT_EXECUTABLE`. For deterministi
 
 `ACCESSIBILITY-POLICY-VALIDATOR-v4` first reconstructs the exact Issue #240 v3 packet and its 77/105 inventory arithmetic, then applies exactly the six correction records. It adds exact semantic assertions that structural v3 validation lacked.
 
-The validator now rejects all of the review attack classes:
+The validator now rejects all of the Issue #243 review attack classes:
 
 - pause capability smuggled into its own applicability trigger;
 - the pre-start/default subtitle rule narrowed by an early-content predicate;
@@ -71,13 +71,13 @@ The validator now rejects all of the review attack classes:
 - the ambiguous XAG 104 source range represented as an executable scalar;
 - a project fail-closed threshold mislabeled as source normative.
 
-The aggregate assertions separately require stable inventory identity/counts, XAG 108–123 summary-only state, empirical `NOT_RUN`, `mapping_complete: false`, OPEN accessibility blocker, mandatory fresh review, and `integration_authorized: false`.
+The aggregate assertions separately require stable inventory identity/counts, XAG 108–123 summary-only state, empirical `NOT_RUN`, `mapping_complete: false`, OPEN accessibility blocker, mandatory fresh review, and `integration_authorized: false`. They also require the fresh review to re-attack the narrower Issue #242 proper-name-pronunciation concern rather than silently treating the external retirement of #245 as a defect disposition.
 
-## 5. Preserved fail-closed state and parallel review
+## 5. Preserved fail-closed state and narrower review provenance
 
 This correction does not establish empirical accessibility quality. No product applicability sweep, implementation evidence, player test, screen-reader trace, contrast measurement, caption behavior capture, or accessibility verification PASS has been produced here.
 
-The parallel Issue #242 review is preserved as independent negative provenance on current `main`. Its additional `PG-REM-ACC03-M01` attack on `XAG106-PROPER-NAME-PRONUNCIATION` remains routed to Issue #245. Because Issue #247 did not own that finding, this packet neither edits that record nor claims that finding resolved.
+Issue #242 remains preserved as narrower negative review provenance on `main`. Its additional `PG-REM-ACC03-M01` concern about `XAG106-PROPER-NAME-PRONUNCIATION` is **not** marked resolved here. Issue #245 was externally superseded by comment `5290106078`; therefore there is no parallel live producer branch to maintain. The fail-closed continuation is to make the mandatory fresh review explicitly attack that pronunciation applicability and reopen bounded correction if it reproduces the defect.
 
 Accordingly:
 
@@ -87,6 +87,8 @@ empirical_accessibility_evidence: NOT_RUN
 mapping_complete: false
 IR-BLOCKER-ACCESSIBILITY-CURRENT: OPEN
 fresh_independent_scoped_review_required: true
+issue_242_findings_resolved_by_this_task: false
+issue_245_state: SUPERSEDED
 integration_authorized: false
 canonicality: NOT_CANONICAL
 ```
@@ -106,12 +108,13 @@ For the Issue #243 finding set only:
 - XAG 108–123 promoted: **NO**;
 - empirical PASS claimed: **NO**;
 - aggregate accessibility blocker cleared: **NO**;
+- narrower Issue #242 finding claimed resolved: **NO**;
 - readiness/integration/canonical/legal/platform authority claimed: **NO**.
 
-This self-review is not acceptance. A fresh independent/degraded-independent scoped reviewer must reconstruct the exact v3 base plus this v4 overlay and attack the corrected semantic assertions before any integration eligibility can be considered.
+This self-review is not acceptance. A fresh independent/degraded-independent scoped reviewer must reconstruct the exact v3 base plus this v4 overlay, attack the corrected Issue #243 semantic assertions, and independently retest the narrower Issue #242 pronunciation concern before any integration eligibility can be considered.
 
 ## 7. Downstream contract
 
-A successor scoped review should consume this task only at its terminal immutable head/work/blob identities, re-read current first-party XAG 102/104/105/106 source text, execute the v4 semantic fixtures, and return a typed clean/changes-needed disposition. It must keep Issue #245’s parallel finding route independent rather than treating a clean Issue #247 review as resolution of the separate pronunciation finding.
+A successor scoped review should consume this task only at its terminal immutable head/work/blob identities, re-read current first-party XAG 102/104/105/106 source text, execute the v4 semantic fixtures, and return a typed clean/changes-needed disposition. Because Issue #245 is externally superseded, the reviewer must also re-attack `XAG106-PROPER-NAME-PRONUNCIATION` applicability as a recorded narrower-review risk and reopen bounded remediation if reproduced; it must not infer that supersession itself resolved the finding.
 
 Even a clean review of this packet would create only bounded noncanonical review evidence. It would not close aggregate `W2-REV-M02`, clear `IR-BLOCKER-ACCESSIBILITY-CURRENT`, establish empirical accessibility PASS, authorize implementation/release, provide legal/compliance or platform certification, create a product decision, or make any artifact canonical. Any later `main` integration remains separately authorized and squash-only.
