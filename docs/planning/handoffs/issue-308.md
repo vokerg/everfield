@@ -47,6 +47,15 @@ No earlier material finding was established in the XAG 118 photosensitivity or X
 - Required correction is limited to `XAG120-COMM-NOTIFICATION-SETTINGS` plus minimum validator/report metadata: keep accessibility of applicable notification-management UI normative, while gating concrete duration/toggle semantics on those controls existing or representing them as source examples/recommendations.
 - Fresh independent/degraded-independent scoped review of the exact remediation is mandatory before any integration eligibility.
 
+## PR freeze
+
+- Draft review PR: `#311`.
+- PR base branch: `main`.
+- PR base/head before terminal: `65d4eb8144e33d8e247c0dc0a688f6811a4225bb` / `b1bdc400638a5e035e68dc70393b6cbadb3959c3`.
+- `main` remained exact `65d4eb8144e33d8e247c0dc0a688f6811a4225bb` through the compatibility check.
+- PR #311 recalculated `mergeable: true`, remains `draft: true`, and its changed-file set is exactly the two declared review-provenance files.
+- Mergeability is compatibility only. This review does not grant its own integration authority.
+
 ## Remaining boundary
 
 - XAG 121–123: unaccepted by this review episode.
@@ -59,4 +68,4 @@ No earlier material finding was established in the XAG 118 photosensitivity or X
 
 ## Next transition
 
-Open and verify an exact-head draft PR for this immutable review + handoff, then publish terminal schema-3 `STATUS(REVIEW_READY)` with disposition `CHANGES_NEEDED`, finding `W2-REV-ACC19-M01`, exact work/head/blob identities, successor #310, and the XAG 121–123 unaccepted boundary.
+Publish terminal schema-3 `STATUS(REVIEW_READY)` with disposition `CHANGES_NEEDED`, finding `W2-REV-ACC19-M01`, exact work/head/blob identities, draft PR #311, successor #310, and the XAG 121–123 unaccepted boundary. Any later review-provenance integration remains separately authorized and squash-only.
