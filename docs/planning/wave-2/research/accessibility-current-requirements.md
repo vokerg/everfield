@@ -1,123 +1,102 @@
-# W2-REM-ACC-07 — restore XAG 116 default-over-20-hours exemption
+# W2-REM-ACC-08 — restore omitted XAG 112 navigation obligations
 
-**Mission:** `W2-REM-ACC-07` / Issue #264  
-**Winning claim:** comment `5291862878`  
-**Claim base:** `main@6eacb5b81e414686028e5a50c9250a0b80a16c94`  
-**Source review:** Issue #262 terminal `CHANGES_NEEDED` comment `5290467457`, head `1992c8b65fcc45d19cf951f0265fd5272a32d315`, work `508689bcfb6172bbd46b6aa5edbe60f16f0da9b4`  
-**Finding:** `W2-REV-ACC06-M01` / MAJOR  
-**Immutable reviewed producer:** Issue #259 terminal comment `5290417804`, head `b8553ac83dd11193ad1f57f8b552827768ba3338`, work `14dee0852546eec43677312ce3066b811533df61`  
-**Immutable v6 policy blob:** `80e278315d6b7a108d89da3f5a99086a8ef91bf7`  
-**Immutable v6 report blob:** `ec901acaf36ed4d398b127eac058537e6387a92e`  
-**Authority:** bounded noncanonical remediation only; fresh independent/degraded-independent scoped review remains mandatory.
+**Mission:** `W2-REM-ACC-08` / Issue #270  
+**Winning claim:** comment `5292959267`  
+**Claim base:** `main@ace13b7c93b037f4cfa9fb98e4f09e267db68440`  
+**Source review:** Issue #269 terminal `CHANGES_NEEDED` comment `5292556689`, head `79c3ebe86eaacaedbbee6766a70aadc43845d1f1`, work `50f3cc0ace1f94ebac4130d77c1a7a2066bd03da`  
+**Finding:** `W2-REV-ACC08-M01` / MAJOR  
+**Immutable integrated input:** exact v7 policy blob `4cf9113bc6c4c663db360594e54b5403cc9e5588`, report blob `1a1ec00e6b8143d7f233d58ecc3889d8f7c1550f`  
+**Logical v6 input:** policy blob `80e278315d6b7a108d89da3f5a99086a8ef91bf7`  
+**Authority:** bounded noncanonical remediation only; fresh independent/degraded-independent review remains mandatory.
 
 ## 1. Scope
 
-Issue #262 independently reproduced one material source-fidelity defect in the exact Issue #259 packet. Microsoft XAG 116 provides an exception block for content-imposed time limits and explicitly includes the case where the default time limit exceeds 20 hours. Exact v6 models the other duration-modification exceptions but contains no `default_time_limit_exceeds_20_hours` predicate anywhere, while its validator can still report PASS.
+Issue #269 performed the required full corrected-v7 XAG 108–123 review and terminated negatively after reproducing one coherent material defect in XAG 112. Exact v6, inherited by v7 outside the XAG 116 correction, contains 11 XAG 112 atomic identities but omits three current implementation-guideline obligations while the inherited contract asserts source-clause candidate completeness.
 
-This remediation uses exact v6 policy blob `80e278315d6b7a108d89da3f5a99086a8ef91bf7` as an immutable logical input. It replaces only the two XAG 116 records in v6 that already carry the source exception block and extends only the validator assertions/fixtures needed to make omission or inversion of the >20-hour exception rejectable.
+This remediation consumes exact integrated v7 as immutable input and adds only those three missing XAG 112 records plus mechanically dependent inventory/validator metadata. It does not reinterpret, replace, or remove any inherited XAG 101–123 semantic record. In particular, the reviewed v7 XAG 116 default-over-20-hours exception correction remains immutable.
 
-No unrelated XAG 108–123 or inherited XAG 101–107 record is rewritten.
+Issue #269 terminated after this material defect. Therefore this remediation does not claim that untouched XAG 113–123 semantics were accepted, and it does not by itself complete the required full corrected-mapping review.
 
-## 2. Fresh first-party source recheck
+## 2. Fresh first-party XAG 112 recheck
 
-Microsoft XAG 116 was re-read on `2026-08-14`:
+Microsoft XAG 112 (`UI navigation`) was re-read on `2026-08-14` at:
 
-`https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116`
+`https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112`
 
-The page reports last updated `2026-03-04` and remains XAG v3.2 best-practice guidance.
+The page reports XAG v3.2 and last updated `2026-03-04`. The load-bearing omitted guidance remains:
 
-The current source continues to distinguish non-core-gameplay UI timing from core gameplay timing. For applicable UI time limits it preserves the existing modification alternatives:
+1. When a game-map interface is scaled or zoomed, provide an alternative map-navigation method that does not require scrolling. A supplementary text list of points of interest is presented as an example, not as the only permitted implementation.
+2. All submenus should provide persistent links back to the main menu screen or initial interactive screen.
+3. When an input method can move focus onto a UI element, that same input method should ordinarily be able to move focus away. If moving focus away necessarily uses navigation inconsistent with the rest of the interface, provide a clear interaction prompt explaining how to escape focus.
 
-- request a longer or absent session limit before the limit starts;
-- pre-adjust to at least 10× the default;
-- warn before expiry, provide at least 20 seconds for a simple extension action, and allow at least ten extensions;
-- turn the time limit off.
-
-For important on-screen element duration it preserves the alternatives of pre-adjusting to at least 10× the default or disabling the duration limit and allowing dismissal/advance on input.
-
-The source exception block says a content-imposed time limit is exempt when at least one listed condition is true. The listed conditions include:
-
-- a required real-time event with no alternative;
-- the time limit being essential to the task;
-- **the default time limit exceeding 20 hours**.
-
-Core gameplay timing remains outside this XAG's scope.
+The correction preserves those conditions and alternatives rather than promoting examples or fallback language into unconditional simultaneous requirements.
 
 ## 3. Correction
 
-`ACCESSIBILITY-POLICY-OVERLAY-v7` composes over the exact v6 blob and replaces only:
+`ACCESSIBILITY-POLICY-OVERLAY-v8` loads exact v7 blob `4cf9113bc6c4c663db360594e54b5403cc9e5588` and adds exactly three identities:
 
-- `XAG116-UI-TIME-LIMIT-MODIFIABLE`;
-- `XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE`.
+- `XAG112-SCALED-MAP-NONSCROLLING-NAVIGATION`;
+- `XAG112-SUBMENU-PERSISTENT-RETURN-LINK`;
+- `XAG112-SAME-INPUT-FOCUS-ESCAPE`.
 
-The first record now carries:
+### 3.1 Scaled/zoomed game-map navigation
 
-```yaml
-exceptions:
-  - real_time_event_with_no_alternative
-  - time_limit_is_essential_to_task
-  - default_time_limit_exceeds_20_hours
-  - core_gameplay_timing
-```
+Applicability is conditional on `game_map_ui_is_scaled_or_zoomed`. The record requires a non-scrolling alternative navigation method. The source's supplementary text-list example is explicitly nonexclusive, preventing example-to-requirement inflation.
 
-The important-element duration record now carries:
+### 3.2 Persistent submenu return path
 
-```yaml
-exceptions:
-  - real_time_event_with_no_alternative
-  - duration_is_essential_to_task
-  - default_time_limit_exceeds_20_hours
-  - core_gameplay_timing
-```
+Applicability is conditional on a submenu existing. Each applicable submenu requires a persistent return link, with the source-permitted targets modeled as alternatives: the main menu screen or the initial interactive screen. The overlay does not require both targets and does not invent a broader navigation architecture.
 
-Every pre-existing alternative, threshold, trigger, evidence reference, gap reference, and source authority class in those records is preserved. `XAG116-UI-TIME-LIMIT-ESSENTIAL-ONLY` and `XAG116-UI-TIME-LIMIT-ADVANCE-WARNING` remain exact logical inputs from v6; this bounded patch does not reinterpret unrelated XAG 116 semantics that the negative review did not find defective.
+### 3.3 Same-input focus escape
 
-## 4. Validator hardening
+Applicability is conditional on a UI element being focusable through an input method. The normal case requires focus to be movable away with the same input method. The clear-prompt rule is modeled only as a conditional fallback when moving away requires navigation inconsistent with the rest of the interface; it is not an unconditional second requirement.
 
-`ACCESSIBILITY-POLICY-VALIDATOR-v7` first requires exact v6 reconstruction over the exact v5 blob and verifies the existing 110-record XAG 108–123 inventory / 215-record composed inventory before applying the two-record patch.
+## 4. Mechanical validator hardening
 
-The validator now requires `default_time_limit_exceeds_20_hours` to be present as an exception in both duration-modification records and forbids it from appearing as a trigger, required semantic, or positive requirement.
+`ACCESSIBILITY-POLICY-VALIDATOR-v8` first binds the exact v7 input and verifies its exact v6 lineage. It then requires the inherited 11 XAG 112 identities plus exactly the three correction identities above.
 
-Load-bearing adversarial fixtures include:
+Corrected inventory is mechanically fixed at:
 
-- `XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED` → `REJECT_EXCEPTION_LOSS`;
-- `XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_INVERTED_TO_REQUIREMENT` → `REJECT_EXCEPTION_INVERSION`;
-- `XAG116_EXISTING_EXCEPTION_DROPPED` → `REJECT_EXCEPTION_LOSS`;
-- `XAG116_MODIFICATION_ALTERNATIVE_DROPPED` → `REJECT_SEMANTIC_NARROWING`;
-- `XAG116_THRESHOLD_WEAKENED` → `REJECT_THRESHOLD_DRIFT`;
-- `V6_UNRELATED_RECORD_REDEFINED` → `REJECT_SCOPE_LEAKAGE`.
+- XAG 112: **14** atomic records;
+- XAG 108–123: **113** atomic records;
+- composed XAG 101–123: **218** atomic records.
 
-Fail-closed evidence and aggregate-state fixtures remain mandatory.
+The validator rejects:
+
+- removal of any one of the three new identities;
+- duplicate or extra XAG 112 identities;
+- removal of the scaled-map applicability trigger;
+- conversion of the source map-list example into the sole accepted implementation;
+- conversion of submenu return-target alternatives into simultaneous requirements;
+- unconditional promotion of the focus-escape prompt fallback;
+- loss of the prompt requirement when inconsistent escape navigation is required;
+- any unrelated v7 semantic redefinition;
+- regression of the v7 XAG 116 default-over-20-hours correction;
+- empirical PASS or `mapping_complete: true` claims while evidence remains `NOT_RUN`.
 
 ## 5. Preservation proof
 
-The v7 overlay adds, removes, splits, or renames no atomic clause identity.
+The v8 overlay adds three XAG 112 records and does not replace or remove any v7 semantic record. All inherited XAG 101–111 and XAG 113–123 records remain exact logical inputs from v7. The four XAG 116 identities and the v7 `default_time_limit_exceeds_20_hours` exception correction remain preserved without reinterpretation.
 
-Preserved inventory:
+The only intended mechanical count changes are therefore `11 → 14` for XAG 112, `110 → 113` for XAG 108–123, and `215 → 218` for the composed XAG 101–123 inventory.
 
-- inherited XAG 101–107 atomic clauses: 105;
-- XAG 108–123 atomic clauses: 110;
-- XAG 116 atomic clauses: 4;
-- composed XAG 101–123 atomic total: 215.
+No empirical accessibility evidence is produced by this task. The negative early termination of Issue #269 remains historical review provenance and is not rewritten into acceptance of untouched XAG 113–123.
 
-The exact v6 policy blob remains the only logical source for all records except the two declared XAG 116 corrections. Source registrations, evidence/gap records, all non-XAG116 records, and the v6 authority boundary remain unchanged.
+## 6. Finding disposition and self-review
 
-The existing XAG 116 semantics remain preserved, including core-gameplay exclusion, real-time/no-alternative and essential-task exceptions where already source-covered, 10× adjustment, 20-second minimum action window, at least ten extensions, turn-off, and important-element disable/dismiss-or-advance behavior.
+`W2-REV-ACC08-M01` is **RESOLVED_PENDING_FRESH_REVIEW** in this producer packet:
 
-## 6. Finding disposition
-
-`W2-REV-ACC06-M01` is **RESOLVED_PENDING_FRESH_REVIEW** in this producer packet:
-
-- default-over-20-hours exception restored to the two source-exception-bearing duration-modification records: **YES**;
-- exception-loss fixture present: **YES**;
-- exception-inversion fixture present: **YES**;
-- existing XAG 116 alternatives/thresholds changed: **NO**;
-- unrelated v6 records rewritten: **NO**;
-- XAG identity/count changed: **NO**;
+- all three omitted XAG 112 obligations represented: **YES**;
+- scaled-map example kept nonexclusive: **YES**;
+- submenu return-target alternatives preserved: **YES**;
+- same-input focus escape and conditional prompt fallback preserved: **YES**;
+- omission/duplicate/trigger/alternative/fallback regressions mechanically rejectable: **YES**;
+- unrelated v7 semantic records rewritten: **NO**;
+- corrected v7 XAG 116 semantics changed: **NO**;
 - empirical accessibility PASS claimed: **NO**;
 - aggregate blocker cleared: **NO**.
 
-Bounded producer self-review finds 0 unresolved BLOCKER, 0 unresolved MAJOR, and 0 correction-requiring MINOR in this remediation scope. Producer self-review is not independent acceptance.
+Bounded producer self-review finds 0 unresolved BLOCKER, 0 unresolved MAJOR, and 0 correction-requiring MINOR in this remediation scope. Producer self-review is provenance only and cannot satisfy the required independent review.
 
 ## 7. Preserved fail-closed state
 
@@ -126,15 +105,17 @@ empirical_accessibility_evidence: NOT_RUN
 mapping_complete: false
 IR-BLOCKER-ACCESSIBILITY-CURRENT: OPEN
 W2-REV-M02: OPEN_BOUNDED
+full_xag_108_123_review_complete: false
 production_implementation_ready: false
 legal_compliance_claimed: false
 platform_certification_claimed: false
+verification_pass_authority: false
 integration_authorized: false
 canonicality: NOT_CANONICAL
 ```
 
-This task does not establish accessibility quality in a target build, readiness, implementation, release, legal/compliance status, platform certification, verification PASS, decision authority, integration authority, or canonical status.
+This task creates no accessibility PASS, readiness, implementation, release, legal/compliance, platform certification, verification-PASS, integration, decision, or canonical authority.
 
 ## 8. Required next transition
 
-Freeze this remediation at an exact terminal head with an exact-head draft PR to `main`, then route a fresh independent/degraded-independent scoped review of that exact packet. A CLEAN review would only make the exact corrected provenance eligible for separately authorized squash-only integration; it would not close `W2-REV-M02` or `IR-BLOCKER-ACCESSIBILITY-CURRENT`.
+Freeze this remediation at an exact terminal head with an exact-head draft PR, then perform a fresh independent/degraded-independent review of this exact correction before any producer integration eligibility. A clean bounded remediation review would not by itself accept the XAG 113–123 surface that Issue #269 never reached; the required corrected-mapping review must still be completed for that remaining scope before an empirical accessibility evidence successor can be justified.
