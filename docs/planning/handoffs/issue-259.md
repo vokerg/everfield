@@ -9,7 +9,9 @@
 - Claim base: `2d3307cdc52db6e8783f7c4c4025996685934fa7`
 - Canonical Planning Program v1 blob: `e3120ec203c4156328770aa86c12fbb7187966dc`
 - Exact composition input policy v5 blob: `c7c3f72fb3bbd2d0e961aee94b33ce2ac93c5615`
-- Draft PR: `PENDING_EXACT_HEAD_CREATION`
+- Draft PR: #261
+- PR initial exact head before this handoff-binding commit: `14dee0852546eec43677312ce3066b811533df61`
+- Overlapping later Issue #260: terminal `SUPERSEDED` at comment `5290357582`; it explicitly recognizes Issue #259 claim `5290341307` as the controlling earlier superset claim and performed no substantive branch work.
 
 ## Bounded work
 
@@ -53,4 +55,4 @@ This producer packet addresses only the remaining source-clause atomization subc
 
 ## Required next transition
 
-Open and freeze an exact-head draft PR, then perform one fresh independent/degraded-independent scoped review of the exact terminal packet. A clean review may only make the packet eligible for a separately authorized squash-only noncanonical integration; it cannot establish empirical accessibility PASS or close `W2-REV-M02`.
+Re-fetch PR #261 after this handoff-binding commit and bind its exact final head in terminal schema-3 status. Then perform one fresh independent/degraded-independent scoped review of that exact terminal packet. A clean review may only make the packet eligible for a separately authorized squash-only noncanonical integration; it cannot establish empirical accessibility PASS or close `W2-REV-M02`.
