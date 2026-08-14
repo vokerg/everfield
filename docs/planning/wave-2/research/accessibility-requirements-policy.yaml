@@ -1,51 +1,52 @@
-version: 10
+version: 11
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-11
-issue: 282
+mission_id: W2-REM-ACC-12
+issue: 288
 observed_date: '2026-08-14'
 
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v10
-  base_main_sha: 89d6fab07dae08bb34a85fe41354050144a0d3a9
-  base_policy_version: 9
-  base_policy_blob_sha: 5cf18195bdfcb377aac7727b65b2d8a479ef8ac3
-  base_report_blob_sha: 3665805bb6391bc0c7b6b27ca2f70b7f0b88aaae
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v11
+  base_main_sha: d8445512718e00c8f223f9249b433b471ac2b70c
+  base_policy_version: 10
+  base_policy_blob_sha: 12c1af5bd6ae88a549e575c594f8ec2afa387705
+  base_report_blob_sha: fc826cf315b0bda8308aecbc63364f6977be39d1
   inherited_xag_108_123_origin_blob_sha: 80e278315d6b7a108d89da3f5a99086a8ef91bf7
-  source_review_issue: 281
-  source_review_claim_comment_id: 5293197877
-  source_review_terminal_comment_id: 5293245321
-  source_review_head_sha: 08fee5742c95935d45fc85ab536ea56223923be0
-  source_review_work_sha: 9efd4fac68c96a28d63a1ee7fdbc3592ae2aba8a
+  source_review_issue: 287
+  source_review_claim_comment_id: 5293624794
+  source_review_terminal_comment_id: 5293661376
+  source_review_head_sha: 539f8bfe35f0b25854cc7d740bbf3ca8b215d829
+  source_review_work_sha: 04ed012577d85eba5d060fe88a5d89b192163e57
   source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC11-M01
-  source_review_finding_class: SOURCE_EXCEPTION_OMISSION_AND_VALIDATOR_INCOMPLETENESS
+  source_review_finding: W2-REV-ACC13-M01
+  source_review_finding_class: SOURCE_LOGICAL_OPERATOR_WEAKENING_AND_INCOMPLETE_VALIDATOR_ORACLE
   canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
   rule: >-
-    Load exact v9 policy and report as immutable inputs and resolve their full
+    Load exact v10 policy and report as immutable inputs and resolve their full
     composed lineage. Replace only the inherited semantic body of
-    XAG114-CRITICAL-TEXT-READING-LEVEL by adding the source-qualified titles
-    exception. Preserve its identity, trigger, threshold, evidence/gap routing,
-    and every other composed XAG record byte-logically; update only the minimum
-    validator/report metadata required to close W2-REV-ACC11-M01.
+    XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE so the pre-commit protection
+    path is equivalent to (review AND correct) OR complete_reverse_or_cancel.
+    Preserve its identity, source id, modality, trigger, evidence/gap routing,
+    every unrelated composed XAG record, and all fail-closed aggregate state.
+    Add only the minimum validator/report metadata required to make operator
+    weakening mechanically rejectable.
 
-preserved_v9_state:
+preserved_v10_state:
   inherited_xag_101_107_atomic_clause_count: 105
   xag_112_atomic_clause_count: 14
   xag_114_atomic_clause_count: 16
   xag_108_123_atomic_clause_count: 113
   composed_xag_101_123_atomic_clause_count: 218
-  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V9_LINEAGE
-  xag_112_scaled_map_correction: PRESERVED_FROM_V9
-  xag_112_submenu_universal_coverage_correction: PRESERVED_FROM_V9
-  xag_112_same_input_focus_escape_correction: PRESERVED_FROM_V9
+  xag_112_reviewed_corrections: PRESERVED_FROM_V10_LINEAGE
+  xag_114_title_exception_correction: PRESERVED_FROM_V10
+  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V10_LINEAGE
   empirical_accessibility_evidence: NOT_RUN
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
   blocker_authority_state: OPEN
   w2_rev_m02: OPEN_BOUNDED
   full_xag_108_123_review_complete: false
-  xag_114_remainder_accepted: false
-  untouched_xag_115_123_accepted: false
+  xag_115_remainder_accepted: false
+  xag_116_123_accepted_by_issue_287: false
   production_implementation_ready: false
   legal_compliance_claimed: false
   platform_certification_claimed: false
@@ -55,79 +56,82 @@ preserved_v9_state:
   integration_authorized: false
 
 source_recheck:
-  XAG-114:
-    url: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/114
-    title: UI context
+  XAG-115:
+    url: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/115
+    title: Error messages and destructive actions
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
     normative_scope: implementation_guidelines
     authority_class: ACCESSIBILITY_BEST_PRACTICE
-    corrected_semantic: critical_ui_and_settings_text_reading_level_exception_set
-    source_exception_classes:
-      - narrative_or_story_text
-      - proper_names
-      - titles
+    corrected_semantic: player_controlled_stored_data_precommit_protection
+    source_operator: '(review AND correct) OR complete_reverse_or_cancel'
 
 atomic_clause_correction_patch:
-  XAG114-CRITICAL-TEXT-READING-LEVEL:
-    source_id: XAG-114
+  XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE:
+    source_id: XAG-115
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
     source_modality: SHOULD
     applicability: CONDITIONAL
-    trigger: critical_ui_or_settings_text_is_present
+    trigger: player_action_deletes_or_modifies_player_controlled_stored_data
     required_semantics:
-      reading_level_no_more_advanced_than_lower_secondary: true
-      lower_secondary_reference_school_years: 7-9
-    exceptions:
-      - narrative_or_story_text
-      - proper_names
-      - titles
+      precommit_protection_path:
+        any_of:
+          - all_of:
+              - review_available_before_commit
+              - correction_available_before_commit
+          - complete_reverse_or_cancel_available_before_commit
     evidence_requirement_refs:
-      - ACC-EV-XAG114
-    gap_ref: ACC-GAP-XAG114
+      - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
 
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v10
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v11
   composition_steps:
-    - load exact v9 policy blob 5cf18195bdfcb377aac7727b65b2d8a479ef8ac3
-    - load exact v9 report blob 3665805bb6391bc0c7b6b27ca2f70b7f0b88aaae
-    - resolve v9 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all bounded overlays
-    - verify inherited XAG114-CRITICAL-TEXT-READING-LEVEL identity exists exactly once
-    - verify the inherited record trigger, lower-secondary threshold, evidence reference, and gap reference match the frozen v9 lineage
-    - replace exactly the exception set of XAG114-CRITICAL-TEXT-READING-LEVEL by adding titles; add, remove, split, or rename no identity
-    - verify every other v9-composed semantic record is byte-logically unchanged by this overlay
+    - load exact v10 policy blob 12c1af5bd6ae88a549e575c594f8ec2afa387705
+    - load exact v10 report blob fc826cf315b0bda8308aecbc63364f6977be39d1
+    - resolve v10 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all bounded overlays
+    - verify inherited XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE identity exists exactly once
+    - verify the inherited source id, modality, applicability, trigger, evidence reference, and gap reference match the frozen v10 lineage
+    - replace exactly the weakened XAG 115 protection operator with any_of(all_of(review, correction), complete_reverse_or_cancel)
+    - verify every other v10-composed semantic record is byte-logically unchanged by this overlay
     - verify final XAG 114 count is 16, XAG 112 count is 14, XAG 108-123 count is 113, inherited XAG 101-107 count is 105, and composed XAG 101-123 count is 218
-    - preserve exact v9 XAG 112 scaled-map, universal-submenu-return, and same-input focus-escape corrections
-    - preserve exact v9-lineage XAG 116 corrected records including default_time_limit_exceeds_20_hours exception semantics
+    - preserve exact v10 XAG 112 and XAG 114 reviewed corrections and v10-lineage XAG 116 correction
     - preserve all evidence/gap routing and fail-closed aggregate/authority state
   required_semantic_assertions:
-    - critical gameplay/settings UI text keeps the lower-secondary reading-level guidance
-    - narrative_or_story_text remains exempt
-    - proper_names remains exempt
-    - titles is explicitly exempt as a distinct source-qualified exception
-    - titles is not broadened into all labels, all UI text, or unrelated proper nouns
-    - source exceptions remain exceptions and are not converted into trigger or requirement semantics
-    - no unrelated v9-composed semantic record is redefined
+    - review alone does not satisfy the XAG 115 stored-data protection path
+    - correction alone does not satisfy the XAG 115 stored-data protection path
+    - review plus correction before commit satisfies one source-allowed protection path
+    - complete reversal or cancellation before commit satisfies the alternate source-allowed protection path
+    - review and correction are conjunctive inside the first alternative
+    - complete reversal or cancellation is disjunctive against the complete review-plus-correction alternative
+    - no permanent-action, destructive-confirmation, or button-hold XAG 115 record is redefined
+    - no unrelated v10-composed semantic record is redefined
   load_bearing_fixtures:
-    XAG114_READING_LEVEL_COMPLETE_EXCEPTION_SET:
-      exceptions:
-        - narrative_or_story_text
-        - proper_names
-        - titles
+    XAG115_REVIEW_ONLY:
+      candidate:
+        review_available_before_commit: true
+        correction_available_before_commit: false
+        complete_reverse_or_cancel_available_before_commit: false
+      expected: REJECT_INCOMPLETE_PROTECTION_PATH
+    XAG115_CORRECTION_ONLY:
+      candidate:
+        review_available_before_commit: false
+        correction_available_before_commit: true
+        complete_reverse_or_cancel_available_before_commit: false
+      expected: REJECT_INCOMPLETE_PROTECTION_PATH
+    XAG115_REVIEW_AND_CORRECT:
+      candidate:
+        review_available_before_commit: true
+        correction_available_before_commit: true
+        complete_reverse_or_cancel_available_before_commit: false
       expected: PASS
-    XAG114_READING_LEVEL_TITLE_EXCEPTION_OMITTED:
-      exceptions:
-        - narrative_or_story_text
-        - proper_names
-      expected: REJECT_EXCEPTION_SET_MISMATCH
-    XAG114_READING_LEVEL_TITLE_EXCEPTION_SCOPE_INFLATED:
-      exceptions:
-        - narrative_or_story_text
-        - proper_names
-        - titles
-        - all_ui_labels
-      expected: REJECT_EXCEPTION_SCOPE_INFLATION
+    XAG115_COMPLETE_REVERSAL:
+      candidate:
+        review_available_before_commit: false
+        correction_available_before_commit: false
+        complete_reverse_or_cancel_available_before_commit: true
+      expected: PASS
   aggregate_assertions:
     - XAG 114 count equals 16
     - XAG 112 count equals 14
@@ -138,32 +142,39 @@ mechanical_validation:
     - mapping_complete remains false
     - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
     - W2-REV-M02 remains OPEN_BOUNDED
-    - full corrected XAG 108-123 review remains incomplete because Issue 281 terminated early
-    - the remainder of XAG 114 and XAG 115-123 remain unaccepted by Issue 281
+    - full corrected XAG 108-123 review remains incomplete because Issue 287 terminated early
+    - the unreviewed remainder of XAG 115 and XAG 116-123 remains unaccepted by Issue 287
     - fresh independent scoped review of this exact remediation remains required
     - production_implementation_ready remains false
     - integration_authorized remains false
     - canonicality remains NOT_CANONICAL
   adversarial_fixtures:
-    XAG114_TITLE_EXCEPTION_OMITTED: REJECT_EXCEPTION_SET_MISMATCH
-    XAG114_TITLE_EXCEPTION_GENERALIZED_TO_ALL_LABELS: REJECT_EXCEPTION_SCOPE_INFLATION
-    XAG114_READING_THRESHOLD_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG114_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG114_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
-    ANY_OTHER_V9_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    XAG115_REVIEW_ONLY_ACCEPTED: REJECT_OPERATOR_WEAKENING
+    XAG115_CORRECTION_ONLY_ACCEPTED: REJECT_OPERATOR_WEAKENING
+    XAG115_REVIEW_AND_CORRECT_REJECTED: REJECT_SOURCE_VALID_PATH_LOSS
+    XAG115_COMPLETE_REVERSAL_REJECTED: REJECT_SOURCE_VALID_PATH_LOSS
+    XAG115_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG115_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
+    UNRELATED_XAG115_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    ANY_OTHER_V10_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
     XAG112_REVIEWED_CORRECTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
+    XAG114_TITLE_EXCEPTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_PRESERVED_CORRECTION_REGRESSION
     CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
     SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
     CLAIM_FULL_XAG_108_123_REVIEW_COMPLETE_AFTER_EARLY_NEGATIVE: REJECT_REVIEW_SCOPE_INFLATION
   expected_result:
-    W2-REV-ACC11-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+    W2-REV-ACC13-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
     xag_114_inventory: PASS_16
     xag_112_inventory: PASS_14
     xag_108_123_inventory: PASS_113
     composed_inventory: PASS_218
-    title_exception_present: PASS_REQUIRED
+    xag_115_review_only: REJECT
+    xag_115_correction_only: REJECT
+    xag_115_review_and_correct: PASS
+    xag_115_complete_reversal: PASS
     xag_112_reviewed_corrections: PRESERVED
+    xag_114_reviewed_correction: PRESERVED
     xag_116_reviewed_correction: PRESERVED
     empirical_accessibility_evidence: NOT_RUN
     mapping_complete: false
@@ -180,14 +191,14 @@ freshness:
     - empirical accessibility evidence successor
     - readiness verification
   reopen_triggers:
-    - Microsoft XAG 114 version or load-bearing reading-level exception semantics change
-    - any change to exact v9 input identity
+    - Microsoft XAG 115 version or load-bearing stored-data protection semantics change
+    - any change to exact v10 input identity
     - selected platform scope change
     - empirical accessibility evidence production
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC11-M01
+  closes_only_finding: W2-REV-ACC13-M01
   finding_state: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
   closes_w2_rev_m02: false
   full_xag_108_123_review_complete: false
