@@ -1,170 +1,229 @@
-version: 7
+version: 9
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-07
-issue: 264
+mission_id: W2-REM-ACC-09
+issue: 275
 observed_date: '2026-08-14'
 
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v7
-  base_issue: 259
-  base_terminal_comment_id: 5290417804
-  base_head_sha: b8553ac83dd11193ad1f57f8b552827768ba3338
-  base_work_sha: 14dee0852546eec43677312ce3066b811533df61
-  base_policy_blob_sha: 80e278315d6b7a108d89da3f5a99086a8ef91bf7
-  base_report_blob_sha: ec901acaf36ed4d398b127eac058537e6387a92e
-  source_review_issue: 262
-  source_review_terminal_comment_id: 5290467457
-  source_review_head_sha: 1992c8b65fcc45d19cf951f0265fd5272a32d315
-  source_review_work_sha: 508689bcfb6172bbd46b6aa5edbe60f16f0da9b4
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v9
+  base_main_sha: 3f06e40020201493eaed138394889a6f7f09fda7
+  base_policy_version: 8
+  base_policy_blob_sha: f1d07ef936f6187529ffc1e84d3fd2f2b4f06b96
+  base_report_blob_sha: 260abddcec26584c62a3bb213ac6e6ea0f90ad0a
+  base_producer_issue: 270
+  base_producer_terminal_comment_id: 5292997562
+  source_review_issue: 273
+  source_review_terminal_comment_id: 5293049701
   source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC06-M01
-  source_review_integration_main_sha: 6eacb5b81e414686028e5a50c9250a0b80a16c94
+  source_review_finding: W2-REV-ACC09-M01
+  source_review_finding_class: SOURCE_QUANTIFIER_WEAKENING_AND_INCOMPLETE_VALIDATOR_ORACLE
   canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
-  rule: load exact v6 policy blob, replace only the two XAG 116 duration-modification records below to restore the source exception for a default limit exceeding 20 hours, and extend only the semantic validator contract needed to reject exception loss or inversion; every other v6 record, identity, count, source registration, evidence/gap record, blocker state, and authority boundary remains logically unchanged
+  rule: >-
+    Load exact producer v8 policy and report as immutable inputs. Preserve every v8
+    semantic identity and record, source registration, evidence/gap record, count,
+    XAG 116 correction, fail-closed state, and authority boundary except replace
+    exactly the semantic body of XAG112-SUBMENU-PERSISTENT-RETURN-LINK with the
+    universal all-applicable-submenus contract below and update only mechanically
+    dependent validator/report metadata required by W2-REV-ACC09-M01.
 
-preserved_v6_state:
-  prior_xag_101_107_atomic_clause_count: 105
-  xag_108_123_atomic_clause_count: 110
-  composed_atomic_clause_count: 215
+preserved_v8_state:
+  inherited_xag_101_107_atomic_clause_count: 105
+  xag_112_atomic_clause_count: 14
+  xag_108_123_atomic_clause_count: 113
+  composed_xag_101_123_atomic_clause_count: 218
   xag_116_atomic_clause_count: 4
+  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V8
+  scaled_map_record: PRESERVED_EXACTLY_FROM_V8
+  same_input_focus_escape_record: PRESERVED_EXACTLY_FROM_V8
   empirical_accessibility_evidence: NOT_RUN
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
   blocker_authority_state: OPEN
   w2_rev_m02: OPEN_BOUNDED
+  full_xag_108_123_review_complete: false
+  untouched_xag_113_123_accepted: false
   production_implementation_ready: false
   legal_compliance_claimed: false
   platform_certification_claimed: false
+  verification_pass_authority: false
   canonicality: NOT_CANONICAL
   fresh_independent_scoped_review_required: true
   integration_authorized: false
 
 source_recheck:
-  XAG-116:
-    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116
+  XAG-112:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+    title: UI navigation
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
+    normative_scope: implementation_guidelines
     authority_class: ACCESSIBILITY_BEST_PRACTICE
-    exception_block_semantics:
-      applies_to: content_imposed_time_limit_expectations
-      any_one_exception_is_sufficient: true
-      exceptions:
-        - real_time_event_with_no_alternative
-        - time_or_duration_limit_is_essential_to_task
-        - default_time_limit_exceeds_20_hours
-    core_gameplay_scope_exclusion: core_gameplay_timing
+    corrected_obligation: all_submenus_have_persistent_return_link_to_main_or_initial_interactive_screen
+    preserved_target_semantics:
+      target_choice: ALTERNATIVE
+      allowed_targets:
+        - main_menu_screen
+        - initial_interactive_screen
+
+expected_xag112_inventory_v9:
+  - XAG112-INITIAL-ACCESSIBILITY-PATH
+  - XAG112-LOGICAL-CONSISTENT-NAVIGATION-ORDER
+  - XAG112-KEYBOARD-CONTROLLER-DIGITAL-NAVIGATION
+  - XAG112-MULTI-INPUT-NAVIGATION
+  - XAG112-REPEATED-COMPONENT-ORDER
+  - XAG112-SEQUENTIAL-FOCUS-ORDER
+  - XAG112-FOCUS-ALIGNS-MEANING-OR-VISUAL-FLOW
+  - XAG112-LINEAR-MENU-LOOP
+  - XAG112-MULTIPLE-CONTENT-LOCATION-METHODS
+  - XAG112-NAVIGATION-UPDATES-WITH-LAYOUT
+  - XAG112-SCALED-TEXT-ONE-DIRECTION-SCROLL
+  - XAG112-SCALED-MAP-NONSCROLLING-NAVIGATION
+  - XAG112-SUBMENU-PERSISTENT-RETURN-LINK
+  - XAG112-SAME-INPUT-FOCUS-ESCAPE
 
 atomic_clause_correction_patch:
-  XAG116-UI-TIME-LIMIT-MODIFIABLE:
-    source_id: XAG-116
+  XAG112-SUBMENU-PERSISTENT-RETURN-LINK:
+    source_id: XAG-112
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
     source_modality: SHOULD
     applicability: CONDITIONAL
-    trigger: non_core_gameplay_ui_interaction_has_time_limit
+    trigger: applicable_submenu_count_gt_0
     required_semantics:
-      modification_alternatives_minimum: 1
-      allowed_alternatives:
-        - request_longer_or_no_session_limit_before_start: true
-        - adjust_before_start_up_to_at_least_multiplier: 10
-        - warn_before_expiry: true
-          minimum_extension_action_window_seconds: 20
-          simple_action_extends_limit: true
-          minimum_extension_uses: 10
-        - turn_time_limit_off: true
-    exceptions:
-      - real_time_event_with_no_alternative
-      - time_limit_is_essential_to_task
-      - default_time_limit_exceeds_20_hours
-      - core_gameplay_timing
+      universal_scope:
+        collection: applicable_submenus
+        quantifier: ALL
+        empty_collection_behavior: NOT_APPLICABLE
+        predicate:
+          persistent_return_path_present: true
+          return_target_alternatives_minimum: 1
+          allowed_return_targets:
+            - main_menu_screen
+            - initial_interactive_screen
+      target_choice_semantics:
+        require_both_allowed_targets: false
+        at_least_one_allowed_target_per_applicable_submenu: true
     evidence_requirement_refs:
-      - ACC-EV-XAG116
-    gap_ref: ACC-GAP-XAG116
-
-  XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE:
-    source_id: XAG-116
-    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
-    source_modality: SHOULD
-    applicability: CONDITIONAL
-    trigger: important_element_has_display_duration_limit
-    required_semantics:
-      duration_control_alternatives_minimum: 1
-      allowed_alternatives:
-        - adjust_before_encounter_up_to_at_least_multiplier: 10
-        - disable_duration_limit_and_dismiss_or_advance_on_input: true
-    exceptions:
-      - real_time_event_with_no_alternative
-      - duration_is_essential_to_task
-      - default_time_limit_exceeds_20_hours
-      - core_gameplay_timing
-    evidence_requirement_refs:
-      - ACC-EV-XAG116
-    gap_ref: ACC-GAP-XAG116
+      - ACC-EV-XAG112
+    gap_ref: ACC-GAP-XAG112
 
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v7
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v9
   composition_steps:
-    - load exact v6 policy blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7
-    - verify v6 reconstructs exact v5 blob c7c3f72fb3bbd2d0e961aee94b33ce2ac93c5615 plus exactly the 110 XAG 108-123 identities declared by v6
-    - verify the v6 XAG 108-123 inventory has 110 identities and the composed XAG 101-123 inventory has 215 identities before this patch
-    - replace exactly XAG116-UI-TIME-LIMIT-MODIFIABLE and XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE with atomic_clause_correction_patch records
-    - preserve XAG116-UI-TIME-LIMIT-ESSENTIAL-ONLY and XAG116-UI-TIME-LIMIT-ADVANCE-WARNING byte-for-byte as logical inputs from v6
-    - preserve every non-XAG116 v6 record, source registration, evidence/gap record, empirical NOT_RUN state, OPEN blocker state, and authority boundary
+    - load exact v8 policy blob f1d07ef936f6187529ffc1e84d3fd2f2b4f06b96
+    - load exact v8 report blob 260abddcec26584c62a3bb213ac6e6ea0f90ad0a
+    - verify v8 resolves through exact integrated v7 policy blob 4cf9113bc6c4c663db360594e54b5403cc9e5588
+    - verify v8 XAG 112 identity set equals expected_xag112_inventory_v9 with exact count 14 and uniqueness
+    - replace exactly XAG112-SUBMENU-PERSISTENT-RETURN-LINK semantic body; add, remove, split, or rename no identity
+    - verify every other v8 semantic record is byte-logically unchanged by the overlay
+    - verify final XAG 112 count is 14, XAG 108-123 count is 113, and composed XAG 101-123 count is 218
+    - preserve exact v8 XAG112-SCALED-MAP-NONSCROLLING-NAVIGATION semantics
+    - preserve exact v8 XAG112-SAME-INPUT-FOCUS-ESCAPE semantics
+    - preserve exact v8 inherited XAG 116 corrected records and default_time_limit_exceeds_20_hours exception semantics
+    - preserve all fail-closed authority and evidence state
   required_semantic_assertions:
-    - XAG116-UI-TIME-LIMIT-MODIFIABLE exceptions contain real_time_event_with_no_alternative, time_limit_is_essential_to_task, default_time_limit_exceeds_20_hours, and core_gameplay_timing
-    - XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE exceptions contain real_time_event_with_no_alternative, duration_is_essential_to_task, default_time_limit_exceeds_20_hours, and core_gameplay_timing
-    - default_time_limit_exceeds_20_hours appears only as an exception predicate in this patch and never as a trigger, required_semantics field, or positive requirement
-    - XAG116-UI-TIME-LIMIT-MODIFIABLE retains one-of-four modification alternatives, including at-least-10x adjustment, at-least-20-second expiry action window, at least ten extensions, and turn-off
-    - XAG116-IMPORTANT-ELEMENT-DURATION-MODIFIABLE retains at-least-10x adjustment and disable-duration/dismiss-or-advance alternatives
-    - all four XAG 116 clause identities remain present and no new source requirement identity is introduced
+    - submenu correction applies exactly when one or more applicable submenus exist
+    - every applicable submenu independently satisfies the persistent-return-path predicate
+    - each applicable submenu has a persistent return path to at least one source-allowed target
+    - main_menu_screen and initial_interactive_screen remain alternatives; both are not simultaneously required
+    - no compliant submenu can mask a noncompliant sibling submenu
+    - scaled-map and same-input focus-escape records remain unchanged from exact v8
+    - no unrelated v8 semantic record is redefined
+  universal_coverage_oracle:
+    collection: applicable_submenus
+    pass_condition: >-
+      for every applicable submenu s, s has at least one persistent return path
+      whose target is main_menu_screen or initial_interactive_screen
+    reject_condition: >-
+      one or more applicable submenus lacks any persistent return path to either
+      source-allowed target
+  load_bearing_fixtures:
+    XAG112_SUBMENU_ALL_COVERED:
+      applicable_submenus:
+        - inventory
+        - settings
+      persistent_return_paths:
+        inventory:
+          - main_menu_screen
+        settings:
+          - initial_interactive_screen
+      expected: PASS
+    XAG112_SUBMENU_PARTIAL_COVERAGE:
+      applicable_submenus:
+        - inventory
+        - settings
+      persistent_return_paths:
+        inventory:
+          - main_menu_screen
+        settings: []
+      expected: REJECT_UNIVERSAL_COVERAGE_FAILURE
+    XAG112_SUBMENU_BOTH_TARGETS_NOT_REQUIRED:
+      applicable_submenus:
+        - inventory
+      persistent_return_paths:
+        inventory:
+          - initial_interactive_screen
+      expected: PASS
   aggregate_assertions:
-    - exact XAG 108-123 clause identity and per-page counts remain unchanged
-    - composed atomic inventory remains 215
-    - all empirical accessibility evidence remains NOT_RUN
+    - XAG 112 count equals 14
+    - XAG 108-123 count equals 113
+    - composed XAG 101-123 count equals 218
+    - empirical accessibility evidence remains NOT_RUN
     - mapping_complete remains false
     - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
     - W2-REV-M02 remains OPEN_BOUNDED
+    - full XAG 108-123 review remains incomplete and untouched XAG 113-123 remain unaccepted
     - fresh independent scoped review remains required
     - production_implementation_ready remains false
     - integration_authorized remains false
     - canonicality remains NOT_CANONICAL
+  adversarial_fixtures:
+    XAG112_SUBMENU_RECORD_REMOVED: REJECT_EXPECTED_SET_MISMATCH
+    XAG112_SUBMENU_UNIVERSAL_QUANTIFIER_REMOVED: REJECT_QUANTIFIER_WEAKENING
+    XAG112_SUBMENU_PARTIAL_COVERAGE_MULTI_SUBMENU: REJECT_UNIVERSAL_COVERAGE_FAILURE
+    XAG112_SUBMENU_RETURN_TARGETS_MADE_SIMULTANEOUS: REJECT_ALTERNATIVE_INVERSION
+    XAG112_SUBMENU_UNALLOWED_TARGET_ONLY: REJECT_TARGET_SET_VIOLATION
+    XAG112_SCALED_MAP_RECORD_CHANGED_FROM_V8: REJECT_SCOPE_LEAKAGE
+    XAG112_FOCUS_ESCAPE_RECORD_CHANGED_FROM_V8: REJECT_SCOPE_LEAKAGE
+    V8_UNRELATED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_PRESERVED_CORRECTION_REGRESSION
+    CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
+    SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
   expected_result:
-    W2-REV-ACC06-M01: RESOLVED_PENDING_FRESH_REVIEW
-    xag_116_default_over_20_hours_exception: PASS
-    xag_116_existing_alternatives_and_thresholds: PRESERVED
-    xag_108_123_inventory: PASS
-    composed_inventory: PASS
+    W2-REV-ACC09-M01: RESOLVED_PENDING_FRESH_REVIEW
+    xag_112_inventory: PASS_14
+    xag_108_123_inventory: PASS_113
+    composed_inventory: PASS_218
+    submenu_universal_coverage: PASS_REQUIRED
+    xag_116_v8_correction: PRESERVED
     empirical_accessibility_evidence: NOT_RUN
     mapping_complete: false
     blocker_authority_state: OPEN
+    full_xag_108_123_review_complete: false
     fresh_independent_scoped_review_required: true
     integration_authorized: false
-  adversarial_fixtures:
-    XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_EXCEPTION_LOSS
-    XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_INVERTED_TO_REQUIREMENT: REJECT_EXCEPTION_INVERSION
-    XAG116_EXISTING_EXCEPTION_DROPPED: REJECT_EXCEPTION_LOSS
-    XAG116_MODIFICATION_ALTERNATIVE_DROPPED: REJECT_SEMANTIC_NARROWING
-    XAG116_THRESHOLD_WEAKENED: REJECT_THRESHOLD_DRIFT
-    V6_UNRELATED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
-    CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
-    SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
 
 freshness:
   recheck_before:
     - fresh independent scoped review
     - any later integration decision
+    - full corrected XAG 108-123 review
+    - empirical accessibility evidence successor
     - readiness verification
-    - release or accessibility marketing claim
   reopen_triggers:
-    - Microsoft XAG 116 version or load-bearing exception semantics change
+    - Microsoft XAG 112 version or load-bearing implementation semantics change
     - selected platform scope change
+    - any change to exact v8 input identity
     - empirical accessibility evidence production
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC06-M01
+  closes_only_finding: W2-REV-ACC09-M01
   closes_w2_rev_m02: false
+  full_xag_108_123_review_complete: false
+  untouched_xag_113_123_accepted: false
   empirical_accessibility_pass: false
+  mapping_complete: false
   readiness_authority: false
   implementation_authority: false
   release_authority: false
