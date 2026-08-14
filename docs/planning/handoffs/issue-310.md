@@ -74,9 +74,10 @@ Bounded producer self-review: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MIN
 - Draft producer PR: `#314`.
 - PR base branch: `main`.
 - PR base observed at creation: `547034a95abffe4d6a8722bcb42d56236e194097`.
-- The concurrent main advance from producer base `65d4eb8144e33d8e247c0dc0a688f6811a4225bb` to `547034a95abffe4d6a8722bcb42d56236e194097` is exactly the squash integration of Issue #308 terminal negative review provenance.
-- Current-main policy/report remain exact v13 input blobs `3dcdaa400ffd43cea390c331f5b4f8ea62750a5c` / `e5f1f491a91499bef96861d2878e4fb5552a207b` after that review-provenance integration.
-- PR #314 recalculated `mergeable: true`, remains `draft: true`, and its changed-file set is exactly the three declared producer files: policy, report, and handoff.
+- The first concurrent main advance from producer base `65d4eb8144e33d8e247c0dc0a688f6811a4225bb` to `547034a95abffe4d6a8722bcb42d56236e194097` is exactly the squash integration of Issue #308 terminal negative review provenance.
+- A later terminal-refresh advance to `main@6bdf6c54ce3100f9b9af0adb99e7745c1c8c4b89` is exactly the squash integration of historical W1 recovery provenance PR #312 and does not touch the accessibility mapping.
+- At `main@6bdf6c54ce3100f9b9af0adb99e7745c1c8c4b89`, the accessibility policy/report remain exact v13 input blobs `3dcdaa400ffd43cea390c331f5b4f8ea62750a5c` / `e5f1f491a91499bef96861d2878e4fb5552a207b`.
+- PR #314's changed-file set remains exactly the three declared producer files: policy, report, and handoff.
 - Mergeability is compatibility only. Producer status does not grant integration authority; required scoped review #313 remains mandatory.
 
 ## Remaining authority boundary
