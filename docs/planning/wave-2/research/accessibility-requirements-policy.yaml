@@ -1,47 +1,51 @@
-version: 9
+version: 10
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-09
-issue: 275
+mission_id: W2-REM-ACC-11
+issue: 282
 observed_date: '2026-08-14'
 
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v9
-  base_main_sha: 3f06e40020201493eaed138394889a6f7f09fda7
-  base_policy_version: 8
-  base_policy_blob_sha: f1d07ef936f6187529ffc1e84d3fd2f2b4f06b96
-  base_report_blob_sha: 260abddcec26584c62a3bb213ac6e6ea0f90ad0a
-  base_producer_issue: 270
-  base_producer_terminal_comment_id: 5292997562
-  source_review_issue: 273
-  source_review_terminal_comment_id: 5293049701
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v10
+  base_main_sha: 89d6fab07dae08bb34a85fe41354050144a0d3a9
+  base_policy_version: 9
+  base_policy_blob_sha: 5cf18195bdfcb377aac7727b65b2d8a479ef8ac3
+  base_report_blob_sha: 3665805bb6391bc0c7b6b27ca2f70b7f0b88aaae
+  inherited_xag_108_123_origin_blob_sha: 80e278315d6b7a108d89da3f5a99086a8ef91bf7
+  source_review_issue: 281
+  source_review_claim_comment_id: 5293197877
+  source_review_terminal_comment_id: 5293245321
+  source_review_head_sha: 08fee5742c95935d45fc85ab536ea56223923be0
+  source_review_work_sha: 9efd4fac68c96a28d63a1ee7fdbc3592ae2aba8a
   source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC09-M01
-  source_review_finding_class: SOURCE_QUANTIFIER_WEAKENING_AND_INCOMPLETE_VALIDATOR_ORACLE
+  source_review_finding: W2-REV-ACC11-M01
+  source_review_finding_class: SOURCE_EXCEPTION_OMISSION_AND_VALIDATOR_INCOMPLETENESS
   canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
   rule: >-
-    Load exact producer v8 policy and report as immutable inputs. Preserve every v8
-    semantic identity and record, source registration, evidence/gap record, count,
-    XAG 116 correction, fail-closed state, and authority boundary except replace
-    exactly the semantic body of XAG112-SUBMENU-PERSISTENT-RETURN-LINK with the
-    universal all-applicable-submenus contract below and update only mechanically
-    dependent validator/report metadata required by W2-REV-ACC09-M01.
+    Load exact v9 policy and report as immutable inputs and resolve their full
+    composed lineage. Replace only the inherited semantic body of
+    XAG114-CRITICAL-TEXT-READING-LEVEL by adding the source-qualified titles
+    exception. Preserve its identity, trigger, threshold, evidence/gap routing,
+    and every other composed XAG record byte-logically; update only the minimum
+    validator/report metadata required to close W2-REV-ACC11-M01.
 
-preserved_v8_state:
+preserved_v9_state:
   inherited_xag_101_107_atomic_clause_count: 105
   xag_112_atomic_clause_count: 14
+  xag_114_atomic_clause_count: 16
   xag_108_123_atomic_clause_count: 113
   composed_xag_101_123_atomic_clause_count: 218
-  xag_116_atomic_clause_count: 4
-  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V8
-  scaled_map_record: PRESERVED_EXACTLY_FROM_V8
-  same_input_focus_escape_record: PRESERVED_EXACTLY_FROM_V8
+  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V9_LINEAGE
+  xag_112_scaled_map_correction: PRESERVED_FROM_V9
+  xag_112_submenu_universal_coverage_correction: PRESERVED_FROM_V9
+  xag_112_same_input_focus_escape_correction: PRESERVED_FROM_V9
   empirical_accessibility_evidence: NOT_RUN
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
   blocker_authority_state: OPEN
   w2_rev_m02: OPEN_BOUNDED
   full_xag_108_123_review_complete: false
-  untouched_xag_113_123_accepted: false
+  xag_114_remainder_accepted: false
+  untouched_xag_115_123_accepted: false
   production_implementation_ready: false
   legal_compliance_claimed: false
   platform_certification_claimed: false
@@ -51,151 +55,116 @@ preserved_v8_state:
   integration_authorized: false
 
 source_recheck:
-  XAG-112:
-    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
-    title: UI navigation
+  XAG-114:
+    url: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/114
+    title: UI context
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
     normative_scope: implementation_guidelines
     authority_class: ACCESSIBILITY_BEST_PRACTICE
-    corrected_obligation: all_submenus_have_persistent_return_link_to_main_or_initial_interactive_screen
-    preserved_target_semantics:
-      target_choice: ALTERNATIVE
-      allowed_targets:
-        - main_menu_screen
-        - initial_interactive_screen
-
-expected_xag112_inventory_v9:
-  - XAG112-INITIAL-ACCESSIBILITY-PATH
-  - XAG112-LOGICAL-CONSISTENT-NAVIGATION-ORDER
-  - XAG112-KEYBOARD-CONTROLLER-DIGITAL-NAVIGATION
-  - XAG112-MULTI-INPUT-NAVIGATION
-  - XAG112-REPEATED-COMPONENT-ORDER
-  - XAG112-SEQUENTIAL-FOCUS-ORDER
-  - XAG112-FOCUS-ALIGNS-MEANING-OR-VISUAL-FLOW
-  - XAG112-LINEAR-MENU-LOOP
-  - XAG112-MULTIPLE-CONTENT-LOCATION-METHODS
-  - XAG112-NAVIGATION-UPDATES-WITH-LAYOUT
-  - XAG112-SCALED-TEXT-ONE-DIRECTION-SCROLL
-  - XAG112-SCALED-MAP-NONSCROLLING-NAVIGATION
-  - XAG112-SUBMENU-PERSISTENT-RETURN-LINK
-  - XAG112-SAME-INPUT-FOCUS-ESCAPE
+    corrected_semantic: critical_ui_and_settings_text_reading_level_exception_set
+    source_exception_classes:
+      - narrative_or_story_text
+      - proper_names
+      - titles
 
 atomic_clause_correction_patch:
-  XAG112-SUBMENU-PERSISTENT-RETURN-LINK:
-    source_id: XAG-112
+  XAG114-CRITICAL-TEXT-READING-LEVEL:
+    source_id: XAG-114
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
     source_modality: SHOULD
     applicability: CONDITIONAL
-    trigger: applicable_submenu_count_gt_0
+    trigger: critical_ui_or_settings_text_is_present
     required_semantics:
-      universal_scope:
-        collection: applicable_submenus
-        quantifier: ALL
-        empty_collection_behavior: NOT_APPLICABLE
-        predicate:
-          persistent_return_path_present: true
-          return_target_alternatives_minimum: 1
-          allowed_return_targets:
-            - main_menu_screen
-            - initial_interactive_screen
-      target_choice_semantics:
-        require_both_allowed_targets: false
-        at_least_one_allowed_target_per_applicable_submenu: true
+      reading_level_no_more_advanced_than_lower_secondary: true
+      lower_secondary_reference_school_years: 7-9
+    exceptions:
+      - narrative_or_story_text
+      - proper_names
+      - titles
     evidence_requirement_refs:
-      - ACC-EV-XAG112
-    gap_ref: ACC-GAP-XAG112
+      - ACC-EV-XAG114
+    gap_ref: ACC-GAP-XAG114
 
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v9
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v10
   composition_steps:
-    - load exact v8 policy blob f1d07ef936f6187529ffc1e84d3fd2f2b4f06b96
-    - load exact v8 report blob 260abddcec26584c62a3bb213ac6e6ea0f90ad0a
-    - verify v8 resolves through exact integrated v7 policy blob 4cf9113bc6c4c663db360594e54b5403cc9e5588
-    - verify v8 XAG 112 identity set equals expected_xag112_inventory_v9 with exact count 14 and uniqueness
-    - replace exactly XAG112-SUBMENU-PERSISTENT-RETURN-LINK semantic body; add, remove, split, or rename no identity
-    - verify every other v8 semantic record is byte-logically unchanged by the overlay
-    - verify final XAG 112 count is 14, XAG 108-123 count is 113, and composed XAG 101-123 count is 218
-    - preserve exact v8 XAG112-SCALED-MAP-NONSCROLLING-NAVIGATION semantics
-    - preserve exact v8 XAG112-SAME-INPUT-FOCUS-ESCAPE semantics
-    - preserve exact v8 inherited XAG 116 corrected records and default_time_limit_exceeds_20_hours exception semantics
-    - preserve all fail-closed authority and evidence state
+    - load exact v9 policy blob 5cf18195bdfcb377aac7727b65b2d8a479ef8ac3
+    - load exact v9 report blob 3665805bb6391bc0c7b6b27ca2f70b7f0b88aaae
+    - resolve v9 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all bounded overlays
+    - verify inherited XAG114-CRITICAL-TEXT-READING-LEVEL identity exists exactly once
+    - verify the inherited record trigger, lower-secondary threshold, evidence reference, and gap reference match the frozen v9 lineage
+    - replace exactly the exception set of XAG114-CRITICAL-TEXT-READING-LEVEL by adding titles; add, remove, split, or rename no identity
+    - verify every other v9-composed semantic record is byte-logically unchanged by this overlay
+    - verify final XAG 114 count is 16, XAG 112 count is 14, XAG 108-123 count is 113, inherited XAG 101-107 count is 105, and composed XAG 101-123 count is 218
+    - preserve exact v9 XAG 112 scaled-map, universal-submenu-return, and same-input focus-escape corrections
+    - preserve exact v9-lineage XAG 116 corrected records including default_time_limit_exceeds_20_hours exception semantics
+    - preserve all evidence/gap routing and fail-closed aggregate/authority state
   required_semantic_assertions:
-    - submenu correction applies exactly when one or more applicable submenus exist
-    - every applicable submenu independently satisfies the persistent-return-path predicate
-    - each applicable submenu has a persistent return path to at least one source-allowed target
-    - main_menu_screen and initial_interactive_screen remain alternatives; both are not simultaneously required
-    - no compliant submenu can mask a noncompliant sibling submenu
-    - scaled-map and same-input focus-escape records remain unchanged from exact v8
-    - no unrelated v8 semantic record is redefined
-  universal_coverage_oracle:
-    collection: applicable_submenus
-    pass_condition: >-
-      for every applicable submenu s, s has at least one persistent return path
-      whose target is main_menu_screen or initial_interactive_screen
-    reject_condition: >-
-      one or more applicable submenus lacks any persistent return path to either
-      source-allowed target
+    - critical gameplay/settings UI text keeps the lower-secondary reading-level guidance
+    - narrative_or_story_text remains exempt
+    - proper_names remains exempt
+    - titles is explicitly exempt as a distinct source-qualified exception
+    - titles is not broadened into all labels, all UI text, or unrelated proper nouns
+    - source exceptions remain exceptions and are not converted into trigger or requirement semantics
+    - no unrelated v9-composed semantic record is redefined
   load_bearing_fixtures:
-    XAG112_SUBMENU_ALL_COVERED:
-      applicable_submenus:
-        - inventory
-        - settings
-      persistent_return_paths:
-        inventory:
-          - main_menu_screen
-        settings:
-          - initial_interactive_screen
+    XAG114_READING_LEVEL_COMPLETE_EXCEPTION_SET:
+      exceptions:
+        - narrative_or_story_text
+        - proper_names
+        - titles
       expected: PASS
-    XAG112_SUBMENU_PARTIAL_COVERAGE:
-      applicable_submenus:
-        - inventory
-        - settings
-      persistent_return_paths:
-        inventory:
-          - main_menu_screen
-        settings: []
-      expected: REJECT_UNIVERSAL_COVERAGE_FAILURE
-    XAG112_SUBMENU_BOTH_TARGETS_NOT_REQUIRED:
-      applicable_submenus:
-        - inventory
-      persistent_return_paths:
-        inventory:
-          - initial_interactive_screen
-      expected: PASS
+    XAG114_READING_LEVEL_TITLE_EXCEPTION_OMITTED:
+      exceptions:
+        - narrative_or_story_text
+        - proper_names
+      expected: REJECT_EXCEPTION_SET_MISMATCH
+    XAG114_READING_LEVEL_TITLE_EXCEPTION_SCOPE_INFLATED:
+      exceptions:
+        - narrative_or_story_text
+        - proper_names
+        - titles
+        - all_ui_labels
+      expected: REJECT_EXCEPTION_SCOPE_INFLATION
   aggregate_assertions:
+    - XAG 114 count equals 16
     - XAG 112 count equals 14
     - XAG 108-123 count equals 113
+    - inherited XAG 101-107 count equals 105
     - composed XAG 101-123 count equals 218
     - empirical accessibility evidence remains NOT_RUN
     - mapping_complete remains false
     - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
     - W2-REV-M02 remains OPEN_BOUNDED
-    - full XAG 108-123 review remains incomplete and untouched XAG 113-123 remain unaccepted
-    - fresh independent scoped review remains required
+    - full corrected XAG 108-123 review remains incomplete because Issue 281 terminated early
+    - the remainder of XAG 114 and XAG 115-123 remain unaccepted by Issue 281
+    - fresh independent scoped review of this exact remediation remains required
     - production_implementation_ready remains false
     - integration_authorized remains false
     - canonicality remains NOT_CANONICAL
   adversarial_fixtures:
-    XAG112_SUBMENU_RECORD_REMOVED: REJECT_EXPECTED_SET_MISMATCH
-    XAG112_SUBMENU_UNIVERSAL_QUANTIFIER_REMOVED: REJECT_QUANTIFIER_WEAKENING
-    XAG112_SUBMENU_PARTIAL_COVERAGE_MULTI_SUBMENU: REJECT_UNIVERSAL_COVERAGE_FAILURE
-    XAG112_SUBMENU_RETURN_TARGETS_MADE_SIMULTANEOUS: REJECT_ALTERNATIVE_INVERSION
-    XAG112_SUBMENU_UNALLOWED_TARGET_ONLY: REJECT_TARGET_SET_VIOLATION
-    XAG112_SCALED_MAP_RECORD_CHANGED_FROM_V8: REJECT_SCOPE_LEAKAGE
-    XAG112_FOCUS_ESCAPE_RECORD_CHANGED_FROM_V8: REJECT_SCOPE_LEAKAGE
-    V8_UNRELATED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    XAG114_TITLE_EXCEPTION_OMITTED: REJECT_EXCEPTION_SET_MISMATCH
+    XAG114_TITLE_EXCEPTION_GENERALIZED_TO_ALL_LABELS: REJECT_EXCEPTION_SCOPE_INFLATION
+    XAG114_READING_THRESHOLD_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG114_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG114_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
+    ANY_OTHER_V9_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    XAG112_REVIEWED_CORRECTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_PRESERVED_CORRECTION_REGRESSION
     CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
     SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
+    CLAIM_FULL_XAG_108_123_REVIEW_COMPLETE_AFTER_EARLY_NEGATIVE: REJECT_REVIEW_SCOPE_INFLATION
   expected_result:
-    W2-REV-ACC09-M01: RESOLVED_PENDING_FRESH_REVIEW
+    W2-REV-ACC11-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+    xag_114_inventory: PASS_16
     xag_112_inventory: PASS_14
     xag_108_123_inventory: PASS_113
     composed_inventory: PASS_218
-    submenu_universal_coverage: PASS_REQUIRED
-    xag_116_v8_correction: PRESERVED
+    title_exception_present: PASS_REQUIRED
+    xag_112_reviewed_corrections: PRESERVED
+    xag_116_reviewed_correction: PRESERVED
     empirical_accessibility_evidence: NOT_RUN
     mapping_complete: false
     blocker_authority_state: OPEN
@@ -207,21 +176,21 @@ freshness:
   recheck_before:
     - fresh independent scoped review
     - any later integration decision
-    - full corrected XAG 108-123 review
+    - resumed full corrected XAG 108-123 review
     - empirical accessibility evidence successor
     - readiness verification
   reopen_triggers:
-    - Microsoft XAG 112 version or load-bearing implementation semantics change
+    - Microsoft XAG 114 version or load-bearing reading-level exception semantics change
+    - any change to exact v9 input identity
     - selected platform scope change
-    - any change to exact v8 input identity
     - empirical accessibility evidence production
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC09-M01
+  closes_only_finding: W2-REV-ACC11-M01
+  finding_state: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
   closes_w2_rev_m02: false
   full_xag_108_123_review_complete: false
-  untouched_xag_113_123_accepted: false
   empirical_accessibility_pass: false
   mapping_complete: false
   readiness_authority: false
