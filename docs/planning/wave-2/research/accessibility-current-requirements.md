@@ -1,83 +1,81 @@
-# W2-REM-ACC-09 — enforce persistent return links on every submenu
+# W2-REM-ACC-11 — restore the XAG 114 title exception
 
-**Mission:** `W2-REM-ACC-09` / Issue #275  
-**Winning claim:** comment `5293060848`  
-**Claim base:** `main@3f06e40020201493eaed138394889a6f7f09fda7`  
-**Required review:** Issue #273 terminal `CHANGES_NEEDED` comment `5293049701`, head `ff66673fa36bae8a190a2bd3205f3059e2fb1b67`, work `791a3991c135a4a2d842f86242a88eaeda172a26`  
-**Finding:** `W2-REV-ACC09-M01` / MAJOR — `SOURCE_QUANTIFIER_WEAKENING_AND_INCOMPLETE_VALIDATOR_ORACLE`  
-**Immutable producer input:** Issue #270 policy v8 blob `f1d07ef936f6187529ffc1e84d3fd2f2b4f06b96`, report v8 blob `260abddcec26584c62a3bb213ac6e6ea0f90ad0a`  
-**Authority:** bounded noncanonical remediation only; fresh independent/degraded-independent review remains mandatory.
+**Mission:** `W2-REM-ACC-11` / Issue #282  
+**Winning claim:** comment `5293260434`  
+**Claim base:** `main@89d6fab07dae08bb34a85fe41354050144a0d3a9`  
+**Required full review:** Issue #281 winning claim `5293197877`, terminal `CHANGES_NEEDED` comment `5293245321`, review head `08fee5742c95935d45fc85ab536ea56223923be0`, work `9efd4fac68c96a28d63a1ee7fdbc3592ae2aba8a`  
+**Finding:** `W2-REV-ACC11-M01` / MAJOR — `SOURCE_EXCEPTION_OMISSION_AND_VALIDATOR_INCOMPLETENESS`  
+**Immutable producer input:** policy v9 blob `5cf18195bdfcb377aac7727b65b2d8a479ef8ac3`, report v9 blob `3665805bb6391bc0c7b6b27ca2f70b7f0b88aaae`  
+**Authority:** bounded noncanonical remediation only; fresh independent/degraded-independent scoped review remains mandatory.
 
 ## 1. Scope
 
-Issue #273 accepted the v8 scaled/zoomed-map semantics, same-input focus-escape semantics, inventory arithmetic, preserved XAG 116 correction, and fail-closed aggregate state within its bounded review scope. It found one remaining MAJOR: v8 describes persistent submenu return navigation with `trigger: submenu_exists` and a singular `persistent_return_link_present` predicate, so a mechanically evaluated candidate can satisfy the record even when only some of several submenus expose a persistent return path.
+Issue #281 performed the required fresh full corrected XAG 108–123 review but terminated early on the first reproducible material defect. The inherited record `XAG114-CRITICAL-TEXT-READING-LEVEL` preserved two exceptions—narrative/story text and proper names—but omitted the source-qualified **titles** exception. The inherited validator likewise had no load-bearing rejection fixture for that omission.
 
-This remediation consumes exact v8 as immutable input and changes exactly that quantifier/oracle defect. It adds, removes, splits, or renames no XAG identity and does not change the two other XAG 112 additions from Issue #270.
+This remediation consumes exact v9 as immutable input and changes only that exception set plus the minimum mechanical validator/report metadata needed to make the omission rejectable. It adds, removes, splits, or renames no XAG identity and does not accept the remainder of XAG 114 or XAG 115–123.
 
-## 2. Source-faithful correction
+## 2. Fresh source reconstruction
 
-The current Microsoft XAG 112 guidance requires persistent links back to the main menu screen or initial interactive screen **on all submenus**. The v9 correction therefore models the applicable submenu set explicitly and quantifies over it with `ALL`.
+The current first-party Microsoft XAG 114 (`UI context`, XAG v3.2, page last updated 2026-03-04; re-observed 2026-08-14) retains the reading-level guidance for UI text critical to gameplay understanding or settings management and expressly excludes narrative/story material and proper names **or titles** from that guidance.
 
-For every applicable submenu, the predicate requires at least one persistent return path whose target is one of the source-permitted alternatives:
+The corrected atomic record therefore keeps the existing trigger and lower-secondary threshold unchanged and makes the exception set explicit:
 
-- `main_menu_screen`; or
-- `initial_interactive_screen`.
+```yaml
+exceptions:
+  - narrative_or_story_text
+  - proper_names
+  - titles
+```
 
-The two targets remain alternatives. A submenu is not required to expose both.
+`titles` remains a source-qualified exception. It is not generalized into all labels, all UI text, or unrelated proper nouns, and it is not converted into trigger or requirement semantics.
 
-If there are no applicable submenus, this clause is not applicable rather than vacuously claiming positive coverage.
+## 3. Mechanical correction
 
-## 3. Mechanical oracle
+`ACCESSIBILITY-POLICY-VALIDATOR-v10` resolves exact v9 through the inherited XAG 108–123 lineage and requires the final `XAG114-CRITICAL-TEXT-READING-LEVEL` exception set to include all three source-qualified classes.
 
-`ACCESSIBILITY-POLICY-VALIDATOR-v9` binds exact v8 and replaces only the semantic body of `XAG112-SUBMENU-PERSISTENT-RETURN-LINK`.
+The load-bearing fixtures are:
 
-The load-bearing universal coverage oracle is:
+1. narrative/story text + proper names + titles → **PASS**;
+2. the same record with `titles` omitted → **REJECT_EXCEPTION_SET_MISMATCH**;
+3. the complete exception set plus invented `all_ui_labels` → **REJECT_EXCEPTION_SCOPE_INFLATION**.
 
-> For every applicable submenu `s`, `s` has at least one persistent return path whose target is `main_menu_screen` or `initial_interactive_screen`.
-
-The validator must reject if any applicable submenu lacks such a path. A compliant sibling submenu cannot mask a noncompliant submenu.
-
-Three explicit fixtures make the quantifier mechanically visible:
-
-1. two submenus, each with one allowed return path → **PASS**;
-2. two submenus, one with an allowed return path and one with none → **REJECT_UNIVERSAL_COVERAGE_FAILURE**;
-3. one submenu returning only to `initial_interactive_screen` → **PASS**, proving the two allowed targets were not accidentally converted into simultaneous requirements.
-
-The adversarial contract also rejects removal of the universal quantifier, partial multi-submenu coverage, unallowed-target-only coverage, target-alternative inversion, unrelated v8 changes, regression of the XAG 116 correction, and fail-open empirical/readiness state.
+The validator also rejects changes to the reading-level trigger, seven-to-nine-school-year reference, evidence/gap routing, any unrelated v9-composed record, or the reviewed XAG 112/XAG 116 corrections.
 
 ## 4. Preservation proof
 
-The exact XAG identity/count contract remains unchanged from v8:
+The identity/count contract is unchanged:
 
+- XAG 114: **16** atomic records;
 - XAG 112: **14** atomic records;
 - XAG 108–123: **113** atomic records;
-- composed XAG 101–123: **218** atomic records;
-- inherited XAG 101–107: **105** atomic records.
+- inherited XAG 101–107: **105** atomic records;
+- composed XAG 101–123: **218** atomic records.
 
-`XAG112-SCALED-MAP-NONSCROLLING-NAVIGATION` remains exact v8 semantics, including the nonexclusive source-example treatment.
+The following prior corrections remain immutable composition inputs:
 
-`XAG112-SAME-INPUT-FOCUS-ESCAPE` remains exact v8 semantics, including same-input normal behavior and the clear-prompt requirement only as the source-conditional fallback.
+- XAG 116 default-over-20-hours exception;
+- XAG 112 scaled/zoomed-map non-scrolling alternative navigation;
+- XAG 112 universal return navigation on every applicable submenu with main-menu / initial-interactive-screen alternatives;
+- XAG 112 same-input focus escape with the source-conditional prompt fallback.
 
-The inherited XAG 116 default-over-20-hours exception remains preserved. No unrelated v8 semantic record is redefined.
+No evidence or gap route changes. No unrelated XAG 108–123 record changes.
 
-Issue #269 still did not accept untouched XAG 113–123. This bounded correction does not turn that historical review gap into full corrected-mapping acceptance.
+## 5. Finding disposition and bounded self-review
 
-## 5. Finding disposition and self-review
+`W2-REV-ACC11-M01` is **RESOLVED_PENDING_FRESH_SCOPED_REVIEW** in this producer packet:
 
-`W2-REV-ACC09-M01` is **RESOLVED_PENDING_FRESH_REVIEW** in this producer packet:
-
-- every applicable submenu explicitly covered by a universal quantifier: **YES**;
-- partial multi-submenu coverage mechanically rejected: **YES**;
-- main-menu vs initial-interactive-screen target choice remains alternative: **YES**;
-- XAG identity/count changes: **NO**;
-- scaled-map record changed: **NO**;
-- same-input focus-escape record changed: **NO**;
-- corrected XAG 116 semantics changed: **NO**;
-- unrelated v8 semantics changed: **NO**;
+- `titles` explicitly represented as an XAG 114 reading-level exception: **YES**;
+- omission of `titles` mechanically rejected: **YES**;
+- exception generalized beyond the source: **NO**;
+- trigger or reading-level threshold changed: **NO**;
+- identity/count changed: **NO**;
+- XAG 112 reviewed corrections changed: **NO**;
+- XAG 116 reviewed correction changed: **NO**;
+- unrelated v9 semantics changed: **NO**;
 - empirical accessibility PASS claimed: **NO**;
-- mapping completion or aggregate blocker clearance claimed: **NO**.
+- full corrected XAG 108–123 review claimed complete: **NO**.
 
-Bounded producer self-review finds 0 unresolved BLOCKER, 0 unresolved MAJOR, and 0 correction-requiring MINOR in this remediation scope. Producer self-review is provenance only and cannot satisfy the required fresh independent review.
+Bounded producer self-review finds **0 unresolved BLOCKER / 0 unresolved MAJOR / 0 correction-requiring MINOR** in this remediation scope. Producer self-review is provenance only and does not satisfy the required fresh independent scoped review.
 
 ## 6. Preserved fail-closed state
 
@@ -87,7 +85,8 @@ mapping_complete: false
 IR-BLOCKER-ACCESSIBILITY-CURRENT: OPEN
 W2-REV-M02: OPEN_BOUNDED
 full_xag_108_123_review_complete: false
-untouched_xag_113_123_accepted: false
+xag_114_remainder_accepted: false
+untouched_xag_115_123_accepted: false
 production_implementation_ready: false
 legal_compliance_claimed: false
 platform_certification_claimed: false
@@ -96,10 +95,10 @@ integration_authorized: false
 canonicality: NOT_CANONICAL
 ```
 
-This task creates no accessibility PASS, full corrected XAG 108–123 acceptance, readiness, implementation, release, legal/compliance, platform certification, verification-PASS, integration, decision, or canonical authority.
+Issue #281's early-negative boundary remains authoritative. This bounded repair does not resume or complete its unreviewed remainder and does not make an empirical accessibility successor eligible.
 
 ## 7. Required next transition
 
-Freeze this remediation at an exact terminal head with an exact-head draft PR, then perform a fresh independent/degraded-independent scoped review of this exact v9 correction before any producer integration eligibility.
+Freeze this remediation at an exact terminal head with an exact-head draft PR, then perform a fresh independent/degraded-independent scoped review of this exact v10 correction.
 
-A clean bounded review may make this remediation packet separately eligible for noncanonical squash integration under repository authority, but it still cannot substitute for the later fresh full corrected XAG 108–123 review covering the untouched XAG 113–123 surface before an empirical accessibility successor is derived.
+If that bounded review is clean, the producer packet may become eligible for separately authorized squash-only noncanonical integration. After any such integration, a fresh full corrected XAG 108–123 review must resume/restart across the still-unaccepted remainder before empirical accessibility evidence work can become eligible.
