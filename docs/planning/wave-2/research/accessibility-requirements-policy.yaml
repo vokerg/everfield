@@ -1,52 +1,58 @@
-version: 11
+version: 12
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-12
-issue: 288
+mission_id: W2-REM-ACC-13
+issue: 296
 observed_date: '2026-08-14'
 
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v11
-  base_main_sha: d8445512718e00c8f223f9249b433b471ac2b70c
-  base_policy_version: 10
-  base_policy_blob_sha: 12c1af5bd6ae88a549e575c594f8ec2afa387705
-  base_report_blob_sha: fc826cf315b0bda8308aecbc63364f6977be39d1
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v12
+  base_main_sha: ea7d085fd38d90658abe23ef0b315b786c6c80b4
+  base_policy_version: 11
+  base_policy_blob_sha: b57c0aae729085c672ae9746179d76afb866a721
+  base_report_blob_sha: cb6b2ba3d1226c912874a89a369e9acf7912a034
   inherited_xag_108_123_origin_blob_sha: 80e278315d6b7a108d89da3f5a99086a8ef91bf7
-  source_review_issue: 287
-  source_review_claim_comment_id: 5293624794
-  source_review_terminal_comment_id: 5293661376
-  source_review_head_sha: 539f8bfe35f0b25854cc7d740bbf3ca8b215d829
-  source_review_work_sha: 04ed012577d85eba5d060fe88a5d89b192163e57
+  source_review_issue: 293
+  source_review_claim_comment_id: 5294404386
+  source_review_terminal_comment_id: 5294463445
+  source_review_head_sha: dd4ec050025d4321d9e2a0b73b0ecbc6fdc920e3
+  source_review_work_sha: 247e785b20f0cdad7e78d9501e86e7450432bf3e
   source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC13-M01
+  source_review_finding: W2-REV-ACC15-M01
   source_review_finding_class: SOURCE_LOGICAL_OPERATOR_WEAKENING_AND_INCOMPLETE_VALIDATOR_ORACLE
   canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
   rule: >-
-    Load exact v10 policy and report as immutable inputs and resolve their full
+    Load exact v11 policy and report as immutable inputs and resolve their full
     composed lineage. Replace only the inherited semantic body of
-    XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE so the pre-commit protection
-    path is equivalent to (review AND correct) OR complete_reverse_or_cancel.
-    Preserve its identity, source id, modality, trigger, evidence/gap routing,
-    every unrelated composed XAG record, and all fail-closed aggregate state.
-    Add only the minimum validator/report metadata required to make operator
-    weakening mechanically rejectable.
+    XAG115-PERMANENT-ACTION-CONFIRM-OR-UNDO so the permanent/destructive-action
+    protection surface is equivalent to review AND confirmation AND undo.
+    Preserve that record identity, source id, modality, applicability, trigger,
+    evidence/gap routing, the exact reviewed v11
+    XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE operator and witnesses, the
+    separate XAG115-NO-BUTTON-HOLD-DESTRUCTIVE-CONFIRMATION record, every other
+    v11-composed semantic record, all inventory identities/counts, and all
+    fail-closed aggregate state. Add only the minimum validator/report metadata
+    required to make incomplete one-of-three and two-of-three protection sets
+    mechanically rejectable.
 
-preserved_v10_state:
+preserved_v11_state:
   inherited_xag_101_107_atomic_clause_count: 105
   xag_112_atomic_clause_count: 14
   xag_114_atomic_clause_count: 16
   xag_108_123_atomic_clause_count: 113
   composed_xag_101_123_atomic_clause_count: 218
-  xag_112_reviewed_corrections: PRESERVED_FROM_V10_LINEAGE
-  xag_114_title_exception_correction: PRESERVED_FROM_V10
-  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V10_LINEAGE
+  xag_112_reviewed_corrections: PRESERVED_FROM_V11_LINEAGE
+  xag_114_title_exception_correction: PRESERVED_FROM_V11_LINEAGE
+  xag_115_stored_data_operator_correction: PRESERVED_REVIEWED_FROM_V11
+  xag_115_button_hold_record: PRESERVED_FROM_V11_LINEAGE
+  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V11_LINEAGE
   empirical_accessibility_evidence: NOT_RUN
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
   blocker_authority_state: OPEN
   w2_rev_m02: OPEN_BOUNDED
   full_xag_108_123_review_complete: false
-  xag_115_remainder_accepted: false
-  xag_116_123_accepted_by_issue_287: false
+  xag_115_button_hold_surface_accepted_by_issue_293: false
+  xag_116_123_accepted_by_issue_293: false
   production_implementation_ready: false
   legal_compliance_claimed: false
   platform_certification_claimed: false
@@ -57,17 +63,35 @@ preserved_v10_state:
 
 source_recheck:
   XAG-115:
-    url: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/115
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
     title: Error messages and destructive actions
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
     normative_scope: implementation_guidelines
     authority_class: ACCESSIBILITY_BEST_PRACTICE
-    corrected_semantic: player_controlled_stored_data_precommit_protection
-    source_operator: '(review AND correct) OR complete_reverse_or_cancel'
+    corrected_semantic: permanent_or_destructive_action_protection
+    source_operator: review AND confirmation AND undo
+    separate_button_hold_guideline_preserved: true
 
 atomic_clause_correction_patch:
+  XAG115-PERMANENT-ACTION-CONFIRM-OR-UNDO:
+    source_id: XAG-115
+    authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    source_modality: SHOULD
+    applicability: CONDITIONAL
+    trigger: action_is_permanent_or_destructive
+    required_semantics:
+      permanent_or_destructive_action_protection:
+        all_of:
+          - review_available_for_action
+          - confirmation_available_for_action
+          - undo_available_for_action
+    evidence_requirement_refs:
+      - ACC-EV-XAG115
+    gap_ref: ACC-GAP-XAG115
+
+preserved_reviewed_contracts:
   XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE:
     source_id: XAG-115
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
@@ -84,54 +108,95 @@ atomic_clause_correction_patch:
     evidence_requirement_refs:
       - ACC-EV-XAG115
     gap_ref: ACC-GAP-XAG115
+    required_v11_witnesses:
+      review_only: REJECT_INCOMPLETE_PROTECTION_PATH
+      correction_only: REJECT_INCOMPLETE_PROTECTION_PATH
+      review_and_correct: PASS
+      complete_reversal_or_cancellation: PASS
+  XAG115-NO-BUTTON-HOLD-DESTRUCTIVE-CONFIRMATION:
+    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V11_COMPOSED_LINEAGE
 
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v11
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v12
   composition_steps:
-    - load exact v10 policy blob 12c1af5bd6ae88a549e575c594f8ec2afa387705
-    - load exact v10 report blob fc826cf315b0bda8308aecbc63364f6977be39d1
-    - resolve v10 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all bounded overlays
-    - verify inherited XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE identity exists exactly once
-    - verify the inherited source id, modality, applicability, trigger, evidence reference, and gap reference match the frozen v10 lineage
-    - replace exactly the weakened XAG 115 protection operator with any_of(all_of(review, correction), complete_reverse_or_cancel)
-    - verify every other v10-composed semantic record is byte-logically unchanged by this overlay
+    - load exact v11 policy blob b57c0aae729085c672ae9746179d76afb866a721
+    - load exact v11 report blob cb6b2ba3d1226c912874a89a369e9acf7912a034
+    - resolve v11 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all reviewed bounded overlays
+    - verify inherited XAG115-PERMANENT-ACTION-CONFIRM-OR-UNDO identity exists exactly once
+    - verify its inherited source id, modality, applicability, trigger, evidence reference, and gap reference match exact v11 lineage
+    - replace exactly its weakened OR semantic body with all_of(review, confirmation, undo)
+    - verify exact v11 XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE semantics and all four reviewed witnesses are unchanged
+    - verify XAG115-NO-BUTTON-HOLD-DESTRUCTIVE-CONFIRMATION is byte-logically unchanged
+    - verify every other v11-composed semantic record is byte-logically unchanged by this overlay
     - verify final XAG 114 count is 16, XAG 112 count is 14, XAG 108-123 count is 113, inherited XAG 101-107 count is 105, and composed XAG 101-123 count is 218
-    - preserve exact v10 XAG 112 and XAG 114 reviewed corrections and v10-lineage XAG 116 correction
+    - preserve exact v11 XAG 112, XAG 114, XAG 115 stored-data, and XAG 116 reviewed corrections
     - preserve all evidence/gap routing and fail-closed aggregate/authority state
   required_semantic_assertions:
-    - review alone does not satisfy the XAG 115 stored-data protection path
-    - correction alone does not satisfy the XAG 115 stored-data protection path
-    - review plus correction before commit satisfies one source-allowed protection path
-    - complete reversal or cancellation before commit satisfies the alternate source-allowed protection path
-    - review and correction are conjunctive inside the first alternative
-    - complete reversal or cancellation is disjunctive against the complete review-plus-correction alternative
-    - no permanent-action, destructive-confirmation, or button-hold XAG 115 record is redefined
-    - no unrelated v10-composed semantic record is redefined
+    - review alone does not satisfy the XAG 115 permanent/destructive-action protection surface
+    - confirmation alone does not satisfy the XAG 115 permanent/destructive-action protection surface
+    - undo alone does not satisfy the XAG 115 permanent/destructive-action protection surface
+    - review plus confirmation without undo does not satisfy the protection surface
+    - review plus undo without confirmation does not satisfy the protection surface
+    - confirmation plus undo without review does not satisfy the protection surface
+    - review plus confirmation plus undo satisfies the protection surface
+    - the permanent/destructive-action record identity is preserved despite the legacy OR-oriented record name
+    - the reviewed XAG 115 stored-data operator remains exactly (review AND correct) OR complete_reverse_or_cancel
+    - the separate no-button-hold XAG 115 record is not redefined or folded into this correction
+    - no unrelated v11-composed semantic record is redefined
   load_bearing_fixtures:
-    XAG115_REVIEW_ONLY:
+    XAG115_PERMANENT_ACTION_NONE:
       candidate:
-        review_available_before_commit: true
-        correction_available_before_commit: false
-        complete_reverse_or_cancel_available_before_commit: false
-      expected: REJECT_INCOMPLETE_PROTECTION_PATH
-    XAG115_CORRECTION_ONLY:
+        review_available_for_action: false
+        confirmation_available_for_action: false
+        undo_available_for_action: false
+      expected: REJECT_INCOMPLETE_PROTECTION_SURFACE
+    XAG115_PERMANENT_ACTION_REVIEW_ONLY:
       candidate:
-        review_available_before_commit: false
-        correction_available_before_commit: true
-        complete_reverse_or_cancel_available_before_commit: false
-      expected: REJECT_INCOMPLETE_PROTECTION_PATH
-    XAG115_REVIEW_AND_CORRECT:
+        review_available_for_action: true
+        confirmation_available_for_action: false
+        undo_available_for_action: false
+      expected: REJECT_INCOMPLETE_PROTECTION_SURFACE
+    XAG115_PERMANENT_ACTION_CONFIRM_ONLY:
       candidate:
-        review_available_before_commit: true
-        correction_available_before_commit: true
-        complete_reverse_or_cancel_available_before_commit: false
+        review_available_for_action: false
+        confirmation_available_for_action: true
+        undo_available_for_action: false
+      expected: REJECT_INCOMPLETE_PROTECTION_SURFACE
+    XAG115_PERMANENT_ACTION_UNDO_ONLY:
+      candidate:
+        review_available_for_action: false
+        confirmation_available_for_action: false
+        undo_available_for_action: true
+      expected: REJECT_INCOMPLETE_PROTECTION_SURFACE
+    XAG115_PERMANENT_ACTION_REVIEW_CONFIRM_ONLY:
+      candidate:
+        review_available_for_action: true
+        confirmation_available_for_action: true
+        undo_available_for_action: false
+      expected: REJECT_INCOMPLETE_PROTECTION_SURFACE
+    XAG115_PERMANENT_ACTION_REVIEW_UNDO_ONLY:
+      candidate:
+        review_available_for_action: true
+        confirmation_available_for_action: false
+        undo_available_for_action: true
+      expected: REJECT_INCOMPLETE_PROTECTION_SURFACE
+    XAG115_PERMANENT_ACTION_CONFIRM_UNDO_ONLY:
+      candidate:
+        review_available_for_action: false
+        confirmation_available_for_action: true
+        undo_available_for_action: true
+      expected: REJECT_INCOMPLETE_PROTECTION_SURFACE
+    XAG115_PERMANENT_ACTION_REVIEW_CONFIRM_UNDO:
+      candidate:
+        review_available_for_action: true
+        confirmation_available_for_action: true
+        undo_available_for_action: true
       expected: PASS
-    XAG115_COMPLETE_REVERSAL:
-      candidate:
-        review_available_before_commit: false
-        correction_available_before_commit: false
-        complete_reverse_or_cancel_available_before_commit: true
-      expected: PASS
+  preserved_v11_fixtures:
+    XAG115_STORED_DATA_REVIEW_ONLY: REJECT_INCOMPLETE_PROTECTION_PATH
+    XAG115_STORED_DATA_CORRECTION_ONLY: REJECT_INCOMPLETE_PROTECTION_PATH
+    XAG115_STORED_DATA_REVIEW_AND_CORRECT: PASS
+    XAG115_STORED_DATA_COMPLETE_REVERSAL: PASS
   aggregate_assertions:
     - XAG 114 count equals 16
     - XAG 112 count equals 14
@@ -142,21 +207,23 @@ mechanical_validation:
     - mapping_complete remains false
     - IR-BLOCKER-ACCESSIBILITY-CURRENT remains OPEN
     - W2-REV-M02 remains OPEN_BOUNDED
-    - full corrected XAG 108-123 review remains incomplete because Issue 287 terminated early
-    - the unreviewed remainder of XAG 115 and XAG 116-123 remains unaccepted by Issue 287
+    - full corrected XAG 108-123 review remains incomplete because Issue 293 terminated early
+    - the separate XAG 115 button-hold surface and XAG 116-123 remain unaccepted by Issue 293
     - fresh independent scoped review of this exact remediation remains required
     - production_implementation_ready remains false
     - integration_authorized remains false
     - canonicality remains NOT_CANONICAL
   adversarial_fixtures:
-    XAG115_REVIEW_ONLY_ACCEPTED: REJECT_OPERATOR_WEAKENING
-    XAG115_CORRECTION_ONLY_ACCEPTED: REJECT_OPERATOR_WEAKENING
-    XAG115_REVIEW_AND_CORRECT_REJECTED: REJECT_SOURCE_VALID_PATH_LOSS
-    XAG115_COMPLETE_REVERSAL_REJECTED: REJECT_SOURCE_VALID_PATH_LOSS
-    XAG115_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG115_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
-    UNRELATED_XAG115_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
-    ANY_OTHER_V10_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    XAG115_ANY_ONE_OF_THREE_ACCEPTED: REJECT_OPERATOR_WEAKENING
+    XAG115_ANY_TWO_OF_THREE_ACCEPTED: REJECT_OPERATOR_WEAKENING
+    XAG115_ALL_THREE_REJECTED: REJECT_SOURCE_VALID_PATH_LOSS
+    XAG115_PERMANENT_ACTION_IDENTITY_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG115_PERMANENT_ACTION_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG115_PERMANENT_ACTION_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG115_STORED_DATA_OPERATOR_CHANGED: REJECT_REVIEWED_CORRECTION_REGRESSION
+    XAG115_STORED_DATA_WITNESSES_CHANGED: REJECT_REVIEWED_ORACLE_REGRESSION
+    XAG115_BUTTON_HOLD_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
+    ANY_OTHER_V11_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
     XAG112_REVIEWED_CORRECTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG114_TITLE_EXCEPTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
     XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_PRESERVED_CORRECTION_REGRESSION
@@ -164,15 +231,22 @@ mechanical_validation:
     SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
     CLAIM_FULL_XAG_108_123_REVIEW_COMPLETE_AFTER_EARLY_NEGATIVE: REJECT_REVIEW_SCOPE_INFLATION
   expected_result:
-    W2-REV-ACC13-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+    W2-REV-ACC15-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+    W2-REV-ACC13-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
     xag_114_inventory: PASS_16
     xag_112_inventory: PASS_14
     xag_108_123_inventory: PASS_113
     composed_inventory: PASS_218
-    xag_115_review_only: REJECT
-    xag_115_correction_only: REJECT
-    xag_115_review_and_correct: PASS
-    xag_115_complete_reversal: PASS
+    xag_115_permanent_action_none: REJECT
+    xag_115_permanent_action_review_only: REJECT
+    xag_115_permanent_action_confirmation_only: REJECT
+    xag_115_permanent_action_undo_only: REJECT
+    xag_115_permanent_action_review_confirmation_only: REJECT
+    xag_115_permanent_action_review_undo_only: REJECT
+    xag_115_permanent_action_confirmation_undo_only: REJECT
+    xag_115_permanent_action_review_confirmation_undo: PASS
+    xag_115_stored_data_operator: PRESERVED_REVIEWED
+    xag_115_button_hold_record: PRESERVED
     xag_112_reviewed_corrections: PRESERVED
     xag_114_reviewed_correction: PRESERVED
     xag_116_reviewed_correction: PRESERVED
@@ -191,15 +265,16 @@ freshness:
     - empirical accessibility evidence successor
     - readiness verification
   reopen_triggers:
-    - Microsoft XAG 115 version or load-bearing stored-data protection semantics change
-    - any change to exact v10 input identity
+    - Microsoft XAG 115 version or load-bearing permanent/destructive-action semantics change
+    - any change to exact v11 input identity
     - selected platform scope change
     - empirical accessibility evidence production
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC13-M01
+  closes_only_finding: W2-REV-ACC15-M01
   finding_state: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+  preserves_reviewed_finding: W2-REV-ACC13-M01
   closes_w2_rev_m02: false
   full_xag_108_123_review_complete: false
   empirical_accessibility_pass: false
