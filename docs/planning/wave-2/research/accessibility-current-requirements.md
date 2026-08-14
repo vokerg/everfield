@@ -1,111 +1,110 @@
-# W2-REM-ACC-15 — correct XAG 120 notification-setting example inflation
+# W2-REM-ACC-16 — correct XAG 122 named accessible support-method weakening
 
-**Mission:** `W2-REM-ACC-15` / Issue #310  
-**Winning claim:** comment `5296883667`  
-**Claim base:** `main@65d4eb8144e33d8e247c0dc0a688f6811a4225bb`  
-**Required full-review continuation:** Issue #308 winning claim `5296830252`, terminal `CHANGES_NEEDED` comment `5296868370`, review head `024efaa4cc97b5af6e669cf9100b5172a2096bd4`, work `ed51563510cee7cd24463a6d1a169ec3f0f2ea3e`  
-**Finding:** `W2-REV-ACC19-M01` / MAJOR — `EXAMPLE_TO_REQUIREMENT_PROMOTION_AND_FEATURE_EXISTENCE_INFLATION`  
-**Immutable producer input:** policy v13 blob `3dcdaa400ffd43cea390c331f5b4f8ea62750a5c`, report v13 blob `e5f1f491a91499bef96861d2878e4fb5552a207b`  
+**Mission:** `W2-REM-ACC-16` / Issue #319  
+**Winning claim:** comment `5297064545`  
+**Claim base:** `main@39bda0cc8cfce8273e1e425efd72ec760dc0b4a4`  
+**Required full-review continuation:** Issue #316 winning claim `5297013118`, terminal `CHANGES_NEEDED` comment `5297053703`, review head `ec7c3fd306649ece3968c612e01847c50bf4bc55`, work `e0304f34365cd6c6ff40a9eb61a3ef1827e66519`  
+**Finding:** `W2-REV-ACC21-M01` / MAJOR — `SOURCE_NAMED_SUPPORT_METHOD_SET_WEAKENING`  
+**Immutable producer input:** policy v14 blob `33c4fdcde1c28ed2623496b04d2d376d4aac190b`, report v14 blob `b8c5cb0e7394b21f99ca9e09275cd145d59bba1b`  
 **Authority:** bounded noncanonical remediation only; fresh independent/degraded-independent scoped review remains mandatory.
 
 ## 1. Scope and source binding
 
-Issue #308 resumed the still-unaccepted XAG 118–123 mapping remainder. It established no material finding in its XAG 118 photosensitivity or XAG 119 speech/text communication attacks, then terminated early on the first reproducible material defect at XAG 120. XAG 121–123 therefore remain unaccepted by that episode.
+Issue #316 resumed the still-unaccepted XAG 121–123 mapping remainder. It accepted all six XAG 121 records with no material finding, attacked `XAG122-SUPPORT-NO-EXTRA-COST` with no material finding, then terminalized early on the second XAG 122 atom. XAG 123 therefore remains unaccepted.
 
-Fresh first-party Microsoft XAG 120 was re-read on `2026-08-14`:
+Fresh first-party Microsoft XAG 122 was re-read on `2026-08-14`:
 
-- `https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/120`
+- `https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/122`
 - XAG v3.2 lineage; page last updated `2026-03-04`.
 
-The source makes accessibility/usability of the necessary communication configuration UI the applicable obligation. In the notification-management subsection, controls such as adjusting notification display duration and turning certain notifications on/off are introduced as examples. They identify settings whose UI should be accessible when those settings exist; the examples do not universally require every title with communication notifications to create both capabilities.
+The Implementation guidelines state that multiple accessible methods should be available to contact support, including phone, TTY, email, and chat. The four named methods are inside the source `SHOULD` directive rather than introduced as a separate illustrative example list.
 
 ## 2. Exact inherited defect
 
-The exact inherited XAG 120 atom resolved through current v13 is:
+The exact inherited atom resolved through v14 is:
 
 ```yaml
-XAG120-COMM-NOTIFICATION-SETTINGS:
-  source_id: XAG-120
+XAG122-MULTIPLE-ACCESSIBLE-SUPPORT-METHODS:
+  source_id: XAG-122
   authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
   source_modality: SHOULD
   applicability: CONDITIONAL
-  trigger: communication_notifications_are_available
+  trigger: customer_support_is_offered
   required_semantics:
-    notification_settings_accessible: true
-    notification_duration_adjustable_when_timed: true
-    notifications_can_be_turned_on_or_off: true
+    multiple_accessible_support_methods_available: true
+    supported_examples:
+      - phone
+      - tty
+      - email
+      - chat
   evidence_requirement_refs:
-    - ACC-EV-XAG120
-  gap_ref: ACC-GAP-XAG120
+    - ACC-EV-XAG122
+  gap_ref: ACC-GAP-XAG122
 ```
 
-The identity, source, best-practice authority, `SHOULD` modality, conditional applicability, trigger, evidence route, and gap route are not the finding. The defect is the semantic payload: once any communication notification exists, the atom requires both example capabilities as product features. That can false-fail a source-faithful implementation whose actual notification-management UI is accessible but which does not offer one or both example controls.
+The identity, source, best-practice authority, `SHOULD` modality, conditional applicability, trigger, evidence route, and gap route are not the finding. The defect is that the source-named method set is modeled as `supported_examples`. A candidate can satisfy the only load-bearing semantic—an unspecified plurality—while omitting one or more of phone, TTY, email, or chat.
 
-## 3. Bounded v14 correction
+## 3. Bounded v15 correction
 
-The v14 overlay keeps the source's applicable accessibility obligation and converts the examples into conditional source-faithful semantics:
+The v15 overlay changes only the semantic treatment of that named set:
 
 ```yaml
-XAG120-COMM-NOTIFICATION-SETTINGS:
-  source_id: XAG-120
+XAG122-MULTIPLE-ACCESSIBLE-SUPPORT-METHODS:
+  source_id: XAG-122
   authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
   source_modality: SHOULD
   applicability: CONDITIONAL
-  trigger: communication_notifications_are_available
+  trigger: customer_support_is_offered
   required_semantics:
-    notification_settings_accessible: true
-  conditional_semantics:
-    - when: notification_duration_adjustment_control_is_present
-      required:
-        notification_duration_adjustment_control_accessible: true
-    - when: notification_on_off_control_is_present
-      required:
-        notification_on_off_control_accessible: true
-  source_examples:
-    - notification_display_duration_adjustment
-    - notification_on_off_control
+    multiple_accessible_support_methods_available: true
+    required_accessible_support_methods:
+      - phone
+      - tty
+      - email
+      - chat
   evidence_requirement_refs:
-    - ACC-EV-XAG120
-  gap_ref: ACC-GAP-XAG120
+    - ACC-EV-XAG122
+  gap_ref: ACC-GAP-XAG122
 ```
 
-This preserves two distinct source truths simultaneously:
+This makes each source-named method mechanically load-bearing when customer support is offered while preserving XAG 122 as accessibility best-practice `SHOULD` guidance. It does not create legal/compliance, platform-certification, or `MUST` authority.
 
-1. If the game offers applicable communication-notification management, that management UI remains required to be accessible.
-2. The source examples do not require the game to add duration-adjustment or notification-toggle features. If those controls do exist, they remain inside the accessibility obligation.
-
-The correction does not weaken XAG 120 into an advisory-only mapping and does not invent new communication capabilities.
+`XAG122-SUPPORT-NO-EXTRA-COST` remains unchanged.
 
 ## 4. Load-bearing mechanical oracles
 
-`ACCESSIBILITY-POLICY-VALIDATOR-v14` makes the correction mechanically load-bearing:
+`ACCESSIBILITY-POLICY-VALIDATOR-v15` requires all four source-named methods and rejects substitution:
 
 | Candidate | Expected |
 | --- | --- |
-| notifications exist; management UI accessible; neither example control exists | `PASS` |
-| duration control exists and is accessible | `PASS` |
-| duration control exists but is inaccessible | `REJECT_EXISTING_NOTIFICATION_CONTROL_INACCESSIBLE` |
-| notification toggle exists but is inaccessible | `REJECT_EXISTING_NOTIFICATION_CONTROL_INACCESSIBLE` |
-| mapping universally requires both example controls to exist | `REJECT_EXAMPLE_TO_REQUIREMENT_PROMOTION` |
-| notification-management UI is inaccessible | `REJECT_NOTIFICATION_MANAGEMENT_ACCESSIBILITY_WEAKENING` |
+| phone + TTY + email + chat accessible | `PASS` |
+| phone omitted | `REJECT_NAMED_SUPPORT_METHOD_OMISSION` |
+| TTY omitted | `REJECT_NAMED_SUPPORT_METHOD_OMISSION` |
+| email omitted | `REJECT_NAMED_SUPPORT_METHOD_OMISSION` |
+| chat omitted | `REJECT_NAMED_SUPPORT_METHOD_OMISSION` |
+| unrelated plurality such as web form + postal mail substitutes for named set | `REJECT_NAMED_SUPPORT_METHOD_SET_WEAKENING` |
+| mapping inflates source to `MUST`/compliance authority | `REJECT_AUTHORITY_INFLATION` |
 
-Additional adversarial assertions reject mutation of the atom identity, trigger, authority/modality, evidence/gap routing, any unrelated v13 record, or any previously reviewed correction. The validator therefore prevents both directions of semantic drift: false feature-existence inflation and fail-open accessibility weakening.
+Additional adversarial assertions reject mutation of the atom identity, trigger, authority/modality, evidence/gap routing, `XAG122-SUPPORT-NO-EXTRA-COST`, any XAG 121 record accepted by Issue #316, any previously reviewed correction, or any unrelated v14-composed record.
 
 ## 5. Preservation proof
 
-The v14 overlay consumes exact v13 as immutable input and replaces only the XAG 120 notification-setting semantic encoding described above.
+The v15 overlay consumes exact v14 as immutable input and replaces only the XAG 122 named-method semantic encoding described above.
 
-Reviewed correction lineage remains unchanged:
+Preserved review lineage includes:
 
-- XAG 112 scaled/zoomed-map non-scrolling alternative navigation, universal submenu return coverage, and same-input focus escape;
+- XAG 112 navigation corrections;
 - XAG 114 `titles` reading-level exception;
-- XAG 115 stored-data protection operator `(review AND correct) OR complete reverse/cancel`;
-- XAG 115 permanent/destructive-action conjunction `review AND confirmation AND undo`;
-- XAG 115 no-button-hold destructive-confirmation semantics;
-- XAG 116 default-over-20-hours exception and reviewed timing semantics;
-- XAG 117 camera-view `BEST_PRACTICE_REQUIRED_IF_APPLICABLE / SHOULD` correction with the inherited conditional trigger and semantic payload.
+- XAG 115 stored-data `(review AND correct) OR complete reverse/cancel` operator;
+- XAG 115 permanent/destructive-action `review AND confirmation AND undo` conjunction;
+- XAG 115 no-button-hold record;
+- XAG 116 reviewed timing correction;
+- XAG 117 camera-view required-if-applicable / `SHOULD` correction;
+- XAG 120 notification-management accessibility without example-feature existence inflation;
+- all six XAG 121 records accepted by Issue #316;
+- XAG 122 no-extra-cost support atom.
 
-Inventory is unchanged:
+Inventory remains unchanged:
 
 - XAG 112: **14** atomic records;
 - XAG 114: **16** atomic records;
@@ -113,28 +112,27 @@ Inventory is unchanged:
 - inherited XAG 101–107: **105** atomic records;
 - composed XAG 101–123: **218** atomic records.
 
-No identity is added, removed, split, or renamed. No sibling XAG 120 atom and no unrelated v13-composed record is redefined.
+No identity is added, removed, split, or renamed.
 
 ## 6. Finding disposition and producer self-review
 
-`W2-REV-ACC19-M01` is **RESOLVED_PENDING_FRESH_SCOPED_REVIEW** in this producer packet:
+`W2-REV-ACC21-M01` is **RESOLVED_PENDING_FRESH_SCOPED_REVIEW** in this producer packet:
 
-- notification-management accessibility remains required when applicable: **YES**;
-- duration-adjustment example promoted to universal feature existence: **NO**;
-- notification-toggle example promoted to universal feature existence: **NO**;
-- existing duration-control accessibility allowed to fail open: **NO**;
-- existing toggle-control accessibility allowed to fail open: **NO**;
-- atom identity changed: **NO**;
-- source id changed: **NO**;
-- authority/modality changed: **NO**;
-- applicability or trigger broadened: **NO**;
+- unspecified plurality still sufficient while source-named methods are absent: **NO**;
+- phone load-bearing: **YES**;
+- TTY load-bearing: **YES**;
+- email load-bearing: **YES**;
+- chat load-bearing: **YES**;
+- unrelated methods can substitute for omitted source-named methods: **NO**;
+- atom identity/source/authority/modality/applicability/trigger changed: **NO**;
 - evidence or gap route changed: **NO**;
-- sibling XAG 120 or unrelated v13 record changed: **NO**;
-- reviewed XAG 112–117 corrections changed: **NO**;
+- no-extra-cost atom changed: **NO**;
+- accepted XAG 121 scope changed: **NO**;
+- reviewed XAG 108–120 corrections changed: **NO**;
 - atomic counts changed: **NO**;
 - `MUST`, legal/compliance, or platform-certification authority invented: **NO**;
-- empirical accessibility PASS claimed: **NO**;
-- full corrected XAG 108–123 review claimed complete: **NO**.
+- XAG 123 acceptance claimed: **NO**;
+- empirical accessibility eligibility or PASS claimed: **NO**.
 
 Bounded producer self-review finds **0 unresolved BLOCKER / 0 unresolved MAJOR / 0 correction-requiring MINOR** in this exact remediation scope. Producer self-review does not satisfy the mandatory fresh independent/degraded-independent scoped review.
 
@@ -142,11 +140,13 @@ Bounded producer self-review finds **0 unresolved BLOCKER / 0 unresolved MAJOR /
 
 ```yaml
 empirical_accessibility_evidence: NOT_RUN
+empirical_accessibility_successor_eligible: false
 mapping_complete: false
 IR-BLOCKER-ACCESSIBILITY-CURRENT: OPEN
 W2-REV-M02: OPEN_BOUNDED
 full_xag_108_123_review_complete: false
-xag_121_123_accepted_by_issue_308: false
+xag_121_review: ACCEPTED_NO_MATERIAL_FINDING_BY_ISSUE_316
+xag_123_review: UNACCEPTED
 production_implementation_ready: false
 legal_compliance_claimed: false
 platform_certification_claimed: false
@@ -155,10 +155,10 @@ integration_authorized: false
 canonicality: NOT_CANONICAL
 ```
 
-Issue #308's early-negative boundary remains controlling. This bounded repair does not accept XAG 121–123, make empirical accessibility evidence work eligible, clear the aggregate blocker, create readiness/implementation/release authority, or grant verification, integration, decision, or canonical authority.
+This bounded repair does not accept XAG 123, make empirical accessibility evidence eligible, clear aggregate blockers, create readiness/implementation/release authority, or grant verification, integration, decision, or canonical authority.
 
 ## 8. Required next transition
 
-Freeze this exact remediation in an exact-head draft PR and perform a fresh independent/degraded-independent scoped review. The review must independently re-read current XAG 120, attack both example-to-required-feature inflation and accessibility weakening, prove identity/authority/trigger/evidence/gap preservation, and verify all inventory/fail-closed invariants.
+Freeze this exact remediation in an exact-head draft PR and perform a fresh independent/degraded-independent scoped review. That review must independently re-read current XAG 122, verify each source-named support method is load-bearing, attack omission/substitution and authority inflation, prove identity/trigger/evidence/gap/no-extra-cost/XAG 121 preservation, and verify inventory/fail-closed invariants.
 
-A clean scoped review may make this exact producer packet eligible only for the separately authorized squash-only noncanonical integration route. After the bounded correction chain is integrated as authorized, the required full mapping review must resume from the still-unaccepted XAG 121–123 remainder before any empirical-accessibility successor can be derived.
+A clean scoped review may make this exact producer packet eligible only for the separately authorized squash-only noncanonical integration route. After the bounded correction chain is integrated as authorized, the required full mapping review must resume from the still-unaccepted XAG 123 remainder before any empirical-accessibility successor can be derived.
