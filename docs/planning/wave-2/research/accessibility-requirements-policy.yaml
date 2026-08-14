@@ -1,56 +1,57 @@
-version: 15
+version: 16
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-16
-issue: 319
+mission_id: W2-REM-ACC-17
+issue: 324
 observed_date: '2026-08-14'
 
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v15
-  base_main_sha: 39bda0cc8cfce8273e1e425efd72ec760dc0b4a4
-  base_policy_version: 14
-  base_policy_blob_sha: 33c4fdcde1c28ed2623496b04d2d376d4aac190b
-  base_report_blob_sha: b8c5cb0e7394b21f99ca9e09275cd145d59bba1b
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v16
+  base_main_sha: 4421a79e5647ab53afa28f49b68b72ef630556de
+  base_policy_version: 15
+  base_policy_blob_sha: bba27a68a6922751c4b2c1ccdc3a6c164ac3a2dd
+  base_report_blob_sha: b46e924dff194a61993d445ad66cbee5fb79d1df
   inherited_xag_108_123_origin_blob_sha: 80e278315d6b7a108d89da3f5a99086a8ef91bf7
-  source_review_issue: 316
-  source_review_claim_comment_id: 5297013118
-  source_review_terminal_comment_id: 5297053703
-  source_review_head_sha: ec7c3fd306649ece3968c612e01847c50bf4bc55
-  source_review_work_sha: e0304f34365cd6c6ff40a9eb61a3ef1827e66519
+  source_review_issue: 323
+  source_review_claim_comment_id: 5297163566
+  source_review_terminal_comment_id: 5297205043
+  source_review_head_sha: 0ed9caf6e73ad15c741f20b740645a6a4ccc2e60
+  source_review_work_sha: 47efe2cf9bcaa5e448910ffc59714494d5e8e1f9
+  source_review_pr: 325
   source_review_disposition: CHANGES_NEEDED
-  source_review_finding: W2-REV-ACC21-M01
-  source_review_finding_class: SOURCE_NAMED_SUPPORT_METHOD_SET_WEAKENING
+  source_review_finding: W2-REV-ACC23-M01
+  source_review_finding_class: RESOURCE_LOCALIZATION_ADVISORY_PROMOTION
   canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
   canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
   rule: >-
-    Load exact v14 policy/report as immutable inputs and resolve their full composed
+    Load exact v15 policy/report as immutable inputs and resolve their full composed
     lineage. Replace only the inherited semantic encoding of
-    XAG122-MULTIPLE-ACCESSIBLE-SUPPORT-METHODS so the source-named accessible
-    support methods phone, TTY, email, and chat are mechanically load-bearing rather
-    than example-only metadata. Preserve the atom identity, source id, best-practice
-    authority/modality, conditional customer-support applicability, trigger,
-    evidence/gap routing, XAG122-SUPPORT-NO-EXTRA-COST, all six XAG 121 records
-    accepted by Issue 316, every reviewed XAG 108-120 correction, inventory
-    identities/counts, and fail-closed aggregate state. Add only the minimum
-    validator/report metadata needed to reject omission or substitution of the
-    source-named method set without inflating legal/compliance/platform authority.
+    XAG123-MENTAL-HEALTH-RESOURCES so suitable in-game support/learning resources
+    remain load-bearing while locale/region specificity is not a rejecting semantic.
+    Preserve atom/source/authority/applicability/trigger/evidence/gap identity, all
+    reviewed XAG 108-122 lineage, the first five XAG 123 atoms accepted by Issue 323,
+    the early-negative boundary for the final two XAG 123 atoms, exact inventory,
+    and fail-closed aggregate state. Add only minimum validator/report metadata.
 
-preserved_v14_state:
+preserved_v15_state:
   inherited_xag_101_107_atomic_clause_count: 105
   xag_112_atomic_clause_count: 14
   xag_114_atomic_clause_count: 16
   xag_108_123_atomic_clause_count: 113
   composed_xag_101_123_atomic_clause_count: 218
-  xag_112_reviewed_corrections: PRESERVED_FROM_V14_LINEAGE
-  xag_114_title_exception_correction: PRESERVED_FROM_V14_LINEAGE
-  xag_115_stored_data_operator_correction: PRESERVED_REVIEWED_FROM_V14
-  xag_115_permanent_action_conjunction_correction: PRESERVED_REVIEWED_FROM_V14
-  xag_115_button_hold_record: PRESERVED_FROM_V14_LINEAGE
-  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V14_LINEAGE
-  xag_117_camera_view_authority_correction: PRESERVED_REVIEWED_FROM_V14
-  xag_120_notification_example_correction: PRESERVED_REVIEWED_FROM_V14
+  xag_112_reviewed_corrections: PRESERVED_FROM_V15_LINEAGE
+  xag_114_title_exception_correction: PRESERVED_FROM_V15_LINEAGE
+  xag_115_stored_data_operator_correction: PRESERVED_REVIEWED_FROM_V15
+  xag_115_permanent_action_conjunction_correction: PRESERVED_REVIEWED_FROM_V15
+  xag_115_button_hold_record: PRESERVED_FROM_V15_LINEAGE
+  xag_116_default_over_20_hours_exception: PRESERVED_FROM_V15_LINEAGE
+  xag_117_camera_view_authority_correction: PRESERVED_REVIEWED_FROM_V15
+  xag_120_notification_example_correction: PRESERVED_REVIEWED_FROM_V15
   xag_121_review_status: ACCEPTED_NO_MATERIAL_FINDING_BY_ISSUE_316
-  xag122_support_no_extra_cost_review_status: NO_MATERIAL_FINDING_BY_ISSUE_316
-  xag_123_review_status: UNACCEPTED_NOT_REVIEWED_TO_COMPLETION
+  xag122_support_no_extra_cost_review_status: ACCEPTED_NO_MATERIAL_FINDING_BY_ISSUE_316
+  xag122_named_support_methods_review_status: RESOLVED_BOUNDED_REVIEWED_BY_ISSUE_321
+  xag_123_atoms_1_5_review_status: ACCEPTED_NO_MATERIAL_FINDING_BY_ISSUE_323
+  xag123_resource_atom_review_status: MAJOR_FINDING_W2_REV_ACC23_M01
+  xag123_final_two_review_status: UNACCEPTED_NOT_REVIEWED_TO_COMPLETION
   empirical_accessibility_evidence: NOT_RUN
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
@@ -67,151 +68,152 @@ preserved_v14_state:
   integration_authorized: false
 
 source_recheck:
-  XAG-122:
-    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/122
-    title: Accessible customer support
+  XAG-123:
+    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/123
+    title: Mental health best practices
     version: XAG-v3.2
     page_last_updated: '2026-03-04'
     observed_date: '2026-08-14'
     normative_scope: implementation_guidelines
     authority_class: ACCESSIBILITY_BEST_PRACTICE
-    corrected_semantic: named_accessible_support_method_set
-    source_directive: multiple accessible methods should be made available to contact support including phone, TTY, email, and chat
-    source_named_methods:
-      - phone
-      - tty
-      - email
-      - chat
-    source_named_methods_are_examples_only: false
+    corrected_semantic: in_game_support_or_learning_resources_available
+    implementation_directive: >-
+      Provide resources in-game to support players with mental health conditions or
+      help them learn more about mental health; regional helplines and websites are
+      examples of resources that can satisfy that resource category.
+    locale_region_guidance_scope: BROADER_APPROACH_ADVISORY
+    locale_region_guidance_modality: CONSIDER
+    locale_region_specificity_is_required_semantic: false
     repository_native_modality: SHOULD
     repository_native_authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
+    legal_or_compliance_authority: false
+    platform_certification_authority: false
+
+source_review_boundary:
+  issue_323_atoms_1_5: ACCEPTED_NO_MATERIAL_FINDING
+  issue_323_resource_atom: EARLY_NEGATIVE_W2_REV_ACC23_M01
+  XAG123-WARNINGS-SETTINGS-ACCESSIBLE: UNACCEPTED_NOT_REVIEWED_TO_COMPLETION
+  XAG123-RESPECTFUL-MENTAL-HEALTH-REPRESENTATION: UNACCEPTED_NOT_REVIEWED_TO_COMPLETION
+  rule: >-
+    Preserve Issue 323's early-negative boundary. This remediation corrects only the
+    resource atom and does not infer acceptance of the two later XAG 123 atoms.
 
 atomic_clause_correction_patch:
-  XAG122-MULTIPLE-ACCESSIBLE-SUPPORT-METHODS:
-    source_id: XAG-122
+  XAG123-MENTAL-HEALTH-RESOURCES:
+    source_id: XAG-123
     authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE
     source_modality: SHOULD
     applicability: CONDITIONAL
-    trigger: customer_support_is_offered
+    trigger: game_contains_content_related_to_mental_health_self_harm_suicide_eating_disorders_addiction_or_other_serious_psychological_risk
     required_semantics:
-      multiple_accessible_support_methods_available: true
-      required_accessible_support_methods:
-        - phone
-        - tty
-        - email
-        - chat
+      in_game_resources_for_support_or_learning_more_available: true
     source_fidelity_note: >-
-      The current first-party implementation guideline names phone, TTY, email, and
-      chat inside the SHOULD directive using including-language. These methods are
-      therefore load-bearing members of the mapped support-method set, not merely
-      illustrative metadata. This remains best-practice SHOULD authority and creates
-      no legal/compliance or platform-certification claim.
+      Current first-party implementation guidance makes suitable in-game resources
+      for support or learning load-bearing. Regional helplines, websites, and similar
+      resources are examples, while the broader approaches section says to consider
+      locale/region-specific resources. Locale/region specificity therefore cannot
+      independently fail an otherwise source-faithful candidate.
     evidence_requirement_refs:
-      - ACC-EV-XAG122
-    gap_ref: ACC-GAP-XAG122
+      - ACC-EV-XAG123
+    gap_ref: ACC-GAP-XAG123
 
 preserved_reviewed_contracts:
   XAG112-REVIEWED-CORRECTIONS:
-    preservation_rule: SCALED_NAVIGATION_SUBMENU_RETURN_AND_FOCUS_ESCAPE_UNCHANGED_FROM_EXACT_V14_LINEAGE
+    preservation_rule: SCALED_NAVIGATION_SUBMENU_RETURN_AND_FOCUS_ESCAPE_UNCHANGED_FROM_EXACT_V15_LINEAGE
   XAG114-CRITICAL-TEXT-READING-LEVEL:
-    preservation_rule: TITLES_EXCEPTION_UNCHANGED_FROM_EXACT_V14_LINEAGE
+    preservation_rule: TITLES_EXCEPTION_UNCHANGED_FROM_EXACT_V15_LINEAGE
   XAG115-DATA-MODIFICATION-REVIEW-CORRECT-REVERSE:
-    preservation_rule: REVIEW_AND_CORRECT_OR_COMPLETE_REVERSAL_OPERATOR_UNCHANGED_FROM_EXACT_V14_LINEAGE
+    preservation_rule: REVIEW_AND_CORRECT_OR_COMPLETE_REVERSAL_OPERATOR_UNCHANGED_FROM_EXACT_V15_LINEAGE
   XAG115-PERMANENT-ACTION-CONFIRM-OR-UNDO:
-    preservation_rule: REVIEW_AND_CONFIRMATION_AND_UNDO_CONJUNCTION_UNCHANGED_FROM_EXACT_V14_LINEAGE
+    preservation_rule: REVIEW_AND_CONFIRMATION_AND_UNDO_CONJUNCTION_UNCHANGED_FROM_EXACT_V15_LINEAGE
   XAG115-NO-BUTTON-HOLD-DESTRUCTIVE-CONFIRMATION:
-    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V14_LINEAGE
+    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V15_LINEAGE
   XAG116-REVIEWED-CORRECTION:
     preservation_rule: DEFAULT_OVER_20_HOURS_EXCEPTION_AND_REVIEWED_TIMING_SEMANTICS_UNCHANGED
   XAG117-CAMERA-VIEW-CHOICE:
-    preservation_rule: REQUIRED_IF_APPLICABLE_SHOULD_AUTHORITY_TRIGGER_AND_SEMANTICS_UNCHANGED_FROM_EXACT_V14
+    preservation_rule: REQUIRED_IF_APPLICABLE_SHOULD_AUTHORITY_TRIGGER_AND_SEMANTICS_UNCHANGED_FROM_EXACT_V15
   XAG120-COMM-NOTIFICATION-SETTINGS:
-    preservation_rule: ACCESSIBLE_EXISTING_NOTIFICATION_MANAGEMENT_WITHOUT_EXAMPLE_FEATURE_EXISTENCE_INFLATION_UNCHANGED_FROM_EXACT_V14
+    preservation_rule: ACCESSIBLE_EXISTING_NOTIFICATION_MANAGEMENT_WITHOUT_EXAMPLE_FEATURE_EXISTENCE_INFLATION_UNCHANGED_FROM_EXACT_V15
   XAG121-REVIEWED-SCOPE:
-    preservation_rule: ALL_SIX_ATOMS_ACCEPTED_BY_ISSUE_316_UNCHANGED_FROM_EXACT_V14_COMPOSITION
-  XAG122-SUPPORT-NO-EXTRA-COST:
-    preservation_rule: BYTE_LOGICALLY_UNCHANGED_FROM_EXACT_V14_COMPOSITION
+    preservation_rule: ALL_SIX_ATOMS_ACCEPTED_BY_ISSUE_316_UNCHANGED_FROM_EXACT_V15_COMPOSITION
+  XAG122-REVIEWED-SCOPE:
+    preservation_rule: NO_EXTRA_COST_AND_NAMED_SUPPORT_METHOD_SET_UNCHANGED_FROM_EXACT_REVIEWED_V15_COMPOSITION
+  XAG123-ATOMS-1-5:
+    preservation_rule: ALL_FIVE_ATOMS_ACCEPTED_WITH_NO_MATERIAL_FINDING_BY_ISSUE_323_UNCHANGED
 
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v15
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v16
   composition_steps:
-    - load exact v14 policy blob 33c4fdcde1c28ed2623496b04d2d376d4aac190b
-    - load exact v14 report blob b8c5cb0e7394b21f99ca9e09275cd145d59bba1b
-    - resolve v14 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and all reviewed bounded overlays
-    - verify inherited XAG122-MULTIPLE-ACCESSIBLE-SUPPORT-METHODS identity exists exactly once
-    - verify inherited source id, authority class, source modality, applicability, trigger, evidence reference, and gap reference match exact v14 lineage
-    - replace only supported_examples handling for phone, tty, email, and chat with a load-bearing required_accessible_support_methods set
-    - require all four source-named methods to be available and accessible whenever customer_support_is_offered
-    - verify unrelated accessible methods cannot substitute for any omitted source-named method
-    - verify XAG122-SUPPORT-NO-EXTRA-COST is byte-logically unchanged
-    - verify all six XAG 121 atoms accepted by Issue 316 are byte-logically unchanged
-    - verify every other v14-composed semantic record is byte-logically unchanged by this overlay
-    - verify reviewed XAG 112, XAG 114, both XAG 115 corrections, XAG 116, XAG 117, and XAG 120 corrections remain unchanged
+    - load exact v15 policy blob bba27a68a6922751c4b2c1ccdc3a6c164ac3a2dd
+    - load exact v15 report blob b46e924dff194a61993d445ad66cbee5fb79d1df
+    - resolve v15 through exact inherited XAG 108-123 origin blob 80e278315d6b7a108d89da3f5a99086a8ef91bf7 and reviewed overlays
+    - bind terminal Issue 323 comment 5297205043 and its exact early-negative boundary
+    - verify inherited XAG123-MENTAL-HEALTH-RESOURCES identity exists exactly once
+    - verify source id, authority class, modality, applicability, trigger, evidence reference, and gap reference match exact inherited lineage
+    - replace only the resource atom required_semantics so in-game support or learning resources remain required
+    - remove resources_localized_or_region_appropriate_when_applicable from required_semantics
+    - verify locale or region specificity cannot independently cause rejection
+    - verify no live helpline identity is pinned by the policy overlay
+    - verify every other v15-composed semantic record is byte-logically unchanged by this overlay
+    - verify reviewed XAG 108-122 corrections and accepted scope remain unchanged
+    - verify Issue 323 XAG 123 atoms 1-5 remain unchanged
+    - verify the final two XAG 123 atoms remain unaccepted and are not modified
     - verify final XAG 112 count is 14, XAG 114 count is 16, XAG 108-123 count is 113, inherited XAG 101-107 count is 105, and composed XAG 101-123 count is 218
     - preserve all evidence/gap routing and fail-closed aggregate/authority state
   required_semantic_assertions:
-    - XAG 122 remains conditional on customer support being offered
-    - the mapped support contact surface remains best-practice SHOULD authority, not legal/compliance/platform certification
-    - multiple accessible support methods remain required
-    - phone, TTY, email, and chat are each load-bearing members of the required accessible support-method set
-    - unrelated support methods do not satisfy omission of a source-named method
-    - XAG122-SUPPORT-NO-EXTRA-COST remains unchanged
-    - all six XAG 121 records accepted by Issue 316 remain unchanged
-    - XAG 123 remains unaccepted and no empirical-accessibility successor is made eligible
+    - XAG 123 resource atom remains conditional on the inherited serious psychological-risk content trigger
+    - suitable in-game support or learning resources remain load-bearing when applicable
+    - locale or region specificity is not a load-bearing pass/fail condition
+    - regional helplines and websites remain source examples, not mandatory resource identities
+    - the mapped atom remains best-practice SHOULD authority, not legal/compliance/platform certification
     - atom identity, source id, authority class, SHOULD modality, applicability, trigger, evidence requirement, and gap route remain unchanged
-    - no sibling XAG 122 atom or unrelated v14-composed record is redefined
+    - all reviewed XAG 108-122 lineage remains unchanged
+    - the first five XAG 123 atoms accepted by Issue 323 remain unchanged
+    - the final two XAG 123 atoms remain unaccepted
+    - empirical accessibility remains NOT_RUN and successor-ineligible
   load_bearing_fixtures:
-    XAG122_ALL_NAMED_METHODS_ACCESSIBLE:
+    XAG123_SUITABLE_NONLOCALIZED_RESOURCES:
       candidate:
-        customer_support_is_offered: true
-        multiple_accessible_support_methods_available: true
-        accessible_support_methods:
-          - phone
-          - tty
-          - email
-          - chat
+        atom_applicable: true
+        in_game_resources_for_support_or_learning_more_available: true
+        resources_localized_or_region_appropriate: false
       expected: PASS
-    XAG122_PHONE_OMITTED:
+    XAG123_SUITABLE_LOCALIZED_RESOURCES:
       candidate:
-        customer_support_is_offered: true
-        accessible_support_methods: [tty, email, chat]
-      expected: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_TTY_OMITTED:
+        atom_applicable: true
+        in_game_resources_for_support_or_learning_more_available: true
+        resources_localized_or_region_appropriate: true
+      expected: PASS
+    XAG123_NO_IN_GAME_RESOURCES:
       candidate:
-        customer_support_is_offered: true
-        accessible_support_methods: [phone, email, chat]
-      expected: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_EMAIL_OMITTED:
-      candidate:
-        customer_support_is_offered: true
-        accessible_support_methods: [phone, tty, chat]
-      expected: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_CHAT_OMITTED:
-      candidate:
-        customer_support_is_offered: true
-        accessible_support_methods: [phone, tty, email]
-      expected: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_UNRELATED_METHODS_SUBSTITUTED:
-      candidate:
-        customer_support_is_offered: true
-        multiple_accessible_support_methods_available: true
-        accessible_support_methods:
-          - web_form
-          - postal_mail
-      expected: REJECT_NAMED_SUPPORT_METHOD_SET_WEAKENING
-    XAG122_AUTHORITY_INFLATED:
+        atom_applicable: true
+        in_game_resources_for_support_or_learning_more_available: false
+      expected: REJECT_REQUIRED_IN_GAME_RESOURCES_MISSING
+    XAG123_LOCALIZATION_PROMOTED_TO_REQUIRED:
+      candidate_mapping:
+        required_semantics:
+          in_game_resources_for_support_or_learning_more_available: true
+          resources_localized_or_region_appropriate_when_applicable: true
+      expected: REJECT_ADVISORY_PROMOTION
+    XAG123_AUTHORITY_INFLATED:
       candidate_mapping:
         authority_class: MANDATORY_COMPLIANCE_REQUIREMENT
         source_modality: MUST
       expected: REJECT_AUTHORITY_INFLATION
+    XAG123_IDENTITY_OR_ROUTING_CHANGED:
+      candidate_mapping:
+        source_id: XAG-123-CHANGED
+      expected: REJECT_SCOPE_LEAKAGE
   aggregate_assertions:
     - XAG 112 count equals 14
     - XAG 114 count equals 16
     - XAG 108-123 count equals 113
     - inherited XAG 101-107 count equals 105
     - composed XAG 101-123 count equals 218
-    - XAG 121 acceptance from Issue 316 remains preserved
-    - XAG 123 remains unaccepted because Issue 316 terminalized early at XAG 122
+    - XAG 121 review acceptance remains preserved
+    - XAG 122 corrected reviewed scope remains preserved
+    - Issue 323 XAG 123 atoms 1-5 acceptance remains preserved
+    - Issue 323 final two XAG 123 atoms remain unaccepted
     - empirical accessibility evidence remains NOT_RUN
     - empirical accessibility successor eligibility remains false
     - mapping_complete remains false
@@ -223,40 +225,28 @@ mechanical_validation:
     - integration_authorized remains false
     - canonicality remains NOT_CANONICAL
   adversarial_fixtures:
-    XAG122_NAMED_METHODS_LEFT_AS_EXAMPLES_ONLY: REJECT_NAMED_SUPPORT_METHOD_SET_WEAKENING
-    XAG122_PHONE_OMITTED: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_TTY_OMITTED: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_EMAIL_OMITTED: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_CHAT_OMITTED: REJECT_NAMED_SUPPORT_METHOD_OMISSION
-    XAG122_UNRELATED_METHOD_SUBSTITUTION: REJECT_NAMED_SUPPORT_METHOD_SET_WEAKENING
-    XAG122_NO_EXTRA_COST_ATOM_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG122_IDENTITY_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG122_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG122_AUTHORITY_OR_MODALITY_CHANGED: REJECT_SCOPE_LEAKAGE
-    XAG122_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
-    ANY_XAG121_ACCEPTED_RECORD_REDEFINED: REJECT_PRESERVED_REVIEW_SCOPE_REGRESSION
-    ANY_OTHER_V14_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
-    XAG112_REVIEWED_CORRECTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
-    XAG114_TITLE_EXCEPTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
-    XAG115_STORED_DATA_OPERATOR_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
-    XAG115_PERMANENT_ACTION_CONJUNCTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
-    XAG116_DEFAULT_OVER_20_HOURS_EXCEPTION_REMOVED: REJECT_PRESERVED_CORRECTION_REGRESSION
-    XAG117_CAMERA_VIEW_AUTHORITY_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
-    XAG120_NOTIFICATION_EXAMPLE_CORRECTION_REGRESSED: REJECT_PRESERVED_CORRECTION_REGRESSION
+    XAG123_LOCALIZATION_LEFT_LOAD_BEARING: REJECT_ADVISORY_PROMOTION
+    XAG123_REQUIRED_IN_GAME_RESOURCE_REMOVED: REJECT_SOURCE_SEMANTIC_WEAKENING
+    XAG123_LIVE_HELPLINE_IDENTITY_PINNED: REJECT_SCOPE_AND_FRESHNESS_ERROR
+    XAG123_IDENTITY_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG123_TRIGGER_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG123_AUTHORITY_OR_MODALITY_CHANGED: REJECT_SCOPE_LEAKAGE
+    XAG123_EVIDENCE_OR_GAP_ROUTING_CHANGED: REJECT_SCOPE_LEAKAGE
+    ANY_XAG123_ATOM_1_5_REDEFINED: REJECT_PRESERVED_REVIEW_SCOPE_REGRESSION
+    XAG123_FINAL_TWO_ATOMS_ACCEPTED_OR_REDEFINED: REJECT_REVIEW_SCOPE_INFLATION
+    ANY_XAG122_REVIEWED_RECORD_REDEFINED: REJECT_PRESERVED_REVIEW_SCOPE_REGRESSION
+    ANY_OTHER_V15_COMPOSED_RECORD_REDEFINED: REJECT_SCOPE_LEAKAGE
     CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
     SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
-    CLAIM_XAG123_ACCEPTANCE_WITHOUT_REVIEW: REJECT_REVIEW_SCOPE_INFLATION
   expected_result:
-    W2-REV-ACC21-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
-    W2-REV-ACC19-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
-    W2-REV-ACC17-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
-    W2-REV-ACC15-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
-    W2-REV-ACC13-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
+    W2-REV-ACC23-M01: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
+    W2-REV-ACC21-M01: PRESERVED_RESOLVED_BOUNDED_REVIEWED
     xag_121_review: PRESERVED_ACCEPTED_NO_MATERIAL_FINDING
-    xag122_no_extra_cost: PRESERVED
-    xag122_named_support_methods: REQUIRED_PHONE_TTY_EMAIL_CHAT
-    xag122_named_methods_authority: BEST_PRACTICE_SHOULD
-    xag_123_review: UNACCEPTED
+    xag_122_review: PRESERVED_RESOLVED_BOUNDED_REVIEWED
+    xag_123_atoms_1_5: PRESERVED_ACCEPTED_NO_MATERIAL_FINDING
+    xag123_resource_localization: NON_LOAD_BEARING
+    xag123_in_game_resources: REQUIRED_WHEN_APPLICABLE
+    xag123_final_two_atoms: UNACCEPTED_NOT_REVIEWED_TO_COMPLETION
     xag_112_inventory: PASS_14
     xag_114_inventory: PASS_16
     xag_108_123_inventory: PASS_113
@@ -278,17 +268,18 @@ freshness:
     - empirical accessibility evidence successor
     - readiness verification
   reopen_triggers:
-    - Microsoft XAG 122 version or load-bearing support-method semantics change
-    - any change to exact v14 input identity
-    - selected customer-support scope change
+    - Microsoft XAG 123 version or load-bearing resource semantics change
+    - any change to exact v15 input identity
+    - selected mental-health content applicability scope change
     - empirical accessibility evidence production
 
 authority_boundary:
   this_packet: NONCANONICAL_REMEDIATION_PROVENANCE
-  closes_only_finding: W2-REV-ACC21-M01
+  closes_only_finding: W2-REV-ACC23-M01
   finding_state: RESOLVED_PENDING_FRESH_SCOPED_REVIEW
-  preserves_xag_121_review_acceptance: true
-  accepts_xag_123: false
+  preserves_xag_108_122_reviewed_lineage: true
+  preserves_xag_123_atoms_1_5_review_acceptance: true
+  accepts_xag_123_final_two: false
   closes_w2_rev_m02: false
   full_xag_108_123_review_complete: false
   empirical_accessibility_successor_eligible: false
