@@ -44,6 +44,16 @@ No earlier new material finding was established in the resumed XAG 115 button-ho
 - Required correction is limited to `XAG117-CAMERA-VIEW-CHOICE` authority/modality plus minimum validator/report metadata, preserving identity, trigger, semantic payload, evidence/gap routing, all unrelated XAG records, all prior reviewed corrections, counts, and fail-closed authority state.
 - Fresh independent/degraded-independent scoped review of the exact remediation is mandatory before any integration eligibility.
 
+## PR and concurrent-main freeze
+
+- Draft review PR: `#304`.
+- PR base branch: `main`.
+- PR base observed after creation: `7631dee0a166c91e383a8c2e7bd641b46e6b9821`.
+- The concurrent main advance from review base `8818f2ac...` to `7631dee...` is exactly the squash integration of Issue #299 terminal scoped-review provenance (`[PLAN-v1][W2-REV-ACC-16] Integrate terminal scoped review provenance (#301)`).
+- The integrated policy at `main@7631dee...` remains exact blob `4c10dc8969a8080a14e8f46e0d2e126bd8a1ee5e`; therefore the logical mapping reviewed by this episode did not change.
+- PR #304 recalculated `mergeable: true`, remains `draft: true`, and its changed-file set is exactly the two declared review-provenance files.
+- Mergeability is compatibility only. This review does not grant its own integration authority.
+
 ## Remaining boundary
 
 - XAG 118–123: unaccepted by this review episode.
@@ -56,4 +66,4 @@ No earlier new material finding was established in the resumed XAG 115 button-ho
 
 ## Next transition
 
-Open and verify an exact-head draft PR for this immutable review + handoff, then publish terminal schema-3 `STATUS(REVIEW_READY)` with disposition `CHANGES_NEEDED`, finding `W2-REV-ACC17-M01`, exact work/head/blob identities, successor #303, and the XAG 118–123 unaccepted boundary.
+Publish terminal schema-3 `STATUS(REVIEW_READY)` with disposition `CHANGES_NEEDED`, finding `W2-REV-ACC17-M01`, exact work/head/blob identities, draft PR #304, successor #303, and the XAG 118–123 unaccepted boundary. Any later review-provenance integration remains separately authorized and squash-only.
