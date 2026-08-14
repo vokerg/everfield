@@ -1,33 +1,29 @@
-version: 2
+version: 3
 state: REMEDIATED_CANDIDATE
-mission_id: W2-REM-ACC-02
-issue: 135
-observed_date: 2026-08-13
-
+mission_id: W2-REM-ACC-03
+issue: 240
+observed_date: '2026-08-14'
 composition_contract:
-  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v2
-  base_issue: 96
-  base_work_sha: 3937f65ae4eb495420d1240c2b739841aa14a037
-  base_policy_blob_sha: 78690cf658967b2ded35e738df125959a56f0d86
-  rule: apply only the patches below to the exact base policy; all unpatched records and authority boundaries remain byte-identical logical inputs
-
-review_provenance:
-  issue: 134
-  terminal_status_comment_id: 5277197150
-  head_sha: 771cec9d69483b5d2411b40b3d133b024d1e7aba
-  disposition: CHANGES_NEEDED
-  findings: [PG-REM-ACC-M01, PG-REM-ACC-M02]
-
+  algorithm: ACCESSIBILITY-POLICY-OVERLAY-v3
+  base_issue: 135
+  base_work_source: 'current main integrated Issue #135 policy'
+  base_policy_blob_sha: d4f934d1731800b3966adeae82c4a57b9af737b8
+  rule: apply only this overlay to the exact v2 blob; all unpatched authority boundaries remain logical inputs
+finding_route:
+  formal_review_issue: 84
+  formal_review_mission: W2-REV-01
+  finding: W2-REV-M02
+  finding_state: OPEN_BOUNDED
+  bounded_subcondition_addressed: atomic mapping for XAG 102-106 only
+  not_addressed:
+  - XAG 108-123 atomic mapping
+  - required empirical accessibility evidence
+  - independent review of this remediation
 preserved_state:
   mapping_complete: false
   blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
   blocker_authority_state: OPEN
   summary_only_pages:
-  - XAG-102
-  - XAG-103
-  - XAG-104
-  - XAG-105
-  - XAG-106
   - XAG-108
   - XAG-109
   - XAG-110
@@ -44,133 +40,164 @@ preserved_state:
   - XAG-121
   - XAG-122
   - XAG-123
-  formal_review_required: W2-REV-01
+  empirical_accessibility_pass_claimed: false
   legal_compliance_claimed: false
   valve_verified_result_claimed: false
-  empirical_accessibility_pass_claimed: false
-
+  production_implementation_ready: false
+  canonicality: NOT_CANONICAL
+  fresh_independent_scoped_review_required: true
 source_register_patch:
-  XAG-INDEX:
-    url: https://learn.microsoft.com/en-us/xbox/accessibility/guidelines
-    version: XAG-v3.2
-    page_last_updated: 2026-03-04
-    observed_date: 2026-08-13
-  XAG-101:
-    url: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101
-    version: XAG-v3.2
-    page_last_updated: 2026-03-04
-    observed_date: 2026-08-13
-  VALVE-DECK-COMPAT:
-    url: https://partner.steamgames.com/doc/steamhardware/compat
-    version: LIVE_PUBLIC_CHECKLIST
-    observed_date: 2026-08-13
-
-expected_source_clause_inventory:
-  XAG-101:
-  - XAG101-PC-DEFAULT-SIZE
-  - XAG101-GLYPH-CONTAINED-TEXT
-  - XAG101-GLYPH-SCALE-200
-  - XAG101-TEXT-SCALE-200
-  - XAG101-SCALED-OVERFLOW
-  - XAG101-SANS-SERIF
-  - XAG101-NONSTYLIZED-FONT
-  - XAG101-COMPLETE-CHARSETS
-  - XAG101-TEXT-BLOCK-SPACING
-  - XAG101-SENTENCE-CASE
-  - XAG101-LANGUAGE-ALIGNMENT
-  XAG-107:
-  - XAG107-UI-DIGITAL-ANALOG
-  - XAG107-UI-SINGLE-PRESS
-  - XAG107-REMAP-ALL
-  - XAG107-REMAP-LABELS
-  - XAG107-DIGITAL-EQUIVALENTS
-  - XAG107-RAPID-INPUT
-  - XAG107-PROLONGED-HOLD
-  - XAG107-SIMULTANEOUS
-  - XAG107-MULTIPOINT-GESTURES
-  - XAG107-PATH-GESTURES
-  - XAG107-POINTER-UP-CANCEL
-  - XAG107-NONTRADITIONAL-ALT
-  - XAG107-TWO-STICK
-  - XAG107-KEYBOARD-FULL-PATH
-  - XAG107-SENSITIVITY
-  - XAG107-DICTATION
-  - XAG107-CUSTOMIZATION-ACCESSIBLE
-
-catalog_contract_patch:
-  atomically_expanded_requires_exact_expected_clause_inventory: true
-  atomically_expanded_requires_required_semantic_contracts: true
-  duplicate_extra_or_missing_clause_invalidates_expansion: true
-  missing_expected_inventory_invalidates_expansion: true
-  dangling_evidence_or_gap_ref_invalidates_expansion: true
-  conditional_clause_without_trigger_invalidates_expansion: true
-  aggregate_mapping_complete_is_derived_only_after_all_checks: true
-
+  XAG-102: {url: 'https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/102', version: XAG-v3.2, page_last_updated: '2026-03-04', observed_date: '2026-08-14', normative_scope: implementation_guidelines}
+  XAG-103: {url: 'https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103', version: XAG-v3.2, page_last_updated: '2026-03-04', observed_date: '2026-08-14', normative_scope: implementation_guidelines}
+  XAG-104: {url: 'https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/104', version: XAG-v3.2, page_last_updated: '2026-03-04', observed_date: '2026-08-14', normative_scope: implementation_guidelines}
+  XAG-105: {url: 'https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/105', version: XAG-v3.2, page_last_updated: '2026-03-04', observed_date: '2026-08-14', normative_scope: implementation_guidelines}
+  XAG-106: {url: 'https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/106', version: XAG-v3.2, page_last_updated: '2026-03-04', observed_date: '2026-08-14', normative_scope: implementation_guidelines}
+page_expansion_patch: {XAG-102: ATOMICALLY_EXPANDED, XAG-103: ATOMICALLY_EXPANDED, XAG-104: ATOMICALLY_EXPANDED, XAG-105: ATOMICALLY_EXPANDED, XAG-106: ATOMICALLY_EXPANDED}
+expected_source_clause_inventory_patch:
+  XAG-102: [XAG102-LARGE-CONTRAST, XAG102-STANDARD-CONTRAST, XAG102-INACTIVE-TEXT-CONTRAST, XAG102-INPUT-TEXT-CONTRAST, XAG102-HIGH-CONTRAST-MODE, XAG102-NONSOLID-BACKGROUND-MEASURE, XAG102-PLATFORM-HIGH-CONTRAST-DEFAULT, XAG102-TEXT-COLORS-CONFIGURABLE, XAG102-COLOR-NOT-ALONE, XAG102-IMAGE-TEXT-PROHIBITION, XAG102-LOGOTYPE-EXEMPTION, XAG102-DECORATIVE-EXEMPTION]
+  XAG-103: [XAG103-CRITICAL-VISUAL-MULTISENSORY, XAG103-MULTIVISUAL-NONVISUAL-ID, XAG103-NARRATED-SYMBOL-ALT, XAG103-COLOR-CRITICAL-SIGNIFIER, XAG103-PRIMARY-COLOR-CONFIG, XAG103-GRAYED-CONTROL-SECONDARY-CUE, XAG103-CRITICAL-AUDIO-MULTISENSORY, XAG103-TEXT-ONLY-DIALOGUE-IDENTITY-LOCATION]
+  XAG-104: [XAG104-SUBTITLES-ALL-SPOKEN, XAG104-SPEAKER-IDENTIFICATION, XAG104-SPEAKER-SPATIAL-INDICATION, XAG104-SPEAKER-ID-REFRESH, XAG104-SPEAKER-COLOR-NOT-ALONE, XAG104-PRESTART-OR-DEFAULT-ON, XAG104-CAPTIONS-IMPORTANT-NONVISUALIZED-SOUNDS, XAG104-CAPTION-SOUND-DIRECTION, XAG104-TOGGLE-ANYTIME-DISCOVERABLE, XAG104-CAPTION-TYPES-INDEPENDENT, XAG104-PLATFORM-CAPTION-DEFAULTS, XAG104-TEXT-MIN-SIZE, XAG104-TEXT-SCALE-200, XAG104-TEXT-SPACING, XAG104-LINE-LENGTH-40, XAG104-LINE-COUNT, XAG104-MANUAL-LINE-BREAKS, XAG104-MIXED-CASE, XAG104-SANS-SERIF-OPTION, XAG104-SOLID-BACKGROUND, XAG104-BACKGROUND-COLOR-CONFIG, XAG104-BACKGROUND-OPACITY, XAG104-PLACEMENT-NO-OBSCURE, XAG104-PRESENTATION-PREVIEW, XAG104-PREVIEW-REALISTIC-CONTEXT, XAG104-UGC-PERSISTENCE, XAG104-FMV-TRANSCRIPTS, XAG104-SIGN-LANGUAGE-SCRIPTED-MEDIA, XAG104-SIGN-LANGUAGE-LOCALIZATION]
+  XAG-105: [XAG105-INDEPENDENT-AUDIO-CONTROLS, XAG105-SPATIAL-AUDIO-OPTION, XAG105-MONO-AUDIO-OPTION, XAG105-PAUSE-AUDIO-EVENTS, XAG105-ASSISTIVE-AUDIO-DUCKING]
+  XAG-106: [XAG106-CORE-UI-NARRATION, XAG106-INTERACTABLE-TEXT-ALTERNATIVES, XAG106-COMPOSITE-CONTROL-ENUMERATION, XAG106-NON-TEXT-EQUIVALENT-AUDIO, XAG106-GRAPHIC-ALT-PURPOSE-OPERATION, XAG106-DECORATIVE-NOT-SPOKEN, XAG106-FOCUS-ORDER, XAG106-LINEAR-MENU-LOOP, XAG106-CANCEL-REPEAT-NARRATION, XAG106-FOCUS-INTERRUPTS-NARRATION, XAG106-RATE-PITCH-CONTROLS, XAG106-CONTEXT-CHANGE-INITIATED-NARRATED, XAG106-INTERACTION-EVENT-NARRATION, XAG106-EXTERNAL-READER-MAIN-LANGUAGE, XAG106-EXTERNAL-READER-EMBEDDED-LANGUAGE, XAG106-ALT-TEXT-NO-OBJECT-TYPE-PREFIX, XAG106-MARKUP-VALIDITY, XAG106-PROGRAMMATIC-UI-SEMANTICS, XAG106-TIME-BASED-MEDIA-TEXT-ALT, XAG106-LIVE-MEDIA-TITLE-SUFFICIENT, XAG106-TABLE-NARRATION, XAG106-TABLE-HEADER-ASSOCIATION, XAG106-PROPER-NAME-PRONUNCIATION]
 atomic_clause_patch:
-  XAG101-TEXT-BLOCK-SPACING:
-    source_id: XAG-101
-    required_semantics:
-      line_width_max_characters: 80
-      line_width_max_characters_cjk: 40
-      line_width_measurement_text_resize_percent: 100
-      line_width_character_count_excludes_spaces: true
-      line_spacing_min_multiplier: 1.5
-      paragraph_spacing_min_multiple_of_line_spacing: 2
-      letter_spacing_min_multiple_of_font_size: 0.12
-      word_spacing_min_multiple_of_font_size: 0.16
-
-platform_requirement_patch:
-  direct_valve_compatibility:
-    ACC-DECK-09:
-      source_id: VALVE-DECK-COMPAT
-      authority_class: PLATFORM_COMPATIBILITY_REQUIRED
-      semantics:
-        no_in_game_setting_change_required_to_enable_controller_support_or_default_configuration: true
-      evidence_requirement_refs: [ACC-EV-INPUT-CONTROLLER-01]
-  project_selected:
-    ACC-PROJECT-DECK-PROTON-01:
-      authority_class: PROJECT_SELECTED_PLATFORM_EVIDENCE
-      preserve_from_base_policy: true
-
+  XAG102-LARGE-CONTRAST: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: ALWAYS_FOR_APPLICABLE_VISUAL_ELEMENTS, trigger: large_scale_text_or_visual_element, required_semantics: {minimum_contrast_ratio: '3:1', large_text_thresholds: {console: {1080p_px: 52, 4k_px: 104}, pc_vr: {1080p_px: 36, 4k_px: 72}, mobile_streaming: {100dpi_px: 36, 200dpi_px: 72, 400dpi_px: 144, higher_dpi: scale_linearly}}}, evidence_requirement_refs: [ACC-EV-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-STANDARD-CONTRAST: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: standard_sized_text_or_visual_element_provides_important_information_or_gameplay_context, required_semantics: {minimum_contrast_ratio: '4.5:1'}, evidence_requirement_refs: [ACC-EV-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-INACTIVE-TEXT-CONTRAST: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: inactive_ui_text_is_present, required_semantics: {minimum_contrast_ratio: '3:1'}, evidence_requirement_refs: [ACC-EV-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-INPUT-TEXT-CONTRAST: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: placeholder_or_input_field_text_is_present, required_semantics: {standard_minimum_contrast_ratio: '4.5:1', large_scale_minimum_contrast_ratio: '3:1'}, evidence_requirement_refs: [ACC-EV-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-HIGH-CONTRAST-MODE: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: ALWAYS_FOR_GAME_UI, trigger: game_has_visual_ui, required_semantics: {mode_provided: true, minimum_ui_contrast_ratio_when_enabled: '7:1', mode_variants: light_dark_or_both}, evidence_requirement_refs: [ACC-EV-HIGH-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-NONSOLID-BACKGROUND-MEASURE: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: text_is_displayed_over_non_solid_color_background, required_semantics: {measure_against: lowest_contrasting_area_of_background}, evidence_requirement_refs: [ACC-EV-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-PLATFORM-HIGH-CONTRAST-DEFAULT: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: platform_high_contrast_setting_is_available_to_title, required_semantics: {read_platform_setting: true, apply_as_launch_default: true, player_may_reconfigure_after_launch: true}, evidence_requirement_refs: [ACC-EV-PLATFORM-A11Y], gap_ref: ACC-GAP-XAG102}
+  XAG102-TEXT-COLORS-CONFIGURABLE: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: ALWAYS_FOR_GAME_UI, trigger: foreground_and_background_text_colors_are_used, required_semantics: {foreground_and_background_text_colors_player_configurable: true}, evidence_requirement_refs: [ACC-EV-HIGH-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-COLOR-NOT-ALONE: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: important_information_uses_color, required_semantics: {avoid_color_only: true, if_color_only_unavoidable: provide_player_choice_for_key_element_colors}, evidence_requirement_refs: [ACC-EV-COLOR-CUES], gap_ref: ACC-GAP-XAG102}
+  XAG102-IMAGE-TEXT-PROHIBITION: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: image_contains_or_would_contain_text, required_semantics: {image_text_prohibited: true}, evidence_requirement_refs: [ACC-EV-STATIC-TEXT], gap_ref: ACC-GAP-XAG102, exceptions: [logotypes]}
+  XAG102-LOGOTYPE-EXEMPTION: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: text_or_visual_element_is_part_of_logo_or_brand_name, required_semantics: {minimum_contrast_requirement: NONE}, evidence_requirement_refs: [ACC-EV-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG102-DECORATIVE-EXEMPTION: {source_id: XAG-102, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: element_is_purely_decorative_or_not_visible_or_part_of_picture_with_significant_other_visual_content, required_semantics: {minimum_contrast_requirement: NONE}, evidence_requirement_refs: [ACC-EV-CONTRAST], gap_ref: ACC-GAP-XAG102}
+  XAG103-CRITICAL-VISUAL-MULTISENSORY: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: visual_content_is_critical_to_gameplay_understanding_or_narrative, required_semantics: {additional_sensory_methods_minimum: 1, additional_method_not_visual_only: true}, evidence_requirement_refs: [ACC-EV-MULTISENSORY], gap_ref: ACC-GAP-XAG103}
+  XAG103-MULTIVISUAL-NONVISUAL-ID: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: game_critical_content_uses_multiple_visual_affordances, required_semantics: {additional_identification_not_reliant_on_vision: true, examples: [haptic_feedback, spatial_audio, screen_narration]}, evidence_requirement_refs: [ACC-EV-MULTISENSORY], gap_ref: ACC-GAP-XAG103}
+  XAG103-NARRATED-SYMBOL-ALT: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: menu_narration_is_supported_and_graphical_symbols_are_present, required_semantics: {use_images_with_contextual_text_alternatives: true, do_not_use_semantically_mismatched_unicode_glyphs_as_graphics: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG103}
+  XAG103-COLOR-CRITICAL-SIGNIFIER: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: critical_gameplay_or_narrative_content_is_expressed_through_color, required_semantics: {additional_signifiers_minimum: 1, allowed_examples: [shape, pattern, iconography, text_label]}, evidence_requirement_refs: [ACC-EV-COLOR-CUES], gap_ref: ACC-GAP-XAG103}
+  XAG103-PRIMARY-COLOR-CONFIG: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: color_is_primary_information_channel, required_semantics: {player_color_configuration: true, minimum: presets, preferred: free_choice}, evidence_requirement_refs: [ACC-EV-COLOR-CUES], gap_ref: ACC-GAP-XAG103}
+  XAG103-GRAYED-CONTROL-SECONDARY-CUE: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: graying_or_color_change_indicates_control_existence_or_unavailable_state, required_semantics: {additional_non_color_method_required: true}, evidence_requirement_refs: [ACC-EV-COLOR-CUES], gap_ref: ACC-GAP-XAG103}
+  XAG103-CRITICAL-AUDIO-MULTISENSORY: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: audio_content_is_critical_to_gameplay_understanding_or_narrative, required_semantics: {additional_sensory_methods_minimum: 1, haptics_must_not_be_the_only_alternative: true}, evidence_requirement_refs: [ACC-EV-MULTISENSORY], gap_ref: ACC-GAP-XAG103}
+  XAG103-TEXT-ONLY-DIALOGUE-IDENTITY-LOCATION: {source_id: XAG-103, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: dialogue_is_text_only_without_spoken_audio_track, required_semantics: {speaker_name_required: true, speaker_spatial_location_indication_required: true}, evidence_requirement_refs: [ACC-EV-DIALOGUE], gap_ref: ACC-GAP-XAG103}
+  XAG104-SUBTITLES-ALL-SPOKEN: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: spoken_content_exists, required_semantics: {subtitles_for_all_spoken_content: true}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-SPEAKER-IDENTIFICATION: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_speech_has_identifiable_speaker, required_semantics: {identify_speaker: true}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104, exceptions: [single_unidentified_narrator_with_no_other_speakers]}
+  XAG104-SPEAKER-SPATIAL-INDICATION: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: speaker_direction_is_not_immediately_clear, required_semantics: {visual_spatial_indicator_required: true}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-SPEAKER-ID-REFRESH: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: speaker_changes_or_same_speaker_resumes_after_significant_pause, required_semantics: {speaker_name_reappears: true, significant_pause_minutes: '>1-2'}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-SPEAKER-COLOR-NOT-ALONE: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: color_is_used_to_distinguish_speakers, required_semantics: {additional_non_color_method_required: true, example: text}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-PRESTART-OR-DEFAULT-ON: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: game_has_spoken_or_captionable_content_before_first_settings_access, required_semantics: {one_of: [player_can_adjust_before_game_start, subtitles_enabled_by_default]}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-CAPTIONS-IMPORTANT-NONVISUALIZED-SOUNDS: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: important_sound_is_not_already_communicated_visually, required_semantics: {caption_text_equivalent_required: true}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-CAPTION-SOUND-DIRECTION: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: captioned_sound_direction_is_not_immediately_clear, required_semantics: {spatial_indication_required: true}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-TOGGLE-ANYTIME-DISCOVERABLE: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitles_or_captions_are_supported, required_semantics: {toggle_on_off_any_time: true, setting_discoverable: true, setting_easy_to_configure: true}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-CAPTION-TYPES-INDEPENDENT: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: multiple_caption_information_types_exist, required_semantics: {types_independently_toggleable: true}, evidence_requirement_refs: [ACC-EV-CAPTIONS], gap_ref: ACC-GAP-XAG104}
+  XAG104-PLATFORM-CAPTION-DEFAULTS: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: platform_caption_or_subtitle_preferences_are_available_to_title, required_semantics: {use_platform_preferences_as_default: true}, evidence_requirement_refs: [ACC-EV-PLATFORM-A11Y], gap_ref: ACC-GAP-XAG104}
+  XAG104-TEXT-MIN-SIZE: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {default_minimum_pixel_height_ref: XAG-101}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-TEXT-SCALE-200: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {minimum_scale_percent_of_default: 200}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-TEXT-SPACING: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {avoid_small_character_spacing: true, words_and_lines_not_tightly_spaced: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-LINE-LENGTH-40: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {avoid_lines_over_characters: 40, especially_when_dialogue_fast: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-LINE-COUNT: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {normal_max_lines: 2, exceptional_max_lines: 3}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-MANUAL-LINE-BREAKS: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: manual_editorial_line_breaks_are_possible, required_semantics: {manual_breaks_preferred: true, breaks_at_editorially_sensible_points: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-MIXED-CASE: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {mixed_case_required: true, all_same_case_avoided: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-SANS-SERIF-OPTION: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {sans_serif_font_options_minimum: 1}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-SOLID-BACKGROUND: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_is_displayed, required_semantics: {player_can_place_solid_background: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-BACKGROUND-COLOR-CONFIG: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_solid_background_is_available, required_semantics: {background_color_player_configurable: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-BACKGROUND-OPACITY: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_background_is_available, required_semantics: {opacity_range_percent: [0, 100]}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-PLACEMENT-NO-OBSCURE: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_text_can_scale_to_largest_supported_size, required_semantics: {important_ui_or_gameplay_elements_not_obscured: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-PRESENTATION-PREVIEW: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: subtitle_or_caption_presentation_is_configurable, required_semantics: {visual_simulation_of_current_configuration: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-PREVIEW-REALISTIC-CONTEXT: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: realistic_preview_context_is_feasible, required_semantics: {preview_uses_realistic_game_context: true}, evidence_requirement_refs: [ACC-EV-CAPTION-PRESENTATION], gap_ref: ACC-GAP-XAG104}
+  XAG104-UGC-PERSISTENCE: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: screen_recording_capture_or_other_ugc_can_include_captioned_content, required_semantics: {caption_subtitle_information_persists: true, viewers_can_choose_to_display: true}, evidence_requirement_refs: [ACC-EV-CAPTION-UGC], gap_ref: ACC-GAP-XAG104}
+  XAG104-FMV-TRANSCRIPTS: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: full_motion_video_exists, required_semantics: {full_transcripts_available: true, delivery: accessible_website}, evidence_requirement_refs: [ACC-EV-CAPTION-TRANSCRIPT], gap_ref: ACC-GAP-XAG104}
+  XAG104-SIGN-LANGUAGE-SCRIPTED-MEDIA: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: scripted_cutscene_or_prerecorded_prerendered_media_contains_speech, required_semantics: {sign_language_interpretation_provided: true}, evidence_requirement_refs: [ACC-EV-SIGN-LANGUAGE], gap_ref: ACC-GAP-XAG104}
+  XAG104-SIGN-LANGUAGE-LOCALIZATION: {source_id: XAG-104, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: sign_language_interpretation_is_provided, required_semantics: {sign_language_localized_for_target_language_or_region: true}, evidence_requirement_refs: [ACC-EV-SIGN-LANGUAGE], gap_ref: ACC-GAP-XAG104}
+  XAG105-INDEPENDENT-AUDIO-CONTROLS: {source_id: XAG-105, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: game_outputs_multiple_audio_types, required_semantics: {independent_adjust_or_mute: true, covered_types_at_minimum: [music, voice_over, active_gameplay_critical_sound_effects, background_ambient_sound_effects, narration, voice_chat], list_non_exhaustive: true}, evidence_requirement_refs: [ACC-EV-AUDIO-CONTROLS], gap_ref: ACC-GAP-XAG105}
+  XAG105-SPATIAL-AUDIO-OPTION: {source_id: XAG-105, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: directionality_of_sound_effects_narration_or_other_important_game_sounds_is_relevant, required_semantics: {spatial_audio_option: true}, evidence_requirement_refs: [ACC-EV-AUDIO-CONTROLS], gap_ref: ACC-GAP-XAG105}
+  XAG105-MONO-AUDIO-OPTION: {source_id: XAG-105, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: stereo_audio_output_is_supported, required_semantics: {convert_stereo_to_mono_sent_to_both_channels: true}, evidence_requirement_refs: [ACC-EV-AUDIO-CONTROLS], gap_ref: ACC-GAP-XAG105}
+  XAG105-PAUSE-AUDIO-EVENTS: {source_id: XAG-105, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: 'pausable_non_live_audio_event_duration_seconds>=3', required_semantics: {player_can_pause: true, includes_cinematics_with_audio: true}, evidence_requirement_refs: [ACC-EV-AUDIO-PAUSE], gap_ref: ACC-GAP-XAG105, exceptions: [audio_event_under_3_seconds, real_time_multiplayer_gameplay]}
+  XAG105-ASSISTIVE-AUDIO-DUCKING: {source_id: XAG-105, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: assistive_technology_audio_output_is_detected, required_semantics: {option_to_automatically_lower_or_mute_game_audio: true}, evidence_requirement_refs: [ACC-EV-AUDIO-DUCKING], gap_ref: ACC-GAP-XAG105}
+  XAG106-CORE-UI-NARRATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: core_game_ui_text_or_state_information_exists, required_semantics: {support_platform_screen_reader_or_ui_speech_synthesizer: true, coverage: [main_menu, options, HUD, state_changes, players_in_game, time_based_events]}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-INTERACTABLE-TEXT-ALTERNATIVES: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: interactable_ui_element_exists, required_semantics: {text_alternative_describes_function: true, interaction_input_described_when_control: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-COMPOSITE-CONTROL-ENUMERATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: ui_element_behaves_as_list_tab_radio_checklist_or_combo_box, required_semantics: {enumerate_child_count: true, input_type_narrated: true, current_state_or_value_narrated: true, enumeration_position: end_of_narrated_string}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-NON-TEXT-EQUIVALENT-AUDIO: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: chart_diagram_picture_or_animation_conveys_information, required_semantics: {text_alternative_makes_same_information_available_to_auditory_output: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-GRAPHIC-ALT-PURPOSE-OPERATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: graphic_represents_ui_component_or_operation, required_semantics: {text_alternative_conveys_purpose_and_operation: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-DECORATIVE-NOT-SPOKEN: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: non_text_content_is_purely_decorative_or_visual_formatting_only_or_not_presented_visually, required_semantics: {spoken_by_narration: false}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-FOCUS-ORDER: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: focusable_ui_exists, required_semantics: {primary_order_basis: meaning_or_operation, fallback_if_independent: visual_design_flow}, evidence_requirement_refs: [ACC-EV-FOCUS], gap_ref: ACC-GAP-XAG106}
+  XAG106-LINEAR-MENU-LOOP: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: menu_is_linear_and_focus_moves_only_on_one_axis, required_semantics: {last_to_first_loop: true, first_to_last_loop: true}, evidence_requirement_refs: [ACC-EV-FOCUS], gap_ref: ACC-GAP-XAG106, exceptions: [multidirectional_menu_structure]}
+  XAG106-CANCEL-REPEAT-NARRATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: narration_is_enabled, required_semantics: {player_can_quickly_cancel: true, player_can_quickly_repeat: true, input_types: [controller, keyboard, mouse, touch]}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-FOCUS-INTERRUPTS-NARRATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: focus_moves_before_current_narration_string_finishes, required_semantics: {stop_old_narration_immediately: true, begin_newly_focused_item_narration: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-RATE-PITCH-CONTROLS: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: ui_narration_voice_is_used, required_semantics: {speaking_rate_adjustable: true, pitch_adjustable: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-CONTEXT-CHANGE-INITIATED-NARRATED: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: ui_context_change_occurs, required_semantics: {context_change_player_initiated_where_possible: true, new_context_narrated_after_change: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-INTERACTION-EVENT-NARRATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: user_relevant_component_state_value_description_or_timed_game_state_changes, required_semantics: {notify_via_narration: true, timed_state_acceptable_interval_seconds: [7, 10], must_not_interfere_with_other_narration: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+  XAG106-EXTERNAL-READER-MAIN-LANGUAGE: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: external_screen_reader_is_supported, required_semantics: {programmatically_expose_main_game_language: true}, evidence_requirement_refs: [ACC-EV-EXTERNAL-READER], gap_ref: ACC-GAP-XAG106}
+  XAG106-EXTERNAL-READER-EMBEDDED-LANGUAGE: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: external_screen_reader_is_supported_and_content_language_differs_from_main_game_language, required_semantics: {programmatically_expose_content_language_change: true}, evidence_requirement_refs: [ACC-EV-EXTERNAL-READER], gap_ref: ACC-GAP-XAG106, exceptions: [proper_names, technical_terms, words_of_indeterminate_language, vernacular_foreign_phrases]}
+  XAG106-ALT-TEXT-NO-OBJECT-TYPE-PREFIX: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: external_screen_reader_is_supported_and_alt_text_is_written_for_image_graphic_icon_or_diagram, required_semantics: {do_not_include_object_type_in_description: true}, evidence_requirement_refs: [ACC-EV-EXTERNAL-READER], gap_ref: ACC-GAP-XAG106}
+  XAG106-MARKUP-VALIDITY: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: external_screen_reader_is_supported_and_markup_language_is_used, required_semantics: {complete_start_end_tags: true, valid_nesting: true, no_duplicate_attributes: true, unique_ids: true}, evidence_requirement_refs: [ACC-EV-EXTERNAL-READER], gap_ref: ACC-GAP-XAG106}
+  XAG106-PROGRAMMATIC-UI-SEMANTICS: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: external_screen_reader_is_supported_and_ui_components_exist, required_semantics: {name_and_role_programmatically_determinable: true, user_settable_states_properties_values_programmatically_settable: true, changes_exposed_to_user_agents_and_assistive_tech: true}, evidence_requirement_refs: [ACC-EV-EXTERNAL-READER], gap_ref: ACC-GAP-XAG106}
+  XAG106-TIME-BASED-MEDIA-TEXT-ALT: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: time_based_media_exists, required_semantics: {descriptive_text_alternative_required: true}, evidence_requirement_refs: [ACC-EV-TIME-MEDIA], gap_ref: ACC-GAP-XAG106}
+  XAG106-LIVE-MEDIA-TITLE-SUFFICIENT: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: time_based_media_is_live, required_semantics: {descriptive_title_is_sufficient: true, continuous_real_time_value_narration_not_required: true}, evidence_requirement_refs: [ACC-EV-TIME-MEDIA], gap_ref: ACC-GAP-XAG106}
+  XAG106-TABLE-NARRATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: table_exists, required_semantics: {fully_accessible_to_screen_narration: true}, evidence_requirement_refs: [ACC-EV-TABLE], gap_ref: ACC-GAP-XAG106}
+  XAG106-TABLE-HEADER-ASSOCIATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: table_exists, required_semantics: {row_and_column_headers_programmatically_associated_with_relevant_cells: true, high_level_alt_text_instead_of_cell_semantics: AVOID}, evidence_requirement_refs: [ACC-EV-TABLE], gap_ref: ACC-GAP-XAG106}
+  XAG106-PROPER-NAME-PRONUNCIATION: {source_id: XAG-106, authority_class: BEST_PRACTICE_REQUIRED_IF_APPLICABLE, applicability: CONDITIONAL, trigger: proper_name_technical_term_or_word_of_indeterminate_language_requires_pronunciation_help, required_semantics: {pronunciation_mechanism_provided: true}, evidence_requirement_refs: [ACC-EV-NARRATION], gap_ref: ACC-GAP-XAG106}
+evidence_requirement_catalog_patch:
+  ACC-EV-CONTRAST: {state: NOT_RUN, requires: measured contrast evidence across applicable UI/game contexts}
+  ACC-EV-HIGH-CONTRAST: {state: NOT_RUN, requires: high-contrast mode/configuration and ratio evidence}
+  ACC-EV-PLATFORM-A11Y: {state: NOT_RUN, requires: platform accessibility preference integration evidence where platform API is available}
+  ACC-EV-COLOR-CUES: {state: NOT_RUN, requires: color-channel alternatives/configurability evidence}
+  ACC-EV-STATIC-TEXT: {state: NOT_RUN, requires: asset/UI audit for text embedded in images and logotype exceptions}
+  ACC-EV-MULTISENSORY: {state: NOT_RUN, requires: critical cue sensory-channel matrix plus empirical perception checks}
+  ACC-EV-NARRATION: {state: NOT_RUN, requires: screen narration semantic/output evidence on applicable UI/content}
+  ACC-EV-DIALOGUE: {state: NOT_RUN, requires: dialogue identity/location presentation evidence}
+  ACC-EV-CAPTIONS: {state: NOT_RUN, requires: subtitle/caption coverage, identity, timing, direction, and configuration evidence}
+  ACC-EV-CAPTION-PRESENTATION: {state: NOT_RUN, requires: caption presentation size/scale/spacing/line/background/placement/preview evidence}
+  ACC-EV-CAPTION-UGC: {state: NOT_RUN, requires: capture/recording/UGC caption persistence and viewer-choice evidence}
+  ACC-EV-CAPTION-TRANSCRIPT: {state: NOT_RUN, requires: accessible FMV transcript publication evidence}
+  ACC-EV-SIGN-LANGUAGE: {state: NOT_RUN, requires: scripted-media sign-language interpretation and localization evidence}
+  ACC-EV-AUDIO-CONTROLS: {state: NOT_RUN, requires: independent volume/mute, spatial-audio, and mono option evidence}
+  ACC-EV-AUDIO-PAUSE: {state: NOT_RUN, requires: audio-event pause behavior and exemption evidence}
+  ACC-EV-AUDIO-DUCKING: {state: NOT_RUN, requires: assistive-technology audio detection/ducking option evidence}
+  ACC-EV-FOCUS: {state: NOT_RUN, requires: focus-order and linear-loop behavior evidence}
+  ACC-EV-EXTERNAL-READER: {state: NOT_RUN, requires: external screen-reader language, markup, programmatic semantics, and alt-text evidence}
+  ACC-EV-TIME-MEDIA: {state: NOT_RUN, requires: time-based/live media text-alternative evidence}
+  ACC-EV-TABLE: {state: NOT_RUN, requires: table navigation/header association screen-narration evidence}
+gap_register_patch:
+  ACC-GAP-XAG102: {state: OPEN, reason: 'atomic source mapping added, but product applicability and empirical implementation evidence remain unproven'}
+  ACC-GAP-XAG103: {state: OPEN, reason: 'atomic source mapping added, but product applicability and empirical implementation evidence remain unproven'}
+  ACC-GAP-XAG104: {state: OPEN, reason: 'atomic source mapping added, but product applicability and empirical implementation evidence remain unproven'}
+  ACC-GAP-XAG105: {state: OPEN, reason: 'atomic source mapping added, but product applicability and empirical implementation evidence remain unproven'}
+  ACC-GAP-XAG106: {state: OPEN, reason: 'atomic source mapping added, but product applicability and empirical implementation evidence remain unproven'}
 mechanical_validation:
-  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v2
+  algorithm: ACCESSIBILITY-POLICY-VALIDATOR-v3
   steps:
-  - fetch exact base policy blob and apply overlay patches
-  - for every ATOMICALLY_EXPANDED page require an expected inventory
-  - compare actual clause IDs to expected IDs by exact set and exact count
-  - require unique clause IDs and valid source IDs
-  - require deterministic applicability and a trigger for conditional clauses
-  - require all evidence and gap references to resolve
-  - require exact semantic values declared in atomic_clause_patch
-  - require ACC-DECK-09 in direct Valve compatibility mapping
-  - derive mapping_complete only after all prior checks
+  - apply exact v2 base policy blob then this v3 overlay
+  - require XAG 102-106 source records to bind to the registered first-party URLs/version/observed date
+  - for every ATOMICALLY_EXPANDED page require exact set-and-count equality against expected_source_clause_inventory
+  - reject duplicate, missing, or extra clause IDs
+  - require every clause to have source_id, deterministic applicability, trigger, required_semantics, resolvable evidence_requirement_refs, and resolvable gap_ref
+  - require conditional clauses to carry a non-empty trigger and any source exception to be explicit
+  - require XAG 108-123 to remain GUIDELINE_SUMMARY_ONLY and mapping_complete false
+  - require empirical evidence states for this tranche to remain NOT_RUN until separately produced and independently reviewed
+  - derive aggregate accessibility blocker only after all mapping and empirical predicates; expected current state remains OPEN
   expected_result:
-    expected_atomic_clause_count: 28
-    XAG_101_inventory: PASS
-    XAG_107_inventory: PASS
-    XAG101_text_spacing_semantics: PASS
+    inherited_atomic_clause_count: 28
+    new_atomic_clause_count: 77
+    expected_atomic_clause_count: 105
+    per_page_new_clause_counts: {XAG-102: 12, XAG-103: 8, XAG-104: 29, XAG-105: 5, XAG-106: 23}
+    xag_102_106_inventory: PASS
     reference_integrity: PASS
     applicability_trigger_totality: PASS
-    direct_valve_ACC_DECK_09: PASS
-    summary_only_pages_fail_closed: PASS
+    xag_108_123_summary_only: PASS
+    empirical_accessibility_pass_claimed: false
     mapping_complete: false
     blocker_authority_state: OPEN
   adversarial_fixtures:
-    OMIT_EXPECTED_XAG101_CLAUSE: REJECT_ATOMIC_EXPANSION
-    OMIT_LINE_WIDTH_RESIZE_PERCENT: REJECT_REQUIRED_SEMANTIC_MISMATCH
-    ALTER_LINE_WIDTH_RESIZE_PERCENT: REJECT_REQUIRED_SEMANTIC_MISMATCH
-    OMIT_SPACE_EXCLUSION: REJECT_REQUIRED_SEMANTIC_MISMATCH
-    SET_SPACE_EXCLUSION_FALSE: REJECT_REQUIRED_SEMANTIC_MISMATCH
-    DANGLING_EVIDENCE_REF: REJECT_REFERENCE_INTEGRITY
+    OMIT_EXPECTED_TRANCHE_CLAUSE: REJECT_ATOMIC_EXPANSION
+    ADD_UNREGISTERED_TRANCHE_CLAUSE: REJECT_ATOMIC_EXPANSION
+    DUPLICATE_CLAUSE_ID: REJECT_ATOMIC_EXPANSION
     CONDITIONAL_WITHOUT_TRIGGER: REJECT_APPLICABILITY_TOTALITY
-    SUMMARY_PAGE_FALSELY_ATOMIC_WITHOUT_INVENTORY: REJECT_ATOMIC_EXPANSION
-    OMIT_ACC_DECK_09: REJECT_DIRECT_VALVE_COMPLETENESS
-
+    DANGLING_EVIDENCE_REF: REJECT_REFERENCE_INTEGRITY
+    DANGLING_GAP_REF: REJECT_REFERENCE_INTEGRITY
+    UPGRADE_XAG108_123_WITHOUT_INVENTORY: REJECT_ATOMIC_EXPANSION
+    SET_MAPPING_COMPLETE_TRUE: REJECT_AGGREGATE_STATE
+    CLAIM_EMPIRICAL_PASS_WITH_NOT_RUN_EVIDENCE: REJECT_EVIDENCE_STATE
 freshness:
-  recheck_before: [W2-REV-01, engine_ADR_or_readiness_verification, release_or_accessibility_marketing_claim]
-  reopen_triggers:
-  - Microsoft_XAG_version_or_load_bearing_page_change
-  - Valve_Deck_compatibility_checklist_change
-  - selected_platform_scope_change
-  - feature_trigger_change
-  - release_jurisdiction_or_service_scope_becomes_concrete
+  recheck_before: [fresh independent scoped review, readiness verification, release or accessibility marketing claim]
+  reopen_triggers: [Microsoft XAG version or load-bearing XAG 102-106 implementation-guideline change, selected platform scope change, feature trigger change, empirical accessibility evidence production]
