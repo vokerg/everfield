@@ -15,7 +15,7 @@
 - Source-review terminal: `5296868370`
 - Source-review exact head/work: `024efaa4cc97b5af6e669cf9100b5172a2096bd4` / `ed51563510cee7cd24463a6d1a169ec3f0f2ea3e`
 - Source finding: `W2-REV-ACC19-M01 / MAJOR / EXAMPLE_TO_REQUIREMENT_PROMOTION_AND_FEATURE_EXISTENCE_INFLATION`
-- Source review PR #311 is separate review provenance. Its integration is not a prerequisite for this exact terminal finding and was not touched by this producer.
+- Source review PR #311 was separately squash-integrated as noncanonical review provenance at `main@547034a95abffe4d6a8722bcb42d56236e194097`. That concurrent main advance leaves the immutable policy/report v13 inputs unchanged and does not alter the finding or producer scope.
 
 ## Producer output
 
@@ -69,6 +69,16 @@ Bounded producer self-review: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MIN
 - Review must independently re-read current XAG 120 and attack both feature-existence inflation and accessibility weakening for controls that exist.
 - A clean #313 review may create only separately authorized noncanonical squash-integration eligibility for this exact remediation.
 
+## PR and concurrent-main freeze
+
+- Draft producer PR: `#314`.
+- PR base branch: `main`.
+- PR base observed at creation: `547034a95abffe4d6a8722bcb42d56236e194097`.
+- The concurrent main advance from producer base `65d4eb8144e33d8e247c0dc0a688f6811a4225bb` to `547034a95abffe4d6a8722bcb42d56236e194097` is exactly the squash integration of Issue #308 terminal negative review provenance.
+- Current-main policy/report remain exact v13 input blobs `3dcdaa400ffd43cea390c331f5b4f8ea62750a5c` / `e5f1f491a91499bef96861d2878e4fb5552a207b` after that review-provenance integration.
+- PR #314 recalculated `mergeable: true`, remains `draft: true`, and its changed-file set is exactly the three declared producer files: policy, report, and handoff.
+- Mergeability is compatibility only. Producer status does not grant integration authority; required scoped review #313 remains mandatory.
+
 ## Remaining authority boundary
 
 ```yaml
@@ -90,4 +100,4 @@ No empirical-accessibility successor is eligible. XAG 121–123 remain unaccepte
 
 ## Next transition
 
-Open and verify an exact-head draft producer PR containing only policy v14, report v14, and this handoff, then publish terminal schema-3 `STATUS(REVIEW_READY)` with exact identities and successor #313. The mandatory scoped review must occur before any integration eligibility.
+Publish terminal schema-3 `STATUS(REVIEW_READY)` with exact producer identities, draft PR #314, and successor #313. The mandatory fresh scoped review must occur before any integration eligibility; any eventual integration remains separate and squash-only.
