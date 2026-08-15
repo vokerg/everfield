@@ -1,0 +1,114 @@
+name: W2 engine provider authority intake probe
+
+on:
+  push:
+    branches:
+      - planning/issue-347
+    paths:
+      - .github/workflows/w2-engine-provider-authority-probe.yml
+      - tools/planning/engine_provider_authority_probe.py
+      - docs/planning/wave-2/evidence/provider-authority-input-contract.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-engine-provider-authority-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  presence-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      UNITY_AUTH_MODE: ${{ vars.UNITY_AUTH_MODE }}
+      UNITY_SERVICE_ACCOUNT_ID_PRESENT: ${{ secrets.UNITY_SERVICE_ACCOUNT_ID != '' }}
+      UNITY_SERVICE_ACCOUNT_SECRET_PRESENT: ${{ secrets.UNITY_SERVICE_ACCOUNT_SECRET != '' }}
+      UNITY_LICENSE_SERIAL_PRESENT: ${{ secrets.UNITY_LICENSE_SERIAL != '' }}
+      UNITY_OFFLINE_LICENSE_PRESENT: ${{ secrets.UNITY_OFFLINE_LICENSE_B64 != '' }}
+      UNITY_FLOATING_CONFIG_PRESENT: ${{ secrets.UNITY_FLOATING_CONFIG_B64 != '' }}
+      UNREAL_AUTH_MODE: ${{ vars.UNREAL_AUTH_MODE }}
+      UNREAL_GITHUB_TOKEN_PRESENT: ${{ secrets.UNREAL_GITHUB_TOKEN != '' }}
+      UNREAL_PRESEED_URL_PRESENT: ${{ secrets.UNREAL_5_8_PRESEED_URL != '' }}
+      UNREAL_PRESEED_SHA256_PRESENT: ${{ vars.UNREAL_5_8_PRESEED_SHA256 != '' }}
+    steps:
+      - name: Checkout exact triggering commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Validate probe syntax
+        shell: bash
+        run: python3 -m py_compile tools/planning/engine_provider_authority_probe.py
+
+      - name: Run deterministic fail-closed self-tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/planning/wave-2/evidence/ci/provider-authority
+          python3 tools/planning/engine_provider_authority_probe.py --self-test \
+            --out docs/planning/wave-2/evidence/ci/provider-authority/selftest.json
+
+      - name: Measure configured input presence without reading secret values
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/planning/wave-2/evidence/ci/provider-authority
+          python3 tools/planning/engine_provider_authority_probe.py \
+            --out docs/planning/wave-2/evidence/ci/provider-authority/presence.json
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "runner_os=${RUNNER_OS}"
+            echo "runner_arch=${RUNNER_ARCH}"
+            echo "image_os=${ImageOS:-unknown}"
+            echo "image_version=${ImageVersion:-unknown}"
+            sha256sum tools/planning/engine_provider_authority_probe.py
+            sha256sum docs/planning/wave-2/evidence/provider-authority-input-contract.json
+            sha256sum docs/planning/wave-2/evidence/ci/provider-authority/presence.json
+            sha256sum docs/planning/wave-2/evidence/ci/provider-authority/selftest.json
+          } > docs/planning/wave-2/evidence/ci/provider-authority/run-identity.txt
+
+      - name: Assert presence-only path never grants authority
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('docs/planning/wave-2/evidence/ci/provider-authority/presence.json')
+          data = json.loads(p.read_text())
+          assert data['effective_provider_authority_validated'] is False
+          assert data['five_candidate_empirical_successor_unlocked'] is False
+          assert data['prior_not_run_promoted'] is False
+          assert data['historical_not_run_cells_preserved'] == 50
+          print('presence-only authority boundary: PASS')
+          PY
+
+      - name: Persist non-secret evidence to task branch
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/provider-authority/
+          if git diff --cached --quiet; then
+            echo "No generated evidence delta"
+            exit 0
+          fi
+          git commit -m "[PLAN-v1][W2-ENG-PROVIDER-AUTH-PRESEED-01] Record authority presence run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-347
+
+      - name: Upload immutable non-secret evidence bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-engine-provider-authority-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/provider-authority/
+          if-no-files-found: error
+          retention-days: 30
