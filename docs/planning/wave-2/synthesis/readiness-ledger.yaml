@@ -1,8 +1,26 @@
 schema: implementation_readiness_ledger_v1
-mission_id: W2-SYN-REM-03
-issue: 234
-claim_base_main_sha: c7bc9dbfeae43ea43b1de8215008c37b4d643867
+mission_id: W2-SYN-CONV-01
+issue: 335
+claim_base_main_sha: 597b72b73d5a1e06f38c29edc38994e355694189
 canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+predecessor_candidate:
+  mission_id: W2-SYN-REM-03
+  issue: 234
+  decision_blob_sha: 89e84ce010529edb3cc191e01b0bd584215b8a8d
+  ledger_blob_sha: 5dd99a6a05d53271a1283b1872fa017bc1f14181
+  preservation_rule: UNAFFECTED_PREDECESSOR_VALUES_RETAINED
+recovery_source:
+  mission_id: W1-REC-02
+  issue: 333
+  claim_comment_id: 5301195807
+  terminal_comment_id: 5301203154
+  work_sha: 78c3085dfb589a9459a5139b89c46121734c1fa2
+  head_sha: d72a1041d9deaf4c2a6908e01ba51aaaf7984697
+  recovery_blob_sha: 1ed6cae0d47f523144e57df4b8f7eae06ad6a062
+  handoff_blob_sha: b220d26e1c0d560c66e72fac491da6fd6d65c40f
+  disposition: RECOVERY_PATH_IDENTIFIED
+  recovery_class: MISSING_POST_TERMINAL_CONVERGENCE_TRANSITION
+  secondary_class: TERMINAL_OPEN_RECORDS_CONFUSED_WITH_RUNNABLE_FRONTIER
 authoritative_baseline:
   mission_id: W2-SYN-REM-01
   issue: 199
@@ -33,8 +51,22 @@ source_verifications:
     terminal_comment_id: 5285396137
     result: FAIL
     finding_id: W2-READY-M03
-    report_blob_sha: a6d4a39e5e174e4b9628d755db532eac14481528
     historical_result_preserved: true
+  - mission_id: W2-READY-04
+    issue: 237
+    terminal_comment_id: 5285525243
+    integration_status_comment_id: 5285583377
+    result: PASS
+    blocker_count: 0
+    major_count: 0
+    correction_requiring_minor_count: 0
+    verified_candidate_outcome: BLOCKED
+    w2_ready_m03: RESOLVED
+    w2_ready_m02: RETAINED_SUBSTANTIVELY_RESOLVED
+    production_implementation_ready: false
+    engine_selected: false
+    release_ready: false
+    canonicality: NOT_CANONICAL
 prerequisite_review:
   mission_id: W2-REV-01
   issue: 84
@@ -60,9 +92,46 @@ domain_evidence_review:
   blocker_count: 0
   major_count: 0
   correction_requiring_minor_count: 0
+late_terminal_deltas:
+  engine:
+    mission_id: W2-ENG-03
+    issue: 82
+    terminal_comment_id: 5276916603
+    head_sha: 1575cb3a18c9c7be1776b64c9ec92cc8990a97e0
+    work_sha: 1575cb3a18c9c7be1776b64c9ec92cc8990a97e0
+    disposition: INCONCLUSIVE_ENVIRONMENT_BLOCKED
+    admitted_candidate_count: 5
+    scenario_count_per_candidate: 10
+    not_run_cell_count: 50
+    engine_selected: false
+    lifecycle_classification: EXTERNAL_TRIGGER_REQUIRED
+  accessibility_mapping_review:
+    mission_id: W2-REV-ACC-25
+    issue: 329
+    terminal_comment_id: 5297430151
+    integration_status_comment_id: 5297445862
+    disposition: CLEAN_FOR_EMPIRICAL_ACCESSIBILITY_SUCCESSOR
+    reviewed_policy_v16_blob: 5e3c932dd34ca81945e345eff30860ade540f2b4
+    reviewed_report_v16_blob: c2b60278dc5a4e689756d6a73bcbd5dd7f8acad4
+  accessibility_empirical_evidence:
+    mission_id: W2-EV-ACC-01
+    issue: 331
+    terminal_comment_id: 5297479372
+    head_sha: dd9ffa226ed87952164718d9e73481cc373585ae
+    work_sha: 8c220e55337c80d1193be664788d50c82424852a
+    integrated_main_sha: 597b72b73d5a1e06f38c29edc38994e355694189
+    disposition: EVIDENCE_INCOMPLETE
+    reason: NO_CONCRETE_EXECUTABLE_OR_BUILD_ARTIFACT_AVAILABLE
+    target_build_identity: UNBOUND
+    test_environment_identity: UNBOUND
+    empirical_accessibility_evidence: NOT_RUN
+    empirical_accessibility_pass: false
+    mapping_complete: false
+    successor_issue: NONE_UNTIL_RECOVERY_TRIGGER
+    lifecycle_classification: EXTERNAL_TRIGGER_REQUIRED
 lifecycle:
-  synthesis_state: CORRECTED_CANDIDATE
-  verification_target: W2-READY
+  synthesis_state: POST_WAVE_2_CONVERGENCE_CANDIDATE
+  verification_target: W2-READY-CONV-01
   verification_issue: null
   verification_input_ready: true
   production_implementation_ready: false
@@ -79,18 +148,17 @@ verification_finding_dispositions:
     state: RESOLVED_BY_W2_SYN_REM_02_RETAINED
     resolution: >-
       The scoped core-game evidence dependency, exact resolution predicate, and
-      reviewed evidence lineage remain bound by the accepted Issue #230 delta.
+      reviewed evidence lineage remain bound by the accepted Issue #230 delta
+      and were retained by W2-READY-04 PASS.
   - finding_id: W2-READY-M03
     source_issue: 232
-    state: RESOLVED_BY_W2_SYN_REM_03
-    resolution: >-
-      Every unrelated readiness field is reconstructed from the exact Issue #199
-      baseline; only the accepted scoped game-evidence delta is overlaid.
+    state: RESOLVED_BY_W2_SYN_REM_03_VERIFIED_W2_READY_04
+    verification_comment_id: 5285525243
 review_finding_dispositions:
   - finding_id: W2-REV-M01
     severity: MAJOR
     review_state: OPEN_BOUNDED
-    synthesis_disposition: OPEN_RETAINED
+    synthesis_disposition: OPEN_RETAINED_EXTERNAL_TRIGGER
     blocks:
       - ENGINE_SELECTION
       - PRODUCTION_IMPLEMENTATION
@@ -104,22 +172,27 @@ review_finding_dispositions:
   - finding_id: W2-REV-M02
     severity: MAJOR
     review_state: OPEN_BOUNDED
-    synthesis_disposition: OPEN_RETAINED
+    synthesis_disposition: OPEN_RETAINED_EXTERNAL_TRIGGER
+    mapping_review_component: COMPLETE_CLEAN
+    empirical_component: NOT_RUN
     blocks:
       - PRODUCTION_IMPLEMENTATION
       - ACCESSIBILITY_CLEARANCE
       - RELEASE_CLEARANCE
     resolution_predicate: >-
-      Atomic mapping of all remaining applicable current source clauses plus
-      required empirical accessibility evidence and the required independent
-      authority route.
+      Bind a concrete reproducibly identifiable gameplay build/executable or
+      equivalent same gameplay kernel plus test-environment identity; execute
+      the required empirical accessibility matrix against the exact reviewed
+      v16 mapping; then complete the required independent authority route.
     evidence_refs:
-      - 50e6770cc490ef74c44faa3ae9eba115b4c1eb7a
-      - 1643b7b9cc3f9ba05ec371220f06d1539ed0b8ba
+      - 5e3c932dd34ca81945e345eff30860ade540f2b4
+      - c2b60278dc5a4e689756d6a73bcbd5dd7f8acad4
+      - 8395057977ae8a9d6030cbc2b371b76914fe4fda
+      - dd9ffa226ed87952164718d9e73481cc373585ae
   - finding_id: W2-REV-M03
     severity: MAJOR
     review_state: OPEN_BOUNDED
-    synthesis_disposition: OPEN_RETAINED
+    synthesis_disposition: OPEN_RETAINED_AUTHORITY_AND_EXTERNAL_TRIGGER
     blocks:
       - PRODUCTION_IMPLEMENTATION
       - EVIDENCE_PROVIDER_READINESS
@@ -142,7 +215,9 @@ readiness_entries:
       - W2-ENG-03
     evidence_satisfaction_refs: []
     state: OPEN
+    frontier_classification: EXTERNAL_TRIGGER_REQUIRED
     rationale: 50 required candidate/scenario cells remain NOT_RUN; no comparative engine authority exists.
+    reopen_trigger: CAPABLE_OR_REPRODUCIBLY_PRESEEDED_REAL_TOOLCHAIN_S1_S10_EXECUTION
   - blocker_id: IR-BLOCKER-PLATFORM-SCOPE
     category: PLATFORM
     scope: GLOBAL
@@ -155,7 +230,9 @@ readiness_entries:
     evidence_satisfaction_refs:
       - 9d51099be4d53eff876104f482e3c163d34519e3
     state: OPEN
+    frontier_classification: AUTHORITY_REQUIRED_AT_COMMITMENT_BOUNDARY
     rationale: PLAT-PC-FIRST-R1 is a reversible planning candidate, not final production or release authority.
+    reopen_trigger: SEPARATELY_AUTHORIZED_PRODUCTION_OR_RELEASE_PLATFORM_COMMITMENT
   - blocker_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
     category: ACCESSIBILITY
     scope: GLOBAL
@@ -165,11 +242,16 @@ readiness_entries:
       - RELEASE_CLEARANCE
     source_requirement_refs:
       - W2-REV-M02
-      - W2-REM-ACC-02
+      - W2-REV-ACC-25
+      - W2-EV-ACC-01
     evidence_satisfaction_refs:
-      - 50e6770cc490ef74c44faa3ae9eba115b4c1eb7a
+      - 5e3c932dd34ca81945e345eff30860ade540f2b4
+      - c2b60278dc5a4e689756d6a73bcbd5dd7f8acad4
+      - 8395057977ae8a9d6030cbc2b371b76914fe4fda
     state: OPEN
-    rationale: mapping_complete is false, summary-only source clauses remain, and empirical accessibility PASS is absent.
+    frontier_classification: EXTERNAL_TRIGGER_REQUIRED
+    rationale: Corrected mapping review is clean, but target/environment are UNBOUND and empirical accessibility evidence remains NOT_RUN.
+    reopen_trigger: CONCRETE_REPRODUCIBLY_IDENTIFIABLE_GAMEPLAY_BUILD_OR_EXECUTABLE_PLUS_ENVIRONMENT_IDENTITY
   - blocker_id: IR-BLOCKER-EVIDENCE-FOUNDATION
     category: EVIDENCE
     scope: GLOBAL
@@ -182,7 +264,9 @@ readiness_entries:
     evidence_satisfaction_refs:
       - 9f0c42bb82a1bddd97f028b9ba8e94c791e3705a
     state: OPEN
-    rationale: logical fail-closed contracts are bounded evidence; production-specific provider/control enforcement is unproven.
+    frontier_classification: AUTHORITY_AND_EXTERNAL_TRIGGER_REQUIRED
+    rationale: Logical fail-closed contracts are bounded evidence; production-specific provider/control enforcement is unproven.
+    reopen_trigger: BOUND_PRODUCTION_PROVIDER_PLUS_PROVIDER_SPECIFIC_OPERATIONAL_CONTROL_EVIDENCE
   - blocker_id: IR-BLOCKER-RIGHTS-SCOPED
     category: RIGHTS
     scope: FEATURE_CLASS
@@ -199,7 +283,9 @@ readiness_entries:
       - a23d355c3dd8cb385f893baa199a4c700c885b92
       - f5aa7c65ac610d0a5c57cd869212a998b140b6eb
     state: OPEN
-    rationale: reviewed policy mechanics are fail-closed but do not grant legal clearance, provider permission, or universal content rights.
+    frontier_classification: AUTHORITY_REQUIRED_AT_USE_BOUNDARY
+    rationale: Reviewed policy mechanics are fail-closed but do not grant legal clearance, provider permission, or universal content rights.
+    reopen_trigger: ACTUAL_SCOPED_LEGAL_CLEARANCE_OR_PROVIDER_PERMISSION_WHEN_REQUIRED
   - blocker_id: IR-BLOCKER-GAME-EVIDENCE
     category: PRODUCT
     scope: DOMAIN
@@ -252,10 +338,12 @@ readiness_entries:
       required_domain_evidence_properties: SATISFIED_BY_REVIEWED_LINEAGE
       independent_aggregate_review: SATISFIED_ISSUE_228
       fresh_synthesis_disposition: SATISFIED_ISSUE_230_RETAINED
+      verification_preservation: SATISFIED_W2_READY_04
     state: RESOLVED
+    frontier_classification: NON_RUNNABLE_RESOLVED
     resolution_scope_id: SCOPE-CORE-GAMEPLAY-v1
     resolved_by_issue: 230
-    rationale: Exact Issue #196 predicate is satisfied by the accepted reviewed lineage; resolution is scope-bounded.
+    rationale: Exact Issue #196 predicate remains satisfied by the accepted reviewed lineage; resolution is scope-bounded.
 trust_debt:
   state: OPEN
   mode: DEGRADED_SINGLE_AGENT
@@ -276,8 +364,12 @@ decisions:
     production_commitment: false
     release_commitment: false
   accessibility:
-    state: PARTIAL_BOUNDED_EVIDENCE
+    state: MAPPING_REVIEW_COMPLETE_EMPIRICAL_EVIDENCE_BLOCKED
+    mapping_review_complete: true
     mapping_complete: false
+    target_build_identity: UNBOUND
+    test_environment_identity: UNBOUND
+    empirical_evidence: NOT_RUN
     empirical_pass: false
   rights:
     state: MECHANICALLY_CLOSED_POLICY_FIXTURE
@@ -292,20 +384,52 @@ decisions:
     state: REVIEWED_PREDICATE_SATISFIED
     blocker_state: RESOLVED
     authority: SCOPED_READINESS_EVIDENCE_ONLY
+live_frontier:
+  derivation_rule: SCHEMA3_LIFECYCLE_STATE_NOT_GITHUB_OPEN_STATE
+  internal_ready_after_this_terminal:
+    - mission_id: W2-READY-CONV-01
+      task_class: FRESH_READINESS_VERIFICATION
+      prerequisite: EXACT_W2_SYN_CONV_01_TERMINAL_CANDIDATE
+  external_trigger_required:
+    - W2-REV-M01
+    - W2-REV-M02
+  authority_and_external_trigger_required:
+    - W2-REV-M03
+  authority_required:
+    - IR-BLOCKER-RIGHTS-SCOPED
+    - IR-BLOCKER-PLATFORM-SCOPE
+  non_runnable_terminal_open_issues:
+    - 82
+    - 232
+    - 234
+    - 237
+    - 329
+    - 331
+  no_other_internal_ready_work_claimed: true
 preservation_checks:
   issue_199_unaffected_review_findings_exact: true
   issue_199_unaffected_readiness_entries_exact: true
-  issue_199_unaffected_decisions_exact: true
+  issue_199_unaffected_decisions_exact_except_later_evidence_delta: true
   issue_199_trust_debt_exact: true
   issue_230_game_evidence_delta_retained: true
+  w2_ready_04_pass_preserved: true
+  w2_ready_m03_resolved: true
+  w2_ready_m02_substantive_resolution_retained: true
+  late_accessibility_mapping_review_reconciled: true
+  late_accessibility_evidence_incomplete_reconciled: true
+  engine_inconclusive_terminal_reconciled: true
   game_evidence_rerun: false
+  external_authority_minted: false
 next_transition:
   allowed_state: VERIFICATION_READY
-  target_mission: W2-READY
+  target_mission: W2-READY-CONV-01
   target_issue: null
-  meaning: Exact corrected successor is ready for one fresh independent verification episode only.
+  meaning: Exact convergence candidate is ready for one fresh independent readiness verification episode only.
   does_not_mean:
     - PRODUCTION_IMPLEMENTATION_READY
     - ENGINE_SELECTED
+    - EMPIRICAL_ACCESSIBILITY_PASS
+    - PROVIDER_PRODUCTION_ENFORCEMENT_PROVEN
+    - LEGAL_CLEARANCE
     - RELEASE_READY
     - CANONICAL
