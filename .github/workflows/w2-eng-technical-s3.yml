@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/w2-eng-technical-s3.yml
       - tools/planning/engine_technical_s3_probe.py
+      - tools/planning/engine_technical_s3_defold_remediation.py
   workflow_dispatch:
 
 permissions:
@@ -37,7 +38,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p docs/planning/wave-2/evidence/ci/engine-technical-s3
-          python3 -m py_compile tools/planning/engine_technical_s3_probe.py tools/planning/engine_toolchain_probe.py
+          python3 -m py_compile \
+            tools/planning/engine_technical_s3_probe.py \
+            tools/planning/engine_technical_s3_defold_remediation.py \
+            tools/planning/engine_toolchain_probe.py
           python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
             > docs/planning/wave-2/evidence/ci/engine-technical-s3/harness-validator.json
           {
@@ -49,6 +53,7 @@ jobs:
             echo "image_os=${ImageOS:-unknown}"
             echo "image_version=${ImageVersion:-unknown}"
             sha256sum tools/planning/engine_technical_s3_probe.py
+            sha256sum tools/planning/engine_technical_s3_defold_remediation.py
             sha256sum tools/planning/engine_toolchain_probe.py
             sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
             sha256sum docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
@@ -64,6 +69,15 @@ jobs:
             --bevy-lock docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock \
             --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
             | tee docs/planning/wave-2/evidence/ci/engine-technical-s3/summary.log
+
+      - name: Remediate bounded Defold archive invocation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/planning/engine_technical_s3_defold_remediation.py \
+            --evidence docs/planning/wave-2/evidence/ci/engine-technical-s3/evidence.json \
+            --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            | tee docs/planning/wave-2/evidence/ci/engine-technical-s3/defold-remediation-summary.log
           sha256sum docs/planning/wave-2/evidence/ci/engine-technical-s3/evidence.json \
             | tee docs/planning/wave-2/evidence/ci/engine-technical-s3/evidence.sha256
 
@@ -84,6 +98,8 @@ jobs:
           assert d['partial_candidate_ranking_permitted'] is False
           assert d['engine_selected'] is False
           assert d['integration_authority'] is False
+          assert d['defold_archive_remediation_applied'] is True
+          assert len(d.get('producer_remediation_history', [])) >= 1
           for name in ('Unity','Unreal Engine'):
               assert d['results'][name]['producer_disposition']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'
           print(json.dumps({'validated':True,'provisional_review_pending_s3_pass_candidates':d['provisional_review_pending_s3_pass_candidates']},sort_keys=True))
