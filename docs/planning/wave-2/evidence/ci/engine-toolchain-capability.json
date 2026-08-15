@@ -10,7 +10,7 @@
             "--version"
           ],
           "exit": 0,
-          "seconds": 0.435,
+          "seconds": 0.097,
           "stderr": "",
           "stdout": "cargo 1.97.1 (c980f4866 2026-06-30)\n",
           "timed_out": false
@@ -24,7 +24,7 @@
           "--quiet"
         ],
         "exit": 0,
-        "seconds": 21.623,
+        "seconds": 17.323,
         "stderr": "",
         "stdout": "",
         "timed_out": false
@@ -37,8 +37,8 @@
           "--locked"
         ],
         "exit": 101,
-        "seconds": 2.732,
-        "stderr": "    Updating crates.io index\nerror: cannot create the lock file /tmp/everfield-ci-probe-ye476zgn/bevy-smoke/Cargo.lock because --locked was passed to prevent this\nhelp: to generate the lock file without accessing the network, remove the --locked flag and use --offline instead.\n",
+        "seconds": 0.5,
+        "stderr": "    Updating crates.io index\nerror: cannot create the lock file /tmp/everfield-ci-probe-58xwp3wo/bevy-smoke/Cargo.lock because --locked was passed to prevent this\nhelp: to generate the lock file without accessing the network, remove the --locked flag and use --offline instead.\n",
         "stdout": "",
         "timed_out": false
       },
@@ -50,7 +50,7 @@
           "--locked"
         ],
         "exit": 0,
-        "seconds": 0.103,
+        "seconds": 0.086,
         "stderr": "",
         "stdout": "",
         "timed_out": false
@@ -61,8 +61,8 @@
           "fetch"
         ],
         "exit": 0,
-        "seconds": 1.076,
-        "stderr": "9\n  Downloaded itertools v0.14.0\n  Downloaded ndk v0.9.0\n  Downloaded portable-atomic v1.15.0\n  Downloaded spin v0.10.1\n  Downloaded jni v0.22.4\n  Downloaded walkdir v2.5.0\n  Downloaded same-file v1.0.6\n  Downloaded jni-macros v0.22.4\n  Downloaded crossbeam-utils v0.8.22\n  Downloaded bevy_diagnostic v0.19.1\n  Downloaded proc-macro-crate v3.5.0\n  Downloaded jni-sys-macros v0.4.1\n  Downloaded thiserror v1.0.69\n  Downloaded android-properties v0.2.2\n  Downloaded bevy v0.19.0\n  Downloaded bevy_utils v0.19.1\n  Downloaded indexmap v2.14.0\n  Downloaded hashbrown v0.17.1\n  Downloaded equivalent v1.0.2\n  Downloaded disqualified v1.0.0\n  Downloaded portable-atomic-util v0.2.7\n  Downloaded hashbrown v0.16.1\n  Downloaded downcast-rs v2.0.2\n  Downloaded bevy_app v0.19.1\n  Downloaded bevy_time v0.19.1\n  Downloaded bevy_input v0.19.1\n  Downloaded find-msvc-tools v0.1.11\n  Downloaded jni-sys v0.4.1\n  Downloaded const-fnv1a-hash v1.1.0\n  Downloaded bevy_ptr v0.19.1\n  Downloaded num_enum_derive v0.7.6\n  Downloaded winapi-util v0.1.11\n  Downloaded bytes v1.12.1\n  Downloaded byteorder v1.5.0\n  Downloaded serde_core v1.0.229\n  Downloaded unicode-segmentation v1.13.3\n  Downloaded bevy_derive v0.19.1\n  Downloaded jni-sys v0.3.1\n  Downloaded unicode-ident v1.0.24\n  Downloaded futures-channel v0.3.34\n  Downloaded futures-task v0.3.34\n  Downloaded toml_edit v0.25.13+spec-1.1.0\n  Downloaded bevy_ecs_macro_logic v0.19.1\n  Downloaded bevy_android v0.19.1\n  Downloaded ndk-context v0.1.1\n  Downloaded num-traits v0.2.19\n  Downloaded thiserror-impl v1.0.69\n  Downloaded num_enum v0.7.6\n  Downloaded simdutf8 v0.1.5\n  Downloaded shlex v2.0.1\n  Downloaded atomic-waker v1.1.2\n  Downloaded bevy_macro_utils v0.19.1\n  Downloaded version_check v0.9.5\n  Downloaded cc v1.4.3\n  Downloaded combine v4.6.7\n  Downloaded simd_cesu8 v1.2.0\n  Downloaded android-activity v0.6.1\n  Downloaded ndk-sys v0.6.0+11769913\n  Downloaded futures-core v0.3.34\n  Downloaded unicode-xid v0.2.6\n  Downloaded cfg-if v1.0.4\n  Downloaded hash32 v0.3.1\n  Downloaded assert_type_match v0.1.1\n  Downloaded pin-project-lite v0.2.17\n  Downloaded wasm-bindgen-macro v0.2.127\n  Downloaded variadics_please v1.1.0\n  Downloaded typeid v1.0.3\n  Downloaded concurrent-queue v2.5.0\n  Downloaded crossbeam-queue v0.3.13\n  Downloaded nonmax v0.5.5\n  Downloaded rustc_version v0.4.1\n  Downloaded wasm-bindgen-shared v0.2.127\n  Downloaded stable_deref_trait v1.2.1\n  Downloaded convert_case v0.10.0\n  Downloaded async-task v4.7.1\n  Downloaded autocfg v1.5.1\n  Downloaded fixedbitset v0.5.7\n  Downloaded foldhash v0.2.0\n  Downloaded derive_more v2.1.1\n  Downloaded semver v1.0.28\n  Downloaded web-task v1.1.3\n  Downloaded rustversion v1.0.23\n  Downloaded slab v0.4.12\n  Downloaded futures-lite v2.6.1\n  Downloaded bytemuck_derive v1.12.0\n  Downloaded toml_datetime v1.1.1+spec-1.1.0\n  Downloaded rand_core v0.10.1\n  Downloaded arrayvec v0.7.8\n  Downloaded slotmap v1.1.1\n  Downloaded bevy_ecs_macros v0.19.1\n  Downloaded proc-macro2 v1.0.107\n  Downloaded bevy_transform v0.19.1\n  Downloaded thiserror v2.0.20\n  Downloaded thiserror-impl v2.0.20\n  Downloaded bevy_tasks v0.19.1\n  Downloaded bevy_reflect_derive v0.19.1\n  Downloaded once_cell v1.21.4\n  Downloaded bytemuck v1.25.2\n  Downloaded uuid v1.24.1\n  Downloaded rand v0.10.2\n  Downloaded either v1.17.0\n  Downloaded bitflags v2.13.1\n  Downloaded wasm-bindgen v0.2.127\n  Downloaded heapless v0.9.3\n  Downloaded getrandom v0.4.3\n  Downloaded log v0.4.33\n  Downloaded r-efi v6.0.0\n  Downloaded wasm-bindgen-macro-support v0.2.127\n  Downloaded bumpalo v3.20.3\n  Downloaded js-sys v0.3.104\n  Downloaded rand_distr v0.6.0\n  Downloaded derive_more-impl v2.1.1\n  Downloaded memchr v2.8.3\n  Downloaded libm v0.2.16\n  Downloaded futures-util v0.3.34\n  Downloaded winnow v1.0.4\n  Downloaded bevy_reflect v0.19.1\n  Downloaded bevy_math v0.19.1\n  Downloaded syn v3.0.3\n  Downloaded syn v2.0.119\n  Downloaded bevy_ecs v0.19.1\n  Downloaded glam v0.32.1\n  Downloaded libc v0.2.189\n  Downloaded windows-sys v0.61.2\n",
+        "seconds": 0.77,
+        "stderr": "1.0\n  Downloaded unicode-xid v0.2.6\n  Downloaded rustc_version v0.4.1\n  Downloaded futures-task v0.3.34\n  Downloaded atomic-waker v1.1.2\n  Downloaded convert_case v0.10.0\n  Downloaded bevy_internal v0.19.1\n  Downloaded web-task v1.1.3\n  Downloaded stable_deref_trait v1.2.1\n  Downloaded typeid v1.0.3\n  Downloaded jni-sys v0.4.1\n  Downloaded winapi-util v0.1.11\n  Downloaded jni-sys-macros v0.4.1\n  Downloaded futures-core v0.3.34\n  Downloaded downcast-rs v2.0.2\n  Downloaded nonmax v0.5.5\n  Downloaded wasm-bindgen-macro v0.2.127\n  Downloaded version_check v0.9.5\n  Downloaded wasm-bindgen-shared v0.2.127\n  Downloaded variadics_please v1.1.0\n  Downloaded bevy_macro_utils v0.19.1\n  Downloaded proc-macro-crate v3.5.0\n  Downloaded jni-sys v0.3.1\n  Downloaded ndk-context v0.1.1\n  Downloaded android-properties v0.2.2\n  Downloaded same-file v1.0.6\n  Downloaded bevy_ecs_macros v0.19.1\n  Downloaded foldhash v0.2.0\n  Downloaded thiserror v2.0.20\n  Downloaded quote v1.0.47\n  Downloaded rustversion v1.0.23\n  Downloaded pin-project-lite v0.2.17\n  Downloaded bevy_platform v0.19.1\n  Downloaded thiserror-impl v2.0.20\n  Downloaded crossbeam-queue v0.3.13\n  Downloaded autocfg v1.5.1\n  Downloaded fixedbitset v0.5.7\n  Downloaded concurrent-queue v2.5.0\n  Downloaded bevy_derive v0.19.1\n  Downloaded shlex v2.0.1\n  Downloaded toml_datetime v1.1.1+spec-1.1.0\n  Downloaded slab v0.4.12\n  Downloaded bytemuck_derive v1.12.0\n  Downloaded assert_type_match v0.1.1\n  Downloaded erased-serde v0.4.10\n  Downloaded rand_core v0.10.1\n  Downloaded either v1.17.0\n  Downloaded bevy_ptr v0.19.1\n  Downloaded find-msvc-tools v0.1.11\n  Downloaded bevy_transform v0.19.1\n  Downloaded bevy_tasks v0.19.1\n  Downloaded once_cell v1.21.4\n  Downloaded async-task v4.7.1\n  Downloaded futures-lite v2.6.1\n  Downloaded arrayvec v0.7.8\n  Downloaded jobserver v0.1.35\n  Downloaded num_enum v0.7.6\n  Downloaded num_enum_derive v0.7.6\n  Downloaded thiserror-impl v1.0.69\n  Downloaded walkdir v2.5.0\n  Downloaded simdutf8 v0.1.5\n  Downloaded thiserror v1.0.69\n  Downloaded byteorder v1.5.0\n  Downloaded semver v1.0.28\n  Downloaded futures-channel v0.3.34\n  Downloaded smallvec v1.15.2\n  Downloaded toml_parser v1.1.3+spec-1.1.0\n  Downloaded serde_derive v1.0.229\n  Downloaded unicode-ident v1.0.24\n  Downloaded crossbeam-utils v0.8.22\n  Downloaded bytemuck v1.25.2\n  Downloaded spin v0.10.1\n  Downloaded serde_core v1.0.229\n  Downloaded portable-atomic-util v0.2.7\n  Downloaded bevy_reflect_derive v0.19.1\n  Downloaded bitflags v2.13.1\n  Downloaded bevy_time v0.19.1\n  Downloaded proc-macro2 v1.0.107\n  Downloaded log v0.4.33\n  Downloaded num-traits v0.2.19\n  Downloaded bevy_app v0.19.1\n  Downloaded wasm-bindgen v0.2.127\n  Downloaded toml_edit v0.25.13+spec-1.1.0\n  Downloaded rand_distr v0.6.0\n  Downloaded getrandom v0.4.3\n  Downloaded slotmap v1.1.1\n  Downloaded jni-macros v0.22.4\n  Downloaded uuid v1.24.1\n  Downloaded derive_more v2.1.1\n  Downloaded wasm-bindgen-macro-support v0.2.127\n  Downloaded r-efi v6.0.0\n  Downloaded serde v1.0.229\n  Downloaded derive_more-impl v2.1.1\n  Downloaded rand v0.10.2\n  Downloaded unicode-segmentation v1.13.3\n  Downloaded bumpalo v3.20.3\n  Downloaded indexmap v2.14.0\n  Downloaded js-sys v0.3.104\n  Downloaded heapless v0.9.3\n  Downloaded memchr v2.8.3\n  Downloaded itertools v0.14.0\n  Downloaded hashbrown v0.17.1\n  Downloaded hashbrown v0.16.1\n  Downloaded libm v0.2.16\n  Downloaded futures-util v0.3.34\n  Downloaded winnow v1.0.4\n  Downloaded bevy_input v0.19.1\n  Downloaded bytes v1.12.1\n  Downloaded ndk v0.9.0\n  Downloaded cc v1.4.3\n  Downloaded portable-atomic v1.15.0\n  Downloaded combine v4.6.7\n  Downloaded bevy_math v0.19.1\n  Downloaded bevy_reflect v0.19.1\n  Downloaded syn v3.0.3\n  Downloaded syn v2.0.119\n  Downloaded android-activity v0.6.1\n  Downloaded jni v0.22.4\n  Downloaded simd_cesu8 v1.2.0\n  Downloaded ndk-sys v0.6.0+11769913\n  Downloaded bevy v0.19.0\n  Downloaded bevy_ecs v0.19.1\n  Downloaded glam v0.32.1\n  Downloaded libc v0.2.189\n  Downloaded windows-sys v0.61.2\n",
         "stdout": "",
         "timed_out": false
       },
@@ -74,7 +74,7 @@
             "--version"
           ],
           "exit": 0,
-          "seconds": 0.11,
+          "seconds": 0.697,
           "stderr": "",
           "stdout": "rustc 1.97.1 (8bab26f4f 2026-07-14)\n",
           "timed_out": false
@@ -87,15 +87,15 @@
       "baseline": "1.13.0",
       "bob_version": {
         "cmd": [
-          "/usr/bin/java",
+          "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
           "-jar",
-          "/tmp/everfield-ci-probe-ye476zgn/bob-1.13.0.jar",
+          "/tmp/everfield-ci-probe-58xwp3wo/bob-1.13.0.jar",
           "--version"
         ],
-        "exit": 1,
-        "seconds": 0.179,
-        "stderr": "Error: LinkageError occurred while loading main class com.dynamo.bob.Bob\n\tjava.lang.UnsupportedClassVersionError: com/dynamo/bob/Bob has been compiled by a more recent version of the Java Runtime (class file version 69.0), this version of the Java Runtime only recognizes class file versions up to 61.0\n",
-        "stdout": "",
+        "exit": 0,
+        "seconds": 0.867,
+        "stderr": "",
+        "stdout": "bob.jar version: 1.13.0  sha1: f735c12192bf95684e6ae1ae27c400b8170fc6d8  built: 2026-07-07 11:40:03\n100% Working\n",
         "timed_out": false
       },
       "bytes": 208726976,
@@ -108,31 +108,31 @@
           "--connect-timeout",
           "20",
           "-o",
-          "/tmp/everfield-ci-probe-ye476zgn/bob-1.13.0.jar",
+          "/tmp/everfield-ci-probe-58xwp3wo/bob-1.13.0.jar",
           "https://github.com/defold/defold/releases/download/1.13.0/bob.jar"
         ],
         "exit": 0,
-        "seconds": 1.172,
-        "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n 17  199M   17 34.1M    0     0  86.7M      0  0:00:02 --:--:--  0:00:02 86.7M\n100  199M  100  199M    0     0   171M      0  0:00:01  0:00:01 --:--:--  214M\n",
+        "seconds": 2.363,
+        "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n 40  199M   40 80.0M    0     0  60.8M      0  0:00:03  0:00:01  0:00:02 81.5M\n 95  199M   95  190M    0     0  81.2M      0  0:00:02  0:00:02 --:--:-- 94.6M\n100  199M  100  199M    0     0  84.4M      0  0:00:02  0:00:02 --:--:-- 98.3M\n",
         "stdout": "",
         "timed_out": false
       },
       "java": {
-        "path": "/usr/bin/java",
+        "path": "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
         "probe": {
           "cmd": [
-            "/usr/bin/java",
+            "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
             "-version"
           ],
           "exit": 0,
-          "seconds": 0.975,
-          "stderr": "openjdk version \"17.0.20\" 2026-07-21\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\n",
+          "seconds": 0.087,
+          "stderr": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
           "stdout": "",
           "timed_out": false
         }
       },
-      "reason": "bob_download_or_execution_failed",
-      "status": "FAILED",
+      "reason": "exact_bob_jar_downloaded_and_executed",
+      "status": "CAPABLE",
       "surface": "Java + exact bob.jar",
       "url": "https://github.com/defold/defold/releases/download/1.13.0/bob.jar"
     },
@@ -148,16 +148,16 @@
           "--connect-timeout",
           "20",
           "-o",
-          "/tmp/everfield-ci-probe-ye476zgn/godot-4.7.1.zip",
+          "/tmp/everfield-ci-probe-58xwp3wo/godot-4.7.1.zip",
           "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
         ],
         "exit": 0,
-        "seconds": 0.31,
-        "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n100 72.5M  100 72.5M    0     0   240M      0 --:--:-- --:--:-- --:--:--  290M\n",
+        "seconds": 0.547,
+        "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n100 72.5M  100 72.5M    0     0   134M      0 --:--:-- --:--:-- --:--:--  134M\n",
         "stdout": "",
         "timed_out": false
       },
-      "executable": "/tmp/everfield-ci-probe-ye476zgn/godot/Godot_v4.7.1-stable_linux.x86_64",
+      "executable": "/tmp/everfield-ci-probe-58xwp3wo/godot/Godot_v4.7.1-stable_linux.x86_64",
       "reason": "exact_linux_editor_downloaded_and_headless_process_executed",
       "status": "CAPABLE",
       "surface": "Linux editor/headless executable",
@@ -165,12 +165,12 @@
         "cmd": [
           "/usr/bin/unzip",
           "-q",
-          "/tmp/everfield-ci-probe-ye476zgn/godot-4.7.1.zip",
+          "/tmp/everfield-ci-probe-58xwp3wo/godot-4.7.1.zip",
           "-d",
-          "/tmp/everfield-ci-probe-ye476zgn/godot"
+          "/tmp/everfield-ci-probe-58xwp3wo/godot"
         ],
         "exit": 0,
-        "seconds": 0.968,
+        "seconds": 0.98,
         "stderr": "",
         "stdout": "",
         "timed_out": false
@@ -178,12 +178,12 @@
       "url": "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip",
       "version": {
         "cmd": [
-          "/tmp/everfield-ci-probe-ye476zgn/godot/Godot_v4.7.1-stable_linux.x86_64",
+          "/tmp/everfield-ci-probe-58xwp3wo/godot/Godot_v4.7.1-stable_linux.x86_64",
           "--headless",
           "--version"
         ],
         "exit": 0,
-        "seconds": 0.1,
+        "seconds": 0.047,
         "stderr": "",
         "stdout": "4.7.1.stable.official.a13da4feb\n",
         "timed_out": false
@@ -200,9 +200,9 @@
             "https://unity.com/releases/editor/archive"
           ],
           "exit": 0,
-          "seconds": 8.117,
+          "seconds": 8.161,
           "stderr": "",
-          "stdout": "HTTP/2 200 \ndocument-policy: js-profiling\nx-middleware-rewrite: /en/releases/editor/archive\nvary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding\nx-nextjs-cache: HIT\nx-nextjs-prerender: 1\nx-nextjs-stale-time: 300\nx-powered-by: Next.js\netag: \"ww1682n4v770a7\"\ncontent-type: text/html; charset=utf-8\ncontent-length: 327019\nx-hex-cache-hit: miss\ncache-control: max-age=300, s-maxage=1800\ndate: Sat, 15 Aug 2026 13:24:34 GMT\nset-cookie: NEXT_LOCALE=en; Path=/; SameSite=lax\nset-cookie: x-hex-backend=gcp; Path=/; Expires=Sat, 15 Aug 2026 13:54:34 GMT; Max-Age=1800; SameSite=lax\nset-cookie: x-hex-backend-reset=true; Path=/; Expires=Sun, 16 Aug 2026 13:24:34 GMT; Max-Age=86400\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sat, 15-Aug-2026 13:34:34 GMT; path=/; SameSite=Lax\n\n",
+          "stdout": "HTTP/2 200 \ndocument-policy: js-profiling\nx-middleware-rewrite: /en/releases/editor/archive\nvary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding\nx-nextjs-cache: HIT\nx-nextjs-prerender: 1\nx-nextjs-stale-time: 300\nx-powered-by: Next.js\netag: \"ww1682n4v770a7\"\ncontent-type: text/html; charset=utf-8\ncontent-length: 327019\nx-hex-cache-hit: miss\ncache-control: max-age=300, s-maxage=1800\ndate: Sat, 15 Aug 2026 13:27:15 GMT\nset-cookie: NEXT_LOCALE=en; Path=/; SameSite=lax\nset-cookie: x-hex-backend=gcp; Path=/; Expires=Sat, 15 Aug 2026 13:57:15 GMT; Max-Age=1800; SameSite=lax\nset-cookie: x-hex-backend-reset=true; Path=/; Expires=Sun, 16 Aug 2026 13:27:15 GMT; Max-Age=86400\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sat, 15-Aug-2026 13:37:15 GMT; path=/; SameSite=Lax\n\n",
           "timed_out": false
         },
         "url": "https://unity.com/releases/editor/archive"
@@ -219,9 +219,9 @@
             "https://hub.unity3d.com/"
           ],
           "exit": 22,
-          "seconds": 19.851,
+          "seconds": 19.358,
           "stderr": "curl: (22) The requested URL returned error: 404\n",
-          "stdout": "HTTP/1.1 301 Moved Permanently\nServer: nginx/1.31.2\nDate: Sat, 15 Aug 2026 13:24:34 GMT\nContent-Type: text/html\nContent-Length: 169\nConnection: keep-alive\nLocation: https://unity.com/unity-hub\n\nHTTP/2 308 \ndocument-policy: js-profiling\nlocation: /download\nrefresh: 0;url=/download\nx-hex-cache-hit: miss\ndate: Sat, 15 Aug 2026 13:24:45 GMT\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sat, 15-Aug-2026 13:34:45 GMT; path=/; SameSite=Lax\n\nHTTP/2 307 \ndocument-policy: js-profiling\nlocation: https://api.unity.com/v1/oauth2/authorize?client_id=cms_unity&response_type=code&redirect_uri=https%3A%2F%2Fcloud.unity.com%2Forganizations%2Fdefault%2Fonboarding%2Fpost-download%3Flocale%3Den&locale=en_us&is_reg=true\nx-hex-cache-hit: miss\ndate: Sat, 15 Aug 2026 13:24:54 GMT\nset-cookie: REDIRECT_PATH=%2Fdownload; Path=/\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sat, 15-Aug-2026 13:34:54 GMT; path=/; SameSite=Lax\n\nHTTP/2 302 \nlocation: https://login.unity.com/en/conversations/a3e44d75-5ccd-4e0a-af9d-defa33f06447003f\ncache-control: no-cache, no-store, must-revalidate\npragma: no-cache\nexpires: 0\nsc-request-id: c9bc7b3d-36d9-4c4a-9cb4-662bc6e6fdd2\ncontent-length: 0\nvia: 1.1 google\ndate: Sat, 15 Aug 2026 13:24:53 GMT\nalt-svc: h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000\ngoogle-accounts-check-oauth-login: true\nstrict-transport-security: max-age=31536000; includeSubDomains; preload;\n\nHTTP/2 404 \nstrict-transport-security: max-age=31536000; includeSubDomains\nx-content-type-options: nosniff\nreferrer-policy: strict-origin-when-cross-origin\nx-current-path: /en/conversations/a3e44d75-5ccd-4e0a-af9d-defa33f06447003f\nvary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding\ncache-control: private, no-cache, no-store, max-age=0, must-revalidate\ncontent-type: text/html; charset=utf-8\ndate: Sat, 15 Aug 2026 13:24:54 GMT\nvia: 1.1 google\nalt-svc: h3=\":443\"; ma=2592000\n\n",
+          "stdout": "HTTP/1.1 301 Moved Permanently\nServer: nginx/1.31.2\nDate: Sat, 15 Aug 2026 13:27:16 GMT\nContent-Type: text/html\nContent-Length: 169\nConnection: keep-alive\nLocation: https://unity.com/unity-hub\n\nHTTP/2 308 \ndocument-policy: js-profiling\nlocation: /download\nrefresh: 0;url=/download\nx-hex-cache-hit: miss\ndate: Sat, 15 Aug 2026 13:27:26 GMT\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sat, 15-Aug-2026 13:37:26 GMT; path=/; SameSite=Lax\n\nHTTP/2 307 \ndocument-policy: js-profiling\nlocation: https://api.unity.com/v1/oauth2/authorize?client_id=cms_unity&response_type=code&redirect_uri=https%3A%2F%2Fcloud.unity.com%2Forganizations%2Fdefault%2Fonboarding%2Fpost-download%3Flocale%3Den&locale=en_us&is_reg=true\nx-hex-cache-hit: miss\ndate: Sat, 15 Aug 2026 13:27:34 GMT\nset-cookie: REDIRECT_PATH=%2Fdownload; Path=/\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sat, 15-Aug-2026 13:37:34 GMT; path=/; SameSite=Lax\n\nHTTP/2 302 \nlocation: https://login.unity.com/en/conversations/95a1d951-f1b3-4035-9da2-0e7640858504019f\ncache-control: no-cache, no-store, must-revalidate\npragma: no-cache\nexpires: 0\nsc-request-id: 4d75cd25-dab2-400c-97d3-bf0636c8d9dd\ncontent-length: 0\nvia: 1.1 google\ndate: Sat, 15 Aug 2026 13:27:33 GMT\nalt-svc: h3=\":443\"; ma=2592000\ngoogle-accounts-check-oauth-login: true\nstrict-transport-security: max-age=31536000; includeSubDomains; preload;\n\nHTTP/2 404 \nstrict-transport-security: max-age=31536000; includeSubDomains\nx-content-type-options: nosniff\nreferrer-policy: strict-origin-when-cross-origin\nx-current-path: /en/conversations/95a1d951-f1b3-4035-9da2-0e7640858504019f\nvary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding\ncache-control: private, no-cache, no-store, max-age=0, must-revalidate\ncontent-type: text/html; charset=utf-8\ndate: Sat, 15 Aug 2026 13:27:34 GMT\nvia: 1.1 google\nalt-svc: h3=\":443\"; ma=2592000\n\n",
           "timed_out": false
         },
         "url": "https://hub.unity3d.com/"
@@ -244,9 +244,9 @@
             "https://www.unrealengine.com/"
           ],
           "exit": 22,
-          "seconds": 0.09,
+          "seconds": 0.114,
           "stderr": "curl: (22) The requested URL returned error: 403\n",
-          "stdout": "HTTP/2 403 \ndate: Sat, 15 Aug 2026 13:24:54 GMT\ncontent-type: text/html; charset=UTF-8\ncontent-length: 25173\naccept-ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA\ncf-mitigated: challenge\nx-frame-options: SAMEORIGIN\nserver: cloudflare\ncritical-ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA\ncross-origin-embedder-policy: require-corp\ncross-origin-opener-policy: same-origin\ncross-origin-resource-policy: same-origin\norigin-agent-cluster: ?1\npermissions-policy: accelerometer=(),camera=(),clipboard-read=(),clipboard-write=(),geolocation=(),gyroscope=(),hid=(),magnetometer=(),microphone=(),payment=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),sync-xhr=(),usb=(),xr-spatial-tracking=*\nreferrer-policy: same-origin\nserver-timing: chlray;desc=\"a2b885b078abb83d\"\nx-content-type-options: nosniff\nstrict-transport-security: max-age=15552000; includeSubDomains; preload\nset-cookie: __cf_bm=0lQ8Ug.JCwNn_XxiyzuqY5mhxWWvm0OKiK3RmjqIt58-1786800294.477033-1.0.1.1-wEJ.ukX0xDMkWUKV.VtZ0wsTuCD5rMuXqewomn7tEl9152lt8X1aNMCZ3yIKzDwwmn61_Qv4HcDS8urdKELxuXru83FIj7sc_H3NwbQr.HztiDYEYn2cOAvhLy953uOC; HttpOnly; SameSite=None; Secure; Path=/; Domain=unrealengine.com; Expires=Sat, 15 Aug 2026 13:54:54 GMT\ncf-ray: a2b885b078abb83d-IAD\nalt-svc: h3=\":443\"; ma=86400\n\n",
+          "stdout": "HTTP/2 403 \ndate: Sat, 15 Aug 2026 13:27:35 GMT\ncontent-type: text/html; charset=UTF-8\ncontent-length: 25176\naccept-ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA\ncf-mitigated: challenge\nx-frame-options: SAMEORIGIN\nserver: cloudflare\ncritical-ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA\ncross-origin-embedder-policy: require-corp\ncross-origin-opener-policy: same-origin\ncross-origin-resource-policy: same-origin\norigin-agent-cluster: ?1\npermissions-policy: accelerometer=(),camera=(),clipboard-read=(),clipboard-write=(),geolocation=(),gyroscope=(),hid=(),magnetometer=(),microphone=(),payment=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),sync-xhr=(),usb=(),xr-spatial-tracking=*\nreferrer-policy: same-origin\nserver-timing: chlray;desc=\"a2b8899bc883996a\"\nx-content-type-options: nosniff\nstrict-transport-security: max-age=15552000; includeSubDomains; preload\nset-cookie: __cf_bm=jMeyR06xOKYwzuVC8e1GxvgjueQcX9QgL7PQNDlGO6s-1786800455.0101955-1.0.1.1-_pJ3KmqzY14wkSxhmBiAbCzCVh50zEodHcIj2jtt7NDEOgYbbGSmijqYYfy9CfssDPypJk6ftdvvmvFzBq21kNAacrxBR8gsknngtBzS6Ofyoc3EBjjvwAhYEXUTB4Sr; HttpOnly; SameSite=None; Secure; Path=/; Domain=unrealengine.com; Expires=Sat, 15 Aug 2026 13:57:35 GMT\ncf-ray: a2b8899bc883996a-LAX\nalt-svc: h3=\":443\"; ma=86400\n\n",
           "timed_out": false
         },
         "url": "https://www.unrealengine.com/"
@@ -263,9 +263,9 @@
             "https://github.com/EpicGames/UnrealEngine"
           ],
           "exit": 22,
-          "seconds": 0.172,
+          "seconds": 0.309,
           "stderr": "curl: (22) The requested URL returned error: 404\n",
-          "stdout": "ithub-production-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com *.rel.tunnels.api.visualstudio.com wss://*.rel.tunnels.api.visualstudio.com github.githubassets.com objects-origin.githubusercontent.com copilot-proxy.githubusercontent.com proxy.individual.githubcopilot.com proxy.business.githubcopilot.com proxy.enterprise.githubcopilot.com *.actions.githubusercontent.com wss://*.actions.githubusercontent.com productionresultssa0.blob.core.windows.net productionresultssa1.blob.core.windows.net productionresultssa2.blob.core.windows.net productionresultssa3.blob.core.windows.net productionresultssa4.blob.core.windows.net productionresultssa5.blob.core.windows.net productionresultssa6.blob.core.windows.net productionresultssa7.blob.core.windows.net productionresultssa8.blob.core.windows.net productionresultssa9.blob.core.windows.net productionresultssa10.blob.core.windows.net productionresultssa11.blob.core.windows.net productionresultssa12.blob.core.windows.net productionresultssa13.blob.core.windows.net productionresultssa14.blob.core.windows.net productionresultssa15.blob.core.windows.net productionresultssa16.blob.core.windows.net productionresultssa17.blob.core.windows.net productionresultssa18.blob.core.windows.net productionresultssa19.blob.core.windows.net github-production-repository-image-32fea6.s3.amazonaws.com github-production-release-asset-2e65be.s3.amazonaws.com insights.github.com wss://alive.github.com wss://alive-staging.github.com api.githubcopilot.com api.individual.githubcopilot.com api.business.githubcopilot.com api.enterprise.githubcopilot.com wss://production-copilot-host.webpubsub.azure.com; font-src github.githubassets.com; form-action 'self' github.com gist.github.com copilot-workspace.githubnext.com objects-origin.githubusercontent.com; frame-ancestors 'none'; frame-src viewscreen.githubusercontent.com notebooks.githubusercontent.com; img-src 'self' data: blob: github.githubassets.com media.githubusercontent.com camo.githubusercontent.com identicons.github.com avatars.githubusercontent.com private-avatars.githubusercontent.com github-cloud.s3.amazonaws.com objects.githubusercontent.com release-assets.githubusercontent.com secured-user-images.githubusercontent.com user-images.githubusercontent.com private-user-images.githubusercontent.com opengraph.githubassets.com repository-images.githubusercontent.com marketplace-screenshots.githubusercontent.com copilotprodattachments.blob.core.windows.net/github-production-copilot-attachments/ github-production-user-asset-6210df.s3.amazonaws.com customer-stories-feed.github.com spotlights-feed.github.com explore-feed.github.com objects-origin.githubusercontent.com *.githubusercontent.com; manifest-src 'self'; media-src github.com user-images.githubusercontent.com secured-user-images.githubusercontent.com private-user-images.githubusercontent.com github-production-user-asset-6210df.s3.amazonaws.com gist.github.com github.githubassets.com; script-src github.githubassets.com; style-src 'unsafe-inline' github.githubassets.com; upgrade-insecure-requests; worker-src github.githubassets.com github.com/assets-cdn/worker/ github.com/assets/ gist.github.com/assets-cdn/worker/\nserver: github.com\nset-cookie: _gh_sess=O7IJKrXCZXQMXp010rva0V%2BQr8G4zVOsZuQTl2BAQuCGQSItsRlMT3KZy%2F9oE%2FH3TanP1Aw1BPM73VvT7lk%2FxtbbP9qrO0AT9P4J6y7Qs9LPyleyB4AxlT2IKw2b1EmVVtqkJPa7Grl8RhOKmEc9YE0QXhrlDTIYCzeynn0BG18rL6OOxvqszwfLvDlnlHGOEWkAmM1tI08fnfylx7QEYwd1YAGnsMwVfGwvm2EVqh3jIbMo4keNkw3qsrq7nm0ruYK0uEKPF1FDzQ595U%2BwvQ%3D%3D--wu8ipYiYaEE8oHic--HaqtaOqu0LLYkETDiVl9fQ%3D%3D; path=/; HttpOnly; secure; SameSite=Lax\nset-cookie: _octo=GH1.1.701609631.1786800294; expires=Sun, 15 Aug 2027 13:24:54 GMT; domain=.github.com; path=/; secure; SameSite=Lax\nset-cookie: logged_in=no; expires=Sun, 15 Aug 2027 13:24:54 GMT; domain=.github.com; path=/; HttpOnly; secure; SameSite=Lax\nx-github-request-id: 5C10:1C1B08:C4B713:10ADF7A:6A8068A6\nx-github-edge-region: iad\n\n",
+          "stdout": "duction-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com *.rel.tunnels.api.visualstudio.com wss://*.rel.tunnels.api.visualstudio.com github.githubassets.com objects-origin.githubusercontent.com copilot-proxy.githubusercontent.com proxy.individual.githubcopilot.com proxy.business.githubcopilot.com proxy.enterprise.githubcopilot.com *.actions.githubusercontent.com wss://*.actions.githubusercontent.com productionresultssa0.blob.core.windows.net productionresultssa1.blob.core.windows.net productionresultssa2.blob.core.windows.net productionresultssa3.blob.core.windows.net productionresultssa4.blob.core.windows.net productionresultssa5.blob.core.windows.net productionresultssa6.blob.core.windows.net productionresultssa7.blob.core.windows.net productionresultssa8.blob.core.windows.net productionresultssa9.blob.core.windows.net productionresultssa10.blob.core.windows.net productionresultssa11.blob.core.windows.net productionresultssa12.blob.core.windows.net productionresultssa13.blob.core.windows.net productionresultssa14.blob.core.windows.net productionresultssa15.blob.core.windows.net productionresultssa16.blob.core.windows.net productionresultssa17.blob.core.windows.net productionresultssa18.blob.core.windows.net productionresultssa19.blob.core.windows.net github-production-repository-image-32fea6.s3.amazonaws.com github-production-release-asset-2e65be.s3.amazonaws.com insights.github.com wss://alive.github.com wss://alive-staging.github.com api.githubcopilot.com api.individual.githubcopilot.com api.business.githubcopilot.com api.enterprise.githubcopilot.com wss://production-copilot-host.webpubsub.azure.com; font-src github.githubassets.com; form-action 'self' github.com gist.github.com copilot-workspace.githubnext.com objects-origin.githubusercontent.com; frame-ancestors 'none'; frame-src viewscreen.githubusercontent.com notebooks.githubusercontent.com; img-src 'self' data: blob: github.githubassets.com media.githubusercontent.com camo.githubusercontent.com identicons.github.com avatars.githubusercontent.com private-avatars.githubusercontent.com github-cloud.s3.amazonaws.com objects.githubusercontent.com release-assets.githubusercontent.com secured-user-images.githubusercontent.com user-images.githubusercontent.com private-user-images.githubusercontent.com opengraph.githubassets.com repository-images.githubusercontent.com marketplace-screenshots.githubusercontent.com copilotprodattachments.blob.core.windows.net/github-production-copilot-attachments/ github-production-user-asset-6210df.s3.amazonaws.com customer-stories-feed.github.com spotlights-feed.github.com explore-feed.github.com objects-origin.githubusercontent.com *.githubusercontent.com; manifest-src 'self'; media-src github.com user-images.githubusercontent.com secured-user-images.githubusercontent.com private-user-images.githubusercontent.com github-production-user-asset-6210df.s3.amazonaws.com gist.github.com github.githubassets.com; script-src github.githubassets.com; style-src 'unsafe-inline' github.githubassets.com; upgrade-insecure-requests; worker-src github.githubassets.com github.com/assets-cdn/worker/ github.com/assets/ gist.github.com/assets-cdn/worker/\nserver: github.com\nset-cookie: _gh_sess=1blevBYjbt%2Fco2mwmMmPkUDNd563wu2wk7c6JTzpS7Rmb96NVJbgLJ%2FEz9Vt5lsY%2BdNc%2BVYiUzX%2F0yN%2BgAaqSbv21YIWy7N8Wpq7xBi1DwJbv7L6vUrlJ7DSJxV7DQjoXD5vSmrx7ReCPisBacxUUtCydfy85yYGZ2yCVNN6M2qjx24pl4NOfnjVCM%2FMSunoR11ZMoU3RJ4Bpcf4DdhdZlkaYCUb4Ptl1CM9qECH46rGEdge9QVd%2Fwck1ZElFK7rtChZILNyMlcUoOT%2BOGYopw%3D%3D--PeuZoFkKaqN%2Bp1aC--e5YcuHE5gNyLdN1FdgGdTQ%3D%3D; path=/; HttpOnly; secure; SameSite=Lax\nset-cookie: _octo=GH1.1.1175579734.1786800455; expires=Sun, 15 Aug 2027 13:27:35 GMT; domain=.github.com; path=/; secure; SameSite=Lax\nset-cookie: logged_in=no; expires=Sun, 15 Aug 2027 13:27:35 GMT; domain=.github.com; path=/; HttpOnly; secure; SameSite=Lax\nx-github-request-id: E480:21952:548A47:6DB0A0:6A806947\nx-github-edge-region: iad\n\n",
           "timed_out": false
         },
         "url": "https://github.com/EpicGames/UnrealEngine"
@@ -283,9 +283,9 @@
         "nproc && lscpu | sed -n '1,12p'"
       ],
       "exit": 0,
-      "seconds": 0.103,
+      "seconds": 0.076,
       "stderr": "",
-      "stdout": "4\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\n",
+      "stdout": "4\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              INTEL(R) XEON(R) PLATINUM 8573C\nCPU family:                              6\nModel:                                   207\nThread(s) per core:                      2\nCore(s) per socket:                      2\n",
       "timed_out": false
     },
     "curl": {
@@ -296,7 +296,7 @@
           "--version"
         ],
         "exit": 0,
-        "seconds": 0.008,
+        "seconds": 0.007,
         "stderr": "",
         "stdout": "curl 8.5.0 (x86_64-pc-linux-gnu) libcurl/8.5.0 OpenSSL/3.0.13 zlib/1.3 brotli/1.1.0 zstd/1.5.5 libidn2/2.3.7 libpsl/0.21.2 (+libidn2/2.3.7) libssh/0.10.6/openssl/zlib nghttp2/1.59.0 librtmp/2.3 OpenLDAP/2.6.10\nRelease-Date: 2023-12-06, security patched: 8.5.0-2ubuntu10.11\nProtocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp\nFeatures: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd\n",
         "timed_out": false
@@ -309,7 +309,7 @@
         "."
       ],
       "exit": 0,
-      "seconds": 0.003,
+      "seconds": 0.002,
       "stderr": "",
       "stdout": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/root       145G   58G   87G  40% /\n",
       "timed_out": false
@@ -339,9 +339,9 @@
         "grep -E 'MemTotal|MemAvailable' /proc/meminfo"
       ],
       "exit": 0,
-      "seconds": 0.165,
+      "seconds": 0.157,
       "stderr": "",
-      "stdout": "MemTotal:       16373452 kB\nMemAvailable:   14895168 kB\n",
+      "stdout": "MemTotal:       16372436 kB\nMemAvailable:   15350600 kB\n",
       "timed_out": false
     },
     "python3": {
@@ -380,7 +380,7 @@
           "--help"
         ],
         "exit": 0,
-        "seconds": 0.01,
+        "seconds": 0.004,
         "stderr": "",
         "stdout": "Usage: xvfb-run [OPTION ...] COMMAND\nRun COMMAND (usually an X client) in a virtual X server environment.\nOptions:\n-a        --auto-servernum          try to get a free server number, starting at\n                                    --server-num\n-e FILE   --error-file=FILE         file used to store xauth errors and Xvfb\n                                    output (default: /dev/null)\n-f FILE   --auth-file=FILE          file used to store auth cookie\n                                    (default: ./.Xauthority)\n-h        --help                    display this usage message and exit\n-n NUM    --server-num=NUM          server number to use (default: 99)\n-l        --listen-tcp              enable TCP port listening in the X server\n-p PROTO  --xauth-protocol=PROTO    X authority protocol name to use\n                                    (default: xauth command's default)\n-s ARGS   --server-args=ARGS        arguments (other than server number and\n                                    \"-nolisten tcp\") to pass to the Xvfb server\n                                    (default: \"-screen 0 1280x1024x24\")\n",
         "timed_out": false
@@ -403,8 +403,8 @@
   ],
   "runner": {
     "github_run_attempt": "1",
-    "github_run_id": "31887099444",
-    "github_sha": "6441b5bc67527888a72e0926c35987b27ad7a9c5",
+    "github_run_id": "31887219066",
+    "github_sha": "2517a5b62f760f916080a152d5f74269c2f65f47",
     "image_os": "ubuntu24",
     "image_version": "20260810.271.1",
     "machine": "x86_64",
@@ -419,7 +419,7 @@
   "source_main_sha": "92204cb2e58c792ef4199fe3562ca2192096f5c0",
   "status_summary": {
     "Bevy": "CAPABLE_WITH_PRESEED",
-    "Defold": "FAILED",
+    "Defold": "CAPABLE",
     "Godot": "CAPABLE",
     "Unity": "BLOCKED_BY_SPECIFIC_EXTERNAL_AUTHORITY",
     "Unreal Engine": "BLOCKED_BY_SPECIFIC_EXTERNAL_AUTHORITY"
