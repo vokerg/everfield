@@ -26,6 +26,12 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Provision exact Defold-compatible Java
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+
       - name: Record runner and probe code identity
         shell: bash
         run: |
@@ -39,6 +45,8 @@ jobs:
             echo "runner_arch=${RUNNER_ARCH}"
             echo "image_os=${ImageOS:-unknown}"
             echo "image_version=${ImageVersion:-unknown}"
+            echo "setup_java_action=cf277c60eb25467037889841efdb72551f06f6c3"
+            java -version 2>&1
             sha256sum tools/planning/engine_toolchain_probe.py
             sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
           } | tee docs/planning/wave-2/evidence/ci/engine-toolchain-run-identity.txt
