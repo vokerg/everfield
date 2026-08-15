@@ -1,0 +1,64 @@
+{
+  "both_input_sets_present": false,
+  "canonical_program_blob": "e3120ec203c4156328770aa86c12fbb7187966dc",
+  "effective_provider_authority_validated": false,
+  "engine_source_issue": 82,
+  "engine_source_terminal_comment": 5276916603,
+  "five_candidate_empirical_successor_unlocked": false,
+  "historical_not_run_cells_preserved": 50,
+  "mission_id": "W2-ENG-PROVIDER-AUTH-PRESEED-01",
+  "overall_state": "AUTHORITY_REQUIRED_EXACT",
+  "prior_not_run_promoted": false,
+  "providers": {
+    "Unity": {
+      "account_authentication_equals_editor_license": false,
+      "credential_values_read": false,
+      "effective_authorization_validated": false,
+      "frozen_editor_baseline": "6000.5.6f1",
+      "missing_predicates": [
+        "UNITY_AUTH_MODE must be one of: service_account_serial, offline_file, floating"
+      ],
+      "mode": "UNSET_OR_INVALID",
+      "presence": {
+        "floating_config": false,
+        "license_serial": false,
+        "offline_license_file": false,
+        "service_account_id": false,
+        "service_account_secret": false
+      },
+      "provider": "Unity",
+      "state": "AUTHORITY_REQUIRED"
+    },
+    "Unreal Engine": {
+      "credential_values_read": false,
+      "effective_authorization_validated": false,
+      "frozen_engine_baseline": "5.8",
+      "missing_predicates": [
+        "UNREAL_AUTH_MODE must be one of: github_token, preseed"
+      ],
+      "mode": "UNSET_OR_INVALID",
+      "presence": {
+        "github_token": false,
+        "preseed_sha256": false,
+        "preseed_url": false
+      },
+      "provider": "Unreal Engine",
+      "repository_github_token_cross_repo_entitlement_assumed": false,
+      "state": "AUTHORITY_REQUIRED"
+    }
+  },
+  "runner": {
+    "github_run_attempt": "1",
+    "github_run_id": "31888759105",
+    "github_sha": "7e98635c6a28a9ebbb388035ee7631777c682be4",
+    "image_os": "ubuntu24",
+    "image_version": "20260810.271.1",
+    "machine": "x86_64",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39"
+  },
+  "schema": "W2-ENG-PROVIDER-AUTHORITY-INTAKE-v1",
+  "secret_values_accepted_by_probe": false,
+  "source_issue": 347,
+  "source_main_sha": "92204cb2e58c792ef4199fe3562ca2192096f5c0",
+  "workflow_success_is_not_authority": true
+}

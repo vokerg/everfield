@@ -1,0 +1,11 @@
+trigger_sha=7e98635c6a28a9ebbb388035ee7631777c682be4
+run_id=31888759105
+run_attempt=1
+runner_os=Linux
+runner_arch=X64
+image_os=ubuntu24
+image_version=20260810.271.1
+064056e32d7fc4904014480a1486f98de2b64d52cf24b3905be32845e3cea21d  tools/planning/engine_provider_authority_probe.py
+41c16b2f252842fd69b7cff9a3a5af0b4ec0abdc078643f5f1d0d8bf04d8d56a  docs/planning/wave-2/evidence/provider-authority-input-contract.json
+2e7beabdfb5097db9153a75b2d71e03d7385f24ff740528be0a42c78473ad6d9  docs/planning/wave-2/evidence/ci/provider-authority/presence.json
+1f09e9d1d959694bc0c695bcb12e62ad1c71eaa012b274063eb9a162ef3f87b4  docs/planning/wave-2/evidence/ci/provider-authority/selftest.json
