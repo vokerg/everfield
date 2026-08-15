@@ -1,0 +1,12 @@
+{
+  "cases": {
+    "both_present_still_unvalidated": true,
+    "empty_is_exact_authority_required": true,
+    "empty_never_unlocks": true,
+    "one_provider_never_unlocks": true,
+    "partial_unity_rejected": true,
+    "presence_never_becomes_authority": true
+  },
+  "pass": true,
+  "schema": "W2-ENG-PROVIDER-AUTHORITY-SELFTEST-v1"
+}
