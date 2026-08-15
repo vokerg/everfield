@@ -1,0 +1,88 @@
+name: W2 CI engine toolchain capability probe
+
+on:
+  push:
+    branches:
+      - planning/issue-339
+    paths:
+      - .github/workflows/w2-ci-engine-toolchain-probe.yml
+      - tools/planning/engine_toolchain_probe.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-ci-enable-01-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  capability-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact triggering commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Record runner and probe code identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/planning/wave-2/evidence/ci
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "runner_os=${RUNNER_OS}"
+            echo "runner_arch=${RUNNER_ARCH}"
+            echo "image_os=${ImageOS:-unknown}"
+            echo "image_version=${ImageVersion:-unknown}"
+            sha256sum tools/planning/engine_toolchain_probe.py
+            sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+          } | tee docs/planning/wave-2/evidence/ci/engine-toolchain-run-identity.txt
+
+      - name: Validate probe syntax
+        shell: bash
+        run: python3 -m py_compile tools/planning/engine_toolchain_probe.py
+
+      - name: Re-run reviewed harness validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
+            > docs/planning/wave-2/evidence/ci/engine-harness-validator-ci.json
+
+      - name: Execute bounded toolchain capability probes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/planning/engine_toolchain_probe.py \
+            --out docs/planning/wave-2/evidence/ci/engine-toolchain-capability.json \
+            | tee docs/planning/wave-2/evidence/ci/engine-toolchain-probe-summary.log
+          sha256sum docs/planning/wave-2/evidence/ci/engine-toolchain-capability.json \
+            | tee docs/planning/wave-2/evidence/ci/engine-toolchain-capability.sha256
+
+      - name: Persist exact run evidence on task branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/
+          if git diff --cached --quiet; then
+            echo "No generated evidence delta"
+            exit 0
+          fi
+          git commit -m "[PLAN-v1][W2-CI-ENABLE-01] Record CI capability probe run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-339
+
+      - name: Upload immutable run bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-ci-enable-01-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/
+          if-no-files-found: error
+          retention-days: 30
