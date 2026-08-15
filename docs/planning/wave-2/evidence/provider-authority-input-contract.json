@@ -1,0 +1,51 @@
+{
+  "schema": "W2-ENG-PROVIDER-AUTHORITY-CONTRACT-v1",
+  "mission_id": "W2-ENG-PROVIDER-AUTH-PRESEED-01",
+  "authority_boundary": {
+    "credential_values_may_be_recorded": false,
+    "presence_is_authorization": false,
+    "workflow_success_is_authorization": false,
+    "reduced_candidate_empirical_comparison_allowed": false,
+    "historical_not_run_cells_promotable": false
+  },
+  "unity": {
+    "baseline": "6000.5.6f1",
+    "mode_variable": "UNITY_AUTH_MODE",
+    "allowed_modes": {
+      "service_account_serial": {
+        "secret_presence_required": [
+          "UNITY_SERVICE_ACCOUNT_ID",
+          "UNITY_SERVICE_ACCOUNT_SECRET",
+          "UNITY_LICENSE_SERIAL"
+        ],
+        "semantics": "service-account authentication plus separate serial license material; neither presence nor authentication alone proves editor license authorization"
+      },
+      "offline_file": {
+        "secret_presence_required": ["UNITY_OFFLINE_LICENSE_B64"],
+        "semantics": "lawfully supplied offline license material; presence requires later effective license validation"
+      },
+      "floating": {
+        "secret_presence_required": ["UNITY_FLOATING_CONFIG_B64"],
+        "semantics": "lawfully supplied floating-license client configuration; presence requires later reachable-server/license validation"
+      }
+    },
+    "effective_validation_required_before_empirical_unlock": true
+  },
+  "unreal_engine": {
+    "baseline": "5.8",
+    "mode_variable": "UNREAL_AUTH_MODE",
+    "allowed_modes": {
+      "github_token": {
+        "secret_presence_required": ["UNREAL_GITHUB_TOKEN"],
+        "semantics": "credential must later prove effective authorized access to EpicGames/UnrealEngine exact 5.8 identity; current-repository GITHUB_TOKEN is not assumed sufficient"
+      },
+      "preseed": {
+        "secret_presence_required": ["UNREAL_5_8_PRESEED_URL"],
+        "nonsecret_presence_required": ["UNREAL_5_8_PRESEED_SHA256"],
+        "semantics": "lawfully supplied exact preseed location plus cryptographic expected identity; presence requires later retrieval/version validation"
+      }
+    },
+    "effective_validation_required_before_empirical_unlock": true
+  },
+  "overall_unlock_rule": "Only a separately reviewed effective-validation path may unlock one fresh five-candidate W2-ENG empirical episode after both provider inputs are actually validated. This presence-only contract can never unlock it."
+}
