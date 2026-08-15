@@ -1,0 +1,1 @@
+{"cases": {"artifact_substitution_rejected": true, "authority_unexpected_failed_rejected": true, "baseline_allowed": true, "bevy_lock_substitution_rejected": true, "public_failed_rejected": true}, "pass": true, "schema": "W2-CI-CAPABILITY-POLICY-SELFTEST-v1"}

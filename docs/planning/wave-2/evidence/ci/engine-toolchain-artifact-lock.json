@@ -1,0 +1,25 @@
+{
+  "bevy_lock": {
+    "path": "docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock",
+    "sha256": "fd7e1276ff5c8cde22d98c0932f70eb39383d9b60ac2d15f11d921dfa71218b0"
+  },
+  "entries": {
+    "defold_bob_1.13.0": {
+      "digest_source": "OBSERVED_RUN_TOFU_LOCK",
+      "limitation": "No authoritative vendor digest was observed from the public GitHub release metadata; this exact run content identity is retained for subsequent replay, not represented as vendor-signed identity.",
+      "sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+      "url": "https://github.com/defold/defold/releases/download/1.13.0/bob.jar",
+      "version": "1.13.0"
+    },
+    "godot_4.7.1_linux_x86_64_zip": {
+      "digest_source": "OBSERVED_RUN_TOFU_LOCK",
+      "limitation": "No authoritative vendor digest was observed from the public GitHub release metadata; this exact run content identity is retained for subsequent replay, not represented as vendor-signed identity.",
+      "sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+      "url": "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip",
+      "version": "4.7.1-stable"
+    }
+  },
+  "mission_id": "W2-CI-REM-01",
+  "schema": "W2-CI-ENGINE-ARTIFACT-LOCK-v1",
+  "updated_by_github_run_id": "31888041342"
+}
