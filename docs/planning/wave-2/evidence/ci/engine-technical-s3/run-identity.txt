@@ -1,11 +1,12 @@
-trigger_sha=485f5259ad4fcc93755dd2d773c9441f33ac5640
-run_id=31895462621
+trigger_sha=a8023054415fb941ff6ee743ee28387baaf5ace3
+run_id=31895624493
 run_attempt=1
 runner_os=Linux
 runner_arch=X64
 image_os=ubuntu24
 image_version=20260810.271.1
 d972a657654db6104d801d544feb3b7a4d0fb73c984d85585f17073685aa3534  tools/planning/engine_technical_s3_probe.py
+a010734081aa8d4a2962712fd092a40a0ba64c1c9e3fa343283f9e3d413b8820  tools/planning/engine_technical_s3_defold_remediation.py
 bf7de805a0bb941055466c4972d0f405b14f19f7e8d7196c9db07ab568fc5eac  tools/planning/engine_toolchain_probe.py
 9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea  docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
 fd7e1276ff5c8cde22d98c0932f70eb39383d9b60ac2d15f11d921dfa71218b0  docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
