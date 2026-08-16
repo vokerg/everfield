@@ -205,13 +205,13 @@ def copy_input(ws,inject): (pathlib.Path(ws)/'input.save').write_text(fixture_v1
 def bevy(root,lock,tool,v):
     if tool.get('status') not in ('CAPABLE','CAPABLE_WITH_PRESEED'): return {'candidate':'Bevy','producer_disposition':'NOT_RUN_TOOLCHAIN_UNAVAILABLE','toolchain':tool}
     p=root/'bevy-s4'; (p/'src').mkdir(parents=True); shutil.copy2(lock,p/'Cargo.lock')
-    (p/'Cargo.toml').write_text("[package]\nname='everfield_bevy_s4'\nversion='0.0.0'\nedition='2024'\n[dependencies]\nbevy = { version = '=0.19.0', default-features = false }\n")
+    (p/'Cargo.toml').write_text("[package]\nname='everfield_bevy_probe'\nversion='0.0.0'\nedition='2024'\n[dependencies]\nbevy = { version = '=0.19.0', default-features = false }\n")
     (p/'src/main.rs').write_text(BEVY); cargo=(tool.get('cargo') or {}).get('path') or shutil.which('cargo')
-    build=run([str(cargo),'build','--locked','--quiet'],cwd=p,timeout=900) if cargo else None; exe=p/'target/debug/everfield_bevy_s4'
+    build=run([str(cargo),'build','--locked','--quiet'],cwd=p,timeout=900) if cargo else None; exe=p/'target/debug/everfield_bevy_probe'
     attempts=[]
     if ok(build) and exe.exists():
         for label,mode in [('N1','NORMAL'),('N2','NORMAL'),('FI1','INJECT')]:
-            ws=root/'runs/bevy'/label; ws.mkdir(parents=True); x=ws/'everfield_bevy_s4'; shutil.copy2(exe,x); x.chmod(x.stat().st_mode|stat.S_IXUSR); copy_input(ws,mode=='INJECT')
+            ws=root/'runs/bevy'/label; ws.mkdir(parents=True); x=ws/'everfield_bevy_probe'; shutil.copy2(exe,x); x.chmod(x.stat().st_mode|stat.S_IXUSR); copy_input(ws,mode=='INJECT')
             rr=run([str(x)],cwd=ws,env={'EVERFIELD_S4_MODE':mode},timeout=120); attempts.append(attempt_record('Bevy',label,mode,ws,rr,host_semantics(ws,mode)))
     f=formalize('Bevy',attempts,v) if len(attempts)==3 else None
     good=bool(f and f['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True})
