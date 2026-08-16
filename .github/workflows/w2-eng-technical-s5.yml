@@ -7,6 +7,8 @@ on:
     paths:
       - .github/workflows/w2-eng-technical-s5.yml
       - tools/planning/engine_technical_s5_probe.py
+      - tools/planning/engine_technical_s5_entry.py
+      - tools/planning/engine_technical_s5_verify.py
   workflow_dispatch:
 
 permissions:
@@ -40,6 +42,8 @@ jobs:
           mkdir -p "$out"
           python3 -m py_compile \
             tools/planning/engine_technical_s5_probe.py \
+            tools/planning/engine_technical_s5_entry.py \
+            tools/planning/engine_technical_s5_verify.py \
             tools/planning/engine_toolchain_probe.py \
             docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
           python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py > "$out/harness-validator.json"
@@ -58,7 +62,12 @@ jobs:
             echo "s4_review_disposition=PASS_BOUNDED_REMEDIATED_S4_V5_ENVELOPE"
             echo "s4_review_publication=b0b87a4ca05f7f21595bb2303978cb7dd0d5791e"
             echo "s4_remediation_publication=6f9e56f1d822ed2e2b18fa10a2bf29927efebe3e"
+            echo "predecessor_s5_run=31959088675"
+            echo "predecessor_s5_artifact=9266757869"
+            echo "predecessor_s5_defect=BEVY_RETAINED_LOCK_ROOT_PACKAGE_IDENTITY_MISMATCH"
             sha256sum tools/planning/engine_technical_s5_probe.py
+            sha256sum tools/planning/engine_technical_s5_entry.py
+            sha256sum tools/planning/engine_technical_s5_verify.py
             sha256sum tools/planning/engine_toolchain_probe.py
             sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
             sha256sum docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
@@ -70,7 +79,7 @@ jobs:
         run: |
           set -euo pipefail
           out=docs/planning/wave-2/evidence/ci/engine-technical-s5
-          python3 tools/planning/engine_technical_s5_probe.py \
+          python3 tools/planning/engine_technical_s5_entry.py \
             --out "$out/evidence.json" \
             --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
             --toolchain-probe tools/planning/engine_toolchain_probe.py \
@@ -78,6 +87,18 @@ jobs:
             --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
             | tee "$out/summary.log"
           sha256sum "$out/evidence.json" | tee "$out/evidence.sha256"
+
+      - name: Independently verify retained S5 semantics and bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s5
+          python3 tools/planning/engine_technical_s5_verify.py \
+            --evidence "$out/evidence.json" \
+            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
+            --out "$out/independent-verification.json" \
+            | tee "$out/independent-verification.log"
+          sha256sum "$out/independent-verification.json" | tee "$out/independent-verification.sha256"
 
       - name: Enforce S5 evidence envelope
         shell: bash
@@ -87,6 +108,7 @@ jobs:
           import json
           p='docs/planning/wave-2/evidence/ci/engine-technical-s5/evidence.json'
           d=json.load(open(p))
+          iv=json.load(open('docs/planning/wave-2/evidence/ci/engine-technical-s5/independent-verification.json'))
           assert d['schema']=='W2-ENG-TECHNICAL-S5-v1'
           assert d['mission_id']=='W2-ENG-TECH-S5-01'
           assert d['scenario_id']=='S5'
@@ -110,6 +132,10 @@ jobs:
           assert d['integration_authority'] is False
           assert d['engine_selected'] is False
           assert d['implementation_readiness'] is False
+          assert iv['schema']=='W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v1'
+          assert iv['evidence_run_identity']==d['run_identity']
+          assert iv['provisional_candidates']==d['provisional_candidates']
+          assert iv['all_provisional_verified'] is True
           for name in d['provisional_candidates']:
               x=d['results'][name]
               assert x['disposition']=='PROVISIONAL_S5_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW'
@@ -118,6 +144,9 @@ jobs:
               assert x['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}
               assert x['trusted_representation_ok'] is True
               assert all(x['negative_selftests'].values())
+              assert iv['candidate_verification'][name]['ok'] is True
+              assert iv['candidate_verification'][name]['recomputed_aggregate']==x['aggregate']
+              assert all(iv['negative_attacks'][name].values())
               raws=x['raw_attempts']
               assert [a['record']['label'] for a in raws]==['N1','N2','FI1']
               assert [a['record']['direction'] for a in raws]==['A_THEN_B','B_THEN_A','A_THEN_B']
@@ -130,7 +159,7 @@ jobs:
               assert fi['resolution']=={'state_choice':'branch-a/ACTIVE','ui_choice':'branch-b/Volume'}
               assert fi['generated_metadata']['collision_required'] is False
               assert fi['generated_metadata']['relevant_to_represented_edit_surface'] is False
-          print(json.dumps({'validated':True,'provisional_candidates':d['provisional_candidates']},sort_keys=True))
+          print(json.dumps({'validated':True,'provisional_candidates':d['provisional_candidates'],'independent_verification':True},sort_keys=True))
           PY
 
       - name: Persist exact S5 evidence
