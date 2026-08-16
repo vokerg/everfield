@@ -224,6 +224,50 @@ def editor_path_from_install(data: Any, version: str) -> str | None:
     return None
 
 
+def unity_auth_status_authenticated(data: Any) -> bool:
+    """Require an explicit positive structured auth marker; ambiguity fails closed."""
+    positive = False
+    negative = False
+    boolean_keys = {"authenticated", "isauthenticated", "loggedin", "isloggedin", "signedin", "issignedin"}
+    positive_states = {"authenticated", "loggedin", "signedin"}
+    negative_states = {"unauthenticated", "notauthenticated", "loggedout", "signedout"}
+
+    def visit(node: Any) -> None:
+        nonlocal positive, negative
+        if isinstance(node, dict):
+            for key, value in node.items():
+                normalized_key = re.sub(r"[^a-z0-9]", "", str(key).lower())
+                if normalized_key in boolean_keys and isinstance(value, bool):
+                    if value:
+                        positive = True
+                    else:
+                        negative = True
+                elif normalized_key in {"status", "state", "authstatus", "authenticationstatus"} and isinstance(value, str):
+                    normalized_value = re.sub(r"[^a-z0-9]", "", value.lower())
+                    if normalized_value in positive_states:
+                        positive = True
+                    elif normalized_value in negative_states:
+                        negative = True
+                visit(value)
+        elif isinstance(node, list):
+            for value in node:
+                visit(value)
+
+    visit(data)
+    return positive and not negative
+
+
+def unity_service_account_env(account_id: str, account_secret: str) -> dict[str, str]:
+    """Use Unity CLI's documented unattended service-account environment path."""
+    return {
+        "UNITY_SERVICE_ACCOUNT_ID": account_id,
+        "UNITY_SERVICE_ACCOUNT_SECRET": account_secret,
+        "UNITY_NON_INTERACTIVE": "1",
+        "UNITY_FORMAT": "json",
+        "UNITY_NO_BANNER": "1",
+    }
+
+
 def validate_unity() -> dict[str, Any]:
     account_id = os.getenv("UNITY_SERVICE_ACCOUNT_ID", "")
     account_secret = os.getenv("UNITY_SERVICE_ACCOUNT_SECRET", "")
@@ -235,6 +279,7 @@ def validate_unity() -> dict[str, Any]:
         "baseline": version,
         "state": "NOT_CONFIGURED" if not present else "CONFIGURED_UNVALIDATED",
         "authentication_validated": False,
+        "authentication_stage": "NOT_CONFIGURED" if not present else "SERVICE_ACCOUNT_ENV_CONFIGURED",
         "license_validated": False,
         "editor_installed": False,
         "editor_executed": False,
@@ -248,21 +293,45 @@ def validate_unity() -> dict[str, Any]:
     if not present:
         base["blocker"] = "UNITY_SERVICE_ACCOUNT_ID_AND_SECRET_NOT_CONFIGURED"
         return base
+
+    auth_env = unity_service_account_env(account_id, account_secret)
+    # Unity CLI supports unattended service-account authentication by reading
+    # UNITY_SERVICE_ACCOUNT_ID / UNITY_SERVICE_ACCOUNT_SECRET and generating
+    # its bearer automatically. Credentials never enter argv or stdin.
     auth = run(
-        [unity_cli, "auth", "login", "--client-id", account_id, "--secret-from-stdin", "--non-interactive", "--format", "json"],
-        input_text=account_secret,
+        [unity_cli, "auth", "login"],
         timeout=90,
         secrets=[account_id, account_secret],
+        env=auth_env,
     )
-    auth_status = run([unity_cli, "auth", "status", "--non-interactive", "--format", "json"], timeout=30, secrets=[account_id, account_secret])
-    base["authentication_validated"] = ok(auth) and bool(json_from(auth_status))
+    auth_status = run(
+        [unity_cli, "auth", "status"],
+        timeout=30,
+        secrets=[account_id, account_secret],
+        env=auth_env,
+    )
+    auth_status_data = json_from(auth_status)
+    explicit_status = unity_auth_status_authenticated(auth_status_data)
+    base["authentication_validated"] = ok(auth) and ok(auth_status) and explicit_status
+    base["authentication_stage"] = "AUTHENTICATED_SERVICE_ACCOUNT" if base["authentication_validated"] else (
+        "LOGIN_PROCESS_FAILED" if not ok(auth) else (
+            "STATUS_PROCESS_FAILED" if not ok(auth_status) else "STATUS_NOT_EXPLICITLY_AUTHENTICATED"
+        )
+    )
     base["authentication_process"] = {k: auth[k] for k in ("exit", "timed_out", "seconds")}
     base["authentication_status_process"] = {k: auth_status[k] for k in ("exit", "timed_out", "seconds")}
+    base["authentication_status_explicit_positive"] = explicit_status
     if not base["authentication_validated"]:
-        base["state"] = classify_failure(auth)
+        base["state"] = classify_failure(auth if not ok(auth) else auth_status)
         base["blocker"] = "UNITY_SERVICE_ACCOUNT_AUTHENTICATION_FAILED"
         return base
-    license_status = run([unity_cli, "license", "status", "--format", "json", "--non-interactive"], timeout=60, secrets=[account_id, account_secret])
+
+    license_status = run(
+        [unity_cli, "license", "status"],
+        timeout=60,
+        secrets=[account_id, account_secret],
+        env=auth_env,
+    )
     license_data = json_from(license_status)
     base["license_process"] = {k: license_status[k] for k in ("exit", "timed_out", "seconds")}
     base["license_validated"] = bool(isinstance(license_data, dict) and license_data.get("data", {}).get("active") is True)
@@ -270,8 +339,18 @@ def validate_unity() -> dict[str, Any]:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "UNITY_PERSONAL_LICENSE_CANNOT_BE_ACTIVATED_BY_SERVICE_ACCOUNT_ON_EPHEMERAL_CI"
         return base
-    install = run([unity_cli, "install", version, "--architecture", "x86_64", "--accept-eula", "--yes", "--non-interactive", "--format", "json"], timeout=1800)
-    installed = run([unity_cli, "editors", "--installed", "--format", "json", "--non-interactive"], timeout=60)
+    install = run(
+        [unity_cli, "install", version, "--architecture", "x86_64", "--accept-eula", "--yes"],
+        timeout=1800,
+        secrets=[account_id, account_secret],
+        env=auth_env,
+    )
+    installed = run(
+        [unity_cli, "editors", "--installed"],
+        timeout=60,
+        secrets=[account_id, account_secret],
+        env=auth_env,
+    )
     installed_data = json_from(installed)
     base["editor_install_process"] = {k: install[k] for k in ("exit", "timed_out", "seconds")}
     editor_path = editor_path_from_install(installed_data, version)
@@ -727,6 +806,21 @@ def self_test() -> dict[str, Any]:
         redacted = redact("token=unit-test-secret", ["unit-test-secret"])
         cases["redaction_removes_fixture_secret"] = "unit-test-secret" not in redacted
         cases["commercial_authority_stays_false"] = one["commercial_license_authority"] is False
+
+        cases["unity_auth_explicit_logged_in_true"] = unity_auth_status_authenticated({"data": {"loggedIn": True}})
+        cases["unity_auth_explicit_authenticated_true"] = unity_auth_status_authenticated({"authenticated": True})
+        cases["unity_auth_positive_state_string"] = unity_auth_status_authenticated({"data": {"status": "authenticated"}})
+        cases["unity_auth_explicit_false_rejected"] = not unity_auth_status_authenticated({"data": {"loggedIn": False}})
+        cases["unity_auth_ambiguous_nonempty_json_rejected"] = not unity_auth_status_authenticated({"data": {"user": "present-but-no-auth-state"}})
+        cases["unity_auth_conflicting_markers_rejected"] = not unity_auth_status_authenticated({"loggedIn": True, "data": {"authenticated": False}})
+        unity_env = unity_service_account_env("fixture-id", "fixture-secret")
+        cases["unity_service_account_env_exact"] = unity_env == {
+            "UNITY_SERVICE_ACCOUNT_ID": "fixture-id",
+            "UNITY_SERVICE_ACCOUNT_SECRET": "fixture-secret",
+            "UNITY_NON_INTERACTIVE": "1",
+            "UNITY_FORMAT": "json",
+            "UNITY_NO_BANNER": "1",
+        }
 
         exact = 'Bearer realm="https://ghcr.io/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
         exact_challenge, exact_checks = _ghcr_challenge_details(exact)
