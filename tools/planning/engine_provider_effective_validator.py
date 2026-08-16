@@ -224,39 +224,6 @@ def editor_path_from_install(data: Any, version: str) -> str | None:
     return None
 
 
-def unity_auth_status_authenticated(data: Any) -> bool:
-    """Require an explicit positive structured auth marker; ambiguity fails closed."""
-    positive = False
-    negative = False
-    boolean_keys = {"authenticated", "isauthenticated", "loggedin", "isloggedin", "signedin", "issignedin"}
-    positive_states = {"authenticated", "loggedin", "signedin"}
-    negative_states = {"unauthenticated", "notauthenticated", "loggedout", "signedout"}
-
-    def visit(node: Any) -> None:
-        nonlocal positive, negative
-        if isinstance(node, dict):
-            for key, value in node.items():
-                normalized_key = re.sub(r"[^a-z0-9]", "", str(key).lower())
-                if normalized_key in boolean_keys and isinstance(value, bool):
-                    if value:
-                        positive = True
-                    else:
-                        negative = True
-                elif normalized_key in {"status", "state", "authstatus", "authenticationstatus"} and isinstance(value, str):
-                    normalized_value = re.sub(r"[^a-z0-9]", "", value.lower())
-                    if normalized_value in positive_states:
-                        positive = True
-                    elif normalized_value in negative_states:
-                        negative = True
-                visit(value)
-        elif isinstance(node, list):
-            for value in node:
-                visit(value)
-
-    visit(data)
-    return positive and not negative
-
-
 def unity_service_account_env(account_id: str, account_secret: str) -> dict[str, str]:
     """Use Unity CLI's documented unattended service-account environment path."""
     return {
@@ -266,6 +233,19 @@ def unity_service_account_env(account_id: str, account_secret: str) -> dict[str,
         "UNITY_FORMAT": "json",
         "UNITY_NO_BANNER": "1",
     }
+
+
+def unity_license_status_envelope(data: Any) -> tuple[bool, bool | None]:
+    """Require an explicit structured license-status envelope; ambiguity fails closed."""
+    if not isinstance(data, dict):
+        return False, None
+    payload = data.get("data")
+    if not isinstance(payload, dict):
+        return False, None
+    active = payload.get("active")
+    if not isinstance(active, bool):
+        return False, None
+    return True, active
 
 
 def validate_unity() -> dict[str, Any]:
@@ -295,37 +275,9 @@ def validate_unity() -> dict[str, Any]:
         return base
 
     auth_env = unity_service_account_env(account_id, account_secret)
-    # Unity CLI supports unattended service-account authentication by reading
-    # UNITY_SERVICE_ACCOUNT_ID / UNITY_SERVICE_ACCOUNT_SECRET and generating
-    # its bearer automatically. Credentials never enter argv or stdin.
-    auth = run(
-        [unity_cli, "auth", "login"],
-        timeout=90,
-        secrets=[account_id, account_secret],
-        env=auth_env,
-    )
-    auth_status = run(
-        [unity_cli, "auth", "status"],
-        timeout=30,
-        secrets=[account_id, account_secret],
-        env=auth_env,
-    )
-    auth_status_data = json_from(auth_status)
-    explicit_status = unity_auth_status_authenticated(auth_status_data)
-    base["authentication_validated"] = ok(auth) and ok(auth_status) and explicit_status
-    base["authentication_stage"] = "AUTHENTICATED_SERVICE_ACCOUNT" if base["authentication_validated"] else (
-        "LOGIN_PROCESS_FAILED" if not ok(auth) else (
-            "STATUS_PROCESS_FAILED" if not ok(auth_status) else "STATUS_NOT_EXPLICITLY_AUTHENTICATED"
-        )
-    )
-    base["authentication_process"] = {k: auth[k] for k in ("exit", "timed_out", "seconds")}
-    base["authentication_status_process"] = {k: auth_status[k] for k in ("exit", "timed_out", "seconds")}
-    base["authentication_status_explicit_positive"] = explicit_status
-    if not base["authentication_validated"]:
-        base["state"] = classify_failure(auth if not ok(auth) else auth_status)
-        base["blocker"] = "UNITY_SERVICE_ACCOUNT_AUTHENTICATION_FAILED"
-        return base
-
+    # In service-account mode Unity CLI automatically generates the bearer
+    # from UNITY_SERVICE_ACCOUNT_ID / UNITY_SERVICE_ACCOUNT_SECRET for
+    # authenticated unattended commands. Do not invoke browser/session login.
     license_status = run(
         [unity_cli, "license", "status"],
         timeout=60,
@@ -333,12 +285,24 @@ def validate_unity() -> dict[str, Any]:
         env=auth_env,
     )
     license_data = json_from(license_status)
+    envelope_valid, license_active = unity_license_status_envelope(license_data)
     base["license_process"] = {k: license_status[k] for k in ("exit", "timed_out", "seconds")}
-    base["license_validated"] = bool(isinstance(license_data, dict) and license_data.get("data", {}).get("active") is True)
+    base["license_status_envelope_valid"] = envelope_valid
+    base["authentication_validated"] = ok(license_status) and envelope_valid
+    base["authentication_stage"] = "AUTHENTICATED_SERVICE_ACCOUNT_COMMAND" if base["authentication_validated"] else (
+        "LICENSE_STATUS_PROCESS_FAILED" if not ok(license_status) else "LICENSE_STATUS_RESPONSE_INVALID"
+    )
+    if not base["authentication_validated"]:
+        base["state"] = classify_failure(license_status)
+        base["blocker"] = "UNITY_SERVICE_ACCOUNT_AUTHENTICATION_FAILED"
+        return base
+
+    base["license_validated"] = license_active is True
     if not base["license_validated"]:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
-        base["blocker"] = "UNITY_PERSONAL_LICENSE_CANNOT_BE_ACTIVATED_BY_SERVICE_ACCOUNT_ON_EPHEMERAL_CI"
+        base["blocker"] = "UNITY_LICENSE_STATUS_NOT_ACTIVE"
         return base
+
     install = run(
         [unity_cli, "install", version, "--architecture", "x86_64", "--accept-eula", "--yes"],
         timeout=1800,
@@ -807,12 +771,16 @@ def self_test() -> dict[str, Any]:
         cases["redaction_removes_fixture_secret"] = "unit-test-secret" not in redacted
         cases["commercial_authority_stays_false"] = one["commercial_license_authority"] is False
 
-        cases["unity_auth_explicit_logged_in_true"] = unity_auth_status_authenticated({"data": {"loggedIn": True}})
-        cases["unity_auth_explicit_authenticated_true"] = unity_auth_status_authenticated({"authenticated": True})
-        cases["unity_auth_positive_state_string"] = unity_auth_status_authenticated({"data": {"status": "authenticated"}})
-        cases["unity_auth_explicit_false_rejected"] = not unity_auth_status_authenticated({"data": {"loggedIn": False}})
-        cases["unity_auth_ambiguous_nonempty_json_rejected"] = not unity_auth_status_authenticated({"data": {"user": "present-but-no-auth-state"}})
-        cases["unity_auth_conflicting_markers_rejected"] = not unity_auth_status_authenticated({"loggedIn": True, "data": {"authenticated": False}})
+        active_ok, active_value = unity_license_status_envelope({"data": {"active": True}})
+        inactive_ok, inactive_value = unity_license_status_envelope({"data": {"active": False}})
+        missing_ok, _ = unity_license_status_envelope({"data": {}})
+        nonbool_ok, _ = unity_license_status_envelope({"data": {"active": "true"}})
+        ambiguous_ok, _ = unity_license_status_envelope({"active": True})
+        cases["unity_license_active_envelope_valid"] = active_ok and active_value is True
+        cases["unity_license_inactive_envelope_valid"] = inactive_ok and inactive_value is False
+        cases["unity_license_missing_active_rejected"] = not missing_ok
+        cases["unity_license_nonboolean_active_rejected"] = not nonbool_ok
+        cases["unity_license_ambiguous_envelope_rejected"] = not ambiguous_ok
         unity_env = unity_service_account_env("fixture-id", "fixture-secret")
         cases["unity_service_account_env_exact"] = unity_env == {
             "UNITY_SERVICE_ACCOUNT_ID": "fixture-id",
