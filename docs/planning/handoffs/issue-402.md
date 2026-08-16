@@ -2,7 +2,7 @@
 
 ## State
 
-`REVIEW COMPLETE / CHANGES_NEEDED / DRAFT PR PENDING`
+`REVIEW_READY / CHANGES_NEEDED`
 
 This handoff records the fresh required review of exact remediation Issue #400. It grants no integration, provider credential, engine-selection, commercial/production/legal/release, readiness, verification-PASS, decision, or canonical authority.
 
@@ -15,6 +15,8 @@ This handoff records the fresh required review of exact remediation Issue #400. 
 - reviewer actor/session: `w2-eng-provider-effective-rem-rev-01-gpt56sol-20260816-02`
 - trust mode: `DEGRADED_SINGLE_AGENT`
 - review base: `08a89092a9e9b2bae6f8bd34dd29dd85a8d97bcf`
+- review work SHA: `c40ab61712db4615705a92d316834253697b049b`
+- draft review PR: #403, opened at exact review work SHA `c40ab61712db4615705a92d316834253697b049b`; the final handoff/status commit head is bound by terminal schema-3 status.
 - canonical program blob: `e3120ec203c4156328770aa86c12fbb7187966dc`
 - canonical binding comment: `5245368879`
 - canonical activation: `413e729e8d2d5ac2eb138903f3f2ace07283b23e`
@@ -60,6 +62,12 @@ Frozen #373 supplied nine files. Exact #400/#401 carries only six. The exact rem
 Therefore PR #401 cannot be integrated as a complete provider-access successor. Rejected producer PR #397 is not a valid implicit dependency because it contains the exact old M01/M02 defects.
 
 Full reasoning and all required attack results are in `docs/planning/wave-2/reviews/w2-eng-provider-effective-remediation-review.md`.
+
+## Review publication check
+
+- PR #403 targets `main` from `planning/issue-402` and is intentionally draft.
+- PR #403 contains only the review report and this handoff.
+- The terminal schema-3 status binds the final exact review head, PR head/base/draft state, changed-file count, and reported status-check state.
 
 ## Required next route
 
