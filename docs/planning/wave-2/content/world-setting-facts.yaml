@@ -1,7 +1,7 @@
 schema: everfield_world_setting_candidate_v2
-mission_id: W2-CONTENT-WORLD-REM-01
-issue: 382
-state: REMEDIATION_CANDIDATE_NONCANONICAL
+mission_id: W2-CONTENT-WORLD-REM-02
+issue: 389
+state: REMEDIATION_SUCCESSOR_CANDIDATE_NONCANONICAL
 canonicality: NOT_CANONICAL
 required_fresh_review: true
 fan_in_authority: false
@@ -11,7 +11,7 @@ implementation_readiness_authority: false
 verification_pass_authority: false
 
 provenance:
-  remediation_base_main_sha: 79f5bd62f7d03ecd954e94a485b0734bd80f1b86
+  remediation_base_main_sha: 32637bf66d8e76a4f029c9ca74f983cbe5535ffb
   canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
   canonical_binding_comment_id: 5245368879
   canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
@@ -43,6 +43,24 @@ provenance:
     findings:
       - W2-CONTENT-WORLD-REV-M01
       - W2-CONTENT-WORLD-REV-M02
+  judged_remediation:
+    issue: 382
+    claim_comment_id: 5305696218
+    terminal_comment_id: 5305711075
+    head_sha: 01da67730e18bd9497d264d3a3514122e6793ab7
+    pr: 385
+  source_review:
+    issue: 386
+    claim_comment_id: 5305984671
+    terminal_comment_id: 5306001697
+    work_sha: 7fd2be7ab376efe2ea233653209916d30dd91317
+    head_sha: 365ba43f5c5251e19c67395a32db67a1f2872c2d
+    pr: 390
+    disposition: CHANGES_NEEDED
+    findings:
+      - W2-CONTENT-WORLD-REM-REV-MIN01
+      - W2-CONTENT-WORLD-REM-REV-MIN02
+  successor_claim_comment_id: 5306005287
 
 vocabulary:
   authority_classes:
@@ -233,7 +251,7 @@ chronology:
 world_rules:
   - {id: WR-01, authority: CANDIDATE_CONSTRAINT, rule: Material world effects propagate only through declared causal/state dependencies.}
   - {id: WR-02, authority: CANDIDATE_CONSTRAINT, rule: Shared works use multi-state condition/function rather than a universal repaired boolean.}
-  - {id: WR-03, authority: CANDIDATE_CONSTRAINT, rule: Resource-relevant world state can represent bounded use, regeneration, stewardship, substitution, or access change where materially relevant.}
+  - {id: WR-03, authority: CANDIDATE_CONSTRAINT, rule: Resource-relevant world state must be able to represent bounded use, regeneration, stewardship, substitution, or access change where materially relevant.}
   - {id: WR-04, authority: CANDIDATE_CONSTRAINT, rule: Seasonal condition changes do not change stable logical location identity.}
   - {id: WR-05, authority: CANDIDATE_CONSTRAINT, rule: Important consequences bind cause, affected IDs, branch scope, reversibility, and observable signal.}
   - {id: WR-06, authority: CANDIDATE_CONSTRAINT, rule: In-world claims and generated prose do not become objective truth without a separate validated fact-authority change.}
@@ -441,7 +459,7 @@ checkable_invariants:
   - id: INV:PRESENT-START-CONTAINMENT
     predicate: EVT:PATCHWORK-PRESENT-START is ERA_START_BOUNDARY in ERA:PATCHWORK-PRESENT and precedes EVT:PLAYER-ENTRY in the same era
   - id: INV:CLAIM-REFERENCES-RESOLVE
-    predicate: every in_world_claims[] record has a unique CLM id, claim_authority, holder_ref, perspective_key, proposition_ref, stance, knowledge, branch, truth_relation,truth_effect; holder_ref resolves to provisional_roles and proposition_ref resolves to propositions
+    predicate: every in_world_claims[] record has a unique CLM id; claim_authority is in vocabulary.claim_authority_classes; stance is in vocabulary.claim_stances; knowledge is in vocabulary.knowledge_states; branch is in vocabulary.branch_scopes; truth_relation is in vocabulary.claim_truth_relations; holder_ref resolves to provisional_roles; proposition_ref resolves to propositions; and truth_effect is present
   - id: INV:CLAIM-NO-FACT-PROMOTION
     predicate: every in_world_claims[] record has claim_authority IN_WORLD_CLAIM_ONLY and truth_effect NONE; no claim record can create, mutate, or substitute a CANDIDATE_OBJECTIVE facts[] record without a separate reviewed fact-authority edit
   - id: INV:CLAIM-EXPOSURE-SEPARATE-FROM-TRUTH
@@ -489,6 +507,15 @@ finding_closure:
       - INV:EVENT-ERA-RESOLVES
       - INV:EVENT-PRECEDENCE-ERA-COMPATIBLE
       - INV:PRESENT-START-CONTAINMENT
+  W2-CONTENT-WORLD-REM-REV-MIN01:
+    status: CLOSED_IN_SUCCESSOR_REMEDIATION_PENDING_FRESH_REVIEW
+    mechanisms:
+      - ABOUT_UNKNOWN_BY_DESIGN truth relation retained in both claims and matched by prose
+      - INV:CLAIM-REFERENCES-RESOLVE validates claim authority, stance, knowledge, branch, truth-relation vocabularies and holder/proposition references fail-closed
+  W2-CONTENT-WORLD-REM-REV-MIN02:
+    status: CLOSED_IN_SUCCESSOR_REMEDIATION_PENDING_FRESH_REVIEW
+    mechanisms:
+      - WR-03 restored to must be able to represent
 
 existing_evidence_routes:
   wsn_experiments: WSN-E1..WSN-E9
@@ -503,6 +530,9 @@ self_review:
   prior_findings_closed_pending_fresh_review:
     - W2-CONTENT-WORLD-REV-M01
     - W2-CONTENT-WORLD-REV-M02
+  successor_findings_closed_pending_fresh_review:
+    - W2-CONTENT-WORLD-REM-REV-MIN01
+    - W2-CONTENT-WORLD-REM-REV-MIN02
   preserved_pass_attacks:
     - frozen_identity
     - topology_and_causality
