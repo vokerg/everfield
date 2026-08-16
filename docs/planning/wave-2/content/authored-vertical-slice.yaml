@@ -1,0 +1,609 @@
+schema: everfield_w2_authored_vertical_slice_v1
+mission_id: W2-CONTENT-VS-01
+issue: 434
+state: PRODUCER_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_VERTICAL_SLICE
+canonicality: NOT_CANONICAL
+
+authority:
+  canonical_content: false
+  integration: false
+  verification_pass: false
+  engine_selection: false
+  gameplay_implementation: false
+  implementation_readiness: false
+  release: false
+  decision: false
+  empirical_wsn_pass: false
+
+frozen_inputs:
+  claim_base_main_sha: 3de6f8f276cd1479ceccdea7362420f1e0efa030
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_convergence_directive_comment_id: 5277825639
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  compiler:
+    issue: 365
+    map_blob_sha: 109eca8d2851db118bffe83398b49d68fdb50b31
+    route: W2-CONTENT-VS-01_DEFERRED_FAN_IN_SUCCESSOR
+  reviewed_fan_in:
+    producer_issue: 422
+    producer_work_sha: db4bfbcc7387425989ec5902103e53953db9576b
+    producer_head_sha: f6edd59b7d029474b3de95b8f57e71e7e14e5573
+    map_blob_sha: 5858bc3e2d87baa3740b2513b08fb938633bba54
+    integration_status_comment_id: 5307537330
+    review_issue: 426
+    review_terminal_comment_id: 5307505361
+    review_work_sha: fccbc2812a422f06007c5d565fb3a4e3c887e76c
+    review_head_sha: 00cb20796871f9b3eb921382d388b215013130c5
+    review_blob_sha: a154468dcd617c2cb8926b1edb78afe7d4f1942b
+    review_disposition: CLEAN_FOR_BOUNDED_CONTENT_CONSUMPTION
+    review_integration_status_comment_id: 5307528080
+
+slice:
+  slice_id: VS:OLD-WORKS-ACCOUNTS-01
+  working_title: Accounts at the Old Works
+  status: AUTHORED_CANDIDATE
+  entry_boundary: EVT:PLAYER-ENTRY
+  foundational_progression_required: false
+  exact_calendar_values_authored: false
+  exact_game_time_policy_bound: false
+  concrete_npc_schedules_authored: false
+  generated_content_required: false
+  scope_statement: >-
+    One optional questline instance at LOC:OLD-WORKS that compares conflicting
+    accounts, negotiates a scoped shared-use response, permits disclosure or
+    withholding, and supports either a bounded repair pilot or records-first
+    commitment without resolving the world mystery or creating canon.
+
+instance_bindings:
+  - instance_binding_id: VS-BIND:CONTESTED-SITE
+    source_open_id: OPEN:SYN:COMMON-RESOURCE-CONCRETION
+    kind: SCOPED_INSTANCE_EXACT
+    target_refs: [LOC:OLD-WORKS]
+    scope: VS:OLD-WORKS-ACCOUNTS-01_ONLY
+    authority_effect: NONE
+    rationale: >-
+      LOC:OLD-WORKS is an explicitly reviewed candidate for the contested common,
+      shared worksite, repair/reframe, and investigation surfaces. Selecting it
+      here does not make it the global contested common.
+  - instance_binding_id: VS-BIND:HISTORY-BEARER-A
+    source_open_id: OPEN:SYN:HISTORY-BEARER-CONCRETION
+    claim_ref: CLM:FRAGMENTATION-ACCOUNT-A
+    holder_ref: CHAR:anwen_rell
+    source_perspective: PROVENANCE_ANALYSIS
+    truth_effect: NONE
+    authority_effect: NONE
+  - instance_binding_id: VS-BIND:HISTORY-BEARER-B
+    source_open_id: OPEN:SYN:HISTORY-BEARER-CONCRETION
+    claim_ref: CLM:FRAGMENTATION-ACCOUNT-B
+    holder_ref: CHAR:tomas_irel
+    source_perspective: CONTEXTUAL_TESTIMONY
+    truth_effect: NONE
+    authority_effect: NONE
+  - instance_binding_id: VS-BIND:ARCHIVE-CUSTODIAN
+    source_ref: FACTION_ROLE:CUSTODIAN
+    kind: SCOPED_INSTANCE_EXACT
+    target_refs: [FAC-ARCHIVE-01]
+    purpose: PUBLIC_RECORD_AND_PROVENANCE_ROUTE
+    authority_effect: NONE
+  - instance_binding_id: VS-BIND:CIVIC-CUSTODIAN
+    source_ref: FACTION_ROLE:CUSTODIAN
+    kind: SCOPED_INSTANCE_EXACT
+    target_refs: [FAC-COMMONS-01]
+    purpose: SHARED_USE_NEGOTIATION_AND_PUBLIC_COMMITMENT
+    authority_effect: NONE
+  - instance_binding_id: VS-BIND:REPAIR-SERVICE
+    source_ref: FACTION_ROLE:craft_or_service_network
+    kind: SCOPED_INSTANCE_EXACT
+    target_refs: [FAC-MAKERS-01]
+    purpose: REPAIR_PILOT_SERVICE_ROUTE
+    authority_effect: NONE
+
+information_model:
+  world_mystery_ref: MYS:FRAGMENTATION-CAUSE
+  contested_proposition_ref: PROP:FRAGMENTATION-SINGLE-DOMINANT-CAUSE
+  claim_refs:
+    - CLM:FRAGMENTATION-ACCOUNT-A
+    - CLM:FRAGMENTATION-ACCOUNT-B
+  independent_evidence_refs:
+    - LOC:OLD-WORKS
+    - DISC_ROLE:PUBLIC_RECORD
+    - DISC_ROLE:MATERIAL_TRACE
+  private_information:
+    - info_ref: INFO:anwen_contested_record_provenance_gap
+      authority_class: SECRET
+      truth_status: CHARACTER_CANDIDATE_FACT_ONLY
+      initial_holder_refs: [CHAR:anwen_rell]
+      access_default: DENY
+      legal_access_routes:
+        - EXPLICIT_HOLDER_DISCLOSURE
+        - ROUTE:NARR:TESTIMONY:RELATIONSHIP
+        - ROUTE:NARR:TESTIMONY:RECORD
+      relationship_state_alone_grants_access: false
+      public_standing_alone_grants_access: false
+      player_exposure_grants_character_knowledge: false
+      disclosure_promotes_world_truth: false
+  invariants:
+    - CLAIM_COMPARISON_DOES_NOT_FORCE_OBJECTIVE_TRUTH
+    - ANWEN_SECRET_REMAINS_DENY_BY_DEFAULT
+    - RELATIONSHIP_OR_STANDING_ALONE_NEVER_GRANTS_SECRET_ACCESS
+    - PLAYER_DISCOVERY_NEVER_IMPLIES_UNIVERSAL_CHARACTER_KNOWLEDGE
+    - DISCLOSURE_NEVER_SETTLES_MYS_FRAGMENTATION_CAUSE
+
+quest:
+  quest_template_id: QUEST:VS:OLD-WORKS-ACCOUNTS-01
+  version: 1
+  quest_role_sequence:
+    - QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS
+    - QROLE:NEGOTIATE_SHARED_USE
+    - QROLE:COMMIT_TO_PROJECT
+    - QROLE:REPAIR_OR_REFRAME
+  availability:
+    entry_predicates:
+      - narrative_state_at_or_after: EVT:PLAYER-ENTRY
+      - location_reachable_ref: LOC:OLD-WORKS
+    forbidden_hidden_predicates:
+      - UNIVERSAL_RELATIONSHIP_SCORE
+      - FOUNDATIONAL_NARRATIVE_GATE
+      - UNBOUND_GAME_TIME_POLICY
+      - CONCRETE_NPC_SCHEDULE
+  progression_gate_refs:
+    - gate_id: GATE:NARR:DEEP_HISTORY_INQUIRY
+      version: 1
+      gate_class: OPTIONAL
+    - gate_id: GATE:NARR:TRUSTED_TESTIMONY_ACCESS
+      version: 1
+      gate_class: SPECIALIZATION
+    - gate_id: GATE:NARR:PUBLIC_COMMITMENT
+      version: 1
+      gate_class: BRANCH_EXCLUSIVE
+    - gate_id: GATE:NARR:RECONCILIATION_ROUTE
+      version: 1
+      gate_class: OPTIONAL
+  objectives:
+    - objective_id: OBJ:VS:PUBLIC-RECORD
+      role: DISC_ROLE:PUBLIC_RECORD
+      required: true
+      completion: review_public_record_material_for_old_works
+    - objective_id: OBJ:VS:TOMAS-WITNESS
+      role: DISC_ROLE:WITNESS_ACCOUNT
+      actor_ref: CHAR:tomas_irel
+      required: false
+      completion: obtain_contextual_testimony_or_use_substitute_evidence
+    - objective_id: OBJ:VS:MATERIAL-TRACE
+      role: DISC_ROLE:MATERIAL_TRACE
+      location_ref: LOC:OLD-WORKS
+      required: false
+      completion: inspect_independent_material_trace
+    - objective_id: OBJ:VS:ANWEN-PRIVATE-PROVENANCE
+      role: DISC_ROLE:PRIVATE_TESTIMONY
+      actor_ref: CHAR:anwen_rell
+      information_ref: INFO:anwen_contested_record_provenance_gap
+      required: false
+      access_rule: EXPLICIT_HOLDER_DISCLOSURE_OR_LEGAL_SUBSTITUTE_ROUTE
+    - objective_id: OBJ:VS:COMPARE-ACCOUNTS
+      role: QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS
+      required: true
+      completion: compare_claims_with_at_least_one_independent_evidence_source_or_explicitly_defer_conclusion
+      truth_conclusion_required: false
+    - objective_id: OBJ:VS:NEGOTIATE-SHARED-USE
+      role: QROLE:NEGOTIATE_SHARED_USE
+      required: true
+      location_ref: LOC:OLD-WORKS
+      actor_refs: [CHAR:selka_vey, CHAR:maelin_sor]
+      social_refs: [FAC-COMMONS-01, FAC-MAKERS-01, COM-NEIGHBOR-01]
+      completion: choose_one_supported_public_route_or_defer_with_recovery
+    - objective_id: OBJ:VS:DISCLOSURE-DECISION
+      role: BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING
+      required: true
+      completion: choose_disclose_or_withhold_or_defer_without_promoting_claim_to_truth
+    - objective_id: OBJ:VS:PUBLIC-COMMITMENT
+      role: QROLE:COMMIT_TO_PROJECT
+      required: true
+      completion: select_repair_pilot_or_records_first_after_tradeoff_signaling
+    - objective_id: OBJ:VS:REPAIR-OR-REFRAME
+      role: QROLE:REPAIR_OR_REFRAME
+      required: false
+      completion: pursue_repair_or_relationship_reframing_after_a_material_consequence
+  objective_edges:
+    - {from: OBJ:VS:PUBLIC-RECORD, to: OBJ:VS:COMPARE-ACCOUNTS, edge: REQUIRES}
+    - {from: OBJ:VS:TOMAS-WITNESS, to: OBJ:VS:COMPARE-ACCOUNTS, edge: ENABLES}
+    - {from: OBJ:VS:MATERIAL-TRACE, to: OBJ:VS:COMPARE-ACCOUNTS, edge: SUBSTITUTES}
+    - {from: OBJ:VS:ANWEN-PRIVATE-PROVENANCE, to: OBJ:VS:COMPARE-ACCOUNTS, edge: ENABLES}
+    - {from: OBJ:VS:COMPARE-ACCOUNTS, to: OBJ:VS:NEGOTIATE-SHARED-USE, edge: ENABLES}
+    - {from: OBJ:VS:NEGOTIATE-SHARED-USE, to: OBJ:VS:DISCLOSURE-DECISION, edge: ENABLES}
+    - {from: OBJ:VS:DISCLOSURE-DECISION, to: OBJ:VS:PUBLIC-COMMITMENT, edge: ENABLES}
+    - {from: OBJ:VS:PUBLIC-COMMITMENT, to: OBJ:VS:REPAIR-OR-REFRAME, edge: ENABLES}
+  graph_invariants:
+    - REQUIRED_SUBGRAPH_ACYCLIC
+    - WITNESS_AND_MATERIAL_TRACE_ARE_MEANINGFUL_ALTERNATIVE_EVIDENCE_ROUTES
+    - PRIVATE_SECRET_OBJECTIVE_IS_NOT_HIDDEN_REQUIRED
+    - MUTUALLY_EXCLUSIVE_BRANCHES_ARE_NOT_JOINTLY_REQUIRED
+    - DEFERRED_TRUTH_CONCLUSION_IS_LEGAL
+    - BASELINE_COMMUNITY_PLAY_REMAINS_LEGAL_WITHOUT_OPTIONAL_GATES
+  failure_policy:
+    possible: true
+    recoverable: true
+    cases:
+      - failure_id: FAIL:VS:WITNESS-UNAVAILABLE
+        recovery: use_public_record_plus_material_trace_or_defer_conclusion
+      - failure_id: FAIL:VS:PRIVATE-TESTIMONY-DENIED
+        recovery: use_public_record_or_material_trace; secret remains undisclosed
+      - failure_id: FAIL:VS:NEGOTIATION-STALLS
+        recovery: defer_commitment_and_preserve_baseline_services
+      - failure_id: FAIL:VS:REPAIR-PILOT-DECLINED
+        recovery: records_first_or_reframing_route_remains
+  retry_recovery_policy:
+    abandon_reaccept_allowed: true
+    retry_erases_history: false
+    retry_resets_claim_truth: false
+    retry_may_change_current_relationship_dimensions_only_with_typed_evidence: true
+  timed_window_refs: []
+  explicit_time_deferral:
+    game_time_policy_ref: OPEN:SYN:GAME-TIME-POLICY
+    schedule_dependent_required_objectives: []
+    timed_content_required_for_completion: false
+  observability:
+    pre_commitment_signals:
+      - disclosure_audience_and_likely_relationship_effects
+      - repair_pilot_scope_and_reversibility
+      - records_first_tradeoff_and_delayed_physical_change
+      - affected_goal_classes
+    hidden_irreversibility_allowed: false
+
+branches:
+  - branch_id: BRANCH:VS:DISCLOSE-PROVENANCE-GAP
+    family_ref: BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING
+    reversibility: CONDITIONALLY_REVERSIBLE
+    trigger: player_chooses_disclosure_after_legal_access
+    requires_information_ref: INFO:anwen_contested_record_provenance_gap
+    audience_refs: [FAC-COMMONS-01, FAC-ARCHIVE-01]
+    authority_effect: NONE
+  - branch_id: BRANCH:VS:WITHHOLD-OR-DEFER-PROVENANCE-GAP
+    family_ref: BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING
+    reversibility: CONDITIONALLY_REVERSIBLE
+    trigger: player_withholds_or_never_legally_acquires_private_provenance
+    authority_effect: NONE
+  - branch_id: BRANCH:VS:REPAIR-PILOT
+    family_ref: BRANCH_FAMILY:PUBLIC_ALIGNMENT
+    reversibility: CONDITIONALLY_REVERSIBLE
+    trigger: public_commitment_after_tradeoff_signaling
+    project_site_ref: LOC:OLD-WORKS
+    service_ref: FAC-MAKERS-01
+    authority_effect: NONE
+  - branch_id: BRANCH:VS:RECORDS-FIRST
+    family_ref: BRANCH_FAMILY:PUBLIC_ALIGNMENT
+    reversibility: CONDITIONALLY_REVERSIBLE
+    trigger: public_commitment_to_documentation_and_limited_use_before_repair
+    project_site_ref: LOC:OLD-WORKS
+    custodian_ref: FAC-ARCHIVE-01
+    authority_effect: NONE
+
+consequences:
+  - consequence_id: CONSEQ:VS:DISCLOSE-PROVENANCE
+    trigger_ref: BRANCH:VS:DISCLOSE-PROVENANCE-GAP
+    affected_domain_state_refs:
+      - INFO:anwen_contested_record_provenance_gap
+      - CHAR:anwen_rell
+      - BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING
+    preconditions:
+      - private_information_legally_acquired
+      - disclosure_audience_signaled
+    effect_operations:
+      - expose_candidate_information_to_selected_audience
+      - append_disclosure_history_event
+      - do_not_change_world_mystery_truth
+    reversibility: CONDITIONALLY_REVERSIBLE
+    reversal_route: later_correction_or_contextualization_may_change_exposure_effects_but_not_erase_history
+    persistence_migration_obligation: WSN-E5
+    observability: likely_relationship_and_testimony_effects_signaled_before_disclosure
+    downstream_dependencies: [QROLE:REPAIR_OR_REFRAME]
+    branch_impact_ref: IMPACT:VS:DISCLOSURE
+    compensation_or_alternative_goal_refs: []
+  - consequence_id: CONSEQ:VS:WITHHOLD-PROVENANCE
+    trigger_ref: BRANCH:VS:WITHHOLD-OR-DEFER-PROVENANCE-GAP
+    affected_domain_state_refs:
+      - INFO:anwen_contested_record_provenance_gap
+      - BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING
+    preconditions: []
+    effect_operations:
+      - preserve_private_information_access_scope
+      - preserve_public_record_and_material_trace_routes
+      - do_not_change_world_mystery_truth
+    reversibility: CONDITIONALLY_REVERSIBLE
+    reversal_route: later_legal_disclosure_remains_possible
+    persistence_migration_obligation: WSN-E5
+    observability: reduced_context_and_continued_evidence_route_visible
+    downstream_dependencies: [QROLE:REPAIR_OR_REFRAME]
+    branch_impact_ref: IMPACT:VS:DISCLOSURE
+    compensation_or_alternative_goal_refs: []
+  - consequence_id: CONSEQ:VS:REPAIR-PILOT
+    trigger_ref: BRANCH:VS:REPAIR-PILOT
+    affected_domain_state_refs:
+      - LOC:OLD-WORKS
+      - FAC-MAKERS-01
+      - FAC-COMMONS-01
+      - CHAR:maelin_sor
+      - CHAR:selka_vey
+    preconditions:
+      - material_tradeoffs_exposed
+      - shared_use_negotiation_completed_or_explicitly_recovered
+    effect_operations:
+      - create_bounded_repair_pilot_candidate_state
+      - append_public_commitment_history
+      - preserve_baseline_unrelated_play
+    reversibility: CONDITIONALLY_REVERSIBLE
+    reversal_route: pause_or_reframe_pilot_with_history_preserved
+    persistence_migration_obligation: WSN-E5
+    observability: scope_cost_burden_and_affected_goals_signaled
+    downstream_dependencies: [QROLE:REPAIR_OR_REFRAME, QROLE:AFTERMATH_AMBITION]
+    branch_impact_ref: IMPACT:VS:PUBLIC-COMMITMENT
+    compensation_or_alternative_goal_refs: [GOAL:VS:RECORDS-FIRST, GOAL:VS:COMMUNITY-MITIGATION]
+  - consequence_id: CONSEQ:VS:RECORDS-FIRST
+    trigger_ref: BRANCH:VS:RECORDS-FIRST
+    affected_domain_state_refs:
+      - LOC:OLD-WORKS
+      - FAC-ARCHIVE-01
+      - FAC-COMMONS-01
+    preconditions:
+      - material_tradeoffs_exposed
+    effect_operations:
+      - prioritize_documentation_and_limited_use_candidate_state
+      - defer_broader_physical_repair
+      - preserve_later_repair_route
+    reversibility: CONDITIONALLY_REVERSIBLE
+    reversal_route: later_public_commitment_can_open_bounded_repair_after_reassessment
+    persistence_migration_obligation: WSN-E5
+    observability: delayed_repair_tradeoff_signaled
+    downstream_dependencies: [QROLE:AFTERMATH_AMBITION]
+    branch_impact_ref: IMPACT:VS:PUBLIC-COMMITMENT
+    compensation_or_alternative_goal_refs: [GOAL:VS:REPAIR-PILOT, GOAL:VS:COMMUNITY-MITIGATION]
+
+branch_impacts:
+  - impact_id: IMPACT:VS:DISCLOSURE
+    high_impact: true
+    affected_goal_classes:
+      - testimony_availability
+      - relationship_trust_content
+      - evidence_context
+    unavailable_or_changed_content:
+      - some_private_testimony_may_change_or_close_by_branch
+    alternative_goals:
+      - public_record_evidence_route
+      - material_trace_evidence_route
+      - repair_or_reframe_route
+    shared_foundational_play_preserved: true
+  - impact_id: IMPACT:VS:PUBLIC-COMMITMENT
+    high_impact: true
+    affected_goal_classes:
+      - project_access
+      - stewardship_goals
+      - perspective_specific_aftermath
+    unavailable_or_changed_content:
+      - branch_specific_project_followups_diverge
+    alternative_goals:
+      - GOAL:VS:REPAIR-PILOT
+      - GOAL:VS:RECORDS-FIRST
+      - GOAL:VS:COMMUNITY-MITIGATION
+    shared_foundational_play_preserved: true
+
+relationship_history:
+  predecessor_refs_preserved:
+    - REL_EVT:maelin_selka_burden_objection
+  predecessor_exact_world_chronology_asserted: false
+  new_candidate_events:
+    - event_id: REL_EVT:VS:MAELIN-SELKA-HEARING-01
+      participants: [CHAR:maelin_sor, CHAR:selka_vey]
+      placement_constraint: AFTER_OBJ_VS_NEGOTIATE_SHARED_USE_WITHIN_SLICE
+      exact_world_date: null
+      cause:
+        type: PUBLIC_BURDEN_HEARING
+        detail: player_supported_shared_use_discussion_surfaces_burden_and_legitimacy_tradeoffs
+      resulting_effects:
+        dimension_flags:
+          - {dimension: RESPECT, effect: MAY_REMAIN_OR_INCREASE_IF_BURDEN_IS_ACKNOWLEDGED}
+          - {dimension: CAUTION, effect: MAY_INCREASE_IF_BURDEN_IS_DISMISSED}
+        history_flags:
+          - HEARING_OUTCOME_DOES_NOT_ERASE_PRIOR_BURDEN_OBJECTION
+          - RESPECT_AND_CAUTION_MAY_COEXIST
+      knowledge_visibility:
+        known_by: [CHAR:maelin_sor, CHAR:selka_vey]
+        player_visibility: ONLY_IF_PLAYER_ATTENDS_OR_RECEIVES_VALIDATED_DISCLOSURE
+        nonparticipant_disclosure: EXPLICIT_EVENT_OR_VALIDATED_CONTENT_REQUIRED
+      repairability:
+        repair_possible: true
+        repair_mode: AFFECTED_PARTY_BURDEN_RECOGNITION_AND_VISIBLE_CORRECTION
+        history_erasable_by_repair: false
+      reversal_evidence:
+        can_change_current_dimensions: true
+        required: [VISIBLE_CORRECTION_OF_EXCLUDED_OR_HIDDEN_BURDEN]
+        history_record_remains: true
+  invariants:
+    - NO_UNIVERSAL_RELATIONSHIP_SCALAR
+    - PUBLIC_STANDING_DOES_NOT_SUBSTITUTE_FOR_PRIVATE_TRUST
+    - CURRENT_DIMENSION_CHANGE_REQUIRES_TYPED_CAUSE_OR_EVIDENCE
+    - RECOVERY_NEVER_ERASES_MATERIAL_RELATIONSHIP_HISTORY
+    - RELATIONSHIP_STATE_NEVER_GRANTS_INFORMATION_ACCESS
+
+generated_content_boundary:
+  generated_content_used_for_required_slice_semantics: false
+  optional_presentation_generation_allowed_later: CANDIDATE_ONLY_IF_GROUNDED
+  generated_presentation_can_create_objective_fact: false
+  generated_presentation_can_create_secret_or_knowledge: false
+  generated_presentation_can_change_relationship_state: false
+  generated_presentation_can_create_branch_fact: false
+  generated_presentation_can_execute_authoritative_transition: false
+  grounding_failure: DECLARED_FALLBACK_OR_INCONCLUSIVE
+
+originality_boundary:
+  external_fictional_expression_adopted: false
+  working_title_is_canonical_name: false
+  concrete_slice_labels_are_replaceable: true
+  later_specific_reference_requires:
+    - purpose
+    - provenance
+    - originality_review
+    - rights_review_where_applicable
+
+wsn_evidence_debt:
+  authority_rule: AUTHORSHIP_CREATES_NO_EMPIRICAL_PASS
+  source_map_blob_sha: e4f4e964f9b972ebbc22700c7b0a4e23b1c97593
+  experiments:
+    WSN-E1:
+      state: REQUIRED_REVIEWED_EVIDENCE_NOT_GRANTED_BY_THIS_SLICE
+      slice_attacks:
+        - contradictory_claim_truth_and_branch_scope
+        - disclosure_branch_fact_compatibility
+    WSN-E2:
+      state: REQUIRED_REVIEWED_EVIDENCE_NOT_GRANTED_BY_THIS_SLICE
+      slice_attacks:
+        - relationship_state_secret_leak
+        - public_standing_secret_leak
+        - player_exposure_character_knowledge_leak
+        - generated_presentation_knowledge_leak
+    WSN-E3:
+      state: REQUIRED_REVIEWED_EVIDENCE_NOT_GRANTED_BY_THIS_SLICE
+      slice_attacks:
+        - alternative_evidence_routes
+        - optional_private_testimony_not_hidden_required
+        - negotiation_failure_recovery
+        - commitment_branch_exclusivity
+    WSN-E4:
+      state: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+      blocker: REVIEWED_GAME_TIME_POLICY_AND_CONCRETE_SCHEDULES_ABSENT
+      slice_claim: NO_SCHEDULE_DEPENDENT_REQUIRED_OBJECTIVE
+    WSN-E5:
+      state: REQUIRED_REVIEWED_EVIDENCE_NOT_GRANTED_BY_THIS_SLICE
+      slice_attacks:
+        - disclosure_history_persistence
+        - public_commitment_branch_persistence
+        - alternative_goal_preservation
+    WSN-E6:
+      state: REQUIRED_REVIEWED_EVIDENCE_NOT_GRANTED_BY_THIS_SLICE
+      slice_attacks:
+        - generated_presentation_grounding_and_no_authority
+    WSN-E7:
+      state: REQUIRED_REVIEWED_EVIDENCE_NOT_GRANTED_BY_THIS_SLICE
+      slice_attacks:
+        - evidence_route_and_branch_semantic_distinctness
+    WSN-E8:
+      state: INCONCLUSIVE_LIMITATIONS_RETAINED_PENDING_REVIEWED_SCHEDULE_TIME_PREREQUISITES
+      slice_attacks:
+        - relationship_history_durability
+        - multidimensional_relationship_state
+        - long_horizon_branch_alternatives
+    WSN-E9:
+      state: REQUIRED_REVIEWED_EVIDENCE_NOT_GRANTED_BY_THIS_SLICE
+      slice_attacks:
+        - truth_claim_separation
+        - branch_significance_without_canon_creation
+
+open_binding_ledger:
+  resolved_for_this_instance_only:
+    - open_id: OPEN:SYN:HISTORY-BEARER-CONCRETION
+      resolution: ANWEN_ACCOUNT_A_AND_TOMAS_ACCOUNT_B_WITH_DISTINCT_SOURCE_PERSPECTIVES
+      scope: VS:OLD-WORKS-ACCOUNTS-01_ONLY
+      global_resolution: false
+    - open_id: OPEN:SYN:COMMON-RESOURCE-CONCRETION
+      resolution: LOC:OLD-WORKS
+      scope: VS:OLD-WORKS-ACCOUNTS-01_ONLY
+      global_resolution: false
+  retained:
+    - open_id: OPEN:SYN:OUTSIDE-PRESSURE
+      state: DELIBERATE_UNKNOWN_BOUNDARY
+      rule: no_external_polity_or_outside_faction_is_named_or_asserted
+    - open_id: OPEN:SYN:SENSITIVE-SITE
+      state: NONBLOCKING_TYPED_DEFERRAL
+      rule: this_slice_does_not_require_sensitive_site_concretion
+    - open_id: OPEN:SYN:CHARACTER-EVENT-CHRONOLOGY
+      state: NONBLOCKING_TYPED_DEFERRAL
+      rule: predecessor_relationship_events_are_not_assigned_exact_world_dates
+    - open_id: OPEN:SYN:SOCIAL-PROPOSITION-FACT-BINDINGS
+      state: NONBLOCKING_AUTHORITY_DEFERRAL
+      rule: no_social_claim_is_promoted_to_reviewed_world_fact
+    - open_id: OPEN:SYN:GAME-TIME-POLICY
+      state: REQUIRED_DOWNSTREAM_POLICY_BINDING
+      rule: no_exact_time_policy_or_duration_is_authored
+    - open_id: OPEN:SYN:SEMANTIC-GRAPH-VERSION
+      state: REQUIRED_DOWNSTREAM_SCHEMA_BINDING
+      rule: no_executable_semantic_graph_version_is_claimed
+
+terminal_outcome_candidates:
+  - outcome_id: OUTCOME:VS:REPAIR_DISCLOSED
+    predicates: [BRANCH:VS:DISCLOSE-PROVENANCE-GAP, BRANCH:VS:REPAIR-PILOT]
+    canonical_ending: false
+  - outcome_id: OUTCOME:VS:REPAIR_WITHHELD
+    predicates: [BRANCH:VS:WITHHOLD-OR-DEFER-PROVENANCE-GAP, BRANCH:VS:REPAIR-PILOT]
+    canonical_ending: false
+  - outcome_id: OUTCOME:VS:RECORDS_DISCLOSED
+    predicates: [BRANCH:VS:DISCLOSE-PROVENANCE-GAP, BRANCH:VS:RECORDS-FIRST]
+    canonical_ending: false
+  - outcome_id: OUTCOME:VS:RECORDS_WITHHELD
+    predicates: [BRANCH:VS:WITHHOLD-OR-DEFER-PROVENANCE-GAP, BRANCH:VS:RECORDS-FIRST]
+    canonical_ending: false
+
+invariants:
+  - INV:VS:FANIN-IDENTITY-FROZEN
+  - INV:VS:INSTANCE-CONCRETION-DOES-NOT-GLOBALIZE
+  - INV:VS:MYSTERY-REMAINS-UNKNOWN-BY-DESIGN
+  - INV:VS:CLAIM-BELIEF-KNOWLEDGE-EXPOSURE-ORTHOGONAL
+  - INV:VS:SECRET-ACCESS-DEFAULT-DENY
+  - INV:VS:NO-RELATIONSHIP-OR-STANDING-KNOWLEDGE-LEAK
+  - INV:VS:QUEST-NONTRIVIAL-WITH-ALTERNATIVE-ROUTES
+  - INV:VS:OPTIONAL-OBJECTIVE-NOT-HIDDEN-REQUIRED
+  - INV:VS:FAILURE-RETRY-RECOVERY-EXPLICIT
+  - INV:VS:NO-FOUNDATIONAL-GATE
+  - INV:VS:BRANCH-EXCLUSIVE-COMMITMENT-SIGNALED
+  - INV:VS:HIGH-IMPACT-BRANCH-HAS-IMPACT-AND-ALTERNATIVES
+  - INV:VS:HISTORY-NOT-ERASED-BY-RECOVERY
+  - INV:VS:NO-UNIVERSAL-RELATIONSHIP-SCALAR
+  - INV:VS:NO-EXACT-DATE-TIME-POLICY-OR-SCHEDULE-INVENTION
+  - INV:VS:NO-GENERATED-DIRECT-AUTHORITY
+  - INV:VS:NO-EXTERNAL-POLITY-INVENTION
+  - INV:VS:WSN-DEBT-NOT-LAUNDERED
+  - INV:VS:ENGINE-NEUTRAL
+  - INV:VS:NOT-CANONICAL
+
+self_review:
+  attacked:
+    - cross_root_reference_support
+    - instance_binding_overreach
+    - forced_world_mystery_resolution
+    - truth_claim_knowledge_exposure_leak
+    - secret_access_through_relationship_or_standing
+    - trivial_start_goal_route_collapse
+    - hidden_required_optional_objective
+    - missing_failure_retry_recovery
+    - hidden_foundational_gate
+    - unsignaled_branch_commitment
+    - branch_impact_and_alternative_goal_insufficiency
+    - relationship_scalar_flattening
+    - relationship_history_erasure
+    - invented_time_or_schedule_semantics
+    - generated_content_authority_inflation
+    - outside_polity_invention
+    - originality_boundary_loss
+    - wsn_evidence_laundering
+    - engine_implementation_readiness_authority_inflation
+  findings:
+    blocker: 0
+    major: 0
+    correction_requiring_minor: 0
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_REVIEW
+
+downstream:
+  required_fresh_review: true
+  review_mission_hint: W2-CONTENT-VS-01-REV-01
+  clean_review_may_authorize: BOUNDED_DOWNSTREAM_CONSUMPTION_OF_EXACT_NONCANONICAL_SLICE
+  clean_review_does_not_authorize:
+    - CANONICAL_CONTENT
+    - EMPIRICAL_WSN_PASS
+    - ENGINE_SELECTION
+    - GAMEPLAY_IMPLEMENTATION
+    - IMPLEMENTATION_READINESS
+    - VERIFICATION_PASS
+    - RELEASE
+    - DECISION
+    - INTEGRATION_BY_REVIEW_ALONE
