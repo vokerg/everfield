@@ -1,0 +1,2536 @@
+{
+  "all_public_candidates_remediated_provisionally": true,
+  "authority_bound_not_run": {
+    "Unity": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY",
+    "Unreal Engine": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY"
+  },
+  "canonicality": "NOT_CANONICAL",
+  "engine_selected": false,
+  "findings_closed_by_design": [
+    "W2-ENG-TECH-S4-REV-M01",
+    "W2-ENG-TECH-S4-REV-M02",
+    "W2-ENG-TECH-S4-REV-M03"
+  ],
+  "fresh_review_required": true,
+  "harness_id": "W2-ENG-HARNESS-v5",
+  "historical_issue_82_cells_mutated": false,
+  "historical_issue_82_not_run_cells_preserved": 50,
+  "integration_authority": false,
+  "mission_id": "W2-ENG-TECH-S4-REM-01",
+  "producer_artifact": 9257331215,
+  "producer_evidence_sha256": "8ba3922733c4051f798dab002de4cf607f6176ffe3f66d3e85a2568473967453",
+  "producer_head": "942a8c05032c1506730f52e897496172fb56fcf3",
+  "producer_issue": 360,
+  "producer_run": 31924179133,
+  "producer_runner_sha256": "51c3f652d8bf9c222c83cb381b1adf8286737bcc6d11cb6fd8cd6080b0ac27ed",
+  "remediated_provisional_candidates": [
+    "Bevy",
+    "Defold",
+    "Godot"
+  ],
+  "results": {
+    "Bevy": {
+      "adaptation_validation": {
+        "adaptation_identity": "f0d7e3e5320dfb9ee60d71f3a9a4f477c6d1e089b8bb9b1012ffc7a5b6404940",
+        "binding_id": "3bde5bf5ba7f8c80c42de33e726d66e809d2890880d984558d27250e7d0f712d",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      },
+      "binding_verification": {
+        "ok": true,
+        "reasons": []
+      },
+      "build": {
+        "exit": 0,
+        "seconds": 29.326,
+        "stderr": "",
+        "stdout": "",
+        "timed_out": false
+      },
+      "candidate_identity": {
+        "body": {
+          "build_identity_digest": "sha256:6b7766353be68fcfdd39a6e2c1466d675b4b50125d966bfc1c1e496cebd2f90c",
+          "candidate": "Bevy",
+          "executable_sha256": "be00057175eb8e933d34ead32199dca777bb562806fa4f69711012f33cbdc1f3",
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "predecessor": {
+            "producer_artifact": 9257331215,
+            "producer_evidence_sha256": "8ba3922733c4051f798dab002de4cf607f6176ffe3f66d3e85a2568473967453",
+            "producer_head": "942a8c05032c1506730f52e897496172fb56fcf3",
+            "producer_run": 31924179133,
+            "review_issue": 362,
+            "review_terminal": 5305556485
+          },
+          "producer_runner_sha256": "51c3f652d8bf9c222c83cb381b1adf8286737bcc6d11cb6fd8cd6080b0ac27ed",
+          "remediation_base_sha256": "8154cc3f944149b0ea67ac50d58bec55a4722d18ebb5569e70638881ac3d80cc",
+          "remediation_entry_sha256": "a60985f37d5c51ca7d0640fbb3622f46994ef9ddd30ae17138863347e56dc416",
+          "run_identity": {
+            "run_attempt": "1",
+            "run_id": "31924831337",
+            "runner_arch": "X64",
+            "runner_os": "Linux",
+            "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+          },
+          "scenario_id": "S4",
+          "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+          "toolchain_digest": "sha256:a84eb492d197285026bfccdbb92309c67954ed3b072114346206b9518eb6dc53",
+          "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea",
+          "version": "0.19.0"
+        },
+        "identity_digest": "sha256:358db5a265ed274ef9e47588d9cd67d2475c281f4d4b9e721d216d8cf403f167"
+      },
+      "disposition": "REMEDIATED_S4_PROVISIONAL_PASS_PENDING_FRESH_REVIEW",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "entity_count": 32,
+            "save_v1_field_count": 5,
+            "save_v2_added_field_count": 1
+          },
+          "candidate_id": "Bevy",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S4-INCOMPAT-TUPLE-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:logical_state",
+            "SLICE:save_schema"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "explicit_migration": "EQUIVALENT",
+            "malformed_tuple_diagnostic": "EQUIVALENT",
+            "round_trip": "EQUIVALENT",
+            "schema_evolution": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S4",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "3bde5bf5ba7f8c80c42de33e726d66e809d2890880d984558d27250e7d0f712d",
+        "all_attempt_refs": [
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-N1",
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-N2",
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-FI1"
+        ],
+        "attempts": {
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-FI1": {
+            "attempt_id": "GEN-S4R-6497066fc4b41018306e88fe-S4-FI1",
+            "candidate_generation_id": "GEN-S4R-6497066fc4b41018306e88fe",
+            "candidate_id": "Bevy",
+            "failure_class": "NONE",
+            "injection_id": "FI-S4-INCOMPAT-TUPLE-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-f8d7587bd8607edd9299f1c55e99",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-e0c17c14902246854d3e4c72cfc0"
+          },
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-N1": {
+            "attempt_id": "GEN-S4R-6497066fc4b41018306e88fe-S4-N1",
+            "candidate_generation_id": "GEN-S4R-6497066fc4b41018306e88fe",
+            "candidate_id": "Bevy",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-3dbb3592fef225c2ca8a0ecef1ee",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-38982a32fb40f1e26f672c1c4dde"
+          },
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-N2": {
+            "attempt_id": "GEN-S4R-6497066fc4b41018306e88fe-S4-N2",
+            "candidate_generation_id": "GEN-S4R-6497066fc4b41018306e88fe",
+            "candidate_id": "Bevy",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-10ef829b4fd1a7a98a0d74d94a6c",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-2a8dc57cde123f50f547362f7869"
+          }
+        },
+        "candidate_id": "Bevy",
+        "candidate_work_id": "WORK-S4R-6c233d098d43ae2b27e1c62a",
+        "generation_id": "GEN-S4R-6497066fc4b41018306e88fe",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-N1",
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-N2",
+          "GEN-S4R-6497066fc4b41018306e88fe-S4-FI1"
+        ],
+        "scenario_id": "S4"
+      },
+      "identity_derivation": {
+        "adaptation_identity": "f0d7e3e5320dfb9ee60d71f3a9a4f477c6d1e089b8bb9b1012ffc7a5b6404940",
+        "candidate": "Bevy",
+        "candidate_identity_digest": "sha256:358db5a265ed274ef9e47588d9cd67d2475c281f4d4b9e721d216d8cf403f167",
+        "raw_attempt_digests": [
+          "sha256:61abb7000c938d2f7bc932585a6e966af9c4383c9ff22fc14ea87fe1c7d6b39f",
+          "sha256:ec8e8101acd6aa46bd9b96211acfe5b2f82afcb33fc89859c8e8a058e5ee3a71",
+          "sha256:97efbc3d61f121b3b3e46c8c9632e38cced15e03c7f7a260c64094d3b131f244"
+        ],
+        "run_identity": {
+          "run_attempt": "1",
+          "run_id": "31924831337",
+          "runner_arch": "X64",
+          "runner_os": "Linux",
+          "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+        },
+        "scenario": "S4"
+      },
+      "negative_selftests": {
+        "asserted_reset_without_proof_rejected": true,
+        "binary_identity_substitution_rejected": true,
+        "candidate_generation_mismatch_rejected": true,
+        "duplicate_registry_rejected": true,
+        "formal_raw_binding_substitution_rejected": true,
+        "malformed_tuple_acceptance_rejected": true,
+        "migration_default_omission_rejected": true,
+        "missing_reset_proof_rejected": true,
+        "raw_source_digest_substitution_rejected": true,
+        "reused_state_root_rejected": true,
+        "reused_workspace_rejected": true,
+        "schema_field_omission_rejected": true,
+        "toolchain_identity_substitution_rejected": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:61abb7000c938d2f7bc932585a6e966af9c4383c9ff22fc14ea87fe1c7d6b39f",
+          "observation": {
+            "seconds": 0.002
+          },
+          "record": {
+            "candidate": "Bevy",
+            "candidate_identity_digest": "sha256:358db5a265ed274ef9e47588d9cd67d2475c281f4d4b9e721d216d8cf403f167",
+            "candidate_state_after_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "command_semantic": {
+              "binary_sha256": "be00057175eb8e933d34ead32199dca777bb562806fa4f69711012f33cbdc1f3",
+              "mode": "NORMAL",
+              "program": "bevy-binary"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "digests": {
+                "input": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+                "migrated": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "replay": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "roundtrip": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff"
+              },
+              "input": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migrated": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migration_exact": true,
+              "pass": true,
+              "replay": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "replay_exact": true,
+              "roundtrip": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "roundtrip_exact": true
+            },
+            "label": "N1",
+            "mode": "NORMAL",
+            "reset_proof": {
+              "candidate": "Bevy",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "N1",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-3dbb3592fef225c2ca8a0ecef1ee",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-919efe77587e22918147cfdaac15",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-38982a32fb40f1e26f672c1c4dde"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "EVERFIELD_S4:PASS:NORMAL\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        },
+        {
+          "digest": "sha256:ec8e8101acd6aa46bd9b96211acfe5b2f82afcb33fc89859c8e8a058e5ee3a71",
+          "observation": {
+            "seconds": 0.001
+          },
+          "record": {
+            "candidate": "Bevy",
+            "candidate_identity_digest": "sha256:358db5a265ed274ef9e47588d9cd67d2475c281f4d4b9e721d216d8cf403f167",
+            "candidate_state_after_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "command_semantic": {
+              "binary_sha256": "be00057175eb8e933d34ead32199dca777bb562806fa4f69711012f33cbdc1f3",
+              "mode": "NORMAL",
+              "program": "bevy-binary"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "digests": {
+                "input": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+                "migrated": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "replay": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "roundtrip": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff"
+              },
+              "input": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migrated": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migration_exact": true,
+              "pass": true,
+              "replay": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "replay_exact": true,
+              "roundtrip": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "roundtrip_exact": true
+            },
+            "label": "N2",
+            "mode": "NORMAL",
+            "reset_proof": {
+              "candidate": "Bevy",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "N2",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-10ef829b4fd1a7a98a0d74d94a6c",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-23ed27a9c1496c7630fbf0d5b8d7",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-2a8dc57cde123f50f547362f7869"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "EVERFIELD_S4:PASS:NORMAL\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        },
+        {
+          "digest": "sha256:97efbc3d61f121b3b3e46c8c9632e38cced15e03c7f7a260c64094d3b131f244",
+          "observation": {
+            "seconds": 0.001
+          },
+          "record": {
+            "candidate": "Bevy",
+            "candidate_identity_digest": "sha256:358db5a265ed274ef9e47588d9cd67d2475c281f4d4b9e721d216d8cf403f167",
+            "candidate_state_after_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "command_semantic": {
+              "binary_sha256": "be00057175eb8e933d34ead32199dca777bb562806fa4f69711012f33cbdc1f3",
+              "mode": "INJECT",
+              "program": "bevy-binary"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "93971ed64cd173fade5a764d6047c982a31867d7ad3a92760c7251c4819b2233",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "input": {
+                "ok": false,
+                "reason": "malformed_entity_tuple",
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  4,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "pass": true
+            },
+            "label": "FI1",
+            "mode": "INJECT",
+            "reset_proof": {
+              "candidate": "Bevy",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "FI1",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-f8d7587bd8607edd9299f1c55e99",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-6d5101ea6326b7c279514ee301fb",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-e0c17c14902246854d3e4c72cfc0"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "EVERFIELD_S4:PASS:INCOMPAT_TUPLE\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        }
+      ],
+      "source_bindings": {
+        "GEN-S4R-6497066fc4b41018306e88fe-S4-FI1": "sha256:97efbc3d61f121b3b3e46c8c9632e38cced15e03c7f7a260c64094d3b131f244",
+        "GEN-S4R-6497066fc4b41018306e88fe-S4-N1": "sha256:61abb7000c938d2f7bc932585a6e966af9c4383c9ff22fc14ea87fe1c7d6b39f",
+        "GEN-S4R-6497066fc4b41018306e88fe-S4-N2": "sha256:ec8e8101acd6aa46bd9b96211acfe5b2f82afcb33fc89859c8e8a058e5ee3a71"
+      },
+      "toolchain": {
+        "cargo": {
+          "path": "/home/runner/.cargo/bin/cargo",
+          "probe": {
+            "cmd": [
+              "/home/runner/.cargo/bin/cargo",
+              "--version"
+            ],
+            "exit": 0,
+            "seconds": 0.08,
+            "stderr": "",
+            "stdout": "cargo 1.97.1 (c980f4866 2026-06-30)\n",
+            "timed_out": false
+          }
+        },
+        "cargo_check": {
+          "cmd": [
+            "/home/runner/.cargo/bin/cargo",
+            "check",
+            "--locked",
+            "--quiet"
+          ],
+          "exit": 0,
+          "seconds": 25.193,
+          "stderr": "",
+          "stdout": "",
+          "timed_out": false
+        },
+        "lock_replay_bound": true,
+        "reason": "exact_retained_cargo_lock_replayed_and_compiled; full graphics/package harness not executed",
+        "replay_locked_fetch": {
+          "cmd": [
+            "/home/runner/.cargo/bin/cargo",
+            "fetch",
+            "--locked"
+          ],
+          "exit": 0,
+          "seconds": 1.776,
+          "stderr": " Downloaded bevy_internal v0.19.1\n  Downloaded proc-macro2 v1.0.107\n  Downloaded getrandom v0.4.3\n  Downloaded hashbrown v0.16.1\n  Downloaded bumpalo v3.20.3\n  Downloaded rand_distr v0.6.0\n  Downloaded combine v4.6.7\n  Downloaded bevy_derive v0.19.1\n  Downloaded bevy_ecs_macro_logic v0.19.1\n  Downloaded bevy_time v0.19.1\n  Downloaded jni-sys v0.3.1\n  Downloaded bytes v1.12.1\n  Downloaded find-msvc-tools v0.1.11\n  Downloaded windows-link v0.2.1\n  Downloaded quote v1.0.47\n  Downloaded futures-channel v0.3.34\n  Downloaded bevy_android v0.19.1\n  Downloaded disqualified v1.0.0\n  Downloaded portable-atomic v1.15.0\n  Downloaded serde v1.0.229\n  Downloaded bevy_diagnostic v0.19.1\n  Downloaded walkdir v2.5.0\n  Downloaded equivalent v1.0.2\n  Downloaded indexmap v2.14.0\n  Downloaded jni-sys v0.4.1\n  Downloaded serde_derive v1.0.229\n  Downloaded num_enum v0.7.6\n  Downloaded rustc_version v0.4.1\n  Downloaded bevy_app v0.19.1\n  Downloaded ndk-context v0.1.1\n  Downloaded thiserror-impl v1.0.69\n  Downloaded same-file v1.0.6\n  Downloaded web-task v1.1.3\n  Downloaded syn v3.0.3\n  Downloaded bevy_ecs v0.19.1\n  Downloaded unicode-xid v0.2.6\n  Downloaded const-fnv1a-hash v1.1.0\n  Downloaded android-properties v0.2.2\n  Downloaded thiserror-impl v2.0.20\n  Downloaded derive_more-impl v2.1.1\n  Downloaded serde_core v1.0.229\n  Downloaded portable-atomic-util v0.2.7\n  Downloaded foldhash v0.2.0\n  Downloaded jni-sys-macros v0.4.1\n  Downloaded winapi-util v0.1.11\n  Downloaded derive_more v2.1.1\n  Downloaded syn v2.0.119\n  Downloaded unicode-segmentation v1.13.3\n  Downloaded wasm-bindgen-macro v0.2.127\n  Downloaded proc-macro-crate v3.5.0\n  Downloaded futures-core v0.3.34\n  Downloaded unicode-ident v1.0.24\n  Downloaded thiserror v2.0.20\n  Downloaded bevy_tasks v0.19.1\n  Downloaded simdutf8 v0.1.5\n  Downloaded convert_case v0.10.0\n  Downloaded wasm-bindgen-macro-support v0.2.127\n  Downloaded bevy_input v0.19.1\n  Downloaded num_enum_derive v0.7.6\n  Downloaded thiserror v1.0.69\n  Downloaded shlex v2.0.1\n  Downloaded jobserver v0.1.35\n  Downloaded bevy_transform v0.19.1\n  Downloaded semver v1.0.28\n  Downloaded once_cell v1.21.4\n  Downloaded jni-macros v0.22.4\n  Downloaded atomic-waker v1.1.2\n  Downloaded ndk v0.9.0\n  Downloaded cc v1.4.3\n  Downloaded android-activity v0.6.1\n  Downloaded jni v0.22.4\n  Downloaded hashbrown v0.17.1\n  Downloaded simd_cesu8 v1.2.0\n  Downloaded ndk-sys v0.6.0+11769913\n  Downloaded cfg-if v1.0.4\n  Downloaded pin-project-lite v0.2.17\n  Downloaded crossbeam-queue v0.3.13\n  Downloaded wasm-bindgen-shared v0.2.127\n  Downloaded typeid v1.0.3\n  Downloaded nonmax v0.5.5\n  Downloaded either v1.17.0\n  Downloaded fixedbitset v0.5.7\n  Downloaded hash32 v0.3.1\n  Downloaded bytemuck v1.25.2\n  Downloaded bevy_math v0.19.1\n  Downloaded bytemuck_derive v1.12.0\n  Downloaded assert_type_match v0.1.1\n  Downloaded bevy_macro_utils v0.19.1\n  Downloaded rand_core v0.10.1\n  Downloaded num-traits v0.2.19\n  Downloaded bevy_ecs_macros v0.19.1\n  Downloaded libm v0.2.16\n  Downloaded toml_datetime v1.1.1+spec-1.1.0\n  Downloaded toml_edit v0.25.13+spec-1.1.0\n  Downloaded toml_parser v1.1.3+spec-1.1.0\n  Downloaded autocfg v1.5.1\n  Downloaded arrayvec v0.7.8\n  Downloaded rustversion v1.0.23\n  Downloaded log v0.4.33\n  Downloaded async-task v4.7.1\n  Downloaded memchr v2.8.3\n  Downloaded bevy_ptr v0.19.1\n  Downloaded slotmap v1.1.1\n  Downloaded crossbeam-utils v0.8.22\n  Downloaded smallvec v1.15.2\n  Downloaded r-efi v6.0.0\n  Downloaded bitflags v2.13.1\n  Downloaded bevy_reflect_derive v0.19.1\n  Downloaded futures-lite v2.6.1\n  Downloaded version_check v0.9.5\n  Downloaded concurrent-queue v2.5.0\n  Downloaded js-sys v0.3.104\n  Downloaded uuid v1.24.1\n  Downloaded heapless v0.9.3\n  Downloaded downcast-rs v2.0.2\n  Downloaded futures-util v0.3.34\n  Downloaded itertools v0.14.0\n  Downloaded rand v0.10.2\n  Downloaded winnow v1.0.4\n  Downloaded bevy_reflect v0.19.1\n  Downloaded bevy v0.19.0\n  Downloaded libc v0.2.189\n  Downloaded glam v0.32.1\n  Downloaded windows-sys v0.61.2\n",
+          "stdout": "",
+          "timed_out": false
+        },
+        "resolution": {
+          "cmd": [
+            "reuse",
+            "docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock"
+          ],
+          "exit": 0,
+          "seconds": 0,
+          "stderr": "",
+          "stdout": "",
+          "timed_out": false
+        },
+        "retained_lock_path": "docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock",
+        "retained_lock_sha256": "fd7e1276ff5c8cde22d98c0932f70eb39383d9b60ac2d15f11d921dfa71218b0",
+        "retained_lock_source": "RETAINED_REPOSITORY_LOCK",
+        "rustc": {
+          "path": "/home/runner/.cargo/bin/rustc",
+          "probe": {
+            "cmd": [
+              "/home/runner/.cargo/bin/rustc",
+              "--version"
+            ],
+            "exit": 0,
+            "seconds": 0.159,
+            "stderr": "",
+            "stdout": "rustc 1.97.1 (8bab26f4f 2026-07-14)\n",
+            "timed_out": false
+          }
+        },
+        "status": "CAPABLE_WITH_PRESEED"
+      },
+      "trusted_representation_ok": true
+    },
+    "Defold": {
+      "adaptation_validation": {
+        "adaptation_identity": "ba5afee4765367472ce44ddaa268a0318cec531a1b3e31dcecf31d37855332c5",
+        "binding_id": "380a0d763d562599aaed2a0433b59fc2fea5e55204960f5c83f0f7ab0fcd2997",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      },
+      "binding_verification": {
+        "ok": true,
+        "reasons": []
+      },
+      "builds": [
+        {
+          "result": {
+            "exit": 0,
+            "seconds": 4.585,
+            "stderr": "obuf generated type in use: com.dynamo.proto.DdfMath$Vector3One\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$InstanceDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$ComponenTypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$CollectionDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.properties.proto.PropertiesProto$PropertyDeclarations\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$ComponentDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$PrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.script.proto.Lua$LuaSource\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.lua.proto.Lua$LuaModule\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$RenderPrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$InputBinding\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadModifier_t\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMapEntry\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMap\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMaps\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfileQualifier\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfile\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 3:42:18 AM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfiles\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\n",
+            "stdout": "  0% Downloading 0 archives\n 25% Downloading 0 archives\n 25% Working\n 25% Reading classes\n2026-08-16 03:42:16 INFO     \n 44% Reading classes\n 63% Reading classes\n 69% Reading classes\n 69% Cleaning engine\n 72% Cleaning engine\n 75% Cleaning engine\n 75% Reading tasks\n 77% Building\n2026-08-16 03:42:18 INFO    Creating task builder with a fixed thread pool executor using 3 threads \n2026-08-16 03:42:18 INFO    Build tasks \n2026-08-16 03:42:18 INFO    Generating the resource graph \n2026-08-16 03:42:18 INFO    Generating the resource graph took 0.114000 s \n2026-08-16 03:42:18 INFO    Creation of the excluded resources list. \n2026-08-16 03:42:18 INFO    Creation of the excluded resources list took 0.000000 s \n2026-08-16 03:42:18 INFO    GameProjectBuilder.createArchive \n2026-08-16 03:42:18 INFO    Creating archive entries with a fixed thread pool executor using 3 threads \n2026-08-16 03:42:18 INFO    GameProjectBuilder.createArchive took 0.021000 \n2026-08-16 03:42:18 INFO    buildManifestData begin \n2026-08-16 03:42:18 INFO    ManifestBuilder.buildManifestData took 0.005000 \n2026-08-16 03:42:18 INFO    buildManifestData begin \n2026-08-16 03:42:18 INFO    ManifestBuilder.buildManifestData took 0.000000 \n2026-08-16 03:42:18 INFO    Writing the resource graph to json \n2026-08-16 03:42:18 INFO    Writing the resource graph to json took 0.011000 s \n2026-08-16 03:42:18 INFO    Build tasks took 0.530000 s \n 81% Building\n 81% Bundling\n100% Bundling\n",
+            "timed_out": false
+          },
+          "variant": "headless"
+        }
+      ],
+      "candidate_identity": {
+        "body": {
+          "build_identity_digest": "sha256:52cb089d818cc583d032bc5b264f3e0db1db5fe7b33601edebcc02d12097846d",
+          "candidate": "Defold",
+          "executable_sha256": "e92603177b4f967842f8d5a4179c51e6a249539d377a743b4a68469aaad807df",
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "predecessor": {
+            "producer_artifact": 9257331215,
+            "producer_evidence_sha256": "8ba3922733c4051f798dab002de4cf607f6176ffe3f66d3e85a2568473967453",
+            "producer_head": "942a8c05032c1506730f52e897496172fb56fcf3",
+            "producer_run": 31924179133,
+            "review_issue": 362,
+            "review_terminal": 5305556485
+          },
+          "producer_runner_sha256": "51c3f652d8bf9c222c83cb381b1adf8286737bcc6d11cb6fd8cd6080b0ac27ed",
+          "remediation_base_sha256": "8154cc3f944149b0ea67ac50d58bec55a4722d18ebb5569e70638881ac3d80cc",
+          "remediation_entry_sha256": "a60985f37d5c51ca7d0640fbb3622f46994ef9ddd30ae17138863347e56dc416",
+          "run_identity": {
+            "run_attempt": "1",
+            "run_id": "31924831337",
+            "runner_arch": "X64",
+            "runner_os": "Linux",
+            "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+          },
+          "scenario_id": "S4",
+          "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+          "toolchain_digest": "sha256:354c844ef1204a042d6d9cc7d83e755ba4ab8d5b88ca7e487292a8aea97a15c1",
+          "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea",
+          "version": "1.13.0"
+        },
+        "identity_digest": "sha256:960d7ae451e8a7a6806de5edf9ffddc9d382208bfc45e4549984b2043f46e875"
+      },
+      "disposition": "REMEDIATED_S4_PROVISIONAL_PASS_PENDING_FRESH_REVIEW",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "entity_count": 32,
+            "save_v1_field_count": 5,
+            "save_v2_added_field_count": 1
+          },
+          "candidate_id": "Defold",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S4-INCOMPAT-TUPLE-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:logical_state",
+            "SLICE:save_schema"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "explicit_migration": "EQUIVALENT",
+            "malformed_tuple_diagnostic": "EQUIVALENT",
+            "round_trip": "EQUIVALENT",
+            "schema_evolution": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S4",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "380a0d763d562599aaed2a0433b59fc2fea5e55204960f5c83f0f7ab0fcd2997",
+        "all_attempt_refs": [
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-N1",
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-N2",
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-FI1"
+        ],
+        "attempts": {
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-FI1": {
+            "attempt_id": "GEN-S4R-6d03077324c742a9a1189e02-S4-FI1",
+            "candidate_generation_id": "GEN-S4R-6d03077324c742a9a1189e02",
+            "candidate_id": "Defold",
+            "failure_class": "NONE",
+            "injection_id": "FI-S4-INCOMPAT-TUPLE-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-49e552cc924d49f0db807aaa69ec",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-7013983d251c4cd6d162fb26b931"
+          },
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-N1": {
+            "attempt_id": "GEN-S4R-6d03077324c742a9a1189e02-S4-N1",
+            "candidate_generation_id": "GEN-S4R-6d03077324c742a9a1189e02",
+            "candidate_id": "Defold",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-57cae4091b7c40c78ab4e9e1546b",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-7a7fee571e84560bf8faa1e4bb98"
+          },
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-N2": {
+            "attempt_id": "GEN-S4R-6d03077324c742a9a1189e02-S4-N2",
+            "candidate_generation_id": "GEN-S4R-6d03077324c742a9a1189e02",
+            "candidate_id": "Defold",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-57419d6bfb14a374738fdd959563",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-61fb33a8c25d7f55b5aa7501d2b6"
+          }
+        },
+        "candidate_id": "Defold",
+        "candidate_work_id": "WORK-S4R-d0ecc1252e18670be3448bb8",
+        "generation_id": "GEN-S4R-6d03077324c742a9a1189e02",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-N1",
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-N2",
+          "GEN-S4R-6d03077324c742a9a1189e02-S4-FI1"
+        ],
+        "scenario_id": "S4"
+      },
+      "identity_derivation": {
+        "adaptation_identity": "ba5afee4765367472ce44ddaa268a0318cec531a1b3e31dcecf31d37855332c5",
+        "candidate": "Defold",
+        "candidate_identity_digest": "sha256:960d7ae451e8a7a6806de5edf9ffddc9d382208bfc45e4549984b2043f46e875",
+        "raw_attempt_digests": [
+          "sha256:806b450e7537d58aae365fdf11232b62641c5ce3ea60e97fec9c03d73b63168f",
+          "sha256:d51a1bd5309ec3d0b19dfd09541c85c9456e6f5ff48c908df85b9ba39c9dd45d",
+          "sha256:7e9b0c7df73ae2399614dba6d5d78d5880175ab7e0981e7c03b3eb247736f245"
+        ],
+        "run_identity": {
+          "run_attempt": "1",
+          "run_id": "31924831337",
+          "runner_arch": "X64",
+          "runner_os": "Linux",
+          "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+        },
+        "scenario": "S4"
+      },
+      "negative_selftests": {
+        "asserted_reset_without_proof_rejected": true,
+        "binary_identity_substitution_rejected": true,
+        "candidate_generation_mismatch_rejected": true,
+        "duplicate_registry_rejected": true,
+        "formal_raw_binding_substitution_rejected": true,
+        "malformed_tuple_acceptance_rejected": true,
+        "migration_default_omission_rejected": true,
+        "missing_reset_proof_rejected": true,
+        "raw_source_digest_substitution_rejected": true,
+        "reused_state_root_rejected": true,
+        "reused_workspace_rejected": true,
+        "schema_field_omission_rejected": true,
+        "toolchain_identity_substitution_rejected": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:806b450e7537d58aae365fdf11232b62641c5ce3ea60e97fec9c03d73b63168f",
+          "observation": {
+            "seconds": 0.033
+          },
+          "record": {
+            "candidate": "Defold",
+            "candidate_identity_digest": "sha256:960d7ae451e8a7a6806de5edf9ffddc9d382208bfc45e4549984b2043f46e875",
+            "candidate_state_after_sha256": "a006a24c9927a7b5263578089499f3fd65b47806ed8a7081444e9460baeedc16",
+            "command_semantic": {
+              "binary_sha256": "e92603177b4f967842f8d5a4179c51e6a249539d377a743b4a68469aaad807df",
+              "candidate_state_root_id": "isolated-via-HOME-XDG",
+              "mode": "NORMAL",
+              "program": "defold-bundle"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "digests": {
+                "input": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+                "migrated": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "replay": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "roundtrip": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff"
+              },
+              "input": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migrated": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migration_exact": true,
+              "pass": true,
+              "replay": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "replay_exact": true,
+              "roundtrip": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "roundtrip_exact": true
+            },
+            "label": "N1",
+            "mode": "NORMAL",
+            "reset_proof": {
+              "candidate": "Defold",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "N1",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-57cae4091b7c40c78ab4e9e1546b",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-dee01737ce5789f22d75780c5975",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-7a7fee571e84560bf8faa1e4bb98"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "INFO:DLIB: Log server started on port 40579\nINFO:ENGINE: Target listening with name: runnervmzvulz - 10.1.0.223 - Linux\nINFO:ENGINE: Engine service started on port 8001\nINFO:GRAPHICS: Installed graphics device 'ADAPTER_FAMILY_NULL'\nINFO:ENGINE: Defold Engine 1.13.0 (f735c12)\nINFO:PROFILER: Initialized Remotery (ws://127.0.0.1:17815/rmt)\nINFO:ENGINE: Loading data from: archive:game.dmanifest\nINFO:ENGINE: Initialised sound device 'default'\nINFO:PHYSICS: Created physics context: Box2D v2.2.1\nDEBUG:SCRIPT: EVERFIELD_S4:PASS:NORMAL\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        },
+        {
+          "digest": "sha256:d51a1bd5309ec3d0b19dfd09541c85c9456e6f5ff48c908df85b9ba39c9dd45d",
+          "observation": {
+            "seconds": 0.033
+          },
+          "record": {
+            "candidate": "Defold",
+            "candidate_identity_digest": "sha256:960d7ae451e8a7a6806de5edf9ffddc9d382208bfc45e4549984b2043f46e875",
+            "candidate_state_after_sha256": "38b9e28e7217e3d9200c91673647ee22a8b6b8c87eb1d163115f594029092f13",
+            "command_semantic": {
+              "binary_sha256": "e92603177b4f967842f8d5a4179c51e6a249539d377a743b4a68469aaad807df",
+              "candidate_state_root_id": "isolated-via-HOME-XDG",
+              "mode": "NORMAL",
+              "program": "defold-bundle"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "digests": {
+                "input": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+                "migrated": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "replay": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "roundtrip": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff"
+              },
+              "input": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migrated": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migration_exact": true,
+              "pass": true,
+              "replay": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "replay_exact": true,
+              "roundtrip": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "roundtrip_exact": true
+            },
+            "label": "N2",
+            "mode": "NORMAL",
+            "reset_proof": {
+              "candidate": "Defold",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "N2",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-57419d6bfb14a374738fdd959563",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-fbe45812772699f0987150860d33",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-61fb33a8c25d7f55b5aa7501d2b6"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "INFO:DLIB: Log server started on port 41639\nINFO:ENGINE: Target listening with name: runnervmzvulz - 10.1.0.223 - Linux\nINFO:ENGINE: Engine service started on port 8001\nINFO:GRAPHICS: Installed graphics device 'ADAPTER_FAMILY_NULL'\nINFO:ENGINE: Defold Engine 1.13.0 (f735c12)\nINFO:PROFILER: Initialized Remotery (ws://127.0.0.1:17815/rmt)\nINFO:ENGINE: Loading data from: archive:game.dmanifest\nINFO:ENGINE: Initialised sound device 'default'\nINFO:PHYSICS: Created physics context: Box2D v2.2.1\nDEBUG:SCRIPT: EVERFIELD_S4:PASS:NORMAL\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        },
+        {
+          "digest": "sha256:7e9b0c7df73ae2399614dba6d5d78d5880175ab7e0981e7c03b3eb247736f245",
+          "observation": {
+            "seconds": 0.033
+          },
+          "record": {
+            "candidate": "Defold",
+            "candidate_identity_digest": "sha256:960d7ae451e8a7a6806de5edf9ffddc9d382208bfc45e4549984b2043f46e875",
+            "candidate_state_after_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "command_semantic": {
+              "binary_sha256": "e92603177b4f967842f8d5a4179c51e6a249539d377a743b4a68469aaad807df",
+              "candidate_state_root_id": "isolated-via-HOME-XDG",
+              "mode": "INJECT",
+              "program": "defold-bundle"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "93971ed64cd173fade5a764d6047c982a31867d7ad3a92760c7251c4819b2233",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "input": {
+                "ok": false,
+                "reason": "malformed_entity_tuple",
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  4,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "pass": true
+            },
+            "label": "FI1",
+            "mode": "INJECT",
+            "reset_proof": {
+              "candidate": "Defold",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "FI1",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-49e552cc924d49f0db807aaa69ec",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-006e39cc0937061e1d66e05f74d3",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-7013983d251c4cd6d162fb26b931"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "INFO:DLIB: Log server started on port 37089\nINFO:ENGINE: Target listening with name: runnervmzvulz - 10.1.0.223 - Linux\nINFO:ENGINE: Engine service started on port 8001\nINFO:GRAPHICS: Installed graphics device 'ADAPTER_FAMILY_NULL'\nINFO:ENGINE: Defold Engine 1.13.0 (f735c12)\nINFO:PROFILER: Initialized Remotery (ws://127.0.0.1:17815/rmt)\nINFO:ENGINE: Loading data from: archive:game.dmanifest\nINFO:ENGINE: Initialised sound device 'default'\nINFO:PHYSICS: Created physics context: Box2D v2.2.1\nDEBUG:SCRIPT: EVERFIELD_S4:PASS:INCOMPAT_TUPLE\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        }
+      ],
+      "source_bindings": {
+        "GEN-S4R-6d03077324c742a9a1189e02-S4-FI1": "sha256:7e9b0c7df73ae2399614dba6d5d78d5880175ab7e0981e7c03b3eb247736f245",
+        "GEN-S4R-6d03077324c742a9a1189e02-S4-N1": "sha256:806b450e7537d58aae365fdf11232b62641c5ce3ea60e97fec9c03d73b63168f",
+        "GEN-S4R-6d03077324c742a9a1189e02-S4-N2": "sha256:d51a1bd5309ec3d0b19dfd09541c85c9456e6f5ff48c908df85b9ba39c9dd45d"
+      },
+      "toolchain": {
+        "artifact_identity": {
+          "digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+          "expected_sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+          "limitation": "No authoritative vendor digest was observed from the public GitHub release metadata; this exact run content identity is retained for subsequent replay, not represented as vendor-signed identity.",
+          "observed_sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+          "vendor_digest_probe": {
+            "api_url": "https://api.github.com/repos/defold/defold/releases/tags/1.13.0",
+            "asset_name": "bob.jar",
+            "digest": null,
+            "probe": {
+              "cmd": [
+                "/usr/bin/curl",
+                "-fsSL",
+                "--max-time",
+                "30",
+                "-H",
+                "Accept: application/vnd.github+json",
+                "-H",
+                "X-GitHub-Api-Version: 2022-11-28",
+                "https://api.github.com/repos/defold/defold/releases/tags/1.13.0"
+              ],
+              "exit": 0,
+              "seconds": 0.187,
+              "stderr": "",
+              "stdout": "\",\n        \"id\": 38782685,\n        \"node_id\": \"MDQ6VXNlcjM4NzgyNjg1\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/38782685?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/defold-services\",\n        \"html_url\": \"https://github.com/defold-services\",\n        \"followers_url\": \"https://api.github.com/users/defold-services/followers\",\n        \"following_url\": \"https://api.github.com/users/defold-services/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/defold-services/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/defold-services/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/defold-services/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/defold-services/orgs\",\n        \"repos_url\": \"https://api.github.com/users/defold-services/repos\",\n        \"events_url\": \"https://api.github.com/users/defold-services/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/defold-services/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/x-msdos-program\",\n      \"state\": \"uploaded\",\n      \"size\": 1693696,\n      \"digest\": \"sha256:c652d5ae097b919ae71744252f7de2a415fbeb835bdbc187d2f7a6c1427cb653\",\n      \"download_count\": 20,\n      \"created_at\": \"2026-07-07T11:56:42Z\",\n      \"updated_at\": \"2026-07-07T11:56:42Z\",\n      \"browser_download_url\": \"https://github.com/defold/defold/releases/download/1.13.0/gdc_x86_64_win32-win.exe\"\n    },\n    {\n      \"url\": \"https://api.github.com/repos/defold/defold/releases/assets/469127836\",\n      \"id\": 469127836,\n      \"node_id\": \"RA_kwDOAEHZks4b9lKc\",\n      \"name\": \"ref-doc.zip\",\n      \"label\": \"\",\n      \"uploader\": {\n        \"login\": \"defold-services\",\n        \"id\": 38782685,\n        \"node_id\": \"MDQ6VXNlcjM4NzgyNjg1\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/38782685?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/defold-services\",\n        \"html_url\": \"https://github.com/defold-services\",\n        \"followers_url\": \"https://api.github.com/users/defold-services/followers\",\n        \"following_url\": \"https://api.github.com/users/defold-services/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/defold-services/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/defold-services/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/defold-services/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/defold-services/orgs\",\n        \"repos_url\": \"https://api.github.com/users/defold-services/repos\",\n        \"events_url\": \"https://api.github.com/users/defold-services/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/defold-services/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/zip\",\n      \"state\": \"uploaded\",\n      \"size\": 1197084,\n      \"digest\": \"sha256:b473277894fdfad9f1b1d7b6921bbe93fc61aae2c698f284eea8c852f3a3b3cf\",\n      \"download_count\": 48,\n      \"created_at\": \"2026-07-07T11:55:51Z\",\n      \"updated_at\": \"2026-07-07T11:55:51Z\",\n      \"browser_download_url\": \"https://github.com/defold/defold/releases/download/1.13.0/ref-doc.zip\"\n    }\n  ],\n  \"tarball_url\": \"https://api.github.com/repos/defold/defold/tarball/1.13.0\",\n  \"zipball_url\": \"https://api.github.com/repos/defold/defold/zipball/1.13.0\",\n  \"body\": \"Defold version 1.13.0\\nChannel=stable sha1: f735c12192bf95684e6ae1ae27c400b8170fc6d8\\ndate = 2026-07-07 11:54:22\",\n  \"reactions\": {\n    \"url\": \"https://api.github.com/repos/defold/defold/releases/346133235/reactions\",\n    \"total_count\": 20,\n    \"+1\": 0,\n    \"-1\": 0,\n    \"laugh\": 0,\n    \"hooray\": 0,\n    \"confused\": 0,\n    \"heart\": 14,\n    \"rocket\": 6,\n    \"eyes\": 0\n  }\n}\n",
+              "timed_out": false
+            },
+            "source": "NO_AUTHORITATIVE_DIGEST_OBSERVED"
+          },
+          "verified": true
+        },
+        "bob_version": {
+          "cmd": [
+            "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+            "-jar",
+            "/tmp/everfield-s4-rem-31s_mqpk/bob-1.13.0.jar",
+            "--version"
+          ],
+          "exit": 0,
+          "seconds": 0.468,
+          "stderr": "",
+          "stdout": "bob.jar version: 1.13.0  sha1: f735c12192bf95684e6ae1ae27c400b8170fc6d8  built: 2026-07-07 11:40:03\n100% Working\n",
+          "timed_out": false
+        },
+        "bytes": 208726976,
+        "download": {
+          "cmd": [
+            "/usr/bin/curl",
+            "-fL",
+            "--retry",
+            "2",
+            "--connect-timeout",
+            "20",
+            "-o",
+            "/tmp/everfield-s4-rem-31s_mqpk/bob-1.13.0.jar",
+            "https://github.com/defold/defold/releases/download/1.13.0/bob.jar"
+          ],
+          "exit": 0,
+          "seconds": 5.049,
+          "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n 10  199M   10 20.1M    0     0  29.5M      0  0:00:06 --:--:--  0:00:06 29.5M\n 28  199M   28 56.9M    0     0  35.1M      0  0:00:05  0:00:01  0:00:04 39.2M\n 54  199M   54  108M    0     0  41.3M      0  0:00:04  0:00:02  0:00:02 45.5M\n 74  199M   74  148M    0     0  41.0M      0  0:00:04  0:00:03  0:00:01 43.7M\n 90  199M   90  179M    0     0  38.9M      0  0:00:05  0:00:04  0:00:01 40.5M\n100  199M  100  199M    0     0  39.5M      0  0:00:05  0:00:05 --:--:-- 41.0M\n",
+          "stdout": "",
+          "timed_out": false
+        },
+        "java": {
+          "path": "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+          "probe": {
+            "cmd": [
+              "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+              "-version"
+            ],
+            "exit": 0,
+            "seconds": 1.342,
+            "stderr": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+            "stdout": "",
+            "timed_out": false
+          }
+        },
+        "reason": "digest_bound_bob_jar_downloaded_and_executed",
+        "status": "CAPABLE",
+        "url": "https://github.com/defold/defold/releases/download/1.13.0/bob.jar"
+      },
+      "trusted_representation_ok": true
+    },
+    "Godot": {
+      "adaptation_validation": {
+        "adaptation_identity": "9e33845b90a2d5f7c12c107d3c4455167997ea35f10ac64ffee33e23878d1719",
+        "binding_id": "3406ce0798c53ffa5ad8a5c504c12e70ed60307f6c2fdae322f4865126b9a8aa",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      },
+      "binding_verification": {
+        "ok": true,
+        "reasons": []
+      },
+      "candidate_identity": {
+        "body": {
+          "build_identity_digest": "sha256:0e9f4f4d84eb516de8260de51767f7ec508a863a59460310fac2edcb8e6e6088",
+          "candidate": "Godot",
+          "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "predecessor": {
+            "producer_artifact": 9257331215,
+            "producer_evidence_sha256": "8ba3922733c4051f798dab002de4cf607f6176ffe3f66d3e85a2568473967453",
+            "producer_head": "942a8c05032c1506730f52e897496172fb56fcf3",
+            "producer_run": 31924179133,
+            "review_issue": 362,
+            "review_terminal": 5305556485
+          },
+          "producer_runner_sha256": "51c3f652d8bf9c222c83cb381b1adf8286737bcc6d11cb6fd8cd6080b0ac27ed",
+          "remediation_base_sha256": "8154cc3f944149b0ea67ac50d58bec55a4722d18ebb5569e70638881ac3d80cc",
+          "remediation_entry_sha256": "a60985f37d5c51ca7d0640fbb3622f46994ef9ddd30ae17138863347e56dc416",
+          "run_identity": {
+            "run_attempt": "1",
+            "run_id": "31924831337",
+            "runner_arch": "X64",
+            "runner_os": "Linux",
+            "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+          },
+          "scenario_id": "S4",
+          "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+          "toolchain_digest": "sha256:cbb225ed51d2e99c67b718688f9b651c04d56457cff012bf1e20be552c425d34",
+          "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea",
+          "version": "4.7.1-stable"
+        },
+        "identity_digest": "sha256:3adf375d3d63197507491ec74b0ecebf05a2f8cb483986b48508bee358949244"
+      },
+      "disposition": "REMEDIATED_S4_PROVISIONAL_PASS_PENDING_FRESH_REVIEW",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "entity_count": 32,
+            "save_v1_field_count": 5,
+            "save_v2_added_field_count": 1
+          },
+          "candidate_id": "Godot",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S4-INCOMPAT-TUPLE-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:logical_state",
+            "SLICE:save_schema"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "explicit_migration": "EQUIVALENT",
+            "malformed_tuple_diagnostic": "EQUIVALENT",
+            "round_trip": "EQUIVALENT",
+            "schema_evolution": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S4",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "3406ce0798c53ffa5ad8a5c504c12e70ed60307f6c2fdae322f4865126b9a8aa",
+        "all_attempt_refs": [
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N1",
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N2",
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-FI1"
+        ],
+        "attempts": {
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-FI1": {
+            "attempt_id": "GEN-S4R-dd10ac7075ee1f2530085b69-S4-FI1",
+            "candidate_generation_id": "GEN-S4R-dd10ac7075ee1f2530085b69",
+            "candidate_id": "Godot",
+            "failure_class": "NONE",
+            "injection_id": "FI-S4-INCOMPAT-TUPLE-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-86762f321bf02e59a620068e8731",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-134fff8cbc2b99e65ad176a0bce8"
+          },
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N1": {
+            "attempt_id": "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N1",
+            "candidate_generation_id": "GEN-S4R-dd10ac7075ee1f2530085b69",
+            "candidate_id": "Godot",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-bb43e0c1e335e6f92777a6fdf53f",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-954af0aab6a630761d26cc892852"
+          },
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N2": {
+            "attempt_id": "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N2",
+            "candidate_generation_id": "GEN-S4R-dd10ac7075ee1f2530085b69",
+            "candidate_id": "Godot",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-4c3a0273d1eda0f493d6fd845524",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S4",
+            "workspace_id": "WS-6bc0c808cff6d38e583084d1520e"
+          }
+        },
+        "candidate_id": "Godot",
+        "candidate_work_id": "WORK-S4R-6de47095c6d2eddd8ff6b756",
+        "generation_id": "GEN-S4R-dd10ac7075ee1f2530085b69",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N1",
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N2",
+          "GEN-S4R-dd10ac7075ee1f2530085b69-S4-FI1"
+        ],
+        "scenario_id": "S4"
+      },
+      "identity_derivation": {
+        "adaptation_identity": "9e33845b90a2d5f7c12c107d3c4455167997ea35f10ac64ffee33e23878d1719",
+        "candidate": "Godot",
+        "candidate_identity_digest": "sha256:3adf375d3d63197507491ec74b0ecebf05a2f8cb483986b48508bee358949244",
+        "raw_attempt_digests": [
+          "sha256:df1c75e65d63404916a3a54e94dc738da6c136c256ff8a29d526941ea62f01d9",
+          "sha256:7612bac2470a3084daae145aca76e5806bf4b899aa9ba3de3bebfedac72d1d3e",
+          "sha256:a832e97620fc60d0c82203c8441b6911f277c8eb19eada19b172a1fcdad90790"
+        ],
+        "run_identity": {
+          "run_attempt": "1",
+          "run_id": "31924831337",
+          "runner_arch": "X64",
+          "runner_os": "Linux",
+          "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+        },
+        "scenario": "S4"
+      },
+      "negative_selftests": {
+        "asserted_reset_without_proof_rejected": true,
+        "binary_identity_substitution_rejected": true,
+        "candidate_generation_mismatch_rejected": true,
+        "duplicate_registry_rejected": true,
+        "formal_raw_binding_substitution_rejected": true,
+        "malformed_tuple_acceptance_rejected": true,
+        "migration_default_omission_rejected": true,
+        "missing_reset_proof_rejected": true,
+        "raw_source_digest_substitution_rejected": true,
+        "reused_state_root_rejected": true,
+        "reused_workspace_rejected": true,
+        "schema_field_omission_rejected": true,
+        "toolchain_identity_substitution_rejected": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:df1c75e65d63404916a3a54e94dc738da6c136c256ff8a29d526941ea62f01d9",
+          "observation": {
+            "seconds": 0.167
+          },
+          "record": {
+            "candidate": "Godot",
+            "candidate_identity_digest": "sha256:3adf375d3d63197507491ec74b0ecebf05a2f8cb483986b48508bee358949244",
+            "candidate_state_after_sha256": "b2cdfe3237afda96842d5dc24ff2fb87fae3011598af4d60e172b153c99811ff",
+            "command_semantic": {
+              "binary_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+              "mode": "NORMAL",
+              "program": "godot-headless",
+              "project_role": "isolated-attempt"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "digests": {
+                "input": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+                "migrated": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "replay": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "roundtrip": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff"
+              },
+              "input": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migrated": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migration_exact": true,
+              "pass": true,
+              "replay": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "replay_exact": true,
+              "roundtrip": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "roundtrip_exact": true
+            },
+            "label": "N1",
+            "mode": "NORMAL",
+            "reset_proof": {
+              "candidate": "Godot",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "N1",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-bb43e0c1e335e6f92777a6fdf53f",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-605d7714d3fc2d12f099620b37c8",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-954af0aab6a630761d26cc892852"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\nEVERFIELD_S4:PASS:NORMAL\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        },
+        {
+          "digest": "sha256:7612bac2470a3084daae145aca76e5806bf4b899aa9ba3de3bebfedac72d1d3e",
+          "observation": {
+            "seconds": 0.154
+          },
+          "record": {
+            "candidate": "Godot",
+            "candidate_identity_digest": "sha256:3adf375d3d63197507491ec74b0ecebf05a2f8cb483986b48508bee358949244",
+            "candidate_state_after_sha256": "b2cdfe3237afda96842d5dc24ff2fb87fae3011598af4d60e172b153c99811ff",
+            "command_semantic": {
+              "binary_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+              "mode": "NORMAL",
+              "program": "godot-headless",
+              "project_role": "isolated-attempt"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "digests": {
+                "input": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff",
+                "migrated": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "replay": "b7fffabfe080fc2c9c9b5ba019da103e1cc10dd45a26bddc87b76d0b1e88dd56",
+                "roundtrip": "c47666d7212644bbf089c476b4cbc18f8ceb6dec1689967fa1d955ad69fb07ff"
+              },
+              "input": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migrated": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "migration_exact": true,
+              "pass": true,
+              "replay": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 2,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "replay_exact": true,
+              "roundtrip": {
+                "entity_count": 32,
+                "ok": true,
+                "schema_version": 1,
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "roundtrip_exact": true
+            },
+            "label": "N2",
+            "mode": "NORMAL",
+            "reset_proof": {
+              "candidate": "Godot",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "N2",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-4c3a0273d1eda0f493d6fd845524",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-3b32f0f3e7aff92ebaa2be2d7d31",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-6bc0c808cff6d38e583084d1520e"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\nEVERFIELD_S4:PASS:NORMAL\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        },
+        {
+          "digest": "sha256:a832e97620fc60d0c82203c8441b6911f277c8eb19eada19b172a1fcdad90790",
+          "observation": {
+            "seconds": 0.155
+          },
+          "record": {
+            "candidate": "Godot",
+            "candidate_identity_digest": "sha256:3adf375d3d63197507491ec74b0ecebf05a2f8cb483986b48508bee358949244",
+            "candidate_state_after_sha256": "12866ff635960aae3e4db424fd1acd4a5f417343fc63800a1ed23ad793d31cc3",
+            "command_semantic": {
+              "binary_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+              "mode": "INJECT",
+              "program": "godot-headless",
+              "project_role": "isolated-attempt"
+            },
+            "failure_class": "NONE",
+            "fixture_sha256": "93971ed64cd173fade5a764d6047c982a31867d7ad3a92760c7251c4819b2233",
+            "formal_result": "PASS",
+            "host_semantics": {
+              "input": {
+                "ok": false,
+                "reason": "malformed_entity_tuple",
+                "widths": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  4,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "pass": true
+            },
+            "label": "FI1",
+            "mode": "INJECT",
+            "reset_proof": {
+              "candidate": "Godot",
+              "env_isolation_keys": [
+                "HOME",
+                "XDG_DATA_HOME",
+                "XDG_CONFIG_HOME",
+                "XDG_CACHE_HOME"
+              ],
+              "label": "FI1",
+              "pre_state_root_absent": true,
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-86762f321bf02e59a620068e8731",
+              "schema": "S4-RESET-PROOF-v1",
+              "state_root_created_exclusive": true,
+              "state_root_empty_before_candidate": true,
+              "state_root_id": "STATE-73a267d61bc51b6ea11920e1106f",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-134fff8cbc2b99e65ad176a0bce8"
+            },
+            "reset_verified_derived": true,
+            "result": {
+              "exit": 0,
+              "stderr": "",
+              "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\nEVERFIELD_S4:PASS:INCOMPAT_TUPLE\n",
+              "timed_out": false
+            },
+            "run_identity": {
+              "run_attempt": "1",
+              "run_id": "31924831337",
+              "runner_arch": "X64",
+              "runner_os": "Linux",
+              "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+            },
+            "scenario_id": "S4",
+            "schema": "S4-RAW-ATTEMPT-v1"
+          }
+        }
+      ],
+      "source_bindings": {
+        "GEN-S4R-dd10ac7075ee1f2530085b69-S4-FI1": "sha256:a832e97620fc60d0c82203c8441b6911f277c8eb19eada19b172a1fcdad90790",
+        "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N1": "sha256:df1c75e65d63404916a3a54e94dc738da6c136c256ff8a29d526941ea62f01d9",
+        "GEN-S4R-dd10ac7075ee1f2530085b69-S4-N2": "sha256:7612bac2470a3084daae145aca76e5806bf4b899aa9ba3de3bebfedac72d1d3e"
+      },
+      "toolchain": {
+        "artifact_identity": {
+          "digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+          "expected_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+          "limitation": "No authoritative vendor digest was observed from the public GitHub release metadata; this exact run content identity is retained for subsequent replay, not represented as vendor-signed identity.",
+          "observed_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+          "vendor_digest_probe": {
+            "api_url": "https://api.github.com/repos/godotengine/godot/releases/tags/4.7.1-stable",
+            "asset_name": "Godot_v4.7.1-stable_linux.x86_64.zip",
+            "digest": null,
+            "probe": {
+              "cmd": [
+                "/usr/bin/curl",
+                "-fsSL",
+                "--max-time",
+                "30",
+                "-H",
+                "Accept: application/vnd.github+json",
+                "-H",
+                "X-GitHub-Api-Version: 2022-11-28",
+                "https://api.github.com/repos/godotengine/godot/releases/tags/4.7.1-stable"
+              ],
+              "exit": 0,
+              "seconds": 0.212,
+              "stderr": "",
+              "stdout": "thub.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/zip\",\n      \"state\": \"uploaded\",\n      \"size\": 82407178,\n      \"digest\": \"sha256:d9cdf49102092a2b6db4c5929002628d16eca3d7226afca2b1d03431a0a1e64b\",\n      \"download_count\": 470,\n      \"created_at\": \"2026-07-14T18:08:31Z\",\n      \"updated_at\": \"2026-07-14T18:08:56Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_windows_arm64.exe.zip\"\n    },\n    {\n      \"url\": \"https://api.github.com/repos/godotengine/godot/releases/assets/477009199\",\n      \"id\": 477009199,\n      \"node_id\": \"RA_kwDOAO6SJc4cbpUv\",\n      \"name\": \"SHA512-SUMS.txt\",\n      \"label\": \"\",\n      \"uploader\": {\n        \"login\": \"akien-mga\",\n        \"id\": 4701338,\n        \"node_id\": \"MDQ6VXNlcjQ3MDEzMzg=\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/4701338?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/akien-mga\",\n        \"html_url\": \"https://github.com/akien-mga\",\n        \"followers_url\": \"https://api.github.com/users/akien-mga/followers\",\n        \"following_url\": \"https://api.github.com/users/akien-mga/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"text/plain; charset=utf-8\",\n      \"state\": \"uploaded\",\n      \"size\": 5682,\n      \"digest\": \"sha256:4c8f302a5630f34181b12cc89454ab336f3c7f25feae9d81e10f43fc25e1ae1e\",\n      \"download_count\": 7599,\n      \"created_at\": \"2026-07-14T18:14:55Z\",\n      \"updated_at\": \"2026-07-14T18:14:55Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/SHA512-SUMS.txt\"\n    }\n  ],\n  \"tarball_url\": \"https://api.github.com/repos/godotengine/godot/tarball/4.7.1-stable\",\n  \"zipball_url\": \"https://api.github.com/repos/godotengine/godot/zipball/4.7.1-stable\",\n  \"body\": \"**Godot 4.7.1** is a maintenance release addressing stability and usability issues, and fixing all sorts of bugs. Maintenance releases are compatible with previous releases and are recommended for adoption.\\n\\nReport bugs on GitHub after checking that they haven't been reported:\\n- https://github.com/godotengine/godot/issues\\n\\n----\\n\\n- [Release notes](https://godotengine.org/article/maintenance-release-godot-4-7-1/)\\n- [Complete changelog](https://godotengine.github.io/godot-interactive-changelog/#4.7.1)\\n- [Curated changelog](https://github.com/godotengine/godot/blob/4.7.1-stable/CHANGELOG.md)\\n\\n----\\n\\n- **Download (GitHub):** Expand **Assets** below\",\n  \"reactions\": {\n    \"url\": \"https://api.github.com/repos/godotengine/godot/releases/353984102/reactions\",\n    \"total_count\": 192,\n    \"+1\": 79,\n    \"-1\": 0,\n    \"laugh\": 9,\n    \"hooray\": 31,\n    \"confused\": 0,\n    \"heart\": 36,\n    \"rocket\": 29,\n    \"eyes\": 8\n  }\n}\n",
+              "timed_out": false
+            },
+            "source": "NO_AUTHORITATIVE_DIGEST_OBSERVED"
+          },
+          "verified": true
+        },
+        "bytes": 76056717,
+        "download": {
+          "cmd": [
+            "/usr/bin/curl",
+            "-fL",
+            "--retry",
+            "2",
+            "--connect-timeout",
+            "20",
+            "-o",
+            "/tmp/everfield-s4-rem-31s_mqpk/godot-4.7.1.zip",
+            "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          ],
+          "exit": 0,
+          "seconds": 0.454,
+          "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n100 72.5M  100 72.5M    0     0   162M      0 --:--:-- --:--:-- --:--:--  162M\n",
+          "stdout": "",
+          "timed_out": false
+        },
+        "executable": "/tmp/everfield-s4-rem-31s_mqpk/godot/Godot_v4.7.1-stable_linux.x86_64",
+        "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+        "reason": "digest_bound_linux_archive_extracted_and_headless_process_executed",
+        "status": "CAPABLE",
+        "unzip": {
+          "cmd": [
+            "/usr/bin/unzip",
+            "-q",
+            "/tmp/everfield-s4-rem-31s_mqpk/godot-4.7.1.zip",
+            "-d",
+            "/tmp/everfield-s4-rem-31s_mqpk/godot"
+          ],
+          "exit": 0,
+          "seconds": 0.982,
+          "stderr": "",
+          "stdout": "",
+          "timed_out": false
+        },
+        "url": "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip",
+        "version": {
+          "cmd": [
+            "/tmp/everfield-s4-rem-31s_mqpk/godot/Godot_v4.7.1-stable_linux.x86_64",
+            "--headless",
+            "--version"
+          ],
+          "exit": 0,
+          "seconds": 0.063,
+          "stderr": "",
+          "stdout": "4.7.1.stable.official.a13da4feb\n",
+          "timed_out": false
+        }
+      },
+      "trusted_representation_ok": true
+    },
+    "Unity": {
+      "candidate": "Unity",
+      "disposition": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY"
+    },
+    "Unreal Engine": {
+      "candidate": "Unreal Engine",
+      "disposition": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY"
+    }
+  },
+  "review_issue": 362,
+  "review_terminal": 5305556485,
+  "reviewed_s3_provenance_preserved": true,
+  "run_identity": {
+    "run_attempt": "1",
+    "run_id": "31924831337",
+    "runner_arch": "X64",
+    "runner_os": "Linux",
+    "trigger_sha": "c6f07004db066032494e76c04da41d24a5614e15"
+  },
+  "scenario_id": "S4",
+  "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+  "schema": "W2-ENG-TECHNICAL-S4-REMEDIATION-v1",
+  "source_issue": 364,
+  "trusted_comparison_authority": false,
+  "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea"
+}

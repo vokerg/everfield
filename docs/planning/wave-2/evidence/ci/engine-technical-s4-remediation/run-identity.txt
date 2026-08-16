@@ -1,0 +1,20 @@
+trigger_sha=c6f07004db066032494e76c04da41d24a5614e15
+run_id=31924831337
+run_attempt=1
+runner_os=Linux
+runner_arch=X64
+image_os=ubuntu24
+image_version=20260810.271.1
+producer_issue=360
+producer_head=942a8c05032c1506730f52e897496172fb56fcf3
+producer_run=31924179133
+producer_artifact=9257331215
+producer_evidence_sha256=8ba3922733c4051f798dab002de4cf607f6176ffe3f66d3e85a2568473967453
+review_issue=362
+review_terminal_comment=5305556485
+51c3f652d8bf9c222c83cb381b1adf8286737bcc6d11cb6fd8cd6080b0ac27ed  docs/planning/wave-2/evidence/ci/engine-technical-s4-remediation/source-producer-runner.py
+8154cc3f944149b0ea67ac50d58bec55a4722d18ebb5569e70638881ac3d80cc  tools/planning/engine_technical_s4_remediation.py
+a60985f37d5c51ca7d0640fbb3622f46994ef9ddd30ae17138863347e56dc416  tools/planning/engine_technical_s4_remediation_entry.py
+9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea  docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+fd7e1276ff5c8cde22d98c0932f70eb39383d9b60ac2d15f11d921dfa71218b0  docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
+23f71143c3771df2f438b899a7a948e58da93bc15a3defe9cf3fb5e2b9147daf  docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
