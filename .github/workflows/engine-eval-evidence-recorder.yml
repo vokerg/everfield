@@ -1,0 +1,70 @@
+name: Everfield engine effective evidence recorder
+
+on:
+  workflow_run:
+    workflows:
+      - Everfield engine effective credentialed evaluator
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: everfield-engine-effective-recorder-main
+  cancel-in-progress: false
+
+jobs:
+  record:
+    if: >-
+      github.event.workflow_run.name == 'Everfield engine effective credentialed evaluator' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == 'vokerg/everfield'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Download only the expected producer artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: w2-engine-effective-access-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
+          path: ${{ runner.temp }}/everfield-engine-effective
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Validate and project the producer result
+        shell: bash
+        env:
+          SOURCE: ${{ runner.temp }}/everfield-engine-effective/provider-effective-access.json
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/planning/record_provider_effective_access.py
+          python3 tools/planning/record_provider_effective_access.py \
+            --input "$SOURCE" \
+            --output "docs/planning/wave-2/evidence/ci/provider-effective-access/$RUN_ID/effective.json" \
+            --run-id "$RUN_ID" \
+            --run-attempt "$RUN_ATTEMPT" \
+            --head-sha "$HEAD_SHA" \
+            --branch "$HEAD_BRANCH"
+
+      - name: Persist sanitized evidence as a data-only main update
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/provider-effective-access/
+          git commit -m "[PLAN-v1][W2-ENG-PROVIDER-EFFECTIVE-01] Record effective access run ${{ github.event.workflow_run.id }}"
+          git push origin HEAD:main
