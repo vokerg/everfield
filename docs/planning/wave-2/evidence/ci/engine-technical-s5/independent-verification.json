@@ -1,0 +1,68 @@
+{
+  "all_provisional_verified": true,
+  "candidate_verification": {
+    "Bevy": {
+      "ok": true,
+      "reasons": [],
+      "recomputed_aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      }
+    },
+    "Defold": {
+      "ok": true,
+      "reasons": [],
+      "recomputed_aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      }
+    },
+    "Godot": {
+      "ok": true,
+      "reasons": [],
+      "recomputed_aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      }
+    }
+  },
+  "evidence_run_identity": "31959336546:1:5d4e317d4dbd09899d9fb8c743fa59cff5153708",
+  "negative_attacks": {
+    "Bevy": {
+      "binding_substitution_rejected": true,
+      "lost_nonoverlap_rejected": true,
+      "missing_overlap_rejected": true,
+      "silent_overlap_rejected": true,
+      "toolchain_identity_substitution_rejected": true,
+      "validation_bypass_rejected": true,
+      "workspace_reuse_rejected": true
+    },
+    "Defold": {
+      "binding_substitution_rejected": true,
+      "lost_nonoverlap_rejected": true,
+      "missing_overlap_rejected": true,
+      "silent_overlap_rejected": true,
+      "toolchain_identity_substitution_rejected": true,
+      "validation_bypass_rejected": true,
+      "workspace_reuse_rejected": true
+    },
+    "Godot": {
+      "binding_substitution_rejected": true,
+      "lost_nonoverlap_rejected": true,
+      "missing_overlap_rejected": true,
+      "silent_overlap_rejected": true,
+      "toolchain_identity_substitution_rejected": true,
+      "validation_bypass_rejected": true,
+      "workspace_reuse_rejected": true
+    }
+  },
+  "provisional_candidates": [
+    "Bevy",
+    "Defold",
+    "Godot"
+  ],
+  "schema": "W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v1"
+}
