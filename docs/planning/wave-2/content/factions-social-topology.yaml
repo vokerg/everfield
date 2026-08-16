@@ -1,0 +1,331 @@
+schema: everfield_w2_content_social_topology_remediation_v1
+mission_id: W2-CONTENT-SOCIAL-REM-01
+issue: 387
+state: REMEDIATION_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_SOCIAL
+engine_dependency: ENGINE_NEUTRAL_NOW
+input_binding:
+  claim_base_main_sha: 32637bf66d8e76a4f029c9ca74f983cbe5535ffb
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_convergence_directive_comment_id: 5277825639
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  w1_des_03_work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+  w1_syn_game_work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+  compiler_issue: 365
+  compiler_work_sha: fd2fb7d816cf23d60bcc54bd25c7d9a4eaae3dbb
+  producer_issue: 367
+  producer_claim_comment_id: 5305656863
+  producer_terminal_comment_id: 5305675516
+  producer_head_sha: db5d8ff86f4faeafa4a816412a2170cde979fb67
+  producer_pr: 380
+  required_review_issue: 384
+  required_review_claim_comment_id: 5305707061
+  required_review_terminal_comment_id: 5305720735
+  required_review_work_sha: f92392a7ded55701b21ca498e2575b5766fa4fd4
+  required_review_head_sha: f10657602500ea30b4cff209082106e037f92fab
+  required_review_pr: 388
+  required_review_disposition: CHANGES_NEEDED
+  review_provenance_squash_sha: 32637bf66d8e76a4f029c9ca74f983cbe5535ffb
+  finding_ids: [W2-CONTENT-SOCIAL-REV-M01, W2-CONTENT-SOCIAL-REV-M02]
+authority:
+  canonical_content_authority: false
+  integration_authority: false
+  implementation_readiness_authority: false
+  gameplay_implementation_authority: false
+  engine_selection_authority: false
+  empirical_wsn_pass_authority: false
+  content_fanin_authority: false
+  required_next_gate: FRESH_REQUIRED_CONTENT_ROOT_REVIEW
+  fan_in_after_clean_review: W2-CONTENT-SYN-01
+preserved_producer_surface:
+  source_issue: 367
+  source_head_sha: db5d8ff86f4faeafa4a816412a2170cde979fb67
+  source_paths: [docs/planning/wave-2/content/factions-social-topology.md, docs/planning/wave-2/content/factions-social-topology.yaml]
+  composition_rule: This successor packet is the frozen producer packet composed with the explicit M01/M02 corrections below; every producer semantic not replaced by finding_closures remains unchanged.
+  actor_ids: [FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-MAKERS-01, FAC-ARCHIVE-01, FAC-WAYKEEPERS-01, COM-NEIGHBOR-01]
+  edge_ids: [SOC-EDGE-001, SOC-EDGE-002, SOC-EDGE-003, SOC-EDGE-004, SOC-EDGE-005, SOC-EDGE-006, SOC-EDGE-007, SOC-EDGE-008, SOC-EDGE-009, SOC-EDGE-010]
+  relationship_dimensions: [trust, reliability, reciprocity, value_alignment, public_standing, access_state]
+  history_contract: SocialHistoryEvent append-only meaningful history; recovery may supersede effects without deleting events; repeated low-risk actions cannot satisfy all dimensions.
+  baseline_access:
+    must_not_depend_on_faction_standing: [ordinary community interaction, basic repair and crafting opportunity, baseline cultivation participation, baseline movement and exploration, public information, ordinary mutual aid]
+    denial_contract:
+      must_expose_reason_class: true
+      must_supply_one_of: [recovery_route, alternative_route, explicit_reviewed_branch_exclusive_consequence]
+  branch_ids: [SOC-BRANCH-COMMON-USE-01, SOC-BRANCH-DISCLOSURE-01, SOC-BRANCH-ACCESS-01, SOC-BRANCH-AID-01]
+  branch_constraints:
+    permanence_authorized_here: false
+    disclosure_changes_objective_truth: false
+    coalition_requires_branch_impact_and_alternative_content_evidence: true
+  provisional_refs:
+    world: [WORLD_ROLE:HUB_COMMUNITY, WORLD_ROLE:CULTIVATION_ZONE, WORLD_ROLE:COMMON_RESOURCE, WORLD_ROLE:TRANSIT_EDGE, WORLD_ROLE:SENSITIVE_SITE]
+    character: [CHAR_ROLE:FACTION_LIAISON, CHAR_ROLE:INDEPENDENT_MEDIATOR, CHAR_ROLE:COMMUNITY_NEIGHBOR]
+    narrative: [NARR_ROLE:SOCIAL_DISPUTE, NARR_ROLE:PUBLIC_COMMITMENT]
+    proposition: [PROP_ROLE:SOCIAL_PUBLIC_WORK_RELIABILITY, PROP_ROLE:SOCIAL_STEWARDSHIP_RELIABILITY, PROP_ROLE:SOCIAL_DISCLOSURE_DISPUTE]
+    objective_fact: [WORLD_FACT_ROLE:EXTERNAL_REVIEWED_FACT]
+    branch: [NARR_BRANCH_ROLE:SOCIAL_DISPUTE]
+  originality_boundary: No direct external fictional source; generic institutional patterns only; later specific references require purpose/provenance/originality/rights review.
+  wsn_evidence: [WSN-E1, WSN-E2, WSN-E5, WSN-E7, WSN-E8, WSN-E9]
+  wsn_state: UNRUN_REQUIRED_EVIDENCE
+invariants:
+  - id: SOC-INV-001
+    rule: NO_SOCIAL_OR_FACTION_GATE_IS_FOUNDATIONAL_IN_THIS_CANDIDATE
+  - id: SOC-INV-002
+    rule: BASELINE_LIFE_PLAY_CANNOT_BE_PERMANENTLY_DENIED_BY_ONE_FACTION_STANDING
+  - id: SOC-INV-003
+    rule: RELATIONSHIP_MEANING_IS_MULTI_DIMENSIONAL_AND_NOT_ONE_UNIVERSAL_SCORE
+  - id: SOC-INV-004
+    rule: IMPORTANT_SOCIAL_HISTORY_IS_RETAINED_AFTER_RECOVERY
+  - id: SOC-INV-005
+    rule: MATERIAL_ACCESS_OR_RESPONSE_CHANGE_HAS_AN_EXPLICIT_TYPED_CAUSE
+  - id: SOC-INV-006
+    rule: ORDINARY_NEGATIVE_SOCIAL_STATE_HAS_RECOVERY_OR_ALTERNATIVE_ROUTE
+  - id: SOC-INV-007
+    rule: CLAIM_AUTHORITY_EXPOSURE_DISPUTE_KNOWLEDGE_AND_BRANCH_SCOPE_ARE_ORTHOGONAL_FIELDS
+  - id: SOC-INV-008
+    rule: SOCIAL_ASSERTION_CANNOT_CREATE_OR_PROMOTE_OBJECTIVE_FACT_AUTHORITY
+  - id: SOC-INV-009
+    rule: CROSS_ROOT_REFERENCES_USE_PROVISIONAL_TYPED_ROLE_IDS
+  - id: SOC-INV-010
+    rule: ENGINE_REPRESENTATION_IS_OUT_OF_SCOPE
+  - id: SOC-INV-011
+    rule: ALL_SIX_SOCIAL_GATES_EXPLICITLY_CONFORM_TO_PROGRESSION_GATE_CONTRACT_V1
+social_information_model:
+  schema_version: 1
+  record_type: SocialClaimBelief
+  purpose: Represent in-world social claims and beliefs without conflating objective truth, perspective, exposure, dispute, provenance, or branch applicability.
+  required_fields: [claim_id, holder_ref, source_refs, proposition_ref, authority_status, holder_epistemic_state, dispute_status, knowledge_state, exposure_scope, confidentiality, provenance_refs, branch_scope, objective_fact_ref, truth_relation, objective_fact_authority]
+  holder_ref_types: [FAC-*, COM-*, CHAR_ROLE:*]
+  proposition_ref_types: [PROP_ROLE:*]
+  objective_fact_ref_types: [WORLD_FACT_ROLE:*]
+  authority_status_values: [TESTIMONY, INSTITUTIONAL_RECORD, RUMOR, ANALYSIS, DISPUTED_RECORD]
+  holder_epistemic_state_values: [ASSERTS, BELIEVES, DOUBTS, WITHHOLDS, UNKNOWN]
+  dispute_status_values: [UNCONTESTED_CLAIM, DISPUTED, CORROBORATION_PENDING, RETRACTED]
+  knowledge_state_values: [HELD_BY_SOURCE, KNOWN_TO_HOLDER, DISCLOSED_TO_PLAYER, NOT_DISCLOSED_TO_PLAYER]
+  exposure_scope_values: [PUBLIC, INSTITUTIONAL, PRIVATE, SECRET]
+  confidentiality_values: [NONE, BOUNDED_ROLE, SOURCE_RESTRICTED, SECRET_RESTRICTED]
+  truth_relation_values: [UNKNOWN_TO_SOCIAL_ROOT, EXTERNALLY_BOUND_CONSISTENT, EXTERNALLY_BOUND_CONTRADICTED]
+  branch_scope_semantics: null means branch-independent claim applicability; otherwise a NARR_BRANCH_ROLE:* provisional ref is required
+  objective_fact_authority_rule: objective_fact_authority MUST remain false in this social root. objective_fact_ref may only bind a separately reviewed external fact and does not transfer authority to the social claim.
+  promotion_forbidden: true
+  examples:
+    - claim_id: SOC-CLM-EXAMPLE-001
+      holder_ref: FAC-COMMONS-01
+      source_refs: [FAC-COMMONS-01]
+      proposition_ref: PROP_ROLE:SOCIAL_PUBLIC_WORK_RELIABILITY
+      authority_status: INSTITUTIONAL_RECORD
+      holder_epistemic_state: ASSERTS
+      dispute_status: UNCONTESTED_CLAIM
+      knowledge_state: DISCLOSED_TO_PLAYER
+      exposure_scope: PUBLIC
+      confidentiality: NONE
+      provenance_refs: [SOCIAL_HISTORY_EVENT_ROLE:PUBLIC_WORK]
+      branch_scope: null
+      objective_fact_ref: null
+      truth_relation: UNKNOWN_TO_SOCIAL_ROOT
+      objective_fact_authority: false
+    - claim_id: SOC-CLM-EXAMPLE-002
+      holder_ref: FAC-ARCHIVE-01
+      source_refs: [CHAR_ROLE:COMMUNITY_NEIGHBOR]
+      proposition_ref: PROP_ROLE:SOCIAL_DISCLOSURE_DISPUTE
+      authority_status: DISPUTED_RECORD
+      holder_epistemic_state: DOUBTS
+      dispute_status: DISPUTED
+      knowledge_state: HELD_BY_SOURCE
+      exposure_scope: PRIVATE
+      confidentiality: SOURCE_RESTRICTED
+      provenance_refs: [SOCIAL_HISTORY_EVENT_ROLE:TESTIMONY]
+      branch_scope: NARR_BRANCH_ROLE:SOCIAL_DISPUTE
+      objective_fact_ref: WORLD_FACT_ROLE:EXTERNAL_REVIEWED_FACT
+      truth_relation: UNKNOWN_TO_SOCIAL_ROOT
+      objective_fact_authority: false
+progression_gate_contract_binding:
+  contract_name: ProgressionGateContract
+  contract_version: 1
+  source_mission: W1-SYN-GAME
+  source_work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+  required_shared_fields: [version, gate_id, gate_class, blocks_or_unlocks, requirements, routes, visibility_or_discovery, miss_failure_recovery, branch_scope, evidence_requirements, exception_rationale]
+  required_route_fields: [route_id, route_kind, prerequisite_refs, lifestyle_impacts]
+  allowed_gate_classes: [FOUNDATIONAL, SPECIALIZATION, OPTIONAL, BRANCH_EXCLUSIVE]
+  allowed_route_kinds: [DIRECT_SYSTEM, TRADE, SERVICE, RELATIONSHIP, QUEST, KNOWLEDGE, SUBSTITUTE, OTHER]
+  social_extension_fields: [foundational_dependency, baseline_alternative, reclassify_if_common_progression_requires_it]
+  no_field_invention_at_fanin: true
+gates:
+  - version: 1
+    gate_id: GATE-SOC-COMMONS-DELEGATION-01
+    gate_class: SPECIALIZATION
+    blocks_or_unlocks: [optional civic delegation and priority-setting participation]
+    requirements: [one_declared_route_satisfied, no_unresolved_material_public_work_obligation_relevant_to_delegation]
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-COMMONS-PUBLIC-WORK
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [demonstrated_public_work_reliability]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_DIRECT_PUBLIC_WORK_PLAY]
+      - route_id: ROUTE-COMMONS-MEDIATION
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [successful_bounded_mediation]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_SOCIAL_MEDIATION_PLAY]
+      - route_id: ROUTE-COMMONS-EVIDENCE
+        route_kind: KNOWLEDGE
+        prerequisite_refs: [relevant_corroborated_public_contribution]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_RESEARCH_AND_CORROBORATION_PLAY]
+    visibility_or_discovery: [PUBLIC_GATE_PURPOSE, VISIBLE_ROUTE_CLASSES, VISIBLE_REASON_FOR_DENIAL]
+    miss_failure_recovery: transparent repair, restitution, or later bounded service
+    baseline_alternative: ordinary community participation remains available
+    branch_scope: null
+    evidence_requirements: [SOCIAL_ROUTE_REACHABILITY, DEGENERATE_GRIND_RESISTANCE]
+    exception_rationale: null
+  - version: 1
+    gate_id: GATE-SOC-FIELDWARD-SHARED-STOCK-01
+    gate_class: SPECIALIZATION
+    blocks_or_unlocks: [advanced or scarce cooperative stock, coordinated specialist cultivation support]
+    requirements: [one_declared_route_satisfied, requested_stock_or_support_available_under_declared_scarcity_rule]
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-FIELDWARD-RECIPROCITY
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [material_reciprocity_contribution]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, SUPPORTS_COOPERATIVE_CONTRIBUTION_PLAY]
+      - route_id: ROUTE-FIELDWARD-STEWARDSHIP
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [demonstrated_stewardship_reliability]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, SUPPORTS_STEWARDSHIP_RELATIONSHIP_PLAY]
+      - route_id: ROUTE-FIELDWARD-SUBSTITUTE
+        route_kind: SUBSTITUTE
+        prerequisite_refs: [declared_scarcity_substitution]
+        lifestyle_impacts: [PRESERVES_INDEPENDENT_AND_DIRECT_PLAY, MAY_CHANGE_SPECIALIST_STOCK_CHOICE]
+    visibility_or_discovery: [VISIBLE_SCARCITY_STATE, VISIBLE_ROUTE_CLASSES, VISIBLE_REASON_FOR_DENIAL]
+    miss_failure_recovery: repair damaged stock, settle unmet obligation, or wait for scarcity recovery
+    baseline_alternative: baseline cultivation and ordinary independent acquisition remain available
+    branch_scope: null
+    evidence_requirements: [SOCIAL_ROUTE_REACHABILITY, LIFESTYLE_VIABILITY]
+    exception_rationale: null
+  - version: 1
+    gate_id: GATE-SOC-MAKERS-COMMISSION-01
+    gate_class: OPTIONAL
+    blocks_or_unlocks: [specialist collaborative commissions]
+    requirements: [one_declared_route_satisfied, no_unresolved_material_commission_default]
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-MAKERS-RELIABILITY
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [demonstrated_craft_reliability]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_CRAFT_RELIABILITY_PLAY]
+      - route_id: ROUTE-MAKERS-RECIPROCITY
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [reciprocal_contribution]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_RECIPROCAL_SOCIAL_PLAY]
+      - route_id: ROUTE-MAKERS-REFERENCE
+        route_kind: SERVICE
+        prerequisite_refs: [trusted_partner_or_reference]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, SUPPORTS_SERVICE_NETWORK_PLAY]
+    visibility_or_discovery: [VISIBLE_COMMISSION_REQUIREMENTS, VISIBLE_ROUTE_CLASSES, VISIBLE_REASON_FOR_DENIAL]
+    miss_failure_recovery: restitution or lower-risk proof obligation
+    baseline_alternative: standard repair and crafting remain available
+    branch_scope: null
+    evidence_requirements: [DEGENERATE_GRIND_RESISTANCE]
+    exception_rationale: null
+  - version: 1
+    gate_id: GATE-SOC-ARCHIVE-SENSITIVE-01
+    gate_class: OPTIONAL
+    blocks_or_unlocks: [sensitive private or disputed information appropriate to purpose and scope]
+    requirements: [one_declared_route_satisfied, requested_information_exposure_scope_allows_disclosure, confidentiality_and_purpose_constraints_satisfied]
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-ARCHIVE-SOURCE-AUTH
+        route_kind: KNOWLEDGE
+        prerequisite_refs: [source_authorization]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_SOURCE_AUTHORIZATION_AND_RESEARCH_PLAY]
+      - route_id: ROUTE-ARCHIVE-CONFIDENTIALITY
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [demonstrated_confidentiality]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_TRUST_AND_CONFIDENTIALITY_PLAY]
+      - route_id: ROUTE-ARCHIVE-RESEARCH-NEED
+        route_kind: OTHER
+        prerequisite_refs: [bounded_research_need, corroboration_plan]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_SCOPED_RESEARCH_PLAY]
+    visibility_or_discovery: [PUBLIC_RECORDS_DISCOVERABLE_WITHOUT_GATE, SENSITIVE_GATE_PURPOSE_VISIBLE_WITHOUT_SECRET_CONTENT, VISIBLE_REASON_FOR_DENIAL]
+    miss_failure_recovery: use public records, obtain source authorization, or rebuild scoped trust
+    baseline_alternative: public information remains public
+    reclassify_if_common_progression_requires_it: true
+    branch_scope: null
+    evidence_requirements: [WSN-E2, INFORMATION_SCOPE_VALIDATION]
+    exception_rationale: null
+  - version: 1
+    gate_id: GATE-SOC-WAYKEEPER-SPONSOR-01
+    gate_class: OPTIONAL
+    blocks_or_unlocks: [expedition sponsorship, scarce specialist route support]
+    requirements: [one_declared_route_satisfied, requested_support_not_blocked_by_active_declared_safety_constraint]
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-WAYKEEPER-MAINTENANCE
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [route_maintenance_contribution]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_ROUTE_MAINTENANCE_PLAY]
+      - route_id: ROUTE-WAYKEEPER-RELIABILITY
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [field_reliability]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, FAVORS_FIELD_RELIABILITY_PLAY]
+      - route_id: ROUTE-WAYKEEPER-SERVICE
+        route_kind: SERVICE
+        prerequisite_refs: [bounded_service_exchange]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, SUPPORTS_SERVICE_EXCHANGE_PLAY]
+    visibility_or_discovery: [BASELINE_MOVEMENT_REMAINS_VISIBLE, VISIBLE_SPONSORSHIP_ROUTE_CLASSES, VISIBLE_SAFETY_REASON_FOR_DENIAL]
+    miss_failure_recovery: address concrete safety or obligation failure
+    baseline_alternative: basic movement and exploration remain available
+    branch_scope: null
+    evidence_requirements: [SOCIAL_ROUTE_REACHABILITY]
+    exception_rationale: null
+  - version: 1
+    gate_id: GATE-SOC-COALITION-COMMITMENT-01
+    gate_class: BRANCH_EXCLUSIVE
+    blocks_or_unlocks: [simultaneous conflicting coalition endorsement, branch-specific collaboration and response]
+    requirements: [public_commitment_route_satisfied, selected_commitment_compatible_with_current_social_dispute_branch]
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-COALITION-PUBLIC-COMMITMENT
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [NARR_ROLE:PUBLIC_COMMITMENT]
+        lifestyle_impacts: [NO_BASELINE_LIFESTYLE_DEPENDENCY, CHANGES_BRANCH_SPECIFIC_SOCIAL_COLLABORATION_ONLY]
+    visibility_or_discovery: [COMMITMENT_CONSEQUENCE_CLASS_SIGNALED_BEFORE_CONFIRMATION, CONFLICTING_ENDORSEMENT_EXCLUSION_VISIBLE, ORDINARY_SERVICE_ALTERNATIVE_VISIBLE]
+    miss_failure_recovery: ordinary services remain; later fan-in must specify any recovery or durable exclusion
+    baseline_alternative: noncoalition ordinary play remains available
+    branch_scope: NARR_BRANCH_ROLE:SOCIAL_DISPUTE
+    evidence_requirements: [WSN-E5, BRANCH_IMPACT_EVIDENCE, ALTERNATIVE_CONTENT_SUFFICIENCY]
+    exception_rationale: null
+finding_closures:
+  - finding_id: W2-CONTENT-SOCIAL-REV-M01
+    status: REMEDIATED_PENDING_FRESH_REVIEW
+    evidence_refs: [social_information_model, SOC-INV-007, SOC-INV-008]
+    summary: Replaced conflated information_scopes with an orthogonal SocialClaimBelief contract separating holder/source perspective, proposition reference, social authority, epistemic state, dispute, knowledge/exposure, confidentiality, provenance, branch scope, external objective-fact reference, truth relation, and fail-closed objective authority.
+  - finding_id: W2-CONTENT-SOCIAL-REV-M02
+    status: REMEDIATED_PENDING_FRESH_REVIEW
+    evidence_refs: [progression_gate_contract_binding, gates, SOC-INV-011]
+    summary: All six gates now instantiate frozen ProgressionGateContract v1 fields explicitly, including requirements, route lifestyle impacts, visibility/discovery, recovery, branch scope, evidence, and explicit null exception rationale.
+reopen_conditions:
+  - SIBLING_REVIEW_PROVES_REQUIRED_PROVISIONAL_INTERFACE_IMPOSSIBLE_OR_CONTRADICTORY
+  - ANY_SOCIAL_GATE_BECOMES_REQUIRED_FOR_COMMON_FOUNDATIONAL_GOAL
+  - ONE_ACTOR_BECOMES_SOLE_ROUTE_TO_BASELINE_LIFE_PLAY
+  - DOWNSTREAM_DESIGN_REQUIRES_UNIVERSAL_RELATIONSHIP_SCALAR
+  - BRANCH_BECOMES_IRREVERSIBLE_OR_PROGRESSION_CRITICAL_WITHOUT_ALTERNATIVES_AND_EVIDENCE
+  - SOCIAL_CLAIM_MODEL_CANNOT_PRESERVE_AUTHORITY_PERSPECTIVE_EXPOSURE_DISPUTE_KNOWLEDGE_AND_BRANCH_SCOPE_ORTHOGONALLY
+  - ORIGINALITY_OR_RIGHTS_REVIEW_FINDS_MATERIAL_EXTERNAL_EXPRESSION_RISK
+  - EMPIRICAL_WSN_EVIDENCE_MATERIALLY_CONTRADICTS_SOCIAL_ASSUMPTIONS
+  - DOWNSTREAM_GATE_COMPILATION_REQUIRES_INVENTING_A_PROGRESS_GATE_CONTRACT_FIELD
+self_review:
+  attacked: [m01_information_dimension_conflation, m01_assertion_to_objective_fact_promotion, m02_progression_gate_contract_completeness, hidden_foundational_social_gates, relationship_scalar_flattening, hidden_sibling_dependencies, branch_regression, canon_inflation, scope_expansion, duplicate_wsn_evidence_work, originality_reference_leakage, markdown_yaml_drift]
+  checks:
+    actor_count: 6
+    edge_count: 10
+    gate_count: 6
+    foundational_gate_count: 0
+    branch_pattern_count: 4
+    all_gate_contract_versions: [1]
+    all_gate_exception_rationale_explicit: true
+    all_routes_have_lifestyle_impacts: true
+    social_claim_promotion_forbidden: true
+    wsn_pass_claims: 0
+  findings: {blocker: 0, major: 0, correction_requiring_minor: 0}
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_REVIEW
