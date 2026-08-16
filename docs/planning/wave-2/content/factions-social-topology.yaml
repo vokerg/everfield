@@ -1,0 +1,692 @@
+schema: everfield_w2_content_social_topology_v1
+mission_id: W2-CONTENT-SOCIAL-01
+issue: 367
+state: PRODUCER_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_SOCIAL
+engine_dependency: ENGINE_NEUTRAL_NOW
+
+input_binding:
+  claim_base_main_sha: dd84256de5033cb9873eb10589847be1d403b042
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  w1_des_03_work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+  w1_syn_game_work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+  compiler_issue: 365
+  compiler_claim_comment_id: 5305566663
+  compiler_work_sha: fd2fb7d816cf23d60bcc54bd25c7d9a4eaae3dbb
+  activation_review_issue: 372
+  activation_review_terminal_comment_id: 5305598079
+  activation_review_head_sha: 656930c36d90a166776485cbaf196c39a32fe97e
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_ACTIVATION
+
+producer_authority:
+  canonical_content_authority: false
+  integration_authority: false
+  implementation_readiness_authority: false
+  gameplay_implementation_authority: false
+  engine_selection_authority: false
+  empirical_wsn_pass_authority: false
+  required_next_gate: FRESH_CONTENT_ROOT_REVIEW
+  fan_in_after_clean_review: W2-CONTENT-SYN-01
+
+invariants:
+  - id: SOC-INV-001
+    rule: NO_SOCIAL_OR_FACTION_GATE_IS_FOUNDATIONAL_IN_THIS_CANDIDATE
+  - id: SOC-INV-002
+    rule: BASELINE_LIFE_PLAY_CANNOT_BE_PERMANENTLY_DENIED_BY_ONE_FACTION_STANDING
+  - id: SOC-INV-003
+    rule: RELATIONSHIP_MEANING_IS_MULTI_DIMENSIONAL_AND_NOT_ONE_UNIVERSAL_SCORE
+  - id: SOC-INV-004
+    rule: IMPORTANT_SOCIAL_HISTORY_IS_RETAINED_AFTER_RECOVERY
+  - id: SOC-INV-005
+    rule: MATERIAL_ACCESS_OR_RESPONSE_CHANGE_HAS_AN_EXPLICIT_TYPED_CAUSE
+  - id: SOC-INV-006
+    rule: ORDINARY_NEGATIVE_SOCIAL_STATE_HAS_RECOVERY_OR_ALTERNATIVE_ROUTE
+  - id: SOC-INV-007
+    rule: INFORMATION_SCOPE_DISTINGUISHES_PUBLIC_PRIVATE_DISPUTED_SECRET_AND_BRANCH_SPECIFIC
+  - id: SOC-INV-008
+    rule: PROSE_OR_GENERATED_TEXT_CANNOT_CREATE_OBJECTIVE_FACT_BY_ASSERTION
+  - id: SOC-INV-009
+    rule: CROSS_ROOT_REFERENCES_USE_PROVISIONAL_TYPED_ROLE_IDS
+  - id: SOC-INV-010
+    rule: ENGINE_REPRESENTATION_IS_OUT_OF_SCOPE
+
+provisional_interfaces:
+  world_roles:
+    - ref: WORLD_ROLE:HUB_COMMUNITY
+      required_semantics: shared community surface without fixed geography
+    - ref: WORLD_ROLE:CULTIVATION_ZONE
+      required_semantics: cultivation or stewardship concern without fixed location
+    - ref: WORLD_ROLE:COMMON_RESOURCE
+      required_semantics: shared resource or infrastructure subject to allocation
+    - ref: WORLD_ROLE:TRANSIT_EDGE
+      required_semantics: movement or route-access surface
+    - ref: WORLD_ROLE:SENSITIVE_SITE
+      required_semantics: site whose access or disclosure may have consequences
+  character_roles:
+    - ref: CHAR_ROLE:FACTION_LIAISON
+      required_semantics: representative interface without a fixed named character
+    - ref: CHAR_ROLE:INDEPENDENT_MEDIATOR
+      required_semantics: non-single-point recovery or mediation role
+    - ref: CHAR_ROLE:COMMUNITY_NEIGHBOR
+      required_semantics: noninstitutional community participant
+  narrative_roles:
+    - ref: NARR_ROLE:SOCIAL_DISPUTE
+      required_semantics: later narrative container for a social disagreement
+    - ref: NARR_ROLE:PUBLIC_COMMITMENT
+      required_semantics: later narrative record of a declared social choice
+
+relationship_semantics:
+  universal_aggregate_score_allowed: false
+  dimensions:
+    - id: REL-TRUST
+      key: trust
+      meaning: confidence that vulnerability, access, or information will not be misused
+      interchangeable_with_other_dimensions: false
+    - id: REL-RELIABILITY
+      key: reliability
+      meaning: confidence that accepted obligations are completed or failures communicated
+      interchangeable_with_other_dimensions: false
+    - id: REL-RECIPROCITY
+      key: reciprocity
+      meaning: balance or acknowledged imbalance of aid, contributions, debts, and favors
+      interchangeable_with_other_dimensions: false
+    - id: REL-ALIGNMENT
+      key: value_alignment
+      meaning: issue-specific agreement with declared priorities; disagreement is not distrust
+      interchangeable_with_other_dimensions: false
+    - id: REL-PUBLIC-STANDING
+      key: public_standing
+      meaning: visible willingness of an actor to endorse or vouch for the player
+      interchangeable_with_other_dimensions: false
+    - id: REL-ACCESS
+      key: access_state
+      meaning: derived bounded service or information state from explicit predicates and history
+      derived: true
+      universal_power_score: false
+  history_contract:
+    record_type: SocialHistoryEvent
+    append_only_meaningful_history: true
+    recovery_may_supersede_effect_without_deleting_event: true
+    required_fields:
+      - event_id
+      - actor_refs
+      - target_refs
+      - cause_type
+      - visibility
+      - dimension_effects
+      - service_information_branch_effects
+      - reversibility
+      - recovery_refs
+      - source_authority_ref
+    anti_grind_rule: >-
+      Repeating one low-risk action cannot satisfy trust, reliability, reciprocity,
+      alignment, public standing, and sensitive access simultaneously. Later evidence
+      must attack degenerate repetition loops.
+
+information_scopes:
+  - PUBLIC
+  - INSTITUTIONAL
+  - PRIVATE
+  - DISPUTED
+  - SECRET
+  - BRANCH_SPECIFIC
+
+social_effect_types:
+  - DIMENSION_CHANGE
+  - OBLIGATION_CREATED
+  - OBLIGATION_FULFILLED
+  - OBLIGATION_DEFAULTED
+  - OBLIGATION_FORGIVEN
+  - SERVICE_ACCESS_CHANGED
+  - INFORMATION_SCOPE_CHANGED
+  - ENDORSEMENT_RECORDED
+  - PUBLIC_DISSENT_RECORDED
+  - COLLABORATION_AVAILABILITY_CHANGED
+  - BRANCH_COMMITMENT_RECORDED
+  - RECOVERY_ROUTE_CHANGED
+  - HISTORY_RESPONSE_MODIFIER
+
+baseline_access:
+  must_not_depend_on_faction_standing:
+    - ordinary community interaction
+    - basic repair and crafting opportunity
+    - baseline cultivation participation
+    - baseline movement and exploration
+    - public information
+    - ordinary mutual aid
+  denial_contract:
+    must_expose_reason_class: true
+    must_supply_one_of:
+      - recovery_route
+      - alternative_route
+      - explicit_reviewed_branch_exclusive_consequence
+
+actors:
+  - id: FAC-COMMONS-01
+    candidate_name: The Commons Assembly
+    authority_class: CANDIDATE_SOCIAL_CONTENT
+    actor_type: CIVIC_INSTITUTION
+    motivation: >-
+      Maintain legitimate, legible, broadly usable shared infrastructure and settle
+      competing claims without one specialist interest monopolizing common resources.
+    resources:
+      - coordination authority
+      - public notices
+      - shared-project prioritization
+      - bounded civic endorsements
+      - common-project opportunities
+    obligations:
+      - publish reasons for material allocations
+      - retain dissent
+      - allow nonmember participation routes
+      - do not gate basic life-play on political loyalty
+    tensions:
+      - deliberative fairness versus urgency
+      - public access versus specialist priority
+    player_interfaces:
+      - public-work collaboration
+      - mediation
+      - transparent policy choice
+      - optional civic endorsement
+
+  - id: FAC-FIELDWARD-01
+    candidate_name: The Fieldward Cooperative
+    authority_class: CANDIDATE_SOCIAL_CONTENT
+    actor_type: PRODUCER_STEWARD_COOPERATIVE
+    motivation: >-
+      Keep cultivation and resource stewardship resilient across individual setbacks
+      while protecting long-horizon productive capacity.
+    resources:
+      - shared stock
+      - seasonal knowledge
+      - cooperative labor
+      - specialist cultivation support
+      - stewardship observations
+    obligations:
+      - preserve viable independent and direct-play participation
+      - distinguish shared stock from ownership of all cultivation
+      - communicate scarcity rather than hiding gates
+    tensions:
+      - throughput versus reserves
+      - expansion versus stewardship
+      - scarce cooperative capacity versus equitable access
+    player_interfaces:
+      - cooperative projects
+      - advanced shared stock
+      - specialist cultivation knowledge
+      - optional stewardship influence
+
+  - id: FAC-MAKERS-01
+    candidate_name: "The Makers' Exchange"
+    authority_class: CANDIDATE_SOCIAL_CONTENT
+    actor_type: CRAFT_TRADE_REPAIR_ASSOCIATION
+    motivation: >-
+      Keep tools, repair capability, knowledge transfer, and exchange dependable while
+      rewarding specialized skill and reliable commitments.
+    resources:
+      - specialist commissions
+      - repair expertise
+      - work sharing
+      - standards
+      - supply coordination
+      - trade contacts
+    obligations:
+      - keep ordinary repair and crafting outside high-standing gates
+      - prevent specialist commissions from becoming sole foundational routes
+    tensions:
+      - standardization versus adaptation
+      - throughput versus reserve constraints
+      - specialist priority versus common access
+    player_interfaces:
+      - specialist fabrication and repair
+      - collaborative commissions
+      - trade coordination
+      - optional mastery recognition
+
+  - id: FAC-ARCHIVE-01
+    candidate_name: The Hearth Archive
+    authority_class: CANDIDATE_SOCIAL_CONTENT
+    actor_type: RECORD_MEMORY_INSTITUTION
+    motivation: >-
+      Preserve durable records and testimony while distinguishing public record,
+      private testimony, disputed claims, and material whose disclosure could cause harm.
+    resources:
+      - records
+      - corroboration practices
+      - provenance
+      - contextual research
+      - bounded sensitive testimony access
+    obligations:
+      - do not convert belief or testimony into objective fact by assertion
+      - retain dispute and provenance
+      - protect private or secret material according to explicit scope
+    tensions:
+      - transparency versus privacy
+      - corroboration versus urgency
+      - preservation versus sensitive disclosure
+    player_interfaces:
+      - optional research
+      - contextual evidence
+      - disputed-claim resolution
+      - branch-sensitive information access
+
+  - id: FAC-WAYKEEPERS-01
+    candidate_name: "The Waykeepers' League"
+    authority_class: CANDIDATE_SOCIAL_CONTENT
+    actor_type: ROUTE_ACCESS_FIELD_SUPPORT_ASSOCIATION
+    motivation: >-
+      Keep movement and discovery safe enough to be sustainable without claiming
+      ownership of exploration itself.
+    resources:
+      - route observations
+      - field support
+      - maintenance coordination
+      - expedition sponsorship
+      - risk communication
+    obligations:
+      - keep baseline movement and exploration outside membership gates
+      - cite reasons for route warnings or restrictions
+      - provide alternatives or recovery when practical
+    tensions:
+      - discovery versus stewardship
+      - access versus privacy
+      - expansion versus maintenance capacity
+    player_interfaces:
+      - optional expedition support
+      - route knowledge
+      - field-service collaboration
+      - specialized access planning
+
+  - id: COM-NEIGHBOR-01
+    candidate_name: The Neighbor Network
+    authority_class: CANDIDATE_SOCIAL_CONTENT
+    actor_type: INFORMAL_MUTUAL_AID_COMMUNITY
+    formal_faction: false
+    motivation: >-
+      Maintain reciprocal care and local resilience outside institutional membership.
+    resources:
+      - time
+      - informal knowledge
+      - small-scale aid
+      - introductions
+      - recovery support
+      - distributed social memory
+    obligations:
+      - remain plural rather than a centralized authority
+      - permit disagreement and incomplete community knowledge
+    tensions:
+      - responsiveness versus scalability
+      - reciprocity versus burnout
+      - lived memory versus formal corroboration
+    player_interfaces:
+      - noninstitutional social routes
+      - ordinary-standing recovery
+      - mutual-aid choices
+      - community lifestyle support
+
+edges:
+  - id: SOC-EDGE-001
+    parties: [FAC-COMMONS-01, FAC-FIELDWARD-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: resilient common provisioning
+    tension: public allocation versus reserve and stewardship
+    consequence_surfaces: [priority, obligations, civic_support]
+  - id: SOC-EDGE-002
+    parties: [FAC-FIELDWARD-01, FAC-MAKERS-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: tools and productive capacity
+    tension: throughput demand versus long-horizon reserves
+    consequence_surfaces: [commission_timing, shared_stock, trust]
+  - id: SOC-EDGE-003
+    parties: [FAC-MAKERS-01, FAC-WAYKEEPERS-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: repair and logistics for route upkeep
+    tension: maintenance burden versus expansion
+    consequence_surfaces: [specialist_support, route_projects]
+  - id: SOC-EDGE-004
+    parties: [FAC-COMMONS-01, FAC-MAKERS-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: common infrastructure delivery
+    tension: open access versus specialist or commercial priority
+    consequence_surfaces: [procurement, endorsement]
+  - id: SOC-EDGE-005
+    parties: [FAC-COMMONS-01, FAC-ARCHIVE-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: accountable records
+    tension: transparency versus privacy and confidentiality
+    consequence_surfaces: [public_record, disclosure]
+  - id: SOC-EDGE-006
+    parties: [FAC-ARCHIVE-01, FAC-WAYKEEPERS-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: trustworthy discovery records
+    tension: documentation versus sensitive-site disclosure
+    consequence_surfaces: [information_scope, access]
+  - id: SOC-EDGE-007
+    parties: [FAC-FIELDWARD-01, FAC-WAYKEEPERS-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: safe access to productive or stewardship areas
+    tension: access expansion versus protection
+    consequence_surfaces: [route_conditions, stewardship_alignment]
+  - id: SOC-EDGE-008
+    parties: [COM-NEIGHBOR-01, FAC-COMMONS-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: recovery and local legitimacy
+    tension: informal need versus procedural allocation
+    consequence_surfaces: [aid_routes, civic_pressure]
+  - id: SOC-EDGE-009
+    parties: [COM-NEIGHBOR-01, FAC-MAKERS-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: practical repair and help exchange
+    tension: reciprocity versus market valuation
+    consequence_surfaces: [aid, commission_alternatives]
+  - id: SOC-EDGE-010
+    parties: [COM-NEIGHBOR-01, FAC-ARCHIVE-01]
+    edge_type: COOPERATION_AND_TENSION
+    cooperative_value: community memory and testimony
+    tension: lived memory versus evidentiary caution
+    consequence_surfaces: [disputed_claims, confidentiality]
+
+gates:
+  - gate_id: GATE-SOC-COMMONS-DELEGATION-01
+    gate_class: SPECIALIZATION
+    blocks_or_unlocks:
+      - optional civic delegation and priority-setting participation
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-COMMONS-PUBLIC-WORK
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [demonstrated_public_work_reliability]
+      - route_id: ROUTE-COMMONS-MEDIATION
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [successful_bounded_mediation]
+      - route_id: ROUTE-COMMONS-EVIDENCE
+        route_kind: KNOWLEDGE
+        prerequisite_refs: [relevant_corroborated_public_contribution]
+    miss_failure_recovery: transparent repair, restitution, or later bounded service
+    baseline_alternative: ordinary community participation remains available
+    evidence_requirements:
+      - SOCIAL_ROUTE_REACHABILITY
+      - DEGENERATE_GRIND_RESISTANCE
+
+  - gate_id: GATE-SOC-FIELDWARD-SHARED-STOCK-01
+    gate_class: SPECIALIZATION
+    blocks_or_unlocks:
+      - advanced or scarce cooperative stock
+      - coordinated specialist cultivation support
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-FIELDWARD-RECIPROCITY
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [material_reciprocity_contribution]
+      - route_id: ROUTE-FIELDWARD-STEWARDSHIP
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [demonstrated_stewardship_reliability]
+      - route_id: ROUTE-FIELDWARD-SUBSTITUTE
+        route_kind: SUBSTITUTE
+        prerequisite_refs: [declared_scarcity_substitution]
+    miss_failure_recovery: repair damaged stock, settle unmet obligation, or wait for scarcity recovery
+    baseline_alternative: baseline cultivation and ordinary independent acquisition remain available
+    evidence_requirements:
+      - SOCIAL_ROUTE_REACHABILITY
+      - LIFESTYLE_VIABILITY
+
+  - gate_id: GATE-SOC-MAKERS-COMMISSION-01
+    gate_class: OPTIONAL
+    blocks_or_unlocks:
+      - specialist collaborative commissions
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-MAKERS-RELIABILITY
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [demonstrated_craft_reliability]
+      - route_id: ROUTE-MAKERS-RECIPROCITY
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [reciprocal_contribution]
+      - route_id: ROUTE-MAKERS-REFERENCE
+        route_kind: SERVICE
+        prerequisite_refs: [trusted_partner_or_reference]
+    miss_failure_recovery: restitution or lower-risk proof obligation
+    baseline_alternative: standard repair and crafting remain available
+    evidence_requirements:
+      - DEGENERATE_GRIND_RESISTANCE
+
+  - gate_id: GATE-SOC-ARCHIVE-SENSITIVE-01
+    gate_class: OPTIONAL
+    blocks_or_unlocks:
+      - sensitive private or disputed information appropriate to purpose and scope
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-ARCHIVE-SOURCE-AUTH
+        route_kind: KNOWLEDGE
+        prerequisite_refs: [source_authorization]
+      - route_id: ROUTE-ARCHIVE-CONFIDENTIALITY
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [demonstrated_confidentiality]
+      - route_id: ROUTE-ARCHIVE-RESEARCH-NEED
+        route_kind: OTHER
+        prerequisite_refs: [bounded_research_need, corroboration_plan]
+    miss_failure_recovery: use public records, obtain source authorization, or rebuild scoped trust
+    baseline_alternative: public information remains public
+    reclassify_if_common_progression_requires_it: true
+    evidence_requirements:
+      - WSN-E2
+      - INFORMATION_SCOPE_VALIDATION
+
+  - gate_id: GATE-SOC-WAYKEEPER-SPONSOR-01
+    gate_class: OPTIONAL
+    blocks_or_unlocks:
+      - expedition sponsorship
+      - scarce specialist route support
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-WAYKEEPER-MAINTENANCE
+        route_kind: DIRECT_SYSTEM
+        prerequisite_refs: [route_maintenance_contribution]
+      - route_id: ROUTE-WAYKEEPER-RELIABILITY
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [field_reliability]
+      - route_id: ROUTE-WAYKEEPER-SERVICE
+        route_kind: SERVICE
+        prerequisite_refs: [bounded_service_exchange]
+    miss_failure_recovery: address concrete safety or obligation failure
+    baseline_alternative: basic movement and exploration remain available
+    evidence_requirements:
+      - SOCIAL_ROUTE_REACHABILITY
+
+  - gate_id: GATE-SOC-COALITION-COMMITMENT-01
+    gate_class: BRANCH_EXCLUSIVE
+    blocks_or_unlocks:
+      - simultaneous conflicting coalition endorsement
+      - branch-specific collaboration and response
+    foundational_dependency: false
+    routes:
+      - route_id: ROUTE-COALITION-PUBLIC-COMMITMENT
+        route_kind: RELATIONSHIP
+        prerequisite_refs: [NARR_ROLE:PUBLIC_COMMITMENT]
+    miss_failure_recovery: ordinary services remain; later fan-in must specify any recovery or durable exclusion
+    baseline_alternative: noncoalition ordinary play remains available
+    branch_scope: social_dispute_only
+    evidence_requirements:
+      - WSN-E5
+      - BRANCH_IMPACT_EVIDENCE
+      - ALTERNATIVE_CONTENT_SUFFICIENCY
+
+branches:
+  - branch_id: SOC-BRANCH-COMMON-USE-01
+    authority_class: CANDIDATE_SOCIAL_PATTERN
+    premise_refs: [WORLD_ROLE:COMMON_RESOURCE]
+    conflict: resilience and public access versus near-term productive throughput
+    involved_actors: [FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-MAKERS-01]
+    allowed_effect_types:
+      - DIMENSION_CHANGE
+      - OBLIGATION_CREATED
+      - SERVICE_ACCESS_CHANGED
+      - ENDORSEMENT_RECORDED
+    baseline_play_must_survive: true
+    permanence_authorized_here: false
+
+  - branch_id: SOC-BRANCH-DISCLOSURE-01
+    authority_class: CANDIDATE_SOCIAL_PATTERN
+    premise_refs: [NARR_ROLE:SOCIAL_DISPUTE]
+    conflict: public transparency versus confidentiality and source safety
+    involved_actors: [FAC-ARCHIVE-01, FAC-COMMONS-01, COM-NEIGHBOR-01]
+    allowed_effect_types:
+      - DIMENSION_CHANGE
+      - INFORMATION_SCOPE_CHANGED
+      - PUBLIC_DISSENT_RECORDED
+      - HISTORY_RESPONSE_MODIFIER
+    objective_truth_changed_by_disclosure: false
+    permanence_authorized_here: false
+
+  - branch_id: SOC-BRANCH-ACCESS-01
+    authority_class: CANDIDATE_SOCIAL_PATTERN
+    premise_refs: [WORLD_ROLE:TRANSIT_EDGE, WORLD_ROLE:SENSITIVE_SITE]
+    conflict: wider access versus conditional access or temporary protection
+    involved_actors: [FAC-WAYKEEPERS-01, FAC-FIELDWARD-01]
+    allowed_effect_types:
+      - DIMENSION_CHANGE
+      - SERVICE_ACCESS_CHANGED
+      - BRANCH_COMMITMENT_RECORDED
+    baseline_mobility_requires_alternative: true
+    geography_owned_here: false
+    permanence_authorized_here: false
+
+  - branch_id: SOC-BRANCH-AID-01
+    authority_class: CANDIDATE_SOCIAL_PATTERN
+    premise_refs: [WORLD_ROLE:HUB_COMMUNITY]
+    conflict: formal allocation versus cooperative production versus distributed mutual aid
+    involved_actors: [COM-NEIGHBOR-01, FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-MAKERS-01]
+    allowed_effect_types:
+      - DIMENSION_CHANGE
+      - OBLIGATION_CREATED
+      - OBLIGATION_FULFILLED
+      - ENDORSEMENT_RECORDED
+    globally_superior_route_declared: false
+    permanence_authorized_here: false
+
+history_examples:
+  - cause_type: fulfilled_public_commitment
+    may_change: [reliability, public_standing]
+    history_retained_after_recovery: true
+  - cause_type: broke_public_commitment
+    may_change: [reliability, public_standing]
+    history_retained_after_recovery: true
+  - cause_type: kept_confidentiality
+    may_change: [trust]
+    need_not_change: [value_alignment]
+  - cause_type: unauthorized_disclosure
+    may_change: [trust, access_state, public_standing]
+    dimensions_may_move_in_opposite_directions: true
+  - cause_type: repaid_material_obligation
+    may_change: [reciprocity]
+    resolved_debt_event_remains_queryable: true
+  - cause_type: supported_opposed_policy
+    may_change: [value_alignment]
+    must_not_automatically_change: [trust, baseline_access]
+  - cause_type: mutual_aid_without_contract
+    may_change: [reciprocity]
+    creates_institutional_standing_automatically: false
+
+originality_boundary:
+  direct_external_fictional_source_used: false
+  candidate_names_and_topology_authored_for_everfield: true
+  generic_reference_classes:
+    - cooperative
+    - civic assembly
+    - craft association
+    - archive
+    - route maintenance association
+    - mutual aid network
+  later_specific_reference_requirements:
+    - purpose_and_provenance
+    - artifact_identity_where_applicable
+    - allowed_and_prohibited_reuse
+    - originality_similarity_red_team
+    - rights_or_terms_review
+  external_reference_can_create_canon_by_itself: false
+
+evidence_debt:
+  existing_route_rule: DO_NOT_DUPLICATE_EXISTING_WSN_EXPERIMENT_IDENTITIES
+  experiments:
+    - id: WSN-E1
+      relevance: contradictory social facts and branch scoping
+      state: UNRUN_REQUIRED_EVIDENCE
+    - id: WSN-E2
+      relevance: private secret disputed and branch-specific information leakage
+      state: UNRUN_REQUIRED_EVIDENCE
+    - id: WSN-E5
+      relevance: branch consequence persistence migration and downstream availability
+      state: UNRUN_REQUIRED_EVIDENCE
+    - id: WSN-E7
+      relevance: semantic sameness and degenerate repeated social content structures
+      state: UNRUN_REQUIRED_EVIDENCE
+    - id: WSN-E8
+      relevance: long-horizon relationship knowledge schedule and availability composition
+      state: UNRUN_REQUIRED_EVIDENCE
+    - id: WSN-E9
+      relevance: structured subjective social and narrative quality review
+      state: UNRUN_REQUIRED_EVIDENCE
+  prose_authorship_satisfies_evidence: false
+
+assumptions:
+  - id: SOC-ASM-001
+    text: Six actors are sufficient to demonstrate a useful bounded topology without becoming a final faction catalog.
+  - id: SOC-ASM-002
+    text: Institutional and informal social routes can coexist without either becoming a universal progression requirement.
+  - id: SOC-ASM-003
+    text: Provisional world character and narrative interfaces can be reconciled at fan-in without changing core social invariants.
+  - id: SOC-ASM-004
+    text: Individual future relationships may use a subset of the candidate dimensions or add reviewed domain-specific dimensions.
+
+open_questions:
+  - id: SOC-OQ-001
+    text: Which actor names and roles remain compatible with the reviewed world root?
+  - id: SOC-OQ-002
+    text: Which characters embody liaison mediator or neighbor roles without becoming single points of failure?
+  - id: SOC-OQ-003
+    text: Which social disputes fit reviewed narrative structure without becoming mandatory narrative progression?
+  - id: SOC-OQ-004
+    text: Which services are baseline versus specialist after economy and progression evidence?
+  - id: SOC-OQ-005
+    text: How much social state should be player-visible without turning interaction into meter optimization?
+  - id: SOC-OQ-006
+    text: Which branch consequences justify permanence and what alternative content is sufficient?
+  - id: SOC-OQ-007
+    text: How should long-horizon evidence detect grind dead-end obligations or cascading access loss?
+
+reopen_conditions:
+  - id: SOC-REOPEN-001
+    when: SIBLING_REVIEW_PROVES_REQUIRED_PROVISIONAL_INTERFACE_IMPOSSIBLE_OR_CONTRADICTORY
+  - id: SOC-REOPEN-002
+    when: ANY_SOCIAL_GATE_BECOMES_REQUIRED_FOR_COMMON_FOUNDATIONAL_GOAL
+  - id: SOC-REOPEN-003
+    when: ONE_ACTOR_BECOMES_SOLE_ROUTE_TO_BASELINE_LIFE_PLAY
+  - id: SOC-REOPEN-004
+    when: DOWNSTREAM_DESIGN_REQUIRES_UNIVERSAL_RELATIONSHIP_SCALAR
+  - id: SOC-REOPEN-005
+    when: BRANCH_BECOMES_IRREVERSIBLE_OR_PROGRESSION_CRITICAL_WITHOUT_ALTERNATIVES_AND_EVIDENCE
+  - id: SOC-REOPEN-006
+    when: INFORMATION_MODEL_CANNOT_PRESERVE_OBJECTIVE_BELIEF_PRIVATE_DISPUTED_SECRET_SCOPES
+  - id: SOC-REOPEN-007
+    when: ORIGINALITY_OR_RIGHTS_REVIEW_FINDS_MATERIAL_EXTERNAL_EXPRESSION_RISK
+  - id: SOC-REOPEN-008
+    when: EMPIRICAL_WSN_EVIDENCE_MATERIALLY_CONTRADICTS_SOCIAL_ASSUMPTIONS
+
+self_review:
+  attacked:
+    - hidden_foundational_social_gates
+    - relationship_scalar_flattening
+    - contradiction_with_immutable_game_contracts
+    - hidden_sibling_dependencies
+    - canon_inflation
+    - scope_expansion
+    - duplicate_wsn_evidence_work
+    - originality_reference_leakage
+  findings:
+    blocker: 0
+    major: 0
+    correction_requiring_minor: 0
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_ROOT_REVIEW
