@@ -41,7 +41,7 @@ The evaluator deliberately retains the original W1-DES-03 experiment semantics r
 
 ## 3. Corpus and evaluator
 
-The retained corpus contains **35** deterministic cases. It binds directly to fan-in surfaces such as conflicting-account investigation, shared-use negotiation, project commitment, repair/reframe, aftermath, objective-fact/claim/knowledge separation, branch compatibility, generated-content authority and multidimensional relationship/history semantics.
+The retained corpus contains **36** deterministic cases. It binds directly to fan-in surfaces such as conflicting-account investigation, shared-use negotiation, project commitment, repair/reframe, aftermath, objective-fact/claim/knowledge separation, branch compatibility, generated-content authority and multidimensional relationship/history semantics.
 
 The standard-library-only evaluator is invoked with:
 
@@ -55,8 +55,8 @@ The committed normalized results are expected to be byte-for-byte equivalent JSO
 
 Content SHA-256 identities from the executed run:
 
-- corpus: `78cedb10f62bae963c65675428cc045fc9193530a26fd64209f13bd10b86edad`
-- evaluator: `69ca78727f357ac54b95d9167b1e82a09fc91b9c3f5bf38fd46771cbf5f31673`
+- corpus: `16a57de56900511cffcd011d26ceb47a8acc134ba4d18cbf1645735dde37b804`
+- evaluator: `d74e4ee0a729d9374c97dc3b536b0b5d5b70d473adcebd0435c1676811ce190b`
 
 No mutable repository state, network service, engine, provider credential, random source or clock is consulted by the evaluator.
 
