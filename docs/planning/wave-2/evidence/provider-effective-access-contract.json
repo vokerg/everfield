@@ -1,0 +1,126 @@
+{
+  "schema": "W2-ENG-PROVIDER-EFFECTIVE-ACCESS-CONTRACT-v1",
+  "mission_id": "W2-ENG-PROVIDER-EFFECTIVE-01",
+  "source_issue": 373,
+  "remediation_issue": 400,
+  "canonical_program_blob": "e3120ec203c4156328770aa86c12fbb7187966dc",
+  "historical_issue_82_not_run_cells_preserved": 50,
+  "historical_issue_82_cells_mutated": false,
+  "provider_states": [
+    "NOT_CONFIGURED",
+    "CONFIGURED_UNVALIDATED",
+    "VALIDATED_DEVELOPMENT_ACCESS",
+    "TRANSIENT_VALIDATION_FAILURE",
+    "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
+  ],
+  "authority_domains": {
+    "DEVELOPMENT_ACCESS": "Lawful ability to execute one provider baseline for technical evaluation now.",
+    "COMMERCIAL_AUTHORITY": "Production, commercial, legal, release, and licensing authority; never derived from development access."
+  },
+  "independence_rule": "A validated Unity provider unlocks only Unity-dependent technical cells; a validated Unreal provider unlocks only Unreal-dependent technical cells. No combined predicate is permitted.",
+  "frontier_rule": {
+    "unity": "provider.state == VALIDATED_DEVELOPMENT_ACCESS",
+    "unreal": "provider.state == VALIDATED_DEVELOPMENT_ACCESS",
+    "commercial_license_authority": false,
+    "production_authority": false,
+    "legal_clearance": false,
+    "release_authority": false,
+    "engine_selected": false
+  },
+  "secret_boundary": {
+    "credentialed_stage_permissions": [
+      "contents: read"
+    ],
+    "recorder_stage_permissions": [
+      "actions: read",
+      "contents: write",
+      "pull-requests: write"
+    ],
+    "credentialed_stage_environment": "engine-eval",
+    "trusted_branch": "main",
+    "fork_prs_can_consume_secrets": false,
+    "artifact_is_data_only": true,
+    "secret_values_in_evidence": false,
+    "secret_hashes_in_evidence": false
+  },
+  "identity_binding": {
+    "credentialed_checkout": "exact github.sha from the trusted-main event",
+    "credentialed_checkout_must_equal_event_sha_before_secret_use": true,
+    "consumer_requires_successful_push_run": true,
+    "consumer_requires_repository": "vokerg/everfield",
+    "consumer_requires_branch": "main",
+    "consumer_requires_workflow_name": "Everfield engine effective credentialed evaluator",
+    "consumer_requires_workflow_path": ".github/workflows/engine-eval-credentialed.yml",
+    "consumer_validates_workflow_id_through_actions_api": true,
+    "consumer_checkout": "exact upstream workflow_run.head_sha",
+    "projection_code_sha_must_equal_source_head_sha": true,
+    "recorded_source_identity_fields": [
+      "run_id",
+      "run_attempt",
+      "head_sha",
+      "branch",
+      "event",
+      "conclusion",
+      "workflow.id",
+      "workflow.name",
+      "workflow.path",
+      "projection_code_sha",
+      "publication_base_main_sha"
+    ]
+  },
+  "publication_boundary": {
+    "mode": "BOUNDED_EVIDENCE_BRANCH_DRAFT_PR",
+    "branch_pattern": "evidence/provider-effective-access/run-<run_id>-attempt-<run_attempt>",
+    "direct_push_to_main": false,
+    "draft_pr_required": true,
+    "workflow_success_grants_integration_authority": false,
+    "later_main_integration_requires_separate_authority": true,
+    "later_main_integration_requires_fresh_exact_expected_head_check": true,
+    "later_main_integration_is_squash_only": true
+  },
+  "required_validation": [
+    "authentication",
+    "entitlement_or_license",
+    "exact_baseline_identity",
+    "native_engine_process_execution",
+    "deterministic_native_s3_N1_N2_FI1_when_provider_is_unlocked"
+  ],
+  "implementation": {
+    "credentialed_workflow": ".github/workflows/engine-eval-credentialed.yml",
+    "credentialed_workflow_permissions": [
+      "contents: read"
+    ],
+    "credentialed_workflow_environment": "engine-eval",
+    "trusted_recorder_workflow": ".github/workflows/engine-eval-evidence-recorder.yml",
+    "trusted_recorder_permissions": [
+      "actions: read",
+      "contents: write",
+      "pull-requests: write"
+    ],
+    "health_workflow": ".github/workflows/engine-eval-health.yml",
+    "source_artifact_schema": "W2-ENG-PROVIDER-EFFECTIVE-ACCESS-v1",
+    "recorded_evidence_schema": "W2-ENG-PROVIDER-EFFECTIVE-ACCESS-EVIDENCE-v1",
+    "credentialed_stage_does_not_push": true,
+    "recorder_accepts_only_trusted_main_success": true,
+    "recorder_projects_fixed_non_secret_fields": true,
+    "recorder_direct_main_push": false,
+    "recorder_creates_bounded_evidence_branch": true,
+    "recorder_creates_draft_pr": true,
+    "integration_authority": false
+  },
+  "remediation_provenance": {
+    "producer_issue": 373,
+    "producer_terminal_comment": 5306084733,
+    "producer_head_sha": "75728cade4c1646f9a1006e89ccc026234958a2b",
+    "producer_pr": 397,
+    "review_issue": 398,
+    "review_terminal_comment": 5306215159,
+    "review_head_sha": "8e001aa76d68e0bf04ac44e04d694e27215d8b58",
+    "review_pr": 399,
+    "review_disposition": "CHANGES_NEEDED",
+    "findings": [
+      "W2-ENG-PROVIDER-EFFECTIVE-REV-M01",
+      "W2-ENG-PROVIDER-EFFECTIVE-REV-M02"
+    ]
+  }
+}
