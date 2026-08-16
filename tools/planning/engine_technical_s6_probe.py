@@ -358,7 +358,7 @@ def negative_tests(packet:dict[str,Any],validator,run_id:str)->dict[str,bool]:
     def bad(mut):
         q=copy.deepcopy(packet);mut(q);return not verify_packet(q,validator,run_id)["ok"]
     tests["wrong_state_marker_rejected"]=bad(lambda q:q["raw_attempts"][0]["record"]["source"]["state_observation"].__setitem__("marker","OTHER"))
-    tests["capture_reuse_substitution_rejected"]=bad(lambda q:q["raw_attempts"][1]["record"]["source"]["capture"].__setitem__("sha256",q["raw_attempts"][0]["record"]["source"]["capture"].get("sha256")))
+    tests["capture_reuse_substitution_rejected"]=bad(lambda q:q["raw_attempts"][1]["record"]["source"].__setitem__("capture_binding",copy.deepcopy(q["raw_attempts"][0]["record"]["source"]["capture_binding"])))
     tests["wrong_viewport_rejected"]=bad(lambda q:q["raw_attempts"][0]["record"]["source"]["capture"].__setitem__("dimensions",[640,360]))
     tests["missing_frame_rejected"]=bad(lambda q:q["raw_attempts"][0]["record"]["source"]["capture"].__setitem__("frame_count",0))
     tests["host_fabricated_mechanism_rejected"]=bad(lambda q:q["raw_attempts"][0]["record"]["source"]["capture"].__setitem__("mechanism","HOST_FABRICATED"))
