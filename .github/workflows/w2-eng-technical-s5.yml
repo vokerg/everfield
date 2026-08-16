@@ -47,6 +47,14 @@ jobs:
             tools/planning/engine_toolchain_probe.py \
             docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
           python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py > "$out/harness-validator.json"
+          python3 - <<'PY'
+          import importlib.util
+          p='docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py'
+          s=importlib.util.spec_from_file_location('v',p);v=importlib.util.module_from_spec(s);s.loader.exec_module(v)
+          assert v.FEATURE['merge_fixture']['generated_collision_required_when_candidate_has_generated_metadata'] is True
+          assert v.FEATURE['merge_fixture']['semantic_overlap_locations']==['STATE:entity-07.status','UI:SETTINGS.control-02.label']
+          assert v.SCENARIOS['S5']['required_injections']==['FI-S5-OVERLAP-v2']
+          PY
           {
             echo "trigger_sha=${GITHUB_SHA}"
             echo "run_id=${GITHUB_RUN_ID}"
@@ -62,9 +70,12 @@ jobs:
             echo "s4_review_disposition=PASS_BOUNDED_REMEDIATED_S4_V5_ENVELOPE"
             echo "s4_review_publication=b0b87a4ca05f7f21595bb2303978cb7dd0d5791e"
             echo "s4_remediation_publication=6f9e56f1d822ed2e2b18fa10a2bf29927efebe3e"
-            echo "predecessor_s5_run=31959088675"
-            echo "predecessor_s5_artifact=9266757869"
-            echo "predecessor_s5_defect=BEVY_RETAINED_LOCK_ROOT_PACKAGE_IDENTITY_MISMATCH"
+            echo "predecessor_s5_run_1=31959088675"
+            echo "predecessor_s5_artifact_1=9266757869"
+            echo "predecessor_s5_defect_1=BEVY_RETAINED_LOCK_ROOT_PACKAGE_IDENTITY_MISMATCH"
+            echo "predecessor_s5_run_2=31959336546"
+            echo "predecessor_s5_artifact_2=9266839656"
+            echo "predecessor_s5_defect_2=GENERATED_METADATA_COLLISION_REQUIREMENT_NOT_EXERCISED"
             sha256sum tools/planning/engine_technical_s5_probe.py
             sha256sum tools/planning/engine_technical_s5_entry.py
             sha256sum tools/planning/engine_technical_s5_verify.py
@@ -107,59 +118,20 @@ jobs:
           python3 - <<'PY'
           import json
           p='docs/planning/wave-2/evidence/ci/engine-technical-s5/evidence.json'
-          d=json.load(open(p))
-          iv=json.load(open('docs/planning/wave-2/evidence/ci/engine-technical-s5/independent-verification.json'))
-          assert d['schema']=='W2-ENG-TECHNICAL-S5-v1'
-          assert d['mission_id']=='W2-ENG-TECH-S5-01'
-          assert d['scenario_id']=='S5'
-          assert d['harness_id']=='W2-ENG-HARNESS-v5'
-          assert d['feature_slice_id']=='W2-ENG-FEATURE-SLICE-v2'
-          assert d['scenario_manifest_id']=='W2-ENG-SCENARIO-INPUTS-v2'
-          c=d['s5_contract']
-          assert c['required_injection']=='FI-S5-OVERLAP-v2'
-          assert c['semantic_overlap_locations']==['STATE:entity-07.status','UI:SETTINGS.control-02.label']
-          assert c['min_bounds']=={'overlap_count':2,'branch_a_nonoverlap':1,'branch_b_nonoverlap':1}
-          r=d['predecessor_review']
-          assert r['issue']==374 and r['terminal_comment']==5305617167
-          assert r['disposition']=='PASS_BOUNDED_REMEDIATED_S4_V5_ENVELOPE'
-          assert r['review_publication_sha']=='b0b87a4ca05f7f21595bb2303978cb7dd0d5791e'
-          assert r['remediation_publication_sha']=='6f9e56f1d822ed2e2b18fa10a2bf29927efebe3e'
-          assert d['authority_bound_not_run']=={'Unity':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY','Unreal Engine':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'}
-          assert d['historical_issue_82_not_run_cells_preserved']==50
-          assert d['reviewed_s3_s4_provenance_preserved'] is True
-          assert d['fresh_review_required'] is True
-          assert d['trusted_comparison_authority'] is False
-          assert d['integration_authority'] is False
-          assert d['engine_selected'] is False
-          assert d['implementation_readiness'] is False
-          assert iv['schema']=='W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v1'
-          assert iv['evidence_run_identity']==d['run_identity']
-          assert iv['provisional_candidates']==d['provisional_candidates']
-          assert iv['all_provisional_verified'] is True
+          d=json.load(open(p));iv=json.load(open('docs/planning/wave-2/evidence/ci/engine-technical-s5/independent-verification.json'))
+          assert d['schema']=='W2-ENG-TECHNICAL-S5-v1' and d['mission_id']=='W2-ENG-TECH-S5-01' and d['scenario_id']=='S5'
+          assert d['harness_id']=='W2-ENG-HARNESS-v5' and d['feature_slice_id']=='W2-ENG-FEATURE-SLICE-v2' and d['scenario_manifest_id']=='W2-ENG-SCENARIO-INPUTS-v2'
+          c=d['s5_contract'];assert c['required_injection']=='FI-S5-OVERLAP-v2';assert c['semantic_overlap_locations']==['STATE:entity-07.status','UI:SETTINGS.control-02.label'];assert c['min_bounds']=={'overlap_count':2,'branch_a_nonoverlap':1,'branch_b_nonoverlap':1};assert c['generated_collision_required_when_candidate_has_generated_metadata'] is True
+          r=d['predecessor_review'];assert r['issue']==374 and r['terminal_comment']==5305617167 and r['disposition']=='PASS_BOUNDED_REMEDIATED_S4_V5_ENVELOPE';assert r['review_publication_sha']=='b0b87a4ca05f7f21595bb2303978cb7dd0d5791e' and r['remediation_publication_sha']=='6f9e56f1d822ed2e2b18fa10a2bf29927efebe3e'
+          assert len(d['producer_corrections'])==2
+          assert d['authority_bound_not_run']=={'Unity':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY','Unreal Engine':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'} and d['historical_issue_82_not_run_cells_preserved']==50 and d['reviewed_s3_s4_provenance_preserved'] is True
+          assert d['fresh_review_required'] is True and d['trusted_comparison_authority'] is False and d['integration_authority'] is False and d['engine_selected'] is False and d['implementation_readiness'] is False
+          assert iv['schema']=='W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v2' and iv['evidence_run_identity']==d['run_identity'] and iv['provisional_candidates']==d['provisional_candidates'] and iv['contract_generated_metadata_collision_required'] is True and iv['all_provisional_verified'] is True
           for name in d['provisional_candidates']:
-              x=d['results'][name]
-              assert x['disposition']=='PROVISIONAL_S5_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW'
-              assert x['binding_verification']=={'ok':True,'reasons':[]}
-              assert x['adaptation_validation']['result']=='ACCEPT'
-              assert x['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}
-              assert x['trusted_representation_ok'] is True
-              assert all(x['negative_selftests'].values())
-              assert iv['candidate_verification'][name]['ok'] is True
-              assert iv['candidate_verification'][name]['recomputed_aggregate']==x['aggregate']
-              assert all(iv['negative_attacks'][name].values())
-              raws=x['raw_attempts']
-              assert [a['record']['label'] for a in raws]==['N1','N2','FI1']
-              assert [a['record']['direction'] for a in raws]==['A_THEN_B','B_THEN_A','A_THEN_B']
-              assert all(a['record']['reset_verified_derived'] is True for a in raws)
-              assert len({a['record']['reset_proof']['workspace_id'] for a in raws})==3
-              assert set(x['source_bindings'].values())=={a['digest'] for a in raws}
-              fi=raws[-1]['record']['source']
-              assert set(fi['unmerged_paths'])==set(fi['semantic_mapping'][k] for k in ['STATE:entity-07.status','UI:SETTINGS.control-02.label'])
-              assert all(fi['conflict_markers'].values())
-              assert fi['resolution']=={'state_choice':'branch-a/ACTIVE','ui_choice':'branch-b/Volume'}
-              assert fi['generated_metadata']['collision_required'] is False
-              assert fi['generated_metadata']['relevant_to_represented_edit_surface'] is False
-          print(json.dumps({'validated':True,'provisional_candidates':d['provisional_candidates'],'independent_verification':True},sort_keys=True))
+              x=d['results'][name];assert x['disposition']=='PROVISIONAL_S5_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW';assert x['binding_verification']=={'ok':True,'reasons':[]};assert x['adaptation_validation']['result']=='ACCEPT';assert x['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True};assert x['trusted_representation_ok'] is True;assert all(x['negative_selftests'].values());assert iv['candidate_verification'][name]['ok'] is True;assert iv['candidate_verification'][name]['recomputed_aggregate']==x['aggregate'];assert all(iv['negative_attacks'][name].values())
+              raws=x['raw_attempts'];assert [a['record']['label'] for a in raws]==['N1','N2','FI1'];assert [a['record']['direction'] for a in raws]==['A_THEN_B','B_THEN_A','A_THEN_B'];assert all(a['record']['reset_verified_derived'] is True for a in raws);assert len({a['record']['reset_proof']['workspace_id'] for a in raws})==3;assert set(x['source_bindings'].values())=={a['digest'] for a in raws}
+              fi=raws[-1]['record']['source'];md=fi['generated_metadata'];expected={fi['semantic_mapping']['STATE:entity-07.status'],fi['semantic_mapping']['UI:SETTINGS.control-02.label'],fi['semantic_mapping']['candidate_generated_metadata']};assert set(fi['unmerged_paths'])==expected;assert all(fi['conflict_markers'].values());assert md['candidate_generated_metadata_present'] is True and md['generated_collision_required'] is True and md['collision_path']=='generated/candidate-metadata.txt';assert md['branch_values_distinct'] is True and md['resolved_file_matches_candidate_generation'] is True;assert md['branch_a_generation']['ok'] is True and md['branch_b_generation']['ok'] is True and md['resolved_generation']['ok'] is True
+          print(json.dumps({'validated':True,'provisional_candidates':d['provisional_candidates'],'independent_verification':True,'generated_metadata_collision':True},sort_keys=True))
           PY
 
       - name: Persist exact S5 evidence
@@ -170,10 +142,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/planning/wave-2/evidence/ci/engine-technical-s5/
-          if git diff --cached --quiet; then
-            echo "No generated evidence delta"
-            exit 0
-          fi
+          if git diff --cached --quiet; then echo "No generated evidence delta";exit 0;fi
           git commit -m "[PLAN-v1][W2-ENG-TECH-S5-01] Record empirical S5 run ${GITHUB_RUN_ID}"
           git push origin HEAD:planning/issue-433
 
