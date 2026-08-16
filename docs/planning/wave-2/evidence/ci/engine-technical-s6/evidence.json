@@ -1,0 +1,1897 @@
+{
+  "authority_bound_not_run": {
+    "Unity": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY",
+    "Unreal Engine": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY"
+  },
+  "canonicality": "NOT_CANONICAL",
+  "engine_selected": false,
+  "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+  "fresh_review_required": true,
+  "harness_id": "W2-ENG-HARNESS-v5",
+  "historical_issue_82_not_run_cells_preserved": 50,
+  "implementation_readiness": false,
+  "integration_authority": false,
+  "issue": 456,
+  "mission_id": "W2-ENG-TECH-S6-01",
+  "predecessor_review": {
+    "disposition": "PASS_BOUNDED_S5_V5_ENVELOPE",
+    "producer_issue": 433,
+    "producer_publication_sha": "886438990ed395cde2fad0ee6cb98ca6ade0f26f",
+    "producer_terminal": 5308620093,
+    "review_issue": 454,
+    "review_publication_sha": "a7c587956f542c0fc00d5c6875a04a04e124f4e6",
+    "review_terminal": 5309016465
+  },
+  "provider_state": {
+    "Unity": "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION:UNITY_SERVICE_ACCOUNT_AUTHENTICATION_FAILED",
+    "Unreal Engine": "NOT_CONFIGURED:UNREAL_GITHUB_USERNAME_AND_TOKEN_NOT_CONFIGURED"
+  },
+  "provisional_candidates": [],
+  "results": {
+    "Bevy": {
+      "adaptation_validation": {
+        "adaptation_identity": "f9af4bd24711e5db9f21ecfe3c81530261302730ba7e7f8d95a18fb9786c615f",
+        "binding_id": "a1424eab3bd6f72dbd9d5065433f779adc3715d651b534973e9c4d7b4edcb8a2",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "INCONCLUSIVE",
+        "reasons": [
+          "non_product_failure_class_present"
+        ],
+        "valid_envelope": true
+      },
+      "binding_verification": {
+        "ok": false,
+        "reasons": [
+          "raw_semantics_invalid"
+        ]
+      },
+      "candidate_identity": {
+        "body": {
+          "candidate": "Bevy",
+          "exact_toolchain_identity": {
+            "baseline": "0.19.0",
+            "cargo_version": "cargo 1.97.1 (c980f4866 2026-06-30)\n",
+            "lock_replay_bound": true,
+            "retained_lock_sha256": "fd7e1276ff5c8cde22d98c0932f70eb39383d9b60ac2d15f11d921dfa71218b0",
+            "rustc_version": "rustc 1.97.1 (8bab26f4f 2026-07-14)\n"
+          },
+          "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+          "runner_sha256": "e642d98f094a26a8de4085bd4ffb247c0875ce1b253f7d3b0cb37836d96c1902",
+          "s5_issue": 433,
+          "s5_producer_publication": "886438990ed395cde2fad0ee6cb98ca6ade0f26f",
+          "s5_review_disposition": "PASS_BOUNDED_S5_V5_ENVELOPE",
+          "s5_review_issue": 454,
+          "s5_review_publication": "a7c587956f542c0fc00d5c6875a04a04e124f4e6",
+          "s5_review_terminal": 5309016465,
+          "s5_terminal": 5308620093,
+          "scenario": "S6",
+          "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea"
+        },
+        "identity_digest": "sha256:11d5ee3c7a101925796cad86e07805c03c0da778fb0233b0b18504abc42b6925"
+      },
+      "disposition": "INCONCLUSIVE_HARNESS_OR_INFRA",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "capture_frame_count": 1,
+            "screen_count": 3,
+            "viewport_height": 720,
+            "viewport_width": 1280
+          },
+          "candidate_id": "Bevy",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S6-CAPTURE-DOWN-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:logical_state",
+            "SLICE:player_surface",
+            "SLICE:capture_fixture"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "identity_bound_capture": "EQUIVALENT",
+            "reach_known_state": "EQUIVALENT",
+            "state_vs_capture_failure_separated": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S6",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "a1424eab3bd6f72dbd9d5065433f779adc3715d651b534973e9c4d7b4edcb8a2",
+        "all_attempt_refs": [
+          "GEN-S6-620c278a67f4446e7e098541-S6-N1",
+          "GEN-S6-620c278a67f4446e7e098541-S6-N2",
+          "GEN-S6-620c278a67f4446e7e098541-S6-FI1"
+        ],
+        "attempts": {
+          "GEN-S6-620c278a67f4446e7e098541-S6-FI1": {
+            "attempt_id": "GEN-S6-620c278a67f4446e7e098541-S6-FI1",
+            "candidate_generation_id": "GEN-S6-620c278a67f4446e7e098541",
+            "candidate_id": "Bevy",
+            "failure_class": "HARNESS",
+            "injection_id": "FI-S6-CAPTURE-DOWN-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-S6-3c7814b30c3dad97af17a5a83d39",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-3e499cb10d72bd86ce0f716e8160"
+          },
+          "GEN-S6-620c278a67f4446e7e098541-S6-N1": {
+            "attempt_id": "GEN-S6-620c278a67f4446e7e098541-S6-N1",
+            "candidate_generation_id": "GEN-S6-620c278a67f4446e7e098541",
+            "candidate_id": "Bevy",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-S6-22e7100d79fe11ddb24dd3bc61a3",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-0579050dec5c65450d99b8519ed3"
+          },
+          "GEN-S6-620c278a67f4446e7e098541-S6-N2": {
+            "attempt_id": "GEN-S6-620c278a67f4446e7e098541-S6-N2",
+            "candidate_generation_id": "GEN-S6-620c278a67f4446e7e098541",
+            "candidate_id": "Bevy",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-S6-4658d74ccd5d03cf8a502e08fc58",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-132cb5898028b565831e69c25df8"
+          }
+        },
+        "candidate_id": "Bevy",
+        "candidate_work_id": "WORK-S6-bcfae5bf3973b90271872f07",
+        "generation_id": "GEN-S6-620c278a67f4446e7e098541",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S6-620c278a67f4446e7e098541-S6-N1",
+          "GEN-S6-620c278a67f4446e7e098541-S6-N2",
+          "GEN-S6-620c278a67f4446e7e098541-S6-FI1"
+        ],
+        "scenario_id": "S6"
+      },
+      "negative_selftests": {
+        "candidate_process_validation_bypass_rejected": true,
+        "capture_down_misclassification_rejected": true,
+        "capture_reuse_substitution_rejected": true,
+        "duplicate_registry_rejected": true,
+        "generation_mismatch_rejected": true,
+        "host_fabricated_mechanism_rejected": true,
+        "missing_frame_rejected": true,
+        "raw_source_substitution_rejected": true,
+        "reused_workspace_rejected": true,
+        "wrong_state_marker_rejected": true,
+        "wrong_viewport_rejected": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:2d59a687a658771c38d2794e3c7bac5b2db5651a1e009c8b3cf73568c45f8f9e",
+          "observation": {
+            "elapsed_seconds": 0.0
+          },
+          "record": {
+            "candidate": "Bevy",
+            "candidate_generation_id": "GEN-S6-620c278a67f4446e7e098541",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "label": "N1",
+            "mode": "NORMAL",
+            "required_injection": null,
+            "reset_proof": {
+              "candidate": "Bevy",
+              "label": "N1",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-22e7100d79fe11ddb24dd3bc61a3",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-0579050dec5c65450d99b8519ed3"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": null,
+              "candidate_process_alive_at_capture": false,
+              "candidate_stderr": "",
+              "candidate_stdout": "",
+              "capture": {
+                "exit": 127,
+                "frame_count": 0,
+                "mechanism": "NONE"
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "N1",
+                  "candidate": "Bevy",
+                  "capture_sha256": null,
+                  "classification": "STATE_REACHABILITY",
+                  "executable_sha256": null,
+                  "frame_count": 0,
+                  "generation_id": "GEN-S6-620c278a67f4446e7e098541",
+                  "mechanism": "NONE",
+                  "project_digest": "sha256:33246791e30a5f746b751d3fb2a258102b93ffc6dd7683c752244ce1a8325afc",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:339761396272d55a52a33d6787f155d8b29de0faf7e9e0c7677fc43ba3fc622f",
+                  "viewport": null
+                },
+                "digest": "sha256:1552bd038368fa5312f60948f17f1713fe643a356841c445fad984341d19afa8"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_REACHABILITY",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": null,
+              "preparation": {
+                "build": {
+                  "command": [
+                    "/home/runner/.cargo/bin/cargo",
+                    "build",
+                    "--locked",
+                    "--quiet"
+                  ],
+                  "exit": 101,
+                  "stderr": "error: failed to run custom build command for `wayland-sys v0.31.11`\n\nCaused by:\n  process didn't exit successfully: `/tmp/everfield-s6-3zpwjrag/runs/bevy/N1/target/debug/build/wayland-sys-fbed6b568eba3246/build-script-build` (exit status: 101)\n  --- stdout\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_NO_PKG_CONFIG\n  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG\n  cargo:rerun-if-env-changed=PKG_CONFIG\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_STATIC\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_DYNAMIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR\n\n  --- stderr\n\n  thread 'main' (7259) panicked at /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wayland-sys-0.31.11/build.rs:10:47:\n  called `Result::unwrap()` on an `Err` value: \n  pkg-config exited with status code 1\n  > PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 pkg-config --libs --cflags wayland-client\n\n  pkg-config output:\n    Package wayland-client was not found in the pkg-config search path.\n    Perhaps you should add the directory containing `wayland-client.pc'\n    to the PKG_CONFIG_PATH environment variable\n    Package 'wayland-client', required by 'virtual:world', not found\n\n  The system library `wayland-client` required by crate `wayland-sys` was not found.\n  The file `wayland-client.pc` needs to be installed and the PKG_CONFIG_PATH environment variable must contain its parent directory.\n  The PKG_CONFIG_PATH environment variable is not set.\n\n  HINT: if you have installed the library, try setting PKG_CONFIG_PATH to the directory containing `wayland-client.pc`.\n\n  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+                  "stdout": "",
+                  "timed_out": false
+                },
+                "executable": null,
+                "executable_sha256": null,
+                "lock": {
+                  "command": [
+                    "/home/runner/.cargo/bin/cargo",
+                    "generate-lockfile"
+                  ],
+                  "exit": 0,
+                  "stderr": "    Updating crates.io index\n     Locking 550 packages to latest Rust 1.97.1 compatible versions\n      Adding bevy v0.19.0 (available: v0.19.1)\n",
+                  "stdout": "",
+                  "timed_out": false
+                },
+                "ok": false
+              },
+              "project_identity": {
+                "digest": "sha256:33246791e30a5f746b751d3fb2a258102b93ffc6dd7683c752244ce1a8325afc",
+                "files": {
+                  "Cargo.lock": "572bdabb94c40b4f019d234594cb8a3f843e8fc82a0307b95a552aa7e33df54d",
+                  "Cargo.toml": "89b7c35751a36ed4163adef9d04a74b3df84b195f02549d6274ed8c601a7b18d",
+                  "src/main.rs": "647a4593c4ec8a4e61a5204ecc4768a482e99f725e1b058d52991798d88cd96e"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "ok": false,
+                "reason": "candidate_not_started"
+              }
+            }
+          }
+        },
+        {
+          "digest": "sha256:125c2e16e5730ff758a6f85a11e4e3043908bc96f932a58a16c716ca371199a4",
+          "observation": {
+            "elapsed_seconds": 0.0
+          },
+          "record": {
+            "candidate": "Bevy",
+            "candidate_generation_id": "GEN-S6-620c278a67f4446e7e098541",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "label": "N2",
+            "mode": "NORMAL",
+            "required_injection": null,
+            "reset_proof": {
+              "candidate": "Bevy",
+              "label": "N2",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-4658d74ccd5d03cf8a502e08fc58",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-132cb5898028b565831e69c25df8"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": null,
+              "candidate_process_alive_at_capture": false,
+              "candidate_stderr": "",
+              "candidate_stdout": "",
+              "capture": {
+                "exit": 127,
+                "frame_count": 0,
+                "mechanism": "NONE"
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "N2",
+                  "candidate": "Bevy",
+                  "capture_sha256": null,
+                  "classification": "STATE_REACHABILITY",
+                  "executable_sha256": null,
+                  "frame_count": 0,
+                  "generation_id": "GEN-S6-620c278a67f4446e7e098541",
+                  "mechanism": "NONE",
+                  "project_digest": "sha256:33246791e30a5f746b751d3fb2a258102b93ffc6dd7683c752244ce1a8325afc",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:339761396272d55a52a33d6787f155d8b29de0faf7e9e0c7677fc43ba3fc622f",
+                  "viewport": null
+                },
+                "digest": "sha256:eebbcd16bbb6cf71a3ae1e9d98e9900ea73e512240938824926c03552267a773"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_REACHABILITY",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": null,
+              "preparation": {
+                "build": {
+                  "command": [
+                    "/home/runner/.cargo/bin/cargo",
+                    "build",
+                    "--locked",
+                    "--quiet"
+                  ],
+                  "exit": 101,
+                  "stderr": "error: failed to run custom build command for `wayland-sys v0.31.11`\n\nCaused by:\n  process didn't exit successfully: `/tmp/everfield-s6-3zpwjrag/runs/bevy/N2/target/debug/build/wayland-sys-fbed6b568eba3246/build-script-build` (exit status: 101)\n  --- stdout\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_NO_PKG_CONFIG\n  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG\n  cargo:rerun-if-env-changed=PKG_CONFIG\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_STATIC\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_DYNAMIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR\n\n  --- stderr\n\n  thread 'main' (10253) panicked at /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wayland-sys-0.31.11/build.rs:10:47:\n  called `Result::unwrap()` on an `Err` value: \n  pkg-config exited with status code 1\n  > PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 pkg-config --libs --cflags wayland-client\n\n  pkg-config output:\n    Package wayland-client was not found in the pkg-config search path.\n    Perhaps you should add the directory containing `wayland-client.pc'\n    to the PKG_CONFIG_PATH environment variable\n    Package 'wayland-client', required by 'virtual:world', not found\n\n  The system library `wayland-client` required by crate `wayland-sys` was not found.\n  The file `wayland-client.pc` needs to be installed and the PKG_CONFIG_PATH environment variable must contain its parent directory.\n  The PKG_CONFIG_PATH environment variable is not set.\n\n  HINT: if you have installed the library, try setting PKG_CONFIG_PATH to the directory containing `wayland-client.pc`.\n\n  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+                  "stdout": "",
+                  "timed_out": false
+                },
+                "executable": null,
+                "executable_sha256": null,
+                "lock": {
+                  "command": [
+                    "/home/runner/.cargo/bin/cargo",
+                    "generate-lockfile"
+                  ],
+                  "exit": 0,
+                  "stderr": "    Updating crates.io index\n     Locking 550 packages to latest Rust 1.97.1 compatible versions\n      Adding bevy v0.19.0 (available: v0.19.1)\n",
+                  "stdout": "",
+                  "timed_out": false
+                },
+                "ok": false
+              },
+              "project_identity": {
+                "digest": "sha256:33246791e30a5f746b751d3fb2a258102b93ffc6dd7683c752244ce1a8325afc",
+                "files": {
+                  "Cargo.lock": "572bdabb94c40b4f019d234594cb8a3f843e8fc82a0307b95a552aa7e33df54d",
+                  "Cargo.toml": "89b7c35751a36ed4163adef9d04a74b3df84b195f02549d6274ed8c601a7b18d",
+                  "src/main.rs": "647a4593c4ec8a4e61a5204ecc4768a482e99f725e1b058d52991798d88cd96e"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "ok": false,
+                "reason": "candidate_not_started"
+              }
+            }
+          }
+        },
+        {
+          "digest": "sha256:7fe430a5731f92c5ac90299b28127ef43b91c036af887eb08a08b03e5ef91693",
+          "observation": {
+            "elapsed_seconds": 0.0
+          },
+          "record": {
+            "candidate": "Bevy",
+            "candidate_generation_id": "GEN-S6-620c278a67f4446e7e098541",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "label": "FI1",
+            "mode": "INJECT",
+            "required_injection": "FI-S6-CAPTURE-DOWN-v2",
+            "reset_proof": {
+              "candidate": "Bevy",
+              "label": "FI1",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-3c7814b30c3dad97af17a5a83d39",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-3e499cb10d72bd86ce0f716e8160"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": null,
+              "candidate_process_alive_at_capture": false,
+              "candidate_stderr": "",
+              "candidate_stdout": "",
+              "capture": {
+                "exit": 127,
+                "frame_count": 0,
+                "mechanism": "NONE"
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "FI1",
+                  "candidate": "Bevy",
+                  "capture_sha256": null,
+                  "classification": "STATE_REACHABILITY",
+                  "executable_sha256": null,
+                  "frame_count": 0,
+                  "generation_id": "GEN-S6-620c278a67f4446e7e098541",
+                  "mechanism": "NONE",
+                  "project_digest": "sha256:33246791e30a5f746b751d3fb2a258102b93ffc6dd7683c752244ce1a8325afc",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:339761396272d55a52a33d6787f155d8b29de0faf7e9e0c7677fc43ba3fc622f",
+                  "viewport": null
+                },
+                "digest": "sha256:02ed7228e1e947ad0f6400467d2b153936104aa6f5a247825d00a34916b397bc"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_REACHABILITY",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": null,
+              "preparation": {
+                "build": {
+                  "command": [
+                    "/home/runner/.cargo/bin/cargo",
+                    "build",
+                    "--locked",
+                    "--quiet"
+                  ],
+                  "exit": 101,
+                  "stderr": "error: failed to run custom build command for `wayland-sys v0.31.11`\n\nCaused by:\n  process didn't exit successfully: `/tmp/everfield-s6-3zpwjrag/runs/bevy/FI1/target/debug/build/wayland-sys-fbed6b568eba3246/build-script-build` (exit status: 101)\n  --- stdout\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_NO_PKG_CONFIG\n  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG\n  cargo:rerun-if-env-changed=PKG_CONFIG\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_STATIC\n  cargo:rerun-if-env-changed=WAYLAND_CLIENT_DYNAMIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH\n  cargo:rerun-if-env-changed=PKG_CONFIG_PATH\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-unknown-linux-gnu\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_unknown_linux_gnu\n  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR\n  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR\n\n  --- stderr\n\n  thread 'main' (13268) panicked at /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wayland-sys-0.31.11/build.rs:10:47:\n  called `Result::unwrap()` on an `Err` value: \n  pkg-config exited with status code 1\n  > PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 pkg-config --libs --cflags wayland-client\n\n  pkg-config output:\n    Package wayland-client was not found in the pkg-config search path.\n    Perhaps you should add the directory containing `wayland-client.pc'\n    to the PKG_CONFIG_PATH environment variable\n    Package 'wayland-client', required by 'virtual:world', not found\n\n  The system library `wayland-client` required by crate `wayland-sys` was not found.\n  The file `wayland-client.pc` needs to be installed and the PKG_CONFIG_PATH environment variable must contain its parent directory.\n  The PKG_CONFIG_PATH environment variable is not set.\n\n  HINT: if you have installed the library, try setting PKG_CONFIG_PATH to the directory containing `wayland-client.pc`.\n\n  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+                  "stdout": "",
+                  "timed_out": false
+                },
+                "executable": null,
+                "executable_sha256": null,
+                "lock": {
+                  "command": [
+                    "/home/runner/.cargo/bin/cargo",
+                    "generate-lockfile"
+                  ],
+                  "exit": 0,
+                  "stderr": "    Updating crates.io index\n     Locking 550 packages to latest Rust 1.97.1 compatible versions\n      Adding bevy v0.19.0 (available: v0.19.1)\n",
+                  "stdout": "",
+                  "timed_out": false
+                },
+                "ok": false
+              },
+              "project_identity": {
+                "digest": "sha256:33246791e30a5f746b751d3fb2a258102b93ffc6dd7683c752244ce1a8325afc",
+                "files": {
+                  "Cargo.lock": "572bdabb94c40b4f019d234594cb8a3f843e8fc82a0307b95a552aa7e33df54d",
+                  "Cargo.toml": "89b7c35751a36ed4163adef9d04a74b3df84b195f02549d6274ed8c601a7b18d",
+                  "src/main.rs": "647a4593c4ec8a4e61a5204ecc4768a482e99f725e1b058d52991798d88cd96e"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "ok": false,
+                "reason": "candidate_not_started"
+              }
+            }
+          }
+        }
+      ],
+      "source_bindings": {
+        "GEN-S6-620c278a67f4446e7e098541-S6-FI1": "sha256:7fe430a5731f92c5ac90299b28127ef43b91c036af887eb08a08b03e5ef91693",
+        "GEN-S6-620c278a67f4446e7e098541-S6-N1": "sha256:2d59a687a658771c38d2794e3c7bac5b2db5651a1e009c8b3cf73568c45f8f9e",
+        "GEN-S6-620c278a67f4446e7e098541-S6-N2": "sha256:125c2e16e5730ff758a6f85a11e4e3043908bc96f932a58a16c716ca371199a4"
+      },
+      "trusted_representation_ok": false
+    },
+    "Defold": {
+      "adaptation_validation": {
+        "adaptation_identity": "504ad4d5a30bc481a1bbbb1ff470ade2a03e274039ab0a3915c68b4caf98055b",
+        "binding_id": "3366fbdf4bd6179557b33cab6749ec5ec611c11fdca04144168ce1b8a2939e8e",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "INCONCLUSIVE",
+        "reasons": [
+          "non_product_failure_class_present"
+        ],
+        "valid_envelope": true
+      },
+      "binding_verification": {
+        "ok": false,
+        "reasons": [
+          "raw_semantics_invalid"
+        ]
+      },
+      "candidate_identity": {
+        "body": {
+          "candidate": "Defold",
+          "exact_toolchain_identity": {
+            "artifact_digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+            "artifact_sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+            "baseline": "1.13.0",
+            "bob_version": "bob.jar version: 1.13.0  sha1: f735c12192bf95684e6ae1ae27c400b8170fc6d8  built: 2026-07-07 11:40:03\n100% Working\n",
+            "java_version": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n"
+          },
+          "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+          "runner_sha256": "e642d98f094a26a8de4085bd4ffb247c0875ce1b253f7d3b0cb37836d96c1902",
+          "s5_issue": 433,
+          "s5_producer_publication": "886438990ed395cde2fad0ee6cb98ca6ade0f26f",
+          "s5_review_disposition": "PASS_BOUNDED_S5_V5_ENVELOPE",
+          "s5_review_issue": 454,
+          "s5_review_publication": "a7c587956f542c0fc00d5c6875a04a04e124f4e6",
+          "s5_review_terminal": 5309016465,
+          "s5_terminal": 5308620093,
+          "scenario": "S6",
+          "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea"
+        },
+        "identity_digest": "sha256:e4b9374cd89c2958fa26399fdb38ef3b75a16cd737269ee7b21b3183d8d70413"
+      },
+      "disposition": "INCONCLUSIVE_HARNESS_OR_INFRA",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "capture_frame_count": 1,
+            "screen_count": 3,
+            "viewport_height": 720,
+            "viewport_width": 1280
+          },
+          "candidate_id": "Defold",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S6-CAPTURE-DOWN-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:logical_state",
+            "SLICE:player_surface",
+            "SLICE:capture_fixture"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "identity_bound_capture": "EQUIVALENT",
+            "reach_known_state": "EQUIVALENT",
+            "state_vs_capture_failure_separated": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S6",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "3366fbdf4bd6179557b33cab6749ec5ec611c11fdca04144168ce1b8a2939e8e",
+        "all_attempt_refs": [
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N1",
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N2",
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-FI1"
+        ],
+        "attempts": {
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-FI1": {
+            "attempt_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-FI1",
+            "candidate_generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+            "candidate_id": "Defold",
+            "failure_class": "HARNESS",
+            "injection_id": "FI-S6-CAPTURE-DOWN-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-S6-e7f64b206b55ac5d623ce373d721",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-884e4fa884aebe8ca675c6e7ca04"
+          },
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N1": {
+            "attempt_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N1",
+            "candidate_generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+            "candidate_id": "Defold",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-S6-d508aa4abaa383bf1d9cc4239e5f",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-612e8f353c69d55a21dddfb35021"
+          },
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N2": {
+            "attempt_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N2",
+            "candidate_generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+            "candidate_id": "Defold",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-S6-a4b9b57e474d9c5352807a336b31",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-7b60141ad9b2cdf99693da936c4e"
+          }
+        },
+        "candidate_id": "Defold",
+        "candidate_work_id": "WORK-S6-4bb8d1cc9e9a1ce3f37362c8",
+        "generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N1",
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N2",
+          "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-FI1"
+        ],
+        "scenario_id": "S6"
+      },
+      "negative_selftests": {
+        "candidate_process_validation_bypass_rejected": true,
+        "capture_down_misclassification_rejected": true,
+        "capture_reuse_substitution_rejected": true,
+        "duplicate_registry_rejected": true,
+        "generation_mismatch_rejected": true,
+        "host_fabricated_mechanism_rejected": true,
+        "missing_frame_rejected": true,
+        "raw_source_substitution_rejected": true,
+        "reused_workspace_rejected": true,
+        "wrong_state_marker_rejected": true,
+        "wrong_viewport_rejected": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:d607db1d70849da2fe7babbc1cfccba1d1f959299e9e26e5020abff9a2ba908f",
+          "observation": {
+            "elapsed_seconds": 0.701
+          },
+          "record": {
+            "candidate": "Defold",
+            "candidate_generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "label": "N1",
+            "mode": "NORMAL",
+            "required_injection": null,
+            "reset_proof": {
+              "candidate": "Defold",
+              "label": "N1",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-d508aa4abaa383bf1d9cc4239e5f",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-612e8f353c69d55a21dddfb35021"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": 127,
+              "candidate_process_alive_at_capture": false,
+              "candidate_stderr": "/tmp/everfield-s6-3zpwjrag/runs/defold/N1/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64: error while loading shared libraries: libGLU.so.1: cannot open shared object file: No such file or directory\n",
+              "candidate_stdout": "",
+              "capture": {
+                "exit": 126,
+                "frame_count": 0,
+                "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                "reason": "state_or_process_not_ready"
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "N1",
+                  "candidate": "Defold",
+                  "capture_sha256": null,
+                  "classification": "STATE_REACHABILITY",
+                  "executable_sha256": "5e26892a46d3d9cd718d3d7f62c5124d6fbdfd1e464f1d9affa46c8091bf9b0e",
+                  "frame_count": 0,
+                  "generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+                  "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                  "project_digest": "sha256:21eec45b442d116a5fec9e2152570405420a28825a9b708531e4b86441fd578d",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:efda263300f859281300776c42a1bbf3c6aeba0e6a1bc28a5b1d5fbfcef13057",
+                  "viewport": null
+                },
+                "digest": "sha256:9dbc51ba23166fdd4f8309b2308d201a2e19867490de5943d34d6ade019f5910"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_REACHABILITY",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": {
+                "command": [
+                  "/tmp/everfield-s6-3zpwjrag/runs/defold/N1/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64"
+                ],
+                "pid": 13380,
+                "started": true
+              },
+              "preparation": {
+                "build": {
+                  "command": [
+                    "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+                    "-jar",
+                    "/tmp/everfield-s6-3zpwjrag/toolchains/bob-1.13.0.jar",
+                    "--root",
+                    "/tmp/everfield-s6-3zpwjrag/runs/defold/N1",
+                    "--bundle-output",
+                    "/tmp/everfield-s6-3zpwjrag/runs/defold/N1/bundle-debug",
+                    "--variant",
+                    "debug",
+                    "--platform",
+                    "x86_64-linux",
+                    "--archive",
+                    "resolve",
+                    "build",
+                    "bundle"
+                  ],
+                  "exit": 0,
+                  "stderr": "e.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$PrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.proto.DdfMath$Vector4\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.proto.DdfMath$Vector4One\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gamesys.proto.Gui$NodeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gamesys.proto.Gui$SceneDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.script.proto.Lua$LuaSource\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.lua.proto.Lua$LuaModule\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Material$MaterialDesc$Constant\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Material$MaterialDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$RenderPrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$InputBinding\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadModifier_t\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMapEntry\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMap\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMaps\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfileQualifier\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfile\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:38 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfiles\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\n",
+                  "stdout": "  0% Downloading 0 archives\n 25% Downloading 0 archives\n 25% Working\n 25% Reading classes\n2026-08-16 19:24:36 INFO     \n 44% Reading classes\n 63% Reading classes\n 69% Reading classes\n 69% Cleaning engine\n 72% Cleaning engine\n 75% Cleaning engine\n 75% Reading tasks\n 77% Building\n2026-08-16 19:24:37 INFO    Creating task builder with a fixed thread pool executor using 3 threads \n2026-08-16 19:24:37 INFO    Build tasks \n2026-08-16 19:24:38 INFO    Generating the resource graph \n2026-08-16 19:24:38 INFO    Generating the resource graph took 0.076000 s \n2026-08-16 19:24:38 INFO    Creation of the excluded resources list. \n2026-08-16 19:24:38 INFO    Creation of the excluded resources list took 0.000000 s \n2026-08-16 19:24:38 INFO    GameProjectBuilder.createArchive \n2026-08-16 19:24:38 INFO    Creating archive entries with a fixed thread pool executor using 3 threads \n2026-08-16 19:24:38 INFO    GameProjectBuilder.createArchive took 0.025000 \n2026-08-16 19:24:38 INFO    buildManifestData begin \n2026-08-16 19:24:38 INFO    ManifestBuilder.buildManifestData took 0.003000 \n2026-08-16 19:24:38 INFO    buildManifestData begin \n2026-08-16 19:24:38 INFO    ManifestBuilder.buildManifestData took 0.000000 \n2026-08-16 19:24:38 INFO    Writing the resource graph to json \n2026-08-16 19:24:38 INFO    Writing the resource graph to json took 0.009000 s \n2026-08-16 19:24:38 INFO    Build tasks took 0.711000 s \n 81% Building\n 81% Bundling\n100% Bundling\n",
+                  "timed_out": false
+                },
+                "executable": "/tmp/everfield-s6-3zpwjrag/runs/defold/N1/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64",
+                "executable_sha256": "5e26892a46d3d9cd718d3d7f62c5124d6fbdfd1e464f1d9affa46c8091bf9b0e",
+                "ok": true
+              },
+              "project_identity": {
+                "digest": "sha256:21eec45b442d116a5fec9e2152570405420a28825a9b708531e4b86441fd578d",
+                "files": {
+                  "game.project": "a8abac6cc3bcc9f6fea21cbbf8cd29983e212802dd848f04e3d01f714bd23f8d",
+                  "input/game.input_binding": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "main.collection": "2771b478f948f0259c9fc6ed8160c911a7748a8ec0406de66b63386e8786f723",
+                  "main.gui": "9fff32d1e8276918efaf960dc3ce3ababdf65ae50062768484b8a95afcb11418",
+                  "main.gui_script": "aeb71637d96bc8d1689c09160062b637b44bb1811b07d1a3621f1176747e03a8"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "exit": 127,
+                "ok": false,
+                "reason": "candidate_exited_before_state"
+              }
+            }
+          }
+        },
+        {
+          "digest": "sha256:caf9685650e62d7b53b54fdd1b51705dfe68a0fc1f42c0d0b4046dc447b7f7af",
+          "observation": {
+            "elapsed_seconds": 0.701
+          },
+          "record": {
+            "candidate": "Defold",
+            "candidate_generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "label": "N2",
+            "mode": "NORMAL",
+            "required_injection": null,
+            "reset_proof": {
+              "candidate": "Defold",
+              "label": "N2",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-a4b9b57e474d9c5352807a336b31",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-7b60141ad9b2cdf99693da936c4e"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": 127,
+              "candidate_process_alive_at_capture": false,
+              "candidate_stderr": "/tmp/everfield-s6-3zpwjrag/runs/defold/N2/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64: error while loading shared libraries: libGLU.so.1: cannot open shared object file: No such file or directory\n",
+              "candidate_stdout": "",
+              "capture": {
+                "exit": 126,
+                "frame_count": 0,
+                "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                "reason": "state_or_process_not_ready"
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "N2",
+                  "candidate": "Defold",
+                  "capture_sha256": null,
+                  "classification": "STATE_REACHABILITY",
+                  "executable_sha256": "5e26892a46d3d9cd718d3d7f62c5124d6fbdfd1e464f1d9affa46c8091bf9b0e",
+                  "frame_count": 0,
+                  "generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+                  "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                  "project_digest": "sha256:21eec45b442d116a5fec9e2152570405420a28825a9b708531e4b86441fd578d",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:efda263300f859281300776c42a1bbf3c6aeba0e6a1bc28a5b1d5fbfcef13057",
+                  "viewport": null
+                },
+                "digest": "sha256:c0d557614015994d5aef70ebedb38537c00ca184b3436a3960f3b450745c3339"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_REACHABILITY",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": {
+                "command": [
+                  "/tmp/everfield-s6-3zpwjrag/runs/defold/N2/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64"
+                ],
+                "pid": 13433,
+                "started": true
+              },
+              "preparation": {
+                "build": {
+                  "command": [
+                    "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+                    "-jar",
+                    "/tmp/everfield-s6-3zpwjrag/toolchains/bob-1.13.0.jar",
+                    "--root",
+                    "/tmp/everfield-s6-3zpwjrag/runs/defold/N2",
+                    "--bundle-output",
+                    "/tmp/everfield-s6-3zpwjrag/runs/defold/N2/bundle-debug",
+                    "--variant",
+                    "debug",
+                    "--platform",
+                    "x86_64-linux",
+                    "--archive",
+                    "resolve",
+                    "build",
+                    "bundle"
+                  ],
+                  "exit": 0,
+                  "stderr": "e.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$PrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.proto.DdfMath$Vector4\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.proto.DdfMath$Vector4One\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gamesys.proto.Gui$NodeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gamesys.proto.Gui$SceneDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.script.proto.Lua$LuaSource\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.lua.proto.Lua$LuaModule\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Material$MaterialDesc$Constant\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Material$MaterialDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$RenderPrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$InputBinding\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadModifier_t\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMapEntry\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMap\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMaps\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfileQualifier\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfile\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:41 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfiles\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\n",
+                  "stdout": "  0% Downloading 0 archives\n 25% Downloading 0 archives\n 25% Working\n 25% Reading classes\n2026-08-16 19:24:40 INFO     \n 44% Reading classes\n 63% Reading classes\n 69% Reading classes\n 69% Cleaning engine\n 72% Cleaning engine\n 75% Cleaning engine\n 75% Reading tasks\n 77% Building\n2026-08-16 19:24:41 INFO    Creating task builder with a fixed thread pool executor using 3 threads \n2026-08-16 19:24:41 INFO    Build tasks \n2026-08-16 19:24:41 INFO    Generating the resource graph \n2026-08-16 19:24:41 INFO    Generating the resource graph took 0.075000 s \n2026-08-16 19:24:41 INFO    Creation of the excluded resources list. \n2026-08-16 19:24:41 INFO    Creation of the excluded resources list took 0.000000 s \n2026-08-16 19:24:41 INFO    GameProjectBuilder.createArchive \n2026-08-16 19:24:41 INFO    Creating archive entries with a fixed thread pool executor using 3 threads \n2026-08-16 19:24:42 INFO    GameProjectBuilder.createArchive took 0.020000 \n2026-08-16 19:24:42 INFO    buildManifestData begin \n2026-08-16 19:24:42 INFO    ManifestBuilder.buildManifestData took 0.005000 \n2026-08-16 19:24:42 INFO    buildManifestData begin \n2026-08-16 19:24:42 INFO    ManifestBuilder.buildManifestData took 0.000000 \n2026-08-16 19:24:42 INFO    Writing the resource graph to json \n2026-08-16 19:24:42 INFO    Writing the resource graph to json took 0.013000 s \n2026-08-16 19:24:42 INFO    Build tasks took 0.612000 s \n 81% Building\n 81% Bundling\n100% Bundling\n",
+                  "timed_out": false
+                },
+                "executable": "/tmp/everfield-s6-3zpwjrag/runs/defold/N2/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64",
+                "executable_sha256": "5e26892a46d3d9cd718d3d7f62c5124d6fbdfd1e464f1d9affa46c8091bf9b0e",
+                "ok": true
+              },
+              "project_identity": {
+                "digest": "sha256:21eec45b442d116a5fec9e2152570405420a28825a9b708531e4b86441fd578d",
+                "files": {
+                  "game.project": "a8abac6cc3bcc9f6fea21cbbf8cd29983e212802dd848f04e3d01f714bd23f8d",
+                  "input/game.input_binding": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "main.collection": "2771b478f948f0259c9fc6ed8160c911a7748a8ec0406de66b63386e8786f723",
+                  "main.gui": "9fff32d1e8276918efaf960dc3ce3ababdf65ae50062768484b8a95afcb11418",
+                  "main.gui_script": "aeb71637d96bc8d1689c09160062b637b44bb1811b07d1a3621f1176747e03a8"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "exit": 127,
+                "ok": false,
+                "reason": "candidate_exited_before_state"
+              }
+            }
+          }
+        },
+        {
+          "digest": "sha256:6923d3f8e7de81f61d7cb24a122b96fa16d52fd0f29140e682545f8c37c494cf",
+          "observation": {
+            "elapsed_seconds": 0.701
+          },
+          "record": {
+            "candidate": "Defold",
+            "candidate_generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "label": "FI1",
+            "mode": "INJECT",
+            "required_injection": "FI-S6-CAPTURE-DOWN-v2",
+            "reset_proof": {
+              "candidate": "Defold",
+              "label": "FI1",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-e7f64b206b55ac5d623ce373d721",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-884e4fa884aebe8ca675c6e7ca04"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": 127,
+              "candidate_process_alive_at_capture": false,
+              "candidate_stderr": "/tmp/everfield-s6-3zpwjrag/runs/defold/FI1/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64: error while loading shared libraries: libGLU.so.1: cannot open shared object file: No such file or directory\n",
+              "candidate_stdout": "",
+              "capture": {
+                "exit": 126,
+                "frame_count": 0,
+                "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                "reason": "state_or_process_not_ready"
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "FI1",
+                  "candidate": "Defold",
+                  "capture_sha256": null,
+                  "classification": "STATE_REACHABILITY",
+                  "executable_sha256": "5e26892a46d3d9cd718d3d7f62c5124d6fbdfd1e464f1d9affa46c8091bf9b0e",
+                  "frame_count": 0,
+                  "generation_id": "GEN-S6-d0189c4307d0e3b54d1d5e8f",
+                  "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                  "project_digest": "sha256:21eec45b442d116a5fec9e2152570405420a28825a9b708531e4b86441fd578d",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:efda263300f859281300776c42a1bbf3c6aeba0e6a1bc28a5b1d5fbfcef13057",
+                  "viewport": null
+                },
+                "digest": "sha256:754cfb57e57dd934861b4cdaec5b6c6ea4a9940552044b430fe0f337aaaf7cb6"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_REACHABILITY",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": {
+                "command": [
+                  "/tmp/everfield-s6-3zpwjrag/runs/defold/FI1/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64"
+                ],
+                "pid": 13489,
+                "started": true
+              },
+              "preparation": {
+                "build": {
+                  "command": [
+                    "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+                    "-jar",
+                    "/tmp/everfield-s6-3zpwjrag/toolchains/bob-1.13.0.jar",
+                    "--root",
+                    "/tmp/everfield-s6-3zpwjrag/runs/defold/FI1",
+                    "--bundle-output",
+                    "/tmp/everfield-s6-3zpwjrag/runs/defold/FI1/bundle-debug",
+                    "--variant",
+                    "debug",
+                    "--platform",
+                    "x86_64-linux",
+                    "--archive",
+                    "resolve",
+                    "build",
+                    "bundle"
+                  ],
+                  "exit": 0,
+                  "stderr": "e.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gameobject.proto.GameObject$PrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.proto.DdfMath$Vector4\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.proto.DdfMath$Vector4One\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gamesys.proto.Gui$NodeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.gamesys.proto.Gui$SceneDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.script.proto.Lua$LuaSource\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.lua.proto.Lua$LuaModule\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Material$MaterialDesc$Constant\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Material$MaterialDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$RenderPrototypeDesc\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$InputBinding\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadModifier_t\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMapEntry\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMap\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.input.proto.Input$GamepadMaps\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfileQualifier\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfile\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\nAug 16, 2026 7:24:45 PM com.google.protobuf.GeneratedMessage warnPre22Gencode\nWARNING: Vulnerable protobuf generated type in use: com.dynamo.render.proto.Render$DisplayProfiles\nAs of 2022/09/29 (release 21.7) makeExtensionsImmutable should not be called from protobuf gencode. If you are seeing this message, your gencode is vulnerable to a denial of service attack. You should regenerate your code using protobuf 25.6 or later. Use the latest version that meets your needs. However, if you understand the risks and wish to continue with vulnerable gencode, you can set the system property `-Dcom.google.protobuf.use_unsafe_pre22_gencode` on the command line to silence this warning. You also can set `-Dcom.google.protobuf.error_on_unsafe_pre22_gencode` to throw an error instead. See security vulnerability: https://github.com/protocolbuffers/protobuf/security/advisories/GHSA-h4h5-3hr4-j3g2\n",
+                  "stdout": "  0% Downloading 0 archives\n 25% Downloading 0 archives\n 25% Working\n 25% Reading classes\n2026-08-16 19:24:43 INFO     \n 44% Reading classes\n 63% Reading classes\n 69% Reading classes\n 69% Cleaning engine\n 72% Cleaning engine\n 75% Cleaning engine\n 75% Reading tasks\n 77% Building\n2026-08-16 19:24:44 INFO    Creating task builder with a fixed thread pool executor using 3 threads \n2026-08-16 19:24:44 INFO    Build tasks \n2026-08-16 19:24:45 INFO    Generating the resource graph \n2026-08-16 19:24:45 INFO    Generating the resource graph took 0.093000 s \n2026-08-16 19:24:45 INFO    Creation of the excluded resources list. \n2026-08-16 19:24:45 INFO    Creation of the excluded resources list took 0.000000 s \n2026-08-16 19:24:45 INFO    GameProjectBuilder.createArchive \n2026-08-16 19:24:45 INFO    Creating archive entries with a fixed thread pool executor using 3 threads \n2026-08-16 19:24:45 INFO    GameProjectBuilder.createArchive took 0.021000 \n2026-08-16 19:24:45 INFO    buildManifestData begin \n2026-08-16 19:24:45 INFO    ManifestBuilder.buildManifestData took 0.005000 \n2026-08-16 19:24:45 INFO    buildManifestData begin \n2026-08-16 19:24:45 INFO    ManifestBuilder.buildManifestData took 0.000000 \n2026-08-16 19:24:45 INFO    Writing the resource graph to json \n2026-08-16 19:24:45 INFO    Writing the resource graph to json took 0.012000 s \n2026-08-16 19:24:45 INFO    Build tasks took 0.676000 s \n 81% Building\n 81% Bundling\n100% Bundling\n",
+                  "timed_out": false
+                },
+                "executable": "/tmp/everfield-s6-3zpwjrag/runs/defold/FI1/bundle-debug/Everfield S6 Defold/EverfieldS6Defold.x86_64",
+                "executable_sha256": "5e26892a46d3d9cd718d3d7f62c5124d6fbdfd1e464f1d9affa46c8091bf9b0e",
+                "ok": true
+              },
+              "project_identity": {
+                "digest": "sha256:21eec45b442d116a5fec9e2152570405420a28825a9b708531e4b86441fd578d",
+                "files": {
+                  "game.project": "a8abac6cc3bcc9f6fea21cbbf8cd29983e212802dd848f04e3d01f714bd23f8d",
+                  "input/game.input_binding": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "main.collection": "2771b478f948f0259c9fc6ed8160c911a7748a8ec0406de66b63386e8786f723",
+                  "main.gui": "9fff32d1e8276918efaf960dc3ce3ababdf65ae50062768484b8a95afcb11418",
+                  "main.gui_script": "aeb71637d96bc8d1689c09160062b637b44bb1811b07d1a3621f1176747e03a8"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "exit": 127,
+                "ok": false,
+                "reason": "candidate_exited_before_state"
+              }
+            }
+          }
+        }
+      ],
+      "source_bindings": {
+        "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-FI1": "sha256:6923d3f8e7de81f61d7cb24a122b96fa16d52fd0f29140e682545f8c37c494cf",
+        "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N1": "sha256:d607db1d70849da2fe7babbc1cfccba1d1f959299e9e26e5020abff9a2ba908f",
+        "GEN-S6-d0189c4307d0e3b54d1d5e8f-S6-N2": "sha256:caf9685650e62d7b53b54fdd1b51705dfe68a0fc1f42c0d0b4046dc447b7f7af"
+      },
+      "trusted_representation_ok": false
+    },
+    "Godot": {
+      "adaptation_validation": {
+        "adaptation_identity": "25d0ead1111ff8ef214a622286f71baa86ba127a13a65ca7c674cdcc2128f713",
+        "binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      },
+      "binding_verification": {
+        "ok": true,
+        "reasons": []
+      },
+      "candidate_identity": {
+        "body": {
+          "candidate": "Godot",
+          "exact_toolchain_identity": {
+            "archive_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+            "artifact_digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+            "baseline": "4.7.1-stable",
+            "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+            "version": "4.7.1.stable.official.a13da4feb\n"
+          },
+          "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+          "runner_sha256": "e642d98f094a26a8de4085bd4ffb247c0875ce1b253f7d3b0cb37836d96c1902",
+          "s5_issue": 433,
+          "s5_producer_publication": "886438990ed395cde2fad0ee6cb98ca6ade0f26f",
+          "s5_review_disposition": "PASS_BOUNDED_S5_V5_ENVELOPE",
+          "s5_review_issue": 454,
+          "s5_review_publication": "a7c587956f542c0fc00d5c6875a04a04e124f4e6",
+          "s5_review_terminal": 5309016465,
+          "s5_terminal": 5308620093,
+          "scenario": "S6",
+          "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea"
+        },
+        "identity_digest": "sha256:eed2c67bd572f67f96c3f17f2716d10d7f4826eba253e5523535980ba5d47b67"
+      },
+      "disposition": "INCONCLUSIVE_HARNESS_OR_INFRA",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "capture_frame_count": 1,
+            "screen_count": 3,
+            "viewport_height": 720,
+            "viewport_width": 1280
+          },
+          "candidate_id": "Godot",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S6-CAPTURE-DOWN-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:logical_state",
+            "SLICE:player_surface",
+            "SLICE:capture_fixture"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "identity_bound_capture": "EQUIVALENT",
+            "reach_known_state": "EQUIVALENT",
+            "state_vs_capture_failure_separated": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S6",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+        "all_attempt_refs": [
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N1",
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N2",
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-FI1"
+        ],
+        "attempts": {
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-FI1": {
+            "attempt_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-FI1",
+            "candidate_generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+            "candidate_id": "Godot",
+            "failure_class": "NONE",
+            "injection_id": "FI-S6-CAPTURE-DOWN-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-S6-0550323dd294e8845d6b26db438a",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-919774edfd06e9a0fd4d74b7c46d"
+          },
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N1": {
+            "attempt_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N1",
+            "candidate_generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+            "candidate_id": "Godot",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-S6-ce8c75d49abc8ff2e5cc7efc3e73",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-5f04f6664b69a6c0e9dea324c6bd"
+          },
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N2": {
+            "attempt_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N2",
+            "candidate_generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+            "candidate_id": "Godot",
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-S6-38aad88b27ec3bad8393bf22f0c7",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "PASS",
+            "scenario_id": "S6",
+            "workspace_id": "WS-S6-e28b390e14c1a8cab50702758909"
+          }
+        },
+        "candidate_id": "Godot",
+        "candidate_work_id": "WORK-S6-51f1159b63eeb65860d2e553",
+        "generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N1",
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N2",
+          "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-FI1"
+        ],
+        "scenario_id": "S6"
+      },
+      "negative_selftests": {
+        "candidate_process_validation_bypass_rejected": true,
+        "capture_down_misclassification_rejected": true,
+        "capture_reuse_substitution_rejected": false,
+        "duplicate_registry_rejected": true,
+        "generation_mismatch_rejected": true,
+        "host_fabricated_mechanism_rejected": true,
+        "missing_frame_rejected": true,
+        "raw_source_substitution_rejected": true,
+        "reused_workspace_rejected": true,
+        "wrong_state_marker_rejected": true,
+        "wrong_viewport_rejected": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:47d86e683e7692092995de56eac444cf649271e85a05d2fba2a9228dbca4bf29",
+          "observation": {
+            "elapsed_seconds": 3.811
+          },
+          "record": {
+            "candidate": "Godot",
+            "candidate_generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
+            "label": "N1",
+            "mode": "NORMAL",
+            "required_injection": null,
+            "reset_proof": {
+              "candidate": "Godot",
+              "label": "N1",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-ce8c75d49abc8ff2e5cc7efc3e73",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-5f04f6664b69a6c0e9dea324c6bd"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": -15,
+              "candidate_process_alive_at_capture": true,
+              "candidate_stderr": "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)\nlibpulse.so.0: cannot open shared object file: No such file or directory\nlibpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+              "candidate_stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nEVERFIELD_S6_STATE:CAPTURE-STATE-042\n",
+              "capture": {
+                "command": [
+                  "/usr/bin/scrot",
+                  "-z",
+                  "/tmp/everfield-s6-3zpwjrag/runs/godot/N1/s6-capture.png"
+                ],
+                "dimensions": [
+                  1280,
+                  720
+                ],
+                "exit": 0,
+                "expected_unavailable": false,
+                "frame_count": 1,
+                "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                "path_exists": true,
+                "samples": [
+                  "srgb(204,30,30)",
+                  "srgb(30,184,51)",
+                  "srgb(30,64,219)"
+                ],
+                "sha256": "01a900635c799cd77a6ac809111c9499eb7438cdb310dc5fa643b41efd9284ea",
+                "stderr": "",
+                "timed_out": false
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "N1",
+                  "candidate": "Godot",
+                  "capture_sha256": "01a900635c799cd77a6ac809111c9499eb7438cdb310dc5fa643b41efd9284ea",
+                  "classification": "STATE_AND_CAPTURE_OK",
+                  "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+                  "frame_count": 1,
+                  "generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                  "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                  "project_digest": "sha256:eefd8aafc435f156cd4a62a8de46faf09e06be3c4a5f4aeebf1a03363d7af404",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:841bdff56081870066c4b3af99631258581cd3bc9ea8bb539613a6fe212078b6",
+                  "viewport": [
+                    1280,
+                    720
+                  ]
+                },
+                "digest": "sha256:62872ba25d5a58452385e6a93f19fb5cdec80e9c28bf6d2fe96d826de825a362"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_AND_CAPTURE_OK",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": {
+                "command": [
+                  "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "--path",
+                  "/tmp/everfield-s6-3zpwjrag/runs/godot/N1",
+                  "--display-driver",
+                  "x11",
+                  "--rendering-method",
+                  "gl_compatibility"
+                ],
+                "pid": 13490,
+                "started": true
+              },
+              "preparation": {
+                "executable": "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+                "ok": true
+              },
+              "project_identity": {
+                "digest": "sha256:eefd8aafc435f156cd4a62a8de46faf09e06be3c4a5f4aeebf1a03363d7af404",
+                "files": {
+                  "main.gd": "de9e7a7ec8a4ddbe74232c9a41d2d5bffb14823cea194b57776c3f0068a58d5a",
+                  "main.tscn": "0872e41bac38a69ca1b1d17aeaacbf33092f0b4555741502cc6d1de90268c22f",
+                  "project.godot": "3919f5ef9db85b0954c5f41980ec0d7a3e876740639f375a43b3e073300b852a"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "candidate": "Godot",
+                "generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                "marker": "CAPTURE-STATE-042",
+                "ok": true,
+                "raw": "CAPTURE-STATE-042|BOOT_OR_MAIN,PLAY_SURFACE,SETTINGS|BOOT_OR_MAIN->PLAY_SURFACE,PLAY_SURFACE->SETTINGS,SETTINGS->PLAY_SURFACE|1280x720|Godot|GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                "routes": [
+                  "BOOT_OR_MAIN->PLAY_SURFACE",
+                  "PLAY_SURFACE->SETTINGS",
+                  "SETTINGS->PLAY_SURFACE"
+                ],
+                "screens": [
+                  "BOOT_OR_MAIN",
+                  "PLAY_SURFACE",
+                  "SETTINGS"
+                ],
+                "viewport": "1280x720"
+              }
+            }
+          }
+        },
+        {
+          "digest": "sha256:21f1fbe108c8302e828efcdd49e3324ed5b47f38661ea4f6b258fa5f1f0132c0",
+          "observation": {
+            "elapsed_seconds": 1.135
+          },
+          "record": {
+            "candidate": "Godot",
+            "candidate_generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
+            "label": "N2",
+            "mode": "NORMAL",
+            "required_injection": null,
+            "reset_proof": {
+              "candidate": "Godot",
+              "label": "N2",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-38aad88b27ec3bad8393bf22f0c7",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-e28b390e14c1a8cab50702758909"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": -15,
+              "candidate_process_alive_at_capture": true,
+              "candidate_stderr": "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)\nlibpulse.so.0: cannot open shared object file: No such file or directory\nlibpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+              "candidate_stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nEVERFIELD_S6_STATE:CAPTURE-STATE-042\n",
+              "capture": {
+                "command": [
+                  "/usr/bin/scrot",
+                  "-z",
+                  "/tmp/everfield-s6-3zpwjrag/runs/godot/N2/s6-capture.png"
+                ],
+                "dimensions": [
+                  1280,
+                  720
+                ],
+                "exit": 0,
+                "expected_unavailable": false,
+                "frame_count": 1,
+                "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                "path_exists": true,
+                "samples": [
+                  "srgb(204,30,30)",
+                  "srgb(30,184,51)",
+                  "srgb(30,64,219)"
+                ],
+                "sha256": "01a900635c799cd77a6ac809111c9499eb7438cdb310dc5fa643b41efd9284ea",
+                "stderr": "",
+                "timed_out": false
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "N2",
+                  "candidate": "Godot",
+                  "capture_sha256": "01a900635c799cd77a6ac809111c9499eb7438cdb310dc5fa643b41efd9284ea",
+                  "classification": "STATE_AND_CAPTURE_OK",
+                  "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+                  "frame_count": 1,
+                  "generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                  "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                  "project_digest": "sha256:eefd8aafc435f156cd4a62a8de46faf09e06be3c4a5f4aeebf1a03363d7af404",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:841bdff56081870066c4b3af99631258581cd3bc9ea8bb539613a6fe212078b6",
+                  "viewport": [
+                    1280,
+                    720
+                  ]
+                },
+                "digest": "sha256:77357642ef5b717e0fa36b38d04752eb20675a3b4ec019e84331fb810939b323"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_AND_CAPTURE_OK",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": {
+                "command": [
+                  "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "--path",
+                  "/tmp/everfield-s6-3zpwjrag/runs/godot/N2",
+                  "--display-driver",
+                  "x11",
+                  "--rendering-method",
+                  "gl_compatibility"
+                ],
+                "pid": 13539,
+                "started": true
+              },
+              "preparation": {
+                "executable": "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+                "ok": true
+              },
+              "project_identity": {
+                "digest": "sha256:eefd8aafc435f156cd4a62a8de46faf09e06be3c4a5f4aeebf1a03363d7af404",
+                "files": {
+                  "main.gd": "de9e7a7ec8a4ddbe74232c9a41d2d5bffb14823cea194b57776c3f0068a58d5a",
+                  "main.tscn": "0872e41bac38a69ca1b1d17aeaacbf33092f0b4555741502cc6d1de90268c22f",
+                  "project.godot": "3919f5ef9db85b0954c5f41980ec0d7a3e876740639f375a43b3e073300b852a"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "candidate": "Godot",
+                "generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                "marker": "CAPTURE-STATE-042",
+                "ok": true,
+                "raw": "CAPTURE-STATE-042|BOOT_OR_MAIN,PLAY_SURFACE,SETTINGS|BOOT_OR_MAIN->PLAY_SURFACE,PLAY_SURFACE->SETTINGS,SETTINGS->PLAY_SURFACE|1280x720|Godot|GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                "routes": [
+                  "BOOT_OR_MAIN->PLAY_SURFACE",
+                  "PLAY_SURFACE->SETTINGS",
+                  "SETTINGS->PLAY_SURFACE"
+                ],
+                "screens": [
+                  "BOOT_OR_MAIN",
+                  "PLAY_SURFACE",
+                  "SETTINGS"
+                ],
+                "viewport": "1280x720"
+              }
+            }
+          }
+        },
+        {
+          "digest": "sha256:cfc0c2d877839b8061a3c21188546fa960e35e1789535bb2d236093ad8d799d1",
+          "observation": {
+            "elapsed_seconds": 1.016
+          },
+          "record": {
+            "candidate": "Godot",
+            "candidate_generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
+            "label": "FI1",
+            "mode": "INJECT",
+            "required_injection": "FI-S6-CAPTURE-DOWN-v2",
+            "reset_proof": {
+              "candidate": "Godot",
+              "label": "FI1",
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S6-0550323dd294e8845d6b26db438a",
+              "schema": "S6-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S6-919774edfd06e9a0fd4d74b7c46d"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S6",
+            "schema": "S6-RAW-ATTEMPT-v1",
+            "source": {
+              "candidate_controlled_exit": -15,
+              "candidate_process_alive_at_capture": true,
+              "candidate_stderr": "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)\nlibpulse.so.0: cannot open shared object file: No such file or directory\nlibpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+              "candidate_stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nEVERFIELD_S6_STATE:CAPTURE-STATE-042\n",
+              "capture": {
+                "command": [
+                  "everfield-s6-capture-disabled"
+                ],
+                "dimensions": null,
+                "exit": 97,
+                "expected_unavailable": true,
+                "frame_count": 0,
+                "injection": "FI-S6-CAPTURE-DOWN-v2",
+                "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                "path_exists": false,
+                "samples": null,
+                "sha256": null,
+                "timed_out": false
+              },
+              "capture_binding": {
+                "body": {
+                  "attempt": "FI1",
+                  "candidate": "Godot",
+                  "capture_sha256": null,
+                  "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
+                  "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+                  "frame_count": 0,
+                  "generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                  "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+                  "project_digest": "sha256:eefd8aafc435f156cd4a62a8de46faf09e06be3c4a5f4aeebf1a03363d7af404",
+                  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+                  "state_digest": "sha256:841bdff56081870066c4b3af99631258581cd3bc9ea8bb539613a6fe212078b6",
+                  "viewport": null
+                },
+                "digest": "sha256:90a3c8a384b2b1963fc5b707b4793a50f2943dcd2340e28657941261ffdf5369"
+              },
+              "failure_separation": {
+                "capture_channel": "x11-framebuffer",
+                "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
+                "state_channel": "candidate-generated-ready-file"
+              },
+              "launch": {
+                "command": [
+                  "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "--path",
+                  "/tmp/everfield-s6-3zpwjrag/runs/godot/FI1",
+                  "--display-driver",
+                  "x11",
+                  "--rendering-method",
+                  "gl_compatibility"
+                ],
+                "pid": 13589,
+                "started": true
+              },
+              "preparation": {
+                "executable": "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+                "ok": true
+              },
+              "project_identity": {
+                "digest": "sha256:eefd8aafc435f156cd4a62a8de46faf09e06be3c4a5f4aeebf1a03363d7af404",
+                "files": {
+                  "main.gd": "de9e7a7ec8a4ddbe74232c9a41d2d5bffb14823cea194b57776c3f0068a58d5a",
+                  "main.tscn": "0872e41bac38a69ca1b1d17aeaacbf33092f0b4555741502cc6d1de90268c22f",
+                  "project.godot": "3919f5ef9db85b0954c5f41980ec0d7a3e876740639f375a43b3e073300b852a"
+                }
+              },
+              "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+              "state_observation": {
+                "candidate": "Godot",
+                "generation_id": "GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                "marker": "CAPTURE-STATE-042",
+                "ok": true,
+                "raw": "CAPTURE-STATE-042|BOOT_OR_MAIN,PLAY_SURFACE,SETTINGS|BOOT_OR_MAIN->PLAY_SURFACE,PLAY_SURFACE->SETTINGS,SETTINGS->PLAY_SURFACE|1280x720|Godot|GEN-S6-9d15a37b7aeb8ba85f8b4204",
+                "routes": [
+                  "BOOT_OR_MAIN->PLAY_SURFACE",
+                  "PLAY_SURFACE->SETTINGS",
+                  "SETTINGS->PLAY_SURFACE"
+                ],
+                "screens": [
+                  "BOOT_OR_MAIN",
+                  "PLAY_SURFACE",
+                  "SETTINGS"
+                ],
+                "viewport": "1280x720"
+              }
+            }
+          }
+        }
+      ],
+      "source_bindings": {
+        "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-FI1": "sha256:cfc0c2d877839b8061a3c21188546fa960e35e1789535bb2d236093ad8d799d1",
+        "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N1": "sha256:47d86e683e7692092995de56eac444cf649271e85a05d2fba2a9228dbca4bf29",
+        "GEN-S6-9d15a37b7aeb8ba85f8b4204-S6-N2": "sha256:21f1fbe108c8302e828efcdd49e3324ed5b47f38661ea4f6b258fa5f1f0132c0"
+      },
+      "trusted_representation_ok": true
+    }
+  },
+  "reviewed_s3_s4_s5_provenance_preserved": true,
+  "run_identity": "31967222552:1:0d47365fc89d3d0f0f2a038eeec2a59b1933e58d",
+  "runner_sha256": "e642d98f094a26a8de4085bd4ffb247c0875ce1b253f7d3b0cb37836d96c1902",
+  "s6_contract": {
+    "capture_mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+    "fixed_input_refs": [
+      "SLICE:logical_state",
+      "SLICE:player_surface",
+      "SLICE:capture_fixture"
+    ],
+    "logical_state_marker": "CAPTURE-STATE-042",
+    "min_bounds": {
+      "capture_frame_count": 1,
+      "screen_count": 3,
+      "viewport_height": 720,
+      "viewport_width": 1280
+    },
+    "obligations": [
+      "reach_known_state",
+      "identity_bound_capture",
+      "state_vs_capture_failure_separated"
+    ],
+    "required_injection": "FI-S6-CAPTURE-DOWN-v2"
+  },
+  "scenario_id": "S6",
+  "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+  "schema": "W2-ENG-TECHNICAL-S6-v1",
+  "toolchains": {
+    "Bevy": {
+      "cargo": {
+        "path": "/home/runner/.cargo/bin/cargo",
+        "probe": {
+          "cmd": [
+            "/home/runner/.cargo/bin/cargo",
+            "--version"
+          ],
+          "exit": 0,
+          "seconds": 0.623,
+          "stderr": "",
+          "stdout": "cargo 1.97.1 (c980f4866 2026-06-30)\n",
+          "timed_out": false
+        }
+      },
+      "cargo_check": {
+        "cmd": [
+          "/home/runner/.cargo/bin/cargo",
+          "check",
+          "--locked",
+          "--quiet"
+        ],
+        "exit": 0,
+        "seconds": 25.98,
+        "stderr": "",
+        "stdout": "",
+        "timed_out": false
+      },
+      "lock_replay_bound": true,
+      "reason": "exact_retained_cargo_lock_replayed_and_compiled; full graphics/package harness not executed",
+      "replay_locked_fetch": {
+        "cmd": [
+          "/home/runner/.cargo/bin/cargo",
+          "fetch",
+          "--locked"
+        ],
+        "exit": 0,
+        "seconds": 1.936,
+        "stderr": " jni-sys-macros v0.4.1\n  Downloaded bevy v0.19.0\n  Downloaded bevy_android v0.19.1\n  Downloaded num_enum v0.7.6\n  Downloaded cc v1.4.3\n  Downloaded ndk-context v0.1.1\n  Downloaded bevy_ecs_macro_logic v0.19.1\n  Downloaded walkdir v2.5.0\n  Downloaded find-msvc-tools v0.1.11\n  Downloaded jni-sys v0.4.1\n  Downloaded thiserror-impl v1.0.69\n  Downloaded ndk v0.9.0\n  Downloaded num_enum_derive v0.7.6\n  Downloaded proc-macro-crate v3.5.0\n  Downloaded combine v4.6.7\n  Downloaded bevy_diagnostic v0.19.1\n  Downloaded jobserver v0.1.35\n  Downloaded android-properties v0.2.2\n  Downloaded const-fnv1a-hash v1.1.0\n  Downloaded same-file v1.0.6\n  Downloaded bevy_derive v0.19.1\n  Downloaded jni-sys v0.3.1\n  Downloaded shlex v2.0.1\n  Downloaded winapi-util v0.1.11\n  Downloaded serde_core v1.0.229\n  Downloaded bevy_time v0.19.1\n  Downloaded ndk-sys v0.6.0+11769913\n  Downloaded simdutf8 v0.1.5\n  Downloaded jni-macros v0.22.4\n  Downloaded bytes v1.12.1\n  Downloaded simd_cesu8 v1.2.0\n  Downloaded thiserror v2.0.20\n  Downloaded jni v0.22.4\n  Downloaded futures-core v0.3.34\n  Downloaded semver v1.0.28\n  Downloaded convert_case v0.10.0\n  Downloaded android-activity v0.6.1\n  Downloaded portable-atomic-util v0.2.7\n  Downloaded bevy_transform v0.19.1\n  Downloaded hashbrown v0.16.1\n  Downloaded cfg-if v1.0.4\n  Downloaded pin-project-lite v0.2.17\n  Downloaded web-task v1.1.3\n  Downloaded futures-task v0.3.34\n  Downloaded equivalent v1.0.2\n  Downloaded unicode-xid v0.2.6\n  Downloaded atomic-waker v1.1.2\n  Downloaded thiserror-impl v2.0.20\n  Downloaded bevy_input v0.19.1\n  Downloaded rustc_version v0.4.1\n  Downloaded hash32 v0.3.1\n  Downloaded downcast-rs v2.0.2\n  Downloaded slab v0.4.12\n  Downloaded bytemuck_derive v1.12.0\n  Downloaded toml_datetime v1.1.1+spec-1.1.0\n  Downloaded wasm-bindgen-shared v0.2.127\n  Downloaded stable_deref_trait v1.2.1\n  Downloaded wasm-bindgen-macro v0.2.127\n  Downloaded variadics_please v1.1.0\n  Downloaded typeid v1.0.3\n  Downloaded bevy_macro_utils v0.19.1\n  Downloaded version_check v0.9.5\n  Downloaded fixedbitset v0.5.7\n  Downloaded crossbeam-queue v0.3.13\n  Downloaded bevy_ptr v0.19.1\n  Downloaded bevy_platform v0.19.1\n  Downloaded derive_more-impl v2.1.1\n  Downloaded rustversion v1.0.23\n  Downloaded byteorder v1.5.0\n  Downloaded futures-lite v2.6.1\n  Downloaded assert_type_match v0.1.1\n  Downloaded rand_core v0.10.1\n  Downloaded either v1.17.0\n  Downloaded nonmax v0.5.5\n  Downloaded concurrent-queue v2.5.0\n  Downloaded bevy_ecs_macros v0.19.1\n  Downloaded bevy_utils v0.19.1\n  Downloaded futures-channel v0.3.34\n  Downloaded foldhash v0.2.0\n  Downloaded once_cell v1.21.4\n  Downloaded crossbeam-utils v0.8.22\n  Downloaded smallvec v1.15.2\n  Downloaded erased-serde v0.4.10\n  Downloaded autocfg v1.5.1\n  Downloaded arrayvec v0.7.8\n  Downloaded log v0.4.33\n  Downloaded serde_derive v1.0.229\n  Downloaded bevy_tasks v0.19.1\n  Downloaded bumpalo v3.20.3\n  Downloaded async-task v4.7.1\n  Downloaded bytemuck v1.25.2\n  Downloaded bevy_reflect_derive v0.19.1\n  Downloaded uuid v1.24.1\n  Downloaded toml_edit v0.25.13+spec-1.1.0\n  Downloaded toml_parser v1.1.3+spec-1.1.0\n  Downloaded rand_distr v0.6.0\n  Downloaded getrandom v0.4.3\n  Downloaded num-traits v0.2.19\n  Downloaded slotmap v1.1.1\n  Downloaded bitflags v2.13.1\n  Downloaded unicode-ident v1.0.24\n  Downloaded wasm-bindgen v0.2.127\n  Downloaded wasm-bindgen-macro-support v0.2.127\n  Downloaded js-sys v0.3.104\n  Downloaded memchr v2.8.3\n  Downloaded r-efi v6.0.0\n  Downloaded serde v1.0.229\n  Downloaded derive_more v2.1.1\n  Downloaded indexmap v2.14.0\n  Downloaded unicode-segmentation v1.13.3\n  Downloaded heapless v0.9.3\n  Downloaded rand v0.10.2\n  Downloaded futures-util v0.3.34\n  Downloaded itertools v0.14.0\n  Downloaded libm v0.2.16\n  Downloaded winnow v1.0.4\n  Downloaded bevy_reflect v0.19.1\n  Downloaded bevy_math v0.19.1\n  Downloaded syn v2.0.119\n  Downloaded syn v3.0.3\n  Downloaded bevy_ecs v0.19.1\n  Downloaded glam v0.32.1\n  Downloaded libc v0.2.189\n  Downloaded windows-sys v0.61.2\n",
+        "stdout": "",
+        "timed_out": false
+      },
+      "resolution": {
+        "cmd": [
+          "reuse",
+          "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock"
+        ],
+        "exit": 0,
+        "seconds": 0,
+        "stderr": "",
+        "stdout": "",
+        "timed_out": false
+      },
+      "retained_lock_path": "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock",
+      "retained_lock_sha256": "fd7e1276ff5c8cde22d98c0932f70eb39383d9b60ac2d15f11d921dfa71218b0",
+      "retained_lock_source": "RETAINED_REPOSITORY_LOCK",
+      "rustc": {
+        "path": "/home/runner/.cargo/bin/rustc",
+        "probe": {
+          "cmd": [
+            "/home/runner/.cargo/bin/rustc",
+            "--version"
+          ],
+          "exit": 0,
+          "seconds": 0.178,
+          "stderr": "",
+          "stdout": "rustc 1.97.1 (8bab26f4f 2026-07-14)\n",
+          "timed_out": false
+        }
+      },
+      "status": "CAPABLE_WITH_PRESEED"
+    },
+    "Defold": {
+      "artifact_identity": {
+        "digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+        "expected_sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+        "limitation": "No authoritative vendor digest was observed from the public GitHub release metadata; this exact run content identity is retained for subsequent replay, not represented as vendor-signed identity.",
+        "observed_sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+        "vendor_digest_probe": {
+          "api_url": "https://api.github.com/repos/defold/defold/releases/tags/1.13.0",
+          "asset_name": "bob.jar",
+          "digest": null,
+          "probe": {
+            "cmd": [
+              "/usr/bin/curl",
+              "-fsSL",
+              "--max-time",
+              "30",
+              "-H",
+              "Accept: application/vnd.github+json",
+              "-H",
+              "X-GitHub-Api-Version: 2022-11-28",
+              "https://api.github.com/repos/defold/defold/releases/tags/1.13.0"
+            ],
+            "exit": 0,
+            "seconds": 0.234,
+            "stderr": "",
+            "stdout": "\",\n        \"id\": 38782685,\n        \"node_id\": \"MDQ6VXNlcjM4NzgyNjg1\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/38782685?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/defold-services\",\n        \"html_url\": \"https://github.com/defold-services\",\n        \"followers_url\": \"https://api.github.com/users/defold-services/followers\",\n        \"following_url\": \"https://api.github.com/users/defold-services/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/defold-services/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/defold-services/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/defold-services/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/defold-services/orgs\",\n        \"repos_url\": \"https://api.github.com/users/defold-services/repos\",\n        \"events_url\": \"https://api.github.com/users/defold-services/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/defold-services/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/x-msdos-program\",\n      \"state\": \"uploaded\",\n      \"size\": 1693696,\n      \"digest\": \"sha256:c652d5ae097b919ae71744252f7de2a415fbeb835bdbc187d2f7a6c1427cb653\",\n      \"download_count\": 20,\n      \"created_at\": \"2026-07-07T11:56:42Z\",\n      \"updated_at\": \"2026-07-07T11:56:42Z\",\n      \"browser_download_url\": \"https://github.com/defold/defold/releases/download/1.13.0/gdc_x86_64_win32-win.exe\"\n    },\n    {\n      \"url\": \"https://api.github.com/repos/defold/defold/releases/assets/469127836\",\n      \"id\": 469127836,\n      \"node_id\": \"RA_kwDOAEHZks4b9lKc\",\n      \"name\": \"ref-doc.zip\",\n      \"label\": \"\",\n      \"uploader\": {\n        \"login\": \"defold-services\",\n        \"id\": 38782685,\n        \"node_id\": \"MDQ6VXNlcjM4NzgyNjg1\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/38782685?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/defold-services\",\n        \"html_url\": \"https://github.com/defold-services\",\n        \"followers_url\": \"https://api.github.com/users/defold-services/followers\",\n        \"following_url\": \"https://api.github.com/users/defold-services/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/defold-services/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/defold-services/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/defold-services/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/defold-services/orgs\",\n        \"repos_url\": \"https://api.github.com/users/defold-services/repos\",\n        \"events_url\": \"https://api.github.com/users/defold-services/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/defold-services/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/zip\",\n      \"state\": \"uploaded\",\n      \"size\": 1197084,\n      \"digest\": \"sha256:b473277894fdfad9f1b1d7b6921bbe93fc61aae2c698f284eea8c852f3a3b3cf\",\n      \"download_count\": 49,\n      \"created_at\": \"2026-07-07T11:55:51Z\",\n      \"updated_at\": \"2026-07-07T11:55:51Z\",\n      \"browser_download_url\": \"https://github.com/defold/defold/releases/download/1.13.0/ref-doc.zip\"\n    }\n  ],\n  \"tarball_url\": \"https://api.github.com/repos/defold/defold/tarball/1.13.0\",\n  \"zipball_url\": \"https://api.github.com/repos/defold/defold/zipball/1.13.0\",\n  \"body\": \"Defold version 1.13.0\\nChannel=stable sha1: f735c12192bf95684e6ae1ae27c400b8170fc6d8\\ndate = 2026-07-07 11:54:22\",\n  \"reactions\": {\n    \"url\": \"https://api.github.com/repos/defold/defold/releases/346133235/reactions\",\n    \"total_count\": 20,\n    \"+1\": 0,\n    \"-1\": 0,\n    \"laugh\": 0,\n    \"hooray\": 0,\n    \"confused\": 0,\n    \"heart\": 14,\n    \"rocket\": 6,\n    \"eyes\": 0\n  }\n}\n",
+            "timed_out": false
+          },
+          "source": "NO_AUTHORITATIVE_DIGEST_OBSERVED"
+        },
+        "verified": true
+      },
+      "bob_version": {
+        "cmd": [
+          "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+          "-jar",
+          "/tmp/everfield-s6-3zpwjrag/toolchains/bob-1.13.0.jar",
+          "--version"
+        ],
+        "exit": 0,
+        "seconds": 0.513,
+        "stderr": "",
+        "stdout": "bob.jar version: 1.13.0  sha1: f735c12192bf95684e6ae1ae27c400b8170fc6d8  built: 2026-07-07 11:40:03\n100% Working\n",
+        "timed_out": false
+      },
+      "bytes": 208726976,
+      "download": {
+        "cmd": [
+          "/usr/bin/curl",
+          "-fL",
+          "--retry",
+          "2",
+          "--connect-timeout",
+          "20",
+          "-o",
+          "/tmp/everfield-s6-3zpwjrag/toolchains/bob-1.13.0.jar",
+          "https://github.com/defold/defold/releases/download/1.13.0/bob.jar"
+        ],
+        "exit": 0,
+        "seconds": 2.647,
+        "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n 35  199M   35 70.0M    0     0  57.8M      0  0:00:03  0:00:01  0:00:02 57.8M\n 75  199M   75  150M    0     0  69.7M      0  0:00:02  0:00:02 --:--:-- 85.0M\n100  199M  100  199M    0     0  75.5M      0  0:00:02  0:00:02 --:--:-- 90.5M\n",
+        "stdout": "",
+        "timed_out": false
+      },
+      "java": {
+        "path": "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+        "probe": {
+          "cmd": [
+            "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+            "-version"
+          ],
+          "exit": 0,
+          "seconds": 1.163,
+          "stderr": "openjdk version \"25.0.4\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)\nOpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)\n",
+          "stdout": "",
+          "timed_out": false
+        }
+      },
+      "reason": "digest_bound_bob_jar_downloaded_and_executed",
+      "status": "CAPABLE",
+      "url": "https://github.com/defold/defold/releases/download/1.13.0/bob.jar"
+    },
+    "Godot": {
+      "artifact_identity": {
+        "digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+        "expected_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+        "limitation": "No authoritative vendor digest was observed from the public GitHub release metadata; this exact run content identity is retained for subsequent replay, not represented as vendor-signed identity.",
+        "observed_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+        "vendor_digest_probe": {
+          "api_url": "https://api.github.com/repos/godotengine/godot/releases/tags/4.7.1-stable",
+          "asset_name": "Godot_v4.7.1-stable_linux.x86_64.zip",
+          "digest": null,
+          "probe": {
+            "cmd": [
+              "/usr/bin/curl",
+              "-fsSL",
+              "--max-time",
+              "30",
+              "-H",
+              "Accept: application/vnd.github+json",
+              "-H",
+              "X-GitHub-Api-Version: 2022-11-28",
+              "https://api.github.com/repos/godotengine/godot/releases/tags/4.7.1-stable"
+            ],
+            "exit": 0,
+            "seconds": 0.249,
+            "stderr": "",
+            "stdout": "thub.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/zip\",\n      \"state\": \"uploaded\",\n      \"size\": 82407178,\n      \"digest\": \"sha256:d9cdf49102092a2b6db4c5929002628d16eca3d7226afca2b1d03431a0a1e64b\",\n      \"download_count\": 489,\n      \"created_at\": \"2026-07-14T18:08:31Z\",\n      \"updated_at\": \"2026-07-14T18:08:56Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_windows_arm64.exe.zip\"\n    },\n    {\n      \"url\": \"https://api.github.com/repos/godotengine/godot/releases/assets/477009199\",\n      \"id\": 477009199,\n      \"node_id\": \"RA_kwDOAO6SJc4cbpUv\",\n      \"name\": \"SHA512-SUMS.txt\",\n      \"label\": \"\",\n      \"uploader\": {\n        \"login\": \"akien-mga\",\n        \"id\": 4701338,\n        \"node_id\": \"MDQ6VXNlcjQ3MDEzMzg=\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/4701338?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/akien-mga\",\n        \"html_url\": \"https://github.com/akien-mga\",\n        \"followers_url\": \"https://api.github.com/users/akien-mga/followers\",\n        \"following_url\": \"https://api.github.com/users/akien-mga/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"text/plain; charset=utf-8\",\n      \"state\": \"uploaded\",\n      \"size\": 5682,\n      \"digest\": \"sha256:4c8f302a5630f34181b12cc89454ab336f3c7f25feae9d81e10f43fc25e1ae1e\",\n      \"download_count\": 7846,\n      \"created_at\": \"2026-07-14T18:14:55Z\",\n      \"updated_at\": \"2026-07-14T18:14:55Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/SHA512-SUMS.txt\"\n    }\n  ],\n  \"tarball_url\": \"https://api.github.com/repos/godotengine/godot/tarball/4.7.1-stable\",\n  \"zipball_url\": \"https://api.github.com/repos/godotengine/godot/zipball/4.7.1-stable\",\n  \"body\": \"**Godot 4.7.1** is a maintenance release addressing stability and usability issues, and fixing all sorts of bugs. Maintenance releases are compatible with previous releases and are recommended for adoption.\\n\\nReport bugs on GitHub after checking that they haven't been reported:\\n- https://github.com/godotengine/godot/issues\\n\\n----\\n\\n- [Release notes](https://godotengine.org/article/maintenance-release-godot-4-7-1/)\\n- [Complete changelog](https://godotengine.github.io/godot-interactive-changelog/#4.7.1)\\n- [Curated changelog](https://github.com/godotengine/godot/blob/4.7.1-stable/CHANGELOG.md)\\n\\n----\\n\\n- **Download (GitHub):** Expand **Assets** below\",\n  \"reactions\": {\n    \"url\": \"https://api.github.com/repos/godotengine/godot/releases/353984102/reactions\",\n    \"total_count\": 190,\n    \"+1\": 79,\n    \"-1\": 0,\n    \"laugh\": 9,\n    \"hooray\": 30,\n    \"confused\": 0,\n    \"heart\": 35,\n    \"rocket\": 29,\n    \"eyes\": 8\n  }\n}\n",
+            "timed_out": false
+          },
+          "source": "NO_AUTHORITATIVE_DIGEST_OBSERVED"
+        },
+        "verified": true
+      },
+      "bytes": 76056717,
+      "download": {
+        "cmd": [
+          "/usr/bin/curl",
+          "-fL",
+          "--retry",
+          "2",
+          "--connect-timeout",
+          "20",
+          "-o",
+          "/tmp/everfield-s6-3zpwjrag/toolchains/godot-4.7.1.zip",
+          "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+        ],
+        "exit": 0,
+        "seconds": 0.477,
+        "stderr": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\n\n100 72.5M  100 72.5M    0     0   154M      0 --:--:-- --:--:-- --:--:--  154M\n",
+        "stdout": "",
+        "timed_out": false
+      },
+      "executable": "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+      "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+      "reason": "digest_bound_linux_archive_extracted_and_headless_process_executed",
+      "status": "CAPABLE",
+      "unzip": {
+        "cmd": [
+          "/usr/bin/unzip",
+          "-q",
+          "/tmp/everfield-s6-3zpwjrag/toolchains/godot-4.7.1.zip",
+          "-d",
+          "/tmp/everfield-s6-3zpwjrag/toolchains/godot"
+        ],
+        "exit": 0,
+        "seconds": 0.973,
+        "stderr": "",
+        "stdout": "",
+        "timed_out": false
+      },
+      "url": "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip",
+      "version": {
+        "cmd": [
+          "/tmp/everfield-s6-3zpwjrag/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+          "--headless",
+          "--version"
+        ],
+        "exit": 0,
+        "seconds": 0.027,
+        "stderr": "",
+        "stdout": "4.7.1.stable.official.a13da4feb\n",
+        "timed_out": false
+      }
+    },
+    "Unity": {
+      "archive_network": {
+        "probe": {
+          "cmd": [
+            "/usr/bin/curl",
+            "-fsSIL",
+            "--max-time",
+            "30",
+            "https://unity.com/releases/editor/archive"
+          ],
+          "exit": 0,
+          "seconds": 9.167,
+          "stderr": "",
+          "stdout": "HTTP/2 200 \ndocument-policy: js-profiling\nx-middleware-rewrite: /en/releases/editor/archive\nvary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding\nx-nextjs-cache: HIT\nx-nextjs-prerender: 1\nx-nextjs-stale-time: 300\nx-powered-by: Next.js\netag: \"lho247898c7099\"\ncontent-type: text/html; charset=utf-8\ncontent-length: 326985\nx-hex-cache-hit: miss\ncache-control: max-age=300, s-maxage=1800\ndate: Sun, 16 Aug 2026 19:20:25 GMT\nset-cookie: NEXT_LOCALE=en; Path=/; SameSite=lax\nset-cookie: x-hex-backend=gcp; Path=/; Expires=Sun, 16 Aug 2026 19:50:25 GMT; Max-Age=1800; SameSite=lax\nset-cookie: x-hex-backend-reset=true; Path=/; Expires=Mon, 17 Aug 2026 19:20:25 GMT; Max-Age=86400\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sun, 16-Aug-2026 19:30:25 GMT; path=/; SameSite=Lax\n\n",
+          "timed_out": false
+        },
+        "url": "https://unity.com/releases/editor/archive"
+      },
+      "credential_values_read": false,
+      "hub_network": {
+        "probe": {
+          "cmd": [
+            "/usr/bin/curl",
+            "-fsSIL",
+            "--max-time",
+            "30",
+            "https://hub.unity3d.com/"
+          ],
+          "exit": 22,
+          "seconds": 18.455,
+          "stderr": "curl: (22) The requested URL returned error: 404\n",
+          "stdout": "HTTP/1.1 301 Moved Permanently\nServer: nginx/1.31.2\nDate: Sun, 16 Aug 2026 19:20:25 GMT\nContent-Type: text/html\nContent-Length: 169\nConnection: keep-alive\nLocation: https://unity.com/unity-hub\n\nHTTP/2 308 \ndocument-policy: js-profiling\nlocation: /download\nrefresh: 0;url=/download\nx-hex-cache-hit: miss\ndate: Sun, 16 Aug 2026 19:20:34 GMT\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sun, 16-Aug-2026 19:30:34 GMT; path=/; SameSite=Lax\n\nHTTP/2 307 \ndocument-policy: js-profiling\nlocation: https://api.unity.com/v1/oauth2/authorize?client_id=cms_unity&response_type=code&redirect_uri=https%3A%2F%2Fcloud.unity.com%2Forganizations%2Fdefault%2Fonboarding%2Fpost-download%3Flocale%3Den&locale=en_us&is_reg=true\nx-hex-cache-hit: miss\ndate: Sun, 16 Aug 2026 19:20:43 GMT\nset-cookie: REDIRECT_PATH=%2Fdownload; Path=/\nset-cookie: language_redirected=true\nset-cookie: location=US; expires=Sun, 16-Aug-2026 19:30:43 GMT; path=/; SameSite=Lax\n\nHTTP/2 302 \nlocation: https://login.unity.com/en/conversations/b26ae1d7-b2d9-41ba-878c-962a83776113018f\ncache-control: no-cache, no-store, must-revalidate\npragma: no-cache\nexpires: 0\nsc-request-id: 3c2380a0-5f7e-42ab-9d7b-979aa106e82f\ncontent-length: 0\nvia: 1.1 google\ndate: Sun, 16 Aug 2026 19:20:42 GMT\nalt-svc: h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000\ngoogle-accounts-check-oauth-login: true\nstrict-transport-security: max-age=31536000; includeSubDomains; preload;\n\nHTTP/2 404 \nstrict-transport-security: max-age=31536000; includeSubDomains\nx-content-type-options: nosniff\nreferrer-policy: strict-origin-when-cross-origin\nx-current-path: /en/conversations/b26ae1d7-b2d9-41ba-878c-962a83776113018f\nvary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding\ncache-control: private, no-cache, no-store, max-age=0, must-revalidate\ncontent-type: text/html; charset=utf-8\ndate: Sun, 16 Aug 2026 19:20:43 GMT\nvia: 1.1 google\nalt-svc: h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000\n\n",
+          "timed_out": false
+        },
+        "url": "https://hub.unity3d.com/"
+      },
+      "reason": "public_vendor_network_is_probeable_but_unattended_editor_activation/account_license_state_is_not_repository_self_grantable",
+      "required_external_authority": "valid Unity unattended-use account/license/activation material for the exact editor baseline",
+      "status": "BLOCKED_BY_SPECIFIC_EXTERNAL_AUTHORITY"
+    },
+    "Unreal Engine": {
+      "credential_values_read": false,
+      "public_network": {
+        "probe": {
+          "cmd": [
+            "/usr/bin/curl",
+            "-fsSIL",
+            "--max-time",
+            "30",
+            "https://www.unrealengine.com/"
+          ],
+          "exit": 22,
+          "seconds": 0.118,
+          "stderr": "curl: (22) The requested URL returned error: 403\n",
+          "stdout": "HTTP/2 403 \ndate: Sun, 16 Aug 2026 19:20:43 GMT\ncontent-type: text/html; charset=UTF-8\ncontent-length: 25175\naccept-ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA\ncf-mitigated: challenge\nx-frame-options: SAMEORIGIN\nserver: cloudflare\ncritical-ch: Sec-CH-UA-Bitness, Sec-CH-UA-Arch, Sec-CH-UA-Full-Version, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform, Sec-CH-UA, UA-Bitness, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform-Version, UA-Platform, UA\ncross-origin-embedder-policy: require-corp\ncross-origin-opener-policy: same-origin\ncross-origin-resource-policy: same-origin\norigin-agent-cluster: ?1\npermissions-policy: accelerometer=(),camera=(),clipboard-read=(),clipboard-write=(),geolocation=(),gyroscope=(),hid=(),magnetometer=(),microphone=(),payment=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),sync-xhr=(),usb=(),xr-spatial-tracking=*\nreferrer-policy: same-origin\nserver-timing: chlray;desc=\"a2c2cc4a4ce9cefe\"\nx-content-type-options: nosniff\nstrict-transport-security: max-age=15552000; includeSubDomains; preload\nset-cookie: __cf_bm=A0Fdc2C_.B3l6l4CVNd7fzJGHEk._GedSow7NTZW2r0-1786908043.8807626-1.0.1.1-RfM53j6RGaDGyzG.S_yZrGlkftpdn_jgeXWjnG9ENc5cfvJ41DmU_BS4PNnRcrgsdHZYw.dXNyvfAc7SprgLLWdNn4hCOgml800DLWbN_ToCsAcM3VneUH8S54GIFCGf; HttpOnly; SameSite=None; Secure; Path=/; Domain=unrealengine.com; Expires=Sun, 16 Aug 2026 19:50:43 GMT\ncf-ray: a2c2cc4a4ce9cefe-SJC\nalt-svc: h3=\":443\"; ma=86400\n\n",
+          "timed_out": false
+        },
+        "url": "https://www.unrealengine.com/"
+      },
+      "reason": "public_vendor_network_is_probeable_but_linux_engine_source/prebuilt_acquisition_requires_Epic-linked_entitlement_or_preseeded_artifact",
+      "required_external_authority": "Epic-authorized Unreal Engine 5.8 source/prebuilt artifact access suitable for unattended CI",
+      "source_entitlement_probe": {
+        "probe": {
+          "cmd": [
+            "/usr/bin/curl",
+            "-fsSIL",
+            "--max-time",
+            "30",
+            "https://github.com/EpicGames/UnrealEngine"
+          ],
+          "exit": 22,
+          "seconds": 0.255,
+          "stderr": "curl: (22) The requested URL returned error: 404\n",
+          "stdout": "oduction-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com *.rel.tunnels.api.visualstudio.com wss://*.rel.tunnels.api.visualstudio.com github.githubassets.com objects-origin.githubusercontent.com copilot-proxy.githubusercontent.com proxy.individual.githubcopilot.com proxy.business.githubcopilot.com proxy.enterprise.githubcopilot.com *.actions.githubusercontent.com wss://*.actions.githubusercontent.com productionresultssa0.blob.core.windows.net productionresultssa1.blob.core.windows.net productionresultssa2.blob.core.windows.net productionresultssa3.blob.core.windows.net productionresultssa4.blob.core.windows.net productionresultssa5.blob.core.windows.net productionresultssa6.blob.core.windows.net productionresultssa7.blob.core.windows.net productionresultssa8.blob.core.windows.net productionresultssa9.blob.core.windows.net productionresultssa10.blob.core.windows.net productionresultssa11.blob.core.windows.net productionresultssa12.blob.core.windows.net productionresultssa13.blob.core.windows.net productionresultssa14.blob.core.windows.net productionresultssa15.blob.core.windows.net productionresultssa16.blob.core.windows.net productionresultssa17.blob.core.windows.net productionresultssa18.blob.core.windows.net productionresultssa19.blob.core.windows.net github-production-repository-image-32fea6.s3.amazonaws.com github-production-release-asset-2e65be.s3.amazonaws.com insights.github.com wss://alive.github.com wss://alive-staging.github.com api.githubcopilot.com api.individual.githubcopilot.com api.business.githubcopilot.com api.enterprise.githubcopilot.com wss://production-copilot-host.webpubsub.azure.com; font-src github.githubassets.com; form-action 'self' github.com gist.github.com copilot-workspace.githubnext.com objects-origin.githubusercontent.com; frame-ancestors 'none'; frame-src viewscreen.githubusercontent.com notebooks.githubusercontent.com; img-src 'self' data: blob: github.githubassets.com media.githubusercontent.com camo.githubusercontent.com identicons.github.com avatars.githubusercontent.com private-avatars.githubusercontent.com github-cloud.s3.amazonaws.com objects.githubusercontent.com release-assets.githubusercontent.com secured-user-images.githubusercontent.com user-images.githubusercontent.com private-user-images.githubusercontent.com opengraph.githubassets.com repository-images.githubusercontent.com marketplace-screenshots.githubusercontent.com copilotprodattachments.blob.core.windows.net/github-production-copilot-attachments/ github-production-user-asset-6210df.s3.amazonaws.com customer-stories-feed.github.com spotlights-feed.github.com explore-feed.github.com objects-origin.githubusercontent.com *.githubusercontent.com; manifest-src 'self'; media-src github.com user-images.githubusercontent.com secured-user-images.githubusercontent.com private-user-images.githubusercontent.com github-production-user-asset-6210df.s3.amazonaws.com gist.github.com github.githubassets.com; script-src github.githubassets.com; style-src 'unsafe-inline' github.githubassets.com; upgrade-insecure-requests; worker-src github.githubassets.com github.com/assets-cdn/worker/ github.com/assets/ gist.github.com/assets-cdn/worker/\nserver: github.com\nset-cookie: _gh_sess=AfRmMn8kMB0%2BBa5IYkcc3bmXNX2TjFFGEvlN8Gu6tdkfdTfzVAO1dAtKKKbKgetEttYqH4yDrP7DziFQ2tj42Gh%2FVlqmse75WstP%2FhvUnuU76h4ALvhsfskDYvN8GmTY6J1zKgfFzr44CmpPbdj3fig9PY%2Fk5CojqJ4x9TL2cNXTxEZRqJwz8yhN3gZ4oo5akUs5j1BmQtEcuNS77j%2B4heL3YWKcOiKGrZIOT9Ulyotzd5tmeLvZj9gr4zwpsxv3cNlaK8opXdydFH6InTf8SQ%3D%3D--JmIHsIn7jgzACTPk--N3qrXQDYcNes9QskfOd%2BjA%3D%3D; path=/; HttpOnly; secure; SameSite=Lax\nset-cookie: _octo=GH1.1.2060983954.1786908043; expires=Mon, 16 Aug 2027 19:20:43 GMT; domain=.github.com; path=/; secure; SameSite=Lax\nset-cookie: logged_in=no; expires=Mon, 16 Aug 2027 19:20:43 GMT; domain=.github.com; path=/; HttpOnly; secure; SameSite=Lax\nx-github-request-id: BC30:159294:19150BF:20295BD:6A820D8B\nx-github-edge-region: westus3\n\n",
+          "timed_out": false
+        },
+        "url": "https://github.com/EpicGames/UnrealEngine"
+      },
+      "status": "BLOCKED_BY_SPECIFIC_EXTERNAL_AUTHORITY"
+    }
+  },
+  "trusted_comparison_authority": false,
+  "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea"
+}
