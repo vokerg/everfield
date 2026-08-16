@@ -1,0 +1,250 @@
+name: Everfield engine effective evidence recorder
+
+on:
+  workflow_run:
+    workflows:
+      - Everfield engine effective credentialed evaluator
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: everfield-engine-effective-recorder-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
+  cancel-in-progress: false
+
+jobs:
+  record:
+    if: >-
+      github.repository == 'vokerg/everfield' &&
+      github.event.workflow_run.name == 'Everfield engine effective credentialed evaluator' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == 'vokerg/everfield'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Bind exact upstream workflow, run, and trusted-main identity
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          SOURCE_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          EVENT_WORKFLOW_ID: ${{ github.event.workflow_run.workflow_id }}
+          EXPECTED_WORKFLOW_NAME: Everfield engine effective credentialed evaluator
+          EXPECTED_WORKFLOW_PATH: .github/workflows/engine-eval-credentialed.yml
+          EXPECTED_REPOSITORY: vokerg/everfield
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          api = os.environ['GITHUB_API_URL'].rstrip('/')
+          repo = os.environ['GITHUB_REPOSITORY']
+          token = os.environ['GH_TOKEN']
+          run_id = os.environ['RUN_ID']
+          expected_repo = os.environ['EXPECTED_REPOSITORY']
+          expected_path = os.environ['EXPECTED_WORKFLOW_PATH']
+          expected_name = os.environ['EXPECTED_WORKFLOW_NAME']
+          event_workflow_id = str(os.environ['EVENT_WORKFLOW_ID'])
+          expected_head = os.environ['SOURCE_HEAD_SHA']
+
+          if repo != expected_repo:
+              raise SystemExit('repository identity mismatch')
+
+          def get(path):
+              request = urllib.request.Request(
+                  f"{api}/repos/{repo}/{path}",
+                  headers={
+                      'Authorization': f'Bearer {token}',
+                      'Accept': 'application/vnd.github+json',
+                      'X-GitHub-Api-Version': '2022-11-28',
+                  },
+              )
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  return json.load(response)
+
+          run = get(f"actions/runs/{run_id}")
+          checks = {
+              'id': str(run.get('id')) == run_id,
+              'run_attempt': str(run.get('run_attempt')) == os.environ['RUN_ATTEMPT'],
+              'name': run.get('name') == expected_name,
+              'event': run.get('event') == 'push',
+              'status': run.get('status') == 'completed',
+              'conclusion': run.get('conclusion') == 'success',
+              'head_branch': run.get('head_branch') == 'main',
+              'head_sha': run.get('head_sha') == expected_head,
+              'repository': (run.get('repository') or {}).get('full_name') == expected_repo,
+              'workflow_id': str(run.get('workflow_id')) == event_workflow_id,
+          }
+          failed = [key for key, ok in checks.items() if not ok]
+          if failed:
+              raise SystemExit(f"upstream run identity mismatch: {failed}")
+
+          workflow = get(f"actions/workflows/{run['workflow_id']}")
+          if workflow.get('path') != expected_path:
+              raise SystemExit('trusted evaluator workflow path mismatch')
+          if str(workflow.get('id')) != event_workflow_id:
+              raise SystemExit('trusted evaluator workflow id mismatch')
+
+          branch = get('branches/main')
+          publication_base = (branch.get('commit') or {}).get('sha')
+          compare = get(f"compare/{expected_head}...{publication_base}")
+          if (compare.get('merge_base_commit') or {}).get('sha') != expected_head:
+              raise SystemExit('source head is no longer an ancestor of current main')
+
+          env_file = os.environ['GITHUB_ENV']
+          with open(env_file, 'a', encoding='utf-8') as out:
+              out.write(f"SOURCE_WORKFLOW_ID={run['workflow_id']}\n")
+              out.write(f"SOURCE_WORKFLOW_PATH={expected_path}\n")
+              out.write(f"SOURCE_WORKFLOW_NAME={expected_name}\n")
+              out.write(f"PUBLICATION_BASE_MAIN_SHA={publication_base}\n")
+          print(json.dumps({
+              'run_id': run['id'],
+              'run_attempt': run['run_attempt'],
+              'workflow_id': run['workflow_id'],
+              'workflow_path': expected_path,
+              'head_sha': expected_head,
+              'publication_base_main_sha': publication_base,
+          }, sort_keys=True))
+          PY
+
+      - name: Checkout exact source head for trusted projection code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 1
+
+      - name: Fail closed unless projection code identity matches source head
+        shell: bash
+        env:
+          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_HEAD_SHA"
+          test -f "$SOURCE_WORKFLOW_PATH"
+          test -f tools/planning/record_provider_effective_access.py
+          python3 -m py_compile tools/planning/record_provider_effective_access.py
+          echo "projection code identity: $SOURCE_HEAD_SHA"
+
+      - name: Download only the exact upstream run artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: w2-engine-effective-access-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
+          path: ${{ runner.temp }}/everfield-engine-effective
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Validate and project the producer result
+        shell: bash
+        env:
+          SOURCE: ${{ runner.temp }}/everfield-engine-effective/provider-effective-access.json
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          SOURCE_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          set -euo pipefail
+          EVIDENCE_PATH="docs/planning/wave-2/evidence/ci/provider-effective-access/$RUN_ID/effective.json"
+          python3 tools/planning/record_provider_effective_access.py \
+            --input "$SOURCE" \
+            --output "$EVIDENCE_PATH" \
+            --run-id "$RUN_ID" \
+            --run-attempt "$RUN_ATTEMPT" \
+            --head-sha "$SOURCE_HEAD_SHA" \
+            --branch "$SOURCE_HEAD_BRANCH" \
+            --source-workflow-id "$SOURCE_WORKFLOW_ID" \
+            --source-workflow-name "$SOURCE_WORKFLOW_NAME" \
+            --source-workflow-path "$SOURCE_WORKFLOW_PATH" \
+            --source-event push \
+            --source-conclusion success \
+            --projection-code-sha "$SOURCE_HEAD_SHA" \
+            --publication-base-main-sha "$PUBLICATION_BASE_MAIN_SHA"
+          echo "EVIDENCE_PATH=$EVIDENCE_PATH" >> "$GITHUB_ENV"
+
+      - name: Verify the checkout has only the bounded generated evidence change
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.workflow_run.head_sha }}"
+          test -f "$EVIDENCE_PATH"
+          test "$(git status --porcelain --untracked-files=all)" = "?? $EVIDENCE_PATH"
+
+      - name: Publish immutable evidence handoff as a branch and draft PR
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          EVIDENCE_BRANCH="evidence/provider-effective-access/run-${RUN_ID}-attempt-${RUN_ATTEMPT}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$EVIDENCE_BRANCH"
+          git add -- "$EVIDENCE_PATH"
+          test "$(git diff --cached --name-only)" = "$EVIDENCE_PATH"
+          git commit -m "[PLAN-v1][W2-ENG-PROVIDER-EFFECTIVE-01] Stage effective access run ${RUN_ID}"
+          git push origin "HEAD:refs/heads/$EVIDENCE_BRANCH"
+
+          export EVIDENCE_BRANCH
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          api = os.environ['GITHUB_API_URL'].rstrip('/')
+          repo = os.environ['GITHUB_REPOSITORY']
+          token = os.environ['GH_TOKEN']
+          run_id = os.environ['RUN_ID']
+          attempt = os.environ['RUN_ATTEMPT']
+          head = os.environ['SOURCE_HEAD_SHA']
+          branch = os.environ['EVIDENCE_BRANCH']
+          workflow_path = os.environ['SOURCE_WORKFLOW_PATH']
+          workflow_id = os.environ['SOURCE_WORKFLOW_ID']
+          publication_base = os.environ['PUBLICATION_BASE_MAIN_SHA']
+
+          body = f'''Automated sanitized evidence handoff only.
+
+          Source run: `{run_id}` attempt `{attempt}`
+          Source trusted-main SHA: `{head}`
+          Source workflow: `{workflow_path}` (workflow id `{workflow_id}`)
+          Publication base observed before branch creation: `{publication_base}`
+
+          This draft PR grants no integration, provider, commercial, production, legal, release, engine-selection, readiness, verification, decision, or canonical authority. It must be handled through the repository ownership/review protocol. Any later integration into `main` requires separate authority, a fresh exact expected-head check, and squash-only integration. The workflow never pushes generated evidence directly to `main`.
+          '''
+          payload = json.dumps({
+              'title': f'[PLAN-v1][EVIDENCE] Provider effective access run {run_id} attempt {attempt}',
+              'head': branch,
+              'base': 'main',
+              'body': body,
+              'draft': True,
+          }).encode()
+          request = urllib.request.Request(
+              f"{api}/repos/{repo}/pulls",
+              data=payload,
+              method='POST',
+              headers={
+                  'Authorization': f'Bearer {token}',
+                  'Accept': 'application/vnd.github+json',
+                  'Content-Type': 'application/json',
+                  'X-GitHub-Api-Version': '2022-11-28',
+              },
+          )
+          with urllib.request.urlopen(request, timeout=20) as response:
+              pr = json.load(response)
+          if pr.get('draft') is not True or pr.get('base', {}).get('ref') != 'main':
+              raise SystemExit('draft PR creation did not preserve publication boundary')
+          if pr.get('head', {}).get('ref') != branch:
+              raise SystemExit('draft PR head mismatch')
+          print(json.dumps({'draft_pr': pr.get('number'), 'head': branch}, sort_keys=True))
+          PY
