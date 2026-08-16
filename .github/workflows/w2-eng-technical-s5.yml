@@ -1,0 +1,158 @@
+name: W2 ENG technical S5
+
+on:
+  push:
+    branches:
+      - planning/issue-433
+    paths:
+      - .github/workflows/w2-eng-technical-s5.yml
+      - tools/planning/engine_technical_s5_probe.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-eng-tech-s5-01-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  execute-s5:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - name: Checkout exact S5 trigger
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Provision exact Defold-compatible Java
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Validate runner and exact authority inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s5
+          mkdir -p "$out"
+          python3 -m py_compile \
+            tools/planning/engine_technical_s5_probe.py \
+            tools/planning/engine_toolchain_probe.py \
+            docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+          python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py > "$out/harness-validator.json"
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "runner_os=${RUNNER_OS}"
+            echo "runner_arch=${RUNNER_ARCH}"
+            echo "image_os=${ImageOS:-unknown}"
+            echo "image_version=${ImageVersion:-unknown}"
+            echo "issue=433"
+            echo "scenario=S5"
+            echo "s4_review_issue=374"
+            echo "s4_review_terminal=5305617167"
+            echo "s4_review_disposition=PASS_BOUNDED_REMEDIATED_S4_V5_ENVELOPE"
+            echo "s4_review_publication=b0b87a4ca05f7f21595bb2303978cb7dd0d5791e"
+            echo "s4_remediation_publication=6f9e56f1d822ed2e2b18fa10a2bf29927efebe3e"
+            sha256sum tools/planning/engine_technical_s5_probe.py
+            sha256sum tools/planning/engine_toolchain_probe.py
+            sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+            sha256sum docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
+            sha256sum docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
+          } | tee "$out/run-identity.txt"
+
+      - name: Freshly execute S5 tranche
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s5
+          python3 tools/planning/engine_technical_s5_probe.py \
+            --out "$out/evidence.json" \
+            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
+            --toolchain-probe tools/planning/engine_toolchain_probe.py \
+            --bevy-lock docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock \
+            --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            | tee "$out/summary.log"
+          sha256sum "$out/evidence.json" | tee "$out/evidence.sha256"
+
+      - name: Enforce S5 evidence envelope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='docs/planning/wave-2/evidence/ci/engine-technical-s5/evidence.json'
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-TECHNICAL-S5-v1'
+          assert d['mission_id']=='W2-ENG-TECH-S5-01'
+          assert d['scenario_id']=='S5'
+          assert d['harness_id']=='W2-ENG-HARNESS-v5'
+          assert d['feature_slice_id']=='W2-ENG-FEATURE-SLICE-v2'
+          assert d['scenario_manifest_id']=='W2-ENG-SCENARIO-INPUTS-v2'
+          c=d['s5_contract']
+          assert c['required_injection']=='FI-S5-OVERLAP-v2'
+          assert c['semantic_overlap_locations']==['STATE:entity-07.status','UI:SETTINGS.control-02.label']
+          assert c['min_bounds']=={'overlap_count':2,'branch_a_nonoverlap':1,'branch_b_nonoverlap':1}
+          r=d['predecessor_review']
+          assert r['issue']==374 and r['terminal_comment']==5305617167
+          assert r['disposition']=='PASS_BOUNDED_REMEDIATED_S4_V5_ENVELOPE'
+          assert r['review_publication_sha']=='b0b87a4ca05f7f21595bb2303978cb7dd0d5791e'
+          assert r['remediation_publication_sha']=='6f9e56f1d822ed2e2b18fa10a2bf29927efebe3e'
+          assert d['authority_bound_not_run']=={'Unity':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY','Unreal Engine':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'}
+          assert d['historical_issue_82_not_run_cells_preserved']==50
+          assert d['reviewed_s3_s4_provenance_preserved'] is True
+          assert d['fresh_review_required'] is True
+          assert d['trusted_comparison_authority'] is False
+          assert d['integration_authority'] is False
+          assert d['engine_selected'] is False
+          assert d['implementation_readiness'] is False
+          for name in d['provisional_candidates']:
+              x=d['results'][name]
+              assert x['disposition']=='PROVISIONAL_S5_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW'
+              assert x['binding_verification']=={'ok':True,'reasons':[]}
+              assert x['adaptation_validation']['result']=='ACCEPT'
+              assert x['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}
+              assert x['trusted_representation_ok'] is True
+              assert all(x['negative_selftests'].values())
+              raws=x['raw_attempts']
+              assert [a['record']['label'] for a in raws]==['N1','N2','FI1']
+              assert [a['record']['direction'] for a in raws]==['A_THEN_B','B_THEN_A','A_THEN_B']
+              assert all(a['record']['reset_verified_derived'] is True for a in raws)
+              assert len({a['record']['reset_proof']['workspace_id'] for a in raws})==3
+              assert set(x['source_bindings'].values())=={a['digest'] for a in raws}
+              fi=raws[-1]['record']['source']
+              assert set(fi['unmerged_paths'])==set(fi['semantic_mapping'][k] for k in ['STATE:entity-07.status','UI:SETTINGS.control-02.label'])
+              assert all(fi['conflict_markers'].values())
+              assert fi['resolution']=={'state_choice':'branch-a/ACTIVE','ui_choice':'branch-b/Volume'}
+              assert fi['generated_metadata']['collision_required'] is False
+              assert fi['generated_metadata']['relevant_to_represented_edit_surface'] is False
+          print(json.dumps({'validated':True,'provisional_candidates':d['provisional_candidates']},sort_keys=True))
+          PY
+
+      - name: Persist exact S5 evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/engine-technical-s5/
+          if git diff --cached --quiet; then
+            echo "No generated evidence delta"
+            exit 0
+          fi
+          git commit -m "[PLAN-v1][W2-ENG-TECH-S5-01] Record empirical S5 run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-433
+
+      - name: Upload immutable S5 bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-eng-tech-s5-01-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/engine-technical-s5/
+          if-no-files-found: error
+          retention-days: 30
