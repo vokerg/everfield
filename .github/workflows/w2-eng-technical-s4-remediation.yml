@@ -1,0 +1,156 @@
+name: W2 ENG technical S4 remediation
+
+on:
+  push:
+    branches:
+      - planning/issue-364
+    paths:
+      - .github/workflows/w2-eng-technical-s4-remediation.yml
+      - tools/planning/engine_technical_s4_remediation.py
+      - tools/planning/engine_technical_s4_remediation_entry.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-eng-tech-s4-rem-01-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  remediate-s4:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact remediation trigger
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Provision exact Defold-compatible Java
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Materialize frozen producer and validate identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s4-remediation
+          mkdir -p "$out"
+          git fetch --no-tags origin planning/issue-360:refs/remotes/origin/planning/issue-360
+          git cat-file -e 942a8c05032c1506730f52e897496172fb56fcf3^{commit}
+          git show 942a8c05032c1506730f52e897496172fb56fcf3:tools/planning/engine_technical_s4_probe.py > "$out/source-producer-runner.py"
+          echo '51c3f652d8bf9c222c83cb381b1adf8286737bcc6d11cb6fd8cd6080b0ac27ed  docs/planning/wave-2/evidence/ci/engine-technical-s4-remediation/source-producer-runner.py' | sha256sum -c -
+          python3 -m py_compile \
+            tools/planning/engine_technical_s4_remediation.py \
+            tools/planning/engine_technical_s4_remediation_entry.py \
+            "$out/source-producer-runner.py" \
+            tools/planning/engine_toolchain_probe.py
+          python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py > "$out/harness-validator.json"
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "runner_os=${RUNNER_OS}"
+            echo "runner_arch=${RUNNER_ARCH}"
+            echo "image_os=${ImageOS:-unknown}"
+            echo "image_version=${ImageVersion:-unknown}"
+            echo "producer_issue=360"
+            echo "producer_head=942a8c05032c1506730f52e897496172fb56fcf3"
+            echo "producer_run=31924179133"
+            echo "producer_artifact=9257331215"
+            echo "producer_evidence_sha256=8ba3922733c4051f798dab002de4cf607f6176ffe3f66d3e85a2568473967453"
+            echo "review_issue=362"
+            echo "review_terminal_comment=5305556485"
+            sha256sum "$out/source-producer-runner.py"
+            sha256sum tools/planning/engine_technical_s4_remediation.py
+            sha256sum tools/planning/engine_technical_s4_remediation_entry.py
+            sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+            sha256sum docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
+            sha256sum docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
+          } | tee "$out/run-identity.txt"
+
+      - name: Freshly execute remediated S4 tranche
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s4-remediation
+          PYTHONPATH=tools/planning python3 tools/planning/engine_technical_s4_remediation_entry.py \
+            --out "$out/evidence.json" \
+            --producer-runner "$out/source-producer-runner.py" \
+            --producer-sha256 51c3f652d8bf9c222c83cb381b1adf8286737bcc6d11cb6fd8cd6080b0ac27ed \
+            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
+            --bevy-lock docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock \
+            --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            | tee "$out/summary.log"
+          sha256sum "$out/evidence.json" | tee "$out/evidence.sha256"
+
+      - name: Enforce remediation binding envelope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='docs/planning/wave-2/evidence/ci/engine-technical-s4-remediation/evidence.json'
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-TECHNICAL-S4-REMEDIATION-v1'
+          assert d['producer_head']=='942a8c05032c1506730f52e897496172fb56fcf3'
+          assert d['producer_run']==31924179133
+          assert d['producer_artifact']==9257331215
+          assert d['producer_evidence_sha256']=='8ba3922733c4051f798dab002de4cf607f6176ffe3f66d3e85a2568473967453'
+          assert d['review_issue']==362 and d['review_terminal']==5305556485
+          assert d['findings_closed_by_design']==['W2-ENG-TECH-S4-REV-M01','W2-ENG-TECH-S4-REV-M02','W2-ENG-TECH-S4-REV-M03']
+          assert d['scenario_id']=='S4' and d['harness_id']=='W2-ENG-HARNESS-v5'
+          assert d['authority_bound_not_run']=={'Unity':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY','Unreal Engine':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'}
+          assert d['historical_issue_82_not_run_cells_preserved']==50
+          assert d['historical_issue_82_cells_mutated'] is False
+          assert d['reviewed_s3_provenance_preserved'] is True
+          assert d['trusted_comparison_authority'] is False
+          assert d['fresh_review_required'] is True
+          assert d['integration_authority'] is False
+          assert d['engine_selected'] is False
+          for name in d['remediated_provisional_candidates']:
+              x=d['results'][name]
+              assert x['disposition']=='REMEDIATED_S4_PROVISIONAL_PASS_PENDING_FRESH_REVIEW'
+              assert x['binding_verification']=={'ok':True,'reasons':[]}
+              assert x['adaptation_validation']['result']=='ACCEPT'
+              assert x['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}
+              assert x['trusted_representation_ok'] is True
+              assert all(x['negative_selftests'].values())
+              raws=x['raw_attempts']
+              assert [a['record']['label'] for a in raws]==['N1','N2','FI1']
+              assert all(a['record']['reset_verified_derived'] is True for a in raws)
+              assert len({a['record']['reset_proof']['workspace_id'] for a in raws})==3
+              assert len({a['record']['reset_proof']['state_root_id'] for a in raws})==3
+              assert len({a['record']['reset_proof']['reset_id'] for a in raws})==3
+              assert set(x['source_bindings'].values())=={a['digest'] for a in raws}
+              assert 'remediation_base_sha256' in x['candidate_identity']['body']
+              assert 'remediation_entry_sha256' in x['candidate_identity']['body']
+          print(json.dumps({'validated':True,'remediated_provisional_candidates':d['remediated_provisional_candidates']},sort_keys=True))
+          PY
+
+      - name: Persist exact remediation evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/engine-technical-s4-remediation/
+          if git diff --cached --quiet; then
+            echo "No generated evidence delta"
+            exit 0
+          fi
+          git commit -m "[PLAN-v1][W2-ENG-TECH-S4-REM-01] Record empirical remediation run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-364
+
+      - name: Upload immutable remediation bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-eng-tech-s4-rem-01-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/engine-technical-s4-remediation/
+          if-no-files-found: error
+          retention-days: 30
