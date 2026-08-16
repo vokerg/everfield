@@ -2,7 +2,7 @@
 
 ## State
 
-`REMEDIATION IMPLEMENTED / DRAFT PR AND FRESH REQUIRED REVIEW PENDING`
+`REVIEW_READY / FRESH REQUIRED REVIEW PENDING`
 
 This handoff records the bounded correction of the two MAJOR findings from
 required review Issue #398. It grants no integration, provider, commercial,
@@ -18,6 +18,9 @@ decision, or canonical authority.
 - actor session: `w2-eng-provider-effective-rem-01-gpt56sol-20260816-01`
 - task class: `BLOCKING_REMEDIATION`
 - exact remediation base main: `08a89092a9e9b2bae6f8bd34dd29dd85a8d97bcf`
+- remediation implementation work SHA: `d504aa4aa86a27e56329865b7e9af74b87dd0919`
+- draft remediation PR: #401
+- PR #401 was opened with exact head `d504aa4aa86a27e56329865b7e9af74b87dd0919`; the final handoff/status commit head is reported by the terminal schema-3 status rather than self-referenced here.
 - canonical Planning Program v1 blob: `e3120ec203c4156328770aa86c12fbb7187966dc`
 - canonical binding: Issue #6 comment `5245368879`
 - canonical activation: `413e729e8d2d5ac2eb138903f3f2ace07283b23e`
@@ -93,25 +96,32 @@ are preserved in the projected evidence.
   readiness, verification-PASS, decision, integration, or canonical authority
   is inferred.
 
-## Verification performed before publication
+## Verification performed before terminal status
 
-- Python syntax compilation for the remediated recorder.
-- Deterministic recorder fixture exercised successful identity projection and
-  fail-closed rejection of a mismatched projection-code SHA.
-- Both changed workflow YAML documents parse.
-- Static checks confirm the credentialed workflow uses exact `github.sha`, the
-  recorder binds the exact workflow path and upstream head, and no recorder
-  command pushes `HEAD:main`.
+- Python syntax compilation for the remediated recorder: PASS.
+- Deterministic recorder fixture for successful identity projection: PASS.
+- Fail-closed rejection of a mismatched projection-code SHA: PASS.
+- Both changed workflow YAML documents parse: PASS.
+- Static identity checks confirm exact evaluator `github.sha`, exact recorder
+  workflow path/upstream head binding, and no recorder `HEAD:main` push: PASS.
 - Contract JSON parses and explicitly records the draft-PR/squash-only
-  publication boundary.
+  publication boundary: PASS.
+- Branch diff from remediation base is limited to exactly the six owned paths.
+- Draft PR #401 targets `main` from `planning/issue-400`; its exact final head,
+  draft state, changed-file count, and reported commit-status state are bound in
+  the terminal schema-3 status.
 
 ## Required next route
 
-Open and verify an exact-head draft PR for this branch, then publish terminal
-schema-3 `STATUS(REVIEW_READY)`. Route exactly one fresh independent or
-degraded-independent required review of this exact remediation packet. Only
-that review may determine whether both findings are actually closed and whether
+The exact remediation packet must receive exactly one fresh independent or
+degraded-independent required review. Only that review may determine whether
+both findings are actually closed and whether
 `PASS_BOUNDED_PROVIDER_EFFECTIVE_ACCESS` is warranted.
+
+The review must bind the exact terminal remediation head and PR #401, attack
+both M01 and M02 against the implementation diff, verify the trusted-main secret
+boundary and data-only artifact boundary, and re-check every review-clean
+provider/authority property preserved above.
 
 ## Authority boundary
 
