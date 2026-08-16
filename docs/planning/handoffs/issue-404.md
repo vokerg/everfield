@@ -2,7 +2,7 @@
 
 ## State
 
-`REMEDIATION IMPLEMENTED / DRAFT PR AND FRESH REQUIRED REVIEW PENDING`
+`REVIEW_READY / FRESH REQUIRED REVIEW PENDING`
 
 Issue #404 closes only the reconstruction finding `W2-ENG-PROVIDER-EFFECTIVE-REM-REV-M01` as a remediation candidate. It does not itself grant integration, provider credential, engine-selection, commercial/production/legal/release, readiness, verification-PASS, decision, or canonical authority.
 
@@ -15,6 +15,8 @@ Issue #404 closes only the reconstruction finding `W2-ENG-PROVIDER-EFFECTIVE-REM
 - actor/session: `w2-eng-provider-effective-rem-02-gpt56sol-20260816-03`
 - task class: `BLOCKING_REMEDIATION`
 - exact base main: `59205cab20f60703f91888bab01bb8bcc4ec95e9`
+- reconstruction work SHA: `c9e3158df753cb82a34720ee74f02e10e092a844`
+- draft remediation PR: #405, opened at exact work SHA `c9e3158df753cb82a34720ee74f02e10e092a844`; terminal schema-3 status binds the final handoff head.
 - canonical Planning Program v1 blob: `e3120ec203c4156328770aa86c12fbb7187966dc`
 - canonical binding: Issue #6 comment `5245368879`
 - canonical activation: `413e729e8d2d5ac2eb138903f3f2ace07283b23e`
@@ -52,7 +54,7 @@ This handoff is the only newly authored successor surface.
 
 `W2-ENG-PROVIDER-EFFECTIVE-REM-REV-M01`: `CLOSED_IN_REMEDIATION_CANDIDATE_PENDING_FRESH_REVIEW`.
 
-The exact successor now contains the validator invoked by the credentialed evaluator, the health workflow declared by the contract, and the durable local Unity evidence referenced by the prose. The functional provider packet is therefore complete as a standalone successor rather than depending on rejected PR #397.
+The exact successor contains the validator invoked by the credentialed evaluator, the health workflow declared by the contract, and the durable local Unity evidence referenced by the prose. The functional provider packet is therefore complete as a standalone successor rather than depending on rejected PR #397.
 
 ## Preserved clean properties
 
@@ -69,11 +71,24 @@ The exact successor now contains the validator invoked by the credentialed evalu
 - Issue #82's 50 historical `NOT_RUN` cells remain immutable;
 - no provider credential, engine selection, commercial/production/legal/release, readiness, verification-PASS, decision, integration, or canonical authority is inferred.
 
-## Verification model
+## Verification
 
-The eight functional/evidence files are exact frozen blobs whose predecessor terminal/review episodes already recorded their syntax/self-test/fixture and semantic checks. Reconstruction verification therefore requires both exact-blob identity and whole-successor checks: all retained workflow/script/contract references exist at the exact successor head; the diff is limited to the eight reconstructed surfaces plus this handoff; M01/M02-corrected blobs exactly match #400; omitted dependency blobs exactly match #373; contract/local-evidence JSON and workflow syntax remain inherited from those immutable blobs; recorder direct-main publication remains absent; projection/source SHA mismatch remains fail-closed.
+- complete successor diff from exact base: PASS, exactly nine paths (eight reconstructed provider surfaces plus this handoff);
+- required validator, health workflow, recorder, evaluator, contract, prose, and local evidence paths all exist in the assembled successor: PASS;
+- omitted dependency blobs match frozen #373 exactly: PASS;
+- M01/M02-corrected blobs match frozen #400 exactly: PASS;
+- frozen #373 terminal evidence records validator self-tests and recorder authority fail-closed fixture: PASS at identical blob provenance;
+- frozen #400 terminal evidence records Python compile, recorder identity fixture, projection/source SHA mismatch rejection, workflow YAML parse, and contract JSON parse: PASS at identical blob provenance;
+- direct recorder push to `main` remains absent in exact #400 recorder blob: PASS;
+- PR #405 is draft to `main`, opened at exact reconstruction work SHA with nine changed paths: PASS;
+- PR-triggered workflow runs at the work SHA: none reported;
+- commit status contexts at the work SHA: none reported.
 
-A fresh required review of the exact successor head is mandatory before `PASS_BOUNDED_PROVIDER_EFFECTIVE_ACCESS` or any separately authorized integration.
+A fresh required review of the exact terminal successor head is mandatory before `PASS_BOUNDED_PROVIDER_EFFECTIVE_ACCESS` or any separately authorized integration.
+
+## Required next route
+
+Route exactly one fresh independent or degraded-independent required review of the exact terminal #404 head and PR #405. The review must verify complete successor reconstruction and re-attack the original M01/M02 publication/identity boundaries plus provider, artifact, credential, local-vs-hosted, Issue #82, and authority semantics.
 
 ## Authority boundary
 
