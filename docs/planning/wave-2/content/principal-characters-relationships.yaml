@@ -1,0 +1,488 @@
+schema: w2_content_character_candidate_v1
+mission_id: W2-CONTENT-CHAR-01
+issue: 368
+state: PRODUCER_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_CHARACTER
+engine_dependency: ENGINE_NEUTRAL_NOW
+authority:
+  canonical_content: false
+  engine_selection: false
+  gameplay_implementation: false
+  implementation_readiness: false
+  release: false
+  verification_pass: false
+  integration: false
+  decision: false
+  existing_wsn_empirical_pass: false
+frozen_inputs:
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  compiler_issue: 365
+  compiler_work_sha: fd2fb7d816cf23d60bcc54bd25c7d9a4eaae3dbb
+  activation_review:
+    issue: 372
+    terminal_comment_id: 5305598079
+    head_sha: 656930c36d90a166776485cbaf196c39a32fe97e
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_ACTIVATION
+  w1_des_03_work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+  w1_syn_game_work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+authority_classes:
+  - CHARACTER_CANDIDATE_FACT
+  - BELIEF
+  - SECRET
+  - UNKNOWN
+  - PROVISIONAL_INTERFACE
+relationship_dimension_vocabulary:
+  - TRUST
+  - WARMTH
+  - RESPECT
+  - OBLIGATION
+  - RIVALRY
+  - CAUTION
+relationship_band_vocabulary:
+  - LOW
+  - MEDIUM
+  - HIGH
+characters:
+  - character_id: CHAR:anwen_rell
+    display_name_candidate: Anwen Rell
+    role_summary: keeper_continuity_advocate
+    candidate_identity_facts:
+      - FACT:anwen_values_traceable_knowledge
+      - FACT:anwen_risks_stewardship_becoming_control
+    motivations:
+      - keep consequential knowledge legible rather than rumor-bound
+      - preserve continuity through disruption
+      - be trusted for judgment rather than used only as a repository
+    needs:
+      - distinguish stewardship from control
+      - tolerate explicit uncertainty when disclosure is safer than withholding
+    capabilities:
+      - organize conflicting testimony
+      - detect provenance and chronology gaps
+      - teach or expose information under explicit access conditions
+    limitations:
+      - not_a_universal_truth_oracle
+      - may_overweight_records_relative_to_lived_context
+      - no_sibling_world_fact_without_explicit_knowledge_ref
+    provisional_domain_refs:
+      - WORLD_ROLE:community_archive_or_memory_site
+      - FACTION_ROLE:local_stewardship_body
+      - NARRATIVE_ROLE:contested_record_or_legacy_thread
+    knowledge_refs:
+      - INFO:anwen_contested_record_provenance_gap
+    belief_refs: []
+    secret_refs: []
+    change_arc_refs:
+      - ARC:anwen_stewardship_without_control
+  - character_id: CHAR:jori_marek
+    display_name_candidate: Jori Marek
+    role_summary: maker_practical_systems_advocate
+    candidate_identity_facts:
+      - FACT:jori_values_repairable_arrangements
+      - FACT:jori_resists_unbounded_labor_obligation
+    motivations:
+      - make fragile arrangements repairable and understandable
+      - earn autonomy through demonstrated usefulness
+      - resist obligations that become entitlement to labor
+    needs:
+      - accept bounded mutual reliance without equating it with capture
+      - recognize social and symbolic costs alongside material consequences
+    capabilities:
+      - diagnose material or process failure
+      - teach practical skills
+      - propose alternate capability routes without erasing social or knowledge gates
+    limitations:
+      - technical_competence_is_not_a_universal_progression_substitute
+      - impatience_with_process_can_damage_trust
+    provisional_domain_refs:
+      - WORLD_ROLE:shared_worksite_or_infrastructure
+      - FACTION_ROLE:craft_or_service_network
+      - NARRATIVE_ROLE:repair_vs_replace_pressure
+    knowledge_refs:
+      - INFO:jori_maelin_obligation_interpretation
+    belief_refs: []
+    secret_refs: []
+    change_arc_refs:
+      - ARC:jori_mutuality_without_capture
+  - character_id: CHAR:selka_vey
+    display_name_candidate: Selka Vey
+    role_summary: coordinator_legitimacy_advocate
+    candidate_identity_facts:
+      - FACT:selka_values_defensible_decisions
+      - FACT:selka_risks_procedural_overcentralization
+    motivations:
+      - make decisions defensible after immediate pressure passes
+      - preserve legitimacy under conflicting interests
+      - prevent informal power from becoming invisible rule
+    needs:
+      - recognize that procedural fairness can still impose unequal harm
+      - share authority when consequence evidence warrants it
+    capabilities:
+      - expose tradeoffs and obligations
+      - mediate incompatible interests without assuming reconciliation
+      - condition institutional access only through explicit typed rules
+    limitations:
+      - importance_does_not_make_her_social_gates_foundational
+      - institutional_authority_is_only_a_provisional_sibling_interface
+    provisional_domain_refs:
+      - FACTION_ROLE:civic_coordination_body
+      - WORLD_ROLE:shared_decision_site
+      - NARRATIVE_ROLE:legitimacy_under_pressure
+    knowledge_refs:
+      - INFO:selka_prior_procedural_shortcut
+    belief_refs: []
+    secret_refs:
+      - INFO:selka_prior_procedural_shortcut
+    change_arc_refs:
+      - ARC:selka_legitimacy_beyond_procedure
+  - character_id: CHAR:tomas_irel
+    display_name_candidate: Tomas Irel
+    role_summary: witness_mobility_advocate
+    candidate_identity_facts:
+      - FACT:tomas_values_mobility
+      - FACT:tomas_risks_using_mobility_to_avoid_commitment
+    motivations:
+      - retain freedom of movement
+      - make information useful without being owned by one interest
+      - expose narrow perspectives presented as universal certainty
+    needs:
+      - accept one bounded durable responsibility without surrendering mobility
+      - preserve provenance and context when carrying testimony
+    capabilities:
+      - bridge separated knowledge scopes
+      - introduce alternative witnesses routes or resources when siblings support them
+      - bring conflicting accounts into comparison
+    limitations:
+      - mobility_does_not_imply_omniscience
+      - secret_or_future_information_requires_explicit_acquisition_provenance
+    provisional_domain_refs:
+      - WORLD_ROLE:boundary_route_or_exchange_path
+      - FACTION_ROLE:mobile_exchange_network
+      - NARRATIVE_ROLE:outside_testimony_or_return
+    knowledge_refs: []
+    belief_refs:
+      - INFO:tomas_route_resilience_belief
+    secret_refs: []
+    change_arc_refs:
+      - ARC:tomas_freedom_with_commitment
+  - character_id: CHAR:maelin_sor
+    display_name_candidate: Maelin Sor
+    role_summary: caretaker_reciprocal_obligation_advocate
+    candidate_identity_facts:
+      - FACT:maelin_values_durable_mutual_support
+      - FACT:maelin_risks_absorbing_unbounded_burden
+    motivations:
+      - make mutual support durable rather than exceptional
+      - prevent people being reduced to productivity or faction utility
+      - preserve memory of who carried burdens
+    needs:
+      - set limits without treating them as abandonment
+      - support agency rather than overprotect through silence
+    capabilities:
+      - surface hidden social costs and obligations
+      - preserve relationship history that aggregate dimensions would lose
+      - model repair after breach without guaranteeing forgiveness
+    limitations:
+      - care_cannot_erase_consequence_or_bypass_consent
+      - no_specific_healing_or_economy_mechanic_is_implied
+    provisional_domain_refs:
+      - WORLD_ROLE:shared_care_or_gathering_site
+      - FACTION_ROLE:mutual_aid_network
+      - NARRATIVE_ROLE:cost_of_care_and_repair
+    knowledge_refs:
+      - INFO:jori_maelin_obligation_interpretation
+    belief_refs: []
+    secret_refs: []
+    change_arc_refs:
+      - ARC:maelin_care_with_boundaries
+  - character_id: CHAR:oren_dast
+    display_name_candidate: Oren Dast
+    role_summary: challenger_ambition_advocate
+    candidate_identity_facts:
+      - FACT:oren_values_visible_change
+      - FACT:oren_risks_undervaluing_irreversible_social_cost
+    motivations:
+      - prove stagnant arrangements can change
+      - gain influence without permanent dependence on gatekeepers
+      - leave visible evidence that risk produced value
+    needs:
+      - distinguish justified impatience from treating people as obstacles
+      - bind risk proposals to consequence and recovery responsibility
+    capabilities:
+      - create credible competing proposals and pressure
+      - cooperate on shared goals while contesting methods
+      - support simultaneous rivalry and respect
+    limitations:
+      - not_a_designated_antagonist
+      - ambition_does_not_imply_final_plot_or_faction_truth
+    provisional_domain_refs:
+      - FACTION_ROLE:reform_or_competing_interest
+      - WORLD_ROLE:contested_resource_or_project_site
+      - NARRATIVE_ROLE:ambition_and_consequence_pressure
+    knowledge_refs: []
+    belief_refs:
+      - INFO:oren_project_revive_quickly_belief
+    secret_refs: []
+    change_arc_refs:
+      - ARC:oren_ambition_with_consequence
+facts:
+  - {fact_id: FACT:anwen_values_traceable_knowledge, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:anwen_rell, predicate: values, value: traceable_knowledge}
+  - {fact_id: FACT:anwen_risks_stewardship_becoming_control, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:anwen_rell, predicate: risk, value: stewardship_becoming_control}
+  - {fact_id: FACT:jori_values_repairable_arrangements, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:jori_marek, predicate: values, value: repairable_arrangements}
+  - {fact_id: FACT:jori_resists_unbounded_labor_obligation, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:jori_marek, predicate: resists, value: unbounded_labor_obligation}
+  - {fact_id: FACT:selka_values_defensible_decisions, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:selka_vey, predicate: values, value: defensible_decisions}
+  - {fact_id: FACT:selka_risks_procedural_overcentralization, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:selka_vey, predicate: risk, value: procedural_overcentralization}
+  - {fact_id: FACT:tomas_values_mobility, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:tomas_irel, predicate: values, value: mobility}
+  - {fact_id: FACT:tomas_risks_using_mobility_to_avoid_commitment, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:tomas_irel, predicate: risk, value: mobility_as_commitment_avoidance}
+  - {fact_id: FACT:maelin_values_durable_mutual_support, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:maelin_sor, predicate: values, value: durable_mutual_support}
+  - {fact_id: FACT:maelin_risks_absorbing_unbounded_burden, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:maelin_sor, predicate: risk, value: unbounded_care_burden}
+  - {fact_id: FACT:oren_values_visible_change, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:oren_dast, predicate: values, value: visible_change}
+  - {fact_id: FACT:oren_risks_undervaluing_irreversible_social_cost, authority_class: CHARACTER_CANDIDATE_FACT, subject_ref: CHAR:oren_dast, predicate: risk, value: undervaluing_irreversible_social_cost}
+information_records:
+  - info_id: INFO:anwen_contested_record_provenance_gap
+    authority_class: SECRET
+    subject_ref: CHAR:anwen_rell
+    proposition: {type: PROVISIONAL_INTERFACE, ref: NARRATIVE_ROLE:contested_record_or_legacy_thread, claim: source_provenance_is_incomplete}
+    truth_status: CHARACTER_CANDIDATE_FACT_ONLY
+    known_by: [CHAR:anwen_rell]
+    explicitly_not_implied_known_by: [CHAR:selka_vey, CHAR:tomas_irel, CHAR:jori_marek, CHAR:maelin_sor, CHAR:oren_dast]
+    promotion_rule: requires_fan_in_and_later_authority
+  - info_id: INFO:tomas_route_resilience_belief
+    authority_class: BELIEF
+    subject_ref: CHAR:tomas_irel
+    proposition: {type: PROVISIONAL_INTERFACE, ref: WORLD_ROLE:boundary_route_or_exchange_path, claim: route_is_more_resilient_than_local_assumptions}
+    truth_status: UNKNOWN
+    known_by: [CHAR:tomas_irel]
+    promotion_rule: requires_sibling_world_or_evidence_resolution
+  - info_id: INFO:selka_prior_procedural_shortcut
+    authority_class: SECRET
+    subject_ref: CHAR:selka_vey
+    proposition: {type: CHARACTER_CANDIDATE_FACT, claim: selka_previously_accepted_a_procedural_shortcut}
+    truth_status: CHARACTER_CANDIDATE_FACT_ONLY
+    known_by: [CHAR:selka_vey]
+    access_policy:
+      relationship_score_alone_grants_access: false
+      possible_routes: [voluntary_disclosure, explicit_evidence_discovery, reviewed_fan_in_event]
+    promotion_rule: remains_noncanonical_until_later_authority
+  - info_id: INFO:jori_maelin_obligation_interpretation
+    authority_class: SECRET
+    subject_ref: CHAR:jori_marek
+    proposition: {type: CHARACTER_CANDIDATE_FACT, claim: jori_experiences_unasked_support_as_potential_obligation}
+    truth_status: CHARACTER_CANDIDATE_FACT_ONLY
+    known_by: [CHAR:jori_marek, CHAR:maelin_sor]
+    acquisition: {CHAR:maelin_sor: explicit_disclosure_from_jori}
+    promotion_rule: remains_character_scope_only
+  - info_id: INFO:oren_project_revive_quickly_belief
+    authority_class: BELIEF
+    subject_ref: CHAR:oren_dast
+    proposition: {type: PROVISIONAL_INTERFACE, ref: WORLD_ROLE:contested_resource_or_project_site, claim: stalled_project_can_be_revived_quickly}
+    truth_status: UNKNOWN
+    known_by: [CHAR:oren_dast]
+    promotion_rule: requires_sibling_world_narrative_or_evidence_resolution
+relationship_events:
+  - relationship_event_id: REL_EVT:anwen_selka_uncertainty_dispute
+    participants: [CHAR:anwen_rell, CHAR:selka_vey]
+    candidate_cause: disagreement_over_when_uncertain_information_is_actionable
+    visibility: MUTUAL
+    durable_meaning: [respect_can_coexist_with_caution, future_trust_changes_must_not_erase_method_disagreement]
+    reversible: false
+  - relationship_event_id: REL_EVT:jori_maelin_unasked_support
+    participants: [CHAR:jori_marek, CHAR:maelin_sor]
+    candidate_cause: maelin_carried_a_burden_jori_did_not_request
+    visibility: MUTUAL
+    durable_meaning: [gratitude_and_discomfort_can_coexist, repayment_does_not_delete_history]
+    reversible: false
+  - relationship_event_id: REL_EVT:jori_oren_joint_attempt
+    participants: [CHAR:jori_marek, CHAR:oren_dast]
+    candidate_cause: practical_collaboration_revealed_shared_competence_and_risk_disagreement
+    visibility: MUTUAL
+    durable_meaning: [respect_and_rivalry_can_increase_together]
+    reversible: false
+  - relationship_event_id: REL_EVT:maelin_selka_burden_objection
+    participants: [CHAR:maelin_sor, CHAR:selka_vey]
+    candidate_cause: invisible_care_burden_was_raised_against_a_formally_valid_decision
+    visibility: MUTUAL
+    durable_meaning: [procedural_validity_does_not_close_consequence_dispute]
+    reversible: false
+relationships:
+  - relationship_id: REL:anwen_selka
+    endpoints: [CHAR:anwen_rell, CHAR:selka_vey]
+    dimensions: {RESPECT: HIGH, TRUST: MEDIUM, CAUTION: MEDIUM}
+    history_refs: [REL_EVT:anwen_selka_uncertainty_dispute]
+    universal_affection_scalar: false
+  - relationship_id: REL:anwen_tomas
+    endpoints: [CHAR:anwen_rell, CHAR:tomas_irel]
+    dimensions: {WARMTH: MEDIUM, TRUST: MEDIUM, CAUTION: MEDIUM}
+    history_refs: []
+    notes: [testimony_requires_context_and_provenance]
+    universal_affection_scalar: false
+  - relationship_id: REL:jori_oren
+    endpoints: [CHAR:jori_marek, CHAR:oren_dast]
+    dimensions: {RESPECT: HIGH, RIVALRY: HIGH, TRUST: MEDIUM}
+    history_refs: [REL_EVT:jori_oren_joint_attempt]
+    universal_affection_scalar: false
+  - relationship_id: REL:jori_maelin
+    endpoints: [CHAR:jori_marek, CHAR:maelin_sor]
+    dimensions: {WARMTH: HIGH, OBLIGATION: MEDIUM, TRUST: MEDIUM}
+    history_refs: [REL_EVT:jori_maelin_unasked_support]
+    universal_affection_scalar: false
+  - relationship_id: REL:selka_oren
+    endpoints: [CHAR:selka_vey, CHAR:oren_dast]
+    dimensions: {RESPECT: MEDIUM, CAUTION: HIGH, RIVALRY: MEDIUM}
+    history_refs: []
+    notes: [decision_conflict_does_not_require_personal_hostility]
+    universal_affection_scalar: false
+  - relationship_id: REL:maelin_selka
+    endpoints: [CHAR:maelin_sor, CHAR:selka_vey]
+    dimensions: {TRUST: MEDIUM, RESPECT: HIGH, CAUTION: MEDIUM}
+    history_refs: [REL_EVT:maelin_selka_burden_objection]
+    universal_affection_scalar: false
+  - relationship_id: REL:tomas_oren
+    endpoints: [CHAR:tomas_irel, CHAR:oren_dast]
+    dimensions: {WARMTH: MEDIUM, RIVALRY: MEDIUM, OBLIGATION: LOW}
+    history_refs: []
+    universal_affection_scalar: false
+  - relationship_id: REL:anwen_maelin
+    endpoints: [CHAR:anwen_rell, CHAR:maelin_sor]
+    dimensions: {TRUST: HIGH, WARMTH: MEDIUM, RESPECT: MEDIUM}
+    history_refs: []
+    notes: [both_preserve_history_for_different_reasons]
+    universal_affection_scalar: false
+change_arcs:
+  - arc_id: ARC:anwen_stewardship_without_control
+    character_ref: CHAR:anwen_rell
+    start_pressure: protects_continuity_by_controlling_uncertain_information
+    eligible_triggers: [transparent_uncertainty_enables_better_joint_decision, withholding_produces_visible_failure, delegation_preserves_provenance]
+    observable_change: publishes_uncertainty_and_delegates_custody
+    forbidden_shortcuts: [relationship_threshold_alone]
+    regression_conditions: [disclosed_uncertainty_is_deliberately_misused]
+    provisional_refs: [NARRATIVE_ROLE:contested_record_or_legacy_thread]
+  - arc_id: ARC:jori_mutuality_without_capture
+    character_ref: CHAR:jori_marek
+    start_pressure: treats_dependence_as_loss_of_autonomy
+    eligible_triggers: [reciprocal_collaboration_with_explicit_boundaries, help_succeeds_without_becoming_control, invisible_support_work_is_recognized]
+    observable_change: accepts_bounded_reliance_and_negotiates_obligations_explicitly
+    forbidden_shortcuts: [repeated_gifts_or_resources]
+    regression_conditions: [help_is_used_as_leverage]
+    provisional_refs: [NARRATIVE_ROLE:repair_vs_replace_pressure]
+  - arc_id: ARC:selka_legitimacy_beyond_procedure
+    character_ref: CHAR:selka_vey
+    start_pressure: treats_defensible_procedure_as_sufficient_fairness
+    eligible_triggers: [evidence_of_excluded_burden, procedurally_valid_outcome_has_unacceptable_consequence, transparent_challenge_from_affected_people]
+    observable_change: adds_consequence_and_participation_checks
+    forbidden_shortcuts: [player_persuasion_without_affected_party_evidence]
+    regression_conditions: [crisis_centralization]
+    provisional_refs: [NARRATIVE_ROLE:legitimacy_under_pressure]
+  - arc_id: ARC:tomas_freedom_with_commitment
+    character_ref: CHAR:tomas_irel
+    start_pressure: uses_mobility_partly_to_avoid_durable_claims
+    eligible_triggers: [carries_commitment_across_boundaries_voluntarily, returns_when_departure_would_be_easier, preserves_context_with_testimony]
+    observable_change: accepts_one_bounded_responsibility_while_retaining_mobility
+    forbidden_shortcuts: [forced_settlement, permanent_route_removal]
+    regression_conditions: [commitment_becomes_coercive]
+    provisional_refs: [NARRATIVE_ROLE:outside_testimony_or_return]
+  - arc_id: ARC:maelin_care_with_boundaries
+    character_ref: CHAR:maelin_sor
+    start_pressure: silently_absorbs_burdens_to_protect_others
+    eligible_triggers: [explicit_consent_and_reciprocity_practice, visible_cost_recognition, successful_refusal_without_support_collapse]
+    observable_change: asks_delegates_and_refuses_without_treating_limits_as_abandonment
+    forbidden_shortcuts: [reward_for_endless_caregiving]
+    regression_conditions: [crisis_restores_assumption_of_unlimited_availability]
+    provisional_refs: [NARRATIVE_ROLE:cost_of_care_and_repair]
+  - arc_id: ARC:oren_ambition_with_consequence
+    character_ref: CHAR:oren_dast
+    start_pressure: treats_speed_and_visible_results_as_good_judgment
+    eligible_triggers: [owns_preventable_downstream_cost, preserves_rivals_valid_objection, chooses_slower_reversible_route_when_evidence_warrants]
+    observable_change: risk_proposals_include_consequence_and_recovery_commitments
+    forbidden_shortcuts: [defeat_or_humiliation_causes_automatic_conversion]
+    regression_conditions: [success_without_visible_cost_reinforces_overconfidence]
+    provisional_refs: [NARRATIVE_ROLE:ambition_and_consequence_pressure]
+provisional_interfaces:
+  allowed_namespaces: [WORLD_ROLE, FACTION_ROLE, NARRATIVE_ROLE]
+  records:
+    - {ref: WORLD_ROLE:community_archive_or_memory_site, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: WORLD_ROLE:shared_worksite_or_infrastructure, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: WORLD_ROLE:shared_decision_site, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: WORLD_ROLE:boundary_route_or_exchange_path, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: WORLD_ROLE:shared_care_or_gathering_site, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: WORLD_ROLE:contested_resource_or_project_site, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: FACTION_ROLE:local_stewardship_body, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: FACTION_ROLE:craft_or_service_network, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: FACTION_ROLE:civic_coordination_body, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: FACTION_ROLE:mobile_exchange_network, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: FACTION_ROLE:mutual_aid_network, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: FACTION_ROLE:reform_or_competing_interest, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: NARRATIVE_ROLE:contested_record_or_legacy_thread, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: NARRATIVE_ROLE:repair_vs_replace_pressure, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: NARRATIVE_ROLE:legitimacy_under_pressure, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: NARRATIVE_ROLE:outside_testimony_or_return, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: NARRATIVE_ROLE:cost_of_care_and_repair, authority_class: PROVISIONAL_INTERFACE}
+    - {ref: NARRATIVE_ROLE:ambition_and_consequence_pressure, authority_class: PROVISIONAL_INTERFACE}
+progression_rules:
+  foundational_relationship_gates_created: false
+  relationship_score_is_knowledge: false
+  repeated_gift_is_universal_progression: false
+  refusal_rivalry_or_low_warmth_equals_failed_play: false
+  future_foundational_gate_requires_progression_gate_contract: true
+  irreversible_social_consequence_requires_branch_impact_evidence: true
+generation_and_canon_rules:
+  generated_prose_can_create_canonical_fact: false
+  relationship_state_can_imply_secret_access: false
+  shared_role_can_imply_knowledge: false
+  future_arc_state_can_imply_current_knowledge: false
+  fan_in_may_reconcile_provisional_interfaces: true
+  producer_authorship_is_canonical_authority: false
+originality_boundary:
+  external_franchise_expression_imported: false
+  provenance_alone_proves_originality: false
+  later_reference_use_requires_bounded_record: true
+  similarity_concern_route: REVIEW_OR_QUARANTINE
+integrity_invariants:
+  - UNIQUE_CHARACTER_IDS
+  - UNIQUE_RELATIONSHIP_IDS
+  - UNIQUE_RELATIONSHIP_EVENT_IDS
+  - UNIQUE_INFORMATION_IDS
+  - UNIQUE_ARC_IDS
+  - RELATIONSHIP_ENDPOINTS_RESOLVE_LOCALLY
+  - RELATIONSHIP_ENDPOINTS_NOT_SELF
+  - RELATIONSHIP_HISTORY_REFS_RESOLVE_LOCALLY
+  - CHARACTER_INFORMATION_REFS_RESOLVE_LOCALLY
+  - CHARACTER_ARC_REFS_RESOLVE_LOCALLY
+  - PROVISIONAL_REFS_USE_ALLOWED_NAMESPACES
+  - NO_CANONICAL_OR_VERIFIED_AUTHORITY
+  - NO_SIBLING_MUTABLE_OUTPUT_CONSUMED
+self_review_attacks:
+  - character_coherence
+  - knowledge_leakage
+  - relationship_flattening_and_grind
+  - unexplained_change
+  - hidden_sibling_dependencies
+  - canon_inflation
+  - originality_reference_leakage
+  - scope_expansion
+  - progression_authority_inflation
+  - machine_readable_integrity
+evidence_debt:
+  status: UNRUN_REQUIRED_EVIDENCE
+  existing_wsn_routes_duplicated: false
+  needs:
+    - knowledge_and_secret_leakage_under_content_selection
+    - long_horizon_relationship_social_simulation
+    - degenerate_relationship_grind_and_repetition
+    - cross_root_consistency_after_fan_in
+    - high_impact_branch_content_sufficiency
+    - grounded_generated_dialogue_and_content
+    - trusted_subjective_character_quality_review
+reopen_conditions:
+  - sibling_review_invalidates_or_materially_changes_a_provisional_interface
+  - fan_in_exposes_character_chronology_knowledge_or_role_contradiction
+  - consequential_behavior_requires_hidden_unmodeled_relationship_state
+  - change_arc_requires_silently_assumed_sibling_fact
+  - empirical_evidence_finds_grind_secret_leakage_or_incoherent_change
+  - originality_review_finds_unacceptable_similarity
+  - stronger_review_isolation_becomes_available
+downstream:
+  required_fresh_review: true
+  clean_review_target: W2-CONTENT-SYN-01
+  fan_in_authority_only: true
