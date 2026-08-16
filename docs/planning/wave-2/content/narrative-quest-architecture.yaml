@@ -1,0 +1,640 @@
+schema_version: 1
+mission_id: W2-CONTENT-NARR-01
+issue: 369
+state: PRODUCER_CANDIDATE
+canonicality: NOT_CANONICAL
+authority:
+  integration: false
+  implementation_readiness: false
+  verification_pass: false
+  decision: false
+  release: false
+  canonical_content: false
+
+frozen_inputs:
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  compiler:
+    issue: 365
+    claim_comment_id: 5305566663
+    work_sha: fd2fb7d816cf23d60bcc54bd25c7d9a4eaae3dbb
+  activation_review:
+    issue: 372
+    terminal_comment_id: 5305598079
+    head_sha: 656930c36d90a166776485cbaf196c39a32fe97e
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_ACTIVATION
+  w1_des_03_work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+  w1_syn_game_work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+  canonical_wave_1_foundation: docs/planning/WAVE-1-FOUNDATIONS-v1.md
+
+sibling_policy:
+  consumes_mutable_sibling_outputs: false
+  concrete_sibling_details_settled: false
+  resolution_owner: W2-CONTENT-SYN-01
+  provisional_roles:
+    - id: WORLD_ROLE:HOME_REGION
+      domain: WORLD
+    - id: WORLD_ROLE:CONTESTED_COMMON
+      domain: WORLD
+    - id: WORLD_ROLE:HISTORY_BEARER
+      domain: WORLD
+    - id: FACTION_ROLE:CUSTODIAN
+      domain: SOCIAL
+    - id: FACTION_ROLE:CHANGE_ADVOCATE
+      domain: SOCIAL
+    - id: FACTION_ROLE:OUTSIDE_PRESSURE
+      domain: SOCIAL
+    - id: CHAR_ROLE:RETURNING_TIE
+      domain: CHARACTER
+    - id: CHAR_ROLE:LOCAL_WITNESS
+      domain: CHARACTER
+    - id: CHAR_ROLE:COUNTERVOICE
+      domain: CHARACTER
+
+theme_axes:
+  - id: THEME:BELONGING_SELF_DIRECTION
+    candidate_only: true
+    tension: belonging versus self-direction
+  - id: THEME:STEWARDSHIP_EXTRACTION
+    candidate_only: true
+    tension: stewardship versus extraction
+  - id: THEME:TRUTH_USEFUL_STORIES
+    candidate_only: true
+    tension: truth versus useful stories
+
+story_states:
+  - STATE:NARRATIVE:ORIENTATION_COMPLETE
+  - STATE:NARRATIVE:CONTEST_RECOGNIZED
+  - STATE:NARRATIVE:COMMITMENT_DECLARED
+  - STATE:NARRATIVE:CONSEQUENCE_OBSERVED
+  - STATE:NARRATIVE:RECKONING_OPEN
+  - STATE:NARRATIVE:AFTERMATH_ENTERED
+
+arc_roles:
+  - id: ARC_ROLE:ORIENTATION
+    purpose: expose core tensions and route plurality
+    required_exit_obligations:
+      - at_least_two_legal_routes
+      - no_hidden_foundational_narrative_gate
+  - id: ARC_ROLE:ENTANGLEMENT
+    purpose: intersect player projects with perspectives and consequences
+    required_exit_obligations:
+      - observable_route_choice
+      - material_tradeoffs_visible_before_commitment
+  - id: ARC_ROLE:RECKONING
+    purpose: confront commitments with evidence and affected parties
+    required_exit_obligations:
+      - branch_impact_evaluated
+      - claims_remain_separate_from_objective_truth
+  - id: ARC_ROLE:AFTERMATH
+    purpose: preserve meaningful play after major choices
+    required_exit_obligations:
+      - alternative_goals_or_reviewed_exception
+
+beat_roles:
+  - BEAT_ROLE:INVITATION
+  - BEAT_ROLE:DISCOVERY
+  - BEAT_ROLE:CONTRADICTION
+  - BEAT_ROLE:COMMITMENT
+  - BEAT_ROLE:COST_REVEAL
+  - BEAT_ROLE:CONSEQUENCE
+  - BEAT_ROLE:RECONSIDERATION
+  - BEAT_ROLE:AFTERMATH
+
+knowledge_model:
+  authority_layers:
+    - OBJECTIVE_FACT_REF
+    - CLAIM_REF
+    - KNOWLEDGE_REF
+    - PLAYER_DISCOVERY_REF
+    - SECRET_REF
+    - BRANCH_FACT_REF
+  invariants:
+    - exposure_does_not_imply_truth
+    - knowledge_does_not_promote_claim_to_objective_fact
+    - false_belief_may_be_expressed_without_mutating_truth
+    - branch_fact_requires_compatible_branch_predicate
+    - generated_presentation_cannot_mutate_authoritative_state
+
+discovery_roles:
+  - DISC_ROLE:PUBLIC_RECORD
+  - DISC_ROLE:WITNESS_ACCOUNT
+  - DISC_ROLE:MATERIAL_TRACE
+  - DISC_ROLE:PRIVATE_TESTIMONY
+  - DISC_ROLE:PLAYER_OBSERVATION
+  - DISC_ROLE:COMPARATIVE_INFERENCE
+discovery_invariants:
+  - exposure_and_truth_are_orthogonal
+  - optional_mysteries_may_remain_unresolved
+  - foundational_progression_may_not_depend_on_unknowable_arbitrary_reveal
+  - irreversible_choice_requires_material_information_and_cost_signaling
+  - chronology_sensitive_reveals_use_explicit_order_constraints
+
+quest_contract:
+  version: 1
+  lifecycle_states:
+    - UNAVAILABLE
+    - AVAILABLE
+    - ACCEPTED
+    - ACTIVE
+    - SUCCEEDED
+    - FAILED_RECOVERABLE
+    - FAILED_TERMINAL
+    - ABANDONED
+  required_fields:
+    - quest_template_id
+    - version
+    - quest_role
+    - availability
+    - progression_gate_refs
+    - objectives
+    - objective_edges
+    - branches
+    - success_effect_refs
+    - failure_policy
+    - retry_recovery_policy
+    - timed_window_refs
+    - provisional_role_refs
+    - observability
+    - semantic_graph_mappings
+    - evidence_refs
+  graph_invariants:
+    - required_edges_acyclic_unless_bounded_monotonic_loop
+    - optional_objective_not_hidden_required
+    - mutually_exclusive_branch_objectives_not_jointly_required
+    - every_required_objective_has_supported_route
+    - unavailable_role_has_substitution_or_legal_failure_recovery
+    - custom_handler_exposes_validation_and_evidence_hooks
+  failure_invariants:
+    - failure_semantics_explicit
+    - retry_reset_semantics_explicit
+    - abandon_reaccept_semantics_explicit
+    - preserved_state_on_retry_explicit
+    - expiry_has_provable_legal_completion_window
+
+quest_role_fixtures:
+  - id: QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS
+    arc_role_refs:
+      - ARC_ROLE:ORIENTATION
+      - ARC_ROLE:ENTANGLEMENT
+    provisional_role_refs:
+      - WORLD_ROLE:HISTORY_BEARER
+      - CHAR_ROLE:LOCAL_WITNESS
+      - CHAR_ROLE:COUNTERVOICE
+    required_semantics:
+      - compare_multiple_claims
+      - independent_evidence_source
+      - no_forced_truth_conclusion
+    route_kinds:
+      - KNOWLEDGE
+      - QUEST
+      - SUBSTITUTE
+    failure_policy:
+      possible: true
+      recoverable: true
+      recovery: alternate evidence source or defer conclusion
+  - id: QROLE:NEGOTIATE_SHARED_USE
+    arc_role_refs:
+      - ARC_ROLE:ENTANGLEMENT
+    provisional_role_refs:
+      - WORLD_ROLE:CONTESTED_COMMON
+      - FACTION_ROLE:CUSTODIAN
+      - FACTION_ROLE:CHANGE_ADVOCATE
+    required_semantics:
+      - multiple_route_kinds
+      - scoped_consequences
+      - no_foundational_gate_inference
+    route_kinds:
+      - SERVICE
+      - TRADE
+      - RELATIONSHIP
+      - QUEST
+      - KNOWLEDGE
+      - SUBSTITUTE
+    failure_policy:
+      possible: true
+      recoverable: true
+      recovery: defer, compensate, or pursue substitute route
+  - id: QROLE:COMMIT_TO_PROJECT
+    arc_role_refs:
+      - ARC_ROLE:ENTANGLEMENT
+      - ARC_ROLE:RECKONING
+    provisional_role_refs:
+      - WORLD_ROLE:CONTESTED_COMMON
+      - FACTION_ROLE:OUTSIDE_PRESSURE
+    required_semantics:
+      - informed_commitment
+      - explicit_costs
+      - affected_goals_listed
+      - reversibility_declared
+    route_kinds:
+      - QUEST
+      - KNOWLEDGE
+    failure_policy:
+      possible: true
+      recoverable: conditional
+      recovery: declared branch-specific recovery or explicit irreversible outcome
+  - id: QROLE:REPAIR_OR_REFRAME
+    arc_role_refs:
+      - ARC_ROLE:RECKONING
+    provisional_role_refs:
+      - CHAR_ROLE:RETURNING_TIE
+      - FACTION_ROLE:CUSTODIAN
+    required_semantics:
+      - consequence_consumed
+      - history_not_erased
+      - restoration_does_not_imply_identical_state
+    route_kinds:
+      - SERVICE
+      - RELATIONSHIP
+      - QUEST
+      - KNOWLEDGE
+    failure_policy:
+      possible: true
+      recoverable: true
+      recovery: alternative compensation or changed relationship route
+  - id: QROLE:AFTERMATH_AMBITION
+    arc_role_refs:
+      - ARC_ROLE:AFTERMATH
+    provisional_role_refs:
+      - WORLD_ROLE:HOME_REGION
+    required_semantics:
+      - branch_specific_goal
+      - medium_or_long_horizon
+      - distinct_consequence_value
+    route_kinds:
+      - DIRECT_SYSTEM
+      - QUEST
+      - SERVICE
+      - SUBSTITUTE
+    failure_policy:
+      possible: true
+      recoverable: true
+      recovery: alternative aftermath goal
+
+progression_gates:
+  version: 1
+  foundational_gate_count: 0
+  gates:
+    - gate_id: GATE:NARR:DEEP_HISTORY_INQUIRY
+      version: 1
+      gate_class: OPTIONAL
+      blocks_or_unlocks:
+        - optional historical interpretation content
+      requirements:
+        - discovery route eligibility
+      routes:
+        - route_id: ROUTE:NARR:HISTORY:PUBLIC
+          route_kind: KNOWLEDGE
+          prerequisite_refs:
+            - DISC_ROLE:PUBLIC_RECORD
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR:HISTORY:WITNESS
+          route_kind: RELATIONSHIP
+          prerequisite_refs:
+            - CHAR_ROLE:LOCAL_WITNESS
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR:HISTORY:MATERIAL
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - DISC_ROLE:MATERIAL_TRACE
+          lifestyle_impacts: []
+      visibility_or_discovery:
+        - optional route hints may be incomplete but not deceptive about foundational status
+      miss_failure_recovery: remain optional; other gameplay remains legal
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E2
+        - WSN-E3
+      exception_rationale: null
+    - gate_id: GATE:NARR:TRUSTED_TESTIMONY_ACCESS
+      version: 1
+      gate_class: SPECIALIZATION
+      blocks_or_unlocks:
+        - perspective-specific testimony and relationship content
+      requirements:
+        - relationship or substitute evidence route
+      routes:
+        - route_id: ROUTE:NARR:TESTIMONY:RELATIONSHIP
+          route_kind: RELATIONSHIP
+          prerequisite_refs:
+            - CHAR_ROLE:LOCAL_WITNESS
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR:TESTIMONY:RECORD
+          route_kind: KNOWLEDGE
+          prerequisite_refs:
+            - DISC_ROLE:PUBLIC_RECORD
+          lifestyle_impacts: []
+      visibility_or_discovery:
+        - route class is legible before commitment
+      miss_failure_recovery: use substitute record/evidence route or skip specialized content
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E2
+        - WSN-E3
+      exception_rationale: null
+    - gate_id: GATE:NARR:PUBLIC_COMMITMENT
+      version: 1
+      gate_class: BRANCH_EXCLUSIVE
+      blocks_or_unlocks:
+        - commitment-specific consequences and aftermath content
+      requirements:
+        - material tradeoffs exposed
+      routes:
+        - route_id: ROUTE:NARR:COMMIT:DECLARE
+          route_kind: QUEST
+          prerequisite_refs:
+            - QROLE:COMMIT_TO_PROJECT
+          lifestyle_impacts:
+            - branch-specific content changes
+        - route_id: ROUTE:NARR:COMMIT:DEFER
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - STATE:NARRATIVE:CONTEST_RECOGNIZED
+          lifestyle_impacts:
+            - preserves uncommitted route temporarily
+      visibility_or_discovery:
+        - affected-goal and irreversibility class signaled before selection
+      miss_failure_recovery: defer if supported; post-commit recovery follows branch contract
+      branch_scope: BRANCH_FAMILY:PUBLIC_ALIGNMENT
+      evidence_requirements:
+        - WSN-E3
+        - WSN-E5
+      exception_rationale: null
+    - gate_id: GATE:NARR:RECONCILIATION_ROUTE
+      version: 1
+      gate_class: OPTIONAL
+      blocks_or_unlocks:
+        - repair or reframing content
+      requirements:
+        - prior consequence exists
+      routes:
+        - route_id: ROUTE:NARR:RECONCILE:REPAIR
+          route_kind: SERVICE
+          prerequisite_refs:
+            - QROLE:REPAIR_OR_REFRAME
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR:RECONCILE:DISCLOSE
+          route_kind: KNOWLEDGE
+          prerequisite_refs:
+            - DISC_ROLE:PLAYER_OBSERVATION
+          lifestyle_impacts: []
+      visibility_or_discovery:
+        - recovery route availability is observable when material
+      miss_failure_recovery: consequence remains; alternative aftermath goals remain
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E3
+        - WSN-E5
+      exception_rationale: null
+    - gate_id: GATE:NARR:AFTERMATH_LEADERSHIP
+      version: 1
+      gate_class: SPECIALIZATION
+      blocks_or_unlocks:
+        - leadership/stewardship aftermath goals
+      requirements:
+        - aftermath state and relevant branch
+      routes:
+        - route_id: ROUTE:NARR:AFTERMATH:PROJECT
+          route_kind: DIRECT_SYSTEM
+          prerequisite_refs:
+            - QROLE:AFTERMATH_AMBITION
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR:AFTERMATH:SERVICE
+          route_kind: SERVICE
+          prerequisite_refs:
+            - STATE:NARRATIVE:AFTERMATH_ENTERED
+          lifestyle_impacts: []
+      visibility_or_discovery:
+        - specialization status explicit
+      miss_failure_recovery: alternative aftermath goal families remain
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E3
+        - WSN-E8
+      exception_rationale: null
+
+game_time_binding:
+  policy_type: GameTimePolicy
+  exact_policy_version: PROVISIONAL_BIND_AT_FANIN_OR_EVIDENCE
+  implicit_wall_time_allowed: false
+  exact_durations_authored_here: false
+  timed_window_contract:
+    required_fields:
+      - window_id
+      - clock_domain
+      - policy_context
+      - pause_scale_semantics
+      - accessibility_timing_alternatives
+      - opening_predicate
+      - closing_predicate
+      - retry_recovery
+      - evidence_scenario_refs
+  fixtures:
+    - window_id: TIME_WINDOW:WITNESS_AVAILABILITY
+      clock_domain: CALENDAR
+      policy_context: gameplay_world
+      pause_scale_semantics: DELEGATE_TO_BOUND_GAME_TIME_POLICY
+      accessibility_timing_alternatives:
+        - alternate appointment or non-timed evidence route must be supported for required content
+      opening_predicate: PROVISIONAL
+      closing_predicate: PROVISIONAL
+      retry_recovery: alternate cycle or substitute evidence route
+      evidence_scenario_refs:
+        - WSN-E3
+        - WSN-E8
+    - window_id: TIME_WINDOW:CONSEQUENCE_RESPONSE
+      clock_domain: SIMULATION
+      policy_context: gameplay_world
+      pause_scale_semantics: DELEGATE_TO_BOUND_GAME_TIME_POLICY
+      accessibility_timing_alternatives:
+        - response window semantics must preserve declared accessibility timing policy
+      opening_predicate: PROVISIONAL
+      closing_predicate: PROVISIONAL
+      retry_recovery: consequence-specific; cannot soft-lock foundational gameplay
+      evidence_scenario_refs:
+        - WSN-E3
+        - WSN-E5
+
+consequence_contract:
+  version: 1
+  reversibility_classes:
+    - REVERSIBLE
+    - CONDITIONALLY_REVERSIBLE
+    - IRREVERSIBLE
+  required_fields:
+    - consequence_id
+    - trigger_ref
+    - affected_domain_state_refs
+    - preconditions
+    - effect_operations
+    - reversibility
+    - reversal_route
+    - persistence_migration_obligation
+    - observability
+    - downstream_dependencies
+  conditionally_required_fields:
+    - field: branch_impact_ref
+      condition: high-impact consequence
+    - field: compensation_or_alternative_goal_refs
+      condition: restoration is impossible
+  invariants:
+    - prose_does_not_perform_state_transition
+    - irreversible_requires_branch_impact
+    - restoration_may_preserve_history
+    - consequence_state_must_survive_save_migration_when_authoritative
+
+branch_families:
+  - id: BRANCH_FAMILY:PUBLIC_ALIGNMENT
+    high_impact: true
+    reversibility: CONDITIONALLY_REVERSIBLE
+    affected_goal_classes:
+      - relationship access
+      - perspective-specific narrative goals
+    unavailable_content_obligation: enumerate at fan-in
+    alternative_goal_obligation:
+      - at least one non-aligned route to shared foundational gameplay
+      - at least one meaningful continued narrative goal
+    recovery_or_compensation: branch-specific repair, deferral, or alternative affiliation route
+    signaling_obligation: affected-goal and relationship consequences legible before commitment
+    long_horizon_scenario_refs:
+      - WSN-E5
+      - WSN-E8
+  - id: BRANCH_FAMILY:COMMONS_TRANSFORMATION
+    high_impact: true
+    reversibility: IRREVERSIBLE
+    affected_goal_classes:
+      - world project access
+      - maintenance/stewardship goals
+      - location or service availability
+    unavailable_content_obligation: enumerate displaced content at fan-in
+    alternative_goal_obligation:
+      - transformation-specific projects
+      - maintenance or mitigation goals
+      - at least one unrelated long-horizon goal remains
+    recovery_or_compensation: no world-state rollback by default; mitigation/compensation routes required
+    signaling_obligation: irreversibility and foreseeable lost opportunities signaled
+    long_horizon_scenario_refs:
+      - WSN-E5
+      - WSN-E8
+  - id: BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING
+    high_impact: true
+    reversibility: CONDITIONALLY_REVERSIBLE
+    affected_goal_classes:
+      - knowledge exposure
+      - relationship/trust content
+      - testimony availability
+    unavailable_content_obligation: enumerate perspective-specific content changes
+    alternative_goal_obligation:
+      - evidence-gathering path
+      - repair/reframing path
+      - at least one continued aftermath goal
+    recovery_or_compensation: correction/disclosure may change exposure but cannot erase history
+    signaling_obligation: disclosure audience and likely relationship effects legible
+    long_horizon_scenario_refs:
+      - WSN-E2
+      - WSN-E5
+
+semantic_graph_interface:
+  contract_type: GameSemanticGraph
+  graph_version: PROVISIONAL_BIND_AT_FANIN_OR_EVIDENCE
+  required_node_families:
+    - goals
+    - verbs
+    - knowledge
+    - relationships
+    - gates
+    - content_families
+    - consequences
+  required_edge_types:
+    - REQUIRES
+    - ENABLES
+    - REVEALS
+    - SUBSTITUTES
+    - CONFLICTS
+    - CHANGES
+  edge_invariants:
+    - semantic_value_ref_required_for_evidence_edge
+    - raw_edge_count_not_quality
+  coverage_obligations:
+    - routes
+    - branches
+    - transitions
+    - named_trajectories
+    - uncovered_semantic_gaps
+
+solvability_obligations:
+  - references_exist_and_types_match
+  - required_objective_graph_has_no_accidental_cycle
+  - every_required_predicate_has_supported_route
+  - mutually_exclusive_branches_not_jointly_required
+  - role_unavailability_has_substitution_or_legal_failure_recovery
+  - timed_window_has_legal_completion_window_under_bound_policy
+  - terminal_transitions_terminate_or_monotonically_progress
+  - effects_and_rewards_reference_valid_state
+  - irreversible_consequence_has_branch_impact
+  - incompatible_branch_facts_do_not_leak
+
+generation_boundary:
+  build_time_candidate_authority: CANDIDATE_ONLY
+  runtime_presentation_only_mutates_authoritative_state: false
+  runtime_canonical_effect_direct_mutation_allowed: false
+  runtime_canonical_effect_requires_validated_command_effect: true
+  accepted_outcome_persistence_required: true
+  outage_or_grounding_failure: DECLARED_FALLBACK_OR_INCONCLUSIVE
+  originality_reference_policy_required: true
+
+evidence_debt:
+  WSN-E1: UNRUN_REQUIRED_EVIDENCE
+  WSN-E2: UNRUN_REQUIRED_EVIDENCE
+  WSN-E3: UNRUN_REQUIRED_EVIDENCE
+  WSN-E4: UNRUN_REQUIRED_EVIDENCE
+  WSN-E5: UNRUN_REQUIRED_EVIDENCE
+  WSN-E6: UNRUN_REQUIRED_EVIDENCE
+  WSN-E7: UNRUN_REQUIRED_EVIDENCE
+  WSN-E8: UNRUN_REQUIRED_EVIDENCE
+  WSN-E9: UNRUN_REQUIRED_EVIDENCE
+
+assumptions:
+  - fixture quest roles provide useful structural coverage without forming a final catalog
+  - provisional sibling roles can be resolved at fan-in without producer cross-editing
+  - high-impact choices can retain meaningful alternative goals at tractable content cost
+  - exact timing can remain deferred while timed-window semantics are typed
+  - narrative participation can be first-class without becoming universal foundational progression
+
+reopen_conditions:
+  - provisional roles cannot resolve without mutable sibling dependency
+  - representative quests require unvalidated cycles or opaque custom handlers
+  - quest state search misses common softlocks
+  - scoped narrative gates compose into de_facto_foundational_progression
+  - knowledge_claim_model cannot express disputed_or_unreliable_history
+  - high_impact_branches_hollow_out_continued_play
+  - time_policy_binding_cannot_model_intended_accessible_windows
+  - consequence_persistence_or_migration_is_unsound
+  - structural_validation_drives_fake_choice_or_blandness
+  - originality_or_generation_controls_are_insufficient
+
+self_review:
+  target_findings:
+    blocker: 0
+    major: 0
+    correction_requiring_minor: 0
+  checks:
+    owned_paths_only: true
+    mutable_sibling_outputs_consumed: false
+    engine_selected: false
+    foundational_narrative_gates_authored: false
+    failure_retry_recovery_explicit: true
+    knowledge_truth_exposure_separate: true
+    exact_time_values_authored: false
+    irreversible_branches_bind_impact: true
+    wsn_evidence_marked_pass: false
+    authority_inflation: false
+
+downstream:
+  required_fresh_root_review: true
+  clean_review_may_unlock: W2-CONTENT-SYN-01
+  content_fanin_authority_now: false
+  vertical_slice_now: false
