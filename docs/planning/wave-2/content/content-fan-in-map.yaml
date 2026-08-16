@@ -1,0 +1,755 @@
+schema: everfield_w2_content_fanin_candidate_v1
+mission_id: W2-CONTENT-SYN-01
+issue: 422
+state: SYNTHESIS_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_FANIN
+engine_dependency: ENGINE_NEUTRAL_NOW
+canonicality: NOT_CANONICAL
+
+authority:
+  canonical_content: false
+  integration: false
+  verification_pass: false
+  engine_selection: false
+  gameplay_implementation: false
+  implementation_readiness: false
+  release: false
+  decision: false
+  empirical_wsn_pass: false
+  downstream_content_consumption_before_fresh_review: false
+
+frozen_inputs:
+  main_sha: ff261a900fd475764a08c48336dfb4afb22bdfb0
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_convergence_directive_comment_id: 5277825639
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  compiler:
+    issue: 365
+    work_sha: fd2fb7d816cf23d60bcc54bd25c7d9a4eaae3dbb
+    review_issue: 372
+    review_terminal_comment_id: 5305598079
+    map_blob_sha: 109eca8d2851db118bffe83398b49d68fdb50b31
+    contract_blob_sha: 27fc02a5c8639421d9e665245b2a3f6fb3dde5a1
+  roots:
+    world:
+      remediation_issue: 389
+      remediation_terminal_comment_id: 5307217533
+      remediation_work_sha: e90279b9c42b9d3e752c4e07599c360d0ee83eb6
+      remediation_head_sha: f508f6d90e3459e6489c00cf3633c4c2844a1353
+      review_issue: 414
+      review_terminal_comment_id: 5307253433
+      review_work_sha: d92ea1f5c08ea7340e65d22a9d8d293be00572d4
+      review_head_sha: c58e43f8fae3bd818af989867ca4250cc7b22863
+      review_disposition: CLEAN_FOR_BOUNDED_CONTENT_FANIN
+      markdown_blob_sha: 3caaddf10e27cefb91c35b6a4f374740aa3c6731
+      yaml_blob_sha: baa827528994864faa3f50c8b0785dd89a775a14
+    social:
+      remediation_issue: 387
+      remediation_terminal_comment_id: 5306008546
+      remediation_work_sha: 442539429762569002c3822e8798ceda47ddfd3d
+      remediation_head_sha: f1e7eed00390e10348fb4e276e36e40f6cd483f6
+      review_issue: 391
+      review_terminal_comment_id: 5306043969
+      review_work_sha: 1284649a52ae2ee653aa7eafc34c011b637af5b8
+      review_head_sha: 065d78e09bdadcdc3405299fe22bad57f807cdf3
+      review_disposition: CLEAN_FOR_BOUNDED_CONTENT_FANIN
+      markdown_blob_sha: 7a4c5431aa08597b96778b5a89b98dbd9d103401
+      yaml_blob_sha: 16c55eb0dba4530a4936b6da3695e752d8f21e68
+      producer_head_sha: db5d8ff86f4faeafa4a816412a2170cde979fb67
+      composition_rule: REMEDIATION_PACKET_PLUS_IMMUTABLE_PRODUCER_SURFACE
+    character:
+      remediation_issue: 409
+      remediation_terminal_comment_id: 5306716782
+      remediation_work_sha: daee0c2c67ce83aed6e97db525fac51782f5c74c
+      remediation_head_sha: d67fd84cc07df369321ba2682265fba228dc51a3
+      review_issue: 411
+      review_terminal_comment_id: 5306750686
+      review_head_sha: 48edf9cfad7a7d6b97407d0a0511722379b228b7
+      review_disposition: CLEAN_FOR_BOUNDED_CONTENT_FANIN
+      markdown_blob_sha: 14a26367abb763860c691e2501ab8c118a497ad2
+      yaml_blob_sha: f836fdf69ac5ecba03b5d711b366ed6765e007db
+      producer_head_sha: 215e2647382caf31171889452f1e44e56533f996
+      producer_yaml_blob_sha: 97dc6977b0fade501f328302dc7dc6fa12bab42a
+      composition_rule: PATCH_EXISTING_COLLECTIONS_BY_STABLE_ID
+    narrative:
+      remediation_issue: 396
+      remediation_terminal_comment_id: 5307386224
+      remediation_work_sha: 79529eede9c39ff5d3432300916136b47a50b8dd
+      remediation_head_sha: 5955d56ab304785d8149fef483ff8bb10d521124
+      review_issue: 419
+      review_terminal_comment_id: 5307411116
+      review_work_sha: ca2edad9f1c0f5dfec0603c1bd044d4954dd046e
+      review_head_sha: 8a0c4461fdc849d19f10fe1e2baa14a5da9bbfd9
+      review_disposition: CLEAN_FOR_BOUNDED_CONTENT_FANIN
+      markdown_blob_sha: 4e31fb0e812f4dcbc65303740c252553d07f7286
+      yaml_blob_sha: 75844d9c24f5ed2073a2c36a782c52f8b7d5c127
+
+composition_rules:
+  root_artifacts_are_immutable_provenance: true
+  fanin_may_define_aliases_and_bindings: true
+  fanin_may_rewrite_root_records: false
+  only_uniquely_supported_bindings_may_be_exact: true
+  ambiguous_bindings_must_remain_set_or_unresolved: true
+  binding_does_not_promote_authority: true
+  binding_does_not_create_canonical_content: true
+  objective_fact_authority_remains_world_owned: true
+  social_claim_authority_never_promotes_objective_truth: true
+  character_knowledge_never_follows_from_player_exposure_or_relationship_state: true
+  narrative_exposure_never_promotes_truth: true
+  generated_presentation_never_mutates_authoritative_state: true
+  exact_calendar_values_may_not_be_invented: true
+  exact_game_time_policy_remains_deferred: true
+  exact_semantic_graph_version_remains_deferred: true
+  wsn_result_state_may_not_be_changed_here: true
+
+binding_kinds:
+  EXACT: One reviewed target uniquely satisfies the source role semantics for this fan-in scope.
+  COMPOSITE: Multiple reviewed target IDs jointly implement one source interface without implying equivalence among them.
+  SET: More than one reviewed target is materially compatible; no single concrete target is selected.
+  STRUCTURAL: The source role binds to a reviewed structural contract, quest role, gate, branch family, or interface rather than a concrete entity.
+  UNRESOLVED: Reviewed inputs intentionally or materially do not support a safe concrete mapping.
+
+cross_root_bindings:
+  world_roles_to_social_or_narrative:
+    - binding_id: BIND:WORLD:LOCAL-CIVIC-STEWARD
+      source_ref: ROLE:LOCAL-CIVIC-STEWARD
+      kind: EXACT
+      target_refs: [FAC-COMMONS-01]
+      rationale: The Commons Assembly is the reviewed civic institution with public allocation, coordination, and stewardship obligations.
+      authority_effect: NONE
+    - binding_id: BIND:WORLD:LAND-USE-CUSTODIAN
+      source_ref: ROLE:LAND-USE-CUSTODIAN
+      kind: EXACT
+      target_refs: [FAC-FIELDWARD-01]
+      rationale: The Fieldward Cooperative uniquely supplies reviewed cultivation and resource-stewardship semantics.
+      authority_effect: NONE
+    - binding_id: BIND:WORLD:WATER-DEPENDENT-USER
+      source_ref: ROLE:WATER-DEPENDENT-USER
+      kind: UNRESOLVED
+      target_refs: []
+      candidate_refs: [FAC-FIELDWARD-01, COM-NEIGHBOR-01]
+      rationale: The role is intentionally broader than any reviewed institution; binding it to one actor would make a generic affected-user role institution-specific.
+      authority_effect: NONE
+    - binding_id: BIND:WORLD:TRAVEL-EXCHANGE-LINK
+      source_ref: ROLE:TRAVEL-AND-EXCHANGE-LINK
+      kind: SET
+      target_refs: [FAC-WAYKEEPERS-01, FAC-MAKERS-01]
+      rationale: Waykeepers uniquely cover route support while Makers carry reviewed trade contacts; the combined label does not justify collapsing either actor.
+      authority_effect: NONE
+    - binding_id: BIND:WORLD:HISTORY-BEARER
+      source_ref: ROLE:HISTORY-BEARER
+      kind: SET
+      target_refs: [FAC-ARCHIVE-01, COM-NEIGHBOR-01, CHAR:anwen_rell, CHAR:tomas_irel]
+      rationale: Formal archive, lived community memory, provenance analysis, and contextual testimony are all reviewed history-bearing surfaces. No one holder is uniquely selected.
+      constraints:
+        - CLM:FRAGMENTATION-ACCOUNT-A and CLM:FRAGMENTATION-ACCOUNT-B MUST NOT silently resolve to the same concrete holder instance merely because both use ROLE:HISTORY-BEARER.
+        - If both claims are assigned to one holder later, an explicit reviewed source/perspective model must explain the distinct accounts without collapsing contradiction into objective truth.
+      authority_effect: NONE
+    - binding_id: BIND:WORLD:PLAYER-ENTRY
+      source_ref: ROLE:PLAYER-ENTRY
+      kind: STRUCTURAL
+      target_refs: [EVT:PLAYER-ENTRY, ARC_ROLE:ORIENTATION, BEAT_ROLE:INVITATION]
+      rationale: World chronology supplies the player-entry boundary; narrative supplies the orientation/invitation structure without fixing a concrete opening scene.
+      authority_effect: NONE
+
+  social_world_roles:
+    - binding_id: BIND:SOCIAL:HUB-COMMUNITY
+      source_ref: WORLD_ROLE:HUB_COMMUNITY
+      kind: EXACT
+      target_refs: [LOC:SETTLEMENT-CORE]
+      rationale: The settlement core is the reviewed civic/services/social-density/exchange hub.
+      authority_effect: NONE
+    - binding_id: BIND:SOCIAL:CULTIVATION-ZONE
+      source_ref: WORLD_ROLE:CULTIVATION_ZONE
+      kind: EXACT
+      target_refs: [LOC:CULTIVATION-MOSAIC]
+      rationale: The cultivation mosaic is the reviewed cultivation and managed-habitat surface.
+      authority_effect: NONE
+    - binding_id: BIND:SOCIAL:COMMON-RESOURCE
+      source_ref: WORLD_ROLE:COMMON_RESOURCE
+      kind: SET
+      target_refs: [LOC:OLD-WORKS, LOC:RIPARIAN-CORRIDOR, LOC:COMMONS-BELT]
+      rationale: Reviewed shared-resource semantics occur across inherited works, water-use infrastructure, and commons; no single site is globally equivalent to the provisional role.
+      authority_effect: NONE
+    - binding_id: BIND:SOCIAL:TRANSIT-EDGE
+      source_ref: WORLD_ROLE:TRANSIT_EDGE
+      kind: COMPOSITE
+      target_refs: [EDGE:CORE-THRESHOLD, LOC:OUTER-THRESHOLD]
+      rationale: The reviewed outer travel/exchange interface consists of the threshold location and its route from the settlement core.
+      authority_effect: NONE
+    - binding_id: BIND:SOCIAL:SENSITIVE-SITE
+      source_ref: WORLD_ROLE:SENSITIVE_SITE
+      kind: UNRESOLVED
+      target_refs: []
+      candidate_refs: [LOC:OLD-WORKS, LOC:EDGE-HABITAT, LOC:UPLAND-CATCHMENT]
+      rationale: The world packet does not classify one location as the universal sensitive-site target; later content must choose a scoped site with evidence.
+      authority_effect: NONE
+
+  character_world_roles:
+    - binding_id: BIND:CHAR:SHARED-WORKSITE
+      source_ref: WORLD_ROLE:shared_worksite_or_infrastructure
+      kind: EXACT
+      target_refs: [LOC:OLD-WORKS]
+      rationale: Inherited works are the reviewed legacy-infrastructure/worksite surface.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:SHARED-DECISION-SITE
+      source_ref: WORLD_ROLE:shared_decision_site
+      kind: EXACT
+      target_refs: [LOC:SETTLEMENT-CORE]
+      rationale: The settlement core is the reviewed civic and coordination surface.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:BOUNDARY-ROUTE
+      source_ref: WORLD_ROLE:boundary_route_or_exchange_path
+      kind: COMPOSITE
+      target_refs: [LOC:OUTER-THRESHOLD, EDGE:CORE-THRESHOLD]
+      rationale: The threshold and route edge jointly implement the reviewed boundary travel/exchange interface.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:ARCHIVE-MEMORY-SITE
+      source_ref: WORLD_ROLE:community_archive_or_memory_site
+      kind: SET
+      target_refs: [LOC:SETTLEMENT-CORE, LOC:OLD-WORKS]
+      related_social_refs: [FAC-ARCHIVE-01, COM-NEIGHBOR-01]
+      rationale: Reviewed memory/provenance functions span civic records, lived memory, and physical historical evidence; a single final site is not frozen.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:CARE-GATHERING-SITE
+      source_ref: WORLD_ROLE:shared_care_or_gathering_site
+      kind: SET
+      target_refs: [LOC:SETTLEMENT-CORE, LOC:COMMONS-BELT]
+      related_social_refs: [COM-NEIGHBOR-01]
+      rationale: Both reviewed locations support gathering/community functions; no dedicated care facility is frozen.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:CONTESTED-PROJECT-SITE
+      source_ref: WORLD_ROLE:contested_resource_or_project_site
+      kind: SET
+      target_refs: [LOC:OLD-WORKS, LOC:RIPARIAN-CORRIDOR, LOC:COMMONS-BELT]
+      rationale: Multiple reviewed world surfaces can support contested stewardship/project consequences; no one final project site is authorized.
+      authority_effect: NONE
+
+  character_faction_roles:
+    - binding_id: BIND:CHAR:CRAFT-SERVICE-NETWORK
+      source_ref: FACTION_ROLE:craft_or_service_network
+      kind: EXACT
+      target_refs: [FAC-MAKERS-01]
+      rationale: Makers are the reviewed craft/trade/repair association.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:CIVIC-COORDINATION
+      source_ref: FACTION_ROLE:civic_coordination_body
+      kind: EXACT
+      target_refs: [FAC-COMMONS-01]
+      rationale: Commons Assembly uniquely carries reviewed civic coordination and allocation semantics.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:MUTUAL-AID
+      source_ref: FACTION_ROLE:mutual_aid_network
+      kind: EXACT
+      target_refs: [COM-NEIGHBOR-01]
+      rationale: Neighbor Network is the reviewed informal mutual-aid community.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:LOCAL-STEWARDSHIP
+      source_ref: FACTION_ROLE:local_stewardship_body
+      kind: SET
+      target_refs: [FAC-FIELDWARD-01, FAC-COMMONS-01]
+      rationale: Land stewardship and civic shared-infrastructure stewardship are both reviewed; character content did not choose one institution.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:MOBILE-EXCHANGE
+      source_ref: FACTION_ROLE:mobile_exchange_network
+      kind: SET
+      target_refs: [FAC-WAYKEEPERS-01, FAC-MAKERS-01]
+      rationale: Route mobility and trade-contact functions are split across reviewed social actors.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:REFORM-COMPETING-INTEREST
+      source_ref: FACTION_ROLE:reform_or_competing_interest
+      kind: UNRESOLVED
+      target_refs: []
+      candidate_refs: [FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-MAKERS-01, FAC-WAYKEEPERS-01]
+      rationale: Oren's reviewed role is a character pressure, not evidence that any one reviewed institution is the final reform faction.
+      authority_effect: NONE
+
+  narrative_world_roles:
+    - binding_id: BIND:NARR:HOME-REGION
+      source_ref: WORLD_ROLE:HOME_REGION
+      kind: STRUCTURAL
+      target_refs: [WORLD_PROMISE:STEWARDSHIP_WATERSHED, BRANCH:BASELINE]
+      supporting_location_refs: [LOC:SETTLEMENT-CORE, LOC:CULTIVATION-MOSAIC, LOC:RIPARIAN-CORRIDOR, LOC:COMMONS-BELT, LOC:UPLAND-CATCHMENT, LOC:OLD-WORKS, LOC:EDGE-HABITAT]
+      rationale: The reviewed bounded watershed is the home-region frame; no final regional proper name is frozen.
+      authority_effect: NONE
+    - binding_id: BIND:NARR:CONTESTED-COMMON
+      source_ref: WORLD_ROLE:CONTESTED_COMMON
+      kind: SET
+      target_refs: [LOC:OLD-WORKS, LOC:RIPARIAN-CORRIDOR, LOC:COMMONS-BELT]
+      rationale: The reviewed world supports several shared-use contest surfaces; selecting one globally would invent plot specificity.
+      authority_effect: NONE
+    - binding_id: BIND:NARR:HISTORY-BEARER-WORLD
+      source_ref: WORLD_ROLE:HISTORY_BEARER
+      kind: STRUCTURAL
+      target_refs: [ROLE:HISTORY-BEARER, PROP:FRAGMENTATION-SINGLE-DOMINANT-CAUSE, MYS:FRAGMENTATION-CAUSE]
+      rationale: Narrative history-bearing resolves to the reviewed world claim/mystery interface, not to an objective answer or a single concrete speaker.
+      authority_effect: NONE
+
+  narrative_social_roles:
+    - binding_id: BIND:NARR:CUSTODIAN
+      source_ref: FACTION_ROLE:CUSTODIAN
+      kind: SET
+      target_refs: [FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-ARCHIVE-01]
+      rationale: Civic, land-use, and record custody are distinct reviewed custodial functions. A quest instance must select the relevant scoped custodian.
+      authority_effect: NONE
+    - binding_id: BIND:NARR:CHANGE-ADVOCATE
+      source_ref: FACTION_ROLE:CHANGE_ADVOCATE
+      kind: UNRESOLVED
+      target_refs: []
+      candidate_refs: [FAC-MAKERS-01, FAC-WAYKEEPERS-01, FAC-FIELDWARD-01]
+      rationale: Reviewed institutions contain change pressures but none is established as the global change-advocate faction.
+      authority_effect: NONE
+    - binding_id: BIND:NARR:OUTSIDE-PRESSURE
+      source_ref: FACTION_ROLE:OUTSIDE_PRESSURE
+      kind: UNRESOLVED
+      target_refs: []
+      world_constraint_refs: [WF:OUTER-WORLD-EXISTS, WF:OUTER-POLITY-DETAILS, MYS:OUTER-CONNECTIONS]
+      rationale: The world explicitly leaves external polity details UNKNOWN_BY_DESIGN; inventing a concrete outside faction would violate that boundary.
+      authority_effect: NONE
+
+  narrative_character_roles:
+    - binding_id: BIND:NARR:RETURNING-TIE
+      source_ref: CHAR_ROLE:RETURNING_TIE
+      kind: EXACT
+      target_refs: [CHAR:tomas_irel]
+      rationale: Tomas uniquely carries reviewed mobility, return, outside-testimony, and bounded-commitment semantics.
+      authority_effect: NONE
+    - binding_id: BIND:NARR:LOCAL-WITNESS
+      source_ref: CHAR_ROLE:LOCAL_WITNESS
+      kind: SET
+      target_refs: [CHAR:anwen_rell, CHAR:tomas_irel]
+      rationale: Anwen contributes provenance/continuity analysis and Tomas contextual testimony; no single witness is frozen for every investigation.
+      authority_effect: NONE
+    - binding_id: BIND:NARR:COUNTERVOICE
+      source_ref: CHAR_ROLE:COUNTERVOICE
+      kind: SET
+      target_refs: [CHAR:selka_vey, CHAR:maelin_sor, CHAR:oren_dast]
+      rationale: Procedural legitimacy, care-burden consequence, and ambition/risk provide distinct reviewed countervoice semantics. No one universal countervoice is authorized.
+      authority_effect: NONE
+
+  social_narrative_roles:
+    - binding_id: BIND:SOCIAL:SOCIAL-DISPUTE
+      source_ref: NARR_ROLE:SOCIAL_DISPUTE
+      kind: STRUCTURAL
+      target_refs: [QROLE:NEGOTIATE_SHARED_USE]
+      branch_candidate_refs: [BRANCH_FAMILY:PUBLIC_ALIGNMENT, BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING]
+      rationale: Negotiation is the reviewed narrative role; branch family depends on whether the dispute concerns commitment or disclosure.
+      authority_effect: NONE
+    - binding_id: BIND:SOCIAL:PUBLIC-COMMITMENT
+      source_ref: NARR_ROLE:PUBLIC_COMMITMENT
+      kind: STRUCTURAL
+      target_refs: [GATE:NARR:PUBLIC_COMMITMENT, QROLE:COMMIT_TO_PROJECT, BRANCH_FAMILY:PUBLIC_ALIGNMENT]
+      rationale: Narrative already provides explicit public-commitment gate, quest, and branch-family semantics.
+      authority_effect: NONE
+    - binding_id: BIND:SOCIAL:DISPUTE-BRANCH
+      source_ref: NARR_BRANCH_ROLE:SOCIAL_DISPUTE
+      kind: SET
+      target_refs: [BRANCH_FAMILY:PUBLIC_ALIGNMENT, BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING]
+      rationale: Social disagreement can lead to alignment or disclosure consequences; it is not automatically one global narrative branch.
+      authority_effect: NONE
+
+  character_narrative_roles:
+    - binding_id: BIND:CHAR:NARR:CONTESTED-RECORD
+      source_ref: NARRATIVE_ROLE:contested_record_or_legacy_thread
+      kind: STRUCTURAL
+      target_refs: [QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS, THEME:TRUTH_USEFUL_STORIES]
+      rationale: The character thread composes directly with reviewed investigation and truth/story tension without asserting the world mystery's answer.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:NARR:REPAIR-REPLACE
+      source_ref: NARRATIVE_ROLE:repair_vs_replace_pressure
+      kind: STRUCTURAL
+      target_refs: [QROLE:REPAIR_OR_REFRAME, BRANCH_FAMILY:COMMONS_TRANSFORMATION]
+      rationale: Repair/reframing and irreversible transformation are the reviewed consequence surfaces; a concrete project remains unbound.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:NARR:LEGITIMACY
+      source_ref: NARRATIVE_ROLE:legitimacy_under_pressure
+      kind: STRUCTURAL
+      target_refs: [QROLE:NEGOTIATE_SHARED_USE, BRANCH_FAMILY:PUBLIC_ALIGNMENT]
+      rationale: The reviewed negotiation/alignment structures support Selka's legitimacy pressure without fixing an outcome.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:NARR:OUTSIDE-TESTIMONY
+      source_ref: NARRATIVE_ROLE:outside_testimony_or_return
+      kind: STRUCTURAL
+      target_refs: [QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS, CHAR:tomas_irel]
+      rationale: Tomas and the investigation role jointly provide reviewed outside-testimony/return semantics while outer polity details remain unresolved.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:NARR:CARE-REPAIR
+      source_ref: NARRATIVE_ROLE:cost_of_care_and_repair
+      kind: STRUCTURAL
+      target_refs: [QROLE:REPAIR_OR_REFRAME, REL_EVT:jori_maelin_unasked_support, REL_EVT:maelin_selka_burden_objection]
+      rationale: Existing relationship history supplies cost/burden evidence while the quest role supplies repair/reframing structure.
+      authority_effect: NONE
+    - binding_id: BIND:CHAR:NARR:AMBITION-CONSEQUENCE
+      source_ref: NARRATIVE_ROLE:ambition_and_consequence_pressure
+      kind: STRUCTURAL
+      target_refs: [QROLE:COMMIT_TO_PROJECT, QROLE:AFTERMATH_AMBITION, CHAR:oren_dast]
+      rationale: Oren's reviewed ambition/risk arc composes with commitment and aftermath roles; no final project or faction alignment is fixed.
+      authority_effect: NONE
+
+information_authority_reconciliation:
+  objective_fact_owner: WORLD_FACT_RECORD_ONLY_WITH_REVIEWED_AUTHORITY
+  layers:
+    - layer: WORLD_OBJECTIVE_OR_CONSTRAINT
+      records: [facts, chronology, world_rules]
+      rule: Candidate objective/constraint authority is preserved exactly; NOT_CANONICAL remains.
+    - layer: WORLD_PROPOSITION_OR_CLAIM
+      records: [propositions, in_world_claims]
+      rule: Proposition presence or claim confidence cannot create or mutate a facts record.
+    - layer: SOCIAL_CLAIM_BELIEF
+      records: [SocialClaimBelief]
+      rule: objective_fact_authority MUST remain false; external fact refs may only point to separately reviewed world facts and do not transfer authority.
+    - layer: CHARACTER_INFORMATION
+      records: [information_records, information_record_patches]
+      rule: Character truth status and holder access remain local candidate semantics; relationship state, shared role, generated text, or player exposure cannot grant access or objective truth.
+    - layer: NARRATIVE_KNOWLEDGE_EXPOSURE
+      records: [knowledge_model, discovery_roles]
+      rule: Exposure and discovery remain orthogonal to truth; generated presentation cannot mutate authoritative state.
+  cross_layer_rules:
+    - A social claim may bind to a world proposition or fact reference only through an explicit fan-in binding; truth_relation remains UNKNOWN unless the target reviewed fact logically determines it.
+    - A character belief may be narratively presented without becoming a world fact.
+    - A character SECRET with CHARACTER_CANDIDATE_FACT_ONLY is not automatically a world objective fact and cannot settle world mysteries.
+    - Player discovery never implies that every character knows the discovered information.
+    - Shared provisional roles never grant knowledge or disclosure permission.
+    - Branch-specific knowledge must carry a compatible branch predicate before exposure.
+
+chronology_reconciliation:
+  world_order:
+    eras: [ERA:PRE-WORKS, ERA:WORKS-BUILDOUT, ERA:PATCHWORK-PRESENT]
+    event_order: [EVT:WORKS-BUILDOUT, EVT:WORKS-FRAGMENTATION, EVT:PATCHWORK-PRESENT-START, EVT:PLAYER-ENTRY]
+    exact_calendar_deferred: true
+  narrative_boundary:
+    player_entry_ref: EVT:PLAYER-ENTRY
+    first_story_surface_refs: [ARC_ROLE:ORIENTATION, BEAT_ROLE:INVITATION]
+    rule: Narrative story-state progression is at or after EVT:PLAYER-ENTRY unless a record is explicitly typed as retrospective evidence.
+  character_history:
+    event_refs: [REL_EVT:anwen_selka_uncertainty_dispute, REL_EVT:jori_maelin_unasked_support, REL_EVT:jori_oren_joint_attempt, REL_EVT:maelin_selka_burden_objection]
+    exact_world_event_positions: UNRESOLVED_BY_REVIEWED_INPUTS
+    rule: Do not infer pre-entry versus post-entry chronology from relationship-history existence alone; a later authored instance must place the event explicitly before using chronology-sensitive reveals.
+  social_history:
+    exact_world_event_positions: UNRESOLVED_BY_REVIEWED_INPUTS
+    rule: SocialHistoryEvent records must preserve append-only meaningful history and explicit branch/visibility fields; fan-in does not assign exact dates.
+  game_time_policy:
+    exact_policy_version: PROVISIONAL_BIND_AT_FANIN_OR_EVIDENCE_RETAINED
+    implicit_wall_time_allowed: false
+    exact_durations_authored_here: false
+
+progression_gate_reconciliation:
+  shared_contract: ProgressionGateContract
+  version: 1
+  foundational_gate_count: 0
+  social_gates:
+    - {gate_id: GATE-SOC-COMMONS-DELEGATION-01, gate_class: SPECIALIZATION}
+    - {gate_id: GATE-SOC-FIELDWARD-SHARED-STOCK-01, gate_class: SPECIALIZATION}
+    - {gate_id: GATE-SOC-MAKERS-COMMISSION-01, gate_class: OPTIONAL}
+    - {gate_id: GATE-SOC-ARCHIVE-SENSITIVE-01, gate_class: OPTIONAL}
+    - {gate_id: GATE-SOC-WAYKEEPER-SPONSOR-01, gate_class: OPTIONAL}
+    - {gate_id: GATE-SOC-COALITION-COMMITMENT-01, gate_class: BRANCH_EXCLUSIVE}
+  narrative_gates:
+    - {gate_id: GATE:NARR:DEEP_HISTORY_INQUIRY, gate_class: OPTIONAL}
+    - {gate_id: GATE:NARR:TRUSTED_TESTIMONY_ACCESS, gate_class: SPECIALIZATION}
+    - {gate_id: GATE:NARR:PUBLIC_COMMITMENT, gate_class: BRANCH_EXCLUSIVE}
+    - {gate_id: GATE:NARR:RECONCILIATION_ROUTE, gate_class: OPTIONAL}
+    - {gate_id: GATE:NARR:AFTERMATH_LEADERSHIP, gate_class: SPECIALIZATION}
+  composition_rules:
+    - No social or narrative gate becomes FOUNDATIONAL merely because another root references its content.
+    - GATE-SOC-COALITION-COMMITMENT-01 and GATE:NARR:PUBLIC_COMMITMENT remain distinct gates; they may share an explicit branch instance but are not aliases.
+    - Baseline ordinary community interaction, repair/crafting, cultivation, movement/exploration, public information, mutual aid, and foundational shared gameplay remain legal without satisfying any gate in this fan-in packet.
+    - Sensitive testimony may have relationship or record substitutes; relationship state alone never grants secret access.
+    - Branch-exclusive gates require pre-commitment consequence signaling and reviewed alternative-content sufficiency before any permanent or high-impact use.
+    - Gate routes retain explicit recovery/substitute semantics and may not be collapsed into a single dominant standing score.
+
+branch_reconciliation:
+  social_branches:
+    ids: [SOC-BRANCH-COMMON-USE-01, SOC-BRANCH-DISCLOSURE-01, SOC-BRANCH-ACCESS-01, SOC-BRANCH-AID-01]
+    permanence_authorized_here: false
+  narrative_families:
+    - id: BRANCH_FAMILY:PUBLIC_ALIGNMENT
+      high_impact: true
+      reversibility: CONDITIONALLY_REVERSIBLE
+    - id: BRANCH_FAMILY:COMMONS_TRANSFORMATION
+      high_impact: true
+      reversibility: IRREVERSIBLE
+    - id: BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING
+      high_impact: true
+      reversibility: CONDITIONALLY_REVERSIBLE
+  bindings:
+    - source_ref: SOC-BRANCH-DISCLOSURE-01
+      kind: STRUCTURAL
+      target_refs: [BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING]
+      rule: Social disclosure branch can instantiate this family only with explicit audience, exposure, history, and branch-effect records.
+    - source_ref: SOC-BRANCH-COMMON-USE-01
+      kind: SET
+      target_refs: [BRANCH_FAMILY:PUBLIC_ALIGNMENT, BRANCH_FAMILY:COMMONS_TRANSFORMATION]
+      rule: Ordinary common-use disagreement is not automatically irreversible; COMMONS_TRANSFORMATION requires an explicit high-impact consequence contract.
+    - source_ref: SOC-BRANCH-ACCESS-01
+      kind: UNRESOLVED
+      target_refs: []
+      rule: Access changes remain bounded social state unless a later reviewed narrative branch contract explicitly elevates them.
+    - source_ref: SOC-BRANCH-AID-01
+      kind: UNRESOLVED
+      target_refs: []
+      rule: Aid choices remain bounded social consequence by default and do not require a high-impact narrative branch.
+  invariants:
+    - Social branch permanence remains unauthorized.
+    - Narrative irreversible consequences require branch impact and observable pre-commitment signaling.
+    - Restored access or relationships may change current dimensions but cannot erase meaningful history.
+    - Where restoration is impossible, compensation_or_alternative_goal_refs are required.
+    - Every high-impact branch preserves at least one meaningful continued goal and shared foundational gameplay route.
+    - Branch facts, social claims, character knowledge, and narrative exposure require compatible branch scope before composition.
+
+quest_fanin_bindings:
+  - quest_role: QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS
+    world_refs: [MYS:FRAGMENTATION-CAUSE, PROP:FRAGMENTATION-SINGLE-DOMINANT-CAUSE, CLM:FRAGMENTATION-ACCOUNT-A, CLM:FRAGMENTATION-ACCOUNT-B, LOC:OLD-WORKS]
+    social_refs: [FAC-ARCHIVE-01, COM-NEIGHBOR-01]
+    character_candidate_refs: [CHAR:anwen_rell, CHAR:tomas_irel]
+    invariants:
+      - compare_multiple_claims
+      - independent_evidence_source
+      - no_forced_truth_conclusion
+      - distinct claim holders or explicit source-perspective semantics
+      - world mystery remains UNKNOWN_BY_DESIGN unless separately reviewed authority resolves it
+  - quest_role: QROLE:NEGOTIATE_SHARED_USE
+    world_refs: [LOC:OLD-WORKS, LOC:RIPARIAN-CORRIDOR, LOC:COMMONS-BELT]
+    social_refs: [FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-MAKERS-01, COM-NEIGHBOR-01]
+    character_candidate_refs: [CHAR:selka_vey, CHAR:maelin_sor]
+    invariants:
+      - no hidden foundational gate
+      - multiple route kinds
+      - ordinary baseline services remain available
+      - concrete contested site chosen explicitly per authored instance
+  - quest_role: QROLE:COMMIT_TO_PROJECT
+    world_refs: [LOC:OLD-WORKS, LOC:RIPARIAN-CORRIDOR, LOC:COMMONS-BELT]
+    social_candidate_refs: [FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-MAKERS-01, FAC-WAYKEEPERS-01]
+    character_candidate_refs: [CHAR:oren_dast, CHAR:selka_vey]
+    branch_refs: [BRANCH_FAMILY:PUBLIC_ALIGNMENT, BRANCH_FAMILY:COMMONS_TRANSFORMATION]
+    invariants:
+      - project/site/faction bindings remain instance-specific
+      - material tradeoffs and affected goals exposed before commitment
+      - irreversibility declared
+      - irreversible route requires branch impact and alternative-goal obligations
+  - quest_role: QROLE:REPAIR_OR_REFRAME
+    world_refs: [LOC:OLD-WORKS]
+    social_candidate_refs: [FAC-MAKERS-01, COM-NEIGHBOR-01, FAC-ARCHIVE-01]
+    character_candidate_refs: [CHAR:jori_marek, CHAR:maelin_sor, CHAR:anwen_rell]
+    relationship_history_refs: [REL_EVT:jori_maelin_unasked_support, REL_EVT:maelin_selka_burden_objection]
+    invariants:
+      - repair never erases relationship or social history
+      - restoration need not recreate identical state
+      - relationship state alone cannot grant information access
+  - quest_role: QROLE:AFTERMATH_AMBITION
+    world_refs: [WORLD_PROMISE:STEWARDSHIP_WATERSHED]
+    character_candidate_refs: [CHAR:oren_dast, CHAR:tomas_irel]
+    branch_refs: [BRANCH_FAMILY:PUBLIC_ALIGNMENT, BRANCH_FAMILY:COMMONS_TRANSFORMATION, BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING]
+    invariants:
+      - exact aftermath goal remains branch-specific
+      - at least one unrelated meaningful long-horizon goal remains
+      - no canonical ending is selected by this fan-in
+
+relationship_and_history_reconciliation:
+  social_relationship_dimensions: [trust, reliability, reciprocity, value_alignment, public_standing, access_state]
+  character_relationship_dimensions: [TRUST, WARMTH, RESPECT, OBLIGATION, RIVALRY, CAUTION]
+  universal_scalar_allowed: false
+  dimension_aliases:
+    - {social: trust, character: TRUST, relation: RELATED_NOT_IDENTICAL}
+    - {social: reliability, character: null, relation: DISTINCT_SOCIAL_EVIDENCE_DIMENSION}
+    - {social: reciprocity, character: OBLIGATION, relation: RELATED_NOT_IDENTICAL}
+    - {social: value_alignment, character: null, relation: DISTINCT_ISSUE_SPECIFIC_DIMENSION}
+    - {social: public_standing, character: null, relation: DISTINCT_PUBLIC_SOCIAL_DIMENSION}
+    - {social: access_state, character: null, relation: DERIVED_ACCESS_NOT_AFFECTION}
+    - {social: null, character: WARMTH, relation: DISTINCT_INTERPERSONAL_DIMENSION}
+    - {social: null, character: RESPECT, relation: DISTINCT_INTERPERSONAL_DIMENSION}
+    - {social: null, character: RIVALRY, relation: DISTINCT_INTERPERSONAL_DIMENSION}
+    - {social: null, character: CAUTION, relation: DISTINCT_INTERPERSONAL_DIMENSION}
+  history_rules:
+    - SocialHistoryEvent and REL_EVT records preserve meaningful history after recovery.
+    - Current dimensions may change only with typed cause/evidence; history itself remains.
+    - Repeated low-risk actions cannot satisfy all social or character dimensions.
+    - Public standing cannot substitute for private trust, character knowledge, confidentiality permission, or objective truth.
+    - Character relationship changes do not automatically alter faction standing and faction standing does not automatically alter character relationships.
+
+originality_and_generation_boundary:
+  external_fictional_expression_adopted: false
+  root_originality_boundaries_preserved: true
+  later_specific_reference_requires: [purpose, provenance, originality_review, rights_review_where_applicable]
+  generated_content:
+    build_time_authority: CANDIDATE_ONLY
+    runtime_direct_canonical_mutation_allowed: false
+    authoritative_effect_requires_validated_command_or_effect: true
+    grounding_failure: DECLARED_FALLBACK_OR_INCONCLUSIVE
+    generation_never_promotes_claim_to_objective_fact: true
+
+wsn_evidence_bindings:
+  source_map_blob_sha: e4f4e964f9b972ebbc22700c7b0a4e23b1c97593
+  result_state_for_all: UNRUN_REQUIRED_EVIDENCE
+  experiments:
+    WSN-E1:
+      title: Contradiction injection
+      fanin_surfaces: [cross_root_bindings, chronology_reconciliation, information_authority_reconciliation, branch_reconciliation]
+      required_attack: Inject contradictory world/social/character/narrative records and verify fail-closed authority, chronology, and branch compatibility.
+    WSN-E2:
+      title: Knowledge/secret leakage
+      fanin_surfaces: [information_authority_reconciliation, relationship_and_history_reconciliation, quest_fanin_bindings]
+      required_attack: Attempt knowledge transfer through player exposure, relationship state, faction standing, shared role, testimony, or generated prose and verify no unauthorized leak/promotion.
+    WSN-E3:
+      title: Quest solvability search
+      fanin_surfaces: [quest_fanin_bindings, progression_gate_reconciliation, branch_reconciliation]
+      required_attack: Search representative route/objective graphs for accidental cycles, mutually exclusive requirements, missing substitutes, and legal failure/recovery gaps.
+    WSN-E4:
+      title: NPC schedule conflict simulation
+      fanin_surfaces: [chronology_reconciliation, quest_fanin_bindings]
+      required_attack: This packet provides role/time-window constraints only; execution remains blocked until concrete schedule instances exist and MUST remain NOT_RUN meanwhile.
+    WSN-E5:
+      title: Branching consequence persistence
+      fanin_surfaces: [branch_reconciliation, relationship_and_history_reconciliation, quest_fanin_bindings]
+      required_attack: Verify high-impact branch facts, lost content, alternatives, mitigation, relationship/history persistence, and migration obligations across branch transitions.
+    WSN-E6:
+      title: Generated-content grounding tournament
+      fanin_surfaces: [originality_and_generation_boundary, information_authority_reconciliation, quest_fanin_bindings]
+      required_attack: Generated candidates must remain grounded to reviewed refs, fail closed on missing grounding, and never gain direct authoritative mutation rights.
+    WSN-E7:
+      title: Semantic-sameness audit
+      fanin_surfaces: [cross_root_bindings, progression_gate_reconciliation, relationship_and_history_reconciliation]
+      required_attack: Detect aliases or generated variants that erase meaningful route, relationship, actor, branch, or consequence distinctions.
+    WSN-E8:
+      title: Long-horizon social/NPC simulation
+      fanin_surfaces: [relationship_and_history_reconciliation, branch_reconciliation, quest_fanin_bindings]
+      required_attack: Test durable history, recovery, long-horizon branch alternatives, actor diversity, and non-degenerate social trajectories without assuming one dominant route.
+    WSN-E9:
+      title: Narrative critic disagreement calibration
+      fanin_surfaces: [information_authority_reconciliation, branch_reconciliation, originality_and_generation_boundary, quest_fanin_bindings]
+      required_attack: Calibrate disagreement on truth/claim separation, branch significance, consequence quality, and originality without converting critic consensus into canon or objective truth.
+
+residual_open_bindings:
+  - open_id: OPEN:SYN:HISTORY-BEARER-CONCRETION
+    class: NONBLOCKING_TYPED_DEFERRAL
+    subject_refs: [ROLE:HISTORY-BEARER, CLM:FRAGMENTATION-ACCOUNT-A, CLM:FRAGMENTATION-ACCOUNT-B]
+    reason: Multiple reviewed history-bearing actors exist and the world mystery intentionally requires conflicting accounts.
+    required_before: CONCRETE_QUEST_INSTANCE_THAT_NAMES_ACCOUNT_HOLDERS
+    route: BOUNDED_CONTENT_INSTANCE_OR_VERTICAL_SLICE
+  - open_id: OPEN:SYN:COMMON-RESOURCE-CONCRETION
+    class: NONBLOCKING_TYPED_DEFERRAL
+    subject_refs: [WORLD_ROLE:COMMON_RESOURCE, WORLD_ROLE:CONTESTED_COMMON, WORLD_ROLE:contested_resource_or_project_site]
+    reason: Several reviewed world surfaces satisfy the abstract role; fan-in must not choose a final main project site.
+    required_before: CONCRETE_PROJECT_OR_QUEST_INSTANCE
+    route: BOUNDED_CONTENT_INSTANCE_OR_VERTICAL_SLICE
+  - open_id: OPEN:SYN:OUTSIDE-PRESSURE
+    class: DELIBERATE_UNKNOWN_BOUNDARY
+    subject_refs: [FACTION_ROLE:OUTSIDE_PRESSURE, WF:OUTER-POLITY-DETAILS, MYS:OUTER-CONNECTIONS]
+    reason: External polity details remain UNKNOWN_BY_DESIGN.
+    required_before: CONTENT_THAT_NAMES_OR_ASSERTS_EXTERNAL_POLITY
+    route: SEPARATELY_REVIEWED_WORLD_SOCIAL_NARRATIVE_EXPANSION
+  - open_id: OPEN:SYN:SENSITIVE-SITE
+    class: NONBLOCKING_TYPED_DEFERRAL
+    subject_refs: [WORLD_ROLE:SENSITIVE_SITE]
+    reason: No reviewed world location is the universal sensitive site.
+    required_before: SENSITIVE_ACCESS_OR_DISCLOSURE_INSTANCE
+    route: BOUNDED_CONTENT_INSTANCE_OR_VERTICAL_SLICE
+  - open_id: OPEN:SYN:CHARACTER-EVENT-CHRONOLOGY
+    class: NONBLOCKING_TYPED_DEFERRAL
+    subject_refs: [REL_EVT:anwen_selka_uncertainty_dispute, REL_EVT:jori_maelin_unasked_support, REL_EVT:jori_oren_joint_attempt, REL_EVT:maelin_selka_burden_objection]
+    reason: Reviewed character history preserves event meaning but does not place these events on world chronology.
+    required_before: CHRONOLOGY_SENSITIVE_DISCOVERY_OR_QUEST_INSTANCE
+    route: BOUNDED_CONTENT_INSTANCE_WITH_EXPLICIT_ORDER_CONSTRAINT
+  - open_id: OPEN:SYN:SOCIAL-PROPOSITION-FACT-BINDINGS
+    class: NONBLOCKING_AUTHORITY_DEFERRAL
+    subject_refs: [PROP_ROLE:SOCIAL_PUBLIC_WORK_RELIABILITY, PROP_ROLE:SOCIAL_STEWARDSHIP_RELIABILITY, PROP_ROLE:SOCIAL_DISCLOSURE_DISPUTE, WORLD_FACT_ROLE:EXTERNAL_REVIEWED_FACT]
+    reason: Social proposition roles are not reviewed world facts; objective-fact binding must be selected case by case.
+    required_before: SOCIAL_CLAIM_WITH_EXTERNALLY_BOUND_TRUTH_RELATION
+    route: EXPLICIT_BINDING_TO_REVIEWED_WORLD_FACT
+  - open_id: OPEN:SYN:GAME-TIME-POLICY
+    class: REQUIRED_DOWNSTREAM_POLICY_BINDING
+    subject_refs: [TIME_WINDOW:WITNESS_AVAILABILITY, TIME_WINDOW:CONSEQUENCE_RESPONSE]
+    reason: Narrative intentionally defers exact GameTimePolicy version and durations.
+    required_before: EXECUTABLE_TIMED_CONTENT_OR_WSN_E4
+    route: BIND_REVIEWED_GAME_TIME_POLICY_WITH_ACCESSIBILITY_SEMANTICS
+  - open_id: OPEN:SYN:SEMANTIC-GRAPH-VERSION
+    class: REQUIRED_DOWNSTREAM_SCHEMA_BINDING
+    subject_refs: [GameSemanticGraph]
+    reason: Narrative intentionally leaves exact graph version provisional.
+    required_before: EXECUTABLE_SEMANTIC_GRAPH_EVIDENCE_OR_CONTENT_COMPILER
+    route: BIND_REVIEWED_GAME_SEMANTIC_GRAPH_SCHEMA
+
+contradiction_ledger:
+  unresolved_blockers: []
+  unresolved_majors: []
+  unresolved_correction_requiring_minors: []
+  resolved_or_avoided:
+    - id: SYN-CHECK-001
+      issue: Shared provisional role names could be mistaken for concrete entity identity.
+      disposition: RESOLVED_BY_TYPED_BINDING_KINDS_AND_NO_AUTHORITY_PROMOTION
+    - id: SYN-CHECK-002
+      issue: Two fragmentation claims use one generic history-bearer role and could be accidentally assigned to one contradictory holder.
+      disposition: RESOLVED_BY_DISTINCT_HOLDER_OR_EXPLICIT_SOURCE_PERSPECTIVE_CONSTRAINT
+    - id: SYN-CHECK-003
+      issue: Social and narrative public-commitment gates could be collapsed into one hidden foundational gate.
+      disposition: RESOLVED_BY_DISTINCT_GATE_IDENTITIES_ZERO_FOUNDATIONAL_COUNT_AND_EXPLICIT_BRANCH_COMPOSITION
+    - id: SYN-CHECK-004
+      issue: Social objective-fact references, character beliefs/secrets, or narrative discovery could silently promote world truth.
+      disposition: RESOLVED_BY_FAIL_CLOSED_INFORMATION_AUTHORITY_RECONCILIATION
+    - id: SYN-CHECK-005
+      issue: Narrative irreversible common transformation could accidentally make ordinary social common-use disagreement irreversible.
+      disposition: RESOLVED_BY_EXPLICIT_HIGH_IMPACT_BRANCH_BINDING_REQUIREMENT
+    - id: SYN-CHECK-006
+      issue: World relative chronology and character/social histories lack exact event dates.
+      disposition: RESOLVED_AS_TYPED_NONBLOCKING_DEFERRAL_WITH_NO_DATE_INVENTION
+    - id: SYN-CHECK-007
+      issue: Social and character relationship dimensions could be flattened into one standing/affection scalar.
+      disposition: RESOLVED_BY_RELATED_NOT_IDENTICAL_DIMENSION_MAPPING_AND_NO_UNIVERSAL_SCALAR
+    - id: SYN-CHECK-008
+      issue: WSN references could be mistaken for evidence PASS after synthesis.
+      disposition: RESOLVED_BY_ALL_EXPERIMENTS_RETAINING_UNRUN_REQUIRED_EVIDENCE
+
+checkable_invariants:
+  - INV:SYN:ROOT-BLOBS-FROZEN
+  - INV:SYN:EXACT-BINDING-UNIQUE-SUPPORT
+  - INV:SYN:AMBIGUITY-REMAINS-SET-OR-UNRESOLVED
+  - INV:SYN:NO-ROOT-REWRITE
+  - INV:SYN:NO-AUTHORITY-PROMOTION-BY-BINDING
+  - INV:SYN:WORLD-FACT-CLAIM-BELIEF-KNOWLEDGE-EXPOSURE-ORTHOGONAL
+  - INV:SYN:PLAYER-EXPOSURE-NOT-CHARACTER-KNOWLEDGE
+  - INV:SYN:RELATIONSHIP-STATE-NOT-INFORMATION-ACCESS
+  - INV:SYN:NO-FOUNDATIONAL-SOCIAL-OR-NARRATIVE-GATE
+  - INV:SYN:BRANCH-EXCLUSIVE-GATES-REQUIRE-SIGNAL-AND-ALTERNATIVES
+  - INV:SYN:IRREVERSIBLE-REQUIRES-BRANCH-IMPACT
+  - INV:SYN:HISTORY-NOT-ERASED-BY-RECOVERY
+  - INV:SYN:NO-EXACT-DATE-INVENTION
+  - INV:SYN:NO-OUTSIDE-POLITY-INVENTION
+  - INV:SYN:NO-GENERATED-DIRECT-AUTHORITY
+  - INV:SYN:WSN-E1-THROUGH-E9-UNRUN
+  - INV:SYN:ENGINE-NEUTRAL
+  - INV:SYN:NOT-CANONICAL
+
+self_review:
+  attacked:
+    - cross_root_identifier_collision
+    - provisional_role_overbinding
+    - chronology_contradiction
+    - claim_belief_knowledge_exposure_authority_leak
+    - hidden_foundational_gate
+    - branch_irreversibility_inflation
+    - relationship_scalar_flattening
+    - history_erasure
+    - quest_softlock_and_missing_recovery_surface
+    - invented_external_canon
+    - generated_content_authority_inflation
+    - originality_boundary_loss
+    - wsn_evidence_inflation
+    - engine_or_readiness_authority_inflation
+  findings:
+    blocker: 0
+    major: 0
+    correction_requiring_minor: 0
+  residual_open_bindings_are_material_defects: false
+  residual_open_bindings_are_explicitly_routed: true
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_REVIEW
+
+downstream:
+  required_fresh_review: true
+  review_mission_hint: W2-CONTENT-SYN-01-REV-01
+  allowed_clean_review_disposition: CLEAN_FOR_BOUNDED_CONTENT_CONSUMPTION
+  vertical_slice_before_clean_review: false
+  wsn_execution_against_fanin_before_clean_review: false
+  integration_authority: false
+  canonicality: NOT_CANONICAL
