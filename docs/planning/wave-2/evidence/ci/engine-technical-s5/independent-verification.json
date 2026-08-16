@@ -11,11 +11,20 @@
       }
     },
     "Defold": {
-      "ok": true,
-      "reasons": [],
+      "ok": false,
+      "reasons": [
+        "semantic:generated_metadata_branches_not_distinct",
+        "semantic:generated_metadata_digest_collision_missing",
+        "semantic:generated_metadata_process:branch_a_generation",
+        "semantic:generated_metadata_process:branch_b_generation",
+        "semantic:generated_metadata_process:resolved_generation",
+        "semantic:generated_metadata_resolution_not_candidate_bound"
+      ],
       "recomputed_aggregate": {
-        "aggregate": "PASS_FOR_COMPARISON",
-        "reasons": [],
+        "aggregate": "INCONCLUSIVE",
+        "reasons": [
+          "non_product_failure_class_present"
+        ],
         "valid_envelope": true
       }
     },
@@ -29,10 +38,13 @@
       }
     }
   },
-  "evidence_run_identity": "31959336546:1:5d4e317d4dbd09899d9fb8c743fa59cff5153708",
+  "contract_generated_metadata_collision_required": true,
+  "evidence_run_identity": "31959757285:1:b7711b63224ee8aab9a06a6c25c5fd1023c3c1dc",
   "negative_attacks": {
     "Bevy": {
       "binding_substitution_rejected": true,
+      "generated_metadata_collision_omission_rejected": true,
+      "generated_metadata_resolution_bypass_rejected": true,
       "lost_nonoverlap_rejected": true,
       "missing_overlap_rejected": true,
       "silent_overlap_rejected": true,
@@ -42,6 +54,8 @@
     },
     "Defold": {
       "binding_substitution_rejected": true,
+      "generated_metadata_collision_omission_rejected": true,
+      "generated_metadata_resolution_bypass_rejected": true,
       "lost_nonoverlap_rejected": true,
       "missing_overlap_rejected": true,
       "silent_overlap_rejected": true,
@@ -51,6 +65,8 @@
     },
     "Godot": {
       "binding_substitution_rejected": true,
+      "generated_metadata_collision_omission_rejected": true,
+      "generated_metadata_resolution_bypass_rejected": true,
       "lost_nonoverlap_rejected": true,
       "missing_overlap_rejected": true,
       "silent_overlap_rejected": true,
@@ -61,8 +77,7 @@
   },
   "provisional_candidates": [
     "Bevy",
-    "Defold",
     "Godot"
   ],
-  "schema": "W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v1"
+  "schema": "W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v2"
 }
