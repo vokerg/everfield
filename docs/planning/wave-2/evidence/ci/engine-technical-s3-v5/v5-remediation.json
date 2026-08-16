@@ -1,0 +1,530 @@
+{
+  "adaptation_validation": {
+    "Bevy": {
+      "adaptation_identity": "559cbedd6f89024b25710172796964e6c2415eee98e475851e226dfa07c11b68",
+      "binding_id": "27709bc3982c55bd09124bc92b94702cbc0b5e2d163ff6217ee5191e46301460",
+      "reasons": [],
+      "result": "ACCEPT"
+    },
+    "Defold": {
+      "adaptation_identity": "03374931e8eacfad3eb4cafc4385ce4061c2ca770358ea2327561fc08196160b",
+      "binding_id": "8d5905387372810278be452105b70bbab12890027a301212d9c81551e94cde2b",
+      "reasons": [],
+      "result": "ACCEPT"
+    },
+    "Godot": {
+      "adaptation_identity": "6df337396e903c8b47dc65b3d32310d7816a160a09b8073be4ec05de491e2244",
+      "binding_id": "cd45ebd9783651b7953b2dd2c00ee329595acfcdb91b85affa4eb3410e785a35",
+      "reasons": [],
+      "result": "ACCEPT"
+    }
+  },
+  "all_executed_candidates_v5_pass_for_comparison": true,
+  "authority_bound_not_run": {
+    "Unity": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY",
+    "Unreal Engine": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY"
+  },
+  "canonicality": "NOT_CANONICAL",
+  "decision_authority": false,
+  "engine_selected": false,
+  "formal_generations": {
+    "Bevy": {
+      "adaptation": {
+        "bounds": {
+          "action_count": 10,
+          "entity_count": 32,
+          "normal_ticks": 600
+        },
+        "candidate_id": "Bevy",
+        "extra_evidence": [],
+        "failure_injections": [
+          "FI-S3-INPUT-PERTURB-v2"
+        ],
+        "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+        "fixed_input_refs": [
+          "SLICE:logical_state",
+          "SLICE:action_vocabulary"
+        ],
+        "harness_id": "W2-ENG-HARNESS-v5",
+        "hidden_context_transfer": false,
+        "mappings": {
+          "exact_seed_input": "EQUIVALENT",
+          "perturbation_distinguishable": "EQUIVALENT",
+          "real_or_shared_rules": "EQUIVALENT",
+          "repeatable_state_events": "EQUIVALENT"
+        },
+        "mechanism_authority": "REAL_OR_SHARED_RULES",
+        "package_target": null,
+        "resource_exception": false,
+        "scenario_id": "S3",
+        "start_profile": {
+          "cache_mode": "COLD",
+          "generated_state_policy": "REGENERATE_FROM_REPO",
+          "profile_id": "W2-ENG-START-COLD-v2",
+          "resource_class": "W2-ENG-HOST-COMMON-v2"
+        },
+        "undocumented_manual_intervention": false
+      },
+      "adaptation_binding_id": "27709bc3982c55bd09124bc92b94702cbc0b5e2d163ff6217ee5191e46301460",
+      "all_attempt_refs": [
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N1",
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N2",
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-FI1"
+      ],
+      "attempts": {
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-FI1": {
+          "attempt_id": "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-FI1",
+          "candidate_generation_id": "GEN-S3-2291aa4fc4b2d1fe8e6916c9",
+          "candidate_id": "Bevy",
+          "failure_class": "NONE",
+          "injection_id": "FI-S3-INPUT-PERTURB-v2",
+          "kind": "FAILURE_INJECTION",
+          "normal_index": null,
+          "reset_id": "RESET-Bevy-FI1",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "44629869c82a67d1f05e246d2fdd283e4b16cb7cb43c3289af41183e21c1cf0b"
+        },
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N1": {
+          "attempt_id": "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N1",
+          "candidate_generation_id": "GEN-S3-2291aa4fc4b2d1fe8e6916c9",
+          "candidate_id": "Bevy",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 1,
+          "reset_id": "RESET-Bevy-N1",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "633611c9f15597e27a92292b549ada1dcd980948391aa8892c00f72e3cd92254"
+        },
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N2": {
+          "attempt_id": "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N2",
+          "candidate_generation_id": "GEN-S3-2291aa4fc4b2d1fe8e6916c9",
+          "candidate_id": "Bevy",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 2,
+          "reset_id": "RESET-Bevy-N2",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "45dc53ce30a42770f651b8b2ffea9d6df59002e11dd4aea985eda0ebd3e1fb69"
+        }
+      },
+      "candidate_id": "Bevy",
+      "candidate_work_id": "WORK-S3-26cab873dbef3f41e34cab61",
+      "generation_id": "GEN-S3-2291aa4fc4b2d1fe8e6916c9",
+      "harness_defect": false,
+      "predecessor_generation_id": null,
+      "repair_change_ref": null,
+      "run_registry_refs": [
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N1",
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N2",
+        "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-FI1"
+      ],
+      "scenario_id": "S3"
+    },
+    "Defold": {
+      "adaptation": {
+        "bounds": {
+          "action_count": 10,
+          "entity_count": 32,
+          "normal_ticks": 600
+        },
+        "candidate_id": "Defold",
+        "extra_evidence": [],
+        "failure_injections": [
+          "FI-S3-INPUT-PERTURB-v2"
+        ],
+        "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+        "fixed_input_refs": [
+          "SLICE:logical_state",
+          "SLICE:action_vocabulary"
+        ],
+        "harness_id": "W2-ENG-HARNESS-v5",
+        "hidden_context_transfer": false,
+        "mappings": {
+          "exact_seed_input": "EQUIVALENT",
+          "perturbation_distinguishable": "EQUIVALENT",
+          "real_or_shared_rules": "EQUIVALENT",
+          "repeatable_state_events": "EQUIVALENT"
+        },
+        "mechanism_authority": "REAL_OR_SHARED_RULES",
+        "package_target": null,
+        "resource_exception": false,
+        "scenario_id": "S3",
+        "start_profile": {
+          "cache_mode": "COLD",
+          "generated_state_policy": "REGENERATE_FROM_REPO",
+          "profile_id": "W2-ENG-START-COLD-v2",
+          "resource_class": "W2-ENG-HOST-COMMON-v2"
+        },
+        "undocumented_manual_intervention": false
+      },
+      "adaptation_binding_id": "8d5905387372810278be452105b70bbab12890027a301212d9c81551e94cde2b",
+      "all_attempt_refs": [
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-N1",
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-N2",
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-FI1"
+      ],
+      "attempts": {
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-FI1": {
+          "attempt_id": "GEN-S3-4e2568f9649df7ee9279e36e-S3-FI1",
+          "candidate_generation_id": "GEN-S3-4e2568f9649df7ee9279e36e",
+          "candidate_id": "Defold",
+          "failure_class": "NONE",
+          "injection_id": "FI-S3-INPUT-PERTURB-v2",
+          "kind": "FAILURE_INJECTION",
+          "normal_index": null,
+          "reset_id": "RESET-Defold-FI1",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "11bd25374f6d47d844869becad5a45553f5ec89921635c2ac074a34ee0c2baff"
+        },
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-N1": {
+          "attempt_id": "GEN-S3-4e2568f9649df7ee9279e36e-S3-N1",
+          "candidate_generation_id": "GEN-S3-4e2568f9649df7ee9279e36e",
+          "candidate_id": "Defold",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 1,
+          "reset_id": "RESET-Defold-N1",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "4ed0a780747d84abfab0fa26f79a0c55b610e9a3f966bd3a5d4a2c987ee5e5d7"
+        },
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-N2": {
+          "attempt_id": "GEN-S3-4e2568f9649df7ee9279e36e-S3-N2",
+          "candidate_generation_id": "GEN-S3-4e2568f9649df7ee9279e36e",
+          "candidate_id": "Defold",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 2,
+          "reset_id": "RESET-Defold-N2",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "1b2ec7fb65d859c656194ba948c28f306d7502a8df242ec3e87e952fa0025fc4"
+        }
+      },
+      "candidate_id": "Defold",
+      "candidate_work_id": "WORK-S3-879834f637537a6220272ea4",
+      "generation_id": "GEN-S3-4e2568f9649df7ee9279e36e",
+      "harness_defect": false,
+      "predecessor_generation_id": null,
+      "repair_change_ref": null,
+      "run_registry_refs": [
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-N1",
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-N2",
+        "GEN-S3-4e2568f9649df7ee9279e36e-S3-FI1"
+      ],
+      "scenario_id": "S3"
+    },
+    "Godot": {
+      "adaptation": {
+        "bounds": {
+          "action_count": 10,
+          "entity_count": 32,
+          "normal_ticks": 600
+        },
+        "candidate_id": "Godot",
+        "extra_evidence": [],
+        "failure_injections": [
+          "FI-S3-INPUT-PERTURB-v2"
+        ],
+        "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+        "fixed_input_refs": [
+          "SLICE:logical_state",
+          "SLICE:action_vocabulary"
+        ],
+        "harness_id": "W2-ENG-HARNESS-v5",
+        "hidden_context_transfer": false,
+        "mappings": {
+          "exact_seed_input": "EQUIVALENT",
+          "perturbation_distinguishable": "EQUIVALENT",
+          "real_or_shared_rules": "EQUIVALENT",
+          "repeatable_state_events": "EQUIVALENT"
+        },
+        "mechanism_authority": "REAL_OR_SHARED_RULES",
+        "package_target": null,
+        "resource_exception": false,
+        "scenario_id": "S3",
+        "start_profile": {
+          "cache_mode": "COLD",
+          "generated_state_policy": "REGENERATE_FROM_REPO",
+          "profile_id": "W2-ENG-START-COLD-v2",
+          "resource_class": "W2-ENG-HOST-COMMON-v2"
+        },
+        "undocumented_manual_intervention": false
+      },
+      "adaptation_binding_id": "cd45ebd9783651b7953b2dd2c00ee329595acfcdb91b85affa4eb3410e785a35",
+      "all_attempt_refs": [
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-N1",
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-N2",
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-FI1"
+      ],
+      "attempts": {
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-FI1": {
+          "attempt_id": "GEN-S3-e80b6400091d93f78cc64d34-S3-FI1",
+          "candidate_generation_id": "GEN-S3-e80b6400091d93f78cc64d34",
+          "candidate_id": "Godot",
+          "failure_class": "NONE",
+          "injection_id": "FI-S3-INPUT-PERTURB-v2",
+          "kind": "FAILURE_INJECTION",
+          "normal_index": null,
+          "reset_id": "RESET-Godot-FI1",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "3ba580240c601763963ea52e894aa3cff720efc46cf01934351c4f391465bb15"
+        },
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-N1": {
+          "attempt_id": "GEN-S3-e80b6400091d93f78cc64d34-S3-N1",
+          "candidate_generation_id": "GEN-S3-e80b6400091d93f78cc64d34",
+          "candidate_id": "Godot",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 1,
+          "reset_id": "RESET-Godot-N1",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "72bfff18960507d5f174e7f535230c713b575a284759b9ed9cf63d43dfaf7841"
+        },
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-N2": {
+          "attempt_id": "GEN-S3-e80b6400091d93f78cc64d34-S3-N2",
+          "candidate_generation_id": "GEN-S3-e80b6400091d93f78cc64d34",
+          "candidate_id": "Godot",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 2,
+          "reset_id": "RESET-Godot-N2",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S3",
+          "workspace_id": "af32b8e8a0f786001ab03ef18e305a7145ebed9ef3436993e45247dc0568f782"
+        }
+      },
+      "candidate_id": "Godot",
+      "candidate_work_id": "WORK-S3-f99eff08783957a68fcfc7bd",
+      "generation_id": "GEN-S3-e80b6400091d93f78cc64d34",
+      "harness_defect": false,
+      "predecessor_generation_id": null,
+      "repair_change_ref": null,
+      "run_registry_refs": [
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-N1",
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-N2",
+        "GEN-S3-e80b6400091d93f78cc64d34-S3-FI1"
+      ],
+      "scenario_id": "S3"
+    }
+  },
+  "historical_issue_82_cells_mutated": false,
+  "historical_issue_82_not_run_cells_preserved": 50,
+  "integration_authority": false,
+  "mission_id": "W2-ENG-TECH-S3-REM-01",
+  "negative_selftests": {
+    "checksum_substitution": true,
+    "duplicate_registry_ref": true,
+    "formal_attempt_without_source_binding": true,
+    "mechanism_authority_downgrade": true,
+    "missing_candidate_generation_id": true,
+    "reused_reset_workspace": true,
+    "source_evidence_hash_substitution": true
+  },
+  "production_implementation_ready": false,
+  "provider_permission": false,
+  "reset_derivation": {
+    "Bevy": {
+      "candidate_native_command_bound_to_attempt_workspace": true,
+      "derived_reset_verified": true,
+      "fresh_successful_process_per_attempt": true,
+      "producer_reset_verified_field_consumed": false,
+      "unique_reset_identity": true,
+      "unique_workspace_identity": true
+    },
+    "Defold": {
+      "candidate_native_command_bound_to_attempt_workspace": true,
+      "derived_reset_verified": true,
+      "fresh_successful_process_per_attempt": true,
+      "producer_reset_verified_field_consumed": false,
+      "unique_reset_identity": true,
+      "unique_workspace_identity": true
+    },
+    "Godot": {
+      "candidate_native_command_bound_to_attempt_workspace": true,
+      "derived_reset_verified": true,
+      "fresh_successful_process_per_attempt": true,
+      "producer_reset_verified_field_consumed": false,
+      "unique_reset_identity": true,
+      "unique_workspace_identity": true
+    }
+  },
+  "review_route": {
+    "finding_closed_by_this_packet": "W2-ENG-TECH-S3-REV-M01",
+    "fresh_review_required": true,
+    "source_review_issue": 353,
+    "source_review_terminal_comment": 5303205496
+  },
+  "reviewed_validator": {
+    "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+    "fixture_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "fixture_validator_executed": true,
+    "harness_id": "W2-ENG-HARNESS-v5",
+    "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+    "validator_id": "W2-ENG-PROTOCOL-VALIDATOR-v5",
+    "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea"
+  },
+  "s1_s2_s4_s10_complete": false,
+  "schema": "W2-ENG-TECH-S3-V5-REMEDIATION-v1",
+  "source": {
+    "artifact_digest": "sha256:068e5ee0df2802d4f52486d0ea42932bb99eaa7a04098298bca8586e65a68c72",
+    "artifact_id": 9249732138,
+    "evidence_commit": "899e0011f49ce8a73f8b543a1c4b054ce517e715",
+    "evidence_sha256": "411641a6fbd6a27bd81adf5747c1bb961e5490fdae72d1eea15ac700dd8c85ca",
+    "failed_history_refs": [
+      {
+        "artifact_digest": "sha256:dee70cb19ad8ae254e69914d5cdc0b15902aaf8410971d14217b0162868d5135",
+        "artifact_id": 9249633980,
+        "evidence_commit": "5d6b940ee3c57ac78f0d40a890cdc6d48891fd4c",
+        "run_id": 31895282641
+      },
+      {
+        "artifact_digest": "sha256:f2258a90ccd47faa6f78bc864fc3578821ca047d6abfd5f08ac7c33d6a578d2a",
+        "artifact_id": 9249687249,
+        "evidence_commit": "67848934b336aa7cde5e391d5cb7fef1766cf462",
+        "run_id": 31895462621
+      }
+    ],
+    "producer_head": "609d463077725acc2c23c894154cca169d6a75fc",
+    "producer_issue": 351,
+    "producer_terminal_comment": 5303181547,
+    "run_id": 31895624493
+  },
+  "source_attempt_bindings": {
+    "Bevy": {
+      "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-FI1": {
+        "source_attempt_id": "BEVY-S3-FI1",
+        "source_expected_checksum": 405122,
+        "source_json_pointer": "/results/Bevy/attempts/2",
+        "source_observed_checksum": 405122,
+        "source_process_command_sha256": "c840583889884d114170b4532587dcf94713b44532ffc4b05564852b4908455c",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      },
+      "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N1": {
+        "source_attempt_id": "BEVY-S3-N1",
+        "source_expected_checksum": 405227,
+        "source_json_pointer": "/results/Bevy/attempts/0",
+        "source_observed_checksum": 405227,
+        "source_process_command_sha256": "9f27a726e85a31a9b53313b68021ed79273d8ae512843b97591ee5cb765ed203",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      },
+      "GEN-S3-2291aa4fc4b2d1fe8e6916c9-S3-N2": {
+        "source_attempt_id": "BEVY-S3-N2",
+        "source_expected_checksum": 405227,
+        "source_json_pointer": "/results/Bevy/attempts/1",
+        "source_observed_checksum": 405227,
+        "source_process_command_sha256": "b4d6d747568e5ecf3a35d24e44d1c26ac24098fc4a7166fbcea6dca1e6d18b04",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      }
+    },
+    "Defold": {
+      "GEN-S3-4e2568f9649df7ee9279e36e-S3-FI1": {
+        "source_attempt_id": "DEFOLD-S3-FI1",
+        "source_expected_checksum": 405122,
+        "source_json_pointer": "/results/Defold/attempts/2",
+        "source_observed_checksum": 405122,
+        "source_process_command_sha256": "5b16cddde0d81949883dca25fa27c9ce24e291ebd62abbf5ee54b528fede43c4",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      },
+      "GEN-S3-4e2568f9649df7ee9279e36e-S3-N1": {
+        "source_attempt_id": "DEFOLD-S3-N1",
+        "source_expected_checksum": 405227,
+        "source_json_pointer": "/results/Defold/attempts/0",
+        "source_observed_checksum": 405227,
+        "source_process_command_sha256": "4d195fc44dbdc872661734701251e2e74c643bac929c3e6172e9c6c1f09c2094",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      },
+      "GEN-S3-4e2568f9649df7ee9279e36e-S3-N2": {
+        "source_attempt_id": "DEFOLD-S3-N2",
+        "source_expected_checksum": 405227,
+        "source_json_pointer": "/results/Defold/attempts/1",
+        "source_observed_checksum": 405227,
+        "source_process_command_sha256": "6e35450ce560f3e0a75b6803cafc73dbc216eca7e4244228aad69678da9d90e7",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      }
+    },
+    "Godot": {
+      "GEN-S3-e80b6400091d93f78cc64d34-S3-FI1": {
+        "source_attempt_id": "GODOT-S3-FI1",
+        "source_expected_checksum": 405122,
+        "source_json_pointer": "/results/Godot/attempts/2",
+        "source_observed_checksum": 405122,
+        "source_process_command_sha256": "8adcce4164c6e0de5203a2c41d6c57f0f831c0c594d8c65ea70549f162382790",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      },
+      "GEN-S3-e80b6400091d93f78cc64d34-S3-N1": {
+        "source_attempt_id": "GODOT-S3-N1",
+        "source_expected_checksum": 405227,
+        "source_json_pointer": "/results/Godot/attempts/0",
+        "source_observed_checksum": 405227,
+        "source_process_command_sha256": "bd1383ec78bfc1af9d933fb73d7d43a9001d03bb93f38fdaacf208f3bc593fad",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      },
+      "GEN-S3-e80b6400091d93f78cc64d34-S3-N2": {
+        "source_attempt_id": "GODOT-S3-N2",
+        "source_expected_checksum": 405227,
+        "source_json_pointer": "/results/Godot/attempts/1",
+        "source_observed_checksum": 405227,
+        "source_process_command_sha256": "35c49023924a11f821d5f7f32dffcb8caee58542f884fc0093e250045c068fa9",
+        "source_process_exit": 0,
+        "source_process_timed_out": false
+      }
+    }
+  },
+  "v5_aggregates": {
+    "Bevy": {
+      "aggregate": "PASS_FOR_COMPARISON",
+      "reasons": [],
+      "valid_envelope": true
+    },
+    "Defold": {
+      "aggregate": "PASS_FOR_COMPARISON",
+      "reasons": [],
+      "valid_envelope": true
+    },
+    "Godot": {
+      "aggregate": "PASS_FOR_COMPARISON",
+      "reasons": [],
+      "valid_envelope": true
+    }
+  },
+  "verification_pass_authority": false
+}

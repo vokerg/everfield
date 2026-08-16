@@ -1,0 +1,112 @@
+name: W2 ENG technical S3 v5 binding remediation
+
+on:
+  push:
+    branches:
+      - planning/issue-355
+    paths:
+      - .github/workflows/w2-eng-technical-s3-v5-bind.yml
+      - tools/planning/engine_technical_s3_v5_bind.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-eng-tech-s3-v5-bind-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bind-v5:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact remediation trigger
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Materialize exact retained producer evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s3-v5
+          mkdir -p "$out"
+          git fetch --no-tags origin planning/issue-351:refs/remotes/origin/planning/issue-351
+          git cat-file -e 899e0011f49ce8a73f8b543a1c4b054ce517e715^{commit}
+          git show 899e0011f49ce8a73f8b543a1c4b054ce517e715:docs/planning/wave-2/evidence/ci/engine-technical-s3/evidence.json > "$out/source-evidence.json"
+          echo '411641a6fbd6a27bd81adf5747c1bb961e5490fdae72d1eea15ac700dd8c85ca  docs/planning/wave-2/evidence/ci/engine-technical-s3-v5/source-evidence.json' | sha256sum -c -
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "source_commit=899e0011f49ce8a73f8b543a1c4b054ce517e715"
+            echo "source_evidence_sha256=411641a6fbd6a27bd81adf5747c1bb961e5490fdae72d1eea15ac700dd8c85ca"
+            echo "source_artifact_id=9249732138"
+            echo "source_artifact_digest=sha256:068e5ee0df2802d4f52486d0ea42932bb99eaa7a04098298bca8586e65a68c72"
+            sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+            sha256sum tools/planning/engine_technical_s3_v5_bind.py
+          } | tee "$out/run-identity.txt"
+
+      - name: Bind retained observations through unchanged v5
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s3-v5
+          python3 -m py_compile tools/planning/engine_technical_s3_v5_bind.py
+          python3 tools/planning/engine_technical_s3_v5_bind.py \
+            --source "$out/source-evidence.json" \
+            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
+            --out "$out/v5-remediation.json" \
+            | tee "$out/summary.log"
+          sha256sum "$out/v5-remediation.json" | tee "$out/v5-remediation.sha256"
+
+      - name: Enforce bounded remediation result
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='docs/planning/wave-2/evidence/ci/engine-technical-s3-v5/v5-remediation.json'
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-TECH-S3-V5-REMEDIATION-v1'
+          assert d['all_executed_candidates_v5_pass_for_comparison'] is True
+          assert set(d['v5_aggregates'])=={'Bevy','Defold','Godot'}
+          for c,a in d['v5_aggregates'].items():
+              assert a=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}, (c,a)
+              assert d['adaptation_validation'][c]['result']=='ACCEPT'
+              assert d['reset_derivation'][c]['derived_reset_verified'] is True
+              assert d['reset_derivation'][c]['producer_reset_verified_field_consumed'] is False
+              assert set(d['source_attempt_bindings'][c])==set(d['formal_generations'][c]['attempts'])
+          assert all(d['negative_selftests'].values())
+          assert d['authority_bound_not_run']=={'Unity':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY','Unreal Engine':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'}
+          assert d['historical_issue_82_not_run_cells_preserved']==50
+          assert d['historical_issue_82_cells_mutated'] is False
+          assert d['engine_selected'] is False
+          assert d['integration_authority'] is False
+          print('bounded v5 remediation envelope validated')
+          PY
+
+      - name: Persist exact remediation packet on task branch
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/engine-technical-s3-v5/
+          if git diff --cached --quiet; then
+            echo "No generated evidence delta"
+            exit 0
+          fi
+          git commit -m "[PLAN-v1][W2-ENG-TECH-S3-REM-01] Record v5 binding run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-355
+
+      - name: Upload immutable remediation bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-eng-tech-s3-v5-rem-01-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/engine-technical-s3-v5/
+          if-no-files-found: error
+          retention-days: 30
