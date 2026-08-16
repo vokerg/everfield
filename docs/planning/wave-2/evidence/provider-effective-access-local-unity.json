@@ -1,0 +1,122 @@
+{
+  "frontier": {
+    "combined_predicate_used_for_individual_unlock": false,
+    "combined_provider_predicate": false,
+    "commercial_license_authority": false,
+    "engine_selected": false,
+    "historical_not_run_cells_mutated": false,
+    "historical_not_run_cells_preserved": 50,
+    "legal_clearance": false,
+    "production_authority": false,
+    "provider_unlocks": {
+      "Unity": true,
+      "Unreal Engine": false
+    },
+    "release_authority": false,
+    "unity_empirical_cells_eligible": true,
+    "unreal_empirical_cells_eligible": false
+  },
+  "mission_id": "W2-ENG-PROVIDER-EFFECTIVE-01",
+  "providers": {
+    "Unity": {
+      "authentication_validated": true,
+      "baseline": "6000.5.6f1",
+      "commercial_authority": false,
+      "credential_values_read": false,
+      "editor_executed": true,
+      "editor_installed": true,
+      "legal_clearance": false,
+      "license_validated": true,
+      "native_s3": {
+        "attempts": [
+          {
+            "attempt_id": "UNITY-S3-N1",
+            "expected_checksum": 405227,
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "native_command": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+            "normal_index": 1,
+            "observed_checksum": 405227,
+            "process": {
+              "exit": 0,
+              "seconds": 7.993,
+              "timed_out": false
+            },
+            "result": "PASS",
+            "scenario_id": "S3"
+          },
+          {
+            "attempt_id": "UNITY-S3-N2",
+            "expected_checksum": 405227,
+            "failure_class": "NONE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "native_command": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+            "normal_index": 2,
+            "observed_checksum": 405227,
+            "process": {
+              "exit": 0,
+              "seconds": 8.122,
+              "timed_out": false
+            },
+            "result": "PASS",
+            "scenario_id": "S3"
+          },
+          {
+            "attempt_id": "UNITY-S3-FI1",
+            "expected_checksum": 405122,
+            "failure_class": "NONE",
+            "injection_id": "FI-S3-INPUT-PERTURB-v2",
+            "kind": "FAILURE_INJECTION",
+            "native_command": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+            "normal_index": null,
+            "observed_checksum": 405122,
+            "process": {
+              "exit": 0,
+              "seconds": 8.215,
+              "timed_out": false
+            },
+            "result": "PASS",
+            "scenario_id": "S3"
+          }
+        ],
+        "harness_id": "W2-ENG-HARNESS-v5",
+        "native_execution": true,
+        "pass": true,
+        "scenario_id": "S3"
+      },
+      "processes": {
+        "auth_status": {
+          "exit": 3,
+          "seconds": 0.057,
+          "timed_out": false
+        },
+        "license_status": {
+          "exit": 0,
+          "seconds": 0.328,
+          "timed_out": false
+        }
+      },
+      "production_authority": false,
+      "provider": "Unity",
+      "release_authority": false,
+      "state": "VALIDATED_DEVELOPMENT_ACCESS"
+    },
+    "Unreal Engine": {
+      "baseline": "5.8",
+      "blocker": "LOCAL_UNITY_PROOF_MODE_DOES_NOT_VALIDATE_UNREAL",
+      "commercial_authority": false,
+      "credential_values_read": false,
+      "legal_clearance": false,
+      "production_authority": false,
+      "provider": "Unreal Engine",
+      "release_authority": false,
+      "state": "NOT_CONFIGURED"
+    }
+  },
+  "schema": "W2-ENG-PROVIDER-EFFECTIVE-ACCESS-v1",
+  "secret_hashes_in_evidence": false,
+  "secret_values_in_evidence": false,
+  "workflow_success_is_not_authority": true
+}
