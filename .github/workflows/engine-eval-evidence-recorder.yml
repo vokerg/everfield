@@ -132,7 +132,13 @@ jobs:
           test "$(git rev-parse HEAD)" = "$SOURCE_HEAD_SHA"
           test -f "$SOURCE_WORKFLOW_PATH"
           test -f tools/planning/record_provider_effective_access.py
-          python3 -m py_compile tools/planning/record_provider_effective_access.py
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("tools/planning/record_provider_effective_access.py")
+          compile(path.read_text(encoding="utf-8"), str(path), "exec")
+          PY
+          test -z "$(git status --porcelain --untracked-files=all)"
           echo "projection code identity: $SOURCE_HEAD_SHA"
 
       - name: Download only the exact upstream run artifact
