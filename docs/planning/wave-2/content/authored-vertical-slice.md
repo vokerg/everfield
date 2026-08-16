@@ -1,276 +1,162 @@
-# W2-CONTENT-VS-01 — bounded authored vertical quest slice
+# W2-CONTENT-VS-01 — authored vertical slice candidate
 
 **Issue:** #434  
-**Slice ID:** `SLICE:OLD-WORKS-CONFLICTING-ACCOUNTS-01`  
-**Working title:** *The Two Accounts at the Old Works*  
+**Slice ID:** `VS:OLD-WORKS-ACCOUNTS-01`  
+**Working title:** *Accounts at the Old Works*  
 **State:** authored candidate / noncanonical  
-**Engine dependency:** none for this bounded authored-planning packet  
-**Required next gate:** fresh independent/degraded-independent review of this exact slice
+**Required next gate:** fresh independent/degraded-independent review of this exact packet
 
-## 1. Scope and frozen authority
+## Scope and frozen authority
 
-This is exactly one authored questline instantiated from the reviewed content fan-in. It is a concrete testable content candidate, not canon, not gameplay implementation, not human-quality evidence, and not empirical WSN evidence.
+This is exactly one bounded questline instantiated from the reviewed `W2-CONTENT-SYN-01` fan-in. The companion `authored-vertical-slice.yaml` is authoritative for exact identities, route predicates, branch impacts, information control, relationship/history records, open bindings, and WSN debt.
 
-Frozen inputs:
+The slice is **not** canon, gameplay/high-throughput implementation, human-quality evidence, empirical WSN evidence, implementation readiness, verification-PASS, release, decision, or integration authority.
 
-- current source `main`: `3de6f8f276cd1479ceccdea7362420f1e0efa030`;
-- canonical Planning Program v1 blob: `e3120ec203c4156328770aa86c12fbb7187966dc`;
-- compiler Issue #365 map blob: `109eca8d2851db118bffe83398b49d68fdb50b31`, which declares `W2-CONTENT-VS-01` as the deferred fan-in successor;
-- fan-in Issue #422 work/head: `db4bfbcc7387425989ec5902103e53953db9576b` / `f6edd59b7d029474b3de95b8f57e71e7e14e5573`;
-- fan-in candidate/map blobs: `accae7e01148f19ef76b4ef0878abd3315901052` / `5858bc3e2d87baa3740b2513b08fb938633bba54`;
-- fan-in integration status: `5307537330`;
-- required fan-in review Issue #426 terminal `5307505361`, work/head `fccbc2812a422f06007c5d565fb3a4e3c887e76c` / `00cb20796871f9b3eb921382d388b215013130c5`, review blob `a154468dcd617c2cb8926b1edb78afe7d4f1942b`, disposition `CLEAN_FOR_BOUNDED_CONTENT_CONSUMPTION`;
-- fan-in review integration status: `5307528080`.
+Frozen inputs include current source `main` `3de6f8f276cd1479ceccdea7362420f1e0efa030`, compiler map blob `109eca8d2851db118bffe83398b49d68fdb50b31`, fan-in map blob `5858bc3e2d87baa3740b2513b08fb938633bba54`, and clean fan-in review Issue #426 disposition `CLEAN_FOR_BOUNDED_CONTENT_CONSUMPTION`.
 
-The machine-readable companion `authored-vertical-slice.yaml` is authoritative for exact slice IDs, route predicates, information-control records, branch impacts, relationship/history events, and evidence debt.
+## Slice-local concretion
 
-## 2. Slice-local concretion without canon promotion
+The quest selects `LOC:OLD-WORKS` as its contested/shared-use site **for this instance only**. That does not make Old Works the universal or canonical contested common.
 
-The reviewed fan-in deliberately leaves several roles plural or unresolved until a concrete content instance exists. This slice activates only the minimum two such deferrals and does so **locally**:
+The two conflicting accounts are given distinct scoped source perspectives:
 
-1. `OPEN:SYN:COMMON-RESOURCE-CONCRETION` selects `LOC:OLD-WORKS` as this quest's contested/shared-use site. It does not make Old Works the game's universal or final central project.
-2. `OPEN:SYN:HISTORY-BEARER-CONCRETION` assigns the two conflicting world claims to distinct source perspectives for this quest:
-   - `CLM:FRAGMENTATION-ACCOUNT-A` → `FAC-ARCHIVE-01`, institutional-record perspective;
-   - `CLM:FRAGMENTATION-ACCOUNT-B` → `COM-NEIGHBOR-01`, lived-community-memory perspective.
+- `CLM:FRAGMENTATION-ACCOUNT-A` → `CHAR:anwen_rell`, provenance-analysis perspective;
+- `CLM:FRAGMENTATION-ACCOUNT-B` → `CHAR:tomas_irel`, contextual-testimony perspective.
 
-That distinct-holder choice satisfies the fan-in constraint against silently giving one concrete holder two incompatible claims. It has no truth effect. `MYS:FRAGMENTATION-CAUSE` remains `UNKNOWN_BY_DESIGN`; neither account is promoted to `WF:FRAGMENTATION-CAUSE`.
+Those assignments have no truth effect. `MYS:FRAGMENTATION-CAUSE` remains unresolved/`UNKNOWN_BY_DESIGN`; neither claim, testimony, observation, relationship state, standing value, nor generated presentation can settle it.
 
-The civic decision surface reuses reviewed `LOC:SETTLEMENT-CORE` plus `FAC-COMMONS-01`. Optional contextual witnesses are `CHAR:tomas_irel` and `CHAR:anwen_rell`, both already listed by the fan-in for investigation/provenance use.
+Scoped institutional/service bindings are `FAC-ARCHIVE-01` for public record/provenance, `FAC-COMMONS-01` for civic negotiation/commitment, and `FAC-MAKERS-01` for the repair-service route. All remain noncanonical instance bindings.
 
-## 3. Quest premise
+## Quest premise and lifecycle
 
-After `EVT:PLAYER-ENTRY`, the player encounters two incompatible accounts of why the inherited works fragmented. The playable question is **not** “which account becomes true?” It is:
+After `EVT:PLAYER-ENTRY`, the player encounters incompatible accounts about the fragmentation of the inherited works and must decide how to proceed with bounded shared use while uncertainty remains. The quest instantiates four reviewed narrative roles:
 
-> How should the community make a bounded shared-use/repair decision at the Old Works when the historical cause remains unresolved and some contextual testimony may be confidential?
+1. `QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS`;
+2. `QROLE:NEGOTIATE_SHARED_USE`;
+3. `QROLE:COMMIT_TO_PROJECT`;
+4. `QROLE:REPAIR_OR_REFRAME`.
 
-That framing lets one authored quest exercise reviewed world truth boundaries, social process, character information control, route plurality, relationship history, branch consequences, recovery, and later WSN evidence surfaces without inventing a canonical mystery answer.
+The graph is deliberately not `start -> goal`.
 
-The quest composes three reviewed narrative roles:
+### Investigation
 
-- `QROLE:INVESTIGATE_CONFLICTING_ACCOUNTS`;
-- `QROLE:NEGOTIATE_SHARED_USE`;
-- `QROLE:REPAIR_OR_REFRAME`.
+A public-record objective is required. Tomas testimony, Old Works material traces, and Anwen's private provenance information are distinct evidence routes. `INFO:anwen_contested_record_provenance_gap` remains `SECRET / CHARACTER_CANDIDATE_FACT_ONLY`, deny-by-default, and optional. The player can complete investigation without receiving it.
 
-No timed quest role, exact schedule, or exact `GameTimePolicy` is introduced.
+The investigation succeeds by comparing the claims against at least one independent evidence source, or by explicitly deferring a conclusion. A forced truth verdict is prohibited.
 
-## 4. Nontrivial lifecycle and route graph
+### Negotiation
 
-The baseline route is deliberately not `start -> goal`.
+The evidence state feeds a scoped shared-use negotiation at `LOC:OLD-WORKS` involving reviewed civic/service/community surfaces and `CHAR:selka_vey` / `CHAR:maelin_sor`. A stalled negotiation has an explicit recovery route: defer commitment while baseline community services and unrelated foundational play remain legal.
 
-### 4.1 Entry and two-source comparison
+### Disclosure and commitment
 
-`QNODE:ORIENT` occurs at or after `EVT:PLAYER-ENTRY` and exposes only the existence of conflicting accounts. The player must then acquire both:
+If Anwen's private provenance gap was legally acquired, the player may disclose it to a scoped audience or withhold/defer it. Both choices instantiate `BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING`; disclosure never promotes the information to world truth.
 
-- `QNODE:ACCOUNT-A` — Account A with `FAC-ARCHIVE-01` provenance;
-- `QNODE:ACCOUNT-B` — Account B with `COM-NEIGHBOR-01` provenance.
+Separately, `GATE:NARR:PUBLIC_COMMITMENT` remains `BRANCH_EXCLUSIVE` and supports two signaled commitment paths:
 
-`QNODE:COMPARE` requires both sources and records their contradiction while preserving unresolved truth.
+- `BRANCH:VS:REPAIR-PILOT` — a bounded, conditionally reversible Old Works repair pilot;
+- `BRANCH:VS:RECORDS-FIRST` — documentation/limited use before broader repair.
 
-### 4.2 Meaningful optional contextual route
+The packet intentionally does **not** instantiate `BRANCH_FAMILY:COMMONS_TRANSFORMATION`; no irreversible transformation is invented merely to make the slice consequential.
 
-From comparison, the player may add context or skip it:
+### Repair or reframe
 
-- `ROUTE:TOMAS-CONTEXT` uses `CHAR:tomas_irel`. Any `GATE:NARR:TRUSTED_TESTIMONY_ACCESS` evaluation remains a **SPECIALIZATION** gate under its reviewed contract. Relationship state alone cannot satisfy it. If Tomas declines or consent is absent, no testimony leaks and the quest remains solvable.
-- `ROUTE:ANWEN-PROVENANCE` uses `CHAR:anwen_rell` and the **OPTIONAL** `GATE:NARR:DEEP_HISTORY_INQUIRY`. It adds provenance analysis, never truth authority.
-- `ROUTE:NO-WITNESS` proceeds with the two independently sourced claims plus site inspection.
+After material consequences, an optional `QROLE:REPAIR_OR_REFRAME` route may change current exposure/relationship dimensions with typed cause/evidence. It cannot erase disclosure or relationship history.
 
-The optional routes therefore change available context and later confidentiality state without becoming mandatory gates.
+## Failure and recovery
 
-### 4.3 Independent site evidence
+The quest keeps legal failure/recovery explicit:
 
-`QNODE:INSPECT-OLD-WORKS` grounds a slice-local observation to `LOC:OLD-WORKS`. Its relation to the fragmentation cause is explicitly `INCONCLUSIVE`. If inspection cannot distinguish the accounts, `FAIL:INSPECTION-INCONCLUSIVE` routes to `RECOVERY:NEGOTIATE-WITH-UNCERTAINTY`; the authoring packet does not tune the evidence until one account wins.
+- unavailable Tomas testimony → public record plus material trace, or defer conclusion;
+- denied Anwen private testimony → continue with non-secret evidence; the secret remains undisclosed;
+- stalled negotiation → defer public commitment and preserve baseline services;
+- declined repair pilot → records-first or reframing remains legal;
+- abandon/reaccept → permitted without erasing material history or resetting claim truth.
 
-### 4.4 Shared-use negotiation
+No required objective depends on a concrete schedule, exact duration, exact calendar, or bound `GameTimePolicy`.
 
-`QNODE:NEGOTIATE` brings the unresolved evidence packet to a bounded shared-use process involving `FAC-COMMONS-01`, `FAC-ARCHIVE-01`, and `COM-NEIGHBOR-01`.
+## Truth, knowledge, exposure, and confidentiality
 
-Three constraints are mandatory:
+The slice preserves the fan-in authority separation:
 
-- no hidden foundational gate;
-- ordinary baseline services and shared play remain available;
-- the decision packet labels unresolved truth and any evidence gap explicitly.
+- objective facts remain world-owned reviewed records;
+- claims do not become facts through repetition/confidence;
+- character knowledge requires valid acquisition/disclosure provenance;
+- player exposure is not character knowledge;
+- relationship state, public standing, shared roles, and generated presentation do not grant secret access;
+- branch-specific information requires compatible branch scope;
+- disclosure of Anwen's candidate information does not settle the world mystery.
 
-The negotiation does not authorize an irreversible transformation of the Old Works.
+The quest remains solvable when private information is unavailable, so optional/specialist access cannot become a hidden foundational gate.
 
-### 4.5 Disclosure branch and terminal outcomes
+## Gates and route plurality
 
-If the player obtained restricted Tomas context, `QNODE:DISCLOSURE-DECISION` instantiates `BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING`:
+The slice retains `ProgressionGateContract` version 1 with foundational gate count `0`:
 
-- `BRANCH:DISCLOSE-WITH-CONSENT` may include Tomas's testimony only after explicit disclosure consent;
-- `BRANCH:WITHHOLD-RESTRICTED` excludes the testimony content and source identity while publicly marking an evidence gap.
+- `GATE:NARR:DEEP_HISTORY_INQUIRY` — `OPTIONAL`;
+- `GATE:NARR:TRUSTED_TESTIMONY_ACCESS` — `SPECIALIZATION`;
+- `GATE:NARR:PUBLIC_COMMITMENT` — `BRANCH_EXCLUSIVE`;
+- `GATE:NARR:RECONCILIATION_ROUTE` — `OPTIONAL`.
 
-If no restricted testimony was acquired, the quest does **not** manufacture a disclosure branch. It ends in `OUTCOME:PUBLIC-UNRESOLVED-NO-RESTRICTED`.
+No relationship score, faction standing scalar, or narrative gate becomes a universal prerequisite for ordinary community interaction, movement, repair/crafting, cultivation, public information, or other foundational shared play.
 
-The two branch outcomes are:
+## Branch impact and continued goals
 
-- `OUTCOME:OPEN-PROVENANCE-PACKET`;
-- `OUTCOME:CONFIDENTIALITY-PRESERVED`.
+All authored high-impact branches carry explicit impact records, pre-commitment signaling, and continued-goal obligations.
 
-Both preserve later `QROLE:NEGOTIATE_SHARED_USE` and `QROLE:REPAIR_OR_REFRAME` goals. Neither is a canonical ending.
+The disclosure family changes testimony/exposure/relationship possibilities while preserving public-record, material-trace, and repair/reframe routes. Later correction can change current effects but cannot erase disclosure history.
 
-## 5. Failure and recovery are first-class
+The public-commitment family changes project/aftermath followups while preserving alternative goals including the other commitment path and a community-mitigation/continued-play route. Shared foundational play remains legal on every authored branch.
 
-The slice retains four explicit fail-closed conditions:
+## Multidimensional relationships and durable history
 
-| Failure | Trigger | Recovery |
-|---|---|---|
-| `FAIL:TOMAS-DECLINES` | optional direct testimony is unavailable or consent is absent | Anwen provenance route or no-witness route |
-| `FAIL:INSPECTION-INCONCLUSIVE` | physical inspection cannot distinguish historical cause accounts | negotiate with uncertainty |
-| `FAIL:SINGLE-CAUSE-PROMOTION` | any route tries to turn a claim/testimony/observation into the objective fragmentation cause | reject transition; return to comparison with mystery unresolved |
-| `FAIL:UNAUTHORIZED-DISCLOSURE` | restricted Tomas content is selected for publication without explicit consent | reject publication; strip restricted content; return to disclosure decision |
+The slice preserves social dimensions (`trust`, `reliability`, `reciprocity`, `value_alignment`, `public_standing`, `access_state`) and character dimensions (`TRUST`, `WARMTH`, `RESPECT`, `OBLIGATION`, `RIVALRY`, `CAUTION`) as distinct semantics. No universal scalar is allowed.
 
-Each failure preserves a legal continuation. No failure is silently removed to make the quest appear solvable.
+It may create `REL_EVT:VS:MAELIN-SELKA-HEARING-01` after the shared-use negotiation. The event records burden/legitimacy tension:
 
-## 6. Truth, knowledge, exposure, and confidentiality
+- RESPECT may remain or increase when burden is acknowledged;
+- CAUTION may increase when burden is dismissed;
+- RESPECT and CAUTION may coexist;
+- current dimensions change only with typed cause/evidence;
+- player visibility requires attendance or validated disclosure;
+- repair cannot erase the event.
 
-The slice maintains four separate information records:
+The predecessor `REL_EVT:maelin_selka_burden_objection` remains durable provenance, and this slice does not assign it an exact world date.
 
-- `SLICE_INFO:ACCOUNT-A` — in-world claim only, Archive provenance;
-- `SLICE_INFO:ACCOUNT-B` — in-world claim only, Neighbor provenance;
-- `SLICE_INFO:TOMAS-CONTEXT` — character testimony candidate only, restricted until explicit disclosure consent;
-- `SLICE_INFO:OLD-WORKS-OBSERVATION` — authored slice observation only, inconclusive relative to the world mystery.
+## Timing, generated content, and originality
 
-The following are prohibited:
+No exact `GameTimePolicy`, NPC schedule, witness duration, response duration, or calendar value is authored. `WSN-E4` therefore remains `NOT_RUN / BLOCKED_BY_EXACT_PREREQUISITE`.
 
-- claim presence or confidence becoming objective truth;
-- player exposure becoming another character's knowledge;
-- relationship or faction standing granting testimony access;
-- generated summaries granting knowledge or authority;
-- withholding private testimony being misrepresented as proof that the testimony is true or false.
+Generated content is not required for the quest semantics. Any later generated presentation is candidate-only and grounded; it cannot create objective facts, secrets, knowledge, relationship state, branch facts, authoritative transitions, or canon.
 
-A public packet may state that an evidence gap exists. Without consent it may not expose Tomas's testimony content or source identity.
+The working title and slice-local labels are replaceable. No external fictional expression is adopted. Later specific external references still require purpose, provenance, originality review, and rights review where applicable.
 
-## 7. Progression gates: zero foundational
+## WSN evidence debt
 
-The shared contract remains `ProgressionGateContract` version `1`, with foundational gate count `0`.
+Authorship creates no empirical PASS and no duplicate experiment identity:
 
-This slice references only optional/specialist gates:
+- **WSN-E1:** contradictory claim/truth/branch compatibility attacks remain required.
+- **WSN-E2:** relationship, standing, player-exposure, and generated-presentation leak attacks remain required.
+- **WSN-E3:** alternative evidence routes, optional-secret non-requirement, failure/recovery, and branch exclusivity require reviewed solvability evidence.
+- **WSN-E4:** remains `NOT_RUN / BLOCKED_BY_EXACT_PREREQUISITE`; the slice has no schedule-dependent required objective.
+- **WSN-E5:** disclosure/history and public-commitment persistence plus alternative-goal retention require reviewed persistence/migration evidence.
+- **WSN-E6:** generated-content grounding/no-authority remains required if generation is exercised.
+- **WSN-E7:** evidence-route and branch semantic distinctness remains required.
+- **WSN-E8:** multidimensional relationship/history trajectories remain limited by retained schedule/time prerequisites.
+- **WSN-E9:** critic disagreement must not convert branch preference or claim confidence into canon/truth.
 
-| Gate | Reviewed class | Slice use | Required for completion |
-|---|---|---|---|
-| `GATE:NARR:TRUSTED_TESTIMONY_ACCESS` | `SPECIALIZATION` | optional Tomas context | no |
-| `GATE:NARR:DEEP_HISTORY_INQUIRY` | `OPTIONAL` | optional Anwen provenance | no |
-| `GATE-SOC-ARCHIVE-SENSITIVE-01` | `OPTIONAL` | optional archival enrichment only | no |
+## Residual open bindings
 
-No gate is reclassified. No relationship score, public-standing scalar, or optional/specialist gate is required for baseline completion.
+Only two fan-in deferrals are resolved, and only locally: contested-site selection and distinct history-bearer assignment. The packet retains the outside-pressure unknown, sensitive-site deferral, predecessor character-event chronology deferral, social-proposition/fact authority deferral, `GameTimePolicy` binding, and semantic-graph-version binding.
 
-## 8. Branch impact and reversibility
+No outside polity is invented; no social assertion is promoted to objective fact; no executable timed/schedule or semantic-graph authority is claimed.
 
-Both authored disclosure branches reuse the reviewed high-impact `BRANCH_FAMILY:DISCLOSURE_OR_WITHHOLDING` and are `CONDITIONALLY_REVERSIBLE`.
+## Producer self-review
 
-### `BRANCH:DISCLOSE-WITH-CONSENT`
+Self-review attacked unsupported cross-root concretion, forced mystery resolution, truth/knowledge leakage, secret access through standing/relationship, route collapse, hidden required optionals, missing failure/recovery, foundational-gate inflation, unsignaled high-impact commitment, inadequate alternatives, relationship scalar collapse/history erasure, invented time/schedules, generated-content authority, outside-polity invention, originality drift, WSN laundering, and engine/readiness authority inflation.
 
-Before commitment, the player is told that public disclosure propagates testimony beyond the direct conversation and that stopping later distribution cannot erase the durable fact that disclosure happened.
-
-`SLICE_IMPACT:DISCLOSE-WITH-CONSENT` records:
-
-- authorized testimony may enter the public packet;
-- every claim remains provenance-labeled and unresolved;
-- future distribution can stop, but disclosure history remains;
-- repair/reframe and shared-use negotiation stay available.
-
-### `BRANCH:WITHHOLD-RESTRICTED`
-
-Before commitment, the player is told that the public packet will omit restricted testimony and visibly retain an evidence gap. A later consented disclosure can reopen the public-record route, but prior confidentiality history remains.
-
-`SLICE_IMPACT:WITHHOLD-RESTRICTED` records:
-
-- restricted content is absent from the public packet;
-- the evidence gap is explicit rather than hidden;
-- both public claim records remain available;
-- repair/reframe and shared-use negotiation stay available.
-
-No irreversible consequence is authored, so compensation for impossible restoration is not triggered. The packet nevertheless carries explicit branch-impact records, mitigation, continued goals, and foundational-play preservation.
-
-## 9. Multidimensional relationships and durable history
-
-The slice preserves the fan-in rule that social and character dimensions are not one universal score.
-
-Character dimensions remain `TRUST`, `WARMTH`, `RESPECT`, `OBLIGATION`, `RIVALRY`, `CAUTION`; social dimensions remain `trust`, `reliability`, `reciprocity`, `value_alignment`, `public_standing`, `access_state`.
-
-Two slice-local relationship events are durable:
-
-- `SLICE_REL_EVT:TOMAS-AUTHORIZED-DISCLOSURE` — bounded `RESPECT` increase after consented disclosure;
-- `SLICE_REL_EVT:TOMAS-CONFIDENTIALITY-HONORED` — bounded `TRUST` increase after honoring confidentiality.
-
-Both are explicitly at or after `EVT:PLAYER-ENTRY`; both preserve history after later relationship changes; neither changes knowledge automatically.
-
-A separate `SLICE_SOCIAL:COMMONS-PROCESS-RECORD` retains process history without synthesizing a universal standing score or access grant. Public standing cannot substitute for private trust, confidentiality permission, character knowledge, or objective truth.
-
-## 10. Chronology and timing remain bounded
-
-All non-retrospective slice nodes and slice-created relationship events occur at or after `EVT:PLAYER-ENTRY`. No exact date is authored.
-
-This packet does not bind:
-
-- an exact `GameTimePolicy`;
-- a concrete NPC schedule;
-- a witness-availability duration;
-- a consequence-response duration;
-- an exact calendar.
-
-`WSN-E4` therefore remains `NOT_RUN / BLOCKED_BY_EXACT_PREREQUISITE`.
-
-## 11. Generated-content and originality boundary
-
-Generated presentation may create wording variants or summaries only when grounded to the exact slice/fan-in refs. It cannot create objective facts, secrets, character knowledge, relationship state, branch facts, authoritative transitions, or canon. Grounding failure must use a declared fallback or remain inconclusive.
-
-The slice adopts no external fictional expression. The working title and all slice-local IDs are provisional Everfield candidate material. Any later external reference requires explicit purpose, provenance, originality review, and rights review where applicable.
-
-## 12. WSN evidence debt
-
-Authorship does not upgrade any WSN result. The slice maps its claims to the existing experiment IDs only:
-
-| WSN ID | Slice surface | Required later attack |
-|---|---|---|
-| `WSN-E1` | claim/branch compatibility | inject contradictions; reject truth or incompatible-branch promotion |
-| `WSN-E2` | testimony, exposure, relationships, generation | attempt unauthorized knowledge/secret leaks through every non-authoritative route |
-| `WSN-E3` | quest graph, alternatives, failures/recovery, gates | search route combinations for dead ends, cycles, missing substitutes, and soft locks |
-| `WSN-E4` | timing/schedule interface | remain `NOT_RUN` until reviewed time policy + concrete schedules exist |
-| `WSN-E5` | branch impacts and durable history | persist/reload/migrate branch state, history, continued goals, and mitigation |
-| `WSN-E6` | generated presentation | reject ungrounded generation and direct authoritative mutation |
-| `WSN-E7` | witness routes + disclosure branches | prove route/branch variants are semantically distinct rather than presentation aliases |
-| `WSN-E8` | multidimensional relationship/history + continuations | run long-horizon traces without scalar collapse or history erasure |
-| `WSN-E9` | truth separation + branch significance + originality | preserve critic disagreement without granting truth/canon authority |
-
-No duplicate WSN identity is created and no authored outcome is represented as empirical PASS.
-
-## 13. Residual open-binding ledger
-
-The slice resolves only what its scope requires:
-
-- common-resource concretion → `LOC:OLD-WORKS`, **slice-local only**;
-- history-bearer concretion → distinct Account A / Account B holders, **slice-local only**.
-
-The following remain open:
-
-- `OPEN:SYN:OUTSIDE-PRESSURE` — not activated; no external polity is named;
-- `OPEN:SYN:SENSITIVE-SITE` — not activated;
-- `OPEN:SYN:CHARACTER-EVENT-CHRONOLOGY` — existing root relationship events are not used for chronology-sensitive claims; new slice events have explicit order constraints;
-- `OPEN:SYN:SOCIAL-PROPOSITION-FACT-BINDINGS` — no social assertion is bound into objective fact authority;
-- `OPEN:SYN:GAME-TIME-POLICY` — still blocks timed execution and `WSN-E4`;
-- `OPEN:SYN:SEMANTIC-GRAPH-VERSION` — remains unbound; this packet claims no executable graph-schema evidence.
-
-## 14. Self-review and authority boundary
-
-Self-review attacked:
-
-- unsupported cross-root concretion;
-- truth/claim/knowledge/exposure/confidentiality leakage;
-- trivial route collapse or a disguised `start -> goal`;
-- hidden foundational or reclassified progression gates;
-- relationship scalar flattening and history erasure;
-- weak branch signaling, recovery, mitigation, or continued goals;
-- generated-content authority inflation;
-- invented time policy/schedules;
-- external-polity or hidden-canon invention;
-- WSN evidence laundering;
-- engine/implementation/readiness/release/decision/integration authority inflation.
-
-Result: `0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR` in this authored-content scope.
+Result: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR** in authored-content scope.
 
 Disposition: `SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_REVIEW`.
 
-A fresh reviewer must judge the exact producer packet before bounded downstream consumption. Suggested mission: `W2-CONTENT-VS-01-REV-01`.
-
-This packet grants **no** canon, empirical WSN PASS, engine selection, gameplay/high-throughput implementation, implementation readiness, verification-PASS, provider/legal/platform/release, decision, or integration authority.
+A fresh reviewer must judge the exact producer packet. Suggested mission: `W2-CONTENT-VS-01-REV-01`. A clean review may authorize only bounded downstream consumption of this exact noncanonical slice under then-current authority; it does not by itself grant integration or any higher authority.
