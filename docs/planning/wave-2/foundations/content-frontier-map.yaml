@@ -1,0 +1,206 @@
+schema: content_frontier_map_v1
+mission_id: W2-CONTENT-GATE-01
+issue: 365
+state: PRODUCER_CANDIDATE_NONCANONICAL
+claim_base_main_sha: c043c47acfa3212ca08e87725b25e47a20e8e5e6
+canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+canonical_binding_comment_id: 5245368879
+owner_directives:
+  convergence: 5277825639
+  parallel_frontier: 5305563203
+policy:
+  frontier_target_min: 4
+  frontier_target_max: 6
+  selected_root_count: 4
+  selected_root_count_reason: >-
+    A fifth initial authored vertical-slice/content execution node would consume multiple
+    root outputs and therefore encode a real fan-in dependency; four roots maximize safe
+    parallel width without manufacturing false independence.
+  root_activation: BLOCKED_PENDING_CONTENT_FRONTIER_REVIEW
+  clean_activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_ACTIVATION
+  unbounded_backlog_allowed: false
+  gameplay_implementation_authorized: false
+  engine_selection_authorized: false
+  canonical_content_authority: false
+  integration_authority: false
+immutable_inputs:
+  W1_DES_03:
+    issue: 31
+    work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+    path: docs/planning/wave-1/proposals/world-social-narrative-content.md
+  W1_REV_GAME:
+    issue: 36
+    work_sha: 29b97b5bedee5a9f5317308a74caf38538bfbd70
+    disposition: CHANGES_REQUIRED
+  W1_SYN_GAME:
+    issue: 39
+    work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+  W2_GAME_GATE_01:
+    issue: 196
+    work_sha: d32aa80fd77c7caf6995ecb71b311da5a457c3b6
+    terminal_comment_id: 5281402332
+existing_evidence_routes:
+  rule: DO_NOT_DUPLICATE_EXISTING_WSN_EXPERIMENT_IDENTITIES
+  source: W2_GAME_GATE_01
+  wsn_experiments: WSN-E1..WSN-E9
+  note: >-
+    Initial content roots create reviewed candidate definitions. Existing WSN evidence
+    tranches remain the execution authority for contradiction, knowledge leakage, quest
+    solvability, schedules, branching consequences, generated-content grounding,
+    semantic sameness, long-horizon social simulation, and critic calibration.
+independence_invariants:
+  - MUTABLE_PATHS_DISJOINT
+  - COMMON_INPUTS_IMMUTABLE
+  - NO_SIBLING_OUTPUT_REQUIRED_FOR_ROOT_COMPLETION
+  - CROSS_ROOT_REFS_USE_PROVISIONAL_TYPED_ROLE_IDS
+  - CROSS_ROOT_CONTRADICTIONS_ROUTE_TO_FAN_IN
+  - NO_PRODUCER_CANONICALITY
+  - ENGINE_CHOICE_NOT_A_DEFAULT_PREREQUISITE
+roots:
+  - mission_id: W2-CONTENT-WORLD-01
+    title: World and setting foundation candidate
+    conflict_domain: CONTENT_WORLD
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    dependencies:
+      - W2-CONTENT-GATE-01_EXACT_REVIEWED_WORK
+      - CONTENT_FRONTIER_REVIEW_CLEAN
+    authoritative_inputs:
+      - W1_DES_03
+      - W1_SYN_GAME
+      - CURRENT_WAVE1_FOUNDATION
+    owned_paths:
+      - docs/planning/wave-2/content/world-setting-foundation.md
+      - docs/planning/wave-2/content/world-setting-facts.yaml
+      - docs/planning/handoffs/issue-N.md
+    outputs:
+      - bounded setting/world candidate
+      - typed world-fact and chronology candidate
+      - explicit assumptions and reopen conditions
+    forbidden_scope:
+      - final factions
+      - final principal cast
+      - final main plot or quest catalog
+      - gameplay implementation
+    required_review: FRESH_CONTENT_ROOT_REVIEW
+    fan_in: W2-CONTENT-SYN-01
+  - mission_id: W2-CONTENT-SOCIAL-01
+    title: Factions institutions and social-conflict topology candidate
+    conflict_domain: CONTENT_SOCIAL
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    dependencies:
+      - W2-CONTENT-GATE-01_EXACT_REVIEWED_WORK
+      - CONTENT_FRONTIER_REVIEW_CLEAN
+    authoritative_inputs:
+      - W1_DES_03
+      - W1_SYN_GAME
+      - CURRENT_WAVE1_FOUNDATION
+    owned_paths:
+      - docs/planning/wave-2/content/factions-social-topology.md
+      - docs/planning/wave-2/content/factions-social-topology.yaml
+      - docs/planning/handoffs/issue-N.md
+    outputs:
+      - bounded faction/institution candidate
+      - conflict/cooperation topology
+      - typed social consequence and gate interfaces
+    forbidden_scope:
+      - final world geography or chronology
+      - final principal character arcs
+      - final main plot
+      - gameplay implementation
+    required_review: FRESH_CONTENT_ROOT_REVIEW
+    fan_in: W2-CONTENT-SYN-01
+  - mission_id: W2-CONTENT-CHAR-01
+    title: Principal character and relationship candidate
+    conflict_domain: CONTENT_CHARACTER
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    dependencies:
+      - W2-CONTENT-GATE-01_EXACT_REVIEWED_WORK
+      - CONTENT_FRONTIER_REVIEW_CLEAN
+    authoritative_inputs:
+      - W1_DES_03
+      - W1_SYN_GAME
+      - CURRENT_WAVE1_FOUNDATION
+    owned_paths:
+      - docs/planning/wave-2/content/principal-characters-relationships.md
+      - docs/planning/wave-2/content/principal-characters-relationships.yaml
+      - docs/planning/handoffs/issue-N.md
+    outputs:
+      - bounded principal-cast candidate
+      - relationship architecture
+      - knowledge belief secret and change-arc interfaces
+    forbidden_scope:
+      - final faction definitions
+      - final world history and geography
+      - final main plot or quest catalog
+      - full dialogue corpus
+      - gameplay implementation
+    required_review: FRESH_CONTENT_ROOT_REVIEW
+    fan_in: W2-CONTENT-SYN-01
+  - mission_id: W2-CONTENT-NARR-01
+    title: Narrative quest and consequence architecture candidate
+    conflict_domain: CONTENT_NARRATIVE
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    dependencies:
+      - W2-CONTENT-GATE-01_EXACT_REVIEWED_WORK
+      - CONTENT_FRONTIER_REVIEW_CLEAN
+    authoritative_inputs:
+      - W1_DES_03
+      - W1_SYN_GAME
+      - CURRENT_WAVE1_FOUNDATION
+    owned_paths:
+      - docs/planning/wave-2/content/narrative-quest-architecture.md
+      - docs/planning/wave-2/content/narrative-quest-architecture.yaml
+      - docs/planning/handoffs/issue-N.md
+    outputs:
+      - bounded narrative structure candidate
+      - quest grammar and story-state model
+      - consequence branch failure and recovery interfaces
+    forbidden_scope:
+      - final setting bible
+      - final faction details
+      - final character biographies
+      - full authored quest/dialogue catalog
+      - engine-specific scripting syntax
+      - gameplay implementation
+    required_review: FRESH_CONTENT_ROOT_REVIEW
+    fan_in: W2-CONTENT-SYN-01
+fan_in:
+  mission_hint: W2-CONTENT-SYN-01
+  state: DEFERRED_UNTIL_ALL_ROOTS_REVIEWED
+  consumes:
+    - W2-CONTENT-WORLD-01_REVIEWED
+    - W2-CONTENT-SOCIAL-01_REVIEWED
+    - W2-CONTENT-CHAR-01_REVIEWED
+    - W2-CONTENT-NARR-01_REVIEWED
+  responsibilities:
+    - reconcile concrete identifiers and terminology
+    - resolve chronology world faction character narrative contradictions
+    - enforce progression gate classifications
+    - reconcile knowledge secrets and branch facts
+    - reconcile branch-impact and recovery obligations
+    - preserve originality and evaluator-trust boundaries
+    - bind remaining WSN evidence debt without marking it passed
+later_successors:
+  - mission_hint: W2-CONTENT-VS-01
+    state: DEFERRED_FAN_IN_SUCCESSOR
+    reason: >-
+      A concrete authored questline with final world/faction/character/narrative references
+      genuinely depends on reviewed fan-in and is therefore not an initial root.
+  - route: EXISTING_W2_GAME_GATE_WSN_EVIDENCE_TRANCHES
+    state: DEFERRED_UNTIL_REVIEWED_CONTENT_PACKET
+review:
+  required: true
+  mode: FRESH_INDEPENDENT_OR_DEGRADED_INDEPENDENT
+  allowed_dispositions:
+    - CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_ACTIVATION
+    - CHANGES_NEEDED
+    - INVALIDATED
+  attacks:
+    - hidden_cross_root_dependencies
+    - overlapping_mutable_paths
+    - accidental_engine_coupling
+    - artificial_serialization
+    - premature_story_canon
+    - duplicate_WSN_evidence_work
+    - insufficient_fan_in
+    - unbounded_backlog_leakage
