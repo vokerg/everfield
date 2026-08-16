@@ -1,0 +1,125 @@
+name: W2 ENG technical S4 empirical tranche
+
+on:
+  push:
+    branches:
+      - planning/issue-360
+    paths:
+      - .github/workflows/w2-eng-technical-s4.yml
+      - tools/planning/engine_technical_s4_probe.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-eng-tech-s4-01-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  technical-s4:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact triggering commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Provision exact Defold-compatible Java
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Validate current harness and tranche runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s4
+          mkdir -p "$out"
+          python3 -m py_compile tools/planning/engine_technical_s4_probe.py tools/planning/engine_toolchain_probe.py
+          python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py > "$out/harness-validator.json"
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "runner_os=${RUNNER_OS}"
+            echo "runner_arch=${RUNNER_ARCH}"
+            echo "image_os=${ImageOS:-unknown}"
+            echo "image_version=${ImageVersion:-unknown}"
+            sha256sum tools/planning/engine_technical_s4_probe.py
+            sha256sum tools/planning/engine_toolchain_probe.py
+            sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+            sha256sum docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
+            sha256sum docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
+          } | tee "$out/run-identity.txt"
+
+      - name: Execute real-engine S4 tranche
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s4
+          python3 tools/planning/engine_technical_s4_probe.py \
+            --out "$out/evidence.json" \
+            --bevy-lock docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock \
+            --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
+            | tee "$out/summary.log"
+          sha256sum "$out/evidence.json" | tee "$out/evidence.sha256"
+
+      - name: Validate fail-closed evidence envelope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='docs/planning/wave-2/evidence/ci/engine-technical-s4/evidence.json'
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-TECHNICAL-S4-v1'
+          assert d['scenario_id']=='S4'
+          assert d['scenario_contract']['required_injection']=='FI-S4-INCOMPAT-TUPLE-v2'
+          assert d['historical_issue_82_not_run_cells_preserved']==50
+          assert d['historical_issue_82_cells_mutated'] is False
+          assert d['reviewed_s3_provenance_preserved'] is True
+          assert d['partial_candidate_ranking_permitted'] is False
+          assert d['engine_selected'] is False
+          assert d['production_implementation_ready'] is False
+          assert d['verification_pass_authority'] is False
+          assert d['decision_authority'] is False
+          assert d['canonicality']=='NOT_CANONICAL'
+          assert d['integration_authority'] is False
+          assert all(d['negative_selftests'].values())
+          for name in ('Unity','Unreal Engine'):
+              assert d['results'][name]['producer_disposition']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'
+          for name in d['provisional_review_pending_s4_pass_candidates']:
+              f=d['results'][name]['formal_v5']
+              assert f['adaptation_validation']['result']=='ACCEPT'
+              assert f['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}
+              assert set(f['generation']['run_registry_refs'])==set(f['source_bindings'])
+          print(json.dumps({'validated':True,'provisional_review_pending_s4_pass_candidates':d['provisional_review_pending_s4_pass_candidates']},sort_keys=True))
+          PY
+
+      - name: Persist exact run evidence on task branch
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/engine-technical-s4/
+          if git diff --cached --quiet; then
+            echo "No generated evidence delta"
+            exit 0
+          fi
+          git commit -m "[PLAN-v1][W2-ENG-TECH-S4-01] Record empirical S4 run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-360
+
+      - name: Upload immutable run bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-eng-tech-s4-01-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/engine-technical-s4/
+          if-no-files-found: error
+          retention-days: 30
