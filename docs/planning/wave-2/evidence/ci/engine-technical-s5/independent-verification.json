@@ -11,20 +11,11 @@
       }
     },
     "Defold": {
-      "ok": false,
-      "reasons": [
-        "semantic:generated_metadata_branches_not_distinct",
-        "semantic:generated_metadata_digest_collision_missing",
-        "semantic:generated_metadata_process:branch_a_generation",
-        "semantic:generated_metadata_process:branch_b_generation",
-        "semantic:generated_metadata_process:resolved_generation",
-        "semantic:generated_metadata_resolution_not_candidate_bound"
-      ],
+      "ok": true,
+      "reasons": [],
       "recomputed_aggregate": {
-        "aggregate": "INCONCLUSIVE",
-        "reasons": [
-          "non_product_failure_class_present"
-        ],
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
         "valid_envelope": true
       }
     },
@@ -39,7 +30,7 @@
     }
   },
   "contract_generated_metadata_collision_required": true,
-  "evidence_run_identity": "31959757285:1:b7711b63224ee8aab9a06a6c25c5fd1023c3c1dc",
+  "evidence_run_identity": "31960259059:1:f515bbcba6e53f56534bce5f58a3869d006aa3d5",
   "negative_attacks": {
     "Bevy": {
       "binding_substitution_rejected": true,
@@ -77,6 +68,7 @@
   },
   "provisional_candidates": [
     "Bevy",
+    "Defold",
     "Godot"
   ],
   "schema": "W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v2"
