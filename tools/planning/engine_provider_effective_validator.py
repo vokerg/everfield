@@ -358,41 +358,97 @@ def _header_value(headers: dict[str, str], name: str) -> str | None:
     return None
 
 
-def parse_ghcr_bearer_challenge(header: str | None) -> dict[str, str] | None:
-    """Accept only the exact HTTPS GHCR pull challenge used for UE access."""
+def _empty_ghcr_auth_trace() -> dict[str, Any]:
+    """Return the complete sanitized auth-stage envelope; never add raw auth data."""
+    return {
+        "initial_status": None,
+        "challenge_present": False,
+        "challenge_scheme_bearer": False,
+        "challenge_realm_matches": False,
+        "challenge_service_matches": False,
+        "challenge_scope_matches": False,
+        "challenge_accepted": False,
+        "token_exchange_attempted": False,
+        "token_exchange_status": None,
+        "token_response_valid": False,
+        "resource_retry_attempted": False,
+        "resource_retry_status": None,
+        "failure_stage": "INITIAL_RESOURCE_FAILURE",
+    }
+
+
+def _ghcr_trace_stage(trace: dict[str, Any]) -> str:
+    initial = trace.get("initial_status")
+    if initial == 200:
+        return "SUCCESS"
+    if initial != 401:
+        return "INITIAL_RESOURCE_FAILURE"
+    if not trace.get("challenge_accepted"):
+        return "CHALLENGE_MISSING_OR_REJECTED"
+    if trace.get("token_exchange_status") != 200:
+        return "TOKEN_EXCHANGE_FAILED"
+    if not trace.get("token_response_valid"):
+        return "TOKEN_RESPONSE_INVALID"
+    if not trace.get("resource_retry_attempted") or trace.get("resource_retry_status") != 200:
+        return "RESOURCE_RETRY_FAILED"
+    return "SUCCESS"
+
+
+def _ghcr_challenge_details(header: str | None) -> tuple[dict[str, str] | None, dict[str, bool]]:
+    checks = {
+        "challenge_present": bool(header),
+        "challenge_scheme_bearer": False,
+        "challenge_realm_matches": False,
+        "challenge_service_matches": False,
+        "challenge_scope_matches": False,
+        "challenge_accepted": False,
+    }
     if not header or not re.match(r"^Bearer\s+", header, re.IGNORECASE):
-        return None
+        return None, checks
+    checks["challenge_scheme_bearer"] = True
     payload = re.sub(r"^Bearer\s+", "", header, count=1, flags=re.IGNORECASE)
     matches = re.findall(r'([A-Za-z][A-Za-z0-9_-]*)="([^"\\]*)"', payload)
     if not matches:
-        return None
+        return None, checks
     params: dict[str, str] = {}
     for key, value in matches:
         lowered = key.lower()
         if lowered in params:
-            return None
+            return None, checks
         params[lowered] = value
     realm = params.get("realm", "")
     service = params.get("service", "")
     scope = params.get("scope", "")
     parsed = urllib.parse.urlsplit(realm)
-    if (
-        parsed.scheme.lower() != "https"
-        or parsed.hostname != GHCR_AUTH_HOST
-        or parsed.username is not None
-        or parsed.password is not None
-        or parsed.port not in (None, 443)
-        or parsed.path != GHCR_AUTH_PATH
-        or parsed.query
-        or parsed.fragment
-    ):
-        return None
-    if service != GHCR_SERVICE or scope != UNREAL_GHCR_SCOPE:
-        return None
-    return {"realm": realm, "service": service, "scope": scope}
+    checks["challenge_realm_matches"] = bool(
+        parsed.scheme.lower() == "https"
+        and parsed.hostname == GHCR_AUTH_HOST
+        and parsed.username is None
+        and parsed.password is None
+        and parsed.port in (None, 443)
+        and parsed.path == GHCR_AUTH_PATH
+        and not parsed.query
+        and not parsed.fragment
+    )
+    checks["challenge_service_matches"] = service == GHCR_SERVICE
+    checks["challenge_scope_matches"] = scope == UNREAL_GHCR_SCOPE
+    checks["challenge_accepted"] = bool(
+        checks["challenge_realm_matches"]
+        and checks["challenge_service_matches"]
+        and checks["challenge_scope_matches"]
+    )
+    if not checks["challenge_accepted"]:
+        return None, checks
+    return {"realm": realm, "service": service, "scope": scope}, checks
 
 
-def _ghcr_bearer_token(challenge: dict[str, str], username: str, token: str) -> str | None:
+def parse_ghcr_bearer_challenge(header: str | None) -> dict[str, str] | None:
+    """Accept only the exact HTTPS GHCR pull challenge used for UE access."""
+    challenge, _ = _ghcr_challenge_details(header)
+    return challenge
+
+
+def _ghcr_bearer_token(challenge: dict[str, str], username: str, token: str) -> tuple[str | None, int, bool]:
     credentials = base64.b64encode(f"{username}:{token}".encode()).decode()
     query = urllib.parse.urlencode({"service": challenge["service"], "scope": challenge["scope"]})
     status, _, body = _http_request(
@@ -400,37 +456,57 @@ def _ghcr_bearer_token(challenge: dict[str, str], username: str, token: str) -> 
         {"Authorization": f"Basic {credentials}", "Accept": "application/json"},
     )
     if status != 200:
-        return None
+        return None, status, False
     try:
         data = json.loads(body)
     except (json.JSONDecodeError, UnicodeDecodeError):
-        return None
+        return None, status, False
     if not isinstance(data, dict):
-        return None
+        return None, status, False
     bearer = data.get("token")
     access_token = data.get("access_token")
     if bearer and access_token and bearer != access_token:
-        return None
+        return None, status, False
     value = bearer or access_token
-    return value if isinstance(value, str) and 16 <= len(value) <= 65536 else None
+    valid = isinstance(value, str) and 16 <= len(value) <= 65536
+    return (value if valid else None), status, valid
 
 
-def registry_request(path: str, username: str, token: str) -> tuple[int, dict[str, str], bytes]:
-    """Perform one GHCR Registry v2 request with bounded Bearer challenge handling."""
+def registry_request(path: str, username: str, token: str) -> tuple[int, dict[str, str], bytes, dict[str, Any]]:
+    """Perform one GHCR Registry v2 request and emit only sanitized auth-stage facts."""
+    trace = _empty_ghcr_auth_trace()
     if not path or path.startswith("/") or "//" in path or "\\" in path:
-        return 400, {}, b""
+        trace["initial_status"] = 400
+        trace["failure_stage"] = _ghcr_trace_stage(trace)
+        return 400, {}, b"", trace
     resource_url = f"{GHCR_REGISTRY_ORIGIN}/v2/{path}"
     accept = "application/vnd.oci.image.manifest.v1+json, application/json"
     status, headers, body = _http_request(resource_url, {"Accept": accept})
+    trace["initial_status"] = status
     if status != 401:
-        return status, headers, body
-    challenge = parse_ghcr_bearer_challenge(_header_value(headers, "WWW-Authenticate"))
+        trace["failure_stage"] = _ghcr_trace_stage(trace)
+        return status, headers, body, trace
+    challenge_header = _header_value(headers, "WWW-Authenticate")
+    challenge, checks = _ghcr_challenge_details(challenge_header)
+    trace.update(checks)
     if challenge is None:
-        return status, headers, body
-    bearer = _ghcr_bearer_token(challenge, username, token)
+        trace["failure_stage"] = _ghcr_trace_stage(trace)
+        return status, headers, body, trace
+    trace["token_exchange_attempted"] = True
+    bearer, token_status, token_valid = _ghcr_bearer_token(challenge, username, token)
+    trace["token_exchange_status"] = token_status
+    trace["token_response_valid"] = token_valid
     if bearer is None:
-        return 401, {}, b""
-    return _http_request(resource_url, {"Authorization": f"Bearer {bearer}", "Accept": accept})
+        trace["failure_stage"] = _ghcr_trace_stage(trace)
+        return 401, {}, b"", trace
+    trace["resource_retry_attempted"] = True
+    retry_status, retry_headers, retry_body = _http_request(
+        resource_url,
+        {"Authorization": f"Bearer {bearer}", "Accept": accept},
+    )
+    trace["resource_retry_status"] = retry_status
+    trace["failure_stage"] = _ghcr_trace_stage(trace)
+    return retry_status, retry_headers, retry_body, trace
 
 
 def select_unreal_tag(tags: list[str]) -> str | None:
@@ -530,11 +606,12 @@ def validate_unreal() -> dict[str, Any]:
     if not (username and token):
         base["blocker"] = "UNREAL_GITHUB_USERNAME_AND_TOKEN_NOT_CONFIGURED"
         return base
-    status, headers, body = registry_request(f"{UNREAL_GHCR_REPOSITORY}/tags/list?n=1000", username, token)
+    status, headers, body, auth_trace = registry_request(f"{UNREAL_GHCR_REPOSITORY}/tags/list?n=1000", username, token)
     if status != 200:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "EPIC_GHCR_AUTHORIZATION_OR_ENTITLEMENT_FAILED"
         base["registry_http_status"] = status
+        base["registry_auth_trace"] = auth_trace
         return base
     try:
         tags = json.loads(body).get("tags", [])
@@ -545,11 +622,12 @@ def validate_unreal() -> dict[str, Any]:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "NO_VENDOR_PUBLISHED_UE_5_8_DEVELOPMENT_TAG_OBSERVED"
         return base
-    manifest_status, manifest_headers, _ = registry_request(f"{UNREAL_GHCR_REPOSITORY}/manifests/{tag}", username, token)
+    manifest_status, manifest_headers, _, manifest_auth_trace = registry_request(f"{UNREAL_GHCR_REPOSITORY}/manifests/{tag}", username, token)
     if manifest_status != 200:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "UE_5_8_MANIFEST_NOT_ACCESSIBLE"
         base["registry_http_status"] = manifest_status
+        base["registry_auth_trace"] = manifest_auth_trace
         return base
     digest = _header_value(manifest_headers, "Docker-Content-Digest")
     base["registry_authorization_validated"] = True
@@ -651,11 +729,12 @@ def self_test() -> dict[str, Any]:
         cases["commercial_authority_stays_false"] = one["commercial_license_authority"] is False
 
         exact = 'Bearer realm="https://ghcr.io/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
-        cases["ghcr_exact_bearer_challenge_accepted"] = parse_ghcr_bearer_challenge(exact) == {
+        exact_challenge, exact_checks = _ghcr_challenge_details(exact)
+        cases["ghcr_exact_bearer_challenge_accepted"] = exact_challenge == {
             "realm": "https://ghcr.io/token",
             "service": "ghcr.io",
             "scope": "repository:epicgames/unreal-engine:pull",
-        }
+        } and all(exact_checks.values())
         cases["ghcr_http_realm_rejected"] = parse_ghcr_bearer_challenge(
             'Bearer realm="http://ghcr.io/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
         ) is None
@@ -677,6 +756,20 @@ def self_test() -> dict[str, Any]:
         cases["ghcr_realm_query_rejected"] = parse_ghcr_bearer_challenge(
             'Bearer realm="https://ghcr.io/token?redirect=https://example.com",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
         ) is None
+
+        def stage_trace(**updates: Any) -> dict[str, Any]:
+            trace = _empty_ghcr_auth_trace()
+            trace.update(updates)
+            return trace
+
+        cases["ghcr_stage_initial_resource_failure"] = _ghcr_trace_stage(stage_trace(initial_status=503)) == "INITIAL_RESOURCE_FAILURE"
+        cases["ghcr_stage_challenge_rejected"] = _ghcr_trace_stage(stage_trace(initial_status=401)) == "CHALLENGE_MISSING_OR_REJECTED"
+        cases["ghcr_stage_token_exchange_failed"] = _ghcr_trace_stage(stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=401)) == "TOKEN_EXCHANGE_FAILED"
+        cases["ghcr_stage_token_response_invalid"] = _ghcr_trace_stage(stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=200, token_response_valid=False)) == "TOKEN_RESPONSE_INVALID"
+        cases["ghcr_stage_resource_retry_failed"] = _ghcr_trace_stage(stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=200, token_response_valid=True, resource_retry_attempted=True, resource_retry_status=401)) == "RESOURCE_RETRY_FAILED"
+        cases["ghcr_stage_success"] = _ghcr_trace_stage(stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=200, token_response_valid=True, resource_retry_attempted=True, resource_retry_status=200)) == "SUCCESS"
+        trace_text = json.dumps(stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=401), sort_keys=True)
+        cases["ghcr_auth_trace_contains_no_fixture_secret_or_bearer"] = "unit-test-secret" not in trace_text and "fixture-bearer-value" not in trace_text and "authorization" not in trace_text.lower() and "cookie" not in trace_text.lower()
     finally:
         os.environ.clear()
         os.environ.update(original)
