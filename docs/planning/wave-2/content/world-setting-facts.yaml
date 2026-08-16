@@ -1,0 +1,477 @@
+schema: everfield_world_setting_candidate_v1
+mission_id: W2-CONTENT-WORLD-01
+issue: 366
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+required_fresh_review: true
+integration_authority: false
+engine_selection_authority: false
+implementation_readiness_authority: false
+verification_pass_authority: false
+
+provenance:
+  producer_base_main_sha: dd84256de5033cb9873eb10589847be1d403b042
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  compiler_issue: 365
+  compiler_work_sha: fd2fb7d816cf23d60bcc54bd25c7d9a4eaae3dbb
+  activation_review_issue: 372
+  activation_review_terminal_comment_id: 5305598079
+  activation_review_head_sha: 656930c36d90a166776485cbaf196c39a32fe97e
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_ACTIVATION
+  immutable_w1_des_03_work_sha: d19ddc43c9e5f22c6f14e5c978c30a4e6a2f0d8b
+  immutable_w1_syn_game_work_sha: e74e0b0c95e85f69718868eedae324a298f02f3e
+
+vocabulary:
+  authority_classes:
+    - CANDIDATE_OBJECTIVE
+    - CANDIDATE_CONSTRAINT
+    - DISPUTED_IN_WORLD
+    - UNKNOWN_BY_DESIGN
+    - PROVISIONAL_INTERFACE
+  knowledge_states:
+    - PUBLIC
+    - DISCOVERABLE
+    - SECRET
+    - SYSTEM_ONLY
+    - NOT_APPLICABLE
+  branch_scopes:
+    - BRANCH:BASELINE
+    - BRANCH:PROVISIONAL
+  reversibility_classes:
+    - REVERSIBLE
+    - SEASON_BOUNDED
+    - COSTLY_TO_REVERSE
+    - IRREVERSIBLE_IF_AUTHORIZED
+    - NOT_APPLICABLE
+
+world_promise:
+  candidate_id: WORLD_PROMISE:STEWARDSHIP_WATERSHED
+  authority: CANDIDATE_CONSTRAINT
+  branch: BRANCH:BASELINE
+  statement: >-
+    A lived-in watershed of settlements, cultivated spaces, commons, routes, habitat,
+    and inherited shared works where care, use, repair, restraint, and neglect can create
+    legible cross-location consequences without implying one universal prosperity meter.
+  thematic_axes:
+    - stewardship_vs_extraction
+    - repair_vs_repurpose_vs_release
+    - public_memory_vs_partial_history
+    - local_benefit_vs_shared_consequence
+    - continuity_vs_change
+  forbidden_shortcuts:
+    - conquest_of_empty_frontier_as_default
+    - restore_every_old_system_as_universal_good
+    - one_global_prosperity_score
+    - final_engine_specific_representation
+    - copied_reference_game_expression
+
+locations:
+  - id: LOC:SETTLEMENT-CORE
+    working_label: Hearth Cluster
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    functions: [civic, services, social_density, exchange]
+    final_name_frozen: false
+    final_ownership_frozen: false
+  - id: LOC:CULTIVATION-MOSAIC
+    working_label: Patchwork Fields
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    functions: [cultivation, managed_habitat, local_production]
+    final_name_frozen: false
+    final_ownership_frozen: false
+  - id: LOC:RIPARIAN-CORRIDOR
+    working_label: Braided Watercourse
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    functions: [watershed_connector, habitat, crossings, water_use]
+    final_name_frozen: false
+    final_ownership_frozen: false
+  - id: LOC:COMMONS-BELT
+    working_label: Open Commons
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    functions: [gathering, shared_use, recreation, habitat]
+    final_name_frozen: false
+    final_ownership_frozen: false
+  - id: LOC:UPLAND-CATCHMENT
+    working_label: High Catchment
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    functions: [headwaters, weather_exposure, remote_access, discovery]
+    final_name_frozen: false
+    final_ownership_frozen: false
+  - id: LOC:OLD-WORKS
+    working_label: Inherited Works
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: DISCOVERABLE
+    branch: BRANCH:BASELINE
+    functions: [legacy_infrastructure, water_or_route_interface, historical_evidence]
+    final_name_frozen: false
+    final_ownership_frozen: false
+  - id: LOC:EDGE-HABITAT
+    working_label: Living Edge
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    functions: [habitat_transition, low_management_use, ecological_observation]
+    final_name_frozen: false
+    final_ownership_frozen: false
+  - id: LOC:OUTER-THRESHOLD
+    working_label: Outer Threshold
+    authority: PROVISIONAL_INTERFACE
+    knowledge: PUBLIC
+    branch: BRANCH:PROVISIONAL
+    functions: [external_connection, travel_interface, expansion_boundary]
+    final_name_frozen: false
+    final_ownership_frozen: false
+
+topology_edges:
+  - id: EDGE:CORE-CULTIVATION
+    from: LOC:SETTLEMENT-CORE
+    to: LOC:CULTIVATION-MOSAIC
+    relation: ROUTE_AND_EXCHANGE
+    bidirectional: true
+  - id: EDGE:CORE-RIPARIAN
+    from: LOC:SETTLEMENT-CORE
+    to: LOC:RIPARIAN-CORRIDOR
+    relation: ACCESS_AND_WATER_USE
+    bidirectional: true
+  - id: EDGE:CULTIVATION-RIPARIAN
+    from: LOC:CULTIVATION-MOSAIC
+    to: LOC:RIPARIAN-CORRIDOR
+    relation: WATER_AND_LAND_USE_CAUSAL
+    bidirectional: false
+  - id: EDGE:CORE-COMMONS
+    from: LOC:SETTLEMENT-CORE
+    to: LOC:COMMONS-BELT
+    relation: SHARED_USE_ROUTE
+    bidirectional: true
+  - id: EDGE:COMMONS-EDGE
+    from: LOC:COMMONS-BELT
+    to: LOC:EDGE-HABITAT
+    relation: USE_PRESSURE_AND_HABITAT
+    bidirectional: true
+  - id: EDGE:UPLAND-RIPARIAN
+    from: LOC:UPLAND-CATCHMENT
+    to: LOC:RIPARIAN-CORRIDOR
+    relation: UPSTREAM_DOWNSTREAM_CAUSAL
+    bidirectional: false
+  - id: EDGE:OLDWORKS-RIPARIAN
+    from: LOC:OLD-WORKS
+    to: LOC:RIPARIAN-CORRIDOR
+    relation: INFRASTRUCTURE_EFFECT
+    bidirectional: false
+  - id: EDGE:OLDWORKS-CORE
+    from: LOC:OLD-WORKS
+    to: LOC:SETTLEMENT-CORE
+    relation: INFRASTRUCTURE_AND_ACCESS
+    bidirectional: true
+  - id: EDGE:CORE-THRESHOLD
+    from: LOC:SETTLEMENT-CORE
+    to: LOC:OUTER-THRESHOLD
+    relation: TRAVEL_AND_EXCHANGE
+    bidirectional: true
+
+chronology:
+  eras:
+    - id: ERA:PRE-WORKS
+      authority: CANDIDATE_OBJECTIVE
+      description: Landscape and human/community use before the coordinated inherited works.
+    - id: ERA:WORKS-BUILDOUT
+      authority: CANDIDATE_OBJECTIVE
+      description: Period in which connected shared infrastructure was established or substantially coordinated.
+    - id: ERA:PATCHWORK-PRESENT
+      authority: CANDIDATE_OBJECTIVE
+      description: Current period of maintained, improvised, repurposed, abandoned, and contested systems.
+  events:
+    - id: EVT:WORKS-BUILDOUT
+      authority: CANDIDATE_OBJECTIVE
+      knowledge: DISCOVERABLE
+      era: ERA:WORKS-BUILDOUT
+      event_type: INFRASTRUCTURE_HISTORY
+      exact_cause_frozen: false
+    - id: EVT:WORKS-FRAGMENTATION
+      authority: CANDIDATE_OBJECTIVE
+      knowledge: DISCOVERABLE
+      era: ERA:WORKS-BUILDOUT
+      event_type: MAINTENANCE_ORDER_CHANGE
+      exact_cause_frozen: false
+    - id: EVT:PATCHWORK-PRESENT-START
+      authority: CANDIDATE_OBJECTIVE
+      knowledge: SYSTEM_ONLY
+      era: ERA:PATCHWORK-PRESENT
+      event_type: PERIOD_BOUNDARY
+      exact_cause_frozen: false
+    - id: EVT:PLAYER-ENTRY
+      authority: PROVISIONAL_INTERFACE
+      knowledge: NOT_APPLICABLE
+      era: ERA:PATCHWORK-PRESENT
+      event_type: NARRATIVE_INTERFACE
+      exact_cause_frozen: false
+  precedes:
+    - [ERA:PRE-WORKS, EVT:WORKS-BUILDOUT]
+    - [EVT:WORKS-BUILDOUT, EVT:WORKS-FRAGMENTATION]
+    - [EVT:WORKS-FRAGMENTATION, EVT:PATCHWORK-PRESENT-START]
+    - [EVT:PATCHWORK-PRESENT-START, EVT:PLAYER-ENTRY]
+
+world_rules:
+  - id: WR-01
+    authority: CANDIDATE_CONSTRAINT
+    rule: Material world effects propagate only through declared causal/state dependencies.
+  - id: WR-02
+    authority: CANDIDATE_CONSTRAINT
+    rule: Shared works use multi-state condition/function rather than a universal repaired boolean.
+  - id: WR-03
+    authority: CANDIDATE_CONSTRAINT
+    rule: Resource-relevant world state must be able to represent bounded use, regeneration, stewardship, substitution, or access change where materially relevant.
+  - id: WR-04
+    authority: CANDIDATE_CONSTRAINT
+    rule: Seasonal condition changes do not change stable logical location identity.
+  - id: WR-05
+    authority: CANDIDATE_CONSTRAINT
+    rule: Important consequences bind cause, affected IDs, branch scope, reversibility, and observable signal.
+  - id: WR-06
+    authority: CANDIDATE_CONSTRAINT
+    rule: In-world claims and generated prose do not become objective truth without explicit validated fact authority.
+  - id: WR-07
+    authority: CANDIDATE_CONSTRAINT
+    rule: Restoring inherited works is not intrinsically or universally the preferred outcome.
+  - id: WR-08
+    authority: CANDIDATE_CONSTRAINT
+    rule: Permanent mutually exclusive world branches require explicit downstream content and evidence support.
+
+facts:
+  - id: WF:WORLD-LIVED-IN
+    type: WORLD_PREMISE
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    subject_refs: [WORLD_PROMISE:STEWARDSHIP_WATERSHED]
+    predicate: IS_LIVED_IN_BEFORE_PLAYER_ENTRY
+    value: true
+    source_basis: DESIGN_INFERENCE_FROM_W1_CONSTRAINTS
+  - id: WF:WATERSHED-CAUSALITY
+    type: PHYSICAL_RELATION
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    subject_refs: [LOC:UPLAND-CATCHMENT, LOC:RIPARIAN-CORRIDOR, LOC:CULTIVATION-MOSAIC]
+    predicate: SUPPORTS_UPSTREAM_DOWNSTREAM_CONSEQUENCES
+    value: true
+    source_basis: WORLD_ROOT_PROPOSAL
+  - id: WF:OLD-WORKS-EXIST
+    type: HISTORICAL_INFRASTRUCTURE
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    subject_refs: [LOC:OLD-WORKS]
+    predicate: HAS_INHERITED_SHARED_INFRASTRUCTURE
+    value: true
+    source_basis: WORLD_ROOT_PROPOSAL
+  - id: WF:OLD-WORKS-FRAGMENTED
+    type: HISTORICAL_STATE
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: DISCOVERABLE
+    branch: BRANCH:BASELINE
+    subject_refs: [LOC:OLD-WORKS, EVT:WORKS-FRAGMENTATION]
+    predicate: COORDINATED_MAINTENANCE_FRAGMENTED
+    value: true
+    source_basis: WORLD_ROOT_PROPOSAL
+  - id: WF:FRAGMENTATION-CAUSE
+    type: HISTORICAL_CAUSE
+    authority: UNKNOWN_BY_DESIGN
+    knowledge: SYSTEM_ONLY
+    branch: BRANCH:BASELINE
+    subject_refs: [EVT:WORKS-FRAGMENTATION]
+    predicate: HAS_SINGLE_RESOLVED_CAUSE
+    value: false
+    source_basis: DELIBERATE_MYSTERY_BOUNDARY
+  - id: WF:PATCHWORK-CONDITION
+    type: PRESENT_WORLD_STATE
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    subject_refs: [ERA:PATCHWORK-PRESENT]
+    predicate: INFRASTRUCTURE_AND_LAND_USE_CONDITION
+    value: MIXED_MAINTAINED_ADAPTED_DEGRADED_ABANDONED_CONTESTED
+    source_basis: WORLD_ROOT_PROPOSAL
+  - id: WF:OUTER-WORLD-EXISTS
+    type: EXTERNAL_INTERFACE
+    authority: CANDIDATE_OBJECTIVE
+    knowledge: PUBLIC
+    branch: BRANCH:BASELINE
+    subject_refs: [LOC:OUTER-THRESHOLD]
+    predicate: BOUNDED_SETTING_IS_NOT_SEALED_UNIVERSE
+    value: true
+    source_basis: WORLD_ROOT_PROPOSAL
+  - id: WF:OUTER-POLITY-DETAILS
+    type: EXTERNAL_INTERFACE
+    authority: UNKNOWN_BY_DESIGN
+    knowledge: SYSTEM_ONLY
+    branch: BRANCH:BASELINE
+    subject_refs: [LOC:OUTER-THRESHOLD]
+    predicate: FINAL_EXTERNAL_GEOPOLITICS_FROZEN
+    value: false
+    source_basis: SCOPE_BOUNDARY
+  - id: WF:SUPERNATURAL-ONTOLOGY
+    type: ONTOLOGY
+    authority: UNKNOWN_BY_DESIGN
+    knowledge: SYSTEM_ONLY
+    branch: BRANCH:BASELINE
+    subject_refs: [MYS:SEASONAL-ANOMALIES]
+    predicate: SUPERNATURAL_EXPLANATION_FROZEN
+    value: false
+    source_basis: DELIBERATE_MYSTERY_BOUNDARY
+  - id: WF:RESTORATION-NOT-UNIVERSAL-GOOD
+    type: DESIGN_CONSTRAINT
+    authority: CANDIDATE_CONSTRAINT
+    knowledge: NOT_APPLICABLE
+    branch: BRANCH:BASELINE
+    subject_refs: [LOC:OLD-WORKS]
+    predicate: ALL_RESTORATION_AUTOMATICALLY_POSITIVE
+    value: false
+    source_basis: THEMATIC_CONSTRAINT
+
+mysteries:
+  - id: MYS:FRAGMENTATION-CAUSE
+    authority: UNKNOWN_BY_DESIGN
+    question: Why did coordinated operation of the inherited works fragment?
+    allowed_invention:
+      - local_evidence
+      - incomplete_records
+      - conflicting_accounts
+      - multiple_contributing_pressures
+    forbidden_resolution:
+      - single_global_catastrophe_as_fact
+      - named_final_villain_or_faction_as_cause
+      - supernatural_cause_as_fact
+      - technological_cause_as_fact
+  - id: MYS:WORKS-ORIGINAL-PURPOSE
+    authority: UNKNOWN_BY_DESIGN
+    question: Were all inherited works built for the functions current residents assign to them?
+    allowed_invention: [repurposing_evidence, layered_modifications, partial_records]
+    forbidden_resolution: [single_master_builder_civilization, lost_utopia_as_fact]
+  - id: MYS:SEASONAL-ANOMALIES
+    authority: UNKNOWN_BY_DESIGN
+    question: Which unusual seasonal observations are ordinary ecology and which imply another ontology, if any?
+    allowed_invention: [repeatable_observation_without_cause, conflicting_interpretation]
+    forbidden_resolution: [canonical_magic_system, gods_as_fact, aliens_as_fact, simulation_twist_as_fact, no_supernatural_possible_as_fact]
+  - id: MYS:OUTER-CONNECTIONS
+    authority: UNKNOWN_BY_DESIGN
+    question: What systems and places exist beyond the bounded watershed?
+    allowed_invention: [evidence_of_exchange, travel, information_flow, obligations]
+    forbidden_resolution: [final_neighboring_polities, final_external_regions, imported_sibling_factions]
+
+provisional_roles:
+  - id: ROLE:LOCAL-CIVIC-STEWARD
+    domain_owner: CONTENT_SOCIAL
+    required_concrete_binding: false
+  - id: ROLE:LAND-USE-CUSTODIAN
+    domain_owner: CONTENT_SOCIAL
+    required_concrete_binding: false
+  - id: ROLE:WATER-DEPENDENT-USER
+    domain_owner: CONTENT_SOCIAL
+    required_concrete_binding: false
+  - id: ROLE:TRAVEL-AND-EXCHANGE-LINK
+    domain_owner: CONTENT_SOCIAL
+    required_concrete_binding: false
+  - id: ROLE:HISTORY-BEARER
+    domain_owner: CONTENT_CHARACTER_OR_SOCIAL
+    required_concrete_binding: false
+  - id: ROLE:PLAYER-ENTRY
+    domain_owner: CONTENT_NARRATIVE
+    required_concrete_binding: false
+
+assumptions:
+  - id: ASM:WORLD-01
+    statement: A bounded watershed can support sufficient gameplay/content variety before external regions are frozen.
+    evidence_state: UNPROVEN_DESIGN_ASSUMPTION
+    reopen_on: REVIEW_OR_WSN_EVIDENCE_FAILURE
+  - id: ASM:WORLD-02
+    statement: Cross-location consequences can remain player-legible when observable signals and causal edges are explicit.
+    evidence_state: UNPROVEN_DESIGN_ASSUMPTION
+    reopen_on: WSN_EVIDENCE_OR_PLAY_EVIDENCE_FAILURE
+  - id: ASM:WORLD-03
+    statement: Relative chronology is sufficient for this root before exact GameTimePolicy mapping.
+    evidence_state: BOUNDED_PLANNING_ASSUMPTION
+    reopen_on: DOWNSTREAM_CHRONOLOGY_DEPENDENCY
+  - id: ASM:WORLD-04
+    statement: Sibling roots can consume typed role/location IDs without final names or ownership assignments.
+    evidence_state: BOUNDED_PARALLELISM_ASSUMPTION
+    reopen_on: SIBLING_REVIEW_FINDS_HARD_DEPENDENCY
+
+open_questions:
+  - id: OPEN:WORLD-01
+    trigger: REVIEWED_SOCIAL_ROOT_REQUIRES_TOPOLOGY_CHANGE
+    route: W2-CONTENT-SYN-01_FAN_IN_RECONCILIATION
+  - id: OPEN:WORLD-02
+    trigger: REVIEWED_NARRATIVE_ROOT_CHRONOLOGY_CONFLICT
+    route: W2-CONTENT-SYN-01_FAN_IN_RECONCILIATION
+  - id: OPEN:WORLD-03
+    trigger: WSN_EVIDENCE_INVALIDATES_TOPOLOGY_OR_CAUSAL_EDGE
+    route: REOPEN_AFFECTED_WORLD_FACTS
+  - id: OPEN:WORLD-04
+    trigger: ORIGINALITY_REVIEW_FINDS_MATERIAL_SIMILARITY
+    route: QUARANTINE_AND_REWRITE_AFFECTED_CONTENT
+  - id: OPEN:WORLD-05
+    trigger: CONCRETE_ENGINE_DEPENDENCY_DISCOVERED
+    route: RECORD_SCOPED_TECHNICAL_DEPENDENCY_WITHOUT_ENGINE_LOCK_IN
+  - id: OPEN:WORLD-06
+    trigger: PRODUCT_OR_PLATFORM_SCOPE_REQUIRES_REPRESENTATION_CHANGE
+    route: REVIEW_SCOPED_PRESENTATION_OR_ACCESS_CONSTRAINT
+  - id: OPEN:WORLD-07
+    trigger: REVIEWED_FAN_IN_AUTHORIZES_SUPERNATURAL_ONTOLOGY
+    route: RESOLVE_ONLY_EXPLICITLY_AUTHORIZED_MYSTERIES
+
+checkable_invariants:
+  - id: INV:ALL-FACTS-TYPED
+    predicate: every facts[] record has id,type,authority,knowledge,branch,subject_refs,predicate,value,source_basis
+  - id: INV:CHRONOLOGY-ACYCLIC
+    predicate: chronology.precedes forms a directed acyclic graph
+  - id: INV:CORE-TRIANGLE
+    predicate: topology contains LOC:SETTLEMENT-CORE, LOC:CULTIVATION-MOSAIC, LOC:RIPARIAN-CORRIDOR and edges connecting all three through declared relations
+  - id: INV:UPSTREAM-DOWNSTREAM
+    predicate: LOC:UPLAND-CATCHMENT has a directed causal path to LOC:RIPARIAN-CORRIDOR
+  - id: INV:OLD-WORKS-CROSS-ZONE
+    predicate: LOC:OLD-WORKS has declared edges affecting at least two distinct functional zones
+  - id: INV:OUTER-INTERFACE
+    predicate: LOC:OUTER-THRESHOLD is reachable from LOC:SETTLEMENT-CORE and remains PROVISIONAL_INTERFACE or explicitly reviewed successor state
+  - id: INV:MYSTERY-NOT-OBJECTIVE
+    predicate: no mystery record is simultaneously resolved by a CANDIDATE_OBJECTIVE fact in this packet
+  - id: INV:NO-SIBLING-CONCRETE-BINDING
+    predicate: provisional_roles have no concrete faction, character, or narrative entity IDs in this packet
+  - id: INV:NO-ENGINE-TYPE-AUTHORITY
+    predicate: no world fact identity depends on engine scene, asset, editor, component, or runtime-specific type
+  - id: INV:NO-PROSE-PASS
+    predicate: no WSN-E1..WSN-E9 experiment is marked PASS or SATISFIED by this packet
+  - id: INV:ORIGINALITY-BOUNDARY
+    predicate: no external reference game's protected names, characters, locations, quest lines, dialogue, or expressive content are adopted as world facts
+
+existing_evidence_routes:
+  wsn_experiments: WSN-E1..WSN-E9
+  state: UNCHANGED_UNRUN_OR_EXISTING_STATE_ONLY
+  duplicate_experiments_created: false
+  prose_satisfies_evidence: false
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  required_fresh_content_root_review: true
+  attacks_required:
+    - internal_world_consistency
+    - chronology
+    - fact_authority
+    - hidden_sibling_dependencies
+    - accidental_canon_inflation
+    - originality_reference_leakage
+    - scope_expansion
