@@ -1,0 +1,187 @@
+schema: w2_content_character_remediation_overlay_v1
+mission_id: W2-CONTENT-CHAR-REM-01
+issue: 409
+state: REMEDIATION_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_CHARACTER
+canonicality: NOT_CANONICAL
+required_fresh_review: true
+authority:
+  content_fanin: false
+  integration: false
+  verification_pass: false
+  engine_selection: false
+  gameplay_implementation: false
+  implementation_readiness: false
+  release: false
+  decision: false
+binding:
+  claim_base_main_sha: 5121f352477a08718e6a39d97086b336d2a68a11
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_convergence_directive_comment_id: 5277825639
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  producer:
+    issue: 368
+    original_claim_comment_id: 5305676233
+    recovery_claim_comment_id: 5306622605
+    terminal_comment_id: 5306628907
+    work_sha: 3d1cc79dcd6a2179887aab7df967417201627bad
+    head_sha: 215e2647382caf31171889452f1e44e56533f996
+    pr: 383
+    markdown_blob_sha: f4f481f7f6cdbe1edd09bb436ea20fe606a99fab
+    yaml_blob_sha: 97dc6977b0fade501f328302dc7dc6fa12bab42a
+  review:
+    issue: 407
+    claim_comment_id: 5306640676
+    terminal_comment_id: 5306658515
+    disposition: CHANGES_NEEDED
+    work_sha: d00488a78a7c09dc9e58b0d280c1e1f39920527b
+    head_sha: 4afdc3d111a12f562b31cfe84dc1d136f132a726
+    pr: 408
+    findings: [W2-CONTENT-CHAR-REV-M01, W2-CONTENT-CHAR-REV-M02]
+    provenance_squash_main_sha: 5121f352477a08718e6a39d97086b336d2a68a11
+composition:
+  algorithm: PATCH_EXISTING_COLLECTIONS_BY_STABLE_ID
+  base_yaml_blob_sha: 97dc6977b0fade501f328302dc7dc6fa12bab42a
+  preserve_unmentioned_base_fields: true
+  collections:
+    relationship_event_patches: event_id
+    information_record_patches: info_id
+  expected_base_counts:
+    characters: 6
+    relationships: 8
+    relationship_events: 4
+    information_records: 5
+    change_arcs: 6
+  fail_closed_if_base_identity_or_counts_mismatch: true
+  delete_base_records: false
+  consume_mutable_sibling_output: false
+relationship_event_contract:
+  required_fields: [event_id, cause, resulting_effects, knowledge_visibility, repairability, reversal_evidence]
+  repair_may_erase_history: false
+  current_dimensions_may_be_changed_by_history_inference: false
+relationship_event_patches:
+  - event_id: REL_EVT:anwen_selka_uncertainty_dispute
+    cause: {type: METHOD_DISAGREEMENT, detail: uncertainty_handling_and_action_timing}
+    resulting_effects:
+      dimension_flags:
+        - {dimension: RESPECT, effect: MAY_REMAIN_HIGH_DURING_METHOD_DISAGREEMENT}
+        - {dimension: CAUTION, effect: SUPPORTED_WHILE_UNCERTAINTY_METHOD_DIFFERS}
+      history_flags: [LATER_TRUST_DOES_NOT_ERASE_METHOD_DISAGREEMENT]
+    knowledge_visibility:
+      known_by: [CHAR:anwen_rell, CHAR:selka_vey]
+      player_visibility: NOT_ASSERTED
+      nonparticipant_disclosure: EXPLICIT_EVENT_OR_VALIDATED_CONTENT_REQUIRED
+    repairability: {repair_possible: true, repair_mode: METHOD_RECONCILIATION_OR_TRUST_REBUILDING, history_erasable_by_repair: false}
+    reversal_evidence: {can_change_current_dimensions: true, required: [REPEATED_TRACEABLE_JOINT_DECISION_EVIDENCE], history_record_remains: true}
+  - event_id: REL_EVT:jori_maelin_unasked_support
+    cause: {type: UNASKED_SUPPORT, detail: support_created_gratitude_and_perceived_obligation}
+    resulting_effects:
+      dimension_flags:
+        - {dimension: OBLIGATION, effect: MAY_REMAIN_SALIENT_UNTIL_EXPLICIT_BOUNDARY_OR_REPAIR}
+        - {dimension: WARMTH, effect: MAY_COEXIST_WITH_DISCOMFORT}
+      history_flags: [REPAYMENT_DOES_NOT_DELETE_HISTORY]
+    knowledge_visibility:
+      known_by: [CHAR:jori_marek, CHAR:maelin_sor]
+      player_visibility: NOT_ASSERTED
+      nonparticipant_disclosure: EXPLICIT_EVENT_OR_VALIDATED_CONTENT_REQUIRED
+    repairability: {repair_possible: true, repair_mode: EXPLICIT_BOUNDARY_AND_RECIPROCITY_CLARIFICATION, history_erasable_by_repair: false}
+    reversal_evidence: {can_change_current_dimensions: true, required: [BOUNDARY_RESPECTING_SUPPORT_OR_EQUIVALENT_RECIPROCITY_EVIDENCE], history_record_remains: true}
+  - event_id: REL_EVT:jori_oren_joint_attempt
+    cause: {type: JOINT_ATTEMPT, detail: shared_practical_attempt_with_contested_method_or_risk}
+    resulting_effects:
+      dimension_flags:
+        - {dimension: RESPECT, effect: CAN_INCREASE_WITH_DEMONSTRATED_COMPETENCE}
+        - {dimension: RIVALRY, effect: CAN_INCREASE_ALONGSIDE_RESPECT}
+      history_flags: [RESPECT_AND_RIVALRY_ARE_NOT_MUTUALLY_EXCLUSIVE]
+    knowledge_visibility:
+      known_by: [CHAR:jori_marek, CHAR:oren_dast]
+      player_visibility: NOT_ASSERTED
+      nonparticipant_disclosure: EXPLICIT_EVENT_OR_VALIDATED_CONTENT_REQUIRED
+    repairability: {repair_possible: true, repair_mode: AGREED_RISK_AND_RECOVERY_NORMS, history_erasable_by_repair: false}
+    reversal_evidence: {can_change_current_dimensions: true, required: [REPEATED_COOPERATION_WITH_RESPECTED_RISK_BOUNDARIES], history_record_remains: true}
+  - event_id: REL_EVT:maelin_selka_burden_objection
+    cause: {type: BURDEN_OBJECTION, detail: care_burden_challenged_despite_procedural_validity}
+    resulting_effects:
+      dimension_flags:
+        - {dimension: RESPECT, effect: CAN_REMAIN_HIGH_DURING_CONSEQUENCE_DISPUTE}
+        - {dimension: CAUTION, effect: REMAINS_RELEVANT_UNTIL_BURDEN_IS_ADDRESSED}
+      history_flags: [PROCEDURAL_VALIDITY_DOES_NOT_CLOSE_CONSEQUENCE_DISPUTE]
+    knowledge_visibility:
+      known_by: [CHAR:maelin_sor, CHAR:selka_vey]
+      player_visibility: NOT_ASSERTED
+      nonparticipant_disclosure: EXPLICIT_EVENT_OR_VALIDATED_CONTENT_REQUIRED
+    repairability: {repair_possible: true, repair_mode: AFFECTED_PARTY_BURDEN_RECOGNITION_AND_CORRECTION, history_erasable_by_repair: false}
+    reversal_evidence: {can_change_current_dimensions: true, required: [VISIBLE_CORRECTION_OF_EXCLUDED_OR_HIDDEN_BURDEN], history_record_remains: true}
+information_control_contract:
+  profile_id: INFO_CONTROL_V1
+  current_holders_must_equal_base_known_by: true
+  every_current_holder_requires_acquisition_provenance: true
+  acquisition_required_fields: [holder_ref, acquisition_mode, source_scope, source_authority]
+  default_access: DENY
+  allowed_access_routes: [EXPLICIT_HOLDER_DISCLOSURE, VALIDATED_AUTHORITY_EFFECT]
+  relationship_state_grants_access: false
+  shared_provisional_role_grants_access: false
+  generated_or_player_visible_content_grants_character_access: false
+  player_exposure:
+    default_state: NOT_ASSERTED
+    grants_character_knowledge: false
+    promotes_objective_truth: false
+  belief_or_testimony_promotes_objective_truth: false
+  provisional_interface_promotes_objective_truth: false
+information_record_patches:
+  - info_id: INFO:anwen_contested_record_provenance_gap
+    assert_base: {authority_class: SECRET, truth_status: CHARACTER_CANDIDATE_FACT_ONLY, known_by: [CHAR:anwen_rell]}
+    current_holders: [CHAR:anwen_rell]
+    acquisition_provenance:
+      - {holder_ref: CHAR:anwen_rell, acquisition_mode: DIRECT_INSPECTION, source_scope: THIS_INFORMATION_RECORD_PROVENANCE_ANALYSIS, source_authority: CHARACTER_CANDIDATE_FACT_ONLY}
+    control_profile: INFO_CONTROL_V1
+  - info_id: INFO:tomas_route_resilience_belief
+    assert_base: {authority_class: BELIEF, truth_status: UNKNOWN, known_by: [CHAR:tomas_irel]}
+    current_holders: [CHAR:tomas_irel]
+    acquisition_provenance:
+      - {holder_ref: CHAR:tomas_irel, acquisition_mode: SELF_INFERENCE, source_scope: SUBJECT_REASONING, source_authority: BELIEF_ONLY}
+    control_profile: INFO_CONTROL_V1
+  - info_id: INFO:selka_prior_procedural_shortcut
+    assert_base: {authority_class: SECRET, truth_status: CHARACTER_CANDIDATE_FACT_ONLY, known_by: [CHAR:selka_vey]}
+    current_holders: [CHAR:selka_vey]
+    acquisition_provenance:
+      - {holder_ref: CHAR:selka_vey, acquisition_mode: FIRST_PERSON_MEMORY, source_scope: SUBJECT_OWN_DECISION, source_authority: CHARACTER_CANDIDATE_FACT_ONLY}
+    control_profile: INFO_CONTROL_V1
+  - info_id: INFO:jori_maelin_obligation_interpretation
+    assert_base: {authority_class: SECRET, truth_status: CHARACTER_CANDIDATE_FACT_ONLY, known_by: [CHAR:jori_marek, CHAR:maelin_sor]}
+    current_holders: [CHAR:jori_marek, CHAR:maelin_sor]
+    acquisition_provenance:
+      - {holder_ref: CHAR:jori_marek, acquisition_mode: SELF_KNOWLEDGE, source_scope: SUBJECT_INTERNAL_INTERPRETATION, source_authority: CHARACTER_CANDIDATE_FACT_ONLY}
+      - {holder_ref: CHAR:maelin_sor, acquisition_mode: EXPLICIT_DISCLOSURE, source_holder_ref: CHAR:jori_marek, source_scope: SUBJECT_DISCLOSURE, source_authority: CHARACTER_CANDIDATE_FACT_ONLY}
+    control_profile: INFO_CONTROL_V1
+  - info_id: INFO:oren_project_revive_quickly_belief
+    assert_base: {authority_class: BELIEF, truth_status: UNKNOWN, known_by: [CHAR:oren_dast]}
+    current_holders: [CHAR:oren_dast]
+    acquisition_provenance:
+      - {holder_ref: CHAR:oren_dast, acquisition_mode: SELF_INFERENCE, source_scope: SUBJECT_REASONING, source_authority: BELIEF_ONLY}
+    control_profile: INFO_CONTROL_V1
+integrity_invariants:
+  - BASE_BLOB_AND_COUNTS_MATCH_BEFORE_COMPOSITION
+  - PATCH_IDS_RESOLVE_TO_EXISTING_BASE_IDS
+  - NO_BASE_RECORD_DELETION_OR_UNPATCHED_SEMANTIC_REWRITE
+  - EVERY_RELATIONSHIP_EVENT_HAS_CAUSE_EFFECT_VISIBILITY_REPAIR_REVERSAL
+  - INFORMATION_CURRENT_HOLDERS_EQUAL_BASE_KNOWN_BY
+  - ACQUISITION_PROVENANCE_COVERS_EVERY_CURRENT_HOLDER
+  - INFORMATION_ACCESS_DEFAULT_DENY
+  - RELATIONSHIP_SHARED_ROLE_AND_PLAYER_VISIBILITY_DO_NOT_GRANT_ACCESS
+  - PLAYER_EXPOSURE_DOES_NOT_GRANT_CHARACTER_KNOWLEDGE_OR_OBJECTIVE_TRUTH
+  - BELIEF_TESTIMONY_AND_PROVISIONAL_INTERFACES_DO_NOT_PROMOTE_OBJECTIVE_TRUTH
+  - NO_SIBLING_MUTABLE_OUTPUT_CONSUMED
+  - NO_WSN_PASS_CREATED
+  - NO_CANONICAL_OR_VERIFIED_AUTHORITY
+finding_disposition:
+  W2-CONTENT-CHAR-REV-M01: REMEDIATED_PENDING_FRESH_REVIEW
+  W2-CONTENT-CHAR-REV-M02: REMEDIATED_PENDING_FRESH_REVIEW
+downstream:
+  required_fresh_review: true
+  allowed_clean_disposition: CLEAN_FOR_BOUNDED_CONTENT_FANIN
+  clean_review_target: W2-CONTENT-SYN-01
+  content_fanin_authority: false
+  integration_authority: false
