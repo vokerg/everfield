@@ -19,6 +19,7 @@ import subprocess
 import tempfile
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from typing import Any
 
@@ -32,6 +33,12 @@ SECRET_ENV_NAMES = (
     "UNITY_SERVICE_ACCOUNT_SECRET",
     "UNREAL_GITHUB_TOKEN",
 )
+GHCR_REGISTRY_ORIGIN = "https://ghcr.io"
+GHCR_AUTH_HOST = "ghcr.io"
+GHCR_AUTH_PATH = "/token"
+GHCR_SERVICE = "ghcr.io"
+UNREAL_GHCR_REPOSITORY = "epicgames/unreal-engine"
+UNREAL_GHCR_SCOPE = f"repository:{UNREAL_GHCR_REPOSITORY}:pull"
 
 
 def redact(text: str, secrets: list[str]) -> str:
@@ -152,9 +159,6 @@ def unity_native_s3(editor_path: str, version: str) -> dict[str, Any]:
     attempts: list[dict[str, Any]] = []
     with tempfile.TemporaryDirectory(prefix="everfield-unity-s3-") as temp:
         for name, perturb, expected in (("N1", False, NORMAL_CHECKSUM), ("N2", False, NORMAL_CHECKSUM), ("FI1", True, PERTURBED_CHECKSUM)):
-            # Each attempt receives a fresh project directory and fresh process.
-            # This prevents a prior run's generated state from becoming evidence
-            # for a later run.
             root = pathlib.Path(temp) / name
             (root / "Assets" / "Editor").mkdir(parents=True)
             (root / "ProjectSettings").mkdir()
@@ -287,12 +291,7 @@ def validate_unity() -> dict[str, Any]:
 
 
 def validate_local_unity() -> dict[str, Any]:
-    """Prove native execution against an already licensed local Unity install.
-
-    This mode is intentionally separate from credentialed CI validation: a
-    local Personal OAuth license is evidence of development execution on this
-    machine, not a portable CI credential or commercial authority.
-    """
+    """Prove native execution against an already licensed local Unity install."""
     version = os.getenv("UNITY_EDITOR_VERSION", UNITY_BASELINE)
     unity_cli = os.getenv("UNITY_CLI", "unity")
     installed = run([unity_cli, "editors", "--installed", "--format", "json", "--non-interactive"], timeout=60)
@@ -330,19 +329,108 @@ def validate_local_unity() -> dict[str, Any]:
     return provider
 
 
-def registry_request(path: str, username: str, token: str) -> tuple[int, dict[str, str], bytes]:
-    credentials = base64.b64encode(f"{username}:{token}".encode()).decode()
-    request = urllib.request.Request(
-        f"https://ghcr.io/v2/{path}",
-        headers={"Authorization": f"Basic {credentials}", "Accept": "application/vnd.oci.image.manifest.v1+json"},
-    )
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """Fail closed instead of forwarding authorization across redirects."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_NO_REDIRECT_OPENER = urllib.request.build_opener(_NoRedirect())
+
+
+def _http_request(url: str, headers: dict[str, str]) -> tuple[int, dict[str, str], bytes]:
+    request = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(request, timeout=60) as response:
+        with _NO_REDIRECT_OPENER.open(request, timeout=60) as response:
             return response.status, dict(response.headers.items()), response.read()
     except urllib.error.HTTPError as exc:
         return exc.code, dict(exc.headers.items()), exc.read()
     except (urllib.error.URLError, TimeoutError):
         return 599, {}, b""
+
+
+def _header_value(headers: dict[str, str], name: str) -> str | None:
+    target = name.lower()
+    for key, value in headers.items():
+        if key.lower() == target:
+            return value
+    return None
+
+
+def parse_ghcr_bearer_challenge(header: str | None) -> dict[str, str] | None:
+    """Accept only the exact HTTPS GHCR pull challenge used for UE access."""
+    if not header or not re.match(r"^Bearer\s+", header, re.IGNORECASE):
+        return None
+    payload = re.sub(r"^Bearer\s+", "", header, count=1, flags=re.IGNORECASE)
+    matches = re.findall(r'([A-Za-z][A-Za-z0-9_-]*)="([^"\\]*)"', payload)
+    if not matches:
+        return None
+    params: dict[str, str] = {}
+    for key, value in matches:
+        lowered = key.lower()
+        if lowered in params:
+            return None
+        params[lowered] = value
+    realm = params.get("realm", "")
+    service = params.get("service", "")
+    scope = params.get("scope", "")
+    parsed = urllib.parse.urlsplit(realm)
+    if (
+        parsed.scheme.lower() != "https"
+        or parsed.hostname != GHCR_AUTH_HOST
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.port not in (None, 443)
+        or parsed.path != GHCR_AUTH_PATH
+        or parsed.query
+        or parsed.fragment
+    ):
+        return None
+    if service != GHCR_SERVICE or scope != UNREAL_GHCR_SCOPE:
+        return None
+    return {"realm": realm, "service": service, "scope": scope}
+
+
+def _ghcr_bearer_token(challenge: dict[str, str], username: str, token: str) -> str | None:
+    credentials = base64.b64encode(f"{username}:{token}".encode()).decode()
+    query = urllib.parse.urlencode({"service": challenge["service"], "scope": challenge["scope"]})
+    status, _, body = _http_request(
+        f"{challenge['realm']}?{query}",
+        {"Authorization": f"Basic {credentials}", "Accept": "application/json"},
+    )
+    if status != 200:
+        return None
+    try:
+        data = json.loads(body)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    bearer = data.get("token")
+    access_token = data.get("access_token")
+    if bearer and access_token and bearer != access_token:
+        return None
+    value = bearer or access_token
+    return value if isinstance(value, str) and 16 <= len(value) <= 65536 else None
+
+
+def registry_request(path: str, username: str, token: str) -> tuple[int, dict[str, str], bytes]:
+    """Perform one GHCR Registry v2 request with bounded Bearer challenge handling."""
+    if not path or path.startswith("/") or "//" in path or "\\" in path:
+        return 400, {}, b""
+    resource_url = f"{GHCR_REGISTRY_ORIGIN}/v2/{path}"
+    accept = "application/vnd.oci.image.manifest.v1+json, application/json"
+    status, headers, body = _http_request(resource_url, {"Accept": accept})
+    if status != 401:
+        return status, headers, body
+    challenge = parse_ghcr_bearer_challenge(_header_value(headers, "WWW-Authenticate"))
+    if challenge is None:
+        return status, headers, body
+    bearer = _ghcr_bearer_token(challenge, username, token)
+    if bearer is None:
+        return 401, {}, b""
+    return _http_request(resource_url, {"Authorization": f"Bearer {bearer}", "Accept": accept})
 
 
 def select_unreal_tag(tags: list[str]) -> str | None:
@@ -442,7 +530,7 @@ def validate_unreal() -> dict[str, Any]:
     if not (username and token):
         base["blocker"] = "UNREAL_GITHUB_USERNAME_AND_TOKEN_NOT_CONFIGURED"
         return base
-    status, headers, body = registry_request("epicgames/unreal-engine/tags/list?n=1000", username, token)
+    status, headers, body = registry_request(f"{UNREAL_GHCR_REPOSITORY}/tags/list?n=1000", username, token)
     if status != 200:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "EPIC_GHCR_AUTHORIZATION_OR_ENTITLEMENT_FAILED"
@@ -450,20 +538,20 @@ def validate_unreal() -> dict[str, Any]:
         return base
     try:
         tags = json.loads(body).get("tags", [])
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, UnicodeDecodeError):
         tags = []
     tag = select_unreal_tag(tags if isinstance(tags, list) else [])
     if not tag:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "NO_VENDOR_PUBLISHED_UE_5_8_DEVELOPMENT_TAG_OBSERVED"
         return base
-    manifest_status, manifest_headers, _ = registry_request(f"epicgames/unreal-engine/manifests/{tag}", username, token)
+    manifest_status, manifest_headers, _ = registry_request(f"{UNREAL_GHCR_REPOSITORY}/manifests/{tag}", username, token)
     if manifest_status != 200:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "UE_5_8_MANIFEST_NOT_ACCESSIBLE"
         base["registry_http_status"] = manifest_status
         return base
-    digest = manifest_headers.get("Docker-Content-Digest")
+    digest = _header_value(manifest_headers, "Docker-Content-Digest")
     base["registry_authorization_validated"] = True
     base["published_tag"] = tag
     base["container_identity"] = digest if isinstance(digest, str) and digest.startswith("sha256:") else None
@@ -476,7 +564,7 @@ def validate_unreal() -> dict[str, Any]:
         base["state"] = "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
         base["blocker"] = "DOCKER_GHCR_LOGIN_FAILED"
         return base
-    image = f"ghcr.io/epicgames/unreal-engine:{tag}"
+    image = f"ghcr.io/{UNREAL_GHCR_REPOSITORY}:{tag}"
     try:
         pull = run(["docker", "pull", image], timeout=3600, secrets=[token])
     finally:
@@ -488,7 +576,7 @@ def validate_unreal() -> dict[str, Any]:
         return base
     inspect = run(["docker", "image", "inspect", image, "--format", "{{json .RepoDigests}}"], timeout=60)
     base["container_local_identity"] = redact(inspect.get("stdout", ""), [token])
-    pinned_image = f"ghcr.io/epicgames/unreal-engine@{digest}"
+    pinned_image = f"ghcr.io/{UNREAL_GHCR_REPOSITORY}@{digest}"
     editor_probe = run([
         "docker", "run", "--rm", "--network", "none", "--entrypoint", "/bin/sh", pinned_image,
         "-lc", "for p in /home/ue5/UnrealEngine/Engine/Binaries/Linux/UnrealEditor /home/ue4/UnrealEngine/Engine/Binaries/Linux/UE4Editor; do if [ -x \"$p\" ]; then printf '%s' \"$p\"; exit 0; fi; done; exit 7",
@@ -561,6 +649,34 @@ def self_test() -> dict[str, Any]:
         redacted = redact("token=unit-test-secret", ["unit-test-secret"])
         cases["redaction_removes_fixture_secret"] = "unit-test-secret" not in redacted
         cases["commercial_authority_stays_false"] = one["commercial_license_authority"] is False
+
+        exact = 'Bearer realm="https://ghcr.io/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
+        cases["ghcr_exact_bearer_challenge_accepted"] = parse_ghcr_bearer_challenge(exact) == {
+            "realm": "https://ghcr.io/token",
+            "service": "ghcr.io",
+            "scope": "repository:epicgames/unreal-engine:pull",
+        }
+        cases["ghcr_http_realm_rejected"] = parse_ghcr_bearer_challenge(
+            'Bearer realm="http://ghcr.io/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
+        ) is None
+        cases["ghcr_wrong_host_rejected"] = parse_ghcr_bearer_challenge(
+            'Bearer realm="https://example.com/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
+        ) is None
+        cases["ghcr_wrong_service_rejected"] = parse_ghcr_bearer_challenge(
+            'Bearer realm="https://ghcr.io/token",service="example.com",scope="repository:epicgames/unreal-engine:pull"'
+        ) is None
+        cases["ghcr_push_scope_rejected"] = parse_ghcr_bearer_challenge(
+            'Bearer realm="https://ghcr.io/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull,push"'
+        ) is None
+        cases["ghcr_other_repository_scope_rejected"] = parse_ghcr_bearer_challenge(
+            'Bearer realm="https://ghcr.io/token",service="ghcr.io",scope="repository:other/repo:pull"'
+        ) is None
+        cases["ghcr_non_bearer_challenge_rejected"] = parse_ghcr_bearer_challenge(
+            'Basic realm="https://ghcr.io/token"'
+        ) is None
+        cases["ghcr_realm_query_rejected"] = parse_ghcr_bearer_challenge(
+            'Bearer realm="https://ghcr.io/token?redirect=https://example.com",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
+        ) is None
     finally:
         os.environ.clear()
         os.environ.update(original)
