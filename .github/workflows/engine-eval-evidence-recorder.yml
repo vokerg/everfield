@@ -10,7 +10,6 @@ on:
 permissions:
   actions: read
   contents: write
-  pull-requests: write
 
 concurrency:
   group: everfield-engine-effective-recorder-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
@@ -184,10 +183,9 @@ jobs:
           test -f "$EVIDENCE_PATH"
           test "$(git status --porcelain --untracked-files=all)" = "?? $EVIDENCE_PATH"
 
-      - name: Publish immutable evidence handoff as a branch and draft PR
+      - name: Publish immutable evidence branch handoff
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ github.event.workflow_run.id }}
           RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
           SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
@@ -206,51 +204,19 @@ jobs:
           python3 - <<'PY'
           import json
           import os
-          import urllib.request
 
-          api = os.environ['GITHUB_API_URL'].rstrip('/')
-          repo = os.environ['GITHUB_REPOSITORY']
-          token = os.environ['GH_TOKEN']
-          run_id = os.environ['RUN_ID']
-          attempt = os.environ['RUN_ATTEMPT']
-          head = os.environ['SOURCE_HEAD_SHA']
-          branch = os.environ['EVIDENCE_BRANCH']
-          workflow_path = os.environ['SOURCE_WORKFLOW_PATH']
-          workflow_id = os.environ['SOURCE_WORKFLOW_ID']
-          publication_base = os.environ['PUBLICATION_BASE_MAIN_SHA']
-
-          body = f'''Automated sanitized evidence handoff only.
-
-          Source run: `{run_id}` attempt `{attempt}`
-          Source trusted-main SHA: `{head}`
-          Source workflow: `{workflow_path}` (workflow id `{workflow_id}`)
-          Publication base observed before branch creation: `{publication_base}`
-
-          This draft PR grants no integration, provider, commercial, production, legal, release, engine-selection, readiness, verification, decision, or canonical authority. It must be handled through the repository ownership/review protocol. Any later integration into `main` requires separate authority, a fresh exact expected-head check, and squash-only integration. The workflow never pushes generated evidence directly to `main`.
-          '''
-          payload = json.dumps({
-              'title': f'[PLAN-v1][EVIDENCE] Provider effective access run {run_id} attempt {attempt}',
-              'head': branch,
-              'base': 'main',
-              'body': body,
-              'draft': True,
-          }).encode()
-          request = urllib.request.Request(
-              f"{api}/repos/{repo}/pulls",
-              data=payload,
-              method='POST',
-              headers={
-                  'Authorization': f'Bearer {token}',
-                  'Accept': 'application/vnd.github+json',
-                  'Content-Type': 'application/json',
-                  'X-GitHub-Api-Version': '2022-11-28',
-              },
-          )
-          with urllib.request.urlopen(request, timeout=20) as response:
-              pr = json.load(response)
-          if pr.get('draft') is not True or pr.get('base', {}).get('ref') != 'main':
-              raise SystemExit('draft PR creation did not preserve publication boundary')
-          if pr.get('head', {}).get('ref') != branch:
-              raise SystemExit('draft PR head mismatch')
-          print(json.dumps({'draft_pr': pr.get('number'), 'head': branch}, sort_keys=True))
+          print(json.dumps({
+              'draft_pr_created_by_workflow': False,
+              'draft_pr_required': True,
+              'evidence_branch': os.environ['EVIDENCE_BRANCH'],
+              'evidence_path': os.environ['EVIDENCE_PATH'],
+              'integration_authority': False,
+              'next_step': 'SEPARATE_NORMAL_OWNERSHIP_EPISODE_OPENS_DRAFT_PR',
+              'publication_base_main_sha': os.environ['PUBLICATION_BASE_MAIN_SHA'],
+              'run_attempt': os.environ['RUN_ATTEMPT'],
+              'run_id': os.environ['RUN_ID'],
+              'source_head_sha': os.environ['SOURCE_HEAD_SHA'],
+              'source_workflow_id': os.environ['SOURCE_WORKFLOW_ID'],
+              'source_workflow_path': os.environ['SOURCE_WORKFLOW_PATH'],
+          }, sort_keys=True))
           PY

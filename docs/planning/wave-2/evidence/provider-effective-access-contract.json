@@ -3,6 +3,7 @@
   "mission_id": "W2-ENG-PROVIDER-EFFECTIVE-01",
   "source_issue": 373,
   "remediation_issue": 400,
+  "publication_recovery_issue": 440,
   "canonical_program_blob": "e3120ec203c4156328770aa86c12fbb7187966dc",
   "historical_issue_82_not_run_cells_preserved": 50,
   "historical_issue_82_cells_mutated": false,
@@ -33,8 +34,7 @@
     ],
     "recorder_stage_permissions": [
       "actions: read",
-      "contents: write",
-      "pull-requests: write"
+      "contents: write"
     ],
     "credentialed_stage_environment": "engine-eval",
     "trusted_branch": "main",
@@ -72,7 +72,9 @@
     "mode": "BOUNDED_EVIDENCE_BRANCH_DRAFT_PR",
     "branch_pattern": "evidence/provider-effective-access/run-<run_id>-attempt-<run_attempt>",
     "direct_push_to_main": false,
+    "recorder_publishes_branch_only": true,
     "draft_pr_required": true,
+    "draft_pr_creator": "SEPARATE_NORMAL_OWNERSHIP_EPISODE",
     "workflow_success_grants_integration_authority": false,
     "later_main_integration_requires_separate_authority": true,
     "later_main_integration_requires_fresh_exact_expected_head_check": true,
@@ -94,8 +96,7 @@
     "trusted_recorder_workflow": ".github/workflows/engine-eval-evidence-recorder.yml",
     "trusted_recorder_permissions": [
       "actions: read",
-      "contents: write",
-      "pull-requests: write"
+      "contents: write"
     ],
     "health_workflow": ".github/workflows/engine-eval-health.yml",
     "source_artifact_schema": "W2-ENG-PROVIDER-EFFECTIVE-ACCESS-v1",
@@ -105,7 +106,8 @@
     "recorder_projects_fixed_non_secret_fields": true,
     "recorder_direct_main_push": false,
     "recorder_creates_bounded_evidence_branch": true,
-    "recorder_creates_draft_pr": true,
+    "recorder_creates_draft_pr": false,
+    "draft_pr_created_by_separate_ownership_episode": true,
     "integration_authority": false
   },
   "remediation_provenance": {
@@ -122,5 +124,17 @@
       "W2-ENG-PROVIDER-EFFECTIVE-REV-M01",
       "W2-ENG-PROVIDER-EFFECTIVE-REV-M02"
     ]
+  },
+  "publication_recovery_provenance": {
+    "recorder_worktree_remediation_issue": 421,
+    "recorder_worktree_review_issue": 425,
+    "recorder_worktree_publication_sha": "b03193c230e00dde6ad9340d69308c2a8de1ae56",
+    "fresh_evaluator_run": 31959049126,
+    "fresh_recorder_run": 31959057717,
+    "fresh_recorder_failure": "ACTIONS_GITHUB_TOKEN_PR_CREATE_HTTP_403_AFTER_EVIDENCE_BRANCH_PUSH",
+    "recovered_evidence_branch": "evidence/provider-effective-access/run-31959049126-attempt-1",
+    "recovered_evidence_branch_head": "ad34a0039d99efd04869ae8aeceaed2097d30924",
+    "recovered_draft_pr": 438,
+    "failed_recorder_run_relabelled_as_success": false
   }
 }
