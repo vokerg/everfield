@@ -7,7 +7,7 @@ kind: HANDOFF
 issue: 373
 mission_id: W2-ENG-PROVIDER-EFFECTIVE-01
 branch: planning/issue-373
-state: IN_PROGRESS
+state: REVIEW_READY
 authority_mode: OWNER
 ```
 
@@ -42,6 +42,8 @@ production, legal, release, engine-selection, or integration authority.
 - Validator deterministic self-tests pass, including independent provider
   unlock and secret-redaction checks.
 - Historical Issue #82 count is fixed at 50 and mutation is rejected.
+- Draft PR #397 targets `main` from the exact task branch; its head is the
+  immutable review surface for the current packet.
 
 ## Remaining gates
 
