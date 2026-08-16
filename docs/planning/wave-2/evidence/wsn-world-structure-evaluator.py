@@ -3,7 +3,7 @@
 import argparse,hashlib,json
 from collections import defaultdict,deque
 from pathlib import Path
-V="wsn-world-structure-evaluator-v3-rem1"
+V="wsn-world-structure-evaluator-v3-rem2"
 R={
 "E1":{"duplicate_facts","incompatible_facts","invalid_chronology","branch_conflict","scope_false_positive_control"},
 "E2":{"distinct_knowledge","distinct_belief","belief_not_objective","world_state_change","lawful_disclosure","player_visibility_leak","relationship_state_leak","social_standing_leak","generated_presentation_leak"},
@@ -59,8 +59,11 @@ def qr(x):
  return sorted(set(f)),{"solvable":ok}
 def e5(x):
  f=[];s=json.loads(json.dumps(x["v1"]));s["branch_facts"].append(x["choice"]["add_branch_fact"]);s["history"].append(x["choice"]["history_event"])
- raw=json.dumps(s,sort_keys=True,separators=(",",":"));loaded=s if x["fault"]=="skip_reload" else json.loads(raw)
- if x["fault"]=="skip_reload":f+=["RELOAD_NOT_PERFORMED"]
+ raw=json.dumps(s,sort_keys=True,separators=(",",":"))
+ s["branch_facts"].append("BF:UNSERIALIZED_AFTER_SAVE")
+ loaded=s if x["fault"]=="skip_reload" else json.loads(raw)
+ if "BF:UNSERIALIZED_AFTER_SAVE" in loaded.get("branch_facts",[]):
+  f+=["RELOAD_NOT_PERFORMED"];loaded["branch_facts"].remove("BF:UNSERIALIZED_AFTER_SAVE")
  if x["fault"]=="skip_migration":m=loaded;f+=["MIGRATION_NOT_PERFORMED"]
  else:
   m={"schema_version":x["migration"]["target_version"]}
