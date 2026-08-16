@@ -1,0 +1,64 @@
+{
+  "actual_byte_substitution_rejected": true,
+  "all_remediation_invariants_verified": true,
+  "candidate_identity_ok": true,
+  "failure_injection": {
+    "observed_exit": 1,
+    "observed_stderr": "scrot: Can't open X display. It *is* running, yeah? [:199]\n",
+    "ok": true,
+    "reasons": []
+  },
+  "fi_misclassification_rejected": true,
+  "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+  "normal_attempts": {
+    "N1": {
+      "frame": {
+        "dimensions": [
+          1280,
+          720
+        ],
+        "marker_hex": "E6CC1A",
+        "ok": true,
+        "panel_hex": [
+          "CC1F1F",
+          "1FB833",
+          "1F40DB"
+        ],
+        "sha256": "32c2c6cce0898ec194ee00d75e6ec89eb5867df97a5852fb7fce69d549dbe34a"
+      },
+      "ok": true,
+      "reasons": []
+    },
+    "N2": {
+      "frame": {
+        "dimensions": [
+          1280,
+          720
+        ],
+        "marker_hex": "E61ACC",
+        "ok": true,
+        "panel_hex": [
+          "CC1F1F",
+          "1FB833",
+          "1F40DB"
+        ],
+        "sha256": "8a3b0ba520f9c8577f5d510c97181f3e8449102b3729615b3a1c397f176dbf7b"
+      },
+      "ok": true,
+      "reasons": []
+    }
+  },
+  "reasons": [],
+  "recomputed_adaptation": {
+    "adaptation_identity": "25d0ead1111ff8ef214a622286f71baa86ba127a13a65ca7c674cdcc2128f713",
+    "binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+    "reasons": [],
+    "result": "ACCEPT"
+  },
+  "recomputed_aggregate": {
+    "aggregate": "PASS_FOR_COMPARISON",
+    "reasons": [],
+    "valid_envelope": true
+  },
+  "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-INDEPENDENT-VERIFY-v1"
+}

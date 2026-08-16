@@ -1,0 +1,546 @@
+{
+  "adaptation_validation": {
+    "adaptation_identity": "25d0ead1111ff8ef214a622286f71baa86ba127a13a65ca7c674cdcc2128f713",
+    "binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+    "reasons": [],
+    "result": "ACCEPT"
+  },
+  "aggregate": {
+    "aggregate": "PASS_FOR_COMPARISON",
+    "reasons": [],
+    "valid_envelope": true
+  },
+  "candidate_identity": {
+    "body": {
+      "archive_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+      "artifact_digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+      "baseline": "4.7.1-stable",
+      "candidate": "Godot",
+      "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+      "producer_head": "0719199237d3ac46505f52a06df0a0fc93429c9f",
+      "review_head": "d2e7c34e583eedd2b2d5c4b02c8969e581b80563",
+      "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+      "runner_sha256": "62d3c45ccb10a75f8b78cfa52598b4fad4e448f022070ef12d637b0919688027",
+      "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea",
+      "version": "4.7.1.stable.official.a13da4feb\n"
+    },
+    "identity_digest": "sha256:020979edcaf9f579f3ef6e92540418a68e28a0bd64f189cde88a158c702d5d80"
+  },
+  "candidate_matrix": {
+    "Bevy": "INCONCLUSIVE_HARNESS_OR_INFRA",
+    "Defold": "INCONCLUSIVE_HARNESS_OR_INFRA",
+    "Godot": "REMEDIATED_EMPIRICAL_S6_EVIDENCE_PENDING_REQUIRED_REVIEW",
+    "Unity": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY",
+    "Unreal Engine": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY"
+  },
+  "canonicality": "NOT_CANONICAL",
+  "engine_selected": false,
+  "fresh_required_review": true,
+  "frozen_provenance": {
+    "producer_artifact": 9268994399,
+    "producer_head": "0719199237d3ac46505f52a06df0a0fc93429c9f",
+    "producer_issue": 456,
+    "producer_run": 31967674130,
+    "producer_terminal": 5309296967,
+    "review_findings": [
+      "W2-ENG-TECH-S6-REV-M01",
+      "W2-ENG-TECH-S6-REV-M02"
+    ],
+    "review_head": "d2e7c34e583eedd2b2d5c4b02c8969e581b80563",
+    "review_issue": 458,
+    "review_terminal": 5309336848
+  },
+  "generation": {
+    "adaptation": {
+      "bounds": {
+        "capture_frame_count": 1,
+        "screen_count": 3,
+        "viewport_height": 720,
+        "viewport_width": 1280
+      },
+      "candidate_id": "Godot",
+      "extra_evidence": [],
+      "failure_injections": [
+        "FI-S6-CAPTURE-DOWN-v2"
+      ],
+      "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+      "fixed_input_refs": [
+        "SLICE:logical_state",
+        "SLICE:player_surface",
+        "SLICE:capture_fixture"
+      ],
+      "harness_id": "W2-ENG-HARNESS-v5",
+      "hidden_context_transfer": false,
+      "mappings": {
+        "identity_bound_capture": "EQUIVALENT",
+        "reach_known_state": "EQUIVALENT",
+        "state_vs_capture_failure_separated": "EQUIVALENT"
+      },
+      "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+      "package_target": null,
+      "resource_exception": false,
+      "scenario_id": "S6",
+      "start_profile": {
+        "cache_mode": "COLD",
+        "generated_state_policy": "REGENERATE_FROM_REPO",
+        "profile_id": "W2-ENG-START-COLD-v2",
+        "resource_class": "W2-ENG-HOST-COMMON-v2"
+      },
+      "undocumented_manual_intervention": false
+    },
+    "adaptation_binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+    "all_attempt_refs": [
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-N1",
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-N2",
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-FI1"
+    ],
+    "attempts": {
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-FI1": {
+        "attempt_id": "GEN-S6R-682a8afad97938325c6f9f40-S6-FI1",
+        "candidate_generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+        "candidate_id": "Godot",
+        "failure_class": "NONE",
+        "injection_id": "FI-S6-CAPTURE-DOWN-v2",
+        "kind": "FAILURE_INJECTION",
+        "normal_index": null,
+        "reset_id": "RESET-S6R-be7c1165160d4323d34bc653",
+        "reset_verified": true,
+        "resource_class": "W2-ENG-HOST-COMMON-v2",
+        "result": "PASS",
+        "scenario_id": "S6",
+        "workspace_id": "WS-S6R-16e57d42b34b3bb4f9dd78ef"
+      },
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-N1": {
+        "attempt_id": "GEN-S6R-682a8afad97938325c6f9f40-S6-N1",
+        "candidate_generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+        "candidate_id": "Godot",
+        "failure_class": "NONE",
+        "injection_id": null,
+        "kind": "NORMAL",
+        "normal_index": 1,
+        "reset_id": "RESET-S6R-8834e548334a6fb76a1cb032",
+        "reset_verified": true,
+        "resource_class": "W2-ENG-HOST-COMMON-v2",
+        "result": "PASS",
+        "scenario_id": "S6",
+        "workspace_id": "WS-S6R-43db80978d3872e3ccc8869a"
+      },
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-N2": {
+        "attempt_id": "GEN-S6R-682a8afad97938325c6f9f40-S6-N2",
+        "candidate_generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+        "candidate_id": "Godot",
+        "failure_class": "NONE",
+        "injection_id": null,
+        "kind": "NORMAL",
+        "normal_index": 2,
+        "reset_id": "RESET-S6R-fd9289d03fccac94ccb9b907",
+        "reset_verified": true,
+        "resource_class": "W2-ENG-HOST-COMMON-v2",
+        "result": "PASS",
+        "scenario_id": "S6",
+        "workspace_id": "WS-S6R-1c5b7de68dac738b2327b028"
+      }
+    },
+    "candidate_id": "Godot",
+    "candidate_work_id": "WORK-S6R-f4576f798ba60a2e4d47dc78",
+    "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+    "harness_defect": false,
+    "predecessor_generation_id": null,
+    "repair_change_ref": null,
+    "run_registry_refs": [
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-N1",
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-N2",
+      "GEN-S6R-682a8afad97938325c6f9f40-S6-FI1"
+    ],
+    "scenario_id": "S6"
+  },
+  "implementation_readiness": false,
+  "integration_authority": false,
+  "issue": 460,
+  "local_semantics_ok": true,
+  "mission_id": "W2-ENG-TECH-S6-REM-01",
+  "normal_frame_sha256": {
+    "N1": "32c2c6cce0898ec194ee00d75e6ec89eb5867df97a5852fb7fce69d549dbe34a",
+    "N2": "8a3b0ba520f9c8577f5d510c97181f3e8449102b3729615b3a1c397f176dbf7b"
+  },
+  "normal_frames_byte_distinct": true,
+  "raw_attempts": [
+    {
+      "digest": "sha256:8eb9a47b856cf2554e87e1850ce6b9e4d796c40acd8c0130a144a5fc8c767ce6",
+      "record": {
+        "candidate": "Godot",
+        "candidate_generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+        "failure_class": "NONE",
+        "formal_result": "PASS",
+        "label": "N1",
+        "mode": "NORMAL",
+        "required_injection": null,
+        "reset_proof": {
+          "pre_workspace_absent": true,
+          "reset_id": "RESET-S6R-8834e548334a6fb76a1cb032",
+          "workspace_created_exclusive": true,
+          "workspace_id": "WS-S6R-43db80978d3872e3ccc8869a"
+        },
+        "reset_verified_derived": true,
+        "scenario_id": "S6",
+        "schema": "S6R-RAW-ATTEMPT-v1",
+        "source": {
+          "candidate_executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "candidate_exit": -15,
+          "candidate_process_alive_at_capture": true,
+          "candidate_stderr": "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)\nlibpulse.so.0: cannot open shared object file: No such file or directory\nlibpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+          "candidate_stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nEVERFIELD_S6_STATE:CAPTURE-STATE-042:N1\n",
+          "capture": {
+            "capture_environment": {
+              "DISPLAY": ":99"
+            },
+            "command": [
+              "/usr/bin/scrot",
+              "-z",
+              "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/engine-technical-s6-remediation/frames/Godot/N1.png"
+            ],
+            "dimensions": [
+              1280,
+              720
+            ],
+            "exit": 0,
+            "frame_count": 1,
+            "marker_hex": "E6CC1A",
+            "panel_hex": [
+              "CC1F1F",
+              "1FB833",
+              "1F40DB"
+            ],
+            "path_exists": true,
+            "program": "scrot",
+            "real_capture_invoked": true,
+            "sha256": "32c2c6cce0898ec194ee00d75e6ec89eb5867df97a5852fb7fce69d549dbe34a",
+            "stderr": "",
+            "stdout": "",
+            "timed_out": false
+          },
+          "capture_binding": {
+            "body": {
+              "attempt": "N1",
+              "attempt_marker_hex": "E6CC1A",
+              "candidate": "Godot",
+              "capture_display": ":99",
+              "capture_exit": 0,
+              "classification": "STATE_AND_CAPTURE_OK",
+              "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+              "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+              "project_digest": "sha256:b826481b2919bd437bf065b84726dd42c41e9a7d883c8df8198ce9c07e69b934",
+              "retained_frame_sha256": "32c2c6cce0898ec194ee00d75e6ec89eb5867df97a5852fb7fce69d549dbe34a",
+              "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+              "state_digest": "sha256:dbf4336a3196831d1ac895e99d3ccc05388fb3dda4e4f845a74143be5a791088"
+            },
+            "digest": "sha256:c02aa19efff62b759423ff2e52f23ac03a7636bc08beaaead2222c230a3dbc7d"
+          },
+          "failure_separation": {
+            "capture_channel": "scrot-on-X-display",
+            "classification": "STATE_AND_CAPTURE_OK",
+            "state_channel": "candidate-generated-ready-file"
+          },
+          "launch": {
+            "command": [
+              "/tmp/s6-rem-l2agagwt/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+              "--path",
+              "/tmp/s6-rem-l2agagwt/N1",
+              "--display-driver",
+              "x11",
+              "--rendering-method",
+              "gl_compatibility"
+            ]
+          },
+          "project_identity": {
+            "digest": "sha256:b826481b2919bd437bf065b84726dd42c41e9a7d883c8df8198ce9c07e69b934",
+            "files": {
+              "main.gd": "09e10707df50b53bff6b3023e785379ea88f7320860f141216e087bc2a2fe974",
+              "main.tscn": "0872e41bac38a69ca1b1d17aeaacbf33092f0b4555741502cc6d1de90268c22f",
+              "project.godot": "9de2e6ea94a868f9a8551c66e26b103cb8b7b4a97d36d8abf36141f40b87618e"
+            }
+          },
+          "retained_frame": {
+            "attempt_marker_hex": "E6CC1A",
+            "dimensions": [
+              1280,
+              720
+            ],
+            "relative_path": "frames/Godot/N1.png",
+            "sha256": "32c2c6cce0898ec194ee00d75e6ec89eb5867df97a5852fb7fce69d549dbe34a"
+          },
+          "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+          "state_observation": {
+            "attempt": "N1",
+            "attempt_marker_hex": "E6CC1A",
+            "candidate": "Godot",
+            "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+            "marker": "CAPTURE-STATE-042",
+            "ok": true,
+            "routes": [
+              "BOOT_OR_MAIN->PLAY_SURFACE",
+              "PLAY_SURFACE->SETTINGS",
+              "SETTINGS->PLAY_SURFACE"
+            ],
+            "screens": [
+              "BOOT_OR_MAIN",
+              "PLAY_SURFACE",
+              "SETTINGS"
+            ],
+            "viewport": "1280x720"
+          }
+        }
+      }
+    },
+    {
+      "digest": "sha256:27c123f4a4b3c861993c1bce4a11062e7d9883e63756c7c74649df20d746b077",
+      "record": {
+        "candidate": "Godot",
+        "candidate_generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+        "failure_class": "NONE",
+        "formal_result": "PASS",
+        "label": "N2",
+        "mode": "NORMAL",
+        "required_injection": null,
+        "reset_proof": {
+          "pre_workspace_absent": true,
+          "reset_id": "RESET-S6R-fd9289d03fccac94ccb9b907",
+          "workspace_created_exclusive": true,
+          "workspace_id": "WS-S6R-1c5b7de68dac738b2327b028"
+        },
+        "reset_verified_derived": true,
+        "scenario_id": "S6",
+        "schema": "S6R-RAW-ATTEMPT-v1",
+        "source": {
+          "candidate_executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "candidate_exit": -15,
+          "candidate_process_alive_at_capture": true,
+          "candidate_stderr": "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)\nlibpulse.so.0: cannot open shared object file: No such file or directory\nlibpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+          "candidate_stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nEVERFIELD_S6_STATE:CAPTURE-STATE-042:N2\n",
+          "capture": {
+            "capture_environment": {
+              "DISPLAY": ":99"
+            },
+            "command": [
+              "/usr/bin/scrot",
+              "-z",
+              "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/engine-technical-s6-remediation/frames/Godot/N2.png"
+            ],
+            "dimensions": [
+              1280,
+              720
+            ],
+            "exit": 0,
+            "frame_count": 1,
+            "marker_hex": "E61ACC",
+            "panel_hex": [
+              "CC1F1F",
+              "1FB833",
+              "1F40DB"
+            ],
+            "path_exists": true,
+            "program": "scrot",
+            "real_capture_invoked": true,
+            "sha256": "8a3b0ba520f9c8577f5d510c97181f3e8449102b3729615b3a1c397f176dbf7b",
+            "stderr": "",
+            "stdout": "",
+            "timed_out": false
+          },
+          "capture_binding": {
+            "body": {
+              "attempt": "N2",
+              "attempt_marker_hex": "E61ACC",
+              "candidate": "Godot",
+              "capture_display": ":99",
+              "capture_exit": 0,
+              "classification": "STATE_AND_CAPTURE_OK",
+              "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+              "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+              "project_digest": "sha256:b826481b2919bd437bf065b84726dd42c41e9a7d883c8df8198ce9c07e69b934",
+              "retained_frame_sha256": "8a3b0ba520f9c8577f5d510c97181f3e8449102b3729615b3a1c397f176dbf7b",
+              "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+              "state_digest": "sha256:144e3080952f1bd926a0f465ff1d49ffa8a516dcfc7292a87653e79efaeb2ff0"
+            },
+            "digest": "sha256:75982622ee069adc13840ad799624be944a60b5fb2f5e82903be834cb556c7e4"
+          },
+          "failure_separation": {
+            "capture_channel": "scrot-on-X-display",
+            "classification": "STATE_AND_CAPTURE_OK",
+            "state_channel": "candidate-generated-ready-file"
+          },
+          "launch": {
+            "command": [
+              "/tmp/s6-rem-l2agagwt/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+              "--path",
+              "/tmp/s6-rem-l2agagwt/N2",
+              "--display-driver",
+              "x11",
+              "--rendering-method",
+              "gl_compatibility"
+            ]
+          },
+          "project_identity": {
+            "digest": "sha256:b826481b2919bd437bf065b84726dd42c41e9a7d883c8df8198ce9c07e69b934",
+            "files": {
+              "main.gd": "09e10707df50b53bff6b3023e785379ea88f7320860f141216e087bc2a2fe974",
+              "main.tscn": "0872e41bac38a69ca1b1d17aeaacbf33092f0b4555741502cc6d1de90268c22f",
+              "project.godot": "9de2e6ea94a868f9a8551c66e26b103cb8b7b4a97d36d8abf36141f40b87618e"
+            }
+          },
+          "retained_frame": {
+            "attempt_marker_hex": "E61ACC",
+            "dimensions": [
+              1280,
+              720
+            ],
+            "relative_path": "frames/Godot/N2.png",
+            "sha256": "8a3b0ba520f9c8577f5d510c97181f3e8449102b3729615b3a1c397f176dbf7b"
+          },
+          "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+          "state_observation": {
+            "attempt": "N2",
+            "attempt_marker_hex": "E61ACC",
+            "candidate": "Godot",
+            "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+            "marker": "CAPTURE-STATE-042",
+            "ok": true,
+            "routes": [
+              "BOOT_OR_MAIN->PLAY_SURFACE",
+              "PLAY_SURFACE->SETTINGS",
+              "SETTINGS->PLAY_SURFACE"
+            ],
+            "screens": [
+              "BOOT_OR_MAIN",
+              "PLAY_SURFACE",
+              "SETTINGS"
+            ],
+            "viewport": "1280x720"
+          }
+        }
+      }
+    },
+    {
+      "digest": "sha256:b9f4a5ad6eef83defcedb9124beb6c052ac86c32e369e9ed9c050db67fdb99fc",
+      "record": {
+        "candidate": "Godot",
+        "candidate_generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+        "failure_class": "NONE",
+        "formal_result": "PASS",
+        "label": "FI1",
+        "mode": "INJECT",
+        "required_injection": "FI-S6-CAPTURE-DOWN-v2",
+        "reset_proof": {
+          "pre_workspace_absent": true,
+          "reset_id": "RESET-S6R-be7c1165160d4323d34bc653",
+          "workspace_created_exclusive": true,
+          "workspace_id": "WS-S6R-16e57d42b34b3bb4f9dd78ef"
+        },
+        "reset_verified_derived": true,
+        "scenario_id": "S6",
+        "schema": "S6R-RAW-ATTEMPT-v1",
+        "source": {
+          "candidate_executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "candidate_exit": -15,
+          "candidate_process_alive_at_capture": true,
+          "candidate_stderr": "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)\nlibpulse.so.0: cannot open shared object file: No such file or directory\nlibpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+          "candidate_stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nEVERFIELD_S6_STATE:CAPTURE-STATE-042:FI1\n",
+          "capture": {
+            "capture_environment": {
+              "DISPLAY": ":199"
+            },
+            "command": [
+              "/usr/bin/scrot",
+              "-z",
+              "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/engine-technical-s6-remediation/frames/Godot/FI1.png"
+            ],
+            "dimensions": null,
+            "exit": 1,
+            "frame_count": 0,
+            "marker_hex": null,
+            "panel_hex": null,
+            "path_exists": false,
+            "program": "scrot",
+            "real_capture_invoked": true,
+            "sha256": null,
+            "stderr": "scrot: Can't open X display. It *is* running, yeah? [:199]\n",
+            "stdout": "",
+            "timed_out": false
+          },
+          "capture_binding": {
+            "body": {
+              "attempt": "FI1",
+              "attempt_marker_hex": "1ACCE6",
+              "candidate": "Godot",
+              "capture_display": ":199",
+              "capture_exit": 1,
+              "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
+              "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+              "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+              "project_digest": "sha256:b826481b2919bd437bf065b84726dd42c41e9a7d883c8df8198ce9c07e69b934",
+              "retained_frame_sha256": null,
+              "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+              "state_digest": "sha256:a762478c24317644a7c1c263df5384f63e8a127df17889f70f3ce41978e72681"
+            },
+            "digest": "sha256:571b4944bb1eaef7c506ac9182c1286645f22dbc356a35edb3394b7430deb98b"
+          },
+          "failure_separation": {
+            "capture_channel": "scrot-on-X-display",
+            "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
+            "state_channel": "candidate-generated-ready-file"
+          },
+          "launch": {
+            "command": [
+              "/tmp/s6-rem-l2agagwt/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+              "--path",
+              "/tmp/s6-rem-l2agagwt/FI1",
+              "--display-driver",
+              "x11",
+              "--rendering-method",
+              "gl_compatibility"
+            ]
+          },
+          "project_identity": {
+            "digest": "sha256:b826481b2919bd437bf065b84726dd42c41e9a7d883c8df8198ce9c07e69b934",
+            "files": {
+              "main.gd": "09e10707df50b53bff6b3023e785379ea88f7320860f141216e087bc2a2fe974",
+              "main.tscn": "0872e41bac38a69ca1b1d17aeaacbf33092f0b4555741502cc6d1de90268c22f",
+              "project.godot": "9de2e6ea94a868f9a8551c66e26b103cb8b7b4a97d36d8abf36141f40b87618e"
+            }
+          },
+          "retained_frame": null,
+          "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+          "state_observation": {
+            "attempt": "FI1",
+            "attempt_marker_hex": "1ACCE6",
+            "candidate": "Godot",
+            "generation_id": "GEN-S6R-682a8afad97938325c6f9f40",
+            "marker": "CAPTURE-STATE-042",
+            "ok": true,
+            "routes": [
+              "BOOT_OR_MAIN->PLAY_SURFACE",
+              "PLAY_SURFACE->SETTINGS",
+              "SETTINGS->PLAY_SURFACE"
+            ],
+            "screens": [
+              "BOOT_OR_MAIN",
+              "PLAY_SURFACE",
+              "SETTINGS"
+            ],
+            "viewport": "1280x720"
+          }
+        }
+      }
+    }
+  ],
+  "run_identity": "31968880106:1:74ccb754b7453cad36a5b0a9007f1591674bd006",
+  "runner_sha256": "62d3c45ccb10a75f8b78cfa52598b4fad4e448f022070ef12d637b0919688027",
+  "scenario_id": "S6",
+  "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-v1",
+  "source_bindings": {
+    "GEN-S6R-682a8afad97938325c6f9f40-S6-FI1": "sha256:b9f4a5ad6eef83defcedb9124beb6c052ac86c32e369e9ed9c050db67fdb99fc",
+    "GEN-S6R-682a8afad97938325c6f9f40-S6-N1": "sha256:8eb9a47b856cf2554e87e1850ce6b9e4d796c40acd8c0130a144a5fc8c767ce6",
+    "GEN-S6R-682a8afad97938325c6f9f40-S6-N2": "sha256:27c123f4a4b3c861993c1bce4a11062e7d9883e63756c7c74649df20d746b077"
+  },
+  "trusted_bounded_s6_comparison_authority": false,
+  "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea"
+}
