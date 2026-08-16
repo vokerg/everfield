@@ -1,0 +1,75 @@
+{
+  "all_provisional_verified": true,
+  "candidate_verification": {
+    "Bevy": {
+      "ok": true,
+      "reasons": [],
+      "recomputed_aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      }
+    },
+    "Defold": {
+      "ok": true,
+      "reasons": [],
+      "recomputed_aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      }
+    },
+    "Godot": {
+      "ok": true,
+      "reasons": [],
+      "recomputed_aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      }
+    }
+  },
+  "contract_generated_metadata_collision_required": true,
+  "evidence_run_identity": "31960259059:1:f515bbcba6e53f56534bce5f58a3869d006aa3d5",
+  "negative_attacks": {
+    "Bevy": {
+      "binding_substitution_rejected": true,
+      "generated_metadata_collision_omission_rejected": true,
+      "generated_metadata_resolution_bypass_rejected": true,
+      "lost_nonoverlap_rejected": true,
+      "missing_overlap_rejected": true,
+      "silent_overlap_rejected": true,
+      "toolchain_identity_substitution_rejected": true,
+      "validation_bypass_rejected": true,
+      "workspace_reuse_rejected": true
+    },
+    "Defold": {
+      "binding_substitution_rejected": true,
+      "generated_metadata_collision_omission_rejected": true,
+      "generated_metadata_resolution_bypass_rejected": true,
+      "lost_nonoverlap_rejected": true,
+      "missing_overlap_rejected": true,
+      "silent_overlap_rejected": true,
+      "toolchain_identity_substitution_rejected": true,
+      "validation_bypass_rejected": true,
+      "workspace_reuse_rejected": true
+    },
+    "Godot": {
+      "binding_substitution_rejected": true,
+      "generated_metadata_collision_omission_rejected": true,
+      "generated_metadata_resolution_bypass_rejected": true,
+      "lost_nonoverlap_rejected": true,
+      "missing_overlap_rejected": true,
+      "silent_overlap_rejected": true,
+      "toolchain_identity_substitution_rejected": true,
+      "validation_bypass_rejected": true,
+      "workspace_reuse_rejected": true
+    }
+  },
+  "provisional_candidates": [
+    "Bevy",
+    "Defold",
+    "Godot"
+  ],
+  "schema": "W2-ENG-TECHNICAL-S5-INDEPENDENT-VERIFY-v2"
+}
