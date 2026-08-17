@@ -1,0 +1,225 @@
+name: W2 Unity license config trusted-main diagnostic
+
+on:
+  push:
+    branches:
+      - main
+      - planning/issue-547
+    paths:
+      - .github/workflows/w2-eng-provider-unity-license-config-main-diag.yml
+      - tools/planning/unity_license_config_diag.py
+      - docs/planning/wave-2/evidence/provider-authority-input-contract.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: w2-unity-license-config-main-diag-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  branch-selftest:
+    if: github.repository == 'vokerg/everfield' && github.ref == 'refs/heads/planning/issue-547'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact remediation head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Verify one-shot trigger and protected-job structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/planning/issue-547"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git hash-object docs/planning/wave-2/evidence/provider-authority-input-contract.json)" = "a4c40fe1f77ec9557dbe0d76af3e947f188c96be"
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('.github/workflows/w2-eng-provider-unity-license-config-main-diag.yml')
+          text = p.read_text(encoding='utf-8')
+          lines = text.splitlines()
+          trigger_header = text.split('\njobs:\n', 1)[0]
+          for forbidden in ('workflow_dispatch:', 'schedule:', 'repository_dispatch:', 'workflow_call:'):
+              assert forbidden not in trigger_header, f'forbidden non-push trigger present: {forbidden}'
+          assert trigger_header.count('  push:') == 1
+          assert sum(line == '    environment: engine-eval' for line in lines) == 1
+          assert "    if: github.repository == 'vokerg/everfield' && github.ref == 'refs/heads/main'" in lines
+          assert "    if: github.repository == 'vokerg/everfield' && github.ref == 'refs/heads/planning/issue-547'" in lines
+          assert 'permissions:\n  contents: read' in trigger_header
+          assert 'branches:\n      - main\n      - planning/issue-547' in trigger_header
+          expected_paths = (
+              '.github/workflows/w2-eng-provider-unity-license-config-main-diag.yml',
+              'tools/planning/unity_license_config_diag.py',
+              'docs/planning/wave-2/evidence/provider-authority-input-contract.json',
+          )
+          for expected in expected_paths:
+              assert f'      - {expected}' in trigger_header
+          assert 'contents: write' not in trigger_header
+          assert 'actions: write' not in trigger_header
+          assert 'pull-requests: write' not in trigger_header
+          print('one-shot workflow structure: PASS')
+          PY
+
+      - name: Syntax and deterministic helper self-test
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/unity-license-config-main-diag"
+          python3 -m py_compile tools/planning/unity_license_config_diag.py
+          python3 tools/planning/unity_license_config_diag.py \
+            --self-test \
+            --out "$RUNNER_TEMP/unity-license-config-main-diag/selftest.json"
+          python3 - <<'PY'
+          import json, os
+          p=os.path.join(os.environ['RUNNER_TEMP'],'unity-license-config-main-diag','selftest.json')
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-PROVIDER-UNITY-LICENSE-CONFIG-MAIN-DIAG-SELFTEST-v1'
+          assert d['pass'] is True
+          assert all(d['cases'].values())
+          print('branch synthetic Unity config diagnostic: PASS')
+          PY
+
+      - name: Upload non-secret remediation self-test
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-unity-license-config-main-rem-selftest-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/unity-license-config-main-diag/selftest.json
+          if-no-files-found: error
+          retention-days: 30
+
+  trusted-main-diagnostic:
+    if: github.repository == 'vokerg/everfield' && github.ref == 'refs/heads/main'
+    environment: engine-eval
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact trusted main event SHA
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Fail closed unless source is trusted main
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "vokerg/everfield"
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git hash-object docs/planning/wave-2/evidence/provider-authority-input-contract.json)" = "a4c40fe1f77ec9557dbe0d76af3e947f188c96be"
+          python3 -m py_compile tools/planning/unity_license_config_diag.py
+          python3 tools/planning/unity_license_config_diag.py --self-test > /dev/null
+
+      - name: Install and pin exact Unity CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://public-cdn.cloud.unity3d.com/hub/prod/cli/install.sh | UNITY_CLI_VERSION=1.0.0-beta.5 bash
+          export PATH="$HOME/.unity/bin:$PATH"
+          discovered="$(command -v unity)"
+          test -n "$discovered"
+          test -x "$discovered"
+          resolved="$(readlink -f "$discovered")"
+          test -n "$resolved"
+          test -x "$resolved"
+          observed="$("$resolved" --version)"
+          test "$observed" = "1.0.0-beta.5"
+          echo "UNITY_CLI=$resolved" >> "$GITHUB_ENV"
+          echo "UNITY_CLI_OBSERVED_VERSION=$observed" >> "$GITHUB_ENV"
+
+      - name: Capture non-secret installed CLI command surface
+        shell: bash
+        run: |
+          set -u
+          help_dir="$RUNNER_TEMP/unity-license-config-main-diag-help"
+          mkdir -p "$help_dir"
+          set +e
+          "$UNITY_CLI" license --help > "$help_dir/license.txt" 2>&1
+          license_exit=$?
+          "$UNITY_CLI" license status --help > "$help_dir/status.txt" 2>&1
+          status_exit=$?
+          "$UNITY_CLI" config --help > "$help_dir/config.txt" 2>&1
+          config_exit=$?
+          set -e
+          echo "UNITY_LICENSE_HELP_EXIT=$license_exit" >> "$GITHUB_ENV"
+          echo "UNITY_LICENSE_STATUS_HELP_EXIT=$status_exit" >> "$GITHUB_ENV"
+          echo "UNITY_CONFIG_HELP_EXIT=$config_exit" >> "$GITHUB_ENV"
+          sha256sum "$help_dir/license.txt" "$help_dir/status.txt" "$help_dir/config.txt"
+          echo "Raw CLI help remains runner-temporary and is not uploaded."
+
+      - name: Measure protected Unity configuration presence only
+        shell: bash
+        env:
+          UNITY_AUTH_MODE: ${{ vars.UNITY_AUTH_MODE }}
+          UNITY_SERVICE_ACCOUNT_ID_PRESENT: ${{ secrets.UNITY_SERVICE_ACCOUNT_ID != '' }}
+          UNITY_SERVICE_ACCOUNT_SECRET_PRESENT: ${{ secrets.UNITY_SERVICE_ACCOUNT_SECRET != '' }}
+          UNITY_LICENSE_SERIAL_PRESENT: ${{ secrets.UNITY_LICENSE_SERIAL != '' }}
+          UNITY_OFFLINE_LICENSE_PRESENT: ${{ secrets.UNITY_OFFLINE_LICENSE_B64 != '' }}
+          UNITY_FLOATING_CONFIG_PRESENT: ${{ secrets.UNITY_FLOATING_CONFIG_B64 != '' }}
+        run: |
+          set -euo pipefail
+          help_dir="$RUNNER_TEMP/unity-license-config-main-diag-help"
+          out="$RUNNER_TEMP/unity-license-config-main-diag"
+          mkdir -p "$out"
+          python3 tools/planning/unity_license_config_diag.py \
+            --contract docs/planning/wave-2/evidence/provider-authority-input-contract.json \
+            --license-help "$help_dir/license.txt" \
+            --status-help "$help_dir/status.txt" \
+            --config-help "$help_dir/config.txt" \
+            --license-help-exit "$UNITY_LICENSE_HELP_EXIT" \
+            --status-help-exit "$UNITY_LICENSE_STATUS_HELP_EXIT" \
+            --config-help-exit "$UNITY_CONFIG_HELP_EXIT" \
+            --out "$out/diagnostic.json"
+
+      - name: Enforce bounded diagnostic authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          p="$RUNNER_TEMP/unity-license-config-main-diag/diagnostic.json"
+          python3 - <<'PY'
+          import json, os
+          p=os.path.join(os.environ['RUNNER_TEMP'],'unity-license-config-main-diag','diagnostic.json')
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-PROVIDER-UNITY-LICENSE-CONFIG-MAIN-DIAG-v1'
+          assert d['issue']==539
+          assert d['reviewed_input_contract']['git_blob']=='a4c40fe1f77ec9557dbe0d76af3e947f188c96be'
+          assert d['secret_values_accepted_by_probe'] is False
+          assert d['secret_hashes_in_evidence'] is False
+          assert d['provider_pass'] is False
+          assert d['unity_license_authority'] is False
+          assert d['editor_execution_authority'] is False
+          assert d['integration_authority'] is False
+          assert d['canonicality']=='NOT_CANONICAL'
+          assert d['unity']['effective_authorization_validated'] is False
+          assert d['unity']['credential_or_license_values_read'] is False
+          assert d['unity']['disposition'] in {
+              'UNITY_LICENSE_MODE_PRESENT_NEEDS_EFFECTIVE_WIRING',
+              'UNITY_LICENSE_CONFIGURATION_INPUT_REQUIRED_EXACT',
+          }
+          for surface in d['cli']['command_surface'].values():
+              assert surface['raw_text_persisted'] is False
+              assert len(surface['raw_sha256']) == 64
+          print('trusted-main bounded Unity config diagnostic envelope: PASS')
+          PY
+          {
+            echo "source_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "issue=539"
+            echo "mission_id=W2-ENG-PROVIDER-UNITY-LICENSE-CONFIG-MAIN-DIAG-01"
+            echo "unity_cli_version=${UNITY_CLI_OBSERVED_VERSION}"
+            echo "contract_blob=$(git hash-object docs/planning/wave-2/evidence/provider-authority-input-contract.json)"
+            sha256sum tools/planning/unity_license_config_diag.py
+            sha256sum "$p"
+          } > "$RUNNER_TEMP/unity-license-config-main-diag/run-identity.txt"
+
+      - name: Upload immutable one-shot trusted-main diagnostic artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-unity-license-config-main-diag-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/unity-license-config-main-diag/
+          if-no-files-found: error
+          retention-days: 30
