@@ -1,0 +1,86 @@
+{
+  "frontier": {
+    "combined_predicate_used_for_individual_unlock": false,
+    "combined_provider_predicate": false,
+    "commercial_license_authority": false,
+    "engine_selected": false,
+    "historical_not_run_cells_mutated": false,
+    "historical_not_run_cells_preserved": 50,
+    "legal_clearance": false,
+    "production_authority": false,
+    "provider_unlocks": {
+      "Unity": false,
+      "Unreal Engine": false
+    },
+    "release_authority": false,
+    "unity_empirical_cells_eligible": false,
+    "unreal_empirical_cells_eligible": false
+  },
+  "mission_id": "W2-ENG-PROVIDER-EFFECTIVE-01",
+  "providers": {
+    "Unity": {
+      "authentication_validated": false,
+      "baseline": "6000.5.6f1",
+      "blocker": "UNITY_LICENSE_STATUS_CONFIGURATION_REQUIRED",
+      "commercial_authority": false,
+      "editor_executed": false,
+      "editor_installed": false,
+      "legal_clearance": false,
+      "license_process": {
+        "exit": 4,
+        "seconds": 1.761,
+        "timed_out": false
+      },
+      "license_validated": false,
+      "native_s3": null,
+      "production_authority": false,
+      "provider": "Unity",
+      "registry_authorization_validated": false,
+      "release_authority": false,
+      "state": "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
+    },
+    "Unreal Engine": {
+      "authentication_validated": false,
+      "baseline": "5.8",
+      "blocker": "EPIC_GHCR_AUTHORIZATION_OR_ENTITLEMENT_FAILED",
+      "commercial_authority": false,
+      "editor_executed": false,
+      "editor_installed": false,
+      "legal_clearance": false,
+      "license_validated": false,
+      "native_s3": null,
+      "production_authority": false,
+      "provider": "Unreal Engine",
+      "registry_authorization_validated": false,
+      "release_authority": false,
+      "state": "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION"
+    }
+  },
+  "publication": {
+    "direct_main_push": false,
+    "fresh_expected_head_check_required": true,
+    "integration_authority": false,
+    "mode": "BOUNDED_EVIDENCE_BRANCH_DRAFT_PR",
+    "squash_only_required": true
+  },
+  "run": {
+    "branch": "main",
+    "conclusion": "success",
+    "event": "push",
+    "head_sha": "330c9f5b02d05b830eab7647fa552a3812e3f9c9",
+    "projection_code_sha": "330c9f5b02d05b830eab7647fa552a3812e3f9c9",
+    "publication_base_main_sha": "330c9f5b02d05b830eab7647fa552a3812e3f9c9",
+    "run_attempt": "1",
+    "run_id": "32025367097",
+    "workflow": {
+      "id": "335536370",
+      "name": "Everfield engine effective credentialed evaluator",
+      "path": ".github/workflows/engine-eval-credentialed.yml"
+    }
+  },
+  "schema": "W2-ENG-PROVIDER-EFFECTIVE-ACCESS-EVIDENCE-v1",
+  "secret_hashes_in_evidence": false,
+  "secret_values_in_evidence": false,
+  "source_schema": "W2-ENG-PROVIDER-EFFECTIVE-ACCESS-v1",
+  "workflow_success_is_not_authority": true
+}
