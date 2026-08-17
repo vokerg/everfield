@@ -1,0 +1,19 @@
+trigger_sha=3835b5ebae6340aa4137c0c0453b39a7e31bf059
+run_id=32029396638
+run_attempt=1
+issue=585
+mission=W2-ENG-TECH-S6-REM-01
+claim_comment=5315719466
+source_issue=456
+source_head=0719199237d3ac46505f52a06df0a0fc93429c9f
+source_run=31967674130
+source_artifact=9268994399
+review_issue=458
+review_terminal=5309336848
+finding_1=W2-ENG-TECH-S6-REV-M01
+finding_2=W2-ENG-TECH-S6-REV-M02
+6ca7560c7931ac3808acd866e20d4596d6ffda8a95dc1709c89530b5e611f903  tools/planning/engine_technical_s6_probe.py
+21c070ac6e2cc457b916696765265e0156e83aba03a87b9f2ea556ac03dd0d8a  tools/planning/engine_technical_s6_verify.py
+bf7de805a0bb941055466c4972d0f405b14f19f7e8d7196c9db07ab568fc5eac  tools/planning/engine_toolchain_probe.py
+9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea  docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+23f71143c3771df2f438b899a7a948e58da93bc15a3defe9cf3fb5e2b9147daf  docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
