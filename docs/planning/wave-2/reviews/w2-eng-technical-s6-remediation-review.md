@@ -1,102 +1,74 @@
-# W2-ENG-TECH-S6-REM-REV-01 — required review of S6 capture remediation
+# W2-ENG-TECH-S6-REM-REV-01 — required review of S6 remediation
 
-## Scope and trust mode
+## Review identity
 
-This is the fresh required review of exact remediation Issue #460 / PR #461 at judged head `0c6e11721f92794e9977e4b1a377c2e5b9cec8e5`. Review ownership is Issue #462, claim `5309429827`, reviewer session `frontier-drain-s6-rem-review-gpt56sol-20260816-01`.
+- issue: #588
+- mission: `W2-ENG-TECH-S6-REM-REV-01`
+- trust mode: `DEGRADED_SINGLE_AGENT`
+- judged issue: #585 / `W2-ENG-TECH-S6-REM-01`
+- judged terminal status: `5316012502`
+- judged head: `917866be1655223ebfc3166a7e1949db738f1ff7`
+- judged draft PR: #587, open/draft at that exact head
+- final judged run: `32029396638`, attempt 1, success, trigger `3835b5ebae6340aa4137c0c0453b39a7e31bf059`
+- artifact: `9288296812`
+- artifact digest independently recomputed from downloaded ZIP: `sha256:7868a7d499a070bd65b56478384a8eb739d0ccc9a61f5ec9c7a73dd4c650ec1e`
+- canonicality: `NOT_CANONICAL`
 
-Trust mode is `DEGRADED_SINGLE_AGENT`: the reviewer episode is distinct from remediation session `frontier-drain-s6-rem-gpt56sol-20260816-01`, but no stronger independent agent isolation is claimed.
-
-Canonical authority remains Planning Program v1 blob `e3120ec203c4156328770aa86c12fbb7187966dc`, binding comment `5245368879`, activation `413e729e8d2d5ac2eb138903f3f2ace07283b23e`. This review is `NOT_CANONICAL` and grants no integration authority by itself.
-
-## Frozen judged identity
-
-The review froze and checked:
-
-- remediation Issue #460, claim `5309348003`, terminal `5309373000`;
-- judged branch `planning/issue-460`, exact head `0c6e11721f92794e9977e4b1a377c2e5b9cec8e5`;
-- draft PR #461, exact head `0c6e11721f92794e9977e4b1a377c2e5b9cec8e5`, base `886438990ed395cde2fad0ee6cb98ca6ade0f26f`, mergeable/clean when reviewed;
-- trigger `74ccb754b7453cad36a5b0a9007f1591674bd006`;
-- Actions run `31968880106`, attempt 1, `success`, on `planning/issue-460`;
-- generated evidence commit `be98ca238539ea4aaf1d8e085ec3a9970ed639be`;
-- artifact `9269235928`, `w2-eng-tech-s6-rem-01-31968880106-1`;
-- recorded artifact SHA-256 `1e731483c6d73c7a4c1f931bfc29cf1eb9d1c5b6b93b9646a25e9ee329d24362`;
-- evidence SHA-256 `ffcd86bef441504dc93f65bc8ce4afaa1154448bb36eb68649d44f3909cc846c`;
-- independent-verification SHA-256 `6b07a0aa8620cd02e4f45ed335c7ab67ef70a70e89dbad880dd8fa9b82c7cd06`;
-- remediation generation `GEN-S6R-682a8afad97938325c6f9f40`.
-
-The Actions artifact was independently downloaded during this review. Its ZIP SHA-256 independently recomputed to the exact recorded artifact digest. The generated evidence commit is an ancestor of the judged head; the only later judged-head changes are the remediation report and handoff, so the byte-bearing generated evidence remains unchanged at the judged head.
-
-## M01 — retained actual frame bytes and attempt attribution
-
-**PASS.** The immutable artifact contains actual `frames/Godot/N1.png` and `frames/Godot/N2.png` byte objects. Independent review recomputation found:
-
-- N1 SHA-256 `32c2c6cce0898ec194ee00d75e6ec89eb5867df97a5852fb7fce69d549dbe34a`, decoded RGB 1280×720, candidate-visible marker pixel `E6CC1A`;
-- N2 SHA-256 `8a3b0ba520f9c8577f5d510c97181f3e8449102b3729615b3a1c397f176dbf7b`, decoded RGB 1280×720, candidate-visible marker pixel `E61ACC`;
-- normal frames are byte-distinct;
-- all three bounded player-surface panels independently decode to distinct retained colors in both frames.
-
-The marker is rendered by the Godot project itself from the attempt identity, not added by the host capture tool. The candidate-generated ready-state record binds the same attempt marker, exact generation, `CAPTURE-STATE-042`, three screen identities/routes, and 1280×720 viewport.
-
-The independent verifier's actual-byte substitution attack is materially adequate for M01: it copies the actual N1 PNG bytes into an N2 object and recomputes the byte SHA, capture SHA, capture-binding digest, and raw-attempt digest. The forged N2 still fails because the retained candidate-rendered N1 pixels do not satisfy independently derived N2 marker authority. Review inspection confirms `actual_byte_substitution_rejected=true` is not merely a prose assertion.
-
-## M02 — real capture-down failure separated from candidate state
-
-**PASS.** FI1 is not a synthetic boolean fixture. The runner starts the exact Godot project, reaches candidate-generated `CAPTURE-STATE-042`, records the Godot process alive at capture time, and invokes the same real capture program used by N1/N2: `/usr/bin/scrot`.
-
-Normal capture runs on `DISPLAY=:99`; FI1 deliberately invokes `scrot` with `DISPLAY=:199`. The retained raw attempt records:
-
-- `real_capture_invoked=true`;
-- program `scrot` and command path `/usr/bin/scrot`;
-- `DISPLAY=:199`;
-- observed exit `1`;
-- `timed_out=false`;
-- output path absent;
-- frame count `0`;
-- stderr `scrot: Can't open X display. It *is* running, yeah? [:199]`;
-- exact candidate process alive at capture;
-- exact candidate-generated state marker/routes/viewport still valid.
-
-Those facts support only `STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE`. The verifier also performs a recomputed-metadata misclassification attack by changing the FI classification to `STATE_REACHABILITY`; the exact FI verification rejects it. `fi_misclassification_rejected=true` is therefore mechanically supported.
-
-## Identity, reset, source, and v5 envelope attacks
-
-Independent review recomputation additionally confirmed:
-
-- candidate-identity body digest is exact;
-- remediation `WORK-S6R-f4576f798ba60a2e4d47dc78` and `GEN-S6R-682a8afad97938325c6f9f40` reconstruct exactly from candidate identity, adaptation identity and run identity;
-- all N1/N2/FI1 raw-attempt canonical digests recompute exactly;
-- all capture-binding body digests recompute exactly;
-- the formal source-binding registry maps one-to-one to the three raw-attempt digests;
-- N1/N2/FI1 workspace IDs and reset IDs are each unique, with exclusive fresh-workspace facts retained;
-- exact Godot executable SHA-256 `32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde` and Godot `4.7.1-stable` identity are retained in candidate/run bindings;
-- the reviewed v5 validator remains blob `2c646988dc16e212f43df6a4ee5ce646622ac2a6`, validator byte SHA-256 `9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea`;
-- independent verifier recomputation returns adaptation `ACCEPT` and aggregate `PASS_FOR_COMPARISON` with `valid_envelope=true`;
-- the evidence itself keeps `trusted_bounded_s6_comparison_authority=false`, `integration_authority=false`, `engine_selected=false`, `implementation_readiness=false`, `canonicality=NOT_CANONICAL` pending this review.
-
-The source producer #456 and required review #458 remain immutable provenance; findings `W2-ENG-TECH-S6-REV-M01` and `W2-ENG-TECH-S6-REV-M02` are closed only for this exact remediation generation.
-
-## Candidate/status preservation
-
-No cross-candidate or scenario authority is upgraded:
-
-- Godot: exact remediation generation may now be trusted only as bounded reviewed S6 v5 comparison evidence;
-- Bevy: remains `INCONCLUSIVE_HARNESS_OR_INFRA`;
-- Defold: remains `INCONCLUSIVE_HARNESS_OR_INFRA`;
-- Unity: remains `NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY`;
-- Unreal Engine: remains `NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY`.
-
-No S1/S2/S7-S10 completion, five-candidate completion, engine ranking/selection, gameplay/high-throughput implementation, implementation/production readiness, provider/commercial/legal/platform/release authority, verification-PASS, decision, canonicality, or integration authority is created here.
-
-## Findings
-
-- BLOCKER: 0
-- MAJOR: 0
-- MINOR requiring correction: 0
-
-No material defect was found against the exact M01/M02 remediation contract.
+This review did not mutate, rerun, repair, integrate, or otherwise advance the judged branch.
 
 ## Disposition
 
-`PASS_BOUNDED_REMEDIATED_S6_V5_ENVELOPE`
+`CHANGES_NEEDED`
 
-The exact Godot remediation generation `GEN-S6R-682a8afad97938325c6f9f40` is acceptable as bounded reviewed S6 v5 comparison evidence only. Any publication/integration is a separate convergence action requiring current merge compatibility and repository integration authority, and must be squash-only. This review itself remains noncanonical review provenance.
+Findings: **0 BLOCKER / 1 MAJOR / 0 correction-requiring MINOR**.
+
+The prior review findings `W2-ENG-TECH-S6-REV-M01` and `W2-ENG-TECH-S6-REV-M02` are materially closed by the remediation. A new MAJOR finding is introduced below because the remediation replaced enough of the S6 harness that unchanged-v5 aggregation is no longer independently reconstructible from the retained packet.
+
+## Independently confirmed remediation facts
+
+The immutable artifact was downloaded and inspected as bytes, not accepted from prose. Its ZIP SHA-256 exactly matches the GitHub artifact digest. It contains both retained normal frames and the final machine evidence.
+
+N1 independently recomputes to SHA-256 `ec2083126dba2bdb96929bfd4306485ad52116d4dc1c7be8b00fb90d0955056b`, Git blob identity `d3630234dc52e14a8d96cd3085ef1e23c4634bc2`, 4380 bytes, PNG, 1280×720. Pixel sampling independently confirms the three rendered screen regions and marker RGB `[255,255,0]` at `(200,200)`.
+
+N2 independently recomputes to SHA-256 `54119fd58b7f625b3b739113bd20fa50c503aed486b84f51885b97a61dfd1b7b`, Git blob identity `4782c5b407c4cdb426dcb5f7d8f9ae427a7e8bdd`, 4380 bytes, PNG, 1280×720. Pixel sampling confirms the same three screen regions and marker RGB `[255,0,255]`. The N1/N2 byte objects are not identical.
+
+The exact Godot source on the judged head selects the marker from `E_ATTEMPT`, writes the attempt/marker into the candidate-produced ready-state record, and draws the marker in `_draw()`. The normal capture path then runs real `/usr/bin/scrot` against the X11 framebuffer. Thus the marker is candidate-rendered, not a host-side image fabrication.
+
+The artifact's N1/N2 capture bindings independently recompute to their retained binding digests and bind candidate, generation, attempt, run identity, exact state, project SHA-256, executable SHA-256, classification, capture mechanism and frame SHA-256/metadata. Substituting the actual N1 bytes for N2 fails the N2 SHA-256 and marker predicate. Missing and byte-tampered frame objects are rejected by the verifier's byte-reading path.
+
+FI1 records exact state `CAPTURE-STATE-042|Godot|GEN-S6-REM-47e2192acf40054ae5a3|FI1|00FFFF|1280x720`, `state_ok=true`, and `candidate_alive_at_capture=true`. The real command `/usr/bin/scrot -z /proc/everfield-s6-capture-down.png` executed and returned exit 1 with zero retained frames, no output path, and stderr `Saving to file ... failed`. The retained classification is exactly `STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE`, and the verifier rejects evidence whose FI classification is not that exact value. This closes the previous hard-coded-failure defect.
+
+The independently recomputed artifact hashes also match: remediation JSON `9f115927f95102c37c60ff7125de843b7cdde1b680276a111ece854c274339e4`; verifier JSON `10abd799a04c198de845ba2e47eac06e1473cce4bb8705e6eae255d83f50b02c`.
+
+## MAJOR — W2-ENG-TECH-S6-REM-REV-M01: retained packet cannot independently recompute unchanged-v5 aggregate
+
+The canonical v5 `agg()` contract does substantially more than compare an aggregate label. It validates generation identity, candidate/adaptation binding, one-to-one `run_registry_refs` / `all_attempt_refs`, closed AttemptRecord schemas, normal-index uniqueness, at least two normal attempts, `reset_verified=true`, distinct reset identities, distinct workspace identities, common resource class, exact required injection coverage, failure-class authority and result semantics before returning `PASS_FOR_COMPARISON`.
+
+The judged remediation constructs such a generation only transiently in the producer:
+- `v.gen(...)` is called with normal resets `('R1','R2')`, normal workspaces `('W1','W2')`, and `oks=(True,True)`;
+- the FI AttemptRecord is then assigned `R3` / `W3` and `reset_verified=True` in memory;
+- `v.agg(g)` returns the reported aggregate.
+
+However, the retained `remediation.json` does **not** retain `g`, its AttemptRecords, its registries, or mechanically derived reset/workspace proof. Its `attempts` are a separate raw S6 evidence schema without `reset_id`, `reset_verified`, `workspace_id`, `resource_class`, formal registry refs, or the full formal adaptation/generation envelope. Only `unchanged_v5.adaptation` and the already-computed `unchanged_v5.aggregate` are retained.
+
+The so-called independent verifier therefore cannot recompute `agg()` from retained formal evidence. It recomputes `va(v.adaptation('S6','Godot'),'Godot')`, but then performs `agg=d['unchanged_v5']['aggregate']` and merely compares that stored dictionary to the expected PASS dictionary. Its output field `recomputed_v5_aggregate` is consequently a copy of producer output, not an independent aggregation.
+
+This is material because `PASS_FOR_COMPARISON` is precisely the v5 envelope that depends on the discarded reset/workspace/registry/AttemptRecord invariants. The packet cannot demonstrate that the producer's asserted `R1/R2`, `W1/W2`, and `reset_verified=True` correspond fail-closed to the actual fresh attempt workspaces. A reviewer cannot independently reconstruct or attack the formal aggregate from immutable evidence.
+
+### Required correction
+
+Route exactly one bounded S6 remediation successor. Preserve the now-clean byte-bearing capture and real FI evidence. Add only the minimum formal-evidence binding needed to:
+1. derive formal normal/FI AttemptRecords from the actual executed attempt records and their actual fresh workspace/reset identities rather than hard-coded labels;
+2. retain the exact v5 generation object, adaptation, registries and AttemptRecords in the immutable artifact;
+3. bind those formal records to the same candidate/generation/run/project/executable/capture evidence;
+4. make the independent verifier load the retained generation and call canonical v5 `agg()` itself;
+5. add negative controls proving reused/unverified reset/workspace or registry/AttemptRecord tampering changes the independently recomputed disposition fail-closed;
+6. rerun fresh evidence and route exactly one fresh required review.
+
+Do not reopen or regress the already-corrected retained PNG/substitution behavior or real capture-down execution.
+
+## Preservation and authority
+
+Bevy and Defold remain `INCONCLUSIVE_HARNESS_OR_INFRA`. Unity and Unreal Engine remain `NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY`. Historical Issue #82 50 `NOT_RUN` cells and all failed/superseded run provenance remain unchanged.
+
+Because of the MAJOR finding, exact generation `GEN-S6-REM-47e2192acf40054ae5a3` is **not** trusted bounded S6 comparison authority. This review grants no integration authority, engine ranking/selection, gameplay/high-throughput implementation, implementation/readiness, provider/commercial/legal/platform/release, verification-PASS, decision, or canonical authority.
