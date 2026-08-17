@@ -1,10 +1,12 @@
 {
   "actual_byte_substitution_rejected": true,
   "canonicality": "NOT_CANONICAL",
+  "capture_down_classification_enforced": true,
   "capture_down_observed": true,
-  "evidence_run_identity": "32029026514:1:4976c86aba60a515260b2a663b6e6d6894f4d7a1",
+  "evidence_run_identity": "32029326533:1:d4fa9d94bdb530720427172653c64371462b1bd3",
   "fresh_review_still_required": true,
-  "generation_id": "GEN-S6-REM-b789a8746a30c009cb4d",
+  "generation_id": "GEN-S6-REM-920a1ba1fa8ead7e0112",
+  "missing_frame_rejected": true,
   "ok": true,
   "reasons": [],
   "recomputed_v5_adaptation": {
@@ -18,5 +20,6 @@
     "reasons": [],
     "valid_envelope": true
   },
-  "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-INDEPENDENT-VERIFY-v1"
+  "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-INDEPENDENT-VERIFY-v1",
+  "tampered_frame_rejected": true
 }

@@ -33,13 +33,14 @@
             "sha256": "ec2083126dba2bdb96929bfd4306485ad52116d4dc1c7be8b00fb90d0955056b",
             "size": 4380
           },
+          "classification": "STATE_AND_CAPTURE_OK",
           "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
-          "generation": "GEN-S6-REM-b789a8746a30c009cb4d",
+          "generation": "GEN-S6-REM-920a1ba1fa8ead7e0112",
           "project_sha256": "325092562ce35b7499de0f4e718551323e182c9a92f1aae34cac6bb6d428fdf4",
-          "run": "32029026514:1:4976c86aba60a515260b2a663b6e6d6894f4d7a1",
-          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM-b789a8746a30c009cb4d|N1|FFFF00|1280x720"
+          "run": "32029326533:1:d4fa9d94bdb530720427172653c64371462b1bd3",
+          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM-920a1ba1fa8ead7e0112|N1|FFFF00|1280x720"
         },
-        "sha256": "d4d3712518d2241738d36279888238c32f9f650796b0bb8ce56a00330f2e52b8"
+        "sha256": "1b8ecfca190baa2037bc8842a037b724a627ec93d36e777ca7847e2749d82932"
       },
       "candidate_alive_at_capture": true,
       "capture": {
@@ -70,6 +71,7 @@
         "stderr": "",
         "stdout": ""
       },
+      "classification": "STATE_AND_CAPTURE_OK",
       "failure_class": "NONE",
       "formal_result": "PASS",
       "mode": "NORMAL",
@@ -110,13 +112,14 @@
             "sha256": "54119fd58b7f625b3b739113bd20fa50c503aed486b84f51885b97a61dfd1b7b",
             "size": 4380
           },
+          "classification": "STATE_AND_CAPTURE_OK",
           "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
-          "generation": "GEN-S6-REM-b789a8746a30c009cb4d",
+          "generation": "GEN-S6-REM-920a1ba1fa8ead7e0112",
           "project_sha256": "325092562ce35b7499de0f4e718551323e182c9a92f1aae34cac6bb6d428fdf4",
-          "run": "32029026514:1:4976c86aba60a515260b2a663b6e6d6894f4d7a1",
-          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM-b789a8746a30c009cb4d|N2|FF00FF|1280x720"
+          "run": "32029326533:1:d4fa9d94bdb530720427172653c64371462b1bd3",
+          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM-920a1ba1fa8ead7e0112|N2|FF00FF|1280x720"
         },
-        "sha256": "88a5b44c52e1e052dbc58398600d3177f340695cc493d6015c20aa4df55ca6ae"
+        "sha256": "fafcebc163bf3564b0cbfd719007b7e1661313cca120403b94c851ba8e4c775e"
       },
       "candidate_alive_at_capture": true,
       "capture": {
@@ -147,6 +150,7 @@
         "stderr": "",
         "stdout": ""
       },
+      "classification": "STATE_AND_CAPTURE_OK",
       "failure_class": "NONE",
       "formal_result": "PASS",
       "mode": "NORMAL",
@@ -180,13 +184,14 @@
             "sha256": null,
             "size": null
           },
+          "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
           "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
-          "generation": "GEN-S6-REM-b789a8746a30c009cb4d",
+          "generation": "GEN-S6-REM-920a1ba1fa8ead7e0112",
           "project_sha256": "325092562ce35b7499de0f4e718551323e182c9a92f1aae34cac6bb6d428fdf4",
-          "run": "32029026514:1:4976c86aba60a515260b2a663b6e6d6894f4d7a1",
-          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM-b789a8746a30c009cb4d|FI1|00FFFF|1280x720"
+          "run": "32029326533:1:d4fa9d94bdb530720427172653c64371462b1bd3",
+          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM-920a1ba1fa8ead7e0112|FI1|00FFFF|1280x720"
         },
-        "sha256": "a347042dfcee0d31c72920db2ce74cf3fea7ba36d16eab222a95055ea5be5104"
+        "sha256": "2edfa18b3de38c0d7ad7217755042f89e1e66589c704ccf90709715077d3a64a"
       },
       "candidate_alive_at_capture": true,
       "capture": {
@@ -206,6 +211,7 @@
         "stderr": "scrot: Saving to file /proc/everfield-s6-capture-down.png failed\n",
         "stdout": ""
       },
+      "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
       "failure_class": "NONE",
       "formal_result": "PASS",
       "mode": "INJECT",
@@ -221,6 +227,7 @@
   ],
   "contract": {
     "capture_frames": 1,
+    "failure_classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
     "injection": "FI-S6-CAPTURE-DOWN-v2",
     "marker": "CAPTURE-STATE-042",
     "screens": 3,
@@ -232,15 +239,17 @@
   "disposition": "PROVISIONAL_S6_REMEDIATED_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW",
   "engine_selected": false,
   "fresh_review_required": true,
-  "generation_id": "GEN-S6-REM-b789a8746a30c009cb4d",
+  "generation_id": "GEN-S6-REM-920a1ba1fa8ead7e0112",
   "implementation_readiness": false,
   "integration_authority": false,
   "issue": 585,
   "mission_id": "W2-ENG-TECH-S6-REM-01",
   "negative_controls": {
     "actual_n1_bytes_rejected_as_n2": true,
+    "capture_failure_misclassification_rejected": true,
     "frame_bytes_distinct": true,
     "real_capture_down_observed": true,
+    "retained_frame_bytes_revalidated": true,
     "state_vs_capture_separated": true
   },
   "preserved": {
@@ -258,7 +267,7 @@
     "issue": 458,
     "terminal": 5309336848
   },
-  "run_identity": "32029026514:1:4976c86aba60a515260b2a663b6e6d6894f4d7a1",
+  "run_identity": "32029326533:1:d4fa9d94bdb530720427172653c64371462b1bd3",
   "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-v1",
   "source": {
     "artifact": 9268994399,
@@ -289,7 +298,7 @@
             "https://api.github.com/repos/godotengine/godot/releases/tags/4.7.1-stable"
           ],
           "exit": 0,
-          "seconds": 0.213,
+          "seconds": 0.167,
           "stderr": "",
           "stdout": "thub.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/zip\",\n      \"state\": \"uploaded\",\n      \"size\": 82407178,\n      \"digest\": \"sha256:d9cdf49102092a2b6db4c5929002628d16eca3d7226afca2b1d03431a0a1e64b\",\n      \"download_count\": 500,\n      \"created_at\": \"2026-07-14T18:08:31Z\",\n      \"updated_at\": \"2026-07-14T18:08:56Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_windows_arm64.exe.zip\"\n    },\n    {\n      \"url\": \"https://api.github.com/repos/godotengine/godot/releases/assets/477009199\",\n      \"id\": 477009199,\n      \"node_id\": \"RA_kwDOAO6SJc4cbpUv\",\n      \"name\": \"SHA512-SUMS.txt\",\n      \"label\": \"\",\n      \"uploader\": {\n        \"login\": \"akien-mga\",\n        \"id\": 4701338,\n        \"node_id\": \"MDQ6VXNlcjQ3MDEzMzg=\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/4701338?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/akien-mga\",\n        \"html_url\": \"https://github.com/akien-mga\",\n        \"followers_url\": \"https://api.github.com/users/akien-mga/followers\",\n        \"following_url\": \"https://api.github.com/users/akien-mga/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"text/plain; charset=utf-8\",\n      \"state\": \"uploaded\",\n      \"size\": 5682,\n      \"digest\": \"sha256:4c8f302a5630f34181b12cc89454ab336f3c7f25feae9d81e10f43fc25e1ae1e\",\n      \"download_count\": 8159,\n      \"created_at\": \"2026-07-14T18:14:55Z\",\n      \"updated_at\": \"2026-07-14T18:14:55Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/SHA512-SUMS.txt\"\n    }\n  ],\n  \"tarball_url\": \"https://api.github.com/repos/godotengine/godot/tarball/4.7.1-stable\",\n  \"zipball_url\": \"https://api.github.com/repos/godotengine/godot/zipball/4.7.1-stable\",\n  \"body\": \"**Godot 4.7.1** is a maintenance release addressing stability and usability issues, and fixing all sorts of bugs. Maintenance releases are compatible with previous releases and are recommended for adoption.\\n\\nReport bugs on GitHub after checking that they haven't been reported:\\n- https://github.com/godotengine/godot/issues\\n\\n----\\n\\n- [Release notes](https://godotengine.org/article/maintenance-release-godot-4-7-1/)\\n- [Complete changelog](https://godotengine.github.io/godot-interactive-changelog/#4.7.1)\\n- [Curated changelog](https://github.com/godotengine/godot/blob/4.7.1-stable/CHANGELOG.md)\\n\\n----\\n\\n- **Download (GitHub):** Expand **Assets** below\",\n  \"reactions\": {\n    \"url\": \"https://api.github.com/repos/godotengine/godot/releases/353984102/reactions\",\n    \"total_count\": 190,\n    \"+1\": 79,\n    \"-1\": 0,\n    \"laugh\": 9,\n    \"hooray\": 30,\n    \"confused\": 0,\n    \"heart\": 35,\n    \"rocket\": 29,\n    \"eyes\": 8\n  }\n}\n",
           "timed_out": false
