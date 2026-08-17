@@ -1,0 +1,145 @@
+name: W2 ENG technical S7 Godot R2
+
+on:
+  push:
+    branches:
+      - planning/issue-507
+    paths:
+      - .github/workflows/w2-eng-technical-s7-godot-r2.yml
+      - tools/planning/engine_technical_s7_godot_r2.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-eng-tech-s7-godot-r2-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  execute-s7-r2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout exact remediation trigger
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Provision exact Defold-compatible Java
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Validate retained authority and remediation scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s7
+          mkdir -p "$out"
+          python3 -m py_compile \
+            tools/planning/engine_technical_s7_probe.py \
+            tools/planning/engine_technical_s7_godot_r2.py \
+            tools/planning/engine_toolchain_probe.py \
+            docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+          python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py > "$out/harness-validator.json"
+          python3 - <<'PY'
+          import importlib.util
+          p='docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py'
+          s=importlib.util.spec_from_file_location('v',p);v=importlib.util.module_from_spec(s);s.loader.exec_module(v)
+          assert v.ID['validator_id']=='W2-ENG-PROTOCOL-VALIDATOR-v5'
+          assert v.SCENARIOS['S7']['fixed_input_refs']==['SLICE:assets','SLICE:logical_state']
+          assert v.SCENARIOS['S7']['obligations']==['inject_broken_reference','diagnose_from_repo_cli','bounded_repair','rerun']
+          assert v.SCENARIOS['S7']['min_bounds']=={'asset_count':8,'broken_reference_count':1}
+          assert v.SCENARIOS['S7']['required_injections']==['FI-S7-BROKEN-REF-v2']
+          assert v.FEATURE['assets']['broken_reference_asset_id']=='ASSET-08'
+          PY
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "issue=507"
+            echo "scenario=S7"
+            echo "remediation_scope=GODOT_FIXTURE_TYPE_AND_SCENETREE_QUIT_ONLY"
+            echo "retained_partial_run=31992586423"
+            echo "retained_partial_evidence_commit=40a0622373c52ac88b54eff5c9ce1433cad7ce29"
+            sha256sum tools/planning/engine_technical_s7_probe.py
+            sha256sum tools/planning/engine_technical_s7_godot_r2.py
+            sha256sum tools/planning/engine_toolchain_probe.py
+            sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+            sha256sum docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
+            sha256sum docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
+          } | tee "$out/run-identity.txt"
+
+      - name: Freshly execute remediated S7 tranche
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s7
+          python3 tools/planning/engine_technical_s7_godot_r2.py \
+            --out "$out/evidence.json" \
+            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
+            --toolchain-probe tools/planning/engine_toolchain_probe.py \
+            --bevy-lock docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock \
+            --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            | tee "$out/summary.log"
+          sha256sum "$out/evidence.json" | tee "$out/evidence.sha256"
+
+      - name: Enforce remediated S7 evidence envelope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='docs/planning/wave-2/evidence/ci/engine-technical-s7/evidence.json'
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-TECHNICAL-S7-v1' and d['mission_id']=='W2-ENG-TECH-S7-01' and d['scenario_id']=='S7'
+          assert d['validator_id']=='W2-ENG-PROTOCOL-VALIDATOR-v5'
+          assert d['s7_contract']['required_injection']=='FI-S7-BROKEN-REF-v2'
+          assert d['s7_contract']['broken_reference_asset_id']=='ASSET-08'
+          assert d['s7_contract']['min_bounds']=={'asset_count':8,'broken_reference_count':1}
+          assert set(d['provisional_candidates'])=={'Bevy','Defold','Godot'}
+          assert len(d['producer_corrections'])==2
+          assert d['producer_corrections'][0]['run_id']==31991497890
+          assert d['producer_corrections'][1]['run_id']==31992586423
+          assert d['remediation_runner']['scope']=='GODOT_FIXTURE_TYPE_AND_SCENETREE_QUIT_ONLY'
+          assert d['authority_bound_not_run']=={'Unity':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY','Unreal Engine':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'}
+          assert d['fresh_review_required'] is True and d['trusted_comparison_authority'] is False and d['integration_authority'] is False
+          assert d['engine_selected'] is False and d['implementation_readiness'] is False and d['verification_pass_authority'] is False and d['release_authority'] is False and d['decision_authority'] is False and d['canonicality']=='NOT_CANONICAL'
+          for name in ('Bevy','Defold','Godot'):
+              x=d['results'][name]
+              assert x['adaptation_validation']['result']=='ACCEPT'
+              assert x['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}
+              assert x['trusted_representation_ok'] is True
+              assert x['source_binding_complete'] is True
+              assert all(x['negative_selftests'].values())
+              assert [a['record']['label'] for a in x['raw_attempts']]==['N1','N2','FI1']
+              assert len({a['record']['reset_proof']['workspace_id'] for a in x['raw_attempts']})==3
+              assert len({a['record']['reset_proof']['reset_id'] for a in x['raw_attempts']})==3
+              fi=x['raw_attempts'][2]['record']['source']
+              assert fi['broken_asset_id']=='ASSET-08' and fi['broken_reference_count']==1
+              assert fi['diagnostic_attributed'] is True and fi['repair_changed_only_broken_reference'] is True and fi['rerun_clean'] is True
+          print(json.dumps({'validated':True,'provisional_candidates':d['provisional_candidates']},sort_keys=True))
+          PY
+
+      - name: Persist exact remediated S7 machine evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/planning/wave-2/evidence/ci/engine-technical-s7/
+          if git diff --cached --quiet; then echo "No generated evidence delta"; exit 0; fi
+          git commit -m "[PLAN-v1][W2-ENG-TECH-S7-01] Record remediated S7 run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-507
+
+      - name: Upload immutable remediated S7 bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-eng-tech-s7-01-r2-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/engine-technical-s7/
+          if-no-files-found: error
+          retention-days: 30
