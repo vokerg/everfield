@@ -60,7 +60,9 @@ jobs:
           r=pathlib.Path('docs/planning/wave-2/evidence/ci/engine-technical-s6');d=json.loads((r/'remediation.json').read_text());v=json.loads((r/'independent-verification.json').read_text())
           assert d['disposition']=='PROVISIONAL_S6_REMEDIATED_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW'
           assert d['closed_findings']==['W2-ENG-TECH-S6-REV-M01','W2-ENG-TECH-S6-REV-M02'] and all(d['negative_controls'].values())
-          assert v['ok'] and v['actual_byte_substitution_rejected'] and v['capture_down_observed']
+          assert d['attempts'][2]['classification']=='STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE'
+          assert v['ok'] and v['actual_byte_substitution_rejected'] and v['missing_frame_rejected'] and v['tampered_frame_rejected']
+          assert v['capture_down_observed'] and v['capture_down_classification_enforced']
           assert d['preserved']['Bevy']=='INCONCLUSIVE_HARNESS_OR_INFRA' and d['preserved']['Defold']=='INCONCLUSIVE_HARNESS_OR_INFRA'
           assert d['preserved']['Unity']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY' and d['preserved']['Unreal Engine']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'
           assert d['fresh_review_required'] and not d['trusted_comparison_authority'] and not d['integration_authority'] and d['canonicality']=='NOT_CANONICAL'
