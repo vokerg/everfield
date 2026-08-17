@@ -1,0 +1,1213 @@
+{
+  "authority_bound_not_run": {
+    "Unity": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY",
+    "Unreal Engine": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY"
+  },
+  "canonicality": "NOT_CANONICAL",
+  "decision_authority": false,
+  "engine_selected": false,
+  "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+  "fresh_review_required": true,
+  "harness_id": "W2-ENG-HARNESS-v5",
+  "historical_issue_82_not_run_cells_preserved": 50,
+  "implementation_readiness": false,
+  "integration_authority": false,
+  "issue": 507,
+  "mission_id": "W2-ENG-TECH-S7-01",
+  "predecessor_review": {
+    "disposition": "PASS_BOUNDED_REMEDIATED_S6_V5_ENVELOPE",
+    "issue": 462,
+    "s6_reviewed_publication_sha": "40179080013d742b70b4a5be611f1666dd3cd599",
+    "terminal_comment": 5309450099
+  },
+  "provisional_candidates": [],
+  "release_authority": false,
+  "results": {
+    "Bevy": {
+      "adaptation_validation": {
+        "adaptation_identity": "addbcc2f36da725d3eb3e14d4b9332159307436ba112a59b101d18f2d1184b8c",
+        "binding_id": "ff497504bf88ad18a939ef272dccd8a5d5a27526e2d0a579cbeee6340f7d95e3",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "INCONCLUSIVE",
+        "reasons": [
+          "non_product_failure_class_present"
+        ],
+        "valid_envelope": true
+      },
+      "candidate": "Bevy",
+      "candidate_id": "Bevy-0.19.0",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "asset_count": 8,
+            "broken_reference_count": 1
+          },
+          "candidate_id": "Bevy-0.19.0",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S7-BROKEN-REF-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:assets",
+            "SLICE:logical_state"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "bounded_repair": "EQUIVALENT",
+            "diagnose_from_repo_cli": "EQUIVALENT",
+            "inject_broken_reference": "EQUIVALENT",
+            "rerun": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S7",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "ff497504bf88ad18a939ef272dccd8a5d5a27526e2d0a579cbeee6340f7d95e3",
+        "all_attempt_refs": [
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1",
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2",
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1"
+        ],
+        "attempts": {
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1": {
+            "attempt_id": "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1",
+            "candidate_generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+            "candidate_id": "Bevy-0.19.0",
+            "failure_class": "HARNESS",
+            "injection_id": "FI-S7-BROKEN-REF-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-S7-644cf2ce2df010da52998c69efec",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-644cf2ce2df010da52998c69efec"
+          },
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1": {
+            "attempt_id": "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1",
+            "candidate_generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+            "candidate_id": "Bevy-0.19.0",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-S7-69690376f2feff5cd5a424c21dc3",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-69690376f2feff5cd5a424c21dc3"
+          },
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2": {
+            "attempt_id": "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2",
+            "candidate_generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+            "candidate_id": "Bevy-0.19.0",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-S7-414e7451a3cfc74110f05f9812d5",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-414e7451a3cfc74110f05f9812d5"
+          }
+        },
+        "candidate_id": "Bevy-0.19.0",
+        "candidate_work_id": "WORK-S7-b3f7ce034998406c8f67ca50",
+        "generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1",
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2",
+          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1"
+        ],
+        "scenario_id": "S7"
+      },
+      "negative_selftests": {
+        "candidate_generation_mismatch": true,
+        "candidate_native_validation_bypass": true,
+        "duplicate_registry_ref": true,
+        "host_only_diagnosis": true,
+        "missing_diagnostic_attribution": true,
+        "more_than_one_broken_reference": true,
+        "rerun_bypass": true,
+        "reused_workspace": true,
+        "source_raw_substitution": true,
+        "unbounded_repair": true,
+        "wrong_broken_asset": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:d6f8a1f09cb2d7eafdc872a71616464c18badcbd88ce08c0b79cd9407cd39a10",
+          "record": {
+            "candidate": "Bevy",
+            "candidate_id": "Bevy-0.19.0",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "label": "N1",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-69690376f2feff5cd5a424c21dc3",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-69690376f2feff5cd5a424c21dc3"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests": {
+                "ASSET-01": "d1b238fd02955fabb540e9db03768b1bc2117568651d995f81f742145e41a6e1",
+                "ASSET-02": "cd19c29213b82e849218b6c08f181b8385a3f3f0a5bd67ee89c377774d7d1000",
+                "ASSET-03": "3c30fd424d060e8201f6e20db5f5f31e931466d06075e10a749f15368d29216d",
+                "ASSET-04": "2d7c286a608234d9f927f24010789d8c944a7db4c2319b62a932d035733dd03f",
+                "ASSET-05": "4ab351d27d9bdb4d251e8348a354bcfb6617c5d3d0cc1de0d997765a0fac41cc",
+                "ASSET-06": "fc798d9eaaf9b5aa42307f54d699290b4aa6f04ba1a3edf67cd0e8d2c6123228",
+                "ASSET-07": "e9f6d451b82927e94b3382ad7f4b9dd8ade9b500098dc43b7d1b714f9f82af7c",
+                "ASSET-08": "a5b4f91e0f45525bc530c3468152cee4379fbf59a755f8a353d2bf871f8eaa7b"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "candidate_command": {
+                "cmd": [
+                  "/home/runner/.cargo/bin/cargo",
+                  "check",
+                  "--locked",
+                  "--quiet"
+                ],
+                "exit": 0,
+                "seconds": 21.915,
+                "stderr": "",
+                "stdout": "",
+                "timed_out": false
+              },
+              "candidate_native": true,
+              "driver_sha256": "26c46edfcdab7a8979a48093c192249628686e19493821aa45db39cc5e15fbfd",
+              "eight_asset_binding": true,
+              "phase": "NORMAL"
+            }
+          }
+        },
+        {
+          "digest": "sha256:b3e96e69e98a5b5862ad9250aa30b517fe436cce341662373351a09c474b2bb7",
+          "record": {
+            "candidate": "Bevy",
+            "candidate_id": "Bevy-0.19.0",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "label": "N2",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-414e7451a3cfc74110f05f9812d5",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-414e7451a3cfc74110f05f9812d5"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests": {
+                "ASSET-01": "d1b238fd02955fabb540e9db03768b1bc2117568651d995f81f742145e41a6e1",
+                "ASSET-02": "cd19c29213b82e849218b6c08f181b8385a3f3f0a5bd67ee89c377774d7d1000",
+                "ASSET-03": "3c30fd424d060e8201f6e20db5f5f31e931466d06075e10a749f15368d29216d",
+                "ASSET-04": "2d7c286a608234d9f927f24010789d8c944a7db4c2319b62a932d035733dd03f",
+                "ASSET-05": "4ab351d27d9bdb4d251e8348a354bcfb6617c5d3d0cc1de0d997765a0fac41cc",
+                "ASSET-06": "fc798d9eaaf9b5aa42307f54d699290b4aa6f04ba1a3edf67cd0e8d2c6123228",
+                "ASSET-07": "e9f6d451b82927e94b3382ad7f4b9dd8ade9b500098dc43b7d1b714f9f82af7c",
+                "ASSET-08": "a5b4f91e0f45525bc530c3468152cee4379fbf59a755f8a353d2bf871f8eaa7b"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "candidate_command": {
+                "cmd": [
+                  "/home/runner/.cargo/bin/cargo",
+                  "check",
+                  "--locked",
+                  "--quiet"
+                ],
+                "exit": 0,
+                "seconds": 21.837,
+                "stderr": "",
+                "stdout": "",
+                "timed_out": false
+              },
+              "candidate_native": true,
+              "driver_sha256": "26c46edfcdab7a8979a48093c192249628686e19493821aa45db39cc5e15fbfd",
+              "eight_asset_binding": true,
+              "phase": "NORMAL"
+            }
+          }
+        },
+        {
+          "digest": "sha256:20c2fb8ab765fc3aa29061968ebaf3f08553be36688cb5ee7411adeb9edb6db5",
+          "record": {
+            "candidate": "Bevy",
+            "candidate_id": "Bevy-0.19.0",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": "FI-S7-BROKEN-REF-v2",
+            "kind": "FAILURE_INJECTION",
+            "label": "FI1",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-644cf2ce2df010da52998c69efec",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-644cf2ce2df010da52998c69efec"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests_after_repair": {
+                "ASSET-01": "d1b238fd02955fabb540e9db03768b1bc2117568651d995f81f742145e41a6e1",
+                "ASSET-02": "cd19c29213b82e849218b6c08f181b8385a3f3f0a5bd67ee89c377774d7d1000",
+                "ASSET-03": "3c30fd424d060e8201f6e20db5f5f31e931466d06075e10a749f15368d29216d",
+                "ASSET-04": "2d7c286a608234d9f927f24010789d8c944a7db4c2319b62a932d035733dd03f",
+                "ASSET-05": "4ab351d27d9bdb4d251e8348a354bcfb6617c5d3d0cc1de0d997765a0fac41cc",
+                "ASSET-06": "fc798d9eaaf9b5aa42307f54d699290b4aa6f04ba1a3edf67cd0e8d2c6123228",
+                "ASSET-07": "e9f6d451b82927e94b3382ad7f4b9dd8ade9b500098dc43b7d1b714f9f82af7c",
+                "ASSET-08": "a5b4f91e0f45525bc530c3468152cee4379fbf59a755f8a353d2bf871f8eaa7b"
+              },
+              "asset_digests_before": {
+                "ASSET-01": "d1b238fd02955fabb540e9db03768b1bc2117568651d995f81f742145e41a6e1",
+                "ASSET-02": "cd19c29213b82e849218b6c08f181b8385a3f3f0a5bd67ee89c377774d7d1000",
+                "ASSET-03": "3c30fd424d060e8201f6e20db5f5f31e931466d06075e10a749f15368d29216d",
+                "ASSET-04": "2d7c286a608234d9f927f24010789d8c944a7db4c2319b62a932d035733dd03f",
+                "ASSET-05": "4ab351d27d9bdb4d251e8348a354bcfb6617c5d3d0cc1de0d997765a0fac41cc",
+                "ASSET-06": "fc798d9eaaf9b5aa42307f54d699290b4aa6f04ba1a3edf67cd0e8d2c6123228",
+                "ASSET-07": "e9f6d451b82927e94b3382ad7f4b9dd8ade9b500098dc43b7d1b714f9f82af7c",
+                "ASSET-08": "a5b4f91e0f45525bc530c3468152cee4379fbf59a755f8a353d2bf871f8eaa7b"
+              },
+              "asset_digests_defect": {
+                "ASSET-01": "d1b238fd02955fabb540e9db03768b1bc2117568651d995f81f742145e41a6e1",
+                "ASSET-02": "cd19c29213b82e849218b6c08f181b8385a3f3f0a5bd67ee89c377774d7d1000",
+                "ASSET-03": "3c30fd424d060e8201f6e20db5f5f31e931466d06075e10a749f15368d29216d",
+                "ASSET-04": "2d7c286a608234d9f927f24010789d8c944a7db4c2319b62a932d035733dd03f",
+                "ASSET-05": "4ab351d27d9bdb4d251e8348a354bcfb6617c5d3d0cc1de0d997765a0fac41cc",
+                "ASSET-06": "fc798d9eaaf9b5aa42307f54d699290b4aa6f04ba1a3edf67cd0e8d2c6123228",
+                "ASSET-07": "e9f6d451b82927e94b3382ad7f4b9dd8ade9b500098dc43b7d1b714f9f82af7c",
+                "ASSET-08": "a5b4f91e0f45525bc530c3468152cee4379fbf59a755f8a353d2bf871f8eaa7b"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "broken_asset_id": "ASSET-08",
+              "broken_reference_count": 1,
+              "candidate_native": true,
+              "diagnosis": {
+                "cmd": [
+                  "/home/runner/.cargo/bin/cargo",
+                  "check",
+                  "--locked",
+                  "--quiet"
+                ],
+                "exit": 101,
+                "seconds": 0.5,
+                "stderr": "error: couldn't read `src/../assets/MISSING-ASSET-08.txt`: No such file or directory (os error 2)\n  --> src/main.rs:12:5\n   |\n12 |     include_bytes!(\"../assets/MISSING-ASSET-08.txt\").len(),\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nerror: could not compile `everfield_bevy_probe` (bin \"everfield_bevy_probe\") due to 1 previous error\n",
+                "stdout": "",
+                "timed_out": false
+              },
+              "diagnostic_attributed": true,
+              "driver_sha256_after_repair": "26c46edfcdab7a8979a48093c192249628686e19493821aa45db39cc5e15fbfd",
+              "driver_sha256_before": "26c46edfcdab7a8979a48093c192249628686e19493821aa45db39cc5e15fbfd",
+              "driver_sha256_defect": "2e33a4c5f0a5ba548d8a5d2c56acb26517202e059533772598f083e69b1493d5",
+              "injection_id": "FI-S7-BROKEN-REF-v2",
+              "phase": "FAILURE_INJECTION_AND_REPAIR",
+              "repair_changed_only_broken_reference": true,
+              "rerun": {
+                "cmd": [
+                  "/home/runner/.cargo/bin/cargo",
+                  "check",
+                  "--locked",
+                  "--quiet"
+                ],
+                "exit": 0,
+                "seconds": 0.261,
+                "stderr": "",
+                "stdout": "",
+                "timed_out": false
+              },
+              "rerun_clean": false
+            }
+          }
+        }
+      ],
+      "source_binding_complete": true,
+      "source_bindings": {
+        "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1": "sha256:20c2fb8ab765fc3aa29061968ebaf3f08553be36688cb5ee7411adeb9edb6db5",
+        "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1": "sha256:d6f8a1f09cb2d7eafdc872a71616464c18badcbd88ce08c0b79cd9407cd39a10",
+        "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2": "sha256:b3e96e69e98a5b5862ad9250aa30b517fe436cce341662373351a09c474b2bb7"
+      },
+      "toolchain_identity": {
+        "body": {
+          "baseline": "0.19.0",
+          "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+          "lock_replay_bound": true,
+          "retained_lock_sha256": "fd7e1276ff5c8cde22d98c0932f70eb39383d9b60ac2d15f11d921dfa71218b0",
+          "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)"
+        },
+        "identity_digest": "sha256:6fb56d01df2ccf18a2ace571231b336f3640c32ede93dbf28c14cda515b50b9f"
+      },
+      "toolchain_reason": "exact_retained_cargo_lock_replayed_and_compiled; full graphics/package harness not executed",
+      "toolchain_status": "CAPABLE_WITH_PRESEED",
+      "trusted_representation_ok": false
+    },
+    "Defold": {
+      "adaptation_validation": {
+        "adaptation_identity": "df889ec73d7141c8ce95ae5e534fa935c4aca1724606451f615960b55da5133a",
+        "binding_id": "66819670ceac92eacaa610030cdc69067396a6424b610c86b06c27b694d5064d",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "INCONCLUSIVE",
+        "reasons": [
+          "non_product_failure_class_present"
+        ],
+        "valid_envelope": true
+      },
+      "candidate": "Defold",
+      "candidate_id": "Defold-1.13.0",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "asset_count": 8,
+            "broken_reference_count": 1
+          },
+          "candidate_id": "Defold-1.13.0",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S7-BROKEN-REF-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:assets",
+            "SLICE:logical_state"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "bounded_repair": "EQUIVALENT",
+            "diagnose_from_repo_cli": "EQUIVALENT",
+            "inject_broken_reference": "EQUIVALENT",
+            "rerun": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S7",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "66819670ceac92eacaa610030cdc69067396a6424b610c86b06c27b694d5064d",
+        "all_attempt_refs": [
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1",
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2",
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1"
+        ],
+        "attempts": {
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1": {
+            "attempt_id": "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1",
+            "candidate_generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+            "candidate_id": "Defold-1.13.0",
+            "failure_class": "HARNESS",
+            "injection_id": "FI-S7-BROKEN-REF-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-S7-7d9e16e9b97e27ccea06b4c56752",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-7d9e16e9b97e27ccea06b4c56752"
+          },
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1": {
+            "attempt_id": "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1",
+            "candidate_generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+            "candidate_id": "Defold-1.13.0",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-S7-409435705426e4ea641bd006ef1b",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-409435705426e4ea641bd006ef1b"
+          },
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2": {
+            "attempt_id": "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2",
+            "candidate_generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+            "candidate_id": "Defold-1.13.0",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-S7-25085ce1a5f77192f36aa0b09f38",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-25085ce1a5f77192f36aa0b09f38"
+          }
+        },
+        "candidate_id": "Defold-1.13.0",
+        "candidate_work_id": "WORK-S7-0c8c9b9d979032e2f86c3528",
+        "generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1",
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2",
+          "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1"
+        ],
+        "scenario_id": "S7"
+      },
+      "negative_selftests": {
+        "candidate_generation_mismatch": true,
+        "candidate_native_validation_bypass": true,
+        "duplicate_registry_ref": true,
+        "host_only_diagnosis": true,
+        "missing_diagnostic_attribution": true,
+        "more_than_one_broken_reference": true,
+        "rerun_bypass": true,
+        "reused_workspace": true,
+        "source_raw_substitution": true,
+        "unbounded_repair": true,
+        "wrong_broken_asset": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:da90a0f9734307f8cd19e270f504f982fe2eeaa21eb343147d79a61d365abd6e",
+          "record": {
+            "candidate": "Defold",
+            "candidate_id": "Defold-1.13.0",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "label": "N1",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-409435705426e4ea641bd006ef1b",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-409435705426e4ea641bd006ef1b"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests": {
+                "ASSET-01": "b8776cf265ce013edb017fe2f1ab669c3a4ae6d2e55824fef6b10f430c861d8e",
+                "ASSET-02": "fe55c446b1bc226ad83f92c589578c5d0af45f413ad4359f564b30aeaa85d504",
+                "ASSET-03": "b2a8535faaa6b0e673837130b8d850cba2cdaf67340ea09344b0d3386e5127aa",
+                "ASSET-04": "d728855776a965c7f89f8c6df8308de21c3b6b3929b35433f43380d570f180c7",
+                "ASSET-05": "ea8076c5487db6bbf1cccc5651f74ce217e4961660c05f53ed331b6de265db00",
+                "ASSET-06": "b1486d5634a860600f1b9162aba9c557346809a14cf49a609b4e8e76ed455e77",
+                "ASSET-07": "ada704573f7359a994e1959cac671336f1bd741f91831c4172d7b87d2eda351b",
+                "ASSET-08": "3145e78a5cdee16fd7d611abe2a1377098e5aa462fe4f865785d6980b26192d0"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "candidate_command": {
+                "cmd": [
+                  "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+                  "-jar",
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "--root",
+                  "/tmp/everfield-s7-18hcv5c6/runs/defold/N1",
+                  "resolve",
+                  "build"
+                ],
+                "exit": 1,
+                "seconds": 3.549,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: game.project:0: 'com.dynamo.bob.CompileExceptionError: the  '/input/game.input_binding' can't be found'\n\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:42 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:44 SEVERE  the  '/input/game.input_binding' can't be found \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:156) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:44 SEVERE  the  '/input/game.input_binding' can't be found \n",
+                "timed_out": false
+              },
+              "candidate_native": true,
+              "driver_sha256": "405423c44b3bb3ee28a0a6a09368d9c3b1c843c61a43a7e917b4825535405167",
+              "eight_asset_binding": true,
+              "phase": "NORMAL"
+            }
+          }
+        },
+        {
+          "digest": "sha256:f85f0686555622d7922564cdc91d488671f472aac76a7771ff8dd4ddad3e74dc",
+          "record": {
+            "candidate": "Defold",
+            "candidate_id": "Defold-1.13.0",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "label": "N2",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-25085ce1a5f77192f36aa0b09f38",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-25085ce1a5f77192f36aa0b09f38"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests": {
+                "ASSET-01": "b8776cf265ce013edb017fe2f1ab669c3a4ae6d2e55824fef6b10f430c861d8e",
+                "ASSET-02": "fe55c446b1bc226ad83f92c589578c5d0af45f413ad4359f564b30aeaa85d504",
+                "ASSET-03": "b2a8535faaa6b0e673837130b8d850cba2cdaf67340ea09344b0d3386e5127aa",
+                "ASSET-04": "d728855776a965c7f89f8c6df8308de21c3b6b3929b35433f43380d570f180c7",
+                "ASSET-05": "ea8076c5487db6bbf1cccc5651f74ce217e4961660c05f53ed331b6de265db00",
+                "ASSET-06": "b1486d5634a860600f1b9162aba9c557346809a14cf49a609b4e8e76ed455e77",
+                "ASSET-07": "ada704573f7359a994e1959cac671336f1bd741f91831c4172d7b87d2eda351b",
+                "ASSET-08": "3145e78a5cdee16fd7d611abe2a1377098e5aa462fe4f865785d6980b26192d0"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "candidate_command": {
+                "cmd": [
+                  "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+                  "-jar",
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "--root",
+                  "/tmp/everfield-s7-18hcv5c6/runs/defold/N2",
+                  "resolve",
+                  "build"
+                ],
+                "exit": 1,
+                "seconds": 1.565,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: game.project:0: 'com.dynamo.bob.CompileExceptionError: the  '/input/game.input_binding' can't be found'\n\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:45 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:45 SEVERE  the  '/input/game.input_binding' can't be found \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:156) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:45 SEVERE  the  '/input/game.input_binding' can't be found \n",
+                "timed_out": false
+              },
+              "candidate_native": true,
+              "driver_sha256": "405423c44b3bb3ee28a0a6a09368d9c3b1c843c61a43a7e917b4825535405167",
+              "eight_asset_binding": true,
+              "phase": "NORMAL"
+            }
+          }
+        },
+        {
+          "digest": "sha256:3a4f6ccbc7e78a31b1f1c5478fd5c6acef8b5a6c0289df25eb00a2ebfd5c00c9",
+          "record": {
+            "candidate": "Defold",
+            "candidate_id": "Defold-1.13.0",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": "FI-S7-BROKEN-REF-v2",
+            "kind": "FAILURE_INJECTION",
+            "label": "FI1",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-7d9e16e9b97e27ccea06b4c56752",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-7d9e16e9b97e27ccea06b4c56752"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests_after_repair": {
+                "ASSET-01": "b8776cf265ce013edb017fe2f1ab669c3a4ae6d2e55824fef6b10f430c861d8e",
+                "ASSET-02": "fe55c446b1bc226ad83f92c589578c5d0af45f413ad4359f564b30aeaa85d504",
+                "ASSET-03": "b2a8535faaa6b0e673837130b8d850cba2cdaf67340ea09344b0d3386e5127aa",
+                "ASSET-04": "d728855776a965c7f89f8c6df8308de21c3b6b3929b35433f43380d570f180c7",
+                "ASSET-05": "ea8076c5487db6bbf1cccc5651f74ce217e4961660c05f53ed331b6de265db00",
+                "ASSET-06": "b1486d5634a860600f1b9162aba9c557346809a14cf49a609b4e8e76ed455e77",
+                "ASSET-07": "ada704573f7359a994e1959cac671336f1bd741f91831c4172d7b87d2eda351b",
+                "ASSET-08": "3145e78a5cdee16fd7d611abe2a1377098e5aa462fe4f865785d6980b26192d0"
+              },
+              "asset_digests_before": {
+                "ASSET-01": "b8776cf265ce013edb017fe2f1ab669c3a4ae6d2e55824fef6b10f430c861d8e",
+                "ASSET-02": "fe55c446b1bc226ad83f92c589578c5d0af45f413ad4359f564b30aeaa85d504",
+                "ASSET-03": "b2a8535faaa6b0e673837130b8d850cba2cdaf67340ea09344b0d3386e5127aa",
+                "ASSET-04": "d728855776a965c7f89f8c6df8308de21c3b6b3929b35433f43380d570f180c7",
+                "ASSET-05": "ea8076c5487db6bbf1cccc5651f74ce217e4961660c05f53ed331b6de265db00",
+                "ASSET-06": "b1486d5634a860600f1b9162aba9c557346809a14cf49a609b4e8e76ed455e77",
+                "ASSET-07": "ada704573f7359a994e1959cac671336f1bd741f91831c4172d7b87d2eda351b",
+                "ASSET-08": "3145e78a5cdee16fd7d611abe2a1377098e5aa462fe4f865785d6980b26192d0"
+              },
+              "asset_digests_defect": {
+                "ASSET-01": "b8776cf265ce013edb017fe2f1ab669c3a4ae6d2e55824fef6b10f430c861d8e",
+                "ASSET-02": "fe55c446b1bc226ad83f92c589578c5d0af45f413ad4359f564b30aeaa85d504",
+                "ASSET-03": "b2a8535faaa6b0e673837130b8d850cba2cdaf67340ea09344b0d3386e5127aa",
+                "ASSET-04": "d728855776a965c7f89f8c6df8308de21c3b6b3929b35433f43380d570f180c7",
+                "ASSET-05": "ea8076c5487db6bbf1cccc5651f74ce217e4961660c05f53ed331b6de265db00",
+                "ASSET-06": "b1486d5634a860600f1b9162aba9c557346809a14cf49a609b4e8e76ed455e77",
+                "ASSET-07": "ada704573f7359a994e1959cac671336f1bd741f91831c4172d7b87d2eda351b",
+                "ASSET-08": "3145e78a5cdee16fd7d611abe2a1377098e5aa462fe4f865785d6980b26192d0"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "broken_asset_id": "ASSET-08",
+              "broken_reference_count": 1,
+              "candidate_native": true,
+              "diagnosis": {
+                "cmd": [
+                  "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+                  "-jar",
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "--root",
+                  "/tmp/everfield-s7-18hcv5c6/runs/defold/FI1",
+                  "resolve",
+                  "build"
+                ],
+                "exit": 1,
+                "seconds": 1.493,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: controller.script:0: 'com.dynamo.bob.CompileExceptionError: the Lua module '/assets/MISSING-ASSET-08.lua' can't be found'\n\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:48 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:48 SEVERE  the Lua module '/assets/MISSING-ASSET-08.lua' can't be found \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:124) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.LuaBuilder.create(LuaBuilder.java:157) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:125) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.ProtoBuilder.createSubTasks(ProtoBuilder.java:160) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.ProtoBuilder.createSubTasks(ProtoBuilder.java:149) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.GameObjectBuilder.create(GameObjectBuilder.java:117) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:106) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.CollectionBuilder.create(CollectionBuilder.java:129) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:106) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:158) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:48 SEVERE  the Lua module '/assets/MISSING-ASSET-08.lua' can't be found \n",
+                "timed_out": false
+              },
+              "diagnostic_attributed": true,
+              "driver_sha256_after_repair": "405423c44b3bb3ee28a0a6a09368d9c3b1c843c61a43a7e917b4825535405167",
+              "driver_sha256_before": "405423c44b3bb3ee28a0a6a09368d9c3b1c843c61a43a7e917b4825535405167",
+              "driver_sha256_defect": "df7fe4acddf817e0c4ca5dd4dd586e1870b405ec937925ffaf776470aea0dff6",
+              "injection_id": "FI-S7-BROKEN-REF-v2",
+              "phase": "FAILURE_INJECTION_AND_REPAIR",
+              "repair_changed_only_broken_reference": true,
+              "rerun": {
+                "cmd": [
+                  "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
+                  "-jar",
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "--root",
+                  "/tmp/everfield-s7-18hcv5c6/runs/defold/FI1",
+                  "resolve",
+                  "build"
+                ],
+                "exit": 1,
+                "seconds": 1.563,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ShadercJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: game.project:0: 'com.dynamo.bob.CompileExceptionError: the  '/input/game.input_binding' can't be found'\n\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:49 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:50 SEVERE  the  '/input/game.input_binding' can't be found \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:156) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:50 SEVERE  the  '/input/game.input_binding' can't be found \n",
+                "timed_out": false
+              },
+              "rerun_clean": false
+            }
+          }
+        }
+      ],
+      "source_binding_complete": true,
+      "source_bindings": {
+        "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1": "sha256:3a4f6ccbc7e78a31b1f1c5478fd5c6acef8b5a6c0289df25eb00a2ebfd5c00c9",
+        "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1": "sha256:da90a0f9734307f8cd19e270f504f982fe2eeaa21eb343147d79a61d365abd6e",
+        "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2": "sha256:f85f0686555622d7922564cdc91d488671f472aac76a7771ff8dd4ddad3e74dc"
+      },
+      "toolchain_identity": {
+        "body": {
+          "artifact_expected_sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+          "artifact_observed_sha256": "22e651025834603794ba6873b09924f11412dff66eee0e38aaef8955eb534655",
+          "artifact_verified": true,
+          "baseline": "1.13.0",
+          "bob_version": "bob.jar version: 1.13.0  sha1: f735c12192bf95684e6ae1ae27c400b8170fc6d8  built: 2026-07-07 11:40:03\n100% Working"
+        },
+        "identity_digest": "sha256:e23b225abf51f47bfa732e013f68fcc0e2f5f83ac4c1d31f30124ef0c0d7a43a"
+      },
+      "toolchain_reason": "digest_bound_bob_jar_downloaded_and_executed",
+      "toolchain_status": "CAPABLE",
+      "trusted_representation_ok": false
+    },
+    "Godot": {
+      "adaptation_validation": {
+        "adaptation_identity": "3ac64e451c3eb30e6ab851a2eaaa329179f84fd7c47f0838101ab70df956a7dc",
+        "binding_id": "3ae435907d97bfc80a40a9c362e9298d9d907e85184866392e86d36d5ad34803",
+        "reasons": [],
+        "result": "ACCEPT"
+      },
+      "aggregate": {
+        "aggregate": "INCONCLUSIVE",
+        "reasons": [
+          "non_product_failure_class_present"
+        ],
+        "valid_envelope": true
+      },
+      "candidate": "Godot",
+      "candidate_id": "Godot-4.7.1-stable",
+      "generation": {
+        "adaptation": {
+          "bounds": {
+            "asset_count": 8,
+            "broken_reference_count": 1
+          },
+          "candidate_id": "Godot-4.7.1-stable",
+          "extra_evidence": [],
+          "failure_injections": [
+            "FI-S7-BROKEN-REF-v2"
+          ],
+          "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+          "fixed_input_refs": [
+            "SLICE:assets",
+            "SLICE:logical_state"
+          ],
+          "harness_id": "W2-ENG-HARNESS-v5",
+          "hidden_context_transfer": false,
+          "mappings": {
+            "bounded_repair": "EQUIVALENT",
+            "diagnose_from_repo_cli": "EQUIVALENT",
+            "inject_broken_reference": "EQUIVALENT",
+            "rerun": "EQUIVALENT"
+          },
+          "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+          "package_target": null,
+          "resource_exception": false,
+          "scenario_id": "S7",
+          "start_profile": {
+            "cache_mode": "COLD",
+            "generated_state_policy": "REGENERATE_FROM_REPO",
+            "profile_id": "W2-ENG-START-COLD-v2",
+            "resource_class": "W2-ENG-HOST-COMMON-v2"
+          },
+          "undocumented_manual_intervention": false
+        },
+        "adaptation_binding_id": "3ae435907d97bfc80a40a9c362e9298d9d907e85184866392e86d36d5ad34803",
+        "all_attempt_refs": [
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1",
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2",
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1"
+        ],
+        "attempts": {
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1": {
+            "attempt_id": "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1",
+            "candidate_generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+            "candidate_id": "Godot-4.7.1-stable",
+            "failure_class": "HARNESS",
+            "injection_id": "FI-S7-BROKEN-REF-v2",
+            "kind": "FAILURE_INJECTION",
+            "normal_index": null,
+            "reset_id": "RESET-S7-048ac3a3d512c78f7de0567fce3e",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-048ac3a3d512c78f7de0567fce3e"
+          },
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1": {
+            "attempt_id": "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1",
+            "candidate_generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+            "candidate_id": "Godot-4.7.1-stable",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 1,
+            "reset_id": "RESET-S7-2343476a7e4488d3848a8ee19185",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-2343476a7e4488d3848a8ee19185"
+          },
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2": {
+            "attempt_id": "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2",
+            "candidate_generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+            "candidate_id": "Godot-4.7.1-stable",
+            "failure_class": "HARNESS",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "normal_index": 2,
+            "reset_id": "RESET-S7-e9c374c079dadd0fc152fc4480f2",
+            "reset_verified": true,
+            "resource_class": "W2-ENG-HOST-COMMON-v2",
+            "result": "INCONCLUSIVE",
+            "scenario_id": "S7",
+            "workspace_id": "WS-S7-e9c374c079dadd0fc152fc4480f2"
+          }
+        },
+        "candidate_id": "Godot-4.7.1-stable",
+        "candidate_work_id": "WORK-S7-65f347abe977f785204cfe5c",
+        "generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+        "harness_defect": false,
+        "predecessor_generation_id": null,
+        "repair_change_ref": null,
+        "run_registry_refs": [
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1",
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2",
+          "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1"
+        ],
+        "scenario_id": "S7"
+      },
+      "negative_selftests": {
+        "candidate_generation_mismatch": true,
+        "candidate_native_validation_bypass": true,
+        "duplicate_registry_ref": true,
+        "host_only_diagnosis": true,
+        "missing_diagnostic_attribution": true,
+        "more_than_one_broken_reference": true,
+        "rerun_bypass": true,
+        "reused_workspace": true,
+        "source_raw_substitution": true,
+        "unbounded_repair": true,
+        "wrong_broken_asset": true
+      },
+      "raw_attempts": [
+        {
+          "digest": "sha256:4be616839a310b9282978597468ea77a77ada6fd21fb6d50b99adeefc151dd48",
+          "record": {
+            "candidate": "Godot",
+            "candidate_id": "Godot-4.7.1-stable",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "label": "N1",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-2343476a7e4488d3848a8ee19185",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-2343476a7e4488d3848a8ee19185"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests": {
+                "ASSET-01": "7bafcd724adc40d1e724b27093b435bbe455bc84da015b49b401af8067233189",
+                "ASSET-02": "802b8b6f99ddcca8d3584cf202c5ebfa95c3025fc67eb9f3a454e1f17552b42f",
+                "ASSET-03": "b6d3bb074add36ccd8c5c15cc7b500ec54f55ce4e8e0c9c597099df15d65027b",
+                "ASSET-04": "640c616f9f9339b06467e8cf71de2c4f25c1b0a84e38bf4960d99435448c829b",
+                "ASSET-05": "e54a094297a3b9b3ca9fd17ade48e7798b7011107e1a5079d331b79272053848",
+                "ASSET-06": "925901655785a19610b82b29b4abee3414daafa460c0204718c3bef7020d0bc3",
+                "ASSET-07": "ed6087b4aa86f516ff20323e5cb9c6218da89b98644331a6bcd34b97b87105c1",
+                "ASSET-08": "c36c2697739ac1fa61482201769d41f51e9060ea0f9e855eb431afdbea16d2c7"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "candidate_command": {
+                "cmd": [
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "--headless",
+                  "--path",
+                  "/tmp/everfield-s7-18hcv5c6/runs/godot/N1"
+                ],
+                "exit": null,
+                "seconds": 180.044,
+                "stderr": "",
+                "stdout": "",
+                "timed_out": true
+              },
+              "candidate_native": true,
+              "driver_sha256": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
+              "eight_asset_binding": true,
+              "phase": "NORMAL"
+            }
+          }
+        },
+        {
+          "digest": "sha256:25cb5c51eff727e4ab778ed3bf31bf697777befe9f8fc720ce78082543491e77",
+          "record": {
+            "candidate": "Godot",
+            "candidate_id": "Godot-4.7.1-stable",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": null,
+            "kind": "NORMAL",
+            "label": "N2",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-e9c374c079dadd0fc152fc4480f2",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-e9c374c079dadd0fc152fc4480f2"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests": {
+                "ASSET-01": "7bafcd724adc40d1e724b27093b435bbe455bc84da015b49b401af8067233189",
+                "ASSET-02": "802b8b6f99ddcca8d3584cf202c5ebfa95c3025fc67eb9f3a454e1f17552b42f",
+                "ASSET-03": "b6d3bb074add36ccd8c5c15cc7b500ec54f55ce4e8e0c9c597099df15d65027b",
+                "ASSET-04": "640c616f9f9339b06467e8cf71de2c4f25c1b0a84e38bf4960d99435448c829b",
+                "ASSET-05": "e54a094297a3b9b3ca9fd17ade48e7798b7011107e1a5079d331b79272053848",
+                "ASSET-06": "925901655785a19610b82b29b4abee3414daafa460c0204718c3bef7020d0bc3",
+                "ASSET-07": "ed6087b4aa86f516ff20323e5cb9c6218da89b98644331a6bcd34b97b87105c1",
+                "ASSET-08": "c36c2697739ac1fa61482201769d41f51e9060ea0f9e855eb431afdbea16d2c7"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "candidate_command": {
+                "cmd": [
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "--headless",
+                  "--path",
+                  "/tmp/everfield-s7-18hcv5c6/runs/godot/N2"
+                ],
+                "exit": null,
+                "seconds": 180.006,
+                "stderr": "",
+                "stdout": "",
+                "timed_out": true
+              },
+              "candidate_native": true,
+              "driver_sha256": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
+              "eight_asset_binding": true,
+              "phase": "NORMAL"
+            }
+          }
+        },
+        {
+          "digest": "sha256:75104650893d0f23ef6aa431a1d7b48f39a17554bd294c8561a70b053cf4a821",
+          "record": {
+            "candidate": "Godot",
+            "candidate_id": "Godot-4.7.1-stable",
+            "failure_class": "HARNESS",
+            "formal_result": "INCONCLUSIVE",
+            "injection_id": "FI-S7-BROKEN-REF-v2",
+            "kind": "FAILURE_INJECTION",
+            "label": "FI1",
+            "reset_proof": {
+              "pre_workspace_absent": true,
+              "reset_id": "RESET-S7-048ac3a3d512c78f7de0567fce3e",
+              "schema": "S7-RESET-PROOF-v1",
+              "workspace_created_exclusive": true,
+              "workspace_id": "WS-S7-048ac3a3d512c78f7de0567fce3e"
+            },
+            "reset_verified_derived": true,
+            "scenario_id": "S7",
+            "schema": "W2-ENG-TECHNICAL-S7-RAW-v1",
+            "source": {
+              "asset_digests_after_repair": {
+                "ASSET-01": "7bafcd724adc40d1e724b27093b435bbe455bc84da015b49b401af8067233189",
+                "ASSET-02": "802b8b6f99ddcca8d3584cf202c5ebfa95c3025fc67eb9f3a454e1f17552b42f",
+                "ASSET-03": "b6d3bb074add36ccd8c5c15cc7b500ec54f55ce4e8e0c9c597099df15d65027b",
+                "ASSET-04": "640c616f9f9339b06467e8cf71de2c4f25c1b0a84e38bf4960d99435448c829b",
+                "ASSET-05": "e54a094297a3b9b3ca9fd17ade48e7798b7011107e1a5079d331b79272053848",
+                "ASSET-06": "925901655785a19610b82b29b4abee3414daafa460c0204718c3bef7020d0bc3",
+                "ASSET-07": "ed6087b4aa86f516ff20323e5cb9c6218da89b98644331a6bcd34b97b87105c1",
+                "ASSET-08": "c36c2697739ac1fa61482201769d41f51e9060ea0f9e855eb431afdbea16d2c7"
+              },
+              "asset_digests_before": {
+                "ASSET-01": "7bafcd724adc40d1e724b27093b435bbe455bc84da015b49b401af8067233189",
+                "ASSET-02": "802b8b6f99ddcca8d3584cf202c5ebfa95c3025fc67eb9f3a454e1f17552b42f",
+                "ASSET-03": "b6d3bb074add36ccd8c5c15cc7b500ec54f55ce4e8e0c9c597099df15d65027b",
+                "ASSET-04": "640c616f9f9339b06467e8cf71de2c4f25c1b0a84e38bf4960d99435448c829b",
+                "ASSET-05": "e54a094297a3b9b3ca9fd17ade48e7798b7011107e1a5079d331b79272053848",
+                "ASSET-06": "925901655785a19610b82b29b4abee3414daafa460c0204718c3bef7020d0bc3",
+                "ASSET-07": "ed6087b4aa86f516ff20323e5cb9c6218da89b98644331a6bcd34b97b87105c1",
+                "ASSET-08": "c36c2697739ac1fa61482201769d41f51e9060ea0f9e855eb431afdbea16d2c7"
+              },
+              "asset_digests_defect": {
+                "ASSET-01": "7bafcd724adc40d1e724b27093b435bbe455bc84da015b49b401af8067233189",
+                "ASSET-02": "802b8b6f99ddcca8d3584cf202c5ebfa95c3025fc67eb9f3a454e1f17552b42f",
+                "ASSET-03": "b6d3bb074add36ccd8c5c15cc7b500ec54f55ce4e8e0c9c597099df15d65027b",
+                "ASSET-04": "640c616f9f9339b06467e8cf71de2c4f25c1b0a84e38bf4960d99435448c829b",
+                "ASSET-05": "e54a094297a3b9b3ca9fd17ade48e7798b7011107e1a5079d331b79272053848",
+                "ASSET-06": "925901655785a19610b82b29b4abee3414daafa460c0204718c3bef7020d0bc3",
+                "ASSET-07": "ed6087b4aa86f516ff20323e5cb9c6218da89b98644331a6bcd34b97b87105c1",
+                "ASSET-08": "c36c2697739ac1fa61482201769d41f51e9060ea0f9e855eb431afdbea16d2c7"
+              },
+              "asset_ids": [
+                "ASSET-01",
+                "ASSET-02",
+                "ASSET-03",
+                "ASSET-04",
+                "ASSET-05",
+                "ASSET-06",
+                "ASSET-07",
+                "ASSET-08"
+              ],
+              "broken_asset_id": "ASSET-08",
+              "broken_reference_count": 1,
+              "candidate_native": true,
+              "diagnosis": {
+                "cmd": [
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "--headless",
+                  "--path",
+                  "/tmp/everfield-s7-18hcv5c6/runs/godot/FI1"
+                ],
+                "exit": null,
+                "seconds": 180.103,
+                "stderr": "",
+                "stdout": "",
+                "timed_out": true
+              },
+              "diagnostic_attributed": false,
+              "driver_sha256_after_repair": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
+              "driver_sha256_before": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
+              "driver_sha256_defect": "a54239841cef738dd997aed1179acce358af4d25a786351e296f799b603477b2",
+              "injection_id": "FI-S7-BROKEN-REF-v2",
+              "phase": "FAILURE_INJECTION_AND_REPAIR",
+              "repair_changed_only_broken_reference": true,
+              "rerun": {
+                "cmd": [
+                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "--headless",
+                  "--path",
+                  "/tmp/everfield-s7-18hcv5c6/runs/godot/FI1"
+                ],
+                "exit": null,
+                "seconds": 180.095,
+                "stderr": "",
+                "stdout": "",
+                "timed_out": true
+              },
+              "rerun_clean": false
+            }
+          }
+        }
+      ],
+      "source_binding_complete": true,
+      "source_bindings": {
+        "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1": "sha256:75104650893d0f23ef6aa431a1d7b48f39a17554bd294c8561a70b053cf4a821",
+        "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1": "sha256:4be616839a310b9282978597468ea77a77ada6fd21fb6d50b99adeefc151dd48",
+        "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2": "sha256:25cb5c51eff727e4ab778ed3bf31bf697777befe9f8fc720ce78082543491e77"
+      },
+      "toolchain_identity": {
+        "body": {
+          "artifact_expected_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+          "artifact_observed_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+          "artifact_verified": true,
+          "baseline": "4.7.1-stable",
+          "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "version": "4.7.1.stable.official.a13da4feb"
+        },
+        "identity_digest": "sha256:ff651aeb087d9cc9b18a5058705048f5355b56394102bd9b69138834b78f2e4d"
+      },
+      "toolchain_reason": "digest_bound_linux_archive_extracted_and_headless_process_executed",
+      "toolchain_status": "CAPABLE",
+      "trusted_representation_ok": false
+    }
+  },
+  "reviewed_s3_s4_s5_s6_provenance_preserved": true,
+  "run_identity": {
+    "github_run_attempt": "1",
+    "github_run_id": "31991497890",
+    "github_sha": "3d40ab57858a7c23c2456d22d4b7a1cec0017457",
+    "issue": 507
+  },
+  "runner_sha256": "78ae73f542c684039637129cb2bb5814db032387f7b2cbf28db68a160c4618e7",
+  "s7_contract": {
+    "asset_ids": [
+      "ASSET-01",
+      "ASSET-02",
+      "ASSET-03",
+      "ASSET-04",
+      "ASSET-05",
+      "ASSET-06",
+      "ASSET-07",
+      "ASSET-08"
+    ],
+    "broken_reference_asset_id": "ASSET-08",
+    "fixed_input_refs": [
+      "SLICE:assets",
+      "SLICE:logical_state"
+    ],
+    "min_bounds": {
+      "asset_count": 8,
+      "broken_reference_count": 1
+    },
+    "obligations": [
+      "inject_broken_reference",
+      "diagnose_from_repo_cli",
+      "bounded_repair",
+      "rerun"
+    ],
+    "required_injection": "FI-S7-BROKEN-REF-v2",
+    "resource_class": "W2-ENG-HOST-COMMON-v2"
+  },
+  "scenario_id": "S7",
+  "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+  "schema": "W2-ENG-TECHNICAL-S7-v1",
+  "toolchain_probe_sha256": "bf7de805a0bb941055466c4972d0f405b14f19f7e8d7196c9db07ab568fc5eac",
+  "trusted_comparison_authority": false,
+  "validator_id": "W2-ENG-PROTOCOL-VALIDATOR-v5",
+  "validator_sha256": "9a50e3e21279a7a94836d6162fee218a0e187bafe292847fd5f0b108df45deea",
+  "verification_pass_authority": false
+}
