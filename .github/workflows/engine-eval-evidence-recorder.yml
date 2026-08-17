@@ -96,9 +96,10 @@ jobs:
 
           branch = get('branches/main')
           publication_base = (branch.get('commit') or {}).get('sha')
-          compare = get(f"compare/{expected_head}...{publication_base}")
-          if (compare.get('merge_base_commit') or {}).get('sha') != expected_head:
-              raise SystemExit('source head is no longer an ancestor of current main')
+          if publication_base != expected_head:
+              compare = get(f"compare/{expected_head}...{publication_base}")
+              if (compare.get('merge_base_commit') or {}).get('sha') != expected_head:
+                  raise SystemExit('source head is no longer an ancestor of current main')
 
           env_file = os.environ['GITHUB_ENV']
           with open(env_file, 'a', encoding='utf-8') as out:
