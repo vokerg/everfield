@@ -618,7 +618,7 @@ values = [i * 17 + (seed % 97) for i in range(count)]
 perturb = os.environ.get("EVERFIELD_PERTURB") == "1"
 for tick in range(ticks):
     action = (tick + seed) % actions
-    if perturb && tick == 137:
+    if perturb and tick == 137:
         action = (action + 1) % actions
     index = (tick * 7 + action) % count
     values[index] = (values[index] + action * 3 + (tick % 11) + 1) % modulus
