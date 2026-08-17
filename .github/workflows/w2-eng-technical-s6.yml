@@ -1,0 +1,92 @@
+name: W2 ENG technical S6 remediation 02
+on:
+  push:
+    branches: [planning/issue-591]
+    paths:
+      - .github/workflows/w2-eng-technical-s6.yml
+      - tools/planning/engine_technical_s6_probe.py
+      - tools/planning/engine_technical_s6_verify.py
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: w2-eng-tech-s6-rem-02-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with: {fetch-depth: 1}
+      - name: Install bounded capture dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y --no-install-recommends xvfb scrot python3-pil
+      - name: Validate frozen route and execute fresh evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=docs/planning/wave-2/evidence/ci/engine-technical-s6
+          rm -rf "$out" && mkdir -p "$out"
+          python3 -m py_compile tools/planning/engine_technical_s6_probe.py tools/planning/engine_technical_s6_verify.py tools/planning/engine_toolchain_probe.py docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
+          {
+            echo trigger_sha=$GITHUB_SHA
+            echo run_id=$GITHUB_RUN_ID
+            echo run_attempt=$GITHUB_RUN_ATTEMPT
+            echo issue=591
+            echo mission=W2-ENG-TECH-S6-REM-02
+            echo claim_comment=5317388619
+            echo source_issue=585
+            echo source_head=917866be1655223ebfc3166a7e1949db738f1ff7
+            echo source_run=32029396638
+            echo source_artifact=9288296812
+            echo review_issue=588
+            echo review_terminal=5317382782
+            echo review_head=ec08f8f9a693b1bd67e6715bb28b1582afb37b8b
+            echo review_pr=589
+            echo finding=W2-ENG-TECH-S6-REM-REV-M01
+            sha256sum tools/planning/engine_technical_s6_probe.py tools/planning/engine_technical_s6_verify.py tools/planning/engine_toolchain_probe.py docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
+          } | tee "$out/run-identity.txt"
+          Xvfb :99 -screen 0 1280x720x24 -nolisten tcp > "$out/xvfb.log" 2>&1 & xp=$!
+          trap 'kill "$xp" 2>/dev/null || true' EXIT
+          export DISPLAY=:99
+          sleep 2
+          python3 tools/planning/engine_technical_s6_probe.py --out "$out/remediation.json" --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py --toolchain-probe tools/planning/engine_toolchain_probe.py --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json | tee "$out/producer.log"
+          sha256sum "$out/remediation.json" | tee "$out/remediation.sha256"
+          python3 tools/planning/engine_technical_s6_verify.py --evidence "$out/remediation.json" --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py --out "$out/independent-verification.json" | tee "$out/independent-verification.log"
+          sha256sum "$out/independent-verification.json" | tee "$out/independent-verification.sha256"
+          python3 - <<'PY'
+          import json,pathlib
+          r=pathlib.Path('docs/planning/wave-2/evidence/ci/engine-technical-s6');d=json.loads((r/'remediation.json').read_text());v=json.loads((r/'independent-verification.json').read_text())
+          assert d['disposition']=='PROVISIONAL_S6_FORMAL_V5_REMEDIATED_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW'
+          assert d['closed_findings']==['W2-ENG-TECH-S6-REV-M01','W2-ENG-TECH-S6-REV-M02','W2-ENG-TECH-S6-REM-REV-M01'] and all(d['negative_controls'].values())
+          assert d['attempts'][2]['classification']=='STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE'
+          assert v['ok'] and v['actual_byte_substitution_rejected'] and v['missing_frame_rejected'] and v['tampered_frame_rejected']
+          assert v['capture_down_observed'] and v['capture_down_classification_enforced'] and v['formal_actual_bindings_recomputed']
+          assert all(v['formal_negative_controls'].values())
+          assert v['recomputed_v5_adaptation']['result']=='ACCEPT'
+          assert v['recomputed_v5_aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True}
+          assert v['producer_v5_aggregate']==v['recomputed_v5_aggregate']
+          g=d['unchanged_v5']['generation'];assert g['run_registry_refs']==g['all_attempt_refs'] and len(g['attempts'])==3
+          assert d['preserved']['Bevy']=='INCONCLUSIVE_HARNESS_OR_INFRA' and d['preserved']['Defold']=='INCONCLUSIVE_HARNESS_OR_INFRA'
+          assert d['preserved']['Unity']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY' and d['preserved']['Unreal Engine']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY' and d['preserved']['issue_82_not_run_cells']==50
+          assert d['fresh_review_required'] and not d['trusted_comparison_authority'] and not d['integration_authority'] and d['canonicality']=='NOT_CANONICAL'
+          PY
+      - name: Persist exact remediation evidence
+        if: success()
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/planning/wave-2/evidence/ci/engine-technical-s6/
+          git commit -m "[PLAN-v1][W2-ENG-TECH-S6-REM-02] Record remediation run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-591
+      - name: Upload immutable remediation bundle
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-eng-tech-s6-rem-02-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/engine-technical-s6/
+          if-no-files-found: error
+          retention-days: 30
