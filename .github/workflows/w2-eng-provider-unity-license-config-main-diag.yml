@@ -40,20 +40,22 @@ jobs:
           from pathlib import Path
           p = Path('.github/workflows/w2-eng-provider-unity-license-config-main-diag.yml')
           text = p.read_text(encoding='utf-8')
+          trigger_header = text.split('\njobs:\n', 1)[0]
           for forbidden in ('workflow_dispatch:', 'schedule:', 'repository_dispatch:', 'workflow_call:'):
-              assert forbidden not in text, f'forbidden non-push trigger present: {forbidden}'
+              assert forbidden not in trigger_header, f'forbidden non-push trigger present: {forbidden}'
+          assert trigger_header.count('  push:') == 1
           assert text.count('environment: engine-eval') == 1
           assert "github.ref == 'refs/heads/main'" in text
           assert "github.ref == 'refs/heads/planning/issue-547'" in text
-          assert 'permissions:\n  contents: read' in text
-          assert 'branches:\n      - main\n      - planning/issue-547' in text
+          assert 'permissions:\n  contents: read' in trigger_header
+          assert 'branches:\n      - main\n      - planning/issue-547' in trigger_header
           expected_paths = (
               '.github/workflows/w2-eng-provider-unity-license-config-main-diag.yml',
               'tools/planning/unity_license_config_diag.py',
               'docs/planning/wave-2/evidence/provider-authority-input-contract.json',
           )
           for expected in expected_paths:
-              assert f'      - {expected}' in text
+              assert f'      - {expected}' in trigger_header
           assert 'contents: write' not in text
           assert 'actions: write' not in text
           assert 'pull-requests: write' not in text
