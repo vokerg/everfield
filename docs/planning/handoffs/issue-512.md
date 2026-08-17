@@ -11,14 +11,12 @@
 - Current main / merge base: `538b8a3b46b8b095bc43206d4a0ad4fdc151616a`
 - Frozen reviewed producer head: `defa1fa6c2cc8dd39a84a864b34b36c47dbaa77b`
 - Frozen reviewed validator blob: `e15c9df7eaab9f8a5a6cd96e945b93cbfdb29a7c`
-- Frozen Issue #508 handoff blob carried byte-identically: `9f5c79a7259f8a5a6cd96e945b93cbfdb29a7c`
+- Frozen Issue #508 handoff blob carried byte-identically: `9f5c79a7259f9d82f18509f630429715e5807e2c`
 - Required review source: Issue #510 terminal comment `5311555047`, disposition `CHANGES_NEEDED`
 - Canonical binding: Issue #6 comment `5245368879`
 - Canonical program blob: `e3120ec203c4156328770aa86c12fbb7187966dc`
 - Canonical activation: `413e729e8d2d5ac2eb138903f3f2ace07283b23e`
 - Canonicality: `NOT_CANONICAL`
-
-> Correction: the frozen Issue #508 handoff blob is `9f5c79a7259f9d82f18509f630429715e5807e2c`; the preceding identity line is superseded by this exact value.
 
 ## Reconstruction and correction fence
 
@@ -60,7 +58,7 @@ No provider credential was consumed. This is non-secret branch verification only
 
 ## Final path fence
 
-The validator source blob remains exactly `69d45fa7bde9bd7879460ac661bac83228f113a6`. The carried Issue #508 handoff remains byte-identical at `9f5c79a7259f9d82f18509f630429715e5807e2c`. This handoff update is the only post-verification branch mutation and exists solely to replace the prior verification-gap record with the exact PASS evidence.
+The validator source blob remains exactly `69d45fa7bde9bd7879460ac661bac83228f113a6`. The carried Issue #508 handoff remains byte-identical at `9f5c79a7259f9d82f18509f630429715e5807e2c`. This handoff is the only post-verification branch artifact update and exists solely to replace the prior verification-gap record with exact PASS evidence.
 
 Draft PR #514 targets current `main` and is the verification/review surface. No integration authority exists at this stage.
 
