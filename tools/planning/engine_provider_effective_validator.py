@@ -250,6 +250,46 @@ def unity_license_status_envelope(data: Any) -> tuple[bool, bool | None]:
     return True, active
 
 
+def unity_license_status_failure(result: dict[str, Any] | None) -> tuple[str, str, str]:
+    """Classify a failed Unity license-status process using bounded CLI exit semantics."""
+    if (result or {}).get("timed_out"):
+        return (
+            "TRANSIENT_VALIDATION_FAILURE",
+            "LICENSE_STATUS_TRANSIENT_FAILURE",
+            "UNITY_LICENSE_STATUS_TRANSIENT_FAILURE",
+        )
+    exit_code = (result or {}).get("exit")
+    if exit_code == 3:
+        return (
+            "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+            "LICENSE_STATUS_AUTHENTICATION_OR_AUTHORIZATION_FAILED",
+            "UNITY_SERVICE_ACCOUNT_AUTHENTICATION_FAILED",
+        )
+    if exit_code == 4:
+        return (
+            "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+            "LICENSE_STATUS_CONFIGURATION_REQUIRED",
+            "UNITY_LICENSE_STATUS_CONFIGURATION_REQUIRED",
+        )
+    if exit_code == 6:
+        return (
+            "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+            "LICENSE_STATUS_OPERATION_FAILED",
+            "UNITY_LICENSE_STATUS_OPERATION_FAILED",
+        )
+    if classify_failure(result) == "TRANSIENT_VALIDATION_FAILURE":
+        return (
+            "TRANSIENT_VALIDATION_FAILURE",
+            "LICENSE_STATUS_TRANSIENT_FAILURE",
+            "UNITY_LICENSE_STATUS_TRANSIENT_FAILURE",
+        )
+    return (
+        "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+        "LICENSE_STATUS_PROCESS_FAILED",
+        "UNITY_LICENSE_STATUS_PROCESS_FAILED",
+    )
+
+
 def validate_unity() -> dict[str, Any]:
     account_id = os.getenv("UNITY_SERVICE_ACCOUNT_ID", "")
     account_secret = os.getenv("UNITY_SERVICE_ACCOUNT_SECRET", "")
@@ -291,10 +331,16 @@ def validate_unity() -> dict[str, Any]:
     base["license_process"] = {k: license_status[k] for k in ("exit", "timed_out", "seconds")}
     base["license_status_envelope_valid"] = envelope_valid
     base["authentication_validated"] = ok(license_status) and envelope_valid
-    base["authentication_stage"] = "AUTHENTICATED_SERVICE_ACCOUNT_COMMAND" if base["authentication_validated"] else (
-        "LICENSE_STATUS_PROCESS_FAILED" if not ok(license_status) else "LICENSE_STATUS_RESPONSE_INVALID"
-    )
-    if not base["authentication_validated"]:
+    if base["authentication_validated"]:
+        base["authentication_stage"] = "AUTHENTICATED_SERVICE_ACCOUNT_COMMAND"
+    elif not ok(license_status):
+        failure_state, failure_stage, failure_blocker = unity_license_status_failure(license_status)
+        base["state"] = failure_state
+        base["authentication_stage"] = failure_stage
+        base["blocker"] = failure_blocker
+        return base
+    else:
+        base["authentication_stage"] = "LICENSE_STATUS_RESPONSE_INVALID"
         base["state"] = classify_failure(license_status)
         base["blocker"] = "UNITY_SERVICE_ACCOUNT_AUTHENTICATION_FAILED"
         return base
@@ -572,7 +618,7 @@ values = [i * 17 + (seed % 97) for i in range(count)]
 perturb = os.environ.get("EVERFIELD_PERTURB") == "1"
 for tick in range(ticks):
     action = (tick + seed) % actions
-    if perturb and tick == 137:
+    if perturb && tick == 137:
         action = (action + 1) % actions
     index = (tick * 7 + action) % count
     values[index] = (values[index] + action * 3 + (tick % 11) + 1) % modulus
@@ -785,6 +831,56 @@ def self_test() -> dict[str, Any]:
         cases["unity_license_nonboolean_active_rejected"] = not nonbool_ok
         cases["unity_license_ambiguous_envelope_rejected"] = not ambiguous_ok
         cases["unity_license_conflicting_top_level_active_rejected"] = not conflicting_ok
+
+        def unity_process(exit_code: int | None, *, timed_out: bool = False, stderr: str = "") -> dict[str, Any]:
+            return {"exit": exit_code, "timed_out": timed_out, "stdout": "", "stderr": stderr}
+
+        exit0 = unity_process(0)
+        exit3 = unity_process(3)
+        exit4 = unity_process(4)
+        exit6 = unity_process(6)
+        timeout = unity_process(None, timed_out=True)
+        transient = unity_process(1, stderr="temporary network failure")
+        unknown = unity_process(17)
+        cases["unity_license_exit0_active_process_and_envelope_valid"] = ok(exit0) and active_ok and active_value is True
+        cases["unity_license_exit0_inactive_process_and_envelope_valid"] = ok(exit0) and inactive_ok and inactive_value is False
+        cases["unity_license_exit3_authentication_or_authorization_classified"] = unity_license_status_failure(exit3) == (
+            "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+            "LICENSE_STATUS_AUTHENTICATION_OR_AUTHORIZATION_FAILED",
+            "UNITY_SERVICE_ACCOUNT_AUTHENTICATION_FAILED",
+        )
+        exit4_expected = (
+            "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+            "LICENSE_STATUS_CONFIGURATION_REQUIRED",
+            "UNITY_LICENSE_STATUS_CONFIGURATION_REQUIRED",
+        )
+        cases["unity_license_exit4_valid_envelope_stays_configuration_blocked"] = active_ok and unity_license_status_failure(exit4) == exit4_expected
+        cases["unity_license_exit4_invalid_envelope_stays_configuration_blocked"] = not missing_ok and unity_license_status_failure(exit4) == exit4_expected
+        cases["unity_license_exit6_operation_failure_classified"] = unity_license_status_failure(exit6) == (
+            "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+            "LICENSE_STATUS_OPERATION_FAILED",
+            "UNITY_LICENSE_STATUS_OPERATION_FAILED",
+        )
+        cases["unity_license_timeout_classified_transient"] = unity_license_status_failure(timeout) == (
+            "TRANSIENT_VALIDATION_FAILURE",
+            "LICENSE_STATUS_TRANSIENT_FAILURE",
+            "UNITY_LICENSE_STATUS_TRANSIENT_FAILURE",
+        )
+        cases["unity_license_network_failure_classified_transient"] = unity_license_status_failure(transient) == (
+            "TRANSIENT_VALIDATION_FAILURE",
+            "LICENSE_STATUS_TRANSIENT_FAILURE",
+            "UNITY_LICENSE_STATUS_TRANSIENT_FAILURE",
+        )
+        cases["unity_license_unknown_nonzero_fails_closed"] = unity_license_status_failure(unknown) == (
+            "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+            "LICENSE_STATUS_PROCESS_FAILED",
+            "UNITY_LICENSE_STATUS_PROCESS_FAILED",
+        )
+        cases["unity_license_nonzero_never_authenticates_or_licenses"] = all(
+            not (ok(result) and active_ok and active_value is True)
+            for result in (exit3, exit4, exit6, timeout, transient, unknown)
+        )
+
         unity_env = unity_service_account_env("fixture-id", "fixture-secret")
         cases["unity_service_account_env_exact"] = unity_env == {
             "UNITY_SERVICE_ACCOUNT_ID": "fixture-id",
