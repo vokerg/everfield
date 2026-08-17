@@ -1,41 +1,22 @@
 {
-  "all_provisional_verified": true,
-  "candidate_verification": {
-    "Godot": {
-      "ok": true,
-      "raw_checks": [
-        {
-          "ok": true,
-          "reasons": []
-        },
-        {
-          "ok": true,
-          "reasons": []
-        },
-        {
-          "ok": true,
-          "reasons": []
-        }
-      ],
-      "reasons": [],
-      "recomputed_aggregate": {
-        "aggregate": "PASS_FOR_COMPARISON",
-        "reasons": [],
-        "valid_envelope": true
-      }
-    }
+  "actual_byte_substitution_rejected": true,
+  "canonicality": "NOT_CANONICAL",
+  "capture_down_observed": true,
+  "evidence_run_identity": "32029026514:1:4976c86aba60a515260b2a663b6e6d6894f4d7a1",
+  "fresh_review_still_required": true,
+  "generation_id": "GEN-S6-REM-b789a8746a30c009cb4d",
+  "ok": true,
+  "reasons": [],
+  "recomputed_v5_adaptation": {
+    "adaptation_identity": "25d0ead1111ff8ef214a622286f71baa86ba127a13a65ca7c674cdcc2128f713",
+    "binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+    "reasons": [],
+    "result": "ACCEPT"
   },
-  "evidence_run_identity": "31967674130:1:b744552663d8dbaf4b8fa27b250ff6507dffe7d8",
-  "negative_attacks": {
-    "Godot": {
-      "duplicate_registry": true,
-      "fi_misclassification": true,
-      "wrong_marker": true,
-      "wrong_viewport": true
-    }
+  "recomputed_v5_aggregate": {
+    "aggregate": "PASS_FOR_COMPARISON",
+    "reasons": [],
+    "valid_envelope": true
   },
-  "provisional_candidates": [
-    "Godot"
-  ],
-  "schema": "W2-ENG-TECHNICAL-S6-INDEPENDENT-VERIFY-v1"
+  "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-INDEPENDENT-VERIFY-v1"
 }
