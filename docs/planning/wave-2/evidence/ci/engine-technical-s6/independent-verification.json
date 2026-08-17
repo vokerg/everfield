@@ -1,0 +1,41 @@
+{
+  "all_provisional_verified": true,
+  "candidate_verification": {
+    "Godot": {
+      "ok": true,
+      "raw_checks": [
+        {
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "reasons": [],
+      "recomputed_aggregate": {
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
+        "valid_envelope": true
+      }
+    }
+  },
+  "evidence_run_identity": "31967674130:1:b744552663d8dbaf4b8fa27b250ff6507dffe7d8",
+  "negative_attacks": {
+    "Godot": {
+      "duplicate_registry": true,
+      "fi_misclassification": true,
+      "wrong_marker": true,
+      "wrong_viewport": true
+    }
+  },
+  "provisional_candidates": [
+    "Godot"
+  ],
+  "schema": "W2-ENG-TECHNICAL-S6-INDEPENDENT-VERIFY-v1"
+}
