@@ -1,0 +1,191 @@
+name: W2 Unity license configuration diagnostic
+
+on:
+  push:
+    branches:
+      - planning/issue-535
+    paths:
+      - .github/workflows/w2-eng-provider-unity-license-config-diag.yml
+      - tools/planning/unity_license_config_diag.py
+      - docs/planning/wave-2/evidence/provider-authority-input-contract.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: w2-unity-license-config-diag-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose-unity-license-config:
+    if: github.repository == 'vokerg/everfield'
+    environment: engine-eval
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact diagnostic branch head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Verify diagnostic source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "vokerg/everfield"
+          test "$GITHUB_REF" = "refs/heads/planning/issue-535"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -f tools/planning/unity_license_config_diag.py
+          test "$(git hash-object docs/planning/wave-2/evidence/provider-authority-input-contract.json)" = "a4c40fe1f77ec9557dbe0d76af3e947f188c96be"
+
+      - name: Install and pin exact Unity CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://public-cdn.cloud.unity3d.com/hub/prod/cli/install.sh | UNITY_CLI_VERSION=1.0.0-beta.5 bash
+          export PATH="$HOME/.unity/bin:$PATH"
+          UNITY_CLI_DISCOVERED="$(command -v unity)"
+          test -n "$UNITY_CLI_DISCOVERED"
+          test -x "$UNITY_CLI_DISCOVERED"
+          UNITY_CLI_RESOLVED="$(readlink -f "$UNITY_CLI_DISCOVERED")"
+          test -n "$UNITY_CLI_RESOLVED"
+          test -x "$UNITY_CLI_RESOLVED"
+          UNITY_CLI_VERSION_OBSERVED="$("$UNITY_CLI_RESOLVED" --version)"
+          test "$UNITY_CLI_VERSION_OBSERVED" = "1.0.0-beta.5"
+          echo "UNITY_CLI=$UNITY_CLI_RESOLVED" >> "$GITHUB_ENV"
+          echo "UNITY_CLI_OBSERVED_VERSION=$UNITY_CLI_VERSION_OBSERVED" >> "$GITHUB_ENV"
+          echo "resolved Unity CLI executable: $UNITY_CLI_RESOLVED"
+
+      - name: Capture non-secret installed CLI command surface
+        shell: bash
+        run: |
+          set -u
+          help_dir="$RUNNER_TEMP/unity-license-config-help"
+          mkdir -p "$help_dir"
+
+          set +e
+          "$UNITY_CLI" license --help > "$help_dir/license.txt" 2>&1
+          license_exit=$?
+          "$UNITY_CLI" license status --help > "$help_dir/status.txt" 2>&1
+          status_exit=$?
+          "$UNITY_CLI" config --help > "$help_dir/config.txt" 2>&1
+          config_exit=$?
+          set -e
+
+          echo "UNITY_LICENSE_HELP_EXIT=$license_exit" >> "$GITHUB_ENV"
+          echo "UNITY_LICENSE_STATUS_HELP_EXIT=$status_exit" >> "$GITHUB_ENV"
+          echo "UNITY_CONFIG_HELP_EXIT=$config_exit" >> "$GITHUB_ENV"
+          sha256sum "$help_dir/license.txt" "$help_dir/status.txt" "$help_dir/config.txt"
+          echo "Captured non-secret CLI help into runner temp; raw text will not be persisted or uploaded."
+
+      - name: Validate diagnostic syntax and deterministic self-tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="docs/planning/wave-2/evidence/ci/provider-unity-license-config-diag/${GITHUB_RUN_ID}"
+          mkdir -p "$out"
+          python3 -m py_compile tools/planning/unity_license_config_diag.py
+          python3 tools/planning/unity_license_config_diag.py \
+            --self-test \
+            --out "$out/selftest.json"
+          python3 - <<'PY'
+          import json, os
+          p=f"docs/planning/wave-2/evidence/ci/provider-unity-license-config-diag/{os.environ['GITHUB_RUN_ID']}/selftest.json"
+          d=json.load(open(p))
+          assert d['pass'] is True
+          assert all(d['cases'].values())
+          print('Unity config diagnostic self-test: PASS')
+          PY
+
+      - name: Run protected-environment presence-only diagnostic
+        shell: bash
+        env:
+          UNITY_AUTH_MODE: ${{ vars.UNITY_AUTH_MODE }}
+          UNITY_SERVICE_ACCOUNT_ID_PRESENT: ${{ secrets.UNITY_SERVICE_ACCOUNT_ID != '' }}
+          UNITY_SERVICE_ACCOUNT_SECRET_PRESENT: ${{ secrets.UNITY_SERVICE_ACCOUNT_SECRET != '' }}
+          UNITY_LICENSE_SERIAL_PRESENT: ${{ secrets.UNITY_LICENSE_SERIAL != '' }}
+          UNITY_OFFLINE_LICENSE_PRESENT: ${{ secrets.UNITY_OFFLINE_LICENSE_B64 != '' }}
+          UNITY_FLOATING_CONFIG_PRESENT: ${{ secrets.UNITY_FLOATING_CONFIG_B64 != '' }}
+        run: |
+          set -euo pipefail
+          help_dir="$RUNNER_TEMP/unity-license-config-help"
+          out="docs/planning/wave-2/evidence/ci/provider-unity-license-config-diag/${GITHUB_RUN_ID}"
+          python3 tools/planning/unity_license_config_diag.py \
+            --contract docs/planning/wave-2/evidence/provider-authority-input-contract.json \
+            --license-help "$help_dir/license.txt" \
+            --status-help "$help_dir/status.txt" \
+            --config-help "$help_dir/config.txt" \
+            --license-help-exit "$UNITY_LICENSE_HELP_EXIT" \
+            --status-help-exit "$UNITY_LICENSE_STATUS_HELP_EXIT" \
+            --config-help-exit "$UNITY_CONFIG_HELP_EXIT" \
+            --out "$out/diagnostic.json"
+
+      - name: Enforce bounded non-authority evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="docs/planning/wave-2/evidence/ci/provider-unity-license-config-diag/${GITHUB_RUN_ID}"
+          python3 - <<'PY'
+          import json, os
+          p=f"docs/planning/wave-2/evidence/ci/provider-unity-license-config-diag/{os.environ['GITHUB_RUN_ID']}/diagnostic.json"
+          d=json.load(open(p))
+          assert d['schema']=='W2-ENG-PROVIDER-UNITY-LICENSE-CONFIG-DIAG-v1'
+          assert d['mission_id']=='W2-ENG-PROVIDER-UNITY-LICENSE-CONFIG-DIAG-01'
+          assert d['issue']==535
+          assert d['reviewed_input_contract']['git_blob']=='a4c40fe1f77ec9557dbe0d76af3e947f188c96be'
+          assert d['secret_values_accepted_by_probe'] is False
+          assert d['secret_hashes_in_evidence'] is False
+          assert d['provider_pass'] is False
+          assert d['unity_license_authority'] is False
+          assert d['editor_execution_authority'] is False
+          assert d['integration_authority'] is False
+          assert d['canonicality']=='NOT_CANONICAL'
+          assert d['unity']['credential_or_license_values_read'] is False
+          assert d['unity']['effective_authorization_validated'] is False
+          assert d['unity']['disposition'] in {
+              'UNITY_LICENSE_MODE_PRESENT_NEEDS_EFFECTIVE_WIRING',
+              'UNITY_LICENSE_CONFIGURATION_INPUT_REQUIRED_EXACT',
+          }
+          for surface in d['cli']['command_surface'].values():
+              assert surface['raw_text_persisted'] is False
+              assert isinstance(surface['raw_sha256'], str) and len(surface['raw_sha256'])==64
+          print('bounded Unity license configuration diagnostic: PASS')
+          PY
+          {
+            echo "trigger_sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "issue=535"
+            echo "mission_id=W2-ENG-PROVIDER-UNITY-LICENSE-CONFIG-DIAG-01"
+            echo "unity_cli_version=${UNITY_CLI_OBSERVED_VERSION}"
+            echo "contract_blob=$(git hash-object docs/planning/wave-2/evidence/provider-authority-input-contract.json)"
+            sha256sum tools/planning/unity_license_config_diag.py
+            sha256sum "$out/selftest.json"
+            sha256sum "$out/diagnostic.json"
+          } > "$out/run-identity.txt"
+
+      - name: Persist bounded diagnostic evidence to task branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="docs/planning/wave-2/evidence/ci/provider-unity-license-config-diag/${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$out"
+          if git diff --cached --quiet; then
+            echo "No diagnostic evidence delta"
+            exit 0
+          fi
+          git commit -m "[PLAN-v1][W2-ENG-PROVIDER-UNITY-LICENSE-CONFIG-DIAG-01] Record run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-535
+
+      - name: Upload immutable bounded diagnostic artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: w2-unity-license-config-diag-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/planning/wave-2/evidence/ci/provider-unity-license-config-diag/${{ github.run_id }}/
+          if-no-files-found: error
+          retention-days: 30
