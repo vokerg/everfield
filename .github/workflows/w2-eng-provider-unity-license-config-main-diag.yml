@@ -40,13 +40,14 @@ jobs:
           from pathlib import Path
           p = Path('.github/workflows/w2-eng-provider-unity-license-config-main-diag.yml')
           text = p.read_text(encoding='utf-8')
+          lines = text.splitlines()
           trigger_header = text.split('\njobs:\n', 1)[0]
           for forbidden in ('workflow_dispatch:', 'schedule:', 'repository_dispatch:', 'workflow_call:'):
               assert forbidden not in trigger_header, f'forbidden non-push trigger present: {forbidden}'
           assert trigger_header.count('  push:') == 1
-          assert text.count('environment: engine-eval') == 1
-          assert "github.ref == 'refs/heads/main'" in text
-          assert "github.ref == 'refs/heads/planning/issue-547'" in text
+          assert sum(line == '    environment: engine-eval' for line in lines) == 1
+          assert "    if: github.repository == 'vokerg/everfield' && github.ref == 'refs/heads/main'" in lines
+          assert "    if: github.repository == 'vokerg/everfield' && github.ref == 'refs/heads/planning/issue-547'" in lines
           assert 'permissions:\n  contents: read' in trigger_header
           assert 'branches:\n      - main\n      - planning/issue-547' in trigger_header
           expected_paths = (
@@ -56,9 +57,9 @@ jobs:
           )
           for expected in expected_paths:
               assert f'      - {expected}' in trigger_header
-          assert 'contents: write' not in text
-          assert 'actions: write' not in text
-          assert 'pull-requests: write' not in text
+          assert 'contents: write' not in trigger_header
+          assert 'actions: write' not in trigger_header
+          assert 'pull-requests: write' not in trigger_header
           print('one-shot workflow structure: PASS')
           PY
 
