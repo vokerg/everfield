@@ -1,158 +1,84 @@
-name: W2 ENG technical S6
-
+name: W2 ENG technical S6 remediation
 on:
   push:
-    branches:
-      - planning/issue-456
+    branches: [planning/issue-585]
     paths:
       - .github/workflows/w2-eng-technical-s6.yml
       - tools/planning/engine_technical_s6_probe.py
       - tools/planning/engine_technical_s6_verify.py
   workflow_dispatch:
-
 permissions:
   contents: write
-
 concurrency:
-  group: w2-eng-tech-s6-01-${{ github.ref }}
+  group: w2-eng-tech-s6-rem-01-${{ github.ref }}
   cancel-in-progress: false
-
 jobs:
-  execute-s6:
+  evidence:
     runs-on: ubuntu-24.04
-    timeout-minutes: 70
+    timeout-minutes: 45
     steps:
-      - name: Checkout exact S6 trigger
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          fetch-depth: 1
-
-      - name: Provision exact Defold-compatible Java
-        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
-        with:
-          distribution: temurin
-          java-version: '25'
-
-      - name: Provision bounded X11 capture dependencies
-        shell: bash
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with: {fetch-depth: 1}
+      - name: Install bounded capture dependencies
         run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends xvfb scrot imagemagick pkg-config libasound2-dev libudev-dev libx11-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libxkbcommon-dev
-
-      - name: Validate runner and exact S6 authority inputs
+          sudo apt-get update -q
+          sudo apt-get install -y --no-install-recommends xvfb scrot python3-pil
+      - name: Validate frozen route and execute fresh evidence
         shell: bash
         run: |
           set -euo pipefail
           out=docs/planning/wave-2/evidence/ci/engine-technical-s6
-          mkdir -p "$out"
+          rm -rf "$out" && mkdir -p "$out"
           python3 -m py_compile tools/planning/engine_technical_s6_probe.py tools/planning/engine_technical_s6_verify.py tools/planning/engine_toolchain_probe.py docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
-          python3 docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py > "$out/harness-validator.json"
-          python3 - <<'PY'
-          import importlib.util
-          p='docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py'
-          s=importlib.util.spec_from_file_location('v',p);v=importlib.util.module_from_spec(s);s.loader.exec_module(v)
-          assert v.FEATURE['capture_fixture']=={'logical_state_marker':'CAPTURE-STATE-042','viewport_width':1280,'viewport_height':720,'required_frame_count':1}
-          assert v.SCENARIOS['S6']['fixed_input_refs']==['SLICE:logical_state','SLICE:player_surface','SLICE:capture_fixture']
-          assert v.SCENARIOS['S6']['obligations']==['reach_known_state','identity_bound_capture','state_vs_capture_failure_separated']
-          assert v.SCENARIOS['S6']['required_injections']==['FI-S6-CAPTURE-DOWN-v2']
-          PY
           {
-            echo "trigger_sha=${GITHUB_SHA}"
-            echo "run_id=${GITHUB_RUN_ID}"
-            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
-            echo "issue=456"
-            echo "scenario=S6"
-            echo "claim_comment=5309183545"
-            echo "s5_producer_terminal=5308620093"
-            echo "s5_review_terminal=5309016465"
-            echo "s5_review_disposition=PASS_BOUNDED_S5_V5_ENVELOPE"
-            echo "s5_review_publication=a7c587956f542c0fc00d5c6875a04a04e124f4e6"
-            echo "s5_producer_publication=886438990ed395cde2fad0ee6cb98ca6ade0f26f"
-            sha256sum tools/planning/engine_technical_s6_probe.py
-            sha256sum tools/planning/engine_technical_s6_verify.py
-            sha256sum tools/planning/engine_toolchain_probe.py
-            sha256sum docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py
-            sha256sum docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock
-            sha256sum docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
+            echo trigger_sha=$GITHUB_SHA
+            echo run_id=$GITHUB_RUN_ID
+            echo run_attempt=$GITHUB_RUN_ATTEMPT
+            echo issue=585
+            echo mission=W2-ENG-TECH-S6-REM-01
+            echo claim_comment=5315719466
+            echo source_issue=456
+            echo source_head=0719199237d3ac46505f52a06df0a0fc93429c9f
+            echo source_run=31967674130
+            echo source_artifact=9268994399
+            echo review_issue=458
+            echo review_terminal=5309336848
+            echo finding_1=W2-ENG-TECH-S6-REV-M01
+            echo finding_2=W2-ENG-TECH-S6-REV-M02
+            sha256sum tools/planning/engine_technical_s6_probe.py tools/planning/engine_technical_s6_verify.py tools/planning/engine_toolchain_probe.py docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json
           } | tee "$out/run-identity.txt"
-
-      - name: Freshly execute S6 tranche
-        shell: bash
-        run: |
-          set -euo pipefail
-          out=docs/planning/wave-2/evidence/ci/engine-technical-s6
-          Xvfb :99 -screen 0 1280x720x24 -nolisten tcp > "$out/xvfb.log" 2>&1 &
-          xvfb_pid=$!
-          trap 'kill "$xvfb_pid" 2>/dev/null || true' EXIT
+          Xvfb :99 -screen 0 1280x720x24 -nolisten tcp > "$out/xvfb.log" 2>&1 & xp=$!
+          trap 'kill "$xp" 2>/dev/null || true' EXIT
           export DISPLAY=:99
           sleep 2
-          python3 tools/planning/engine_technical_s6_probe.py \
-            --out "$out/evidence.json" \
-            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
-            --toolchain-probe tools/planning/engine_toolchain_probe.py \
-            --bevy-lock docs/planning/wave-2/evidence/ci/bevy-0.19.0-Cargo.lock \
-            --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
-            | tee "$out/summary.log"
-          sha256sum "$out/evidence.json" | tee "$out/evidence.sha256"
-
-      - name: Independently verify retained S6 semantics and bindings
-        shell: bash
-        run: |
-          set -euo pipefail
-          out=docs/planning/wave-2/evidence/ci/engine-technical-s6
-          python3 tools/planning/engine_technical_s6_verify.py \
-            --evidence "$out/evidence.json" \
-            --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py \
-            --out "$out/independent-verification.json" \
-            | tee "$out/independent-verification.log"
+          python3 tools/planning/engine_technical_s6_probe.py --out "$out/remediation.json" --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py --toolchain-probe tools/planning/engine_toolchain_probe.py --artifact-lock docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json | tee "$out/producer.log"
+          sha256sum "$out/remediation.json" | tee "$out/remediation.sha256"
+          python3 tools/planning/engine_technical_s6_verify.py --evidence "$out/remediation.json" --validator docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py --out "$out/independent-verification.json" | tee "$out/independent-verification.log"
           sha256sum "$out/independent-verification.json" | tee "$out/independent-verification.sha256"
-
-      - name: Enforce S6 evidence envelope
-        shell: bash
-        run: |
-          set -euo pipefail
           python3 - <<'PY'
-          import json
-          d=json.load(open('docs/planning/wave-2/evidence/ci/engine-technical-s6/evidence.json'))
-          iv=json.load(open('docs/planning/wave-2/evidence/ci/engine-technical-s6/independent-verification.json'))
-          assert d['schema']=='W2-ENG-TECHNICAL-S6-v1' and d['mission_id']=='W2-ENG-TECH-S6-01' and d['issue']==456 and d['scenario_id']=='S6'
-          assert d['harness_id']=='W2-ENG-HARNESS-v5' and d['feature_slice_id']=='W2-ENG-FEATURE-SLICE-v2' and d['scenario_manifest_id']=='W2-ENG-SCENARIO-INPUTS-v2'
-          c=d['s6_contract'];assert c['logical_state_marker']=='CAPTURE-STATE-042' and c['required_injection']=='FI-S6-CAPTURE-DOWN-v2'
-          assert c['min_bounds']=={'screen_count':3,'capture_frame_count':1,'viewport_width':1280,'viewport_height':720}
-          r=d['predecessor_review'];assert r['review_issue']==454 and r['review_terminal']==5309016465 and r['disposition']=='PASS_BOUNDED_S5_V5_ENVELOPE'
-          assert r['review_publication_sha']=='a7c587956f542c0fc00d5c6875a04a04e124f4e6' and r['producer_publication_sha']=='886438990ed395cde2fad0ee6cb98ca6ade0f26f'
-          assert d['authority_bound_not_run']=={'Unity':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY','Unreal Engine':'NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'}
-          assert d['historical_issue_82_not_run_cells_preserved']==50 and d['reviewed_s3_s4_s5_provenance_preserved'] is True
-          assert d['fresh_review_required'] is True and d['trusted_comparison_authority'] is False and d['integration_authority'] is False and d['engine_selected'] is False and d['implementation_readiness'] is False and d['canonicality']=='NOT_CANONICAL'
-          assert len(d['provisional_candidates'])>=1
-          assert iv['schema']=='W2-ENG-TECHNICAL-S6-INDEPENDENT-VERIFY-v1' and iv['evidence_run_identity']==d['run_identity'] and iv['provisional_candidates']==d['provisional_candidates'] and iv['all_provisional_verified'] is True
-          for name in d['provisional_candidates']:
-              x=d['results'][name];assert x['disposition']=='PROVISIONAL_S6_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW';assert x['binding_verification']=={'ok':True,'reasons':[]};assert x['adaptation_validation']['result']=='ACCEPT';assert x['aggregate']=={'aggregate':'PASS_FOR_COMPARISON','reasons':[],'valid_envelope':True};assert x['trusted_representation_ok'] is True;assert all(x['negative_selftests'].values());assert iv['candidate_verification'][name]['ok'] is True;assert all(iv['negative_attacks'][name].values())
-              raws=x['raw_attempts'];assert [a['record']['label'] for a in raws]==['N1','N2','FI1'];assert len({a['record']['reset_proof']['workspace_id'] for a in raws})==3
-              for a in raws[:2]:
-                  s=a['record']['source'];assert s['state_observation']['marker']=='CAPTURE-STATE-042';assert s['capture']['dimensions']==[1280,720] and s['capture']['frame_count']==1 and s['capture']['mechanism']=='CANDIDATE_BOUND_X11_FRAMEBUFFER'
-              fi=raws[2]['record']['source'];assert fi['state_observation']['marker']=='CAPTURE-STATE-042';assert fi['capture']['expected_unavailable'] is True and fi['failure_separation']['classification']=='STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE'
-          print(json.dumps({'validated':True,'provisional_candidates':d['provisional_candidates'],'independent_verification':True},sort_keys=True))
+          import json,pathlib
+          r=pathlib.Path('docs/planning/wave-2/evidence/ci/engine-technical-s6');d=json.loads((r/'remediation.json').read_text());v=json.loads((r/'independent-verification.json').read_text())
+          assert d['disposition']=='PROVISIONAL_S6_REMEDIATED_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW'
+          assert d['closed_findings']==['W2-ENG-TECH-S6-REV-M01','W2-ENG-TECH-S6-REV-M02'] and all(d['negative_controls'].values())
+          assert v['ok'] and v['actual_byte_substitution_rejected'] and v['capture_down_observed']
+          assert d['preserved']['Bevy']=='INCONCLUSIVE_HARNESS_OR_INFRA' and d['preserved']['Defold']=='INCONCLUSIVE_HARNESS_OR_INFRA'
+          assert d['preserved']['Unity']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY' and d['preserved']['Unreal Engine']=='NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY'
+          assert d['fresh_review_required'] and not d['trusted_comparison_authority'] and not d['integration_authority'] and d['canonicality']=='NOT_CANONICAL'
           PY
-
-      - name: Persist exact S6 evidence
-        if: always()
-        shell: bash
+      - name: Persist exact remediation evidence
+        if: success()
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/planning/wave-2/evidence/ci/engine-technical-s6/
-          if git diff --cached --quiet; then echo "No generated evidence delta"; exit 0; fi
-          git commit -m "[PLAN-v1][W2-ENG-TECH-S6-01] Record empirical S6 run ${GITHUB_RUN_ID}"
-          git push origin HEAD:planning/issue-456
-
-      - name: Upload immutable S6 bundle
+          git commit -m "[PLAN-v1][W2-ENG-TECH-S6-REM-01] Record remediation run ${GITHUB_RUN_ID}"
+          git push origin HEAD:planning/issue-585
+      - name: Upload immutable remediation bundle
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: w2-eng-tech-s6-01-${{ github.run_id }}-${{ github.run_attempt }}
+          name: w2-eng-tech-s6-rem-01-${{ github.run_id }}-${{ github.run_attempt }}
           path: docs/planning/wave-2/evidence/ci/engine-technical-s6/
           if-no-files-found: error
           retention-days: 30
