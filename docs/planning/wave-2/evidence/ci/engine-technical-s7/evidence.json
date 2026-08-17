@@ -20,7 +20,27 @@
     "s6_reviewed_publication_sha": "40179080013d742b70b4a5be611f1666dd3cd599",
     "terminal_comment": 5309450099
   },
-  "provisional_candidates": [],
+  "producer_corrections": [
+    {
+      "artifact_digest": "sha256:a5783e6188f37c7587d3c7db6f2efe7f602a3eeb5eab316d383f140cfd580f46",
+      "artifact_id": 9275748382,
+      "evidence_commit_sha": "9508e95c9f7ef063dda684fe7329f4ceb1e1676f",
+      "evidence_sha256": "92ecd5fcd56a92e4507a4c1f7eacd025daefb21e8b59d717f3e3b72413bc9b01",
+      "findings": [
+        "BEVY_COMPILE_ONLY_SUCCESS_RUNTIME_MARKER_MISCLASSIFIED",
+        "DEFOLD_REQUIRED_EMPTY_INPUT_BINDING_OMITTED",
+        "GODOT_PROJECT_LAUNCH_MODE_NONTERMINATING"
+      ],
+      "run_attempt": 1,
+      "run_id": 31991497890,
+      "status": "RETAINED_INCOMPLETE_PRODUCER_PROVENANCE",
+      "trigger_sha": "3d40ab57858a7c23c2456d22d4b7a1cec0017457"
+    }
+  ],
+  "provisional_candidates": [
+    "Bevy",
+    "Defold"
+  ],
   "release_authority": false,
   "results": {
     "Bevy": {
@@ -31,10 +51,8 @@
         "result": "ACCEPT"
       },
       "aggregate": {
-        "aggregate": "INCONCLUSIVE",
-        "reasons": [
-          "non_product_failure_class_present"
-        ],
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
         "valid_envelope": true
       },
       "candidate": "Bevy",
@@ -77,67 +95,67 @@
         },
         "adaptation_binding_id": "ff497504bf88ad18a939ef272dccd8a5d5a27526e2d0a579cbeee6340f7d95e3",
         "all_attempt_refs": [
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1",
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2",
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1"
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N1",
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N2",
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-FI1"
         ],
         "attempts": {
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1": {
-            "attempt_id": "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1",
-            "candidate_generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-FI1": {
+            "attempt_id": "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-FI1",
+            "candidate_generation_id": "GEN-S7-2ec150a77f5d85f8391fdf2d",
             "candidate_id": "Bevy-0.19.0",
-            "failure_class": "HARNESS",
+            "failure_class": "NONE",
             "injection_id": "FI-S7-BROKEN-REF-v2",
             "kind": "FAILURE_INJECTION",
             "normal_index": null,
-            "reset_id": "RESET-S7-644cf2ce2df010da52998c69efec",
+            "reset_id": "RESET-S7-801ec673906bb2e31d13145aee17",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
-            "result": "INCONCLUSIVE",
+            "result": "PASS",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-644cf2ce2df010da52998c69efec"
+            "workspace_id": "WS-S7-801ec673906bb2e31d13145aee17"
           },
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1": {
-            "attempt_id": "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1",
-            "candidate_generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N1": {
+            "attempt_id": "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N1",
+            "candidate_generation_id": "GEN-S7-2ec150a77f5d85f8391fdf2d",
             "candidate_id": "Bevy-0.19.0",
-            "failure_class": "HARNESS",
+            "failure_class": "NONE",
             "injection_id": null,
             "kind": "NORMAL",
             "normal_index": 1,
-            "reset_id": "RESET-S7-69690376f2feff5cd5a424c21dc3",
+            "reset_id": "RESET-S7-34709d39e38721356b593b034d7a",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
-            "result": "INCONCLUSIVE",
+            "result": "PASS",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-69690376f2feff5cd5a424c21dc3"
+            "workspace_id": "WS-S7-34709d39e38721356b593b034d7a"
           },
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2": {
-            "attempt_id": "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2",
-            "candidate_generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N2": {
+            "attempt_id": "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N2",
+            "candidate_generation_id": "GEN-S7-2ec150a77f5d85f8391fdf2d",
             "candidate_id": "Bevy-0.19.0",
-            "failure_class": "HARNESS",
+            "failure_class": "NONE",
             "injection_id": null,
             "kind": "NORMAL",
             "normal_index": 2,
-            "reset_id": "RESET-S7-414e7451a3cfc74110f05f9812d5",
+            "reset_id": "RESET-S7-0e7c737b9eada434289e08490377",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
-            "result": "INCONCLUSIVE",
+            "result": "PASS",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-414e7451a3cfc74110f05f9812d5"
+            "workspace_id": "WS-S7-0e7c737b9eada434289e08490377"
           }
         },
         "candidate_id": "Bevy-0.19.0",
-        "candidate_work_id": "WORK-S7-b3f7ce034998406c8f67ca50",
-        "generation_id": "GEN-S7-5f84cbb63fca6c973dcb555a",
+        "candidate_work_id": "WORK-S7-60569e50940e323545d26e40",
+        "generation_id": "GEN-S7-2ec150a77f5d85f8391fdf2d",
         "harness_defect": false,
         "predecessor_generation_id": null,
         "repair_change_ref": null,
         "run_registry_refs": [
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1",
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2",
-          "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1"
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N1",
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N2",
+          "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-FI1"
         ],
         "scenario_id": "S7"
       },
@@ -156,21 +174,21 @@
       },
       "raw_attempts": [
         {
-          "digest": "sha256:d6f8a1f09cb2d7eafdc872a71616464c18badcbd88ce08c0b79cd9407cd39a10",
+          "digest": "sha256:e6db9c3f44adcb46809332dfd42e7a39294d158e1c4014585dd62da06f52c08e",
           "record": {
             "candidate": "Bevy",
             "candidate_id": "Bevy-0.19.0",
-            "failure_class": "HARNESS",
-            "formal_result": "INCONCLUSIVE",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
             "injection_id": null,
             "kind": "NORMAL",
             "label": "N1",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-69690376f2feff5cd5a424c21dc3",
+              "reset_id": "RESET-S7-34709d39e38721356b593b034d7a",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-69690376f2feff5cd5a424c21dc3"
+              "workspace_id": "WS-S7-34709d39e38721356b593b034d7a"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -204,7 +222,7 @@
                   "--quiet"
                 ],
                 "exit": 0,
-                "seconds": 21.915,
+                "seconds": 21.677,
                 "stderr": "",
                 "stdout": "",
                 "timed_out": false
@@ -217,21 +235,21 @@
           }
         },
         {
-          "digest": "sha256:b3e96e69e98a5b5862ad9250aa30b517fe436cce341662373351a09c474b2bb7",
+          "digest": "sha256:d3a10e73e5b8c594c1ddb6d5da0379c0d82e4e0519b077dd245e34e1df5519d2",
           "record": {
             "candidate": "Bevy",
             "candidate_id": "Bevy-0.19.0",
-            "failure_class": "HARNESS",
-            "formal_result": "INCONCLUSIVE",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
             "injection_id": null,
             "kind": "NORMAL",
             "label": "N2",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-414e7451a3cfc74110f05f9812d5",
+              "reset_id": "RESET-S7-0e7c737b9eada434289e08490377",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-414e7451a3cfc74110f05f9812d5"
+              "workspace_id": "WS-S7-0e7c737b9eada434289e08490377"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -265,7 +283,7 @@
                   "--quiet"
                 ],
                 "exit": 0,
-                "seconds": 21.837,
+                "seconds": 21.489,
                 "stderr": "",
                 "stdout": "",
                 "timed_out": false
@@ -278,21 +296,21 @@
           }
         },
         {
-          "digest": "sha256:20c2fb8ab765fc3aa29061968ebaf3f08553be36688cb5ee7411adeb9edb6db5",
+          "digest": "sha256:ffd42af230b6ac225a55fd9aa1d24211331d0850a2e83fa42c1e696c55ff8aa5",
           "record": {
             "candidate": "Bevy",
             "candidate_id": "Bevy-0.19.0",
-            "failure_class": "HARNESS",
-            "formal_result": "INCONCLUSIVE",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
             "injection_id": "FI-S7-BROKEN-REF-v2",
             "kind": "FAILURE_INJECTION",
             "label": "FI1",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-644cf2ce2df010da52998c69efec",
+              "reset_id": "RESET-S7-801ec673906bb2e31d13145aee17",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-644cf2ce2df010da52998c69efec"
+              "workspace_id": "WS-S7-801ec673906bb2e31d13145aee17"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -349,7 +367,7 @@
                   "--quiet"
                 ],
                 "exit": 101,
-                "seconds": 0.5,
+                "seconds": 0.391,
                 "stderr": "error: couldn't read `src/../assets/MISSING-ASSET-08.txt`: No such file or directory (os error 2)\n  --> src/main.rs:12:5\n   |\n12 |     include_bytes!(\"../assets/MISSING-ASSET-08.txt\").len(),\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nerror: could not compile `everfield_bevy_probe` (bin \"everfield_bevy_probe\") due to 1 previous error\n",
                 "stdout": "",
                 "timed_out": false
@@ -369,21 +387,21 @@
                   "--quiet"
                 ],
                 "exit": 0,
-                "seconds": 0.261,
+                "seconds": 0.183,
                 "stderr": "",
                 "stdout": "",
                 "timed_out": false
               },
-              "rerun_clean": false
+              "rerun_clean": true
             }
           }
         }
       ],
       "source_binding_complete": true,
       "source_bindings": {
-        "GEN-S7-5f84cbb63fca6c973dcb555a-S7-FI1": "sha256:20c2fb8ab765fc3aa29061968ebaf3f08553be36688cb5ee7411adeb9edb6db5",
-        "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N1": "sha256:d6f8a1f09cb2d7eafdc872a71616464c18badcbd88ce08c0b79cd9407cd39a10",
-        "GEN-S7-5f84cbb63fca6c973dcb555a-S7-N2": "sha256:b3e96e69e98a5b5862ad9250aa30b517fe436cce341662373351a09c474b2bb7"
+        "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-FI1": "sha256:ffd42af230b6ac225a55fd9aa1d24211331d0850a2e83fa42c1e696c55ff8aa5",
+        "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N1": "sha256:e6db9c3f44adcb46809332dfd42e7a39294d158e1c4014585dd62da06f52c08e",
+        "GEN-S7-2ec150a77f5d85f8391fdf2d-S7-N2": "sha256:d3a10e73e5b8c594c1ddb6d5da0379c0d82e4e0519b077dd245e34e1df5519d2"
       },
       "toolchain_identity": {
         "body": {
@@ -397,7 +415,7 @@
       },
       "toolchain_reason": "exact_retained_cargo_lock_replayed_and_compiled; full graphics/package harness not executed",
       "toolchain_status": "CAPABLE_WITH_PRESEED",
-      "trusted_representation_ok": false
+      "trusted_representation_ok": true
     },
     "Defold": {
       "adaptation_validation": {
@@ -407,10 +425,8 @@
         "result": "ACCEPT"
       },
       "aggregate": {
-        "aggregate": "INCONCLUSIVE",
-        "reasons": [
-          "non_product_failure_class_present"
-        ],
+        "aggregate": "PASS_FOR_COMPARISON",
+        "reasons": [],
         "valid_envelope": true
       },
       "candidate": "Defold",
@@ -453,67 +469,67 @@
         },
         "adaptation_binding_id": "66819670ceac92eacaa610030cdc69067396a6424b610c86b06c27b694d5064d",
         "all_attempt_refs": [
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1",
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2",
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1"
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N1",
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N2",
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-FI1"
         ],
         "attempts": {
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1": {
-            "attempt_id": "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1",
-            "candidate_generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-FI1": {
+            "attempt_id": "GEN-S7-9a3e981efab968a2e51f2d6c-S7-FI1",
+            "candidate_generation_id": "GEN-S7-9a3e981efab968a2e51f2d6c",
             "candidate_id": "Defold-1.13.0",
-            "failure_class": "HARNESS",
+            "failure_class": "NONE",
             "injection_id": "FI-S7-BROKEN-REF-v2",
             "kind": "FAILURE_INJECTION",
             "normal_index": null,
-            "reset_id": "RESET-S7-7d9e16e9b97e27ccea06b4c56752",
+            "reset_id": "RESET-S7-544115d85871fae1e3e5a7f93f0f",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
-            "result": "INCONCLUSIVE",
+            "result": "PASS",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-7d9e16e9b97e27ccea06b4c56752"
+            "workspace_id": "WS-S7-544115d85871fae1e3e5a7f93f0f"
           },
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1": {
-            "attempt_id": "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1",
-            "candidate_generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N1": {
+            "attempt_id": "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N1",
+            "candidate_generation_id": "GEN-S7-9a3e981efab968a2e51f2d6c",
             "candidate_id": "Defold-1.13.0",
-            "failure_class": "HARNESS",
+            "failure_class": "NONE",
             "injection_id": null,
             "kind": "NORMAL",
             "normal_index": 1,
-            "reset_id": "RESET-S7-409435705426e4ea641bd006ef1b",
+            "reset_id": "RESET-S7-84528cd2d7cffa218b2f75eafe1a",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
-            "result": "INCONCLUSIVE",
+            "result": "PASS",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-409435705426e4ea641bd006ef1b"
+            "workspace_id": "WS-S7-84528cd2d7cffa218b2f75eafe1a"
           },
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2": {
-            "attempt_id": "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2",
-            "candidate_generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N2": {
+            "attempt_id": "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N2",
+            "candidate_generation_id": "GEN-S7-9a3e981efab968a2e51f2d6c",
             "candidate_id": "Defold-1.13.0",
-            "failure_class": "HARNESS",
+            "failure_class": "NONE",
             "injection_id": null,
             "kind": "NORMAL",
             "normal_index": 2,
-            "reset_id": "RESET-S7-25085ce1a5f77192f36aa0b09f38",
+            "reset_id": "RESET-S7-db31af64c5c76c2511129df70268",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
-            "result": "INCONCLUSIVE",
+            "result": "PASS",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-25085ce1a5f77192f36aa0b09f38"
+            "workspace_id": "WS-S7-db31af64c5c76c2511129df70268"
           }
         },
         "candidate_id": "Defold-1.13.0",
-        "candidate_work_id": "WORK-S7-0c8c9b9d979032e2f86c3528",
-        "generation_id": "GEN-S7-1af3c65dca785f51e319bbc2",
+        "candidate_work_id": "WORK-S7-b675bb38eb5549dd6fefa778",
+        "generation_id": "GEN-S7-9a3e981efab968a2e51f2d6c",
         "harness_defect": false,
         "predecessor_generation_id": null,
         "repair_change_ref": null,
         "run_registry_refs": [
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1",
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2",
-          "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1"
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N1",
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N2",
+          "GEN-S7-9a3e981efab968a2e51f2d6c-S7-FI1"
         ],
         "scenario_id": "S7"
       },
@@ -532,21 +548,21 @@
       },
       "raw_attempts": [
         {
-          "digest": "sha256:da90a0f9734307f8cd19e270f504f982fe2eeaa21eb343147d79a61d365abd6e",
+          "digest": "sha256:59188576e43c5509b01ecb870793a6243e435962fa0f2e4ecf7ce16ed8d7c6d1",
           "record": {
             "candidate": "Defold",
             "candidate_id": "Defold-1.13.0",
-            "failure_class": "HARNESS",
-            "formal_result": "INCONCLUSIVE",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
             "injection_id": null,
             "kind": "NORMAL",
             "label": "N1",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-409435705426e4ea641bd006ef1b",
+              "reset_id": "RESET-S7-84528cd2d7cffa218b2f75eafe1a",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-409435705426e4ea641bd006ef1b"
+              "workspace_id": "WS-S7-84528cd2d7cffa218b2f75eafe1a"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -576,16 +592,16 @@
                 "cmd": [
                   "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
                   "-jar",
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar",
                   "--root",
-                  "/tmp/everfield-s7-18hcv5c6/runs/defold/N1",
+                  "/tmp/everfield-s7-pciohqm6/runs/defold/N1",
                   "resolve",
                   "build"
                 ],
-                "exit": 1,
-                "seconds": 3.549,
-                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: game.project:0: 'com.dynamo.bob.CompileExceptionError: the  '/input/game.input_binding' can't be found'\n\n",
-                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:42 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:44 SEVERE  the  '/input/game.input_binding' can't be found \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:156) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:44 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:44 SEVERE  the  '/input/game.input_binding' can't be found \n",
+                "exit": 0,
+                "seconds": 4.725,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:54:59 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n 95% Building\n2026-08-17 03:55:01 INFO    Creating task builder with a fixed thread pool executor using 3 threads \n2026-08-17 03:55:01 INFO    Build tasks \n2026-08-17 03:55:01 INFO    Build tasks took 0.435000 s \n100% Building\n",
                 "timed_out": false
               },
               "candidate_native": true,
@@ -596,21 +612,21 @@
           }
         },
         {
-          "digest": "sha256:f85f0686555622d7922564cdc91d488671f472aac76a7771ff8dd4ddad3e74dc",
+          "digest": "sha256:44d400bc14ff754ca6aaa47c55548f80d80349500ec4744010164aabbb196bfb",
           "record": {
             "candidate": "Defold",
             "candidate_id": "Defold-1.13.0",
-            "failure_class": "HARNESS",
-            "formal_result": "INCONCLUSIVE",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
             "injection_id": null,
             "kind": "NORMAL",
             "label": "N2",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-25085ce1a5f77192f36aa0b09f38",
+              "reset_id": "RESET-S7-db31af64c5c76c2511129df70268",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-25085ce1a5f77192f36aa0b09f38"
+              "workspace_id": "WS-S7-db31af64c5c76c2511129df70268"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -640,16 +656,16 @@
                 "cmd": [
                   "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
                   "-jar",
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar",
                   "--root",
-                  "/tmp/everfield-s7-18hcv5c6/runs/defold/N2",
+                  "/tmp/everfield-s7-pciohqm6/runs/defold/N2",
                   "resolve",
                   "build"
                 ],
-                "exit": 1,
-                "seconds": 1.565,
-                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: game.project:0: 'com.dynamo.bob.CompileExceptionError: the  '/input/game.input_binding' can't be found'\n\n",
-                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:45 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:45 SEVERE  the  '/input/game.input_binding' can't be found \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:156) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:45 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:45 SEVERE  the  '/input/game.input_binding' can't be found \n",
+                "exit": 0,
+                "seconds": 1.839,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:55:02 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n 95% Building\n2026-08-17 03:55:03 INFO    Creating task builder with a fixed thread pool executor using 3 threads \n2026-08-17 03:55:03 INFO    Build tasks \n2026-08-17 03:55:03 INFO    Build tasks took 0.285000 s \n100% Building\n",
                 "timed_out": false
               },
               "candidate_native": true,
@@ -660,21 +676,21 @@
           }
         },
         {
-          "digest": "sha256:3a4f6ccbc7e78a31b1f1c5478fd5c6acef8b5a6c0289df25eb00a2ebfd5c00c9",
+          "digest": "sha256:7131b9378531ac5ecb6ee90f90e16652824f05c7e58aac11a162e20b3b3f7dc5",
           "record": {
             "candidate": "Defold",
             "candidate_id": "Defold-1.13.0",
-            "failure_class": "HARNESS",
-            "formal_result": "INCONCLUSIVE",
+            "failure_class": "NONE",
+            "formal_result": "PASS",
             "injection_id": "FI-S7-BROKEN-REF-v2",
             "kind": "FAILURE_INJECTION",
             "label": "FI1",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-7d9e16e9b97e27ccea06b4c56752",
+              "reset_id": "RESET-S7-544115d85871fae1e3e5a7f93f0f",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-7d9e16e9b97e27ccea06b4c56752"
+              "workspace_id": "WS-S7-544115d85871fae1e3e5a7f93f0f"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -727,16 +743,16 @@
                 "cmd": [
                   "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
                   "-jar",
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar",
                   "--root",
-                  "/tmp/everfield-s7-18hcv5c6/runs/defold/FI1",
+                  "/tmp/everfield-s7-pciohqm6/runs/defold/FI1",
                   "resolve",
                   "build"
                 ],
                 "exit": 1,
-                "seconds": 1.493,
-                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: controller.script:0: 'com.dynamo.bob.CompileExceptionError: the Lua module '/assets/MISSING-ASSET-08.lua' can't be found'\n\n",
-                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:48 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:48 SEVERE  the Lua module '/assets/MISSING-ASSET-08.lua' can't be found \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:124) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.LuaBuilder.create(LuaBuilder.java:157) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:125) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.ProtoBuilder.createSubTasks(ProtoBuilder.java:160) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.ProtoBuilder.createSubTasks(ProtoBuilder.java:149) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.GameObjectBuilder.create(GameObjectBuilder.java:117) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:106) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.CollectionBuilder.create(CollectionBuilder.java:129) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:106) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:158) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:48 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:48 SEVERE  the Lua module '/assets/MISSING-ASSET-08.lua' can't be found \n",
+                "seconds": 1.463,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: controller.script:0: 'com.dynamo.bob.CompileExceptionError: the Lua module '/assets/MISSING-ASSET-08.lua' can't be found'\n\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:55:06 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:55:06 SEVERE  the Lua module '/assets/MISSING-ASSET-08.lua' can't be found \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:124) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.pipeline.LuaBuilder.create(LuaBuilder.java:157) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:125) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.ProtoBuilder.createSubTasks(ProtoBuilder.java:160) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.ProtoBuilder.createSubTasks(ProtoBuilder.java:149) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.pipeline.GameObjectBuilder.create(GameObjectBuilder.java:117) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:106) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.pipeline.CollectionBuilder.create(CollectionBuilder.java:129) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Builder.createSubTask(Builder.java:106) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:158) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:55:06 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:55:06 SEVERE  the Lua module '/assets/MISSING-ASSET-08.lua' can't be found \n",
                 "timed_out": false
               },
               "diagnostic_attributed": true,
@@ -750,28 +766,28 @@
                 "cmd": [
                   "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/25.0.4-7/x64/bin/java",
                   "-jar",
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar",
                   "--root",
-                  "/tmp/everfield-s7-18hcv5c6/runs/defold/FI1",
+                  "/tmp/everfield-s7-pciohqm6/runs/defold/FI1",
                   "resolve",
                   "build"
                 ],
-                "exit": 1,
-                "seconds": 1.563,
-                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ShadercJni in an unnamed module (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-18hcv5c6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\nERROR: game.project:0: 'com.dynamo.bob.CompileExceptionError: the  '/input/game.input_binding' can't be found'\n\n",
-                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:34:49 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n100% Reading tasks\n2026-08-17 03:34:50 SEVERE  the  '/input/game.input_binding' can't be found \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.pipeline.BuilderUtil.checkResource(BuilderUtil.java:47) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.pipeline.GameProjectBuilder.create(GameProjectBuilder.java:156) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createTask(Project.java:502) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createTask(Project.java:474) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createTasks(Project.java:524) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.createAndRunTasks(Project.java:1756) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.doBuild(Project.java:1930) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Project.build(Project.java:709) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Bob.invoke(Bob.java:988) \n2026-08-17 03:34:50 SEVERE  com.dynamo.bob.Bob.main(Bob.java:1065) \n2026-08-17 03:34:50 SEVERE  the  '/input/game.input_binding' can't be found \n",
+                "exit": 0,
+                "seconds": 1.552,
+                "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.dynamo.bob.pipeline.ModelImporterJni in an unnamed module (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nWARNING: A terminally deprecated method in sun.misc.Unsafe has been called\nWARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/tmp/everfield-s7-pciohqm6/toolchains/bob-1.13.0.jar)\nWARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil\nWARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release\n",
+                "stdout": "  0% Downloading 0 archives\n 33% Downloading 0 archives\n 33% Working\n 33% Reading classes\n2026-08-17 03:55:07 INFO     \n 56% Reading classes\n 78% Reading classes\n 85% Reading classes\n 85% Cleaning engine\n 93% Cleaning engine\n 93% Reading tasks\n 95% Reading tasks\n 95% Building\n2026-08-17 03:55:08 INFO    Creating task builder with a fixed thread pool executor using 3 threads \n2026-08-17 03:55:08 INFO    Build tasks \n2026-08-17 03:55:08 INFO    Build tasks took 0.018000 s \n100% Building\n",
                 "timed_out": false
               },
-              "rerun_clean": false
+              "rerun_clean": true
             }
           }
         }
       ],
       "source_binding_complete": true,
       "source_bindings": {
-        "GEN-S7-1af3c65dca785f51e319bbc2-S7-FI1": "sha256:3a4f6ccbc7e78a31b1f1c5478fd5c6acef8b5a6c0289df25eb00a2ebfd5c00c9",
-        "GEN-S7-1af3c65dca785f51e319bbc2-S7-N1": "sha256:da90a0f9734307f8cd19e270f504f982fe2eeaa21eb343147d79a61d365abd6e",
-        "GEN-S7-1af3c65dca785f51e319bbc2-S7-N2": "sha256:f85f0686555622d7922564cdc91d488671f472aac76a7771ff8dd4ddad3e74dc"
+        "GEN-S7-9a3e981efab968a2e51f2d6c-S7-FI1": "sha256:7131b9378531ac5ecb6ee90f90e16652824f05c7e58aac11a162e20b3b3f7dc5",
+        "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N1": "sha256:59188576e43c5509b01ecb870793a6243e435962fa0f2e4ecf7ce16ed8d7c6d1",
+        "GEN-S7-9a3e981efab968a2e51f2d6c-S7-N2": "sha256:44d400bc14ff754ca6aaa47c55548f80d80349500ec4744010164aabbb196bfb"
       },
       "toolchain_identity": {
         "body": {
@@ -785,7 +801,7 @@
       },
       "toolchain_reason": "digest_bound_bob_jar_downloaded_and_executed",
       "toolchain_status": "CAPABLE",
-      "trusted_representation_ok": false
+      "trusted_representation_ok": true
     },
     "Godot": {
       "adaptation_validation": {
@@ -841,67 +857,67 @@
         },
         "adaptation_binding_id": "3ae435907d97bfc80a40a9c362e9298d9d907e85184866392e86d36d5ad34803",
         "all_attempt_refs": [
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1",
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2",
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1"
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-N1",
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-N2",
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-FI1"
         ],
         "attempts": {
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1": {
-            "attempt_id": "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1",
-            "candidate_generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-FI1": {
+            "attempt_id": "GEN-S7-5a3e30513a9a6dccd3099578-S7-FI1",
+            "candidate_generation_id": "GEN-S7-5a3e30513a9a6dccd3099578",
             "candidate_id": "Godot-4.7.1-stable",
             "failure_class": "HARNESS",
             "injection_id": "FI-S7-BROKEN-REF-v2",
             "kind": "FAILURE_INJECTION",
             "normal_index": null,
-            "reset_id": "RESET-S7-048ac3a3d512c78f7de0567fce3e",
+            "reset_id": "RESET-S7-2939530f52ce5d4e613ad1a3f41b",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
             "result": "INCONCLUSIVE",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-048ac3a3d512c78f7de0567fce3e"
+            "workspace_id": "WS-S7-2939530f52ce5d4e613ad1a3f41b"
           },
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1": {
-            "attempt_id": "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1",
-            "candidate_generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-N1": {
+            "attempt_id": "GEN-S7-5a3e30513a9a6dccd3099578-S7-N1",
+            "candidate_generation_id": "GEN-S7-5a3e30513a9a6dccd3099578",
             "candidate_id": "Godot-4.7.1-stable",
             "failure_class": "HARNESS",
             "injection_id": null,
             "kind": "NORMAL",
             "normal_index": 1,
-            "reset_id": "RESET-S7-2343476a7e4488d3848a8ee19185",
+            "reset_id": "RESET-S7-1d7c32ba81151f85800f5651d9be",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
             "result": "INCONCLUSIVE",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-2343476a7e4488d3848a8ee19185"
+            "workspace_id": "WS-S7-1d7c32ba81151f85800f5651d9be"
           },
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2": {
-            "attempt_id": "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2",
-            "candidate_generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-N2": {
+            "attempt_id": "GEN-S7-5a3e30513a9a6dccd3099578-S7-N2",
+            "candidate_generation_id": "GEN-S7-5a3e30513a9a6dccd3099578",
             "candidate_id": "Godot-4.7.1-stable",
             "failure_class": "HARNESS",
             "injection_id": null,
             "kind": "NORMAL",
             "normal_index": 2,
-            "reset_id": "RESET-S7-e9c374c079dadd0fc152fc4480f2",
+            "reset_id": "RESET-S7-3688061cd01bf37bec050b8d347e",
             "reset_verified": true,
             "resource_class": "W2-ENG-HOST-COMMON-v2",
             "result": "INCONCLUSIVE",
             "scenario_id": "S7",
-            "workspace_id": "WS-S7-e9c374c079dadd0fc152fc4480f2"
+            "workspace_id": "WS-S7-3688061cd01bf37bec050b8d347e"
           }
         },
         "candidate_id": "Godot-4.7.1-stable",
-        "candidate_work_id": "WORK-S7-65f347abe977f785204cfe5c",
-        "generation_id": "GEN-S7-47c9b56ee9d055244bf15f93",
+        "candidate_work_id": "WORK-S7-35031869f5280584e71404b4",
+        "generation_id": "GEN-S7-5a3e30513a9a6dccd3099578",
         "harness_defect": false,
         "predecessor_generation_id": null,
         "repair_change_ref": null,
         "run_registry_refs": [
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1",
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2",
-          "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1"
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-N1",
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-N2",
+          "GEN-S7-5a3e30513a9a6dccd3099578-S7-FI1"
         ],
         "scenario_id": "S7"
       },
@@ -920,7 +936,7 @@
       },
       "raw_attempts": [
         {
-          "digest": "sha256:4be616839a310b9282978597468ea77a77ada6fd21fb6d50b99adeefc151dd48",
+          "digest": "sha256:39d0be3a9b68c6f3d9cdbbac715c0c7c224f056f6dbb15e8fb8f8bc7b4d80b6b",
           "record": {
             "candidate": "Godot",
             "candidate_id": "Godot-4.7.1-stable",
@@ -931,10 +947,10 @@
             "label": "N1",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-2343476a7e4488d3848a8ee19185",
+              "reset_id": "RESET-S7-1d7c32ba81151f85800f5651d9be",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-2343476a7e4488d3848a8ee19185"
+              "workspace_id": "WS-S7-1d7c32ba81151f85800f5651d9be"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -962,26 +978,28 @@
               ],
               "candidate_command": {
                 "cmd": [
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
                   "--headless",
                   "--path",
-                  "/tmp/everfield-s7-18hcv5c6/runs/godot/N1"
+                  "/tmp/everfield-s7-pciohqm6/runs/godot/N1",
+                  "--script",
+                  "res://main.gd"
                 ],
-                "exit": null,
-                "seconds": 180.044,
-                "stderr": "",
-                "stdout": "",
-                "timed_out": true
+                "exit": 1,
+                "seconds": 0.182,
+                "stderr": "ERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-01.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-02.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-03.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-04.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-05.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-06.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-07.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-08.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-08.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-08.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-01.tres\".\n          at: GDScript::reload (res://main.gd:2)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-02.tres\".\n          at: GDScript::reload (res://main.gd:3)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-03.tres\".\n          at: GDScript::reload (res://main.gd:4)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-04.tres\".\n          at: GDScript::reload (res://main.gd:5)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-05.tres\".\n          at: GDScript::reload (res://main.gd:6)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-06.tres\".\n          at: GDScript::reload (res://main.gd:7)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-07.tres\".\n          at: GDScript::reload (res://main.gd:8)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-08.tres\".\n          at: GDScript::reload (res://main.gd:9)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:14)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:16)\nERROR: Failed to load script \"res://main.gd\" with error \"Parse error\".\n   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n",
+                "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\n",
+                "timed_out": false
               },
               "candidate_native": true,
-              "driver_sha256": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
+              "driver_sha256": "847479fb0330df5dfdaa5697c260d0b6e79d648a67f60772a96cbb0196f2a444",
               "eight_asset_binding": true,
               "phase": "NORMAL"
             }
           }
         },
         {
-          "digest": "sha256:25cb5c51eff727e4ab778ed3bf31bf697777befe9f8fc720ce78082543491e77",
+          "digest": "sha256:cf80b3f7b7ac6a6a9d67bd92773a0b61e77ce8ad01bbbe39ba2be735ae346b33",
           "record": {
             "candidate": "Godot",
             "candidate_id": "Godot-4.7.1-stable",
@@ -992,10 +1010,10 @@
             "label": "N2",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-e9c374c079dadd0fc152fc4480f2",
+              "reset_id": "RESET-S7-3688061cd01bf37bec050b8d347e",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-e9c374c079dadd0fc152fc4480f2"
+              "workspace_id": "WS-S7-3688061cd01bf37bec050b8d347e"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -1023,26 +1041,28 @@
               ],
               "candidate_command": {
                 "cmd": [
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
                   "--headless",
                   "--path",
-                  "/tmp/everfield-s7-18hcv5c6/runs/godot/N2"
+                  "/tmp/everfield-s7-pciohqm6/runs/godot/N2",
+                  "--script",
+                  "res://main.gd"
                 ],
-                "exit": null,
-                "seconds": 180.006,
-                "stderr": "",
-                "stdout": "",
-                "timed_out": true
+                "exit": 1,
+                "seconds": 0.155,
+                "stderr": "ERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-01.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-02.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-03.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-04.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-05.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-06.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-07.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-08.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-08.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-08.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-01.tres\".\n          at: GDScript::reload (res://main.gd:2)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-02.tres\".\n          at: GDScript::reload (res://main.gd:3)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-03.tres\".\n          at: GDScript::reload (res://main.gd:4)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-04.tres\".\n          at: GDScript::reload (res://main.gd:5)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-05.tres\".\n          at: GDScript::reload (res://main.gd:6)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-06.tres\".\n          at: GDScript::reload (res://main.gd:7)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-07.tres\".\n          at: GDScript::reload (res://main.gd:8)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-08.tres\".\n          at: GDScript::reload (res://main.gd:9)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:14)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:16)\nERROR: Failed to load script \"res://main.gd\" with error \"Parse error\".\n   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n",
+                "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\n",
+                "timed_out": false
               },
               "candidate_native": true,
-              "driver_sha256": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
+              "driver_sha256": "847479fb0330df5dfdaa5697c260d0b6e79d648a67f60772a96cbb0196f2a444",
               "eight_asset_binding": true,
               "phase": "NORMAL"
             }
           }
         },
         {
-          "digest": "sha256:75104650893d0f23ef6aa431a1d7b48f39a17554bd294c8561a70b053cf4a821",
+          "digest": "sha256:fed876a38010922030c8d3f1bb410560246add4ff8ea685af8972bc312f51579",
           "record": {
             "candidate": "Godot",
             "candidate_id": "Godot-4.7.1-stable",
@@ -1053,10 +1073,10 @@
             "label": "FI1",
             "reset_proof": {
               "pre_workspace_absent": true,
-              "reset_id": "RESET-S7-048ac3a3d512c78f7de0567fce3e",
+              "reset_id": "RESET-S7-2939530f52ce5d4e613ad1a3f41b",
               "schema": "S7-RESET-PROOF-v1",
               "workspace_created_exclusive": true,
-              "workspace_id": "WS-S7-048ac3a3d512c78f7de0567fce3e"
+              "workspace_id": "WS-S7-2939530f52ce5d4e613ad1a3f41b"
             },
             "reset_verified_derived": true,
             "scenario_id": "S7",
@@ -1107,36 +1127,40 @@
               "candidate_native": true,
               "diagnosis": {
                 "cmd": [
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
                   "--headless",
                   "--path",
-                  "/tmp/everfield-s7-18hcv5c6/runs/godot/FI1"
+                  "/tmp/everfield-s7-pciohqm6/runs/godot/FI1",
+                  "--script",
+                  "res://main.gd"
                 ],
-                "exit": null,
-                "seconds": 180.103,
-                "stderr": "",
-                "stdout": "",
-                "timed_out": true
+                "exit": 1,
+                "seconds": 0.155,
+                "stderr": "ERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-01.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-02.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-03.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-04.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-05.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-06.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-07.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-01.tres\".\n          at: GDScript::reload (res://main.gd:2)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-02.tres\".\n          at: GDScript::reload (res://main.gd:3)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-03.tres\".\n          at: GDScript::reload (res://main.gd:4)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-04.tres\".\n          at: GDScript::reload (res://main.gd:5)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-05.tres\".\n          at: GDScript::reload (res://main.gd:6)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-06.tres\".\n          at: GDScript::reload (res://main.gd:7)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-07.tres\".\n          at: GDScript::reload (res://main.gd:8)\nSCRIPT ERROR: Parse Error: Preload file \"res://assets/MISSING-ASSET-08.tres\" does not exist.\n          at: GDScript::reload (res://main.gd:9)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:14)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:16)\nERROR: Failed to load script \"res://main.gd\" with error \"Parse error\".\n   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n",
+                "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\n",
+                "timed_out": false
               },
-              "diagnostic_attributed": false,
-              "driver_sha256_after_repair": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
-              "driver_sha256_before": "3bacd81fc91b28093fa74bc65f4094080b3f2051a1d0b20b82f1ecdf44584694",
-              "driver_sha256_defect": "a54239841cef738dd997aed1179acce358af4d25a786351e296f799b603477b2",
+              "diagnostic_attributed": true,
+              "driver_sha256_after_repair": "847479fb0330df5dfdaa5697c260d0b6e79d648a67f60772a96cbb0196f2a444",
+              "driver_sha256_before": "847479fb0330df5dfdaa5697c260d0b6e79d648a67f60772a96cbb0196f2a444",
+              "driver_sha256_defect": "ba85671e31398ca9a41f41582592def7f283ab3e9a6f1f37a9279fe1de065085",
               "injection_id": "FI-S7-BROKEN-REF-v2",
               "phase": "FAILURE_INJECTION_AND_REPAIR",
               "repair_changed_only_broken_reference": true,
               "rerun": {
                 "cmd": [
-                  "/tmp/everfield-s7-18hcv5c6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
+                  "/tmp/everfield-s7-pciohqm6/toolchains/godot/Godot_v4.7.1-stable_linux.x86_64",
                   "--headless",
                   "--path",
-                  "/tmp/everfield-s7-18hcv5c6/runs/godot/FI1"
+                  "/tmp/everfield-s7-pciohqm6/runs/godot/FI1",
+                  "--script",
+                  "res://main.gd"
                 ],
-                "exit": null,
-                "seconds": 180.095,
-                "stderr": "",
-                "stdout": "",
-                "timed_out": true
+                "exit": 1,
+                "seconds": 0.154,
+                "stderr": "ERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-01.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-01.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-02.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-02.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-03.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-03.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-04.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-04.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-05.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-05.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-06.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-06.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-07.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-07.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nERROR: res://assets/ASSET-08.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: res://assets/ASSET-08.tres:1 - Parse Error: Missing 'type' field in 'gd_resource' tag.\n   at: _printerr (scene/resources/resource_format_text.cpp:41)\nERROR: Failed loading resource: res://assets/ASSET-08.tres.\n   at: _load (core/io/resource_loader.cpp:317)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-01.tres\".\n          at: GDScript::reload (res://main.gd:2)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-02.tres\".\n          at: GDScript::reload (res://main.gd:3)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-03.tres\".\n          at: GDScript::reload (res://main.gd:4)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-04.tres\".\n          at: GDScript::reload (res://main.gd:5)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-05.tres\".\n          at: GDScript::reload (res://main.gd:6)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-06.tres\".\n          at: GDScript::reload (res://main.gd:7)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-07.tres\".\n          at: GDScript::reload (res://main.gd:8)\nSCRIPT ERROR: Parse Error: Could not preload resource file \"res://assets/ASSET-08.tres\".\n          at: GDScript::reload (res://main.gd:9)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:14)\nSCRIPT ERROR: Parse Error: Function \"get_tree()\" not found in base self.\n          at: GDScript::reload (res://main.gd:16)\nERROR: Failed to load script \"res://main.gd\" with error \"Parse error\".\n   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n",
+                "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\n\n",
+                "timed_out": false
               },
               "rerun_clean": false
             }
@@ -1145,9 +1169,9 @@
       ],
       "source_binding_complete": true,
       "source_bindings": {
-        "GEN-S7-47c9b56ee9d055244bf15f93-S7-FI1": "sha256:75104650893d0f23ef6aa431a1d7b48f39a17554bd294c8561a70b053cf4a821",
-        "GEN-S7-47c9b56ee9d055244bf15f93-S7-N1": "sha256:4be616839a310b9282978597468ea77a77ada6fd21fb6d50b99adeefc151dd48",
-        "GEN-S7-47c9b56ee9d055244bf15f93-S7-N2": "sha256:25cb5c51eff727e4ab778ed3bf31bf697777befe9f8fc720ce78082543491e77"
+        "GEN-S7-5a3e30513a9a6dccd3099578-S7-FI1": "sha256:fed876a38010922030c8d3f1bb410560246add4ff8ea685af8972bc312f51579",
+        "GEN-S7-5a3e30513a9a6dccd3099578-S7-N1": "sha256:39d0be3a9b68c6f3d9cdbbac715c0c7c224f056f6dbb15e8fb8f8bc7b4d80b6b",
+        "GEN-S7-5a3e30513a9a6dccd3099578-S7-N2": "sha256:cf80b3f7b7ac6a6a9d67bd92773a0b61e77ce8ad01bbbe39ba2be735ae346b33"
       },
       "toolchain_identity": {
         "body": {
@@ -1168,11 +1192,11 @@
   "reviewed_s3_s4_s5_s6_provenance_preserved": true,
   "run_identity": {
     "github_run_attempt": "1",
-    "github_run_id": "31991497890",
-    "github_sha": "3d40ab57858a7c23c2456d22d4b7a1cec0017457",
+    "github_run_id": "31992586423",
+    "github_sha": "274c2e62419acb7d55c318540cd4c6e7b596fbe6",
     "issue": 507
   },
-  "runner_sha256": "78ae73f542c684039637129cb2bb5814db032387f7b2cbf28db68a160c4618e7",
+  "runner_sha256": "7e0d152822afe79872166fa8b17dc5f3685454fd37cf1222abc04a07bf366c51",
   "s7_contract": {
     "asset_ids": [
       "ASSET-01",
