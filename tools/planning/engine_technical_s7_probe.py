@@ -140,14 +140,14 @@ fn main() {
 """ % "\n".join(refs)
 
 def godot_source(broken: bool = False) -> str:
-    lines = ["extends Node"]
+    lines = ["extends SceneTree"]
     for i, a in enumerate(ASSETS, 1):
         path = f"res://assets/{a}.tres"
         if a == BROKEN_ASSET and broken:
             path = "res://assets/MISSING-ASSET-08.tres"
         lines.append(f'const A{i} = preload("{path}")')
     lines += [
-        "func _ready():",
+        "func _init():",
         " var n = 0",
         " for x in [A1,A2,A3,A4,A5,A6,A7,A8]:",
         "  if x != null: n += 1",
@@ -195,6 +195,7 @@ def materialize(repo: pathlib.Path, candidate: str, bevy_lock: pathlib.Path) -> 
         write(repo / "main.gd", godot_source(False))
         return repo / "main.gd"
     write(repo / "game.project", "[project]\ntitle = EverfieldS7\n[bootstrap]\nmain_collection = /main.collectionc\n[display]\nwidth = 320\nheight = 180\n")
+    write(repo / "input" / "game.input_binding", "")
     write(repo / "main.collection", 'name: "main"\nscale_along_z: 0\nembedded_instances {\n id: "controller"\n data: "components {\\n  id: \\"script\\"\\n  component: \\"/controller.script\\"\\n}\\n"\n}\n')
     write(repo / "controller.script", defold_source(False))
     return repo / "controller.script"
@@ -209,7 +210,7 @@ def candidate_command(repo: pathlib.Path, candidate: str, tool: dict[str, Any], 
         exe = tool.get("executable")
         if not exe:
             return {"cmd": ["godot", "--headless"], "exit": 127, "timed_out": False, "seconds": 0, "stdout": "", "stderr": "godot missing"}
-        return run([str(exe), "--headless", "--path", str(repo)], cwd=repo, timeout=180)
+        return run([str(exe), "--headless", "--path", str(repo), "--script", "res://main.gd"], cwd=repo, timeout=90)
     java = ((tool.get("java") or {}).get("path")) or shutil.which("java")
     jar = tool_root / "bob-1.13.0.jar"
     if not java or not jar.exists():
@@ -235,7 +236,8 @@ def execute_attempt(root: pathlib.Path, candidate: str, label: str, inject: bool
     baseline_driver_sha = sha_file(driver)
     normal = candidate_command(repo, candidate, tool, tool_root)
     if not inject:
-        passed = ok(normal) and "EVERFIELD_S7:PASS:8" in ((normal.get("stdout") or "") + (normal.get("stderr") or "")) if candidate != "Defold" else ok(normal)
+        marker_present = "EVERFIELD_S7:PASS:8" in ((normal.get("stdout") or "") + (normal.get("stderr") or ""))
+        passed = ok(normal) and (candidate != "Godot" or marker_present)
         source = {
             "candidate_native": True,
             "phase": "NORMAL",
@@ -257,7 +259,8 @@ def execute_attempt(root: pathlib.Path, candidate: str, label: str, inject: bool
         repaired_driver_sha = sha_file(driver)
         repaired_assets = asset_digests(repo, candidate)
         rerun = candidate_command(repo, candidate, tool, tool_root)
-        rerun_pass = ok(rerun) and ("EVERFIELD_S7:PASS:8" in ((rerun.get("stdout") or "") + (rerun.get("stderr") or "")) if candidate != "Defold" else True)
+        rerun_marker_present = "EVERFIELD_S7:PASS:8" in ((rerun.get("stdout") or "") + (rerun.get("stderr") or ""))
+        rerun_pass = ok(rerun) and (candidate != "Godot" or rerun_marker_present)
         exact_scope = (
             baseline_assets == defect_assets == repaired_assets
             and baseline_driver_sha != defect_driver_sha
@@ -524,6 +527,23 @@ def main() -> int:
                 "disposition": "PASS_BOUNDED_REMEDIATED_S6_V5_ENVELOPE",
                 "s6_reviewed_publication_sha": "40179080013d742b70b4a5be611f1666dd3cd599",
             },
+            "producer_corrections": [
+                {
+                    "run_id": 31991497890,
+                    "run_attempt": 1,
+                    "trigger_sha": "3d40ab57858a7c23c2456d22d4b7a1cec0017457",
+                    "evidence_commit_sha": "9508e95c9f7ef063dda684fe7329f4ceb1e1676f",
+                    "artifact_id": 9275748382,
+                    "artifact_digest": "sha256:a5783e6188f37c7587d3c7db6f2efe7f602a3eeb5eab316d383f140cfd580f46",
+                    "evidence_sha256": "92ecd5fcd56a92e4507a4c1f7eacd025daefb21e8b59d717f3e3b72413bc9b01",
+                    "status": "RETAINED_INCOMPLETE_PRODUCER_PROVENANCE",
+                    "findings": [
+                        "BEVY_COMPILE_ONLY_SUCCESS_RUNTIME_MARKER_MISCLASSIFIED",
+                        "DEFOLD_REQUIRED_EMPTY_INPUT_BINDING_OMITTED",
+                        "GODOT_PROJECT_LAUNCH_MODE_NONTERMINATING",
+                    ],
+                }
+            ],
             "results": results,
             "provisional_candidates": provisional,
             "authority_bound_not_run": {
