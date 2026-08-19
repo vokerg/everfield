@@ -1,0 +1,600 @@
+{
+  "attempts": [
+    {
+      "attempt": "N1",
+      "binding": {
+        "body": {
+          "attempt": "N1",
+          "candidate": "Godot",
+          "capture": {
+            "artifact": "frames/godot-N1.png",
+            "command": [
+              "/usr/bin/scrot",
+              "-z",
+              "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/engine-technical-s6/frames/godot-N1.png"
+            ],
+            "dimensions": [
+              1280,
+              720
+            ],
+            "executed": true,
+            "exit": 0,
+            "failure_mode": null,
+            "format": "PNG",
+            "frame_count": 1,
+            "injection": null,
+            "marker_rgb": [
+              255,
+              255,
+              0
+            ],
+            "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+            "path_exists": true,
+            "sha256": "ec2083126dba2bdb96929bfd4306485ad52116d4dc1c7be8b00fb90d0955056b",
+            "size": 4380
+          },
+          "classification": "STATE_AND_CAPTURE_OK",
+          "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+          "project_sha256": "325092562ce35b7499de0f4e718551323e182c9a92f1aae34cac6bb6d428fdf4",
+          "reset_id": "RESET-S6-3f46d856a2c2f8fb019e6a00",
+          "reset_verified": true,
+          "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM2-2a8d597ef60acfb220e2|N1|FFFF00|1280x720",
+          "workspace_evidence_sha256": "fa172dc7d6ddc26e7d1064cb4a2b18ab0ec0082cac1c5e727e657b44f5a8e944",
+          "workspace_id": "WORKSPACE-S6-fa172dc7d6ddc26e7d1064cb"
+        },
+        "sha256": "b9d0e9e4cf7305200f243ab509846b77fe636100eb74c3d81ce108741e932add"
+      },
+      "candidate_alive_at_capture": true,
+      "capture": {
+        "artifact": "frames/godot-N1.png",
+        "command": [
+          "/usr/bin/scrot",
+          "-z",
+          "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/engine-technical-s6/frames/godot-N1.png"
+        ],
+        "dimensions": [
+          1280,
+          720
+        ],
+        "executed": true,
+        "exit": 0,
+        "format": "PNG",
+        "frame_count": 1,
+        "injection": null,
+        "marker_rgb": [
+          255,
+          255,
+          0
+        ],
+        "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+        "path_exists": true,
+        "sha256": "ec2083126dba2bdb96929bfd4306485ad52116d4dc1c7be8b00fb90d0955056b",
+        "size": 4380,
+        "stderr": "",
+        "stdout": ""
+      },
+      "classification": "STATE_AND_CAPTURE_OK",
+      "failure_class": "NONE",
+      "formal_evidence": {
+        "reset": {
+          "body": {
+            "absent_before": true,
+            "attempt": "N1",
+            "candidate": "Godot",
+            "device": 2049,
+            "empty_after_create": true,
+            "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+            "inode": 8391225,
+            "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+            "workspace_path": "/tmp/tmpaijdesuu/runs/N1"
+          },
+          "reset_id": "RESET-S6-3f46d856a2c2f8fb019e6a00",
+          "sha256": "3f46d856a2c2f8fb019e6a00943a87141a2abd1f317e5aade92e677902686ab0",
+          "verified": true
+        },
+        "workspace": {
+          "body": {
+            "attempt": "N1",
+            "candidate": "Godot",
+            "candidate_cwd_observed": "/tmp/tmpaijdesuu/runs/N1",
+            "candidate_pid": 3061,
+            "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+            "project_files_sha256": {
+              "m.gd": "b1ec83eddb83db519fb4561b7415ae3548b643140cdd13c2c5018cf582b48ed5",
+              "m.tscn": "e13bbcc810ca3bcfc4ac164712d506006357216515b1a86635efb31ab3ccc311",
+              "project.godot": "4d9e9ec269c42a1c37b2db6a1aafa6d6fef4703d279505b12982a37e68e0e1cb"
+            },
+            "reset_evidence_sha256": "3f46d856a2c2f8fb019e6a00943a87141a2abd1f317e5aade92e677902686ab0",
+            "reset_id": "RESET-S6-3f46d856a2c2f8fb019e6a00",
+            "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+            "workspace_device": 2049,
+            "workspace_inode": 8391225,
+            "workspace_path": "/tmp/tmpaijdesuu/runs/N1"
+          },
+          "sha256": "fa172dc7d6ddc26e7d1064cb4a2b18ab0ec0082cac1c5e727e657b44f5a8e944",
+          "workspace_id": "WORKSPACE-S6-fa172dc7d6ddc26e7d1064cb"
+        }
+      },
+      "formal_result": "PASS",
+      "mode": "NORMAL",
+      "state_ok": true,
+      "stderr": "libpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+      "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\n"
+    },
+    {
+      "attempt": "N2",
+      "binding": {
+        "body": {
+          "attempt": "N2",
+          "candidate": "Godot",
+          "capture": {
+            "artifact": "frames/godot-N2.png",
+            "command": [
+              "/usr/bin/scrot",
+              "-z",
+              "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/engine-technical-s6/frames/godot-N2.png"
+            ],
+            "dimensions": [
+              1280,
+              720
+            ],
+            "executed": true,
+            "exit": 0,
+            "failure_mode": null,
+            "format": "PNG",
+            "frame_count": 1,
+            "injection": null,
+            "marker_rgb": [
+              255,
+              0,
+              255
+            ],
+            "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+            "path_exists": true,
+            "sha256": "54119fd58b7f625b3b739113bd20fa50c503aed486b84f51885b97a61dfd1b7b",
+            "size": 4380
+          },
+          "classification": "STATE_AND_CAPTURE_OK",
+          "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+          "project_sha256": "325092562ce35b7499de0f4e718551323e182c9a92f1aae34cac6bb6d428fdf4",
+          "reset_id": "RESET-S6-277c03616b429ea8b5a61f1c",
+          "reset_verified": true,
+          "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM2-2a8d597ef60acfb220e2|N2|FF00FF|1280x720",
+          "workspace_evidence_sha256": "3756e754e8eaf8d279f02f7779ef78b9ab108d6d23d67ed3c14e5d0876da1bbb",
+          "workspace_id": "WORKSPACE-S6-3756e754e8eaf8d279f02f77"
+        },
+        "sha256": "6ac4190ee5568b3a4a54a232eda784fbbc7353b98242dfa9325fc6b69281fe15"
+      },
+      "candidate_alive_at_capture": true,
+      "capture": {
+        "artifact": "frames/godot-N2.png",
+        "command": [
+          "/usr/bin/scrot",
+          "-z",
+          "/home/runner/work/everfield/everfield/docs/planning/wave-2/evidence/ci/engine-technical-s6/frames/godot-N2.png"
+        ],
+        "dimensions": [
+          1280,
+          720
+        ],
+        "executed": true,
+        "exit": 0,
+        "format": "PNG",
+        "frame_count": 1,
+        "injection": null,
+        "marker_rgb": [
+          255,
+          0,
+          255
+        ],
+        "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+        "path_exists": true,
+        "sha256": "54119fd58b7f625b3b739113bd20fa50c503aed486b84f51885b97a61dfd1b7b",
+        "size": 4380,
+        "stderr": "",
+        "stdout": ""
+      },
+      "classification": "STATE_AND_CAPTURE_OK",
+      "failure_class": "NONE",
+      "formal_evidence": {
+        "reset": {
+          "body": {
+            "absent_before": true,
+            "attempt": "N2",
+            "candidate": "Godot",
+            "device": 2049,
+            "empty_after_create": true,
+            "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+            "inode": 8391339,
+            "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+            "workspace_path": "/tmp/tmpaijdesuu/runs/N2"
+          },
+          "reset_id": "RESET-S6-277c03616b429ea8b5a61f1c",
+          "sha256": "277c03616b429ea8b5a61f1c1b0a82b1f00a134c8bd2fbd16152d618980f252e",
+          "verified": true
+        },
+        "workspace": {
+          "body": {
+            "attempt": "N2",
+            "candidate": "Godot",
+            "candidate_cwd_observed": "/tmp/tmpaijdesuu/runs/N2",
+            "candidate_pid": 3108,
+            "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+            "project_files_sha256": {
+              "m.gd": "b1ec83eddb83db519fb4561b7415ae3548b643140cdd13c2c5018cf582b48ed5",
+              "m.tscn": "e13bbcc810ca3bcfc4ac164712d506006357216515b1a86635efb31ab3ccc311",
+              "project.godot": "4d9e9ec269c42a1c37b2db6a1aafa6d6fef4703d279505b12982a37e68e0e1cb"
+            },
+            "reset_evidence_sha256": "277c03616b429ea8b5a61f1c1b0a82b1f00a134c8bd2fbd16152d618980f252e",
+            "reset_id": "RESET-S6-277c03616b429ea8b5a61f1c",
+            "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+            "workspace_device": 2049,
+            "workspace_inode": 8391339,
+            "workspace_path": "/tmp/tmpaijdesuu/runs/N2"
+          },
+          "sha256": "3756e754e8eaf8d279f02f7779ef78b9ab108d6d23d67ed3c14e5d0876da1bbb",
+          "workspace_id": "WORKSPACE-S6-3756e754e8eaf8d279f02f77"
+        }
+      },
+      "formal_result": "PASS",
+      "mode": "NORMAL",
+      "state_ok": true,
+      "stderr": "libpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+      "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\n"
+    },
+    {
+      "attempt": "FI1",
+      "binding": {
+        "body": {
+          "attempt": "FI1",
+          "candidate": "Godot",
+          "capture": {
+            "artifact": null,
+            "command": [
+              "/usr/bin/scrot",
+              "-z",
+              "/proc/everfield-s6-capture-down.png"
+            ],
+            "dimensions": null,
+            "executed": true,
+            "exit": 1,
+            "failure_mode": "REAL_SCROT_WRITE_TO_UNWRITABLE_PROC_PATH",
+            "format": null,
+            "frame_count": 0,
+            "injection": "FI-S6-CAPTURE-DOWN-v2",
+            "marker_rgb": null,
+            "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+            "path_exists": false,
+            "sha256": null,
+            "size": null
+          },
+          "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
+          "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde",
+          "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+          "project_sha256": "325092562ce35b7499de0f4e718551323e182c9a92f1aae34cac6bb6d428fdf4",
+          "reset_id": "RESET-S6-bedb12098e27d3c73c68406b",
+          "reset_verified": true,
+          "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+          "state": "CAPTURE-STATE-042|Godot|GEN-S6-REM2-2a8d597ef60acfb220e2|FI1|00FFFF|1280x720",
+          "workspace_evidence_sha256": "a7f0c0d0118ef73149c53c6de14ac522e35daff9bb11055e428de4aa839d8b80",
+          "workspace_id": "WORKSPACE-S6-a7f0c0d0118ef73149c53c6d"
+        },
+        "sha256": "7e91d92f387ad2dc3929ece82fa443cc2cdd541028b52fb8fab028bfd27096ae"
+      },
+      "candidate_alive_at_capture": true,
+      "capture": {
+        "artifact": null,
+        "command": [
+          "/usr/bin/scrot",
+          "-z",
+          "/proc/everfield-s6-capture-down.png"
+        ],
+        "executed": true,
+        "exit": 1,
+        "failure_mode": "REAL_SCROT_WRITE_TO_UNWRITABLE_PROC_PATH",
+        "frame_count": 0,
+        "injection": "FI-S6-CAPTURE-DOWN-v2",
+        "mechanism": "CANDIDATE_BOUND_X11_FRAMEBUFFER",
+        "path_exists": false,
+        "stderr": "scrot: Saving to file /proc/everfield-s6-capture-down.png failed\n",
+        "stdout": ""
+      },
+      "classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
+      "failure_class": "NONE",
+      "formal_evidence": {
+        "reset": {
+          "body": {
+            "absent_before": true,
+            "attempt": "FI1",
+            "candidate": "Godot",
+            "device": 2049,
+            "empty_after_create": true,
+            "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+            "inode": 8391348,
+            "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+            "workspace_path": "/tmp/tmpaijdesuu/runs/FI1"
+          },
+          "reset_id": "RESET-S6-bedb12098e27d3c73c68406b",
+          "sha256": "bedb12098e27d3c73c68406b870bf9108bf05f58e0e3891a36cf337cfa750afa",
+          "verified": true
+        },
+        "workspace": {
+          "body": {
+            "attempt": "FI1",
+            "candidate": "Godot",
+            "candidate_cwd_observed": "/tmp/tmpaijdesuu/runs/FI1",
+            "candidate_pid": 3156,
+            "generation": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+            "project_files_sha256": {
+              "m.gd": "b1ec83eddb83db519fb4561b7415ae3548b643140cdd13c2c5018cf582b48ed5",
+              "m.tscn": "e13bbcc810ca3bcfc4ac164712d506006357216515b1a86635efb31ab3ccc311",
+              "project.godot": "4d9e9ec269c42a1c37b2db6a1aafa6d6fef4703d279505b12982a37e68e0e1cb"
+            },
+            "reset_evidence_sha256": "bedb12098e27d3c73c68406b870bf9108bf05f58e0e3891a36cf337cfa750afa",
+            "reset_id": "RESET-S6-bedb12098e27d3c73c68406b",
+            "run": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+            "workspace_device": 2049,
+            "workspace_inode": 8391348,
+            "workspace_path": "/tmp/tmpaijdesuu/runs/FI1"
+          },
+          "sha256": "a7f0c0d0118ef73149c53c6de14ac522e35daff9bb11055e428de4aa839d8b80",
+          "workspace_id": "WORKSPACE-S6-a7f0c0d0118ef73149c53c6d"
+        }
+      },
+      "formal_result": "PASS",
+      "mode": "INJECT",
+      "state_ok": true,
+      "stderr": "libpulse.so.0: cannot open shared object file: No such file or directory\nALSA lib confmisc.c:855:(parse_card) cannot find card '0'\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory\nALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory\nALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name\nALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory\nALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory\nALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default\nERROR: Condition \"status < 0\" is true. Returning: ERR_CANT_OPEN\n   at: init_output_device (drivers/alsa/audio_driver_alsa.cpp:97)\nWARNING: All audio drivers failed, falling back to the dummy driver.\n     at: initialize (servers/audio/audio_server.cpp:258)\n",
+      "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\n"
+    }
+  ],
+  "canonicality": "NOT_CANONICAL",
+  "closed_findings": [
+    "W2-ENG-TECH-S6-REV-M01",
+    "W2-ENG-TECH-S6-REV-M02",
+    "W2-ENG-TECH-S6-REM-REV-M01"
+  ],
+  "contract": {
+    "capture_frames": 1,
+    "failure_classification": "STATE_REACHABLE_CAPTURE_PIPELINE_UNAVAILABLE",
+    "injection": "FI-S6-CAPTURE-DOWN-v2",
+    "marker": "CAPTURE-STATE-042",
+    "screens": 3,
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  "disposition": "PROVISIONAL_S6_FORMAL_V5_REMEDIATED_PASS_FOR_COMPARISON_PENDING_REQUIRED_REVIEW",
+  "engine_selected": false,
+  "fresh_review_required": true,
+  "generation_id": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+  "implementation_readiness": false,
+  "integration_authority": false,
+  "issue": 591,
+  "mission_id": "W2-ENG-TECH-S6-REM-02",
+  "negative_controls": {
+    "actual_n1_bytes_rejected_as_n2": true,
+    "actual_resets_verified": true,
+    "capture_failure_misclassification_rejected": true,
+    "frame_bytes_distinct": true,
+    "normal_reset_ids_distinct": true,
+    "normal_workspace_ids_distinct": true,
+    "real_capture_down_observed": true,
+    "retained_frame_bytes_revalidated": true,
+    "state_vs_capture_separated": true
+  },
+  "preserved": {
+    "Bevy": "INCONCLUSIVE_HARNESS_OR_INFRA",
+    "Defold": "INCONCLUSIVE_HARNESS_OR_INFRA",
+    "Unity": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY",
+    "Unreal Engine": "NOT_RUN_BLOCKED_BY_SPECIFIC_AUTHORITY",
+    "issue_82_not_run_cells": 50
+  },
+  "review": {
+    "finding": "W2-ENG-TECH-S6-REM-REV-M01",
+    "head": "ec08f8f9a693b1bd67e6715bb28b1582afb37b8b",
+    "issue": 588,
+    "terminal": 5317382782
+  },
+  "run_identity": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+  "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-v2",
+  "source": {
+    "artifact": 9288296812,
+    "head": "917866be1655223ebfc3166a7e1949db738f1ff7",
+    "issue": 585,
+    "run": 32029396638
+  },
+  "toolchain": {
+    "artifact_identity": {
+      "digest_source": "RETAINED_REPOSITORY_ARTIFACT_LOCK",
+      "expected_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+      "limitation": "No authoritative vendor digest was observed from the public GitHub release metadata; this exact run content identity is retained for subsequent replay, not represented as vendor-signed identity.",
+      "observed_sha256": "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba",
+      "vendor_digest_probe": {
+        "api_url": "https://api.github.com/repos/godotengine/godot/releases/tags/4.7.1-stable",
+        "asset_name": "Godot_v4.7.1-stable_linux.x86_64.zip",
+        "digest": null,
+        "probe": {
+          "cmd": [
+            "/usr/bin/curl",
+            "-fsSL",
+            "--max-time",
+            "30",
+            "-H",
+            "Accept: application/vnd.github+json",
+            "-H",
+            "X-GitHub-Api-Version: 2022-11-28",
+            "https://api.github.com/repos/godotengine/godot/releases/tags/4.7.1-stable"
+          ],
+          "exit": 0,
+          "seconds": 0.618,
+          "stderr": "",
+          "stdout": "thub.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"application/zip\",\n      \"state\": \"uploaded\",\n      \"size\": 82407178,\n      \"digest\": \"sha256:d9cdf49102092a2b6db4c5929002628d16eca3d7226afca2b1d03431a0a1e64b\",\n      \"download_count\": 501,\n      \"created_at\": \"2026-07-14T18:08:31Z\",\n      \"updated_at\": \"2026-07-14T18:08:56Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_windows_arm64.exe.zip\"\n    },\n    {\n      \"url\": \"https://api.github.com/repos/godotengine/godot/releases/assets/477009199\",\n      \"id\": 477009199,\n      \"node_id\": \"RA_kwDOAO6SJc4cbpUv\",\n      \"name\": \"SHA512-SUMS.txt\",\n      \"label\": \"\",\n      \"uploader\": {\n        \"login\": \"akien-mga\",\n        \"id\": 4701338,\n        \"node_id\": \"MDQ6VXNlcjQ3MDEzMzg=\",\n        \"avatar_url\": \"https://avatars.githubusercontent.com/u/4701338?v=4\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/akien-mga\",\n        \"html_url\": \"https://github.com/akien-mga\",\n        \"followers_url\": \"https://api.github.com/users/akien-mga/followers\",\n        \"following_url\": \"https://api.github.com/users/akien-mga/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/akien-mga/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/akien-mga/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/akien-mga/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/akien-mga/orgs\",\n        \"repos_url\": \"https://api.github.com/users/akien-mga/repos\",\n        \"events_url\": \"https://api.github.com/users/akien-mga/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/akien-mga/received_events\",\n        \"type\": \"User\",\n        \"user_view_type\": \"public\",\n        \"site_admin\": false\n      },\n      \"content_type\": \"text/plain; charset=utf-8\",\n      \"state\": \"uploaded\",\n      \"size\": 5682,\n      \"digest\": \"sha256:4c8f302a5630f34181b12cc89454ab336f3c7f25feae9d81e10f43fc25e1ae1e\",\n      \"download_count\": 8224,\n      \"created_at\": \"2026-07-14T18:14:55Z\",\n      \"updated_at\": \"2026-07-14T18:14:55Z\",\n      \"browser_download_url\": \"https://github.com/godotengine/godot/releases/download/4.7.1-stable/SHA512-SUMS.txt\"\n    }\n  ],\n  \"tarball_url\": \"https://api.github.com/repos/godotengine/godot/tarball/4.7.1-stable\",\n  \"zipball_url\": \"https://api.github.com/repos/godotengine/godot/zipball/4.7.1-stable\",\n  \"body\": \"**Godot 4.7.1** is a maintenance release addressing stability and usability issues, and fixing all sorts of bugs. Maintenance releases are compatible with previous releases and are recommended for adoption.\\n\\nReport bugs on GitHub after checking that they haven't been reported:\\n- https://github.com/godotengine/godot/issues\\n\\n----\\n\\n- [Release notes](https://godotengine.org/article/maintenance-release-godot-4-7-1/)\\n- [Complete changelog](https://godotengine.github.io/godot-interactive-changelog/#4.7.1)\\n- [Curated changelog](https://github.com/godotengine/godot/blob/4.7.1-stable/CHANGELOG.md)\\n\\n----\\n\\n- **Download (GitHub):** Expand **Assets** below\",\n  \"reactions\": {\n    \"url\": \"https://api.github.com/repos/godotengine/godot/releases/353984102/reactions\",\n    \"total_count\": 190,\n    \"+1\": 79,\n    \"-1\": 0,\n    \"laugh\": 9,\n    \"hooray\": 30,\n    \"confused\": 0,\n    \"heart\": 35,\n    \"rocket\": 29,\n    \"eyes\": 8\n  }\n}\n",
+          "timed_out": false
+        },
+        "source": "NO_AUTHORITATIVE_DIGEST_OBSERVED"
+      },
+      "verified": true
+    },
+    "baseline": "4.7.1-stable",
+    "executable_sha256": "32f8d7596c4b41185512b1c49d69f2da3be018fd784a53e349fa92a98a97bcde"
+  },
+  "trusted_comparison_authority": false,
+  "unchanged_v5": {
+    "adaptation_validation": {
+      "adaptation_identity": "25d0ead1111ff8ef214a622286f71baa86ba127a13a65ca7c674cdcc2128f713",
+      "binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+      "reasons": [],
+      "result": "ACCEPT"
+    },
+    "aggregate": {
+      "aggregate": "PASS_FOR_COMPARISON",
+      "reasons": [],
+      "valid_envelope": true
+    },
+    "formal_attempt_bindings": {
+      "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-FI1": {
+        "body": {
+          "actual_binding_sha256": "7e91d92f387ad2dc3929ece82fa443cc2cdd541028b52fb8fab028bfd27096ae",
+          "attempt": "FI1",
+          "formal_attempt_id": "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-FI1",
+          "formal_attempt_sha256": "aa7c04b4c3d7a90c61832b469c0301428d8040ed193b24c3fbf27d3cdcdeacfe",
+          "reset_evidence_sha256": "bedb12098e27d3c73c68406b870bf9108bf05f58e0e3891a36cf337cfa750afa",
+          "workspace_evidence_sha256": "a7f0c0d0118ef73149c53c6de14ac522e35daff9bb11055e428de4aa839d8b80"
+        },
+        "sha256": "be9ec4473bf45d51e095d5576e0540c74c007be9e43d6fc1c34254e0b1758376"
+      },
+      "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N1": {
+        "body": {
+          "actual_binding_sha256": "b9d0e9e4cf7305200f243ab509846b77fe636100eb74c3d81ce108741e932add",
+          "attempt": "N1",
+          "formal_attempt_id": "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N1",
+          "formal_attempt_sha256": "4fd8370e44cc10ac4b1c900cbb1ab172df2370e6add77dd87a09cc56b53d2cf6",
+          "reset_evidence_sha256": "3f46d856a2c2f8fb019e6a00943a87141a2abd1f317e5aade92e677902686ab0",
+          "workspace_evidence_sha256": "fa172dc7d6ddc26e7d1064cb4a2b18ab0ec0082cac1c5e727e657b44f5a8e944"
+        },
+        "sha256": "b9555fc5d7a7953652539bb6ae4112e55d1a5a1358bc2814df8e0ea11f2df488"
+      },
+      "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N2": {
+        "body": {
+          "actual_binding_sha256": "6ac4190ee5568b3a4a54a232eda784fbbc7353b98242dfa9325fc6b69281fe15",
+          "attempt": "N2",
+          "formal_attempt_id": "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N2",
+          "formal_attempt_sha256": "a1798b71ad2a5ec19b0d4afbfeafb8fd1709210c1d9578d74bb1b7ef9ce46e5b",
+          "reset_evidence_sha256": "277c03616b429ea8b5a61f1c1b0a82b1f00a134c8bd2fbd16152d618980f252e",
+          "workspace_evidence_sha256": "3756e754e8eaf8d279f02f7779ef78b9ab108d6d23d67ed3c14e5d0876da1bbb"
+        },
+        "sha256": "8e9cc1b9d681427fc6c07eabcadc6cabde527889fb5b8436604aaa3c35653a22"
+      }
+    },
+    "generation": {
+      "adaptation": {
+        "bounds": {
+          "capture_frame_count": 1,
+          "screen_count": 3,
+          "viewport_height": 720,
+          "viewport_width": 1280
+        },
+        "candidate_id": "Godot",
+        "extra_evidence": [],
+        "failure_injections": [
+          "FI-S6-CAPTURE-DOWN-v2"
+        ],
+        "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+        "fixed_input_refs": [
+          "SLICE:logical_state",
+          "SLICE:player_surface",
+          "SLICE:capture_fixture"
+        ],
+        "harness_id": "W2-ENG-HARNESS-v5",
+        "hidden_context_transfer": false,
+        "mappings": {
+          "identity_bound_capture": "EQUIVALENT",
+          "reach_known_state": "EQUIVALENT",
+          "state_vs_capture_failure_separated": "EQUIVALENT"
+        },
+        "mechanism_authority": "CANDIDATE_NATIVE_EQUIVALENT",
+        "package_target": null,
+        "resource_exception": false,
+        "scenario_id": "S6",
+        "start_profile": {
+          "cache_mode": "COLD",
+          "generated_state_policy": "REGENERATE_FROM_REPO",
+          "profile_id": "W2-ENG-START-COLD-v2",
+          "resource_class": "W2-ENG-HOST-COMMON-v2"
+        },
+        "undocumented_manual_intervention": false
+      },
+      "adaptation_binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+      "all_attempt_refs": [
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N1",
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N2",
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-FI1"
+      ],
+      "attempts": {
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-FI1": {
+          "attempt_id": "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-FI1",
+          "candidate_generation_id": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+          "candidate_id": "Godot",
+          "failure_class": "NONE",
+          "injection_id": "FI-S6-CAPTURE-DOWN-v2",
+          "kind": "FAILURE_INJECTION",
+          "normal_index": null,
+          "reset_id": "RESET-S6-bedb12098e27d3c73c68406b",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S6",
+          "workspace_id": "WORKSPACE-S6-a7f0c0d0118ef73149c53c6d"
+        },
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N1": {
+          "attempt_id": "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N1",
+          "candidate_generation_id": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+          "candidate_id": "Godot",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 1,
+          "reset_id": "RESET-S6-3f46d856a2c2f8fb019e6a00",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S6",
+          "workspace_id": "WORKSPACE-S6-fa172dc7d6ddc26e7d1064cb"
+        },
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N2": {
+          "attempt_id": "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N2",
+          "candidate_generation_id": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+          "candidate_id": "Godot",
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "normal_index": 2,
+          "reset_id": "RESET-S6-277c03616b429ea8b5a61f1c",
+          "reset_verified": true,
+          "resource_class": "W2-ENG-HOST-COMMON-v2",
+          "result": "PASS",
+          "scenario_id": "S6",
+          "workspace_id": "WORKSPACE-S6-3756e754e8eaf8d279f02f77"
+        }
+      },
+      "candidate_id": "Godot",
+      "candidate_work_id": "WORK-S6-REM2-2a8d597ef60acfb220e2",
+      "generation_id": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+      "harness_defect": false,
+      "predecessor_generation_id": null,
+      "repair_change_ref": null,
+      "run_registry_refs": [
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N1",
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-N2",
+        "GEN-S6-REM2-2a8d597ef60acfb220e2-S6-FI1"
+      ],
+      "scenario_id": "S6"
+    }
+  }
+}

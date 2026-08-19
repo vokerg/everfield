@@ -1,0 +1,43 @@
+{
+  "actual_byte_substitution_rejected": true,
+  "canonicality": "NOT_CANONICAL",
+  "capture_down_classification_enforced": true,
+  "capture_down_observed": true,
+  "evidence_run_identity": "32043481976:1:020b4b9e05d26ff551c229d0b274751cd7995ff0",
+  "formal_actual_bindings_recomputed": true,
+  "formal_negative_controls": {
+    "all_attempt_registry_duplicate_rejected": true,
+    "all_attempt_registry_mismatch_rejected": true,
+    "attempt_candidate_tamper_rejected": true,
+    "attempt_generation_tamper_rejected": true,
+    "formal_actual_binding_substitution_rejected": true,
+    "reused_normal_reset_rejected": true,
+    "reused_normal_workspace_rejected": true,
+    "run_registry_duplicate_rejected": true,
+    "run_registry_mismatch_rejected": true,
+    "unverified_normal_reset_rejected": true
+  },
+  "fresh_review_still_required": true,
+  "generation_id": "GEN-S6-REM2-2a8d597ef60acfb220e2",
+  "missing_frame_rejected": true,
+  "ok": true,
+  "producer_v5_aggregate": {
+    "aggregate": "PASS_FOR_COMPARISON",
+    "reasons": [],
+    "valid_envelope": true
+  },
+  "reasons": [],
+  "recomputed_v5_adaptation": {
+    "adaptation_identity": "25d0ead1111ff8ef214a622286f71baa86ba127a13a65ca7c674cdcc2128f713",
+    "binding_id": "da9e08a47340186dcab7d9fc62380b64ee580c0d7f39d2005aa3f83c30276476",
+    "reasons": [],
+    "result": "ACCEPT"
+  },
+  "recomputed_v5_aggregate": {
+    "aggregate": "PASS_FOR_COMPARISON",
+    "reasons": [],
+    "valid_envelope": true
+  },
+  "schema": "W2-ENG-TECHNICAL-S6-REMEDIATION-INDEPENDENT-VERIFY-v2",
+  "tampered_frame_rejected": true
+}
