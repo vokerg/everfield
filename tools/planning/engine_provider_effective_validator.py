@@ -39,6 +39,9 @@ GHCR_AUTH_PATH = "/token"
 GHCR_SERVICE = "ghcr.io"
 UNREAL_GHCR_REPOSITORY = "epicgames/unreal-engine"
 UNREAL_GHCR_SCOPE = f"repository:{UNREAL_GHCR_REPOSITORY}:pull"
+GITHUB_API_ORIGIN = "https://api.github.com"
+GITHUB_EXPECTED_ORG = "EpicGames"
+GITHUB_PACKAGE_NAME = "unreal-engine"
 
 
 def redact(text: str, secrets: list[str]) -> str:
@@ -470,6 +473,124 @@ def _header_value(headers: dict[str, str], name: str) -> str | None:
     return None
 
 
+def _github_api_request(path: str, token: str) -> tuple[int, dict[str, str], bytes]:
+    """Call one fixed GitHub API path with the PAT held only in memory."""
+    allowed_paths = {
+        "/user",
+        f"/user/memberships/orgs/{GITHUB_EXPECTED_ORG}",
+        f"/orgs/{GITHUB_EXPECTED_ORG}/packages/container/{GITHUB_PACKAGE_NAME}",
+    }
+    if path not in allowed_paths or not token:
+        return 400, {}, b""
+    return _http_request(
+        f"{GITHUB_API_ORIGIN}{path}",
+        {
+            "Accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {token}",
+            "User-Agent": "everfield-engine-eval",
+            "X-GitHub-Api-Version": "2022-11-28",
+        },
+    )
+
+
+def _safe_scope_names(header: str | None) -> tuple[list[str], bool]:
+    """Project only recognized OAuth scope names, never the raw header."""
+    if header is None:
+        return [], False
+    scopes: list[str] = []
+    for raw in header.split(","):
+        scope = raw.strip().lower()
+        if re.fullmatch(r"[a-z][a-z0-9:_-]{0,63}", scope) and scope not in scopes:
+            scopes.append(scope)
+    return sorted(scopes), True
+
+
+def github_access_probe(
+    token: str,
+    expected_login: str,
+    ghcr_trace: dict[str, Any],
+    *,
+    request_fn: Any = None,
+) -> dict[str, Any]:
+    """Distinguish PAT/API identity from GHCR entitlement without secret output."""
+    request = request_fn or _github_api_request
+    paths = (
+        "/user",
+        f"/user/memberships/orgs/{GITHUB_EXPECTED_ORG}",
+        f"/orgs/{GITHUB_EXPECTED_ORG}/packages/container/{GITHUB_PACKAGE_NAME}",
+    )
+    responses: dict[str, tuple[int, dict[str, str], bytes]] = {}
+    for path in paths:
+        try:
+            responses[path] = request(path, token)
+        except (OSError, ValueError, TypeError):
+            responses[path] = (599, {}, b"")
+
+    user_path, membership_path, package_path = paths
+    user_status, user_headers, user_body = responses[user_path]
+    membership_status, membership_headers, membership_body = responses[membership_path]
+    package_status, package_headers, _ = responses[package_path]
+    user_data: Any = None
+    membership_data: Any = None
+    try:
+        user_data = json.loads(user_body)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        pass
+    try:
+        membership_data = json.loads(membership_body)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        pass
+
+    login = user_data.get("login") if isinstance(user_data, dict) else None
+    login = login if isinstance(login, str) and re.fullmatch(r"[A-Za-z0-9-]{1,39}", login) else None
+    scope_names, scope_header_present = _safe_scope_names(_header_value(user_headers, "X-OAuth-Scopes"))
+    sso_header_present = any(
+        _header_value(headers, "X-GitHub-SSO") is not None
+        for _, headers, _ in responses.values()
+    )
+    redirect_rejected = any(300 <= status < 400 for status, _, _ in responses.values())
+    organization = membership_data.get("organization") if isinstance(membership_data, dict) else None
+    membership_active = bool(
+        isinstance(membership_data, dict)
+        and membership_data.get("state") == "active"
+        and isinstance(organization, dict)
+        and organization.get("login") == GITHUB_EXPECTED_ORG
+    )
+    api_statuses = {
+        "user": user_status,
+        "membership": membership_status,
+        "package": package_status,
+    }
+    exchange_status = ghcr_trace.get("token_exchange_status")
+    if any(status in (429, 599) or status >= 500 for status in api_statuses.values()):
+        diagnostic_code = "GITHUB_API_TRANSIENT_FAILURE"
+    elif user_status != 200 or login is None:
+        diagnostic_code = "TOKEN_INVALID_OR_WRONG_SECRET"
+    elif login.lower() != expected_login.lower():
+        diagnostic_code = "TOKEN_IDENTITY_MISMATCH"
+    elif "read:packages" not in scope_names or not scope_header_present:
+        diagnostic_code = "TOKEN_SCOPE_OR_ORG_AUTHORIZATION_INSUFFICIENT"
+    elif sso_header_present:
+        diagnostic_code = "TOKEN_SSO_AUTHORIZATION_REQUIRED"
+    elif exchange_status == 200 and ghcr_trace.get("token_response_valid") is True:
+        diagnostic_code = "GHCR_TOKEN_EXCHANGE_SUCCEEDED_CONTINUE_CHAIN"
+    else:
+        diagnostic_code = "EPIC_PACKAGE_ENTITLEMENT_OR_GHCR_ACCESS_FAILED"
+    return {
+        "api_statuses": api_statuses,
+        "login": login,
+        "expected_login": expected_login,
+        "login_matches_expected": bool(login and login.lower() == expected_login.lower()),
+        "scope_names": scope_names,
+        "scope_header_present": scope_header_present,
+        "membership_active": membership_active,
+        "sso_header_present": sso_header_present,
+        "redirect_rejected": redirect_rejected,
+        "ghcr_token_exchange_status": exchange_status,
+        "diagnostic_code": diagnostic_code,
+    }
+
+
 def _empty_ghcr_auth_trace() -> dict[str, Any]:
     """Return the complete sanitized auth-stage envelope; never add raw auth data."""
     return {
@@ -724,6 +845,7 @@ def validate_unreal() -> dict[str, Any]:
         base["blocker"] = "EPIC_GHCR_AUTHORIZATION_OR_ENTITLEMENT_FAILED"
         base["registry_http_status"] = status
         base["registry_auth_trace"] = auth_trace
+        base["github_access_probe"] = github_access_probe(token, username, auth_trace)
         return base
     try:
         tags = json.loads(body).get("tags", [])
@@ -1011,6 +1133,94 @@ def self_test() -> dict[str, Any]:
         cases["ghcr_stage_success"] = _ghcr_trace_stage(stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=200, token_response_valid=True, resource_retry_attempted=True, resource_retry_status=200)) == "SUCCESS"
         trace_text = json.dumps(stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=401), sort_keys=True)
         cases["ghcr_auth_trace_contains_no_fixture_secret_or_bearer"] = "unit-test-secret" not in trace_text and "fixture-bearer-value" not in trace_text and "authorization" not in trace_text.lower() and "cookie" not in trace_text.lower()
+
+        def github_fixture(path: str, token: str) -> tuple[int, dict[str, str], bytes]:
+            assert token == "fixture-secret"
+            if path == "/user":
+                return 200, {"X-OAuth-Scopes": "read:packages"}, b'{"login":"vokerg"}'
+            if path == "/user/memberships/orgs/EpicGames":
+                return 200, {}, b'{"state":"active","organization":{"login":"EpicGames"}}'
+            return 200, {}, b'{"name":"unreal-engine"}'
+
+        good_probe = github_access_probe(
+            "fixture-secret",
+            "vokerg",
+            stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=403),
+            request_fn=github_fixture,
+        )
+        cases["github_probe_accepts_expected_identity_scope_membership"] = (
+            good_probe["login"] == "vokerg"
+            and good_probe["login_matches_expected"] is True
+            and good_probe["scope_names"] == ["read:packages"]
+            and good_probe["membership_active"] is True
+            and good_probe["api_statuses"]["package"] == 200
+            and good_probe["diagnostic_code"] == "EPIC_PACKAGE_ENTITLEMENT_OR_GHCR_ACCESS_FAILED"
+        )
+
+        def github_invalid_fixture(path: str, token: str) -> tuple[int, dict[str, str], bytes]:
+            assert token == "fixture-secret"
+            return 401, {}, b'{"message":"Bad credentials"}'
+
+        invalid_probe = github_access_probe(
+            "fixture-secret",
+            "vokerg",
+            stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=403),
+            request_fn=github_invalid_fixture,
+        )
+        cases["github_probe_rejects_invalid_identity"] = invalid_probe["diagnostic_code"] == "TOKEN_INVALID_OR_WRONG_SECRET"
+
+        def github_missing_scope_fixture(path: str, token: str) -> tuple[int, dict[str, str], bytes]:
+            assert token == "fixture-secret"
+            if path == "/user":
+                return 200, {"X-OAuth-Scopes": "repo"}, b'{"login":"vokerg"}'
+            return 403, {}, b'{"message":"Requires read:org"}'
+
+        missing_scope_probe = github_access_probe(
+            "fixture-secret",
+            "vokerg",
+            stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=403),
+            request_fn=github_missing_scope_fixture,
+        )
+        cases["github_probe_classifies_missing_package_scope"] = missing_scope_probe["diagnostic_code"] == "TOKEN_SCOPE_OR_ORG_AUTHORIZATION_INSUFFICIENT"
+
+        def github_sso_fixture(path: str, token: str) -> tuple[int, dict[str, str], bytes]:
+            assert token == "fixture-secret"
+            headers = {"X-GitHub-SSO": "required; url=https://github.com/..."}
+            if path == "/user":
+                return 200, {"X-OAuth-Scopes": "read:packages"}, b'{"login":"vokerg"}'
+            return 403, headers, b'{"message":"SSO required"}'
+
+        sso_probe = github_access_probe(
+            "fixture-secret",
+            "vokerg",
+            stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=403),
+            request_fn=github_sso_fixture,
+        )
+        cases["github_probe_surfaces_sso_signal"] = (
+            sso_probe["sso_header_present"] is True
+            and sso_probe["diagnostic_code"] == "TOKEN_SSO_AUTHORIZATION_REQUIRED"
+        )
+
+        def github_redirect_fixture(path: str, token: str) -> tuple[int, dict[str, str], bytes]:
+            assert token == "fixture-secret"
+            if path == "/user":
+                return 302, {"Location": "https://evil.example/"}, b""
+            return 200, {}, b"{}"
+
+        redirect_probe = github_access_probe(
+            "fixture-secret",
+            "vokerg",
+            stage_trace(initial_status=401, challenge_accepted=True, token_exchange_attempted=True, token_exchange_status=403),
+            request_fn=github_redirect_fixture,
+        )
+        cases["github_probe_rejects_redirects"] = redirect_probe["redirect_rejected"] is True
+        probe_text = json.dumps(good_probe, sort_keys=True)
+        cases["github_probe_contains_no_fixture_secret_header_or_body"] = (
+            "fixture-secret" not in probe_text
+            and "Bad credentials" not in probe_text
+            and "authorization" not in probe_text.lower()
+            and "cookie" not in probe_text.lower()
+        )
     finally:
         os.environ.clear()
         os.environ.update(original)
