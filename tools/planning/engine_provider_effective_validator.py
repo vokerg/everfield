@@ -39,6 +39,13 @@ GHCR_AUTH_PATH = "/token"
 GHCR_SERVICE = "ghcr.io"
 UNREAL_GHCR_REPOSITORY = "epicgames/unreal-engine"
 UNREAL_GHCR_SCOPE = f"repository:{UNREAL_GHCR_REPOSITORY}:pull"
+GHCR_MANIFEST_ACCEPT = ", ".join(
+    (
+        "application/vnd.oci.image.index.v1+json",
+        "application/vnd.oci.image.manifest.v1+json",
+        "application/json",
+    )
+)
 GITHUB_API_ORIGIN = "https://api.github.com"
 GITHUB_EXPECTED_ORG = "EpicGames"
 GITHUB_PACKAGE_NAME = "unreal-engine"
@@ -713,8 +720,7 @@ def registry_request(path: str, username: str, token: str) -> tuple[int, dict[st
         trace["failure_stage"] = _ghcr_trace_stage(trace)
         return 400, {}, b"", trace
     resource_url = f"{GHCR_REGISTRY_ORIGIN}/v2/{path}"
-    accept = "application/vnd.oci.image.manifest.v1+json, application/json"
-    status, headers, body = _http_request(resource_url, {"Accept": accept})
+    status, headers, body = _http_request(resource_url, {"Accept": GHCR_MANIFEST_ACCEPT})
     trace["initial_status"] = status
     if status != 401:
         trace["failure_stage"] = _ghcr_trace_stage(trace)
@@ -735,7 +741,7 @@ def registry_request(path: str, username: str, token: str) -> tuple[int, dict[st
     trace["resource_retry_attempted"] = True
     retry_status, retry_headers, retry_body = _http_request(
         resource_url,
-        {"Authorization": f"Bearer {bearer}", "Accept": accept},
+        {"Authorization": f"Bearer {bearer}", "Accept": GHCR_MANIFEST_ACCEPT},
     )
     trace["resource_retry_status"] = retry_status
     trace["failure_stage"] = _ghcr_trace_stage(trace)
@@ -1098,6 +1104,10 @@ def self_test() -> dict[str, Any]:
             "service": "ghcr.io",
             "scope": "repository:epicgames/unreal-engine:pull",
         } and all(exact_checks.values())
+        cases["ghcr_manifest_accepts_oci_image_index"] = (
+            "application/vnd.oci.image.index.v1+json" in GHCR_MANIFEST_ACCEPT
+            and "application/vnd.oci.image.manifest.v1+json" in GHCR_MANIFEST_ACCEPT
+        )
         cases["ghcr_http_realm_rejected"] = parse_ghcr_bearer_challenge(
             'Bearer realm="http://ghcr.io/token",service="ghcr.io",scope="repository:epicgames/unreal-engine:pull"'
         ) is None
