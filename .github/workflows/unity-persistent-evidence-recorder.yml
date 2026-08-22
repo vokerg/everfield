@@ -134,7 +134,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$SOURCE_HEAD_SHA"
           test -f "$SOURCE_WORKFLOW_PATH"
           test -f tools/planning/record_unity_persistent_evidence.py
-          python3 -m py_compile tools/planning/record_unity_persistent_evidence.py tools/planning/record_provider_effective_access.py
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/persistent-unity-recorder-pycache" \
+            python3 -m py_compile tools/planning/record_unity_persistent_evidence.py tools/planning/record_provider_effective_access.py
           test -z "$(git status --porcelain --untracked-files=all)"
           echo "persistent projection code identity: $SOURCE_HEAD_SHA"
 
