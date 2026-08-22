@@ -49,6 +49,13 @@ GHCR_MANIFEST_ACCEPT = ", ".join(
 GITHUB_API_ORIGIN = "https://api.github.com"
 GITHUB_EXPECTED_ORG = "EpicGames"
 GITHUB_PACKAGE_NAME = "unreal-engine"
+PERSISTENT_UNITY_SCHEMA = "W2-ENG-UNITY-PERSISTENT-ACCESS-v1"
+PERSISTENT_UNITY_MISSION_ID = "W2-ENG-UNITY-PERSISTENT-RUNNER-01"
+PERSISTENT_UNITY_REPOSITORY = "vokerg/everfield"
+PERSISTENT_UNITY_RUNNER_NAME = "everfield-unity-mac"
+PERSISTENT_UNITY_RUNNER_OS = "macOS"
+PERSISTENT_UNITY_RUNNER_ARCH = "ARM64"
+PERSISTENT_UNITY_EVENTS = ("push", "workflow_dispatch")
 
 
 def redact(text: str, secrets: list[str]) -> str:
@@ -449,6 +456,73 @@ def validate_local_unity() -> dict[str, Any]:
     if not passed:
         provider["blocker"] = "LOCAL_UNITY_LICENSE_EDITOR_OR_NATIVE_S3_NOT_PROVEN"
     return provider
+
+
+def persistent_unity_runner_identity() -> dict[str, Any]:
+    """Return only bounded trusted-runner identity fields and checks."""
+    observed = {
+        "repository": os.getenv("GITHUB_REPOSITORY", ""),
+        "event": os.getenv("GITHUB_EVENT_NAME", ""),
+        "ref": os.getenv("GITHUB_REF", ""),
+        "sha": os.getenv("GITHUB_SHA", ""),
+        "run_id": os.getenv("GITHUB_RUN_ID", ""),
+        "run_attempt": os.getenv("GITHUB_RUN_ATTEMPT", ""),
+        "runner_name": os.getenv("RUNNER_NAME", ""),
+        "runner_os": os.getenv("RUNNER_OS", ""),
+        "runner_arch": os.getenv("RUNNER_ARCH", ""),
+    }
+    checks = {
+        "repository_matches": observed["repository"] == PERSISTENT_UNITY_REPOSITORY,
+        "event_allowed": observed["event"] in PERSISTENT_UNITY_EVENTS,
+        "ref_is_main": observed["ref"] == "refs/heads/main",
+        "sha_present": bool(re.fullmatch(r"[0-9a-f]{40}", observed["sha"])),
+        "runner_name_matches": observed["runner_name"] == PERSISTENT_UNITY_RUNNER_NAME,
+        "runner_os_matches": observed["runner_os"] == PERSISTENT_UNITY_RUNNER_OS,
+        "runner_arch_matches": observed["runner_arch"] == PERSISTENT_UNITY_RUNNER_ARCH,
+    }
+    return {
+        **observed,
+        "checks": checks,
+        "trusted": all(checks.values()),
+    }
+
+
+def validate_persistent_unity() -> dict[str, Any]:
+    """Execute native Unity validation only on the exact trusted persistent runner."""
+    identity = persistent_unity_runner_identity()
+    provider: dict[str, Any] = {
+        "provider": "Unity",
+        "baseline": os.getenv("UNITY_EDITOR_VERSION", UNITY_BASELINE),
+        "state": "BLOCKED_BY_SPECIFIC_EXTERNAL_CONDITION",
+        "authentication_validated": False,
+        "license_validated": False,
+        "editor_installed": False,
+        "editor_executed": False,
+        "native_s3": None,
+        "credential_values_read": False,
+        "commercial_authority": False,
+        "production_authority": False,
+        "legal_clearance": False,
+        "release_authority": False,
+    }
+    if not identity["trusted"]:
+        provider["blocker"] = "PERSISTENT_RUNNER_TRUST_IDENTITY_MISMATCH"
+    else:
+        provider = validate_local_unity()
+    return {
+        "schema": PERSISTENT_UNITY_SCHEMA,
+        "mission_id": PERSISTENT_UNITY_MISSION_ID,
+        "execution_context": "PERSISTENT_SELF_HOSTED_WORKSTATION",
+        "runner": identity,
+        "unity": provider,
+        "provider_unlock": provider["state"] == "VALIDATED_DEVELOPMENT_ACCESS",
+        "historical_not_run_cells_preserved": 50,
+        "historical_not_run_cells_mutated": False,
+        "engine_selected": False,
+        "secret_values_in_evidence": False,
+        "secret_hashes_in_evidence": False,
+        "workflow_success_is_not_authority": True,
+    }
 
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -1231,6 +1305,37 @@ def self_test() -> dict[str, Any]:
             and "authorization" not in probe_text.lower()
             and "cookie" not in probe_text.lower()
         )
+
+        os.environ.update({
+            "GITHUB_REPOSITORY": PERSISTENT_UNITY_REPOSITORY,
+            "GITHUB_EVENT_NAME": "workflow_dispatch",
+            "GITHUB_REF": "refs/heads/main",
+            "GITHUB_SHA": "a" * 40,
+            "GITHUB_RUN_ID": "123",
+            "GITHUB_RUN_ATTEMPT": "1",
+            "RUNNER_NAME": PERSISTENT_UNITY_RUNNER_NAME,
+            "RUNNER_OS": PERSISTENT_UNITY_RUNNER_OS,
+            "RUNNER_ARCH": PERSISTENT_UNITY_RUNNER_ARCH,
+        })
+        trusted_identity = persistent_unity_runner_identity()
+        cases["persistent_runner_accepts_exact_trusted_dispatch_identity"] = (
+            trusted_identity["trusted"] is True
+            and trusted_identity["checks"] == {
+                "repository_matches": True,
+                "event_allowed": True,
+                "ref_is_main": True,
+                "sha_present": True,
+                "runner_name_matches": True,
+                "runner_os_matches": True,
+                "runner_arch_matches": True,
+            }
+        )
+        os.environ["GITHUB_REF"] = "refs/heads/feature"
+        untrusted_identity = persistent_unity_runner_identity()
+        cases["persistent_runner_rejects_non_main_ref"] = (
+            untrusted_identity["trusted"] is False
+            and untrusted_identity["checks"]["ref_is_main"] is False
+        )
     finally:
         os.environ.clear()
         os.environ.update(original)
@@ -1243,6 +1348,7 @@ def main() -> int:
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--health-only", action="store_true")
     parser.add_argument("--local-unity-proof", action="store_true")
+    parser.add_argument("--persistent-unity-proof", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         result = self_test()
@@ -1267,13 +1373,19 @@ def main() -> int:
             "secret_hashes_in_evidence": False,
             "workflow_success_is_not_authority": True,
         }
+    elif args.persistent_unity_proof:
+        result = validate_persistent_unity()
     else:
         result = validate(health_only=args.health_only)
     text = json.dumps(result, sort_keys=True, indent=2) + "\n"
     if args.out:
         pathlib.Path(args.out).write_text(text)
     print(text, end="")
-    return 0 if (not args.self_test or result["pass"]) else 3
+    if args.self_test:
+        return 0 if result["pass"] else 3
+    if args.persistent_unity_proof:
+        return 0 if result["unity"]["state"] == "VALIDATED_DEVELOPMENT_ACCESS" else 3
+    return 0
 
 
 if __name__ == "__main__":
