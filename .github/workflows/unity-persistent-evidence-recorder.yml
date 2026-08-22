@@ -159,7 +159,8 @@ jobs:
         run: |
           set -euo pipefail
           EVIDENCE_PATH="docs/planning/wave-2/evidence/ci/unity-persistent-access/$RUN_ID/effective.json"
-          python3 -m tools.planning.record_unity_persistent_evidence \
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/persistent-unity-recorder-pycache" \
+            python3 -m tools.planning.record_unity_persistent_evidence \
             --input "$SOURCE" \
             --output "$EVIDENCE_PATH" \
             --run-id "$RUN_ID" \
