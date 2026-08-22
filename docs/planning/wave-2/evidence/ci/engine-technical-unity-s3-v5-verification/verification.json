@@ -1,0 +1,107 @@
+{
+  "schema": "W2-ENG-TECH-UNITY-S3-V5-VERIFICATION-v1",
+  "mission_id": "W2-ENG-TECH-UNITY-S3-V5-VERIFY-01",
+  "issue": 665,
+  "canonical": {
+    "program_blob_sha": "e3120ec203c4156328770aa86c12fbb7187966dc",
+    "binding_comment_id": 5245368879,
+    "activation_sha": "413e729e8d2d5ac2eb138903f3f2ace07283b23e",
+    "verification_base_main_sha": "ec5fc3f6313ee2e91e530ca83b1f80e2f355eeed"
+  },
+  "source": {
+    "persistent_runner_issue": 633,
+    "evidence_path": "docs/planning/wave-2/evidence/ci/unity-persistent-access/32552745832/effective.json",
+    "evidence_blob_sha": "3fdd02bc1249f43e7365f203cc0227282abdde57",
+    "evaluator_run_id": "32552745832",
+    "evaluator_run_attempt": "1",
+    "evaluator_head_sha": "1f66cc0745a840f5eb4f5b4d4869e2e31e38c1bd",
+    "workflow_path": ".github/workflows/unity-persistent-evaluator.yml",
+    "workflow_blob_sha": "e50d8125718846a871eaf7020991120d48e04eae",
+    "validator_path": "tools/planning/engine_provider_effective_validator.py",
+    "validator_blob_sha": "c12f159a1536660a6a296b81b25c5be796a01890",
+    "projection_path": "tools/planning/record_unity_persistent_evidence.py",
+    "projection_blob_sha": "0dbbae3cfb820f163c5c7f015a4263c5bf662ecd"
+  },
+  "reviewed_v5": {
+    "validator_path": "docs/planning/wave-2/evidence/engine-spike-protocol-fixtures.py",
+    "validator_blob_sha": "2c646988dc16e212f43df6a4ee5ce646622ac2a6",
+    "validator_id": "W2-ENG-PROTOCOL-VALIDATOR-v5",
+    "harness_id": "W2-ENG-HARNESS-v5",
+    "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+    "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+    "reviewed_public_s3_issue": 358,
+    "reviewed_public_s3_terminal_comment": 5305399666
+  },
+  "s3_contract": {
+    "scenario_id": "S3",
+    "fixed_input_refs": ["SLICE:logical_state", "SLICE:action_vocabulary"],
+    "obligations": ["real_or_shared_rules", "exact_seed_input", "repeatable_state_events", "perturbation_distinguishable"],
+    "minimum_bounds": {"entity_count": 32, "normal_ticks": 600, "action_count": 10},
+    "required_injection": "FI-S3-INPUT-PERTURB-v2",
+    "required_mechanism_authority": "REAL_OR_SHARED_RULES",
+    "required_resource_class": "W2-ENG-HOST-COMMON-v2"
+  },
+  "retained_observations": {
+    "candidate_id": "Unity",
+    "baseline": "6000.5.6f1",
+    "development_access_state": "VALIDATED_DEVELOPMENT_ACCESS",
+    "native_execution": true,
+    "attempts": [
+      {"attempt_id": "UNITY-S3-N1", "kind": "NORMAL", "normal_index": 1, "expected_checksum": 405227, "observed_checksum": 405227, "result": "PASS", "failure_class": "NONE", "process_exit": 0, "timed_out": false},
+      {"attempt_id": "UNITY-S3-N2", "kind": "NORMAL", "normal_index": 2, "expected_checksum": 405227, "observed_checksum": 405227, "result": "PASS", "failure_class": "NONE", "process_exit": 0, "timed_out": false},
+      {"attempt_id": "UNITY-S3-FI1", "kind": "FAILURE_INJECTION", "injection_id": "FI-S3-INPUT-PERTURB-v2", "expected_checksum": 405122, "observed_checksum": 405122, "result": "PASS", "failure_class": "NONE", "process_exit": 0, "timed_out": false}
+    ]
+  },
+  "field_completeness": {
+    "candidate_baseline_identity": {"status": "ESTABLISHED", "basis": "retained effective evidence plus exact workflow baseline"},
+    "scenario_harness_identity": {"status": "ESTABLISHED", "basis": "retained native_s3 scenario_id/harness_id"},
+    "native_n1_n2_fi_results": {"status": "ESTABLISHED", "basis": "retained attempt results/checksums/process outcomes"},
+    "required_perturbation_identity": {"status": "ESTABLISHED", "basis": "retained FI1 injection id and checksum"},
+    "common_s3_algorithm_bounds": {"status": "ESTABLISHED_BY_EXACT_EXECUTABLE_SOURCE", "basis": "exact validator source hard-codes seed=424242, ticks=600, actions=10, count=32 and tick-137 perturbation"},
+    "candidate_native_mechanism_execution": {"status": "ESTABLISHED_BOUNDED", "basis": "exact validator creates Unity Editor C# project and retained evidence records native editor success"},
+    "attempt_workspace_runtime_identity": {"status": "MISSING_FROM_RETAINED_EVIDENCE", "basis": "runtime TemporaryDirectory/project paths are not retained by the source packet or projection"},
+    "attempt_reset_identity": {"status": "MISSING_FROM_RETAINED_EVIDENCE", "basis": "the validator constructs N1/N2/FI1 subprojects but emits no reset_id or runtime reconstruction proof"},
+    "attempt_resource_class_binding": {"status": "MISSING_FROM_RETAINED_EVIDENCE", "basis": "effective evidence carries no per-attempt W2-ENG-HOST-COMMON-v2 resource_class"},
+    "attempt_source_digest_binding": {"status": "MISSING_FROM_RETAINED_EVIDENCE", "basis": "projection retains no per-attempt project/script/raw-record digest or one-to-one source binding"},
+    "candidate_work_identity": {"status": "NOT_DERIVABLE_WITHOUT_MISSING_LINEAGE", "basis": "no authoritative raw workspace/reset/source identities are retained"},
+    "candidate_generation_identity": {"status": "NOT_DERIVABLE_WITHOUT_MISSING_LINEAGE", "basis": "generation identity would depend on missing authoritative attempt lineage"},
+    "attempt_candidate_generation_binding": {"status": "NOT_AVAILABLE", "basis": "retained attempts have no candidate_generation_id"},
+    "adaptation_binding_id": {"status": "NOT_AVAILABLE", "basis": "provider projection is not a v5 formal adaptation packet"},
+    "run_registry_refs": {"status": "NOT_AVAILABLE", "basis": "provider projection is not a v5 formal generation packet"},
+    "all_attempt_refs": {"status": "NOT_AVAILABLE", "basis": "provider projection is not a v5 formal generation packet"},
+    "v5_adaptation_validation_output": {"status": "NOT_RUN_FOR_THIS_UNITY_GENERATION", "basis": "no complete Unity formal generation exists"},
+    "v5_aggregate_output": {"status": "NOT_RUN_FOR_THIS_UNITY_GENERATION", "basis": "fail-closed before aggregation because required lineage is incomplete"}
+  },
+  "verification_findings": [
+    {
+      "id": "W2-ENG-TECH-UNITY-S3-V5-VERIFY-M01",
+      "severity": "MAJOR",
+      "summary": "The retained exact-main Unity S3 packet proves bounded native execution but does not retain the per-attempt workspace/reset/resource/source lineage needed to construct a non-invented reviewed-v5 generation.",
+      "effect": "No Unity S3 PASS_FOR_COMPARISON authority can be created from this packet alone."
+    }
+  ],
+  "minimal_successor_requirements": [
+    "Retain an immutable per-attempt runtime workspace/project identity for N1, N2 and FI1.",
+    "Retain mechanically derived reset/reconstruction facts and a distinct reset identity for N1, N2 and FI1; do not emit an unchecked reset_verified boolean.",
+    "Retain per-attempt resource_class exactly W2-ENG-HOST-COMMON-v2 or fail closed under the unchanged v5 start/resource contract.",
+    "Retain exact Unity editor executable/version identity plus generated project/script/source digest and command/process evidence for each attempt.",
+    "Retain canonical raw-attempt digests and one-to-one source bindings sufficient to derive deterministic candidate work/generation identities without runtime-path invention.",
+    "After the fresh exact-main run, construct a Unity S3 adaptation/generation/AttemptRecords/registries and execute the unchanged reviewed v5 va()/agg(); only exact PASS_FOR_COMPARISON with valid_envelope=true may route to fresh required review."
+  ],
+  "disposition": "RERUN_REQUIRED_FOR_UNITY_S3_V5_BINDING",
+  "required_next_route": "EXACTLY_ONE_BOUNDED_PERSISTENT_UNITY_S3_V5_INSTRUMENTATION_RERUN",
+  "historical_issue_82_not_run_cells_preserved": 50,
+  "historical_issue_82_cells_mutated": false,
+  "trusted_unity_s3_pass_for_comparison_created": false,
+  "engine_selected": false,
+  "implementation_readiness": false,
+  "provider_pass": false,
+  "commercial_authority": false,
+  "production_authority": false,
+  "legal_clearance": false,
+  "release_authority": false,
+  "verification_pass_authority": false,
+  "decision_authority": false,
+  "integration_authority": false,
+  "canonicality": "NOT_CANONICAL"
+}
