@@ -1,0 +1,150 @@
+{
+  "authority": {
+    "canonicality": "NOT_CANONICAL",
+    "commercial_authority": false,
+    "decision_authority": false,
+    "engine_selected": false,
+    "implementation_readiness": false,
+    "integration_authority": false,
+    "legal_clearance": false,
+    "production_authority": false,
+    "provider_pass": false,
+    "release_authority": false
+  },
+  "execution_context": "PERSISTENT_SELF_HOSTED_WORKSTATION",
+  "mission_id": "W2-ENG-UNITY-PERSISTENT-RUNNER-01",
+  "publication": {
+    "direct_main_push": false,
+    "fresh_expected_head_check_required": true,
+    "integration_authority": false,
+    "mode": "PERSISTENT_UNITY_EVIDENCE_BRANCH_DRAFT_PR",
+    "squash_only_required": true
+  },
+  "run": {
+    "branch": "main",
+    "conclusion": "success",
+    "event": "workflow_dispatch",
+    "head_sha": "1f66cc0745a840f5eb4f5b4d4869e2e31e38c1bd",
+    "projection_code_sha": "1f66cc0745a840f5eb4f5b4d4869e2e31e38c1bd",
+    "publication_base_main_sha": "1f66cc0745a840f5eb4f5b4d4869e2e31e38c1bd",
+    "run_attempt": "1",
+    "run_id": "32552745832",
+    "workflow": {
+      "id": "339834870",
+      "name": "Everfield persistent Unity exact-main evaluator",
+      "path": ".github/workflows/unity-persistent-evaluator.yml"
+    }
+  },
+  "runner": {
+    "checks": {
+      "event_allowed": true,
+      "ref_is_main": true,
+      "repository_matches": true,
+      "runner_arch_matches": true,
+      "runner_name_matches": true,
+      "runner_os_matches": true,
+      "sha_present": true
+    },
+    "event": "workflow_dispatch",
+    "ref": "refs/heads/main",
+    "repository": "vokerg/everfield",
+    "run_attempt": "1",
+    "run_id": "32552745832",
+    "runner_arch": "ARM64",
+    "runner_name": "everfield-unity-mac",
+    "runner_os": "macOS",
+    "sha": "1f66cc0745a840f5eb4f5b4d4869e2e31e38c1bd",
+    "trusted": true
+  },
+  "schema": "W2-ENG-UNITY-PERSISTENT-ACCESS-EVIDENCE-v1",
+  "secret_hashes_in_evidence": false,
+  "secret_values_in_evidence": false,
+  "source_schema": "W2-ENG-UNITY-PERSISTENT-ACCESS-v1",
+  "unity": {
+    "authentication_validated": true,
+    "baseline": "6000.5.6f1",
+    "blocker": null,
+    "commercial_authority": false,
+    "credential_values_read": false,
+    "editor_executed": true,
+    "editor_installed": true,
+    "legal_clearance": false,
+    "license_validated": true,
+    "native_s3": {
+      "attempts": [
+        {
+          "attempt_id": "UNITY-S3-N1",
+          "expected_checksum": 405227,
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "native_command": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+          "normal_index": 1,
+          "observed_checksum": 405227,
+          "process": {
+            "exit": 0,
+            "seconds": 8.402,
+            "timed_out": false
+          },
+          "result": "PASS",
+          "scenario_id": "S3"
+        },
+        {
+          "attempt_id": "UNITY-S3-N2",
+          "expected_checksum": 405227,
+          "failure_class": "NONE",
+          "injection_id": null,
+          "kind": "NORMAL",
+          "native_command": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+          "normal_index": 2,
+          "observed_checksum": 405227,
+          "process": {
+            "exit": 0,
+            "seconds": 8.484,
+            "timed_out": false
+          },
+          "result": "PASS",
+          "scenario_id": "S3"
+        },
+        {
+          "attempt_id": "UNITY-S3-FI1",
+          "expected_checksum": 405122,
+          "failure_class": "NONE",
+          "injection_id": "FI-S3-INPUT-PERTURB-v2",
+          "kind": "FAILURE_INJECTION",
+          "native_command": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+          "normal_index": null,
+          "observed_checksum": 405122,
+          "process": {
+            "exit": 0,
+            "seconds": 8.167,
+            "timed_out": false
+          },
+          "result": "PASS",
+          "scenario_id": "S3"
+        }
+      ],
+      "harness_id": "W2-ENG-HARNESS-v5",
+      "native_execution": true,
+      "pass": true,
+      "scenario_id": "S3"
+    },
+    "processes": {
+      "auth_status": {
+        "exit": 3,
+        "seconds": 0.055,
+        "timed_out": false
+      },
+      "license_status": {
+        "exit": 0,
+        "seconds": 0.434,
+        "timed_out": false
+      }
+    },
+    "production_authority": false,
+    "provider": "Unity",
+    "release_authority": false,
+    "state": "VALIDATED_DEVELOPMENT_ACCESS"
+  },
+  "workflow_success_is_not_authority": true
+}
