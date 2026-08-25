@@ -39,10 +39,11 @@ A fresh agent with no prior conversation context MUST:
 2. Read `docs/planning/START-HERE.md`.
 3. Read current canonical `docs/planning/PLANNING-PROGRAM-v1.md`.
 4. Parse its `Canonicalized by` issue and resolve the active canonical binding defined by the program.
-5. If binding resolves, select/resume open `[PLAN-v1]` work under the canonical dispatcher.
-6. If no binding exists and the named issue has never published a canonical binding, execute only that issue's verified post-merge activation sequence.
-7. If a prior binding exists for another program blob, fail closed as `CANONICAL_BINDING_MISMATCH` and use canonical recovery/reverification.
-8. Never use chat history as project authority and never integrate into `main` except by squash merge.
+5. Before selecting work, reconcile GitHub-open state against trusted schema-3 terminal comments and required-next-route liveness under the Frontier Liveness rule below.
+6. If binding resolves, select/resume only the remaining live open `[PLAN-v1]` work under the canonical dispatcher.
+7. If no binding exists and the named issue has never published a canonical binding, execute only that issue's verified post-merge activation sequence.
+8. If a prior binding exists for another program blob, fail closed as `CANONICAL_BINDING_MISMATCH` and use canonical recovery/reverification.
+9. Never use chat history as project authority and never integrate into `main` except by squash merge.
 
 After active canonical binding, Bootstrap Issues #2-#6, #11, and #14 are provenance only.
 
@@ -96,6 +97,20 @@ All changes integrated into `main` MUST use **squash merge**.
 - Normal agents MUST NOT use merge commits or rebase-merge to integrate a PR into `main`.
 - If repository settings permit other merge methods, this rule still governs agent behavior until explicitly superseded by a later human directive.
 - Planning Program v1 and all later workflow specifications must preserve this rule.
+
+## Frontier Liveness and Reconciliation Rule — Human Directive
+
+GitHub `open` is a storage state, not planning authority. Before frontier priority is applied:
+
+- exclude an issue with a trusted schema-3 terminal `DONE`, `SUPERSEDED`, or `INVALIDATED` record even if GitHub still reports it open;
+- reconcile such terminal issues to GitHub closed state as maintenance, without inferring any additional PASS/canonicality/decision authority from closure;
+- if a trusted terminal record declares `required_next_route`, require a live successor/recovery issue or an explicitly registered repository-internal execution route before treating that dependency chain as converged;
+- missing successor materialization is recovery/liveness work and outranks unrelated new work;
+- a blocked execution episode whose next route requires a GitHub Actions `workflow_dispatch` must use the repository-owned dispatch surface when that exact route is registered, rather than treating a particular agent connector's missing dispatch API as a project-level external blocker;
+- repository automation may close only conservatively proven terminal issues and rejected/non-integrable draft PRs, and may dispatch only exact-main workflows named in `.github/planning-frontier-routes.json`;
+- automation never grants review, verification, integration, engine-selection, implementation-readiness, decision, or canonical authority and never waives ownership/exact-head/squash gates.
+
+The maintenance implementation is `.github/workflows/planning-frontier-maintenance.yml` plus `tools/planning/frontier_maintenance.py`. Agents must still independently derive prerequisites, ownership, conflicts, and canonical binding after maintenance.
 
 ## Human Directives
 
