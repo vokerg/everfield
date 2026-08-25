@@ -19,21 +19,28 @@ Closed. Consumption is now bound to the current terminal generation:
 - stale/redundant open transition cleanup preserves any transition whose latest valid schema-3 operational record remains nonterminal.
 
 ## Dispatch outcome fencing
-A trusted `dispatch ACCEPTED` marker is no longer treated as permanent success. For a closed resolved transition, maintenance checks the exact workflow/head run:
+A trusted `dispatch ACCEPTED` marker is not permanent success. Maintenance checks the exact workflow/head run:
 - `success` or an in-flight run consumes the exact terminal generation;
 - a just-accepted marker may temporarily consume it for a 15-minute propagation grace period;
 - a failed run or a long-missing run makes the generation retryable;
-- this prevents an accepted-but-never-successful dispatch from becoming a permanent liveness tombstone.
+- an existing nonterminal schema-3 claim causes maintenance to defer dispatch, with a second ownership check immediately before the privileged dispatch mutation.
+
+## Live transition compatibility
+The factory has emitted both of these valid wrapper terminal forms and v2 accepts either only when bound to the exact trusted dispatch marker:
+1. custom immutable `factory_transition_resolution: 1` records (for example #699);
+2. normal owner-bound schema-3 `STATUS(DONE)` records with `disposition: TRANSITION_DISPATCH_ALREADY_ACCEPTED`, exact `source_issue`, `source_terminal_comment_id`, `required_route`, and `accepted_dispatch_comment_id` (live #707).
+
+The schema-3 form is validated through the already-reviewed v1 ownership/immutability/head-binding validator before it can consume a source generation.
 
 ## Live behavior expected
 - #665 is consumed by trusted successor #667.
 - #680/#685/#689 are consumed by their later remediation issues.
 - #693 is consumed by #695.
 - #695 is consumed by explicit successor metadata on #696.
-- #675 generation `5397969110` is consumed only while its exact accepted run is in-flight/successful or inside the bounded dispatch grace; active claimed transition #707 is preserved rather than force-closed.
+- #675 generation `5397969110` is consumed only while an exact bound dispatch run is in-flight/successful or inside bounded propagation grace. Failed/old-missing dispatches remain retryable. Closed #707 is recognized through its owner-bound schema-3 terminal rather than spawning another wrapper if its exact run is valid.
 
 ## Verification
-Deterministic tests cover trusted/untrusted successor authors, dead-successor rejection, successor timestamp ordering, exact transition generation parsing, stale/new terminal generation separation, trusted dispatch+resolution binding, edited/wrong resolution rejection, workflow-run success/in-flight/failure/missing outcomes, bounded dispatch grace, and untrusted matching-transition rejection.
+Deterministic tests cover trusted/untrusted successor authors, dead-successor rejection, successor timestamp ordering, exact transition generation parsing, stale/new terminal generation separation, custom and schema-3 transition terminal binding, edited/wrong resolution rejection, workflow-run success/in-flight/failure/missing outcomes, bounded dispatch grace, and untrusted matching-transition rejection.
 
 ## Required next gate
-Fresh review of the exact remediation head. Only clean `PASS_FOR_INTEGRATION` may route squash-only integration. After integration, inspect the live maintenance run for zero recreation of the known false transition sources and no uncontrolled duplicate #675 generation materialization.
+Fresh review of the exact remediation head. Only clean `PASS_FOR_INTEGRATION` may route squash-only integration. After integration, inspect the live maintenance run for zero recreation of known false transition sources and no uncontrolled duplicate #675 generation materialization.
