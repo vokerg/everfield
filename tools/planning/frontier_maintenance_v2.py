@@ -8,6 +8,7 @@ authority.
 """
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import re
 import sys
 from typing import Any, Iterable
@@ -34,6 +35,7 @@ RESOLUTION_DONE_DISPOSITIONS = {
     "TRANSITION_DISPATCH_ALREADY_ACCEPTED",
     "TRANSITION_DISPATCH_OBSERVED",
 }
+DISPATCH_GRACE_SECONDS = 15 * 60
 
 Generation = tuple[int, int, str]
 SuccessorEdgeMap = dict[int, list[tuple[str, int]]]
@@ -42,6 +44,14 @@ SuccessorEdgeMap = dict[int, list[tuple[str, int]]]
 def trusted_issue_author(issue: dict[str, Any]) -> bool:
     login = ((issue.get("user") or {}).get("login") or "")
     return login == "github-actions[bot]" or issue.get("author_association") in base.TRUSTED_ASSOCIATIONS
+
+
+def successor_issue_eligible(issue: dict[str, Any]) -> bool:
+    if not trusted_issue_author(issue):
+        return False
+    if issue.get("state") == "closed" and issue.get("state_reason") in {"not_planned", "duplicate"}:
+        return False
+    return True
 
 
 def predecessor_sources(issue: dict[str, Any]) -> set[int]:
@@ -80,7 +90,7 @@ def successor_edges(issues: Iterable[dict[str, Any]]) -> SuccessorEdgeMap:
     for issue in issues:
         if "pull_request" in issue or factory_transition_source(issue) is not None:
             continue
-        if not trusted_issue_author(issue):
+        if not successor_issue_eligible(issue):
             continue
         created_at = issue.get("created_at") or ""
         if not created_at:
@@ -101,7 +111,7 @@ def _trusted_resolution_author(comment: dict[str, Any]) -> bool:
     return login == "github-actions[bot]" or comment.get("author_association") in base.TRUSTED_ASSOCIATIONS
 
 
-def transition_resolution_from_comments(
+def trusted_dispatch_for_generation(
     comments: Iterable[dict[str, Any]], generation: Generation
 ) -> dict[str, Any] | None:
     source_issue, source_terminal_comment_id, route = generation
@@ -111,6 +121,21 @@ def transition_resolution_from_comments(
         return None
     dispatch_body = dispatch.get("body") or ""
     if base.integer_scalar(dispatch_body, "source_terminal_comment_id") != source_terminal_comment_id:
+        return None
+    workflow = base.scalar(dispatch_body, "workflow")
+    main_sha = base.scalar(dispatch_body, "main_sha")
+    if not workflow or not main_sha or not base.SHA40_RE.fullmatch(main_sha):
+        return None
+    return dispatch
+
+
+def transition_resolution_from_comments(
+    comments: Iterable[dict[str, Any]], generation: Generation
+) -> tuple[dict[str, Any], dict[str, Any]] | None:
+    source_issue, source_terminal_comment_id, route = generation
+    comments_list = list(comments)
+    dispatch = trusted_dispatch_for_generation(comments_list, generation)
+    if dispatch is None:
         return None
     dispatch_id = int(dispatch["id"])
 
@@ -132,8 +157,30 @@ def transition_resolution_from_comments(
             continue
         if base.integer_scalar(body, "accepted_dispatch_comment_id") != dispatch_id:
             continue
-        return comment
+        return dispatch, comment
     return None
+
+
+def workflow_run_outcome(run: dict[str, Any] | None) -> str:
+    if run is None:
+        return "MISSING"
+    if run.get("status") != "completed":
+        return "IN_FLIGHT"
+    return "SUCCESS" if run.get("conclusion") == "success" else "FAILED"
+
+
+def marker_within_grace(dispatch: dict[str, Any], now: datetime | None = None) -> bool:
+    created_at = dispatch.get("created_at")
+    if not created_at:
+        return False
+    try:
+        created = datetime.fromisoformat(str(created_at).replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    current = now or datetime.now(timezone.utc)
+    if created.tzinfo is None:
+        created = created.replace(tzinfo=timezone.utc)
+    return 0 <= (current - created).total_seconds() <= DISPATCH_GRACE_SECONDS
 
 
 def resolved_transition_generations(closed_issues: Iterable[dict[str, Any]]) -> set[Generation]:
@@ -142,8 +189,21 @@ def resolved_transition_generations(closed_issues: Iterable[dict[str, Any]]) -> 
         generation = factory_transition_generation(issue)
         if generation is None:
             continue
-        comments = base.paged(f"/repos/{base.REPO}/issues/{int(issue['number'])}/comments?")
-        if transition_resolution_from_comments(comments, generation) is not None:
+        comments_list = list(base.paged(f"/repos/{base.REPO}/issues/{int(issue['number'])}/comments?"))
+        resolution = transition_resolution_from_comments(comments_list, generation)
+        if resolution is None:
+            continue
+        dispatch, _ = resolution
+        dispatch_body = dispatch.get("body") or ""
+        workflow = base.scalar(dispatch_body, "workflow")
+        main_sha = base.scalar(dispatch_body, "main_sha")
+        if not workflow or not main_sha:
+            continue
+        run = base.matching_fresh_run(workflow, main_sha, "")
+        outcome = workflow_run_outcome(run)
+        if outcome in {"SUCCESS", "IN_FLIGHT"}:
+            consumed.add(generation)
+        elif outcome == "MISSING" and marker_within_grace(dispatch):
             consumed.add(generation)
     return consumed
 
@@ -300,7 +360,7 @@ def self_test() -> None:
     assert predecessor_sources({"body": "Fresh degraded-independent review of Issue #682 / draft PR #684."}) == {682}
     assert predecessor_sources({"body": "Required clean review: Issue #693 terminal comment 123."}) == {693}
     assert predecessor_sources({"body": "This is the single remediation route required by terminal Issue #665."}) == {665}
-    assert predecessor_sources({"body": "`predecessor_issue: 695`"}) == {695}
+    assert predecessor_sources({"body": "predecessor_issue: 695"}) == {695}
     assert predecessor_sources({"body": "Context mentions Issue #680 and Issue #693, but declares no dependency."}) == set()
 
     trusted_successor = {
@@ -308,6 +368,8 @@ def self_test() -> None:
         "title": "[PLAN-v1] remediation",
         "body": "Minimal remediation of Issue #10.",
         "created_at": "2026-08-25T00:00:06Z",
+        "state": "open",
+        "state_reason": None,
         "author_association": "OWNER",
         "user": {"login": "vokerg"},
     }
@@ -317,8 +379,15 @@ def self_test() -> None:
         author_association="NONE",
         user={"login": "outsider"},
     )
+    dead_successor = dict(
+        trusted_successor,
+        number=22,
+        state="closed",
+        state_reason="not_planned",
+    )
     assert successor_edges([trusted_successor]) == {10: [("2026-08-25T00:00:06Z", 20)]}
     assert successor_edges([untrusted_successor]) == {}
+    assert successor_edges([dead_successor]) == {}
 
     def source(comment_id: int, created_at: str, route: str = "NEXT") -> base.OperationalRecord:
         return base.OperationalRecord(
@@ -367,6 +436,7 @@ def self_test() -> None:
             "source_terminal_comment_id: 2\n"
             "route: NEXT\n"
             "status: ACCEPTED\n"
+            "workflow: evaluator.yml\n"
             f"main_sha: {'c' * 40}\n"
         ),
     }
@@ -388,12 +458,22 @@ def self_test() -> None:
     }
     old_generation = (10, 2, "NEXT")
     new_generation = (10, 3, "NEXT")
-    assert transition_resolution_from_comments([dispatch, resolution], old_generation) is resolution
+    pair = transition_resolution_from_comments([dispatch, resolution], old_generation)
+    assert pair is not None and pair[0] is dispatch and pair[1] is resolution
     assert transition_resolution_from_comments([dispatch, resolution], new_generation) is None
     edited_resolution = dict(resolution, updated_at="2026-08-25T00:01:08Z")
     assert transition_resolution_from_comments([dispatch, edited_resolution], old_generation) is None
     wrong_dispatch = dict(resolution, body=resolution["body"].replace("100", "999"))
     assert transition_resolution_from_comments([dispatch, wrong_dispatch], old_generation) is None
+
+    assert workflow_run_outcome(None) == "MISSING"
+    assert workflow_run_outcome({"status": "queued", "conclusion": None}) == "IN_FLIGHT"
+    assert workflow_run_outcome({"status": "completed", "conclusion": "success"}) == "SUCCESS"
+    assert workflow_run_outcome({"status": "completed", "conclusion": "failure"}) == "FAILED"
+    grace_now = datetime.fromisoformat("2026-08-25T00:10:00+00:00")
+    assert marker_within_grace(dispatch, grace_now)
+    late_now = datetime.fromisoformat("2026-08-25T00:30:00+00:00")
+    assert not marker_within_grace(dispatch, late_now)
 
     resolved = {old_generation}
     assert source_generation_consumed(old_source, {}, resolved)
