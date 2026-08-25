@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 """Conservative GitHub-state reconciliation for Everfield planning-v1.
 
-This tool never grants planning authority. It only:
-- removes terminal schema-3 issues from the GitHub-open candidate set;
-- retires draft PRs whose own text proves they are rejected/non-integrable;
-- materializes a recovery issue for a terminal required_next_route; and
-- dispatches only explicitly registered workflow routes on exact current main.
-
-All semantic review/verification/ownership gates remain in the planning protocol.
+Maintenance never grants planning authority. It only reconciles storage state,
+materializes missing required transitions, and dispatches exact-main workflows
+from a repository-owned allowlist.
 """
 from __future__ import annotations
 
 import json
 import os
 import re
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -26,24 +23,23 @@ TOKEN = os.environ.get("GITHUB_TOKEN", "")
 DRY_RUN = os.environ.get("FRONTIER_MAINTENANCE_DRY_RUN", "").lower() in {"1", "true", "yes"}
 ROUTES_PATH = os.environ.get("FRONTIER_ROUTES_PATH", ".github/planning-frontier-routes.json")
 
+TRUSTED_ASSOCIATIONS = {"OWNER", "MEMBER", "COLLABORATOR"}
+OPERATIONAL_KINDS = {
+    "CLAIM", "ORPHAN_PROBE", "RESUME_INTENT", "RESUME", "RECOVER", "PROGRESS",
+    "STATUS", "REVIEW_STATUS", "VERIFICATION_STATUS", "INTEGRATION_STATUS",
+    "BOOTSTRAP_RESUME", "BOOTSTRAP_VERIFICATION_STATUS",
+}
 TERMINAL_STATES = {"DONE", "SUPERSEDED", "INVALIDATED"}
 TERMINAL_KINDS = {"STATUS", "REVIEW_STATUS", "VERIFICATION_STATUS", "INTEGRATION_STATUS"}
-TRUSTED_ASSOCIATIONS = {"OWNER", "MEMBER", "COLLABORATOR"}
-REJECTED_PR_MARKERS = (
-    "CHANGES_NEEDED",
-    "CHANGES_REQUIRED",
-    "must not integrate",
-    "must not be merged",
-)
 
 
 @dataclass(frozen=True)
-class TerminalRecord:
+class OperationalRecord:
     issue_number: int
     comment_id: int
     created_at: str
-    state: str
     kind: str
+    state: str | None
     route: str | None
     body: str
 
@@ -57,7 +53,7 @@ def request(method: str, path: str, payload: Any | None = None) -> Any:
         "Accept": "application/vnd.github+json",
         "Authorization": f"Bearer {TOKEN}",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "everfield-frontier-maintenance/1",
+        "User-Agent": "everfield-frontier-maintenance/2",
     }
     if data is not None:
         headers["Content-Type"] = "application/json"
@@ -65,9 +61,7 @@ def request(method: str, path: str, payload: Any | None = None) -> Any:
     try:
         with urllib.request.urlopen(req, timeout=30) as response:
             raw = response.read()
-            if not raw:
-                return None
-            return json.loads(raw.decode("utf-8"))
+            return None if not raw else json.loads(raw.decode("utf-8"))
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"GitHub API {method} {url} failed: {exc.code} {detail}") from exc
@@ -94,34 +88,42 @@ def scalar(body: str, key: str) -> str | None:
     return None if value.lower() in {"null", "none", ""} else value
 
 
-def parse_terminal(issue_number: int, comment: dict[str, Any]) -> TerminalRecord | None:
+def parse_operational(issue_number: int, comment: dict[str, Any]) -> OperationalRecord | None:
     body = comment.get("body") or ""
     if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
         return None
     if scalar(body, "protocol") != "planning-v1" or scalar(body, "schema") != "3":
         return None
     kind = scalar(body, "kind")
-    state = scalar(body, "state")
-    if kind not in TERMINAL_KINDS or state not in TERMINAL_STATES:
+    if kind not in OPERATIONAL_KINDS:
         return None
-    return TerminalRecord(
+    return OperationalRecord(
         issue_number=issue_number,
         comment_id=int(comment["id"]),
         created_at=comment.get("created_at") or "",
-        state=state,
         kind=kind,
+        state=scalar(body, "state"),
         route=scalar(body, "required_next_route"),
         body=body,
     )
 
 
-def latest_terminal(issue_number: int) -> TerminalRecord | None:
-    records = []
-    for comment in paged(f"/repos/{REPO}/issues/{issue_number}/comments?"):
-        parsed = parse_terminal(issue_number, comment)
-        if parsed:
-            records.append(parsed)
+def latest_operational_from_comments(issue_number: int, comments: Iterable[dict[str, Any]]) -> OperationalRecord | None:
+    records = [record for comment in comments if (record := parse_operational(issue_number, comment))]
     return max(records, key=lambda item: item.comment_id) if records else None
+
+
+def latest_operational(issue_number: int) -> OperationalRecord | None:
+    return latest_operational_from_comments(
+        issue_number,
+        paged(f"/repos/{REPO}/issues/{issue_number}/comments?"),
+    )
+
+
+def terminal_if_latest(record: OperationalRecord | None) -> OperationalRecord | None:
+    if not record or record.kind not in TERMINAL_KINDS or record.state not in TERMINAL_STATES:
+        return None
+    return record
 
 
 def close_terminal_open_issues(open_issues: list[dict[str, Any]]) -> int:
@@ -130,29 +132,42 @@ def close_terminal_open_issues(open_issues: list[dict[str, Any]]) -> int:
         if "pull_request" in issue:
             continue
         number = int(issue["number"])
-        terminal = latest_terminal(number)
+        terminal = terminal_if_latest(latest_operational(number))
         if not terminal:
             continue
         reason = "completed" if terminal.state == "DONE" else "not_planned"
-        print(f"reconcile issue #{number}: {terminal.kind}/{terminal.state} -> closed/{reason}")
+        print(f"reconcile issue #{number}: latest {terminal.kind}/{terminal.state} -> closed/{reason}")
         if not DRY_RUN:
             request("PATCH", f"/repos/{REPO}/issues/{number}", {"state": "closed", "state_reason": reason})
         closed += 1
     return closed
 
 
+def pr_explicitly_rejected(body: str) -> bool:
+    disposition = re.search(
+        r"(?im)^\s*(?:review\s+)?disposition\s*:\s*`?(CHANGES_NEEDED|CHANGES_REQUIRED)`?(?:\s*[—-].*)?\s*$",
+        body,
+    )
+    disposition_block = re.search(
+        r"(?im)^\s*(?:review\s+)?disposition\s*$\n\s*`?(CHANGES_NEEDED|CHANGES_REQUIRED)`?\s*$",
+        body,
+    )
+    self_prohibition = re.search(
+        r"(?i)\bthis\s+(?:draft\s+)?PR\s+must\s+not\s+(?:integrate|be\s+merged)\b",
+        body,
+    )
+    return bool(disposition or disposition_block or self_prohibition)
+
+
 def close_rejected_open_prs(open_prs: list[dict[str, Any]]) -> int:
     closed = 0
     for pr in open_prs:
-        if not pr.get("draft"):
+        if not pr.get("draft") or pr.get("author_association") not in TRUSTED_ASSOCIATIONS:
             continue
-        if pr.get("author_association") not in TRUSTED_ASSOCIATIONS:
-            continue
-        body = pr.get("body") or ""
-        if not any(marker.lower() in body.lower() for marker in REJECTED_PR_MARKERS):
+        if not pr_explicitly_rejected(pr.get("body") or ""):
             continue
         number = int(pr["number"])
-        print(f"retire rejected draft PR #{number}")
+        print(f"retire explicitly rejected draft PR #{number}")
         if not DRY_RUN:
             request("PATCH", f"/repos/{REPO}/pulls/{number}", {"state": "closed"})
         closed += 1
@@ -160,21 +175,19 @@ def close_rejected_open_prs(open_prs: list[dict[str, Any]]) -> int:
 
 
 def load_routes() -> dict[str, dict[str, Any]]:
-    encoded = urllib.parse.quote(ROUTES_PATH, safe="/")
-    data = request("GET", f"/repos/{REPO}/contents/{encoded}?ref=main")
     import base64
 
+    encoded = urllib.parse.quote(ROUTES_PATH, safe="/")
+    data = request("GET", f"/repos/{REPO}/contents/{encoded}?ref=main")
     raw = base64.b64decode(data["content"]).decode("utf-8")
-    doc = json.loads(raw)
-    routes = doc.get("routes", {})
+    routes = json.loads(raw).get("routes", {})
     if not isinstance(routes, dict):
         raise RuntimeError("routes must be an object")
     return routes
 
 
 def current_main_sha() -> str:
-    branch = request("GET", f"/repos/{REPO}/branches/main")
-    return branch["commit"]["sha"]
+    return request("GET", f"/repos/{REPO}/branches/main")["commit"]["sha"]
 
 
 def transition_title(source_issue: int) -> str:
@@ -183,14 +196,10 @@ def transition_title(source_issue: int) -> str:
 
 def find_open_transition(open_issues: list[dict[str, Any]], source_issue: int) -> dict[str, Any] | None:
     marker = f"[FACTORY-TRANSITION-{source_issue}]"
-    for issue in open_issues:
-        if "pull_request" not in issue and marker in (issue.get("title") or ""):
-            return issue
-    return None
+    return next((item for item in open_issues if "pull_request" not in item and marker in (item.get("title") or "")), None)
 
 
-def create_transition(source: TerminalRecord, route_cfg: dict[str, Any] | None) -> dict[str, Any] | None:
-    title = transition_title(source.issue_number)
+def create_transition(source: OperationalRecord, route_cfg: dict[str, Any] | None) -> dict[str, Any] | None:
     body = (
         "## Factory liveness recovery\n\n"
         f"Source terminal issue: #{source.issue_number}\n"
@@ -199,12 +208,14 @@ def create_transition(source: TerminalRecord, route_cfg: dict[str, Any] | None) 
         "This issue exists because a terminal episode declared a required continuation but no live selectable "
         "transition was present. Re-derive current main/canonical binding/ownership before acting. Preserve all "
         "review, verification, authority, exact-head, and squash-only gates.\n\n"
-        + ("The route is registered for repository-internal workflow dispatch; the maintenance workflow may dispatch it on exact current `main`.\n" if route_cfg else "The route is not executable by the maintenance workflow. Materialize the smallest exact successor/recovery issue required by the source contract; do not invent authority.\n")
+        + ("The route is registered for repository-internal workflow dispatch; maintenance may dispatch it on exact current `main`.\n"
+           if route_cfg else
+           "The route is not executable by maintenance. Materialize the smallest exact successor/recovery issue required by the source contract; do not invent authority.\n")
     )
     print(f"materialize transition from #{source.issue_number}: {source.route}")
     if DRY_RUN:
         return None
-    return request("POST", f"/repos/{REPO}/issues", {"title": title, "body": body})
+    return request("POST", f"/repos/{REPO}/issues", {"title": transition_title(source.issue_number), "body": body})
 
 
 def matching_fresh_run(workflow: str, main_sha: str, source_created_at: str) -> dict[str, Any] | None:
@@ -216,21 +227,20 @@ def matching_fresh_run(workflow: str, main_sha: str, source_created_at: str) -> 
     return None
 
 
-def dispatch_registered_route(source: TerminalRecord, route_cfg: dict[str, Any], transition: dict[str, Any] | None) -> bool:
-    if route_cfg.get("type") != "workflow_dispatch":
+def dispatch_registered_route(source: OperationalRecord, cfg: dict[str, Any], transition: dict[str, Any] | None) -> bool:
+    if cfg.get("type") != "workflow_dispatch":
         return False
-    workflow = route_cfg.get("workflow")
-    ref = route_cfg.get("ref", "main")
-    if not workflow or ref != "main":
-        raise RuntimeError(f"unsafe route registration for {source.route}: workflow and exact main ref required")
+    workflow = cfg.get("workflow")
+    if not workflow or cfg.get("ref", "main") != "main":
+        raise RuntimeError(f"unsafe route registration for {source.route}: exact main workflow required")
     main_sha = current_main_sha()
     if matching_fresh_run(workflow, main_sha, source.created_at):
         print(f"route {source.route}: fresh exact-main run already exists at {main_sha}")
         return False
-    inputs = dict(route_cfg.get("inputs") or {})
+    inputs = dict(cfg.get("inputs") or {})
     if "reason" in inputs:
         inputs["reason"] = str(inputs["reason"]).format(source_issue=source.issue_number, main_sha=main_sha)
-    payload = {"ref": "main"}
+    payload: dict[str, Any] = {"ref": "main"}
     if inputs:
         payload["inputs"] = inputs
     print(f"dispatch {workflow} on main@{main_sha} for route {source.route}")
@@ -238,49 +248,39 @@ def dispatch_registered_route(source: TerminalRecord, route_cfg: dict[str, Any],
         path = urllib.parse.quote(workflow, safe="")
         request("POST", f"/repos/{REPO}/actions/workflows/{path}/dispatches", payload)
         if transition:
-            number = int(transition["number"])
-            request("POST", f"/repos/{REPO}/issues/{number}/comments", {
-                "body": f"Factory dispatched `{workflow}` via `workflow_dispatch` on exact `main@{main_sha}` for route `{source.route}`. Run identity will be resolved from Actions before downstream authority is claimed."
+            request("POST", f"/repos/{REPO}/issues/{int(transition['number'])}/comments", {
+                "body": f"Factory dispatched `{workflow}` via `workflow_dispatch` on exact `main@{main_sha}` for route `{source.route}`. Run identity must be resolved from Actions before downstream authority is claimed."
             })
     return True
 
 
 def predecessor_sources(issue: dict[str, Any]) -> set[int]:
     text = issue.get("body") or ""
-    found = set()
     patterns = (
         r"(?im)^\s*predecessor_issue:\s*(\d+)\s*$",
         r"(?i)immediate predecessor:\s*Issue\s*#(\d+)",
         r"(?i)Source terminal issue:\s*#(\d+)",
     )
+    found: set[int] = set()
     for pattern in patterns:
         found.update(int(value) for value in re.findall(pattern, text))
-    number = int(issue["number"])
-    for comment in paged(f"/repos/{REPO}/issues/{number}/comments?"):
-        body = comment.get("body") or ""
-        match = scalar(body, "predecessor_issue")
-        if match and match.isdigit():
-            found.add(int(match))
     return found
 
 
 def materialize_missing_transitions(open_issues: list[dict[str, Any]], routes: dict[str, dict[str, Any]]) -> tuple[int, int]:
-    created = 0
-    dispatched = 0
+    created = dispatched = 0
     closed = list(paged(f"/repos/{REPO}/issues?state=closed&sort=updated&direction=desc&since=2026-08-20T00:00:00Z&"))
-    all_recent = [item for item in open_issues if "pull_request" not in item] + [item for item in closed if "pull_request" not in item]
+    recent_issues = [item for item in open_issues + closed if "pull_request" not in item]
     consumed_sources: set[int] = set()
-    for item in all_recent:
+    for item in recent_issues:
         consumed_sources.update(predecessor_sources(item))
     dispatch_keys: set[tuple[str, str]] = set()
     for issue in closed:
         if "pull_request" in issue:
             continue
         number = int(issue["number"])
-        source = latest_terminal(number)
-        if not source or not source.route:
-            continue
-        if number in consumed_sources:
+        source = terminal_if_latest(latest_operational(number))
+        if not source or not source.route or number in consumed_sources:
             continue
         transition = find_open_transition(open_issues, number)
         cfg = routes.get(source.route)
@@ -297,21 +297,48 @@ def materialize_missing_transitions(open_issues: list[dict[str, Any]], routes: d
     return created, dispatched
 
 
+def self_test() -> None:
+    def c(cid: int, kind: str, state: str, body_extra: str = "") -> dict[str, Any]:
+        return {
+            "id": cid,
+            "author_association": "OWNER",
+            "created_at": f"2026-08-25T00:00:{cid:02d}Z",
+            "body": f"protocol: planning-v1\nschema: 3\nkind: {kind}\nstate: {state}\n{body_extra}",
+        }
+
+    done = c(1, "STATUS", "DONE", "required_next_route: NEXT")
+    claim = c(2, "CLAIM", "IN_PROGRESS")
+    assert terminal_if_latest(latest_operational_from_comments(10, [done])) is not None
+    assert terminal_if_latest(latest_operational_from_comments(10, [done, claim])) is None
+    assert latest_operational_from_comments(10, [done, claim]).kind == "CLAIM"
+
+    predecessor_prose = "Predecessor review disposition: `CHANGES_NEEDED`. This PR fixes it and requires fresh review."
+    assert not pr_explicitly_rejected(predecessor_prose)
+    assert pr_explicitly_rejected("Disposition: `CHANGES_NEEDED` — 0 blocker / 1 major")
+    assert pr_explicitly_rejected("Review disposition\nCHANGES_REQUIRED")
+    assert pr_explicitly_rejected("This draft PR must not be merged.")
+
+    outsider_done = dict(done, id=3, author_association="NONE")
+    assert latest_operational_from_comments(10, [outsider_done]) is None
+    print("frontier maintenance self-test: PASS")
+
+
 def main() -> int:
+    if "--self-test" in sys.argv:
+        self_test()
+        return 0
     open_items = list(paged(f"/repos/{REPO}/issues?state=open&sort=created&direction=asc&"))
     open_prs = list(paged(f"/repos/{REPO}/pulls?state=open&sort=created&direction=asc&"))
     issue_closed = close_terminal_open_issues(open_items)
     pr_closed = close_rejected_open_prs(open_prs)
-    routes = load_routes()
-    transition_created, dispatched = materialize_missing_transitions(open_items, routes)
-    summary = {
+    transition_created, dispatched = materialize_missing_transitions(open_items, load_routes())
+    print(json.dumps({
         "dry_run": DRY_RUN,
         "terminal_issues_closed": issue_closed,
         "rejected_prs_closed": pr_closed,
         "transitions_created": transition_created,
         "registered_routes_dispatched": dispatched,
-    }
-    print(json.dumps(summary, sort_keys=True))
+    }, sort_keys=True))
     return 0
 
 
