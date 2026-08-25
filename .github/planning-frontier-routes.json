@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "routes": {
+    "REEXECUTE_FRESH_EXACT_MAIN_LINEAGE_EPISODE_FROM_DISPATCH_CAPABLE_GITHUB_SURFACE": {
+      "type": "workflow_dispatch",
+      "workflow": "unity-s3-v5-lineage-evaluator.yml",
+      "ref": "main",
+      "inputs": {
+        "reason": "factory-recovery-source-{source_issue}-main-{main_sha}"
+      }
+    }
+  }
+}
