@@ -1,0 +1,42 @@
+name: Everfield planning frontier maintenance
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: planning-frontier-maintenance
+  cancel-in-progress: false
+
+jobs:
+  maintain:
+    if: github.repository == 'vokerg/everfield'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact event SHA
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate maintenance tool
+        run: |
+          python3 -m py_compile tools/planning/frontier_maintenance.py
+          python3 tools/planning/frontier_maintenance.py --self-test
+
+      - name: Reconcile frontier and registered transitions
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          FRONTIER_ROUTES_PATH: .github/planning-frontier-routes.json
+        run: python3 tools/planning/frontier_maintenance.py
