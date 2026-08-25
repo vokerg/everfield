@@ -105,9 +105,17 @@ def integer_scalar(body: str, key: str) -> int | None:
     return int(value) if value and value.isdigit() else None
 
 
+def immutable_comment(comment: dict[str, Any]) -> bool:
+    created_at = comment.get("created_at")
+    updated_at = comment.get("updated_at")
+    return bool(created_at and updated_at and created_at == updated_at)
+
+
 def parse_operational(issue_number: int, comment: dict[str, Any]) -> OperationalRecord | None:
     body = comment.get("body") or ""
     if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
+        return None
+    if not immutable_comment(comment):
         return None
     if scalar(body, "protocol") != "planning-v1" or scalar(body, "schema") != "3":
         return None
@@ -303,7 +311,7 @@ def trusted_dispatch_marker_from_comments(
         body = comment.get("body") or ""
         user_login = ((comment.get("user") or {}).get("login") or "")
         trusted_author = user_login == "github-actions[bot]" or comment.get("author_association") in TRUSTED_ASSOCIATIONS
-        if not trusted_author:
+        if not trusted_author or not immutable_comment(comment):
             continue
         if scalar(body, "factory_frontier_dispatch") != DISPATCH_MARKER_VERSION:
             continue
@@ -440,12 +448,16 @@ def self_test() -> None:
     def c(
         cid: int, kind: str, state: str, *, issue: int = 10, actor: str = "actor-a",
         mission: str = "M-10", extra: str = "", association: str = "OWNER",
+        edited: bool = False,
     ) -> dict[str, Any]:
+        created_at = f"2026-08-25T00:00:{cid:02d}Z"
+        updated_at = f"2026-08-25T00:01:{cid:02d}Z" if edited else created_at
         return {
             "id": cid,
             "author_association": association,
             "user": {"login": "vokerg" if association == "OWNER" else "outsider"},
-            "created_at": f"2026-08-25T00:00:{cid:02d}Z",
+            "created_at": created_at,
+            "updated_at": updated_at,
             "body": (
                 "protocol: planning-v1\n"
                 "schema: 3\n"
@@ -494,6 +506,19 @@ def self_test() -> None:
     outsider_done = dict(valid_done, id=4, author_association="NONE", user={"login": "outsider"})
     assert reconcilable_terminal_from_comments(10, [claim, outsider_done]) is None
 
+    edited_done = c(
+        2, "STATUS", "DONE", edited=True,
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'b' * 40}\n"
+        ),
+    )
+    assert reconcilable_terminal_from_comments(10, [claim, edited_done]) is None
+    edited_claim = c(1, "CLAIM", "IN_PROGRESS", edited=True)
+    assert reconcilable_terminal_from_comments(10, [edited_claim, valid_done]) is None
+
     predecessor_prose = "Predecessor review disposition: `CHANGES_NEEDED`. This PR fixes it and requires fresh review."
     assert not pr_explicitly_rejected(predecessor_prose)
     assert pr_explicitly_rejected("Disposition: `CHANGES_NEEDED` — 0 blocker / 1 major")
@@ -505,10 +530,13 @@ def self_test() -> None:
     assert consumed_nontransition_sources([normal_successor]) == {10}
     assert consumed_nontransition_sources([transition]) == set()
 
+    marker_created_at = "2026-08-25T00:00:09Z"
     marker = {
         "id": 9,
         "author_association": "NONE",
         "user": {"login": "github-actions[bot]"},
+        "created_at": marker_created_at,
+        "updated_at": marker_created_at,
         "body": (
             "factory_frontier_dispatch: 1\n"
             "source_issue: 10\n"
@@ -519,6 +547,8 @@ def self_test() -> None:
     }
     assert trusted_dispatch_marker_from_comments([marker], 10, "NEXT") is not None
     assert trusted_dispatch_marker_from_comments([marker], 10, "OTHER") is None
+    edited_marker = dict(marker, updated_at="2026-08-25T00:01:09Z")
+    assert trusted_dispatch_marker_from_comments([edited_marker], 10, "NEXT") is None
 
     print("frontier maintenance self-test: PASS")
 
