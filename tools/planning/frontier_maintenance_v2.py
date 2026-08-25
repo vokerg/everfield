@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Successor-aware liveness layer for Everfield planning frontier maintenance.
 
-This module deliberately reuses the reviewed safety/authority primitives from
-frontier_maintenance.py and narrows only graph-consumption/reconciliation.
-It does not grant planning, review, verification, integration, or decision
+This module reuses the reviewed safety/authority primitives from
+frontier_maintenance.py and narrows graph-consumption/reconciliation. It never
+grants planning, review, verification, integration, decision, or canonical
 authority.
 """
 from __future__ import annotations
@@ -16,9 +16,9 @@ import frontier_maintenance as base
 
 
 # Only phrases that explicitly declare a graph relationship are recognized.
-# Arbitrary mentions of an issue number are intentionally ignored.
+# Arbitrary issue-number mentions are intentionally ignored.
 SUCCESSOR_RELATION_PATTERNS = (
-    r"(?im)^\s*predecessor_issue:\s*(\d+)\s*$",
+    r"(?im)^\s*`?predecessor_issue:\s*(\d+)`?\s*$",
     r"(?i)\bimmediate predecessor:\s*Issue\s*#(\d+)\b",
     r"(?i)\bSource terminal issue:\s*#(\d+)\b",
     r"(?i)\b(?:remediation|review|recovery|continuation|integration|publication)\s+of\s+(?:terminal\s+)?Issue\s*#(\d+)\b",
@@ -26,12 +26,22 @@ SUCCESSOR_RELATION_PATTERNS = (
     r"(?i)\brequired\s+by\s+terminal\s+Issue\s*#(\d+)\b",
 )
 
+TRANSITION_SOURCE_RE = re.compile(r"(?im)^\s*Source terminal issue:\s*#(\d+)\s*$")
+TRANSITION_TERMINAL_COMMENT_RE = re.compile(r"(?im)^\s*Source terminal comment:\s*(\d+)\s*$")
 TRANSITION_ROUTE_RE = re.compile(r"(?im)^\s*Required next route:\s*`([^`]+)`\s*$")
 RESOLUTION_VERSION = "1"
 RESOLUTION_DONE_DISPOSITIONS = {
     "TRANSITION_DISPATCH_ALREADY_ACCEPTED",
     "TRANSITION_DISPATCH_OBSERVED",
 }
+
+Generation = tuple[int, int, str]
+SuccessorEdgeMap = dict[int, list[tuple[str, int]]]
+
+
+def trusted_issue_author(issue: dict[str, Any]) -> bool:
+    login = ((issue.get("user") or {}).get("login") or "")
+    return login == "github-actions[bot]" or issue.get("author_association") in base.TRUSTED_ASSOCIATIONS
 
 
 def predecessor_sources(issue: dict[str, Any]) -> set[int]:
@@ -49,18 +59,41 @@ def factory_transition_source(issue: dict[str, Any]) -> int | None:
     return int(match.group(1)) if match else None
 
 
-def factory_transition_route(issue: dict[str, Any]) -> str | None:
-    match = TRANSITION_ROUTE_RE.search(issue.get("body") or "")
-    return match.group(1).strip() if match else None
+def factory_transition_generation(issue: dict[str, Any]) -> Generation | None:
+    title_source = factory_transition_source(issue)
+    if title_source is None:
+        return None
+    body = issue.get("body") or ""
+    source_match = TRANSITION_SOURCE_RE.search(body)
+    comment_match = TRANSITION_TERMINAL_COMMENT_RE.search(body)
+    route_match = TRANSITION_ROUTE_RE.search(body)
+    if not source_match or not comment_match or not route_match:
+        return None
+    body_source = int(source_match.group(1))
+    if body_source != title_source:
+        return None
+    return body_source, int(comment_match.group(1)), route_match.group(1).strip()
 
 
-def consumed_nontransition_sources(issues: Iterable[dict[str, Any]]) -> set[int]:
-    consumed: set[int] = set()
+def successor_edges(issues: Iterable[dict[str, Any]]) -> SuccessorEdgeMap:
+    edges: SuccessorEdgeMap = {}
     for issue in issues:
         if "pull_request" in issue or factory_transition_source(issue) is not None:
             continue
-        consumed.update(predecessor_sources(issue))
-    return consumed
+        if not trusted_issue_author(issue):
+            continue
+        created_at = issue.get("created_at") or ""
+        if not created_at:
+            continue
+        for source in predecessor_sources(issue):
+            edges.setdefault(source, []).append((created_at, int(issue["number"])))
+    return edges
+
+
+def normal_successor_consumes(source: base.OperationalRecord, edges: SuccessorEdgeMap) -> bool:
+    if not source.created_at:
+        return False
+    return any(created_at >= source.created_at for created_at, _ in edges.get(source.issue_number, []))
 
 
 def _trusted_resolution_author(comment: dict[str, Any]) -> bool:
@@ -69,13 +102,18 @@ def _trusted_resolution_author(comment: dict[str, Any]) -> bool:
 
 
 def transition_resolution_from_comments(
-    comments: Iterable[dict[str, Any]], source_issue: int, route: str
+    comments: Iterable[dict[str, Any]], generation: Generation
 ) -> dict[str, Any] | None:
+    source_issue, source_terminal_comment_id, route = generation
     comments_list = list(comments)
     dispatch = base.trusted_dispatch_marker_from_comments(comments_list, source_issue, route)
     if dispatch is None:
         return None
+    dispatch_body = dispatch.get("body") or ""
+    if base.integer_scalar(dispatch_body, "source_terminal_comment_id") != source_terminal_comment_id:
+        return None
     dispatch_id = int(dispatch["id"])
+
     for comment in comments_list:
         if not _trusted_resolution_author(comment) or not base.immutable_comment(comment):
             continue
@@ -83,6 +121,8 @@ def transition_resolution_from_comments(
         if base.scalar(body, "factory_transition_resolution") != RESOLUTION_VERSION:
             continue
         if base.integer_scalar(body, "source_issue") != source_issue:
+            continue
+        if base.integer_scalar(body, "source_terminal_comment_id") != source_terminal_comment_id:
             continue
         if base.scalar(body, "route") != route:
             continue
@@ -96,17 +136,33 @@ def transition_resolution_from_comments(
     return None
 
 
-def resolved_transition_sources(closed_issues: Iterable[dict[str, Any]]) -> set[int]:
-    consumed: set[int] = set()
+def resolved_transition_generations(closed_issues: Iterable[dict[str, Any]]) -> set[Generation]:
+    consumed: set[Generation] = set()
     for issue in closed_issues:
-        source = factory_transition_source(issue)
-        route = factory_transition_route(issue)
-        if source is None or not route:
+        generation = factory_transition_generation(issue)
+        if generation is None:
             continue
         comments = base.paged(f"/repos/{base.REPO}/issues/{int(issue['number'])}/comments?")
-        if transition_resolution_from_comments(comments, source, route) is not None:
-            consumed.add(source)
+        if transition_resolution_from_comments(comments, generation) is not None:
+            consumed.add(generation)
     return consumed
+
+
+def source_generation(source: base.OperationalRecord) -> Generation | None:
+    if not source.route:
+        return None
+    return source.issue_number, source.comment_id, source.route
+
+
+def source_generation_consumed(
+    source: base.OperationalRecord,
+    edges: SuccessorEdgeMap,
+    resolved_generations: set[Generation],
+) -> bool:
+    generation = source_generation(source)
+    if generation is not None and generation in resolved_generations:
+        return True
+    return normal_successor_consumes(source, edges)
 
 
 def transition_has_active_operational_state(issue_number: int) -> bool:
@@ -121,33 +177,56 @@ def transition_has_active_operational_state(issue_number: int) -> bool:
     )
 
 
-def retirable_transition_numbers(
-    open_issues: Iterable[dict[str, Any]], consumed_sources: set[int]
-) -> list[int]:
-    numbers: list[int] = []
-    for issue in open_issues:
-        source = factory_transition_source(issue)
-        if source is not None and source in consumed_sources:
-            numbers.append(int(issue["number"]))
-    return numbers
+def transition_redundancy_reason(
+    transition: dict[str, Any],
+    current_source: base.OperationalRecord | None,
+    edges: SuccessorEdgeMap,
+    resolved_generations: set[Generation],
+) -> str | None:
+    generation = factory_transition_generation(transition)
+    if generation is None or current_source is None:
+        return None
+    current_generation = source_generation(current_source)
+    if current_generation is None:
+        return None
+    if generation != current_generation:
+        return "STALE_TERMINAL_GENERATION"
+    if source_generation_consumed(current_source, edges, resolved_generations):
+        return "SOURCE_GENERATION_ALREADY_CONSUMED"
+    return None
 
 
-def retire_consumed_transitions(
-    open_issues: list[dict[str, Any]], consumed_sources: set[int]
+def retire_redundant_transitions(
+    open_issues: list[dict[str, Any]],
+    edges: SuccessorEdgeMap,
+    resolved_generations: set[Generation],
 ) -> int:
     retired = 0
     retained: list[dict[str, Any]] = []
+    source_cache: dict[int, base.OperationalRecord | None] = {}
+
     for issue in open_issues:
-        source = factory_transition_source(issue)
-        if source is None or source not in consumed_sources:
+        generation = factory_transition_generation(issue)
+        if generation is None:
             retained.append(issue)
             continue
+        source_issue = generation[0]
+        if source_issue not in source_cache:
+            source_cache[source_issue] = base.reconcilable_terminal(source_issue)
+        reason = transition_redundancy_reason(
+            issue, source_cache[source_issue], edges, resolved_generations
+        )
+        if reason is None:
+            retained.append(issue)
+            continue
+
         number = int(issue["number"])
         if transition_has_active_operational_state(number):
-            print(f"preserve claimed transition #{number} for consumed source #{source}")
+            print(f"preserve claimed transition #{number}: {reason}")
             retained.append(issue)
             continue
-        print(f"retire redundant transition #{number}: source #{source} already has a successor/resolution")
+
+        print(f"retire redundant transition #{number}: {reason}")
         if not base.DRY_RUN:
             base.request(
                 "PATCH",
@@ -155,8 +234,23 @@ def retire_consumed_transitions(
                 {"state": "closed", "state_reason": "not_planned"},
             )
         retired += 1
+
     open_issues[:] = retained
     return retired
+
+
+def find_matching_open_transition(
+    open_issues: Iterable[dict[str, Any]], source: base.OperationalRecord
+) -> dict[str, Any] | None:
+    target = source_generation(source)
+    if target is None:
+        return None
+    for issue in open_issues:
+        if not trusted_issue_author(issue):
+            continue
+        if factory_transition_generation(issue) == target:
+            return issue
+    return None
 
 
 def materialize_missing_transitions(
@@ -169,9 +263,9 @@ def materialize_missing_transitions(
         )
     )
     recent_issues = [item for item in open_issues + closed if "pull_request" not in item]
-    consumed_sources = consumed_nontransition_sources(recent_issues)
-    consumed_sources.update(resolved_transition_sources(closed))
-    retired = retire_consumed_transitions(open_issues, consumed_sources)
+    edges = successor_edges(recent_issues)
+    resolved_generations = resolved_transition_generations(closed)
+    retired = retire_redundant_transitions(open_issues, edges, resolved_generations)
 
     dispatch_keys: set[tuple[str, str]] = set()
     for issue in closed:
@@ -179,9 +273,12 @@ def materialize_missing_transitions(
             continue
         number = int(issue["number"])
         source = base.reconcilable_terminal(number)
-        if not source or not source.route or number in consumed_sources:
+        if not source or not source.route:
             continue
-        transition = base.find_open_transition(open_issues, number)
+        if source_generation_consumed(source, edges, resolved_generations):
+            continue
+
+        transition = find_matching_open_transition(open_issues, source)
         cfg = routes.get(source.route)
         if not transition:
             transition = base.create_transition(source, cfg)
@@ -203,19 +300,61 @@ def self_test() -> None:
     assert predecessor_sources({"body": "Fresh degraded-independent review of Issue #682 / draft PR #684."}) == {682}
     assert predecessor_sources({"body": "Required clean review: Issue #693 terminal comment 123."}) == {693}
     assert predecessor_sources({"body": "This is the single remediation route required by terminal Issue #665."}) == {665}
+    assert predecessor_sources({"body": "`predecessor_issue: 695`"}) == {695}
     assert predecessor_sources({"body": "Context mentions Issue #680 and Issue #693, but declares no dependency."}) == set()
 
-    normal = {"number": 20, "title": "[PLAN-v1] remediation", "body": "Minimal remediation of Issue #10."}
-    transition = {
-        "number": 21,
-        "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
-        "body": "Source terminal issue: #10\nRequired next route: `NEXT`",
+    trusted_successor = {
+        "number": 20,
+        "title": "[PLAN-v1] remediation",
+        "body": "Minimal remediation of Issue #10.",
+        "created_at": "2026-08-25T00:00:06Z",
+        "author_association": "OWNER",
+        "user": {"login": "vokerg"},
     }
-    assert consumed_nontransition_sources([normal, transition]) == {10}
-    assert retirable_transition_numbers([transition], {10}) == [21]
-    assert retirable_transition_numbers([transition], {11}) == []
+    untrusted_successor = dict(
+        trusted_successor,
+        number=21,
+        author_association="NONE",
+        user={"login": "outsider"},
+    )
+    assert successor_edges([trusted_successor]) == {10: [("2026-08-25T00:00:06Z", 20)]}
+    assert successor_edges([untrusted_successor]) == {}
 
-    created = "2026-08-25T00:00:00Z"
+    def source(comment_id: int, created_at: str, route: str = "NEXT") -> base.OperationalRecord:
+        return base.OperationalRecord(
+            issue_number=10,
+            comment_id=comment_id,
+            created_at=created_at,
+            kind="STATUS",
+            state="DONE",
+            route=route,
+            body="",
+            declared_issue=10,
+            mission_id="M-10",
+            actor_session_id="actor-a",
+            authority_mode="OWNER",
+            ownership_generation_comment_id=1,
+            head_sha="a" * 40,
+            work_sha="b" * 40,
+        )
+
+    old_source = source(2, "2026-08-25T00:00:05Z")
+    new_source = source(3, "2026-08-25T00:00:10Z")
+    edges = successor_edges([trusted_successor])
+    assert normal_successor_consumes(old_source, edges)
+    assert not normal_successor_consumes(new_source, edges)
+
+    transition = {
+        "number": 30,
+        "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
+        "body": "Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `NEXT`",
+        "created_at": "2026-08-25T00:00:07Z",
+        "author_association": "CONTRIBUTOR",
+        "user": {"login": "github-actions[bot]"},
+    }
+    assert factory_transition_generation(transition) == (10, 2, "NEXT")
+
+    created = "2026-08-25T00:00:08Z"
     dispatch = {
         "id": 100,
         "author_association": "NONE",
@@ -225,9 +364,10 @@ def self_test() -> None:
         "body": (
             "factory_frontier_dispatch: 1\n"
             "source_issue: 10\n"
+            "source_terminal_comment_id: 2\n"
             "route: NEXT\n"
             "status: ACCEPTED\n"
-            f"main_sha: {'a' * 40}\n"
+            f"main_sha: {'c' * 40}\n"
         ),
     }
     resolution = {
@@ -239,17 +379,36 @@ def self_test() -> None:
         "body": (
             "factory_transition_resolution: 1\n"
             "source_issue: 10\n"
+            "source_terminal_comment_id: 2\n"
             "route: NEXT\n"
             "state: DONE\n"
             "disposition: TRANSITION_DISPATCH_ALREADY_ACCEPTED\n"
             "accepted_dispatch_comment_id: 100\n"
         ),
     }
-    assert transition_resolution_from_comments([dispatch, resolution], 10, "NEXT") is resolution
-    edited_resolution = dict(resolution, updated_at="2026-08-25T00:01:00Z")
-    assert transition_resolution_from_comments([dispatch, edited_resolution], 10, "NEXT") is None
+    old_generation = (10, 2, "NEXT")
+    new_generation = (10, 3, "NEXT")
+    assert transition_resolution_from_comments([dispatch, resolution], old_generation) is resolution
+    assert transition_resolution_from_comments([dispatch, resolution], new_generation) is None
+    edited_resolution = dict(resolution, updated_at="2026-08-25T00:01:08Z")
+    assert transition_resolution_from_comments([dispatch, edited_resolution], old_generation) is None
     wrong_dispatch = dict(resolution, body=resolution["body"].replace("100", "999"))
-    assert transition_resolution_from_comments([dispatch, wrong_dispatch], 10, "NEXT") is None
+    assert transition_resolution_from_comments([dispatch, wrong_dispatch], old_generation) is None
+
+    resolved = {old_generation}
+    assert source_generation_consumed(old_source, {}, resolved)
+    assert not source_generation_consumed(new_source, {}, resolved)
+    assert transition_redundancy_reason(transition, old_source, {}, resolved) == "SOURCE_GENERATION_ALREADY_CONSUMED"
+    assert transition_redundancy_reason(transition, new_source, {}, resolved) == "STALE_TERMINAL_GENERATION"
+
+    fake_transition = dict(
+        transition,
+        number=31,
+        author_association="NONE",
+        user={"login": "outsider"},
+    )
+    assert find_matching_open_transition([fake_transition], old_source) is None
+    assert find_matching_open_transition([transition], old_source) is transition
 
     print("frontier maintenance v2 self-test: PASS")
 
