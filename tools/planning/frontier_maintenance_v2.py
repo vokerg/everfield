@@ -11,6 +11,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import re
 import sys
+import urllib.parse
 from typing import Any, Iterable
 
 import frontier_maintenance as base
@@ -111,22 +112,33 @@ def _trusted_resolution_author(comment: dict[str, Any]) -> bool:
     return login == "github-actions[bot]" or comment.get("author_association") in base.TRUSTED_ASSOCIATIONS
 
 
-def trusted_dispatch_for_generation(
+def dispatch_markers_for_generation(
     comments: Iterable[dict[str, Any]], generation: Generation
-) -> dict[str, Any] | None:
+) -> list[dict[str, Any]]:
     source_issue, source_terminal_comment_id, route = generation
-    comments_list = list(comments)
-    dispatch = base.trusted_dispatch_marker_from_comments(comments_list, source_issue, route)
-    if dispatch is None:
-        return None
-    dispatch_body = dispatch.get("body") or ""
-    if base.integer_scalar(dispatch_body, "source_terminal_comment_id") != source_terminal_comment_id:
-        return None
-    workflow = base.scalar(dispatch_body, "workflow")
-    main_sha = base.scalar(dispatch_body, "main_sha")
-    if not workflow or not main_sha or not base.SHA40_RE.fullmatch(main_sha):
-        return None
-    return dispatch
+    markers: list[dict[str, Any]] = []
+    for comment in comments:
+        body = comment.get("body") or ""
+        login = ((comment.get("user") or {}).get("login") or "")
+        trusted = login == "github-actions[bot]" or comment.get("author_association") in base.TRUSTED_ASSOCIATIONS
+        if not trusted or not base.immutable_comment(comment):
+            continue
+        if base.scalar(body, "factory_frontier_dispatch") != base.DISPATCH_MARKER_VERSION:
+            continue
+        if base.integer_scalar(body, "source_issue") != source_issue:
+            continue
+        if base.integer_scalar(body, "source_terminal_comment_id") != source_terminal_comment_id:
+            continue
+        if base.scalar(body, "route") != route:
+            continue
+        if base.scalar(body, "status") not in base.DISPATCH_MARKER_STATES:
+            continue
+        workflow = base.scalar(body, "workflow")
+        main_sha = base.scalar(body, "main_sha")
+        if not workflow or not main_sha or not base.SHA40_RE.fullmatch(main_sha):
+            continue
+        markers.append(comment)
+    return sorted(markers, key=lambda item: int(item["id"]))
 
 
 def transition_resolution_from_comments(
@@ -134,11 +146,11 @@ def transition_resolution_from_comments(
 ) -> tuple[dict[str, Any], dict[str, Any]] | None:
     source_issue, source_terminal_comment_id, route = generation
     comments_list = list(comments)
-    dispatch = trusted_dispatch_for_generation(comments_list, generation)
-    if dispatch is None:
+    markers = {int(marker["id"]): marker for marker in dispatch_markers_for_generation(comments_list, generation)}
+    if not markers:
         return None
-    dispatch_id = int(dispatch["id"])
 
+    valid_resolutions: list[tuple[dict[str, Any], dict[str, Any]]] = []
     for comment in comments_list:
         if not _trusted_resolution_author(comment) or not base.immutable_comment(comment):
             continue
@@ -155,10 +167,13 @@ def transition_resolution_from_comments(
             continue
         if base.scalar(body, "disposition") not in RESOLUTION_DONE_DISPOSITIONS:
             continue
-        if base.integer_scalar(body, "accepted_dispatch_comment_id") != dispatch_id:
+        dispatch_id = base.integer_scalar(body, "accepted_dispatch_comment_id")
+        if dispatch_id is None or dispatch_id not in markers:
             continue
-        return dispatch, comment
-    return None
+        valid_resolutions.append((markers[dispatch_id], comment))
+    if not valid_resolutions:
+        return None
+    return max(valid_resolutions, key=lambda pair: int(pair[1]["id"]))
 
 
 def workflow_run_outcome(run: dict[str, Any] | None) -> str:
@@ -183,6 +198,25 @@ def marker_within_grace(dispatch: dict[str, Any], now: datetime | None = None) -
     return 0 <= (current - created).total_seconds() <= DISPATCH_GRACE_SECONDS
 
 
+def dispatch_marker_blocks_retry(
+    dispatch: dict[str, Any], outcome: str, now: datetime | None = None
+) -> bool:
+    if outcome in {"SUCCESS", "IN_FLIGHT"}:
+        return True
+    if outcome == "MISSING" and marker_within_grace(dispatch, now):
+        return True
+    return False
+
+
+def run_for_dispatch_marker(dispatch: dict[str, Any]) -> dict[str, Any] | None:
+    body = dispatch.get("body") or ""
+    workflow = base.scalar(body, "workflow")
+    main_sha = base.scalar(body, "main_sha")
+    if not workflow or not main_sha:
+        return None
+    return base.matching_fresh_run(workflow, main_sha, "")
+
+
 def resolved_transition_generations(closed_issues: Iterable[dict[str, Any]]) -> set[Generation]:
     consumed: set[Generation] = set()
     for issue in closed_issues:
@@ -194,16 +228,7 @@ def resolved_transition_generations(closed_issues: Iterable[dict[str, Any]]) -> 
         if resolution is None:
             continue
         dispatch, _ = resolution
-        dispatch_body = dispatch.get("body") or ""
-        workflow = base.scalar(dispatch_body, "workflow")
-        main_sha = base.scalar(dispatch_body, "main_sha")
-        if not workflow or not main_sha:
-            continue
-        run = base.matching_fresh_run(workflow, main_sha, "")
-        outcome = workflow_run_outcome(run)
-        if outcome in {"SUCCESS", "IN_FLIGHT"}:
-            consumed.add(generation)
-        elif outcome == "MISSING" and marker_within_grace(dispatch):
+        if dispatch_marker_blocks_retry(dispatch, workflow_run_outcome(run_for_dispatch_marker(dispatch))):
             consumed.add(generation)
     return consumed
 
@@ -313,6 +338,60 @@ def find_matching_open_transition(
     return None
 
 
+def dispatch_registered_route(
+    source: base.OperationalRecord, cfg: dict[str, Any], transition: dict[str, Any] | None
+) -> bool:
+    """Retry-safe registered dispatch for one exact source generation.
+
+    Unlike v1, an old ACCEPTED marker does not permanently suppress retry after
+    a failed or long-missing run. All route/workflow choices still come only
+    from the repository-owned allowlist loaded by v1.
+    """
+    if cfg.get("type") != "workflow_dispatch" or transition is None:
+        return False
+    workflow = cfg.get("workflow")
+    if not workflow or cfg.get("ref", "main") != "main":
+        raise RuntimeError(f"unsafe route registration for {source.route}: exact main workflow required")
+    generation = source_generation(source)
+    if generation is None or factory_transition_generation(transition) != generation:
+        raise RuntimeError("registered dispatch requires an exact source-generation transition")
+
+    main_sha = base.current_main_sha()
+    current_run = base.matching_fresh_run(workflow, main_sha, source.created_at)
+    current_outcome = workflow_run_outcome(current_run)
+    if current_outcome in {"SUCCESS", "IN_FLIGHT"}:
+        print(f"route {source.route}: exact-main run already {current_outcome.lower()} at {main_sha}")
+        return False
+
+    comments = list(base.paged(f"/repos/{base.REPO}/issues/{int(transition['number'])}/comments?"))
+    markers = dispatch_markers_for_generation(comments, generation)
+    if markers:
+        latest = markers[-1]
+        marker_body = latest.get("body") or ""
+        marker_main_sha = base.scalar(marker_body, "main_sha")
+        if marker_main_sha == main_sha:
+            outcome = workflow_run_outcome(run_for_dispatch_marker(latest))
+            if dispatch_marker_blocks_retry(latest, outcome):
+                print(f"route {source.route}: latest current-main dispatch is {outcome.lower()}; no duplicate")
+                return False
+            print(f"route {source.route}: retrying after current-main dispatch outcome {outcome}")
+
+    inputs = dict(cfg.get("inputs") or {})
+    if "reason" in inputs:
+        inputs["reason"] = str(inputs["reason"]).format(
+            source_issue=source.issue_number, main_sha=main_sha
+        )
+    payload: dict[str, Any] = {"ref": "main"}
+    if inputs:
+        payload["inputs"] = inputs
+    print(f"dispatch {workflow} on main@{main_sha} for route {source.route}")
+    if not base.DRY_RUN:
+        path = urllib.parse.quote(workflow, safe="")
+        base.request("POST", f"/repos/{base.REPO}/actions/workflows/{path}/dispatches", payload)
+        base.record_dispatch_marker(transition, source, workflow, main_sha, "ACCEPTED")
+    return True
+
+
 def materialize_missing_transitions(
     open_issues: list[dict[str, Any]], routes: dict[str, dict[str, Any]]
 ) -> tuple[int, int, int]:
@@ -347,7 +426,7 @@ def materialize_missing_transitions(
                 open_issues.append(transition)
         if cfg and transition:
             key = (str(cfg.get("workflow")), base.current_main_sha())
-            if key not in dispatch_keys and base.dispatch_registered_route(source, cfg, transition):
+            if key not in dispatch_keys and dispatch_registered_route(source, cfg, transition):
                 dispatch_keys.add(key)
                 dispatched += 1
     return created, dispatched, retired
@@ -440,6 +519,12 @@ def self_test() -> None:
             f"main_sha: {'c' * 40}\n"
         ),
     }
+    later_dispatch = dict(
+        dispatch,
+        id=102,
+        created_at="2026-08-25T00:20:08Z",
+        updated_at="2026-08-25T00:20:08Z",
+    )
     resolution = {
         "id": 101,
         "author_association": "OWNER",
@@ -456,10 +541,21 @@ def self_test() -> None:
             "accepted_dispatch_comment_id: 100\n"
         ),
     }
+    later_resolution = dict(
+        resolution,
+        id=103,
+        created_at="2026-08-25T00:20:09Z",
+        updated_at="2026-08-25T00:20:09Z",
+        body=resolution["body"].replace("100", "102"),
+    )
     old_generation = (10, 2, "NEXT")
     new_generation = (10, 3, "NEXT")
     pair = transition_resolution_from_comments([dispatch, resolution], old_generation)
     assert pair is not None and pair[0] is dispatch and pair[1] is resolution
+    latest_pair = transition_resolution_from_comments(
+        [dispatch, resolution, later_dispatch, later_resolution], old_generation
+    )
+    assert latest_pair is not None and latest_pair[0] is later_dispatch and latest_pair[1] is later_resolution
     assert transition_resolution_from_comments([dispatch, resolution], new_generation) is None
     edited_resolution = dict(resolution, updated_at="2026-08-25T00:01:08Z")
     assert transition_resolution_from_comments([dispatch, edited_resolution], old_generation) is None
@@ -474,6 +570,11 @@ def self_test() -> None:
     assert marker_within_grace(dispatch, grace_now)
     late_now = datetime.fromisoformat("2026-08-25T00:30:00+00:00")
     assert not marker_within_grace(dispatch, late_now)
+    assert dispatch_marker_blocks_retry(dispatch, "SUCCESS", late_now)
+    assert dispatch_marker_blocks_retry(dispatch, "IN_FLIGHT", late_now)
+    assert dispatch_marker_blocks_retry(dispatch, "MISSING", grace_now)
+    assert not dispatch_marker_blocks_retry(dispatch, "MISSING", late_now)
+    assert not dispatch_marker_blocks_retry(dispatch, "FAILED", grace_now)
 
     resolved = {old_generation}
     assert source_generation_consumed(old_source, {}, resolved)
