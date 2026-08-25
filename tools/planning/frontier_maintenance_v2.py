@@ -341,11 +341,13 @@ def find_matching_open_transition(
 def dispatch_registered_route(
     source: base.OperationalRecord, cfg: dict[str, Any], transition: dict[str, Any] | None
 ) -> bool:
-    """Retry-safe registered dispatch for one exact source generation.
+    """Retry-safe registered dispatch for one exact unowned source generation.
 
     Unlike v1, an old ACCEPTED marker does not permanently suppress retry after
-    a failed or long-missing run. All route/workflow choices still come only
-    from the repository-owned allowlist loaded by v1.
+    a failed or long-missing run. An existing nonterminal schema-3 ownership
+    record always wins: maintenance defers rather than mutating owned work.
+    All route/workflow choices still come only from the repository-owned
+    allowlist loaded by v1.
     """
     if cfg.get("type") != "workflow_dispatch" or transition is None:
         return False
@@ -356,6 +358,11 @@ def dispatch_registered_route(
     if generation is None or factory_transition_generation(transition) != generation:
         raise RuntimeError("registered dispatch requires an exact source-generation transition")
 
+    transition_number = int(transition["number"])
+    if transition_has_active_operational_state(transition_number):
+        print(f"route {source.route}: defer dispatch; transition #{transition_number} is actively owned")
+        return False
+
     main_sha = base.current_main_sha()
     current_run = base.matching_fresh_run(workflow, main_sha, source.created_at)
     current_outcome = workflow_run_outcome(current_run)
@@ -363,7 +370,7 @@ def dispatch_registered_route(
         print(f"route {source.route}: exact-main run already {current_outcome.lower()} at {main_sha}")
         return False
 
-    comments = list(base.paged(f"/repos/{base.REPO}/issues/{int(transition['number'])}/comments?"))
+    comments = list(base.paged(f"/repos/{base.REPO}/issues/{transition_number}/comments?"))
     markers = dispatch_markers_for_generation(comments, generation)
     if markers:
         latest = markers[-1]
@@ -375,6 +382,11 @@ def dispatch_registered_route(
                 print(f"route {source.route}: latest current-main dispatch is {outcome.lower()}; no duplicate")
                 return False
             print(f"route {source.route}: retrying after current-main dispatch outcome {outcome}")
+
+    # Re-check ownership immediately before the privileged dispatch mutation.
+    if transition_has_active_operational_state(transition_number):
+        print(f"route {source.route}: ownership appeared before dispatch; defer")
+        return False
 
     inputs = dict(cfg.get("inputs") or {})
     if "reason" in inputs:
