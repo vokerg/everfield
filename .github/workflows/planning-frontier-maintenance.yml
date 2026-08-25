@@ -31,7 +31,9 @@ jobs:
           persist-credentials: false
 
       - name: Validate maintenance tool
-        run: python3 -m py_compile tools/planning/frontier_maintenance.py
+        run: |
+          python3 -m py_compile tools/planning/frontier_maintenance.py
+          python3 tools/planning/frontier_maintenance.py --self-test
 
       - name: Reconcile frontier and registered transitions
         env:
