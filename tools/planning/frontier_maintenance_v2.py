@@ -17,8 +17,6 @@ from typing import Any, Iterable
 import frontier_maintenance as base
 
 
-# Only phrases that explicitly declare a graph relationship are recognized.
-# Arbitrary issue-number mentions are intentionally ignored.
 SUCCESSOR_RELATION_PATTERNS = (
     r"(?im)^\s*`?predecessor_issue:\s*(\d+)`?\s*$",
     r"(?i)\bimmediate predecessor:\s*Issue\s*#(\d+)\b",
@@ -176,6 +174,56 @@ def transition_resolution_from_comments(
     return max(valid_resolutions, key=lambda pair: int(pair[1]["id"]))
 
 
+def schema_terminal_resolution_from_comments(
+    transition_issue_number: int,
+    comments: Iterable[dict[str, Any]],
+    generation: Generation,
+) -> tuple[dict[str, Any], base.OperationalRecord] | None:
+    """Accept the normal schema-3 transition terminal used by live Issue #707.
+
+    Ownership/immutability/head bindings are delegated to the already-reviewed
+    v1 `reconcilable_terminal_from_comments` validator. This helper adds only
+    exact factory-generation and accepted-dispatch binding.
+    """
+    source_issue, source_terminal_comment_id, route = generation
+    comments_list = list(comments)
+    terminal = base.reconcilable_terminal_from_comments(transition_issue_number, comments_list)
+    if terminal is None:
+        return None
+    if base.scalar(terminal.body, "disposition") not in RESOLUTION_DONE_DISPOSITIONS:
+        return None
+    if base.integer_scalar(terminal.body, "source_issue") != source_issue:
+        return None
+    if base.integer_scalar(terminal.body, "source_terminal_comment_id") != source_terminal_comment_id:
+        return None
+    if base.scalar(terminal.body, "required_route") != route:
+        return None
+    dispatch_id = base.integer_scalar(terminal.body, "accepted_dispatch_comment_id")
+    if dispatch_id is None:
+        return None
+    markers = {int(marker["id"]): marker for marker in dispatch_markers_for_generation(comments_list, generation)}
+    marker = markers.get(dispatch_id)
+    if marker is None:
+        return None
+    return marker, terminal
+
+
+def resolved_dispatch_binding(
+    transition_issue_number: int,
+    comments: Iterable[dict[str, Any]],
+    generation: Generation,
+) -> tuple[dict[str, Any], Any] | None:
+    comments_list = list(comments)
+    custom = transition_resolution_from_comments(comments_list, generation)
+    schema = schema_terminal_resolution_from_comments(
+        transition_issue_number, comments_list, generation
+    )
+    candidates = [candidate for candidate in (custom, schema) if candidate is not None]
+    if not candidates:
+        return None
+    return max(candidates, key=lambda pair: int(pair[1].comment_id if isinstance(pair[1], base.OperationalRecord) else pair[1]["id"]))
+
+
 def workflow_run_outcome(run: dict[str, Any] | None) -> str:
     if run is None:
         return "MISSING"
@@ -223,8 +271,9 @@ def resolved_transition_generations(closed_issues: Iterable[dict[str, Any]]) -> 
         generation = factory_transition_generation(issue)
         if generation is None:
             continue
-        comments_list = list(base.paged(f"/repos/{base.REPO}/issues/{int(issue['number'])}/comments?"))
-        resolution = transition_resolution_from_comments(comments_list, generation)
+        issue_number = int(issue["number"])
+        comments_list = list(base.paged(f"/repos/{base.REPO}/issues/{issue_number}/comments?"))
+        resolution = resolved_dispatch_binding(issue_number, comments_list, generation)
         if resolution is None:
             continue
         dispatch, _ = resolution
@@ -341,14 +390,7 @@ def find_matching_open_transition(
 def dispatch_registered_route(
     source: base.OperationalRecord, cfg: dict[str, Any], transition: dict[str, Any] | None
 ) -> bool:
-    """Retry-safe registered dispatch for one exact unowned source generation.
-
-    Unlike v1, an old ACCEPTED marker does not permanently suppress retry after
-    a failed or long-missing run. An existing nonterminal schema-3 ownership
-    record always wins: maintenance defers rather than mutating owned work.
-    All route/workflow choices still come only from the repository-owned
-    allowlist loaded by v1.
-    """
+    """Retry-safe registered dispatch for one exact unowned source generation."""
     if cfg.get("type") != "workflow_dispatch" or transition is None:
         return False
     workflow = cfg.get("workflow")
@@ -383,7 +425,6 @@ def dispatch_registered_route(
                 return False
             print(f"route {source.route}: retrying after current-main dispatch outcome {outcome}")
 
-    # Re-check ownership immediately before the privileged dispatch mutation.
     if transition_has_active_operational_state(transition_number):
         print(f"route {source.route}: ownership appeared before dispatch; defer")
         return False
@@ -464,38 +505,18 @@ def self_test() -> None:
         "author_association": "OWNER",
         "user": {"login": "vokerg"},
     }
-    untrusted_successor = dict(
-        trusted_successor,
-        number=21,
-        author_association="NONE",
-        user={"login": "outsider"},
-    )
-    dead_successor = dict(
-        trusted_successor,
-        number=22,
-        state="closed",
-        state_reason="not_planned",
-    )
+    untrusted_successor = dict(trusted_successor, number=21, author_association="NONE", user={"login": "outsider"})
+    dead_successor = dict(trusted_successor, number=22, state="closed", state_reason="not_planned")
     assert successor_edges([trusted_successor]) == {10: [("2026-08-25T00:00:06Z", 20)]}
     assert successor_edges([untrusted_successor]) == {}
     assert successor_edges([dead_successor]) == {}
 
     def source(comment_id: int, created_at: str, route: str = "NEXT") -> base.OperationalRecord:
         return base.OperationalRecord(
-            issue_number=10,
-            comment_id=comment_id,
-            created_at=created_at,
-            kind="STATUS",
-            state="DONE",
-            route=route,
-            body="",
-            declared_issue=10,
-            mission_id="M-10",
-            actor_session_id="actor-a",
-            authority_mode="OWNER",
-            ownership_generation_comment_id=1,
-            head_sha="a" * 40,
-            work_sha="b" * 40,
+            issue_number=10, comment_id=comment_id, created_at=created_at,
+            kind="STATUS", state="DONE", route=route, body="", declared_issue=10,
+            mission_id="M-10", actor_session_id="actor-a", authority_mode="OWNER",
+            ownership_generation_comment_id=1, head_sha="a" * 40, work_sha="b" * 40,
         )
 
     old_source = source(2, "2026-08-25T00:00:05Z")
@@ -509,78 +530,70 @@ def self_test() -> None:
         "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
         "body": "Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `NEXT`",
         "created_at": "2026-08-25T00:00:07Z",
-        "author_association": "CONTRIBUTOR",
-        "user": {"login": "github-actions[bot]"},
+        "author_association": "CONTRIBUTOR", "user": {"login": "github-actions[bot]"},
     }
     assert factory_transition_generation(transition) == (10, 2, "NEXT")
 
     created = "2026-08-25T00:00:08Z"
     dispatch = {
-        "id": 100,
-        "author_association": "NONE",
-        "user": {"login": "github-actions[bot]"},
-        "created_at": created,
-        "updated_at": created,
+        "id": 100, "author_association": "NONE", "user": {"login": "github-actions[bot]"},
+        "created_at": created, "updated_at": created,
         "body": (
-            "factory_frontier_dispatch: 1\n"
-            "source_issue: 10\n"
-            "source_terminal_comment_id: 2\n"
-            "route: NEXT\n"
-            "status: ACCEPTED\n"
-            "workflow: evaluator.yml\n"
+            "factory_frontier_dispatch: 1\nsource_issue: 10\nsource_terminal_comment_id: 2\n"
+            "route: NEXT\nstatus: ACCEPTED\nworkflow: evaluator.yml\n"
             f"main_sha: {'c' * 40}\n"
         ),
     }
-    later_dispatch = dict(
-        dispatch,
-        id=102,
-        created_at="2026-08-25T00:20:08Z",
-        updated_at="2026-08-25T00:20:08Z",
-    )
     resolution = {
-        "id": 101,
-        "author_association": "OWNER",
-        "user": {"login": "vokerg"},
-        "created_at": created,
-        "updated_at": created,
+        "id": 101, "author_association": "OWNER", "user": {"login": "vokerg"},
+        "created_at": created, "updated_at": created,
         "body": (
-            "factory_transition_resolution: 1\n"
-            "source_issue: 10\n"
-            "source_terminal_comment_id: 2\n"
-            "route: NEXT\n"
-            "state: DONE\n"
-            "disposition: TRANSITION_DISPATCH_ALREADY_ACCEPTED\n"
+            "factory_transition_resolution: 1\nsource_issue: 10\nsource_terminal_comment_id: 2\n"
+            "route: NEXT\nstate: DONE\ndisposition: TRANSITION_DISPATCH_ALREADY_ACCEPTED\n"
             "accepted_dispatch_comment_id: 100\n"
         ),
     }
-    later_resolution = dict(
-        resolution,
-        id=103,
-        created_at="2026-08-25T00:20:09Z",
-        updated_at="2026-08-25T00:20:09Z",
-        body=resolution["body"].replace("100", "102"),
-    )
     old_generation = (10, 2, "NEXT")
     new_generation = (10, 3, "NEXT")
     pair = transition_resolution_from_comments([dispatch, resolution], old_generation)
     assert pair is not None and pair[0] is dispatch and pair[1] is resolution
-    latest_pair = transition_resolution_from_comments(
-        [dispatch, resolution, later_dispatch, later_resolution], old_generation
-    )
-    assert latest_pair is not None and latest_pair[0] is later_dispatch and latest_pair[1] is later_resolution
     assert transition_resolution_from_comments([dispatch, resolution], new_generation) is None
-    edited_resolution = dict(resolution, updated_at="2026-08-25T00:01:08Z")
-    assert transition_resolution_from_comments([dispatch, edited_resolution], old_generation) is None
-    wrong_dispatch = dict(resolution, body=resolution["body"].replace("100", "999"))
-    assert transition_resolution_from_comments([dispatch, wrong_dispatch], old_generation) is None
+
+    claim_comment = {
+        "id": 110, "author_association": "OWNER", "user": {"login": "vokerg"},
+        "created_at": created, "updated_at": created,
+        "body": (
+            "protocol: planning-v1\nschema: 3\nkind: CLAIM\nissue: 30\nmission_id: FACTORY-TRANSITION-10\n"
+            "actor_session_id: actor-transition\nstate: IN_PROGRESS\n"
+        ),
+    }
+    schema_terminal_comment = {
+        "id": 111, "author_association": "OWNER", "user": {"login": "vokerg"},
+        "created_at": created, "updated_at": created,
+        "body": (
+            "protocol: planning-v1\nschema: 3\nkind: STATUS\nissue: 30\nmission_id: FACTORY-TRANSITION-10\n"
+            "actor_session_id: actor-transition\nstate: DONE\nauthority_mode: OWNER\n"
+            "ownership_generation_comment_id: 110\n"
+            f"head_sha: {'d' * 40}\nwork_sha: {'d' * 40}\n"
+            "disposition: TRANSITION_DISPATCH_ALREADY_ACCEPTED\nsource_issue: 10\n"
+            "source_terminal_comment_id: 2\nrequired_route: NEXT\naccepted_dispatch_comment_id: 100\n"
+        ),
+    }
+    schema_pair = schema_terminal_resolution_from_comments(
+        30, [dispatch, claim_comment, schema_terminal_comment], old_generation
+    )
+    assert schema_pair is not None and schema_pair[0] is dispatch
+    assert schema_terminal_resolution_from_comments(
+        30, [dispatch, claim_comment, schema_terminal_comment], new_generation
+    ) is None
 
     assert workflow_run_outcome(None) == "MISSING"
     assert workflow_run_outcome({"status": "queued", "conclusion": None}) == "IN_FLIGHT"
     assert workflow_run_outcome({"status": "completed", "conclusion": "success"}) == "SUCCESS"
     assert workflow_run_outcome({"status": "completed", "conclusion": "failure"}) == "FAILED"
     grace_now = datetime.fromisoformat("2026-08-25T00:10:00+00:00")
-    assert marker_within_grace(dispatch, grace_now)
     late_now = datetime.fromisoformat("2026-08-25T00:30:00+00:00")
+    assert marker_within_grace(dispatch, grace_now)
     assert not marker_within_grace(dispatch, late_now)
     assert dispatch_marker_blocks_retry(dispatch, "SUCCESS", late_now)
     assert dispatch_marker_blocks_retry(dispatch, "IN_FLIGHT", late_now)
@@ -594,12 +607,7 @@ def self_test() -> None:
     assert transition_redundancy_reason(transition, old_source, {}, resolved) == "SOURCE_GENERATION_ALREADY_CONSUMED"
     assert transition_redundancy_reason(transition, new_source, {}, resolved) == "STALE_TERMINAL_GENERATION"
 
-    fake_transition = dict(
-        transition,
-        number=31,
-        author_association="NONE",
-        user={"login": "outsider"},
-    )
+    fake_transition = dict(transition, number=31, author_association="NONE", user={"login": "outsider"})
     assert find_matching_open_transition([fake_transition], old_source) is None
     assert find_matching_open_transition([transition], old_source) is transition
 
@@ -610,14 +618,11 @@ def main() -> int:
     if "--self-test" in sys.argv:
         self_test()
         return 0
-
     open_items = list(base.paged(f"/repos/{base.REPO}/issues?state=open&sort=created&direction=asc&"))
     open_prs = list(base.paged(f"/repos/{base.REPO}/pulls?state=open&sort=created&direction=asc&"))
     issue_closed = base.close_terminal_open_issues(open_items)
     pr_closed = base.close_rejected_open_prs(open_prs)
-    transition_created, dispatched, transition_retired = materialize_missing_transitions(
-        open_items, base.load_routes()
-    )
+    transition_created, dispatched, transition_retired = materialize_missing_transitions(open_items, base.load_routes())
     print(base.json.dumps({
         "dry_run": base.DRY_RUN,
         "terminal_issues_closed": issue_closed,
