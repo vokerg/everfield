@@ -533,7 +533,12 @@ def validate_packet(packet: Any) -> None:
     expected_refs = [item[0] for item in ATTEMPT_PLAN]
     require(refs == expected_refs and all_refs == expected_refs, "attempt registry mismatch")
     attempts = packet.get("attempts")
-    require(isinstance(attempts, dict) and list(attempts) == expected_refs, "attempt set mismatch")
+    require(
+        isinstance(attempts, dict)
+        and len(attempts) == len(expected_refs)
+        and set(attempts) == set(expected_refs),
+        "attempt set mismatch",
+    )
     candidate = packet.get("candidate")
     require(isinstance(candidate, dict) and candidate.get("candidate_id") == CANDIDATE_ID, "candidate mismatch")
     expected_work = digest(candidate_work_material(packet))
@@ -737,6 +742,10 @@ def self_test() -> None:
     import copy
     base = synthetic_packet()
     validate_packet(base)
+    expected_refs = [item[0] for item in ATTEMPT_PLAN]
+    round_trip = json.loads(json.dumps(base, indent=2, sort_keys=True) + "\n")
+    assert list(round_trip["attempts"]) != expected_refs
+    validate_packet(round_trip)
     cases = []
 
     def rejected(name: str, mutator) -> None:
@@ -749,6 +758,9 @@ def self_test() -> None:
         else:
             raise AssertionError(f"negative case accepted: {name}")
 
+    rejected("missing_attempt", lambda p: p["attempts"].pop("UNITY-S3-N2"))
+    rejected("extra_attempt", lambda p: p["attempts"].__setitem__("UNITY-S3-EXTRA", copy.deepcopy(p["attempts"]["UNITY-S3-N1"])))
+    rejected("wrong_attempt_id", lambda p: p["attempts"].__setitem__("UNITY-S3-WRONG", p["attempts"].pop("UNITY-S3-N2")))
     rejected("reset_false", lambda p: p["attempts"]["UNITY-S3-N1"].__setitem__("reset_verified", False))
     rejected("duplicate_workspace", lambda p: p["attempts"]["UNITY-S3-N2"].__setitem__("workspace_id", p["attempts"]["UNITY-S3-N1"]["workspace_id"]))
     rejected("tampered_source", lambda p: p["attempts"]["UNITY-S3-N1"]["source"].__setitem__("generated_project_source_digest", "0" * 64))
@@ -758,8 +770,8 @@ def self_test() -> None:
     rejected("tampered_raw_digest", lambda p: p["attempts"]["UNITY-S3-N1"].__setitem__("raw_attempt_digest", "0" * 64))
     rejected("sensitive_key", lambda p: p.__setitem__("session_token", "redacted"))
     rejected("absolute_path", lambda p: p["attempts"]["UNITY-S3-N1"].__setitem__("native_command_id", "/private/tmp/Unity"))
-    assert len(cases) == 9
-    print(json.dumps({"self_test": "PASS", "negative_cases": cases}, sort_keys=True))
+    assert len(cases) == 12
+    print(json.dumps({"self_test": "PASS", "round_trip": "PASS", "negative_cases": cases}, sort_keys=True))
 
 
 def main() -> int:
