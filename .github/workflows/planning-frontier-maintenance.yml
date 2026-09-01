@@ -34,11 +34,12 @@ jobs:
         run: |
           python3 -m py_compile \
             tools/planning/frontier_maintenance.py \
-            tools/planning/frontier_maintenance_v2.py
-          python3 tools/planning/frontier_maintenance_v2.py --self-test
+            tools/planning/frontier_maintenance_v2.py \
+            tools/planning/frontier_maintenance_v3.py
+          python3 tools/planning/frontier_maintenance_v3.py --self-test
 
       - name: Reconcile frontier and registered transitions
         env:
           GITHUB_TOKEN: ${{ github.token }}
           FRONTIER_ROUTES_PATH: .github/planning-frontier-routes.json
-        run: python3 tools/planning/frontier_maintenance_v2.py
+        run: python3 tools/planning/frontier_maintenance_v3.py
