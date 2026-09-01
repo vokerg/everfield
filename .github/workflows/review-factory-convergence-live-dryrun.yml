@@ -1,0 +1,43 @@
+name: Review factory convergence live dry-run
+
+on:
+  push:
+    branches: [review/issue-787-live-dryrun]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+  actions: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify producer files unchanged from judged head
+        run: |
+          git fetch --depth=1 origin 5a958140d3b26dcbbf888c76e1869eea634e3907
+          git diff --exit-code 5a958140d3b26dcbbf888c76e1869eea634e3907 -- \
+            tools/planning/frontier_maintenance_v4.py \
+            .github/workflows/planning-frontier-maintenance.yml \
+            docs/planning/handoffs/issue-784.md
+      - name: Compile self-test and live dry-run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          FRONTIER_ROUTES_PATH: .github/planning-frontier-routes.json
+          FRONTIER_MAINTENANCE_DRY_RUN: '1'
+        run: |
+          python3 -m py_compile \
+            tools/planning/frontier_maintenance.py \
+            tools/planning/frontier_maintenance_v2.py \
+            tools/planning/frontier_maintenance_v3.py \
+            tools/planning/frontier_maintenance_v4.py
+          python3 tools/planning/frontier_maintenance_v4.py --self-test
+          python3 tools/planning/frontier_maintenance_v4.py
