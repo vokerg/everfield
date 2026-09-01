@@ -9,6 +9,7 @@ integration, decision, release, or canonical authority.
 """
 from __future__ import annotations
 
+import re
 import sys
 from typing import Any, Iterable
 
@@ -21,6 +22,10 @@ SEMANTIC_RESOLUTION_DISPOSITIONS = {
     "EXACT_REQUIRED_REVIEW_SUCCESSOR_MATERIALIZED",
     "REQUIRED_ROUTE_ALREADY_CONSUMED_BY_TERMINAL_SUCCESSOR",
 }
+MATERIALIZED_SUCCESSOR_RELATION_PATTERNS = (
+    r"(?i)\bfactory transition\s*#(\d+)\b",
+    r"(?im)^\s*source_transition_issue:\s*(\d+)\s*$",
+)
 
 
 def _eligible_semantic_successor(issue: dict[str, Any] | None) -> bool:
@@ -29,6 +34,18 @@ def _eligible_semantic_successor(issue: dict[str, Any] | None) -> bool:
     if v2.factory_transition_source(issue) is not None:
         return False
     return v2.successor_issue_eligible(issue)
+
+
+def _successor_binds_transition(
+    successor: dict[str, Any], transition_issue_number: int
+) -> bool:
+    text = successor.get("body") or ""
+    for pattern in MATERIALIZED_SUCCESSOR_RELATION_PATTERNS:
+        if transition_issue_number in {
+            int(value) for value in re.findall(pattern, text)
+        }:
+            return True
+    return False
 
 
 def semantic_generation_from_terminal(
@@ -46,6 +63,8 @@ def semantic_generation_from_terminal(
     """
     generation = v2.factory_transition_generation(transition_issue)
     if generation is None:
+        return None
+    if not v2.trusted_issue_author(transition_issue):
         return None
     if transition_issue.get("state") != "closed":
         return None
@@ -78,6 +97,8 @@ def semantic_generation_from_terminal(
         successor_number = base.integer_scalar(body, "successor_issue")
         successor = issues_by_number.get(successor_number or -1)
         if not _eligible_semantic_successor(successor):
+            return None
+        if not _successor_binds_transition(successor, int(transition_issue["number"])):
             return None
         transition_created = transition_issue.get("created_at") or ""
         successor_created = successor.get("created_at") or ""
@@ -247,7 +268,7 @@ def self_test() -> None:
     successor = {
         "number": 20,
         "title": "[PLAN-v1] exact review successor",
-        "body": "review of Issue #10",
+        "body": "Exact successor materialized from factory transition #30.",
         "state": "open",
         "state_reason": None,
         "created_at": "2026-09-01T00:00:06Z",
@@ -276,6 +297,36 @@ def self_test() -> None:
     )
     assert semantic_generation_from_terminal(transition, wrong_generation, issues) is None
 
+    wrong_route = _terminal(
+        30,
+        6,
+        materialized_body.replace("source_required_route: NEXT", "source_required_route: OTHER"),
+    )
+    assert semantic_generation_from_terminal(transition, wrong_route, issues) is None
+
+    untrusted_transition = dict(transition)
+    untrusted_transition["author_association"] = "NONE"
+    untrusted_transition["user"] = {"login": "outsider"}
+    assert semantic_generation_from_terminal(
+        untrusted_transition, materialized, issues
+    ) is None
+
+    not_planned_transition = dict(transition)
+    not_planned_transition["state_reason"] = "not_planned"
+    assert semantic_generation_from_terminal(
+        not_planned_transition, materialized, issues
+    ) is None
+
+    duplicate_transition = dict(transition)
+    duplicate_transition["state_reason"] = "duplicate"
+    assert semantic_generation_from_terminal(
+        duplicate_transition, materialized, issues
+    ) is None
+
+    assert semantic_generation_from_terminal(
+        transition, materialized, {30: transition}
+    ) is None
+
     untrusted_successor = dict(successor)
     untrusted_successor["author_association"] = "NONE"
     untrusted_successor["user"] = {"login": "outsider"}
@@ -283,15 +334,28 @@ def self_test() -> None:
         transition, materialized, {20: untrusted_successor, 30: transition}
     ) is None
 
+    unbound_successor = dict(successor)
+    unbound_successor["body"] = "Review of Issue #10 without a transition binding."
+    assert semantic_generation_from_terminal(
+        transition, materialized, {20: unbound_successor, 30: transition}
+    ) is None
+
     transition_successor = dict(successor)
     transition_successor["title"] = (
         "[PLAN-v1][FACTORY-TRANSITION-99] Materialize required next route from #99"
     )
     transition_successor["body"] = (
-        "Source terminal issue: #99\nSource terminal comment: 7\nRequired next route: `X`"
+        "Source terminal issue: #99\nSource terminal comment: 7\nRequired next route: `X`\n"
+        "source_transition_issue: 30"
     )
     assert semantic_generation_from_terminal(
         transition, materialized, {20: transition_successor, 30: transition}
+    ) is None
+
+    older_successor = dict(successor)
+    older_successor["created_at"] = "2026-09-01T00:00:04Z"
+    assert semantic_generation_from_terminal(
+        transition, materialized, {20: older_successor, 30: transition}
     ) is None
 
     existing_body = (
@@ -303,7 +367,7 @@ def self_test() -> None:
         "resolved_successor_terminal_comment_id: 50\n"
         "route_consumed: true\n"
     )
-    existing = _terminal(30, 6, existing_body)
+    existing = _terminal(30, 7, existing_body)
     successor_terminal = _terminal(20, 50, "disposition: DONE\n")
     assert semantic_generation_from_terminal(
         transition,
@@ -318,9 +382,21 @@ def self_test() -> None:
         successor_terminals={20: _terminal(20, 51, "disposition: DONE\n")},
     ) is None
 
+    route_not_consumed = _terminal(
+        30,
+        8,
+        existing_body.replace("route_consumed: true", "route_consumed: false"),
+    )
+    assert semantic_generation_from_terminal(
+        transition,
+        route_not_consumed,
+        issues,
+        successor_terminals={20: successor_terminal},
+    ) is None
+
     wrong_disposition = _terminal(
         30,
-        7,
+        9,
         materialized_body.replace(
             "EXACT_REQUIRED_REVIEW_SUCCESSOR_MATERIALIZED", "UNTRUSTED_SHORTCUT"
         ),
