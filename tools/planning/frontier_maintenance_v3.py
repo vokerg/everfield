@@ -199,12 +199,14 @@ def materialize_missing_transitions(
     )
 
     dispatch_keys: set[tuple[str, str]] = set()
-    for issue in closed:
+    seen_source_numbers: set[int] = set()
+    for issue in recent_issues:
         if "pull_request" in issue:
             continue
         number = int(issue["number"])
-        if number in factory_issue_numbers:
+        if number in seen_source_numbers or number in factory_issue_numbers:
             continue
+        seen_source_numbers.add(number)
         source = routable_terminal(number)
         if not source or not route_is_actionable(source.route):
             continue
@@ -330,6 +332,18 @@ def self_test() -> None:
 
     consumed_edges = successor_edges([recovery_successor])
     assert transition_redundancy_reason(transition, source, consumed_edges, set(), set()) == "SOURCE_GENERATION_ALREADY_CONSUMED"
+
+    open_review_ready = {"number": 10, "state": "open"}
+    closed_same_issue = {"number": 10, "state": "closed"}
+    seen: set[int] = set()
+    candidates = []
+    for item in [open_review_ready, closed_same_issue]:
+        number = int(item["number"])
+        if number in seen:
+            continue
+        seen.add(number)
+        candidates.append(number)
+    assert candidates == [10]
 
     print("frontier maintenance v3 self-test: PASS")
 
