@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import re
 import sys
+import urllib.parse
 from typing import Any, Iterable
 
 import frontier_maintenance_v2 as v2
@@ -108,6 +109,7 @@ def transition_redundancy_reason(
     edges: v2.SuccessorEdgeMap,
     resolved_generations: set[v2.Generation],
     factory_issue_numbers: set[int],
+    registered_routes: set[str],
 ) -> str | None:
     generation = v2.factory_transition_generation(transition)
     if generation is None:
@@ -115,6 +117,8 @@ def transition_redundancy_reason(
     source_issue, _, route = generation
     if not route_is_actionable(route):
         return "NO_ROUTE_SENTINEL"
+    if route in registered_routes:
+        return "REGISTERED_ROUTE_NEEDS_NO_WRAPPER"
     if source_issue in factory_issue_numbers:
         return "FACTORY_TRANSITION_SOURCE_RECURSION"
     if current_source is None:
@@ -134,6 +138,7 @@ def retire_redundant_transitions(
     edges: v2.SuccessorEdgeMap,
     resolved_generations: set[v2.Generation],
     factory_issue_numbers: set[int],
+    registered_routes: set[str],
 ) -> int:
     retired = 0
     retained: list[dict[str, Any]] = []
@@ -153,6 +158,7 @@ def retire_redundant_transitions(
             edges,
             resolved_generations,
             factory_issue_numbers,
+            registered_routes,
         )
         if reason is None:
             retained.append(issue)
@@ -177,6 +183,69 @@ def retire_redundant_transitions(
     return retired
 
 
+def direct_dispatch_registered_route(
+    source: base.OperationalRecord,
+    cfg: dict[str, Any],
+    source_issue: dict[str, Any],
+) -> bool:
+    """Dispatch one exact registered route directly from its terminal source.
+
+    Registered execution routes are already a liveness surface under AGENTS.md;
+    they do not need a factory-transition issue. Dispatch markers are recorded
+    on the source issue and remain bound to the exact terminal generation.
+    """
+    if cfg.get("type") != "workflow_dispatch":
+        return False
+    workflow = cfg.get("workflow")
+    if not workflow or cfg.get("ref", "main") != "main":
+        raise RuntimeError(f"unsafe route registration for {source.route}: exact main workflow required")
+    generation = v2.source_generation(source)
+    if generation is None:
+        raise RuntimeError("registered dispatch requires an exact source generation")
+    if int(source_issue["number"]) != source.issue_number:
+        raise RuntimeError("registered dispatch source issue mismatch")
+
+    main_sha = base.current_main_sha()
+    current_run = base.matching_fresh_run(workflow, main_sha, source.created_at)
+    current_outcome = v2.workflow_run_outcome(current_run)
+    if current_outcome in {"SUCCESS", "IN_FLIGHT"}:
+        print(f"route {source.route}: exact-main run already {current_outcome.lower()} at {main_sha}")
+        return False
+
+    comments = list(base.paged(f"/repos/{base.REPO}/issues/{source.issue_number}/comments?"))
+    markers = v2.dispatch_markers_for_generation(comments, generation)
+    if markers:
+        latest = markers[-1]
+        marker_body = latest.get("body") or ""
+        marker_main_sha = base.scalar(marker_body, "main_sha")
+        if marker_main_sha == main_sha:
+            outcome = v2.workflow_run_outcome(v2.run_for_dispatch_marker(latest))
+            if v2.dispatch_marker_blocks_retry(latest, outcome):
+                print(f"route {source.route}: latest direct current-main dispatch is {outcome.lower()}; no duplicate")
+                return False
+            print(f"route {source.route}: direct retry after current-main dispatch outcome {outcome}")
+
+    refreshed = routable_terminal(source.issue_number)
+    if refreshed is None or v2.source_generation(refreshed) != generation:
+        print(f"route {source.route}: source generation changed before direct dispatch; defer")
+        return False
+
+    inputs = dict(cfg.get("inputs") or {})
+    if "reason" in inputs:
+        inputs["reason"] = str(inputs["reason"]).format(
+            source_issue=source.issue_number, main_sha=main_sha
+        )
+    payload: dict[str, Any] = {"ref": "main"}
+    if inputs:
+        payload["inputs"] = inputs
+    print(f"dispatch {workflow} directly on main@{main_sha} for route {source.route}")
+    if not base.DRY_RUN:
+        path = urllib.parse.quote(workflow, safe="")
+        base.request("POST", f"/repos/{base.REPO}/actions/workflows/{path}/dispatches", payload)
+        base.record_dispatch_marker(source_issue, source, workflow, main_sha, "ACCEPTED")
+    return True
+
+
 def materialize_missing_transitions(
     open_issues: list[dict[str, Any]], routes: dict[str, dict[str, Any]]
 ) -> tuple[int, int, int]:
@@ -194,8 +263,13 @@ def materialize_missing_transitions(
         for item in recent_issues
         if v2.factory_transition_source(item) is not None
     }
+    registered_routes = set(routes)
     retired = retire_redundant_transitions(
-        open_issues, edges, resolved_generations, factory_issue_numbers
+        open_issues,
+        edges,
+        resolved_generations,
+        factory_issue_numbers,
+        registered_routes,
     )
 
     dispatch_keys: set[tuple[str, str]] = set()
@@ -204,7 +278,7 @@ def materialize_missing_transitions(
         if "pull_request" in issue:
             continue
         number = int(issue["number"])
-        if number in seen_source_numbers or number in factory_issue_numbers:
+        if number in seen_source_numbers:
             continue
         seen_source_numbers.add(number)
         source = routable_terminal(number)
@@ -213,18 +287,24 @@ def materialize_missing_transitions(
         if v2.source_generation_consumed(source, edges, resolved_generations):
             continue
 
-        transition = v2.find_matching_open_transition(open_issues, source)
         cfg = routes.get(source.route)
+        if cfg is not None:
+            key = (str(cfg.get("workflow")), base.current_main_sha())
+            if key not in dispatch_keys and direct_dispatch_registered_route(source, cfg, issue):
+                dispatch_keys.add(key)
+                dispatched += 1
+            continue
+
+        if number in factory_issue_numbers:
+            print(f"skip unregistered transition-source recursion from #{number}: {source.route}")
+            continue
+
+        transition = v2.find_matching_open_transition(open_issues, source)
         if not transition:
-            transition = base.create_transition(source, cfg)
+            transition = base.create_transition(source, None)
             created += 1
             if transition:
                 open_issues.append(transition)
-        if cfg and transition:
-            key = (str(cfg.get("workflow")), base.current_main_sha())
-            if key not in dispatch_keys and v2.dispatch_registered_route(source, cfg, transition):
-                dispatch_keys.add(key)
-                dispatched += 1
     return created, dispatched, retired
 
 
@@ -326,12 +406,18 @@ def self_test() -> None:
         "title": "[PLAN-v1][FACTORY-TRANSITION-30] Materialize required next route from #30",
         "body": "Source terminal issue: #30\nSource terminal comment: 9\nRequired next route: `NEXT`",
     }
-    assert transition_redundancy_reason(transition, source, {}, set(), set()) is None
-    assert transition_redundancy_reason(none_transition, source, {}, set(), set()) == "NO_ROUTE_SENTINEL"
-    assert transition_redundancy_reason(recursive_transition, None, {}, set(), {30}) == "FACTORY_TRANSITION_SOURCE_RECURSION"
+    registered_transition = {
+        "number": 33,
+        "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
+        "body": "Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `REGISTERED`",
+    }
+    assert transition_redundancy_reason(transition, source, {}, set(), set(), set()) is None
+    assert transition_redundancy_reason(none_transition, source, {}, set(), set(), set()) == "NO_ROUTE_SENTINEL"
+    assert transition_redundancy_reason(recursive_transition, None, {}, set(), {30}, set()) == "FACTORY_TRANSITION_SOURCE_RECURSION"
+    assert transition_redundancy_reason(registered_transition, source, {}, set(), set(), {"REGISTERED"}) == "REGISTERED_ROUTE_NEEDS_NO_WRAPPER"
 
     consumed_edges = successor_edges([recovery_successor])
-    assert transition_redundancy_reason(transition, source, consumed_edges, set(), set()) == "SOURCE_GENERATION_ALREADY_CONSUMED"
+    assert transition_redundancy_reason(transition, source, consumed_edges, set(), set(), set()) == "SOURCE_GENERATION_ALREADY_CONSUMED"
 
     open_review_ready = {"number": 10, "state": "open"}
     closed_same_issue = {"number": 10, "state": "closed"}
@@ -344,6 +430,9 @@ def self_test() -> None:
         seen.add(number)
         candidates.append(number)
     assert candidates == [10]
+
+    cfg = {"type": "workflow_dispatch", "workflow": "evaluator.yml", "ref": "main"}
+    assert cfg["type"] == "workflow_dispatch" and cfg["ref"] == "main"
 
     print("frontier maintenance v3 self-test: PASS")
 
