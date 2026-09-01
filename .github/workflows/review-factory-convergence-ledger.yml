@@ -1,0 +1,28 @@
+name: Review factory convergence ledger
+
+on:
+  push:
+    branches: [planning/issue-factory-convergence-ledger]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact producer candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Compile and run full maintenance self-tests
+        run: |
+          python3 -m py_compile \
+            tools/planning/frontier_maintenance.py \
+            tools/planning/frontier_maintenance_v2.py \
+            tools/planning/frontier_maintenance_v3.py \
+            tools/planning/frontier_maintenance_v4.py
+          python3 tools/planning/frontier_maintenance_v4.py --self-test
