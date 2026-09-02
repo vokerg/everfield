@@ -1,0 +1,323 @@
+schema: everfield_w2_content_frontier_continuation_v1
+mission_id: W2-CONTENT-FRONTIER-CONT-01
+issue: 806
+state: COMPILER_CANDIDATE_REVIEW_REQUIRED
+conflict_domain: CONTENT
+canonicality: NOT_CANONICAL
+
+compiler:
+  branch: planning/issue-806
+  claim_comment_id: 5513111034
+  claim_base_main_sha: eb81d354931c67ef2193f5242e49ee181a270b8c
+  actor_session_id: frontier-drain-content-frontier-806-gpt56sol-20260902-01
+
+canonical_basis:
+  program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  binding_issue: 6
+  binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_convergence_directive_comment_id: 5277825639
+  owner_parallel_frontier_directive_comment_id: 5305563203
+  owner_content_frontier_directive_comment_id: 5511637902
+
+frozen_reviewed_inputs:
+  predecessor_frontier:
+    compiler_issue: 365
+    compiler_work_sha: fd2fb7d816cf23d60bcc54bd25c7d9a4eaae3dbb
+    review_issue: 372
+    review_terminal_comment_id: 5305598079
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_ACTIVATION
+  content_fan_in:
+    producer_issue: 422
+    producer_work_sha: db4bfbcc7387425989ec5902103e53953db9576b
+    producer_head_sha: f6edd59b7d029474b3de95b8f57e71e7e14e5573
+    markdown_blob_sha: accae7e01148f19ef76b4ef0878abd3315901052
+    map_blob_sha: 5858bc3e2d87baa3740b2513b08fb938633bba54
+    review_issue: 426
+    review_terminal_comment_id: 5307505361
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_CONSUMPTION
+  authored_vertical_slice:
+    producer_issue: 434
+    remediation_issue: 444
+    remediation_work_sha: 3893145f0b3e3f33dfdab187f0f67ff6d07a058f
+    remediation_head_sha: 3893145f0b3e3f33dfdab187f0f67ff6d07a058f
+    markdown_blob_sha: 5e94bdb0ca6146bab93264fc8e6763590aa289d2
+    yaml_blob_sha: 8d341d534ef4a27929aaabdf5b81a6d5ff86b80e
+    review_issue: 449
+    disposition: CLEAN_FOR_BOUNDED_AUTHORED_CONTENT_CONSUMPTION
+    slice_publication_main_sha: 94186664d570239319e6689ddaac1e97ccaf721d
+    review_publication_main_sha: a34a4527d108be895188d41cb69204259ab3d1df
+    use_classification: NONCANONICAL_REGRESSION_REFERENCE_ONLY
+  wsn:
+    remediation_issue: 432
+    review_issue: 437
+    review_terminal_comment_id: 5308501587
+    disposition: CLEAN_FOR_BOUNDED_WSN_CONSUMPTION
+    experiment_blob_sha: 0feb04a4a9bfdc71893ab3619621f62f862858f7
+    corpus_blob_sha: 922c2838396e6fbc8b27248d0b56b8635112059f
+    evaluator_blob_sha: 9471520355e79d4358de01bfe363905bf3de962c
+    results_blob_sha: 6c75ec437fb8f1a333614c6c2f8336683247bb55
+    outcomes:
+      WSN-E1: PASS
+      WSN-E2: PASS
+      WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+      WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+      WSN-E5: PASS_BOUNDED_MODEL_ONLY
+      WSN-E6: PASS
+      WSN-E7: PASS
+      WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+      WSN-E9: PASS
+    authority_limits:
+      aggregate_verification_pass: false
+      human_quality_evidence: NOT_ESTABLISHED
+      production_persistence_validation: NOT_ESTABLISHED
+      production_schedule_validation: NOT_ESTABLISHED
+      canonical: false
+
+activation_review:
+  issue: 816
+  mission_id: W2-CONTENT-FRONTIER-CONT-REV-01
+  current_state: BLOCKED_PENDING_COMPILER_TERMINAL
+  required_clean_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_ACTIVATION
+  clean_scope:
+    activates_exact_root_issues: [811, 812, 813, 814, 815]
+    integration_authority: false
+    canonical_authority: false
+  changes_needed_effect: KEEP_ALL_ROOTS_BLOCKED_AND_ROUTE_ONE_BOUNDED_COMPILER_REMEDIATION
+  invalidated_effect: KEEP_ALL_ROOTS_BLOCKED_AND_ROUTE_BOUNDED_RECOVERY
+
+root_policy:
+  root_count: 5
+  target_range_from_owner_directive: 4_TO_6
+  sixth_root_materialized: false
+  sixth_root_reason: NO_ADDITIONAL_DISJOINT_DECISION_SURFACE_WITH_SUFFICIENT_INDEPENDENT_REVIEWED_INPUT
+  initial_state: BLOCKED_PENDING_CONTENT_FRONTIER_REVIEW
+  readiness_derivation: EXACT_CLEAN_ACTIVATION_REVIEW_PLUS_FRESH_CURRENT_MAIN_OWNERSHIP_CHECK
+  sibling_mutable_outputs_are_prerequisites: false
+  provisional_binding_policy: ALLOW_TYPED_UNRESOLVED_SET_STRUCTURAL_REFERENCES_UNTIL_FAN_IN
+  engine_selection_is_prerequisite: false
+
+roots:
+  - issue: 811
+    mission_id: W2-CONTENT-WORLD-CONT-01
+    family: WORLD_LORE_HISTORY_LOCATION
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_REVIEW
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    immutable_inputs:
+      - REVIEWED_CONTENT_FAN_IN
+      - REVIEWED_AUTHORED_VERTICAL_SLICE_REFERENCE
+      - REVIEWED_WSN_BOUNDED_EVIDENCE
+    sibling_mutable_inputs: []
+    mutable_paths:
+      - docs/planning/wave-2/content/world-lore-continuation-01.md
+      - docs/planning/wave-2/content/world-lore-continuation-01.yaml
+      - docs/planning/handoffs/issue-811.md
+    provisional_interfaces:
+      - SOCIAL_ROLE:*
+      - CHAR_ROLE:*
+      - NARR_ROLE:*
+    required_semantics:
+      - RELATIVE_TYPED_CHRONOLOGY
+      - OBJECTIVE_FACT_CLAIM_MYSTERY_SEPARATION
+      - BRANCH_APPLICABILITY
+      - LOCATION_AFFORDANCE_CONSTRAINT_INTERFACES
+      - NO_INVENTED_CONCRETE_SCHEDULES
+    required_root_review: true
+    reviewed_token: W2-CONTENT-WORLD-CONT-01_REVIEWED
+    downstream_fan_in: W2-CONTENT-SYN-CONT-01
+
+  - issue: 812
+    mission_id: W2-CONTENT-SOCIAL-CONT-01
+    family: FACTIONS_INSTITUTIONS_SOCIAL_CONFLICT
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_REVIEW
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    immutable_inputs:
+      - REVIEWED_CONTENT_FAN_IN
+      - REVIEWED_AUTHORED_VERTICAL_SLICE_REFERENCE
+      - REVIEWED_WSN_BOUNDED_EVIDENCE
+    sibling_mutable_inputs: []
+    mutable_paths:
+      - docs/planning/wave-2/content/social-conflict-continuation-01.md
+      - docs/planning/wave-2/content/social-conflict-continuation-01.yaml
+      - docs/planning/handoffs/issue-812.md
+    provisional_interfaces:
+      - WORLD_ROLE:*
+      - CHAR_ROLE:*
+      - NARR_ROLE:*
+    required_semantics:
+      - CLAIM_BELIEF_KNOWLEDGE_SEPARATION
+      - LEGITIMACY_AUTHORITY_BOUNDARIES
+      - MULTIDIMENSIONAL_RELATIONSHIP_HISTORY_INTERFACES
+      - PROGRESSION_GATE_CLASSIFICATION
+      - SOCIAL_FAILURE_REPAIR_ALTERNATIVES
+    required_root_review: true
+    reviewed_token: W2-CONTENT-SOCIAL-CONT-01_REVIEWED
+    downstream_fan_in: W2-CONTENT-SYN-CONT-01
+
+  - issue: 813
+    mission_id: W2-CONTENT-CHAR-CONT-01
+    family: PRINCIPAL_CHARACTERS_RELATIONSHIPS_CHANGE_ARCS
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_REVIEW
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    immutable_inputs:
+      - REVIEWED_CONTENT_FAN_IN
+      - REVIEWED_AUTHORED_VERTICAL_SLICE_REFERENCE
+      - REVIEWED_WSN_BOUNDED_EVIDENCE
+    sibling_mutable_inputs: []
+    mutable_paths:
+      - docs/planning/wave-2/content/character-arcs-continuation-01.md
+      - docs/planning/wave-2/content/character-arcs-continuation-01.yaml
+      - docs/planning/handoffs/issue-813.md
+    provisional_interfaces:
+      - WORLD_ROLE:*
+      - SOCIAL_ROLE:*
+      - NARR_ROLE:*
+    required_semantics:
+      - CHARACTER_AGENCY_AND_CHANGE_TRIGGERS
+      - MULTIDIMENSIONAL_RELATIONSHIP_STATE
+      - DURABLE_HISTORY
+      - DENY_BY_DEFAULT_PRIVATE_INFORMATION
+      - BRANCH_AND_HIGH_IMPACT_CONSEQUENCE_BOUNDARIES
+    required_root_review: true
+    reviewed_token: W2-CONTENT-CHAR-CONT-01_REVIEWED
+    downstream_fan_in: W2-CONTENT-SYN-CONT-01
+
+  - issue: 814
+    mission_id: W2-CONTENT-NARR-CONT-01
+    family: NARRATIVE_QUEST_CONSEQUENCE
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_REVIEW
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    immutable_inputs:
+      - REVIEWED_CONTENT_FAN_IN
+      - REVIEWED_AUTHORED_VERTICAL_SLICE_REFERENCE
+      - REVIEWED_WSN_BOUNDED_EVIDENCE
+    sibling_mutable_inputs: []
+    mutable_paths:
+      - docs/planning/wave-2/content/narrative-consequence-continuation-01.md
+      - docs/planning/wave-2/content/narrative-consequence-continuation-01.yaml
+      - docs/planning/handoffs/issue-814.md
+    provisional_interfaces:
+      - WORLD_ROLE:*
+      - SOCIAL_ROLE:*
+      - CHAR_ROLE:*
+    required_semantics:
+      - TYPED_PREREQUISITES_EFFECTS_BRANCHES
+      - FAILURE_RETRY_RECOVERY_ALTERNATIVES
+      - REVERSIBLE_IRREVERSIBLE_CONSEQUENCE_CLASSIFICATION
+      - KNOWLEDGE_SECRET_AUTHORITY
+      - PROGRESSION_GATE_CLASSIFICATION
+      - NO_UNSUPPORTED_TIMED_SCHEDULE_CLAIMS
+    required_root_review: true
+    reviewed_token: W2-CONTENT-NARR-CONT-01_REVIEWED
+    downstream_fan_in: W2-CONTENT-SYN-CONT-01
+
+  - issue: 815
+    mission_id: W2-CONTENT-EVAL-CONT-01
+    family: CONTENT_CONSISTENCY_EVALUATION_WSN
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_REVIEW
+    engine_dependency: ENGINE_NEUTRAL_NOW
+    immutable_inputs:
+      - REVIEWED_CONTENT_FAN_IN
+      - REVIEWED_AUTHORED_VERTICAL_SLICE_REFERENCE
+      - REVIEWED_WSN_BOUNDED_EVIDENCE
+    sibling_mutable_inputs: []
+    mutable_paths:
+      - docs/planning/wave-2/content/content-evaluation-continuation-01.md
+      - docs/planning/wave-2/content/content-evaluation-continuation-01.yaml
+      - docs/planning/handoffs/issue-815.md
+    abstract_packet_placeholders:
+      - WORLD_CONT_PACKET
+      - SOCIAL_CONT_PACKET
+      - CHAR_CONT_PACKET
+      - NARR_CONT_PACKET
+    required_semantics:
+      - PARAMETERIZED_CROSS_ROOT_INVARIANTS
+      - VERTICAL_SLICE_NONCANONICAL_REGRESSION_FIXTURES
+      - PRESERVE_EXISTING_WSN_IDENTITIES_AND_OUTCOMES
+      - E3_E4_E8_BLOCKED_DEBT_LEDGER
+      - NO_SINGLE_EVALUATOR_FINAL_AUTHORITY
+      - NO_HUMAN_QUALITY_OR_PRODUCTION_VALIDATION_INFLATION
+    required_root_review: true
+    reviewed_token: W2-CONTENT-EVAL-CONT-01_REVIEWED
+    downstream_fan_in: W2-CONTENT-SYN-CONT-01
+
+conflict_proof:
+  all_root_mutable_paths_disjoint: true
+  shared_mutable_paths: []
+  shared_immutable_inputs_allowed: true
+  compiler_paths_owned_by_roots: false
+  predecessor_paths_owned_by_roots: false
+  existing_wsn_paths_owned_by_roots: false
+  semantic_overlap_resolution: DEFER_CONCRETE_BINDINGS_AND_CONTRADICTIONS_TO_FAN_IN
+
+false_dependencies_rejected:
+  - ENGINE_SELECTION
+  - ENGINE_SPECIFIC_SCRIPTING
+  - SIBLING_MUTABLE_OUTPUTS
+  - FINAL_CANON_DECISION
+  - GLOBAL_WSN_PASS
+  - PRODUCTION_TIME_OR_SCHEDULE_VALIDATION
+
+vertical_slice_policy:
+  canonical: false
+  role: NONCANONICAL_REGRESSION_AND_REFERENCE_FIXTURE
+  may_constrain_semantic_invariants: true
+  may_dictate_final_concrete_content: false
+  preserved_behaviors:
+    - DENY_BY_DEFAULT_PRIVATE_SECRET
+    - EXPLICIT_DISCLOSURE_OR_VALIDATED_AUTHORITY_EFFECT_FOR_DIRECT_SECRET_ACCESS
+    - SUBSTITUTE_TESTIMONY_EVIDENCE_ROUTES_DO_NOT_REVEAL_SECRET
+    - PRIVATE_OBJECTIVE_OPTIONAL
+    - QUEST_SOLVABLE_WITHOUT_SECRET
+
+fan_in:
+  mission_id: W2-CONTENT-SYN-CONT-01
+  materialized_issue: null
+  state: NOT_MATERIALIZED_PENDING_FIVE_REVIEWED_ROOT_TOKENS
+  prerequisites:
+    - W2-CONTENT-WORLD-CONT-01_REVIEWED
+    - W2-CONTENT-SOCIAL-CONT-01_REVIEWED
+    - W2-CONTENT-CHAR-CONT-01_REVIEWED
+    - W2-CONTENT-NARR-CONT-01_REVIEWED
+    - W2-CONTENT-EVAL-CONT-01_REVIEWED
+  owns:
+    - CONCRETE_CROSS_ROOT_BINDING
+    - IDENTIFIER_TERMINOLOGY_RECONCILIATION
+    - CHRONOLOGY_AND_BRANCH_CONTRADICTION_RECONCILIATION
+    - TRUTH_CLAIM_BELIEF_KNOWLEDGE_EXPOSURE_RECONCILIATION
+    - PROGRESSION_GATE_RECONCILIATION
+    - RELATIONSHIP_HISTORY_INTERFACE_RECONCILIATION
+    - QUEST_CONSEQUENCE_AND_RECOVERY_RECONCILIATION
+    - APPLICATION_OF_REVIEWED_EVALUATION_CONTRACT
+    - RESIDUAL_OPEN_FINDING_LEDGER
+    - WSN_EVIDENCE_DEBT_PRESERVATION
+  fresh_synthesis_review_required: true
+  canonicality: NOT_CANONICAL
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  duplicate_successor_mission_found_before_creation: false
+  root_count_within_owner_target: true
+  root_paths_disjoint: true
+  sibling_mutable_dependencies_present: false
+  false_engine_dependency_present: false
+  vertical_slice_canon_inflation_found: false
+  wsn_outcome_laundering_found: false
+  backlog_explosion_found: false
+
+authority:
+  final_content_canon: false
+  engine_selection: false
+  gameplay_implementation: false
+  high_throughput_implementation: false
+  implementation_readiness: false
+  empirical_wsn_upgrade: false
+  human_quality_pass: false
+  production_validation: false
+  verification_pass: false
+  release: false
+  decision: false
+  integration: false
+  canonicalization: false
