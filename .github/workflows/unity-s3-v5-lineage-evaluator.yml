@@ -110,11 +110,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          command -v caffeinate >/dev/null
           output_dir="$RUNNER_TEMP/everfield-unity-s3-v5-lineage"
           output_path="$output_dir/lineage.json"
           mkdir -p "$output_dir"
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-lineage-pycache" \
-            python3 tools/planning/unity_s3_v5_lineage.py \
+            caffeinate -i python3 tools/planning/unity_s3_v5_lineage.py \
               --editor-path "$UNITY_EDITOR_PATH" \
               --out "$output_path"
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-lineage-pycache" \
