@@ -162,3 +162,20 @@ jobs:
           path: ${{ runner.temp }}/everfield-unity-s3-v5-lineage/lineage.json
           if-no-files-found: error
           retention-days: 30
+
+  record:
+    name: Record exact lineage evidence on GitHub-hosted runner
+    needs: lineage
+    if: >-
+      needs.lineage.result == 'success' &&
+      github.repository == 'vokerg/everfield' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch'
+    permissions:
+      actions: read
+      contents: write
+    uses: ./.github/workflows/unity-s3-v5-lineage-recorder.yml
+    with:
+      source_run_id: ${{ github.run_id }}
+      source_run_attempt: ${{ github.run_attempt }}
+      source_head_sha: ${{ github.sha }}
