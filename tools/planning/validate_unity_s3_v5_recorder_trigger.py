@@ -85,7 +85,7 @@ def validate(evaluator: str, recorder: str) -> None:
     require(publication, "          GH_TOKEN: ${{ github.token }}\n", "publication-scoped repository token")
     require(
         publication,
-        "          auth_header=\"$(printf 'x-access-token:%s' \"$GH_TOKEN\" | base64 | tr -d '\\\\n')\"\n",
+        "auth_header=\"$(printf 'x-access-token:%s' \"$GH_TOKEN\" | base64",
         "ephemeral basic-auth header derivation",
     )
     authenticated_push = (
@@ -95,6 +95,7 @@ def validate(evaluator: str, recorder: str) -> None:
         "            git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\""
     )
     require(publication, authenticated_push, "ephemeral Git-config authenticated evidence push")
+    require(publication, "          unset auth_header\n", "ephemeral auth variable cleanup")
     require_order(
         publication,
         "auth_header=",
@@ -201,15 +202,15 @@ def negative_static_controls(evaluator: str, recorder: str) -> None:
     before_publication, separator, publication = recorder.partition(publication_marker)
     if not separator:
         raise SystemExit("negative controls cannot locate publication step")
-    unauthenticated_publication = publication.replace(
-        "          auth_header=\"$(printf 'x-access-token:%s' \"$GH_TOKEN\" | base64 | tr -d '\\\\n')\"\n"
-        "          GIT_CONFIG_COUNT=1 \\\n"
-        "          GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \\\n"
-        "          GIT_CONFIG_VALUE_0=\"AUTHORIZATION: basic $auth_header\" \\\n"
-        "            git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\"\n"
-        "          unset auth_header\n",
-        "          git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\"\n",
-        1,
+    auth_start = publication.find("          auth_header=")
+    auth_end_marker = "          unset auth_header\n"
+    auth_end = publication.find(auth_end_marker)
+    if auth_start < 0 or auth_end < auth_start:
+        raise SystemExit("negative controls cannot locate bounded publication authentication")
+    unauthenticated_publication = (
+        publication[:auth_start]
+        + "          git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\"\n"
+        + publication[auth_end + len(auth_end_marker):]
     )
     mutations = [
         (
