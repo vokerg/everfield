@@ -173,6 +173,7 @@ jobs:
       - name: Publish immutable lineage evidence branch handoff
         shell: bash
         env:
+          GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ inputs.source_run_id }}
           RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
           SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
@@ -185,7 +186,12 @@ jobs:
           git add -- "$EVIDENCE_PATH"
           test "$(git diff --cached --name-only)" = "$EVIDENCE_PATH"
           git commit -m "[PLAN-v1][W2-ENG-TECH-UNITY-S3-V5-RERUN-01] Stage lineage run ${RUN_ID}"
-          git push origin "HEAD:refs/heads/$EVIDENCE_BRANCH"
+          auth_header="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')"
+          GIT_CONFIG_COUNT=1 \
+          GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
+          GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth_header" \
+            git push origin "HEAD:refs/heads/$EVIDENCE_BRANCH"
+          unset auth_header
           export EVIDENCE_BRANCH
           python3 - <<'PY'
           import json
