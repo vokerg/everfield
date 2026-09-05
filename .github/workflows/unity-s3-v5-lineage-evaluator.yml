@@ -162,3 +162,96 @@ jobs:
           path: ${{ runner.temp }}/everfield-unity-s3-v5-lineage/lineage.json
           if-no-files-found: error
           retention-days: 30
+
+  dispatch_recording:
+    name: Dispatch separate exact lineage recorder
+    needs: lineage
+    if: >-
+      needs.lineage.result == 'success' &&
+      github.repository == 'vokerg/everfield' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch recorder as a separate workflow run
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN_ID: ${{ github.run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ github.run_attempt }}
+          SOURCE_HEAD_SHA: ${{ github.sha }}
+          EXPECTED_REPOSITORY: vokerg/everfield
+          EXPECTED_REF: refs/heads/main
+          EXPECTED_EVENT: workflow_dispatch
+          RECORDER_WORKFLOW: unity-s3-v5-lineage-recorder.yml
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          api = os.environ["GITHUB_API_URL"].rstrip("/")
+          repo = os.environ["GITHUB_REPOSITORY"]
+          token = os.environ["GH_TOKEN"]
+          source_run_id = os.environ["SOURCE_RUN_ID"]
+          source_run_attempt = os.environ["SOURCE_RUN_ATTEMPT"]
+          source_head_sha = os.environ["SOURCE_HEAD_SHA"]
+          expected_repo = os.environ["EXPECTED_REPOSITORY"]
+          expected_ref = os.environ["EXPECTED_REF"]
+          expected_event = os.environ["EXPECTED_EVENT"]
+          recorder_workflow = os.environ["RECORDER_WORKFLOW"]
+
+          if repo != expected_repo:
+              raise SystemExit("dispatch repository identity mismatch")
+          if os.environ["GITHUB_REF"] != expected_ref:
+              raise SystemExit("dispatch ref identity mismatch")
+          if os.environ["GITHUB_EVENT_NAME"] != expected_event:
+              raise SystemExit("dispatch event identity mismatch")
+          if not source_run_id.isdigit() or not source_run_attempt.isdigit():
+              raise SystemExit("dispatch source run identity is not numeric")
+          if len(source_head_sha) != 40 or any(c not in "0123456789abcdef" for c in source_head_sha.lower()):
+              raise SystemExit("dispatch source head is not sha40")
+
+          payload = json.dumps({
+              "ref": "main",
+              "inputs": {
+                  "source_run_id": source_run_id,
+                  "source_run_attempt": source_run_attempt,
+                  "source_head_sha": source_head_sha,
+              },
+          }).encode("utf-8")
+          request = urllib.request.Request(
+              f"{api}/repos/{repo}/actions/workflows/{recorder_workflow}/dispatches",
+              data=payload,
+              method="POST",
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept": "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+                  "Content-Type": "application/json",
+              },
+          )
+          with urllib.request.urlopen(request, timeout=20) as response:
+              status = response.status
+              body = response.read()
+          if status not in (200, 204):
+              raise SystemExit(f"recorder workflow dispatch failed with HTTP {status}")
+          dispatched_run_id = None
+          if body:
+              decoded = json.loads(body)
+              dispatched_run_id = decoded.get("workflow_run_id")
+              if dispatched_run_id is not None and not str(dispatched_run_id).isdigit():
+                  raise SystemExit("recorder dispatch returned invalid workflow_run_id")
+          print(json.dumps({
+              "recorder_dispatched": True,
+              "recorder_workflow": recorder_workflow,
+              "source_run_attempt": source_run_attempt,
+              "source_run_id": source_run_id,
+              "source_head_sha": source_head_sha,
+              "dispatched_run_id": dispatched_run_id,
+          }, sort_keys=True))
+          PY

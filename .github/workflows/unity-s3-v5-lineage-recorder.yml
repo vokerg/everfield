@@ -1,161 +1,125 @@
 name: Everfield Unity S3 reviewed-v5 lineage recorder
 
 on:
-  workflow_run:
-    workflows:
-      - Everfield Unity S3 reviewed-v5 lineage evaluator
-    types:
-      - completed
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: "Exact evaluator workflow run id"
+        required: true
+        type: string
+      source_run_attempt:
+        description: "Exact evaluator workflow run attempt"
+        required: true
+        type: string
+      source_head_sha:
+        description: "Exact evaluator source head on main"
+        required: true
+        type: string
 
 permissions:
   actions: read
   contents: write
 
 concurrency:
-  group: everfield-unity-s3-v5-lineage-recorder-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
+  group: everfield-unity-s3-v5-lineage-recorder-${{ inputs.source_run_id }}-${{ inputs.source_run_attempt }}
   cancel-in-progress: false
 
 jobs:
   record:
     if: >-
       github.repository == 'vokerg/everfield' &&
-      github.event.workflow_run.name == 'Everfield Unity S3 reviewed-v5 lineage evaluator' &&
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'workflow_dispatch' &&
-      github.event.workflow_run.head_branch == 'main' &&
-      github.event.workflow_run.head_repository.full_name == 'vokerg/everfield'
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - name: Bind exact upstream workflow run and trusted-main identity
+      - name: Checkout trusted current-main recorder gate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Wait for exact evaluator terminal success and bind current main
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
-          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          SOURCE_EVENT: ${{ github.event.workflow_run.event }}
-          EVENT_WORKFLOW_ID: ${{ github.event.workflow_run.workflow_id }}
-          EXPECTED_WORKFLOW_NAME: Everfield Unity S3 reviewed-v5 lineage evaluator
-          EXPECTED_WORKFLOW_PATH: .github/workflows/unity-s3-v5-lineage-evaluator.yml
-          EXPECTED_REPOSITORY: vokerg/everfield
+          RUN_ID: ${{ inputs.source_run_id }}
+          RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
+          RECORDER_WORKFLOW_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import json
-          import os
-          import urllib.request
-
-          api = os.environ["GITHUB_API_URL"].rstrip("/")
-          repo = os.environ["GITHUB_REPOSITORY"]
-          token = os.environ["GH_TOKEN"]
-          run_id = os.environ["RUN_ID"]
-          expected_repo = os.environ["EXPECTED_REPOSITORY"]
-          expected_path = os.environ["EXPECTED_WORKFLOW_PATH"]
-          expected_name = os.environ["EXPECTED_WORKFLOW_NAME"]
-          event_workflow_id = str(os.environ["EVENT_WORKFLOW_ID"])
-          expected_head = os.environ["SOURCE_HEAD_SHA"]
-
-          if repo != expected_repo:
-              raise SystemExit("repository identity mismatch")
-
-          def get(path):
-              request = urllib.request.Request(
-                  f"{api}/repos/{repo}/{path}",
-                  headers={
-                      "Authorization": f"Bearer {token}",
-                      "Accept": "application/vnd.github+json",
-                      "X-GitHub-Api-Version": "2022-11-28",
-                  },
-              )
-              with urllib.request.urlopen(request, timeout=20) as response:
-                  return json.load(response)
-
-          run = get(f"actions/runs/{run_id}")
-          checks = {
-              "id": str(run.get("id")) == run_id,
-              "run_attempt": str(run.get("run_attempt")) == os.environ["RUN_ATTEMPT"],
-              "name": run.get("name") == expected_name,
-              "event": run.get("event") == "workflow_dispatch",
-              "status": run.get("status") == "completed",
-              "conclusion": run.get("conclusion") == "success",
-              "head_branch": run.get("head_branch") == "main",
-              "head_sha": run.get("head_sha") == expected_head,
-              "repository": (run.get("repository") or {}).get("full_name") == expected_repo,
-              "workflow_id": str(run.get("workflow_id")) == event_workflow_id,
-          }
-          failed = [key for key, ok in checks.items() if not ok]
-          if failed:
-              raise SystemExit(f"upstream run identity mismatch: {failed}")
-
-          workflow = get(f"actions/workflows/{run['workflow_id']}")
-          if workflow.get("path") != expected_path or str(workflow.get("id")) != event_workflow_id:
-              raise SystemExit("trusted lineage evaluator workflow identity mismatch")
-
-          branch = get("branches/main")
-          publication_base = (branch.get("commit") or {}).get("sha")
-          if publication_base != expected_head:
-              compare = get(f"compare/{expected_head}...{publication_base}")
-              if (compare.get("merge_base_commit") or {}).get("sha") != expected_head:
-                  raise SystemExit("source head is no longer an ancestor of current main")
-
-          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as out:
-              out.write(f"SOURCE_WORKFLOW_ID={run['workflow_id']}\n")
-              out.write(f"SOURCE_WORKFLOW_PATH={expected_path}\n")
-              out.write(f"SOURCE_WORKFLOW_NAME={expected_name}\n")
-              out.write(f"PUBLICATION_BASE_MAIN_SHA={publication_base}\n")
-          print(json.dumps({
-              "run_id": run["id"],
-              "run_attempt": run["run_attempt"],
-              "workflow_id": run["workflow_id"],
-              "head_sha": expected_head,
-              "publication_base_main_sha": publication_base,
-          }, sort_keys=True))
-          PY
+          test "$GITHUB_REPOSITORY" = "vokerg/everfield"
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$GITHUB_EVENT_NAME" = "workflow_dispatch"
+          test "$(git rev-parse HEAD)" = "$RECORDER_WORKFLOW_SHA"
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-recorder-gate-pycache" \
+            python3 -m py_compile tools/planning/unity_s3_v5_recorder_source_gate.py
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-recorder-gate-pycache" \
+            python3 tools/planning/unity_s3_v5_recorder_source_gate.py --self-test
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-recorder-gate-pycache" \
+            python3 tools/planning/unity_s3_v5_recorder_source_gate.py \
+              --run-id "$RUN_ID" \
+              --run-attempt "$RUN_ATTEMPT" \
+              --source-head-sha "$SOURCE_HEAD_SHA" \
+              --recorder-workflow-sha "$RECORDER_WORKFLOW_SHA" \
+              --github-env "$GITHUB_ENV" \
+              --max-polls 24 \
+              --sleep-seconds 5
+          test -z "$(git status --porcelain --untracked-files=all)"
 
       - name: Checkout exact source head for trusted projection code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ inputs.source_head_sha }}
           fetch-depth: 1
+          clean: true
+          persist-credentials: false
 
       - name: Verify projection code identity and deterministic self-tests
         shell: bash
         env:
-          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$SOURCE_HEAD_SHA"
+          test "$SOURCE_HEAD_SHA" = "$PUBLICATION_BASE_MAIN_SHA"
           test -f "$SOURCE_WORKFLOW_PATH"
           test -f tools/planning/unity_s3_v5_lineage.py
           test -f tools/planning/record_unity_s3_v5_lineage.py
+          test -f tools/planning/unity_s3_v5_recorder_source_gate.py
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-lineage-recorder-pycache" \
             python3 -m py_compile \
               tools/planning/unity_s3_v5_lineage.py \
-              tools/planning/record_unity_s3_v5_lineage.py
+              tools/planning/record_unity_s3_v5_lineage.py \
+              tools/planning/unity_s3_v5_recorder_source_gate.py
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-lineage-recorder-pycache" \
             python3 tools/planning/unity_s3_v5_lineage.py --self-test
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-lineage-recorder-pycache" \
             python3 -m tools.planning.record_unity_s3_v5_lineage --self-test
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-lineage-recorder-pycache" \
+            python3 tools/planning/unity_s3_v5_recorder_source_gate.py --self-test
           test -z "$(git status --porcelain --untracked-files=all)"
 
       - name: Download only the exact upstream lineage artifact
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: w2-unity-s3-v5-lineage-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
+          name: w2-unity-s3-v5-lineage-${{ inputs.source_run_id }}-${{ inputs.source_run_attempt }}
           path: ${{ runner.temp }}/everfield-unity-s3-v5-lineage
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ inputs.source_run_id }}
           github-token: ${{ github.token }}
 
       - name: Validate and project exact Unity S3 v5 lineage evidence
         shell: bash
         env:
           SOURCE: ${{ runner.temp }}/everfield-unity-s3-v5-lineage/lineage.json
-          RUN_ID: ${{ github.event.workflow_run.id }}
-          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          SOURCE_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
-          SOURCE_EVENT: ${{ github.event.workflow_run.event }}
+          RUN_ID: ${{ inputs.source_run_id }}
+          RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
+          SOURCE_HEAD_BRANCH: main
+          SOURCE_EVENT: workflow_dispatch
         run: |
           set -euo pipefail
           EVIDENCE_PATH="docs/planning/wave-2/evidence/ci/unity-s3-v5-lineage/$RUN_ID/lineage.json"
@@ -181,15 +145,38 @@ jobs:
         run: |
           set -euo pipefail
           test -f "$EVIDENCE_PATH"
-          test "$(git rev-parse HEAD)" = "${{ github.event.workflow_run.head_sha }}"
+          test "$(git rev-parse HEAD)" = "${{ inputs.source_head_sha }}"
+          test "$(git status --porcelain --untracked-files=all)" = "?? $EVIDENCE_PATH"
+
+      - name: Reconfirm exact terminal source and current main before publication
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.source_run_id }}
+          RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
+          RECORDER_WORKFLOW_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/unity-s3-v5-recorder-gate-pycache" \
+            python3 tools/planning/unity_s3_v5_recorder_source_gate.py \
+              --run-id "$RUN_ID" \
+              --run-attempt "$RUN_ATTEMPT" \
+              --source-head-sha "$SOURCE_HEAD_SHA" \
+              --recorder-workflow-sha "$RECORDER_WORKFLOW_SHA" \
+              --github-env "$GITHUB_ENV" \
+              --max-polls 1 \
+              --sleep-seconds 0
+          test "$(git rev-parse HEAD)" = "$SOURCE_HEAD_SHA"
           test "$(git status --porcelain --untracked-files=all)" = "?? $EVIDENCE_PATH"
 
       - name: Publish immutable lineage evidence branch handoff
         shell: bash
         env:
-          RUN_ID: ${{ github.event.workflow_run.id }}
-          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
-          SOURCE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.source_run_id }}
+          RUN_ATTEMPT: ${{ inputs.source_run_attempt }}
+          SOURCE_HEAD_SHA: ${{ inputs.source_head_sha }}
         run: |
           set -euo pipefail
           EVIDENCE_BRANCH="evidence/unity-s3-v5-lineage/run-${RUN_ID}-attempt-${RUN_ATTEMPT}"
@@ -199,7 +186,12 @@ jobs:
           git add -- "$EVIDENCE_PATH"
           test "$(git diff --cached --name-only)" = "$EVIDENCE_PATH"
           git commit -m "[PLAN-v1][W2-ENG-TECH-UNITY-S3-V5-RERUN-01] Stage lineage run ${RUN_ID}"
-          git push origin "HEAD:refs/heads/$EVIDENCE_BRANCH"
+          auth_header="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')"
+          GIT_CONFIG_COUNT=1 \
+          GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
+          GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth_header" \
+            git push origin "HEAD:refs/heads/$EVIDENCE_BRANCH"
+          unset auth_header
           export EVIDENCE_BRANCH
           python3 - <<'PY'
           import json
