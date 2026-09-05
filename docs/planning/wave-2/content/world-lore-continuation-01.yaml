@@ -1,0 +1,371 @@
+schema: everfield_world_lore_continuation_candidate_v1
+mission_id: W2-CONTENT-WORLD-CONT-01
+issue: 811
+state: PRODUCER_CANDIDATE_NONCANONICAL_REQUIRES_FRESH_ROOT_REVIEW
+canonicality: NOT_CANONICAL
+required_fresh_root_review: true
+fan_in_consumption_authority: false
+integration_authority: false
+engine_selection_authority: false
+implementation_readiness_authority: false
+verification_pass_authority: false
+decision_authority: false
+
+provenance:
+  producer_base_main_sha: ab3bc02d502243a6194c42960dd3ea854d14766f
+  current_main_at_recovery_sha: 88b704183e99dbd0dd102131c67a99fd0013ff36
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  continuation_compiler_issue: 806
+  continuation_compiler_head_sha: ffdb55f3ac103d4f57da9b758df8a3676eb89a09
+  activation_review_issue: 831
+  activation_review_terminal_comment_id: 5525721241
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_ACTIVATION
+  activation_scope: [811, 812, 813, 814, 815]
+  predecessor_world_markdown_blob_sha: 3caaddf10e27cefb91c35b6a4f374740aa3c6731
+  predecessor_world_yaml_blob_sha: baa827528994864faa3f50c8b0785dd89a775a14
+  reviewed_fan_in_markdown_blob_sha: accae7e01148f19ef76b4ef0878abd3315901052
+  reviewed_fan_in_map_blob_sha: 5858bc3e2d87baa3740b2513b08fb938633bba54
+  reviewed_fan_in_terminal_comment_id: 5307505361
+  corrected_vertical_slice_markdown_blob_sha: 5e94bdb0ca6146bab93264fc8e6763590aa289d2
+  corrected_vertical_slice_yaml_blob_sha: 8d341d534ef4a27929aaabdf5b81a6d5ff86b80e
+  reviewed_wsn_issue: 432
+  reviewed_wsn_review_issue: 437
+  reviewed_wsn_terminal_comment_id: 5308501587
+  recovered_source_claim_comment_id: 5536245868
+  recovery_intent_comment_id: 5551701221
+  recovery_ownership_comment_id: 5551702658
+  preserved_partial_head_sha: 210646b9ee2f72891f2ff2b7b2dcb6e7e4e68798
+  preserved_markdown_blob_sha: 5114ca04e2648b1a2e1507a28ef1dfaf01d028e6
+
+vocabulary:
+  authority_classes:
+    - CANDIDATE_OBJECTIVE
+    - CANDIDATE_CONSTRAINT
+    - UNKNOWN_BY_DESIGN
+    - DISPUTED_IN_WORLD
+    - PROVISIONAL_INTERFACE
+    - IN_WORLD_CLAIM_ONLY
+  lore_record_forms: [OBSERVATION, INTERPRETATION, ABSENCE]
+  branches: [BRANCH:BASELINE, BRANCH:PROVISIONAL]
+
+reviewed_location_ids:
+  - LOC:SETTLEMENT-CORE
+  - LOC:CULTIVATION-MOSAIC
+  - LOC:RIPARIAN-CORRIDOR
+  - LOC:COMMONS-BELT
+  - LOC:UPLAND-CATCHMENT
+  - LOC:OLD-WORKS
+  - LOC:EDGE-HABITAT
+  - LOC:OUTER-THRESHOLD
+
+place_interfaces:
+  - id: WORLD_IFACE:WATER-DEPENDENCY
+    authority: PROVISIONAL_INTERFACE
+    branch: BRANCH:PROVISIONAL
+    location_refs: [LOC:UPLAND-CATCHMENT, LOC:RIPARIAN-CORRIDOR, LOC:CULTIVATION-MOSAIC]
+    stable_affordance: UPSTREAM_CONDITION_CAN_CREATE_DOWNSTREAM_CONSTRAINTS_WITH_DISTINCT_WATER_AND_HABITAT_DIMENSIONS
+    unresolved: [final_user_groups, allocations, schedules, quantitative_flow]
+  - id: WORLD_IFACE:SHARED-WORKS-JUNCTION
+    authority: PROVISIONAL_INTERFACE
+    branch: BRANCH:PROVISIONAL
+    location_refs: [LOC:OLD-WORKS, LOC:RIPARIAN-CORRIDOR, LOC:SETTLEMENT-CORE]
+    stable_affordance: INHERITED_WORKS_CAN_ALTER_ACCESS_AND_WATER_FUNCTION_ACROSS_MULTIPLE_ZONES
+    unresolved: [original_purpose, owner, preferred_repair_outcome, exact_operation_calendar]
+  - id: WORLD_IFACE:COMMONS-EDGE
+    authority: PROVISIONAL_INTERFACE
+    branch: BRANCH:PROVISIONAL
+    location_refs: [LOC:COMMONS-BELT, LOC:EDGE-HABITAT]
+    stable_affordance: SHARED_ACCESS_AND_HABITAT_PRESSURE_CAN_CHANGE_INDEPENDENTLY
+    unresolved: [final_custodians, quotas, species_lists, seasonal_closure_schedule]
+  - id: WORLD_IFACE:CULTIVATION-MARGIN
+    authority: PROVISIONAL_INTERFACE
+    branch: BRANCH:PROVISIONAL
+    location_refs: [LOC:CULTIVATION-MOSAIC, LOC:RIPARIAN-CORRIDOR, LOC:EDGE-HABITAT]
+    stable_affordance: PRODUCTIVE_USE_WATER_CONDITION_AND_HABITAT_CONTINUITY_REMAIN_DISTINCT_DIMENSIONS
+    unresolved: [crops, ownership, exact_yields, timed_planting_windows]
+  - id: WORLD_IFACE:HISTORY-TRACE
+    authority: PROVISIONAL_INTERFACE
+    branch: BRANCH:PROVISIONAL
+    location_refs: [LOC:OLD-WORKS, LOC:SETTLEMENT-CORE, LOC:COMMONS-BELT]
+    stable_affordance: LAYERED_MODIFICATIONS_AND_RECORDS_CAN_EXPOSE_EVIDENCE_FROM_MULTIPLE_HISTORICAL_LAYERS
+    unresolved: [single_authoritative_fragmentation_story, named_builders, exact_dates]
+  - id: WORLD_IFACE:OUTER-CONNECTION
+    authority: PROVISIONAL_INTERFACE
+    branch: BRANCH:PROVISIONAL
+    location_refs: [LOC:SETTLEMENT-CORE, LOC:OUTER-THRESHOLD]
+    stable_affordance: EXCHANGE_TRAVEL_INFORMATION_AND_OBLIGATIONS_CAN_CROSS_THE_BOUNDED_SETTING
+    unresolved: [neighboring_polities, route_timetable, external_geography, final_trade_dependency]
+
+chronology:
+  model: RELATIVE_LAYERS_ONLY
+  exact_dates_allowed: false
+  exact_durations_allowed: false
+  exact_schedules_allowed: false
+  reviewed_era_order: [ERA:PRE-WORKS, ERA:WORKS-BUILDOUT, ERA:PATCHWORK-PRESENT]
+  layers:
+    - id: HIST_LAYER:PRIOR-USE
+      authority: CANDIDATE_OBJECTIVE
+      branch: BRANCH:BASELINE
+      contained_by_era: ERA:PRE-WORKS
+      relation: MAY_OVERLAP_EARLIEST_EVIDENCE_LATER_INCORPORATED_INTO_WORKS
+    - id: HIST_LAYER:COORDINATED-WORKS
+      authority: CANDIDATE_OBJECTIVE
+      branch: BRANCH:BASELINE
+      contained_by_era: ERA:WORKS-BUILDOUT
+      relation: MULTIPLE_WORKS_MAY_HAVE_BEEN_MAINTAINED_OR_UNDERSTOOD_AS_CONNECTED
+    - id: HIST_LAYER:FRAGMENTED-PRACTICE
+      authority: CANDIDATE_OBJECTIVE
+      branch: BRANCH:BASELINE
+      after_event: EVT:WORKS-BUILDOUT
+      compatible_with_event: EVT:WORKS-FRAGMENTATION
+      explains_fragmentation_cause: false
+    - id: HIST_LAYER:PRESENT-ADAPTATION
+      authority: CANDIDATE_OBJECTIVE
+      branch: BRANCH:BASELINE
+      contained_by_era: ERA:PATCHWORK-PRESENT
+      after_event: EVT:PATCHWORK-PRESENT-START
+      relation: CURRENT_REPAIR_ABANDONMENT_REPURPOSING_AND_INFORMAL_ADAPTATION
+
+historical_traces:
+  - id: TRACE:WORKS-MULTI-LAYER-MODIFICATION
+    authority: CANDIDATE_OBJECTIVE
+    branch: BRANCH:BASELINE
+    location_refs: [LOC:OLD-WORKS]
+    layer_refs: [HIST_LAYER:COORDINATED-WORKS, HIST_LAYER:FRAGMENTED-PRACTICE, HIST_LAYER:PRESENT-ADAPTATION]
+    observation: DISTINCT_REPAIR_OR_REPURPOSING_LAYERS_ARE_OBSERVABLE
+    interpretation_state: UNRESOLVED_ATTRIBUTION_AND_EXACT_CHRONOLOGY
+  - id: TRACE:RIPARIAN-ROUTE-REALIGNMENT
+    authority: CANDIDATE_OBJECTIVE
+    branch: BRANCH:BASELINE
+    location_refs: [LOC:RIPARIAN-CORRIDOR, LOC:OLD-WORKS]
+    layer_refs: [HIST_LAYER:FRAGMENTED-PRACTICE]
+    observation: ACCESS_OR_WATER_USE_RELATIONSHIPS_CHANGED_ACROSS_HISTORICAL_LAYERS
+    interpretation_state: TRIGGER_AND_DATES_UNRESOLVED
+  - id: TRACE:COMMONS-BOUNDARY-NEGOTIATION
+    authority: CANDIDATE_OBJECTIVE
+    branch: BRANCH:BASELINE
+    location_refs: [LOC:COMMONS-BELT, LOC:EDGE-HABITAT]
+    layer_refs: [HIST_LAYER:FRAGMENTED-PRACTICE, HIST_LAYER:PRESENT-ADAPTATION]
+    observation: REPEATED_SIGNS_OF_NEGOTIATED_USE_BOUNDARIES_ARE_REPRESENTABLE
+    interpretation_state: NO_PERMANENT_OWNERSHIP_OR_CONTINUOUS_INSTITUTION_INFERRED
+  - id: TRACE:OUTER-EXCHANGE-RESIDUE
+    authority: CANDIDATE_OBJECTIVE
+    branch: BRANCH:BASELINE
+    location_refs: [LOC:OUTER-THRESHOLD, LOC:SETTLEMENT-CORE]
+    layer_refs: [HIST_LAYER:PRESENT-ADAPTATION]
+    observation: MATERIAL_OR_INFORMATION_EXCHANGE_BEYOND_THE_BOUNDED_WATERSHED_IS_OBSERVABLE
+    interpretation_state: EXTERNAL_REGIONS_AND_POLITIES_UNFROZEN
+
+tensions:
+  - id: TENSION:UPSTREAM-DOWNSTREAM-STEWARDSHIP
+    authority: CANDIDATE_CONSTRAINT
+    branch: BRANCH:BASELINE
+    world_interface_ref: WORLD_IFACE:WATER-DEPENDENCY
+    dimensions: [upstream_access_or_use, downstream_water_condition, cultivation_reliability, habitat_condition]
+    rule: IMPROVING_ONE_DIMENSION_MAY_CREATE_COST_OR_CONSTRAINT_IN_ANOTHER
+    sibling_hooks: [SOCIAL_ROLE:WATER-DEPENDENT-USER, NARR_ROLE:CONSEQUENCE-WITNESS]
+    prohibited_inferences: [fixed_water_rights, rationing_schedule, drought_calendar, final_beneficiary]
+  - id: TENSION:WORKS-REPAIR-REPURPOSE-RELEASE
+    authority: CANDIDATE_CONSTRAINT
+    branch: BRANCH:BASELINE
+    world_interface_ref: WORLD_IFACE:SHARED-WORKS-JUNCTION
+    dimensions: [structural_condition, current_usefulness, historical_evidence, access_consequence, ecological_consequence]
+    rule: RESTORATION_IS_NOT_AUTOMATICALLY_SUPERIOR_TO_REPURPOSE_STABILIZATION_OR_NON_RESTORATION
+    sibling_hooks: [SOCIAL_ROLE:PUBLIC-WORKS-STAKE, CHAR_ROLE:HISTORY-INTERPRETER, NARR_ROLE:WORKS-CHOICE]
+    prohibited_inferences: [universal_optimal_state, original_purpose_answer]
+  - id: TENSION:COMMONS-ACCESS-HABITAT-PRESSURE
+    authority: CANDIDATE_CONSTRAINT
+    branch: BRANCH:BASELINE
+    world_interface_ref: WORLD_IFACE:COMMONS-EDGE
+    dimensions: [shared_access, productive_use, habitat_pressure, cultural_continuity]
+    rule: ACCESS_RESTRICTION_AND_EXPANSION_MAY_EACH_PRODUCE_MIXED_CONSEQUENCES
+    sibling_hooks: [SOCIAL_ROLE:COMMONS-STAKE, CHAR_ROLE:LOCAL-USER, NARR_ROLE:ACCESS-CONSEQUENCE]
+    prohibited_inferences: [final_custodian, quota, species_calendar, morality_score]
+  - id: TENSION:CULTIVATION-MARGIN-TRADEOFF
+    authority: CANDIDATE_CONSTRAINT
+    branch: BRANCH:BASELINE
+    world_interface_ref: WORLD_IFACE:CULTIVATION-MARGIN
+    dimensions: [productive_capacity, water_demand, habitat_continuity, route_or_access_condition]
+    rule: CHANGES_MUST_EXPOSE_AFFECTED_DIMENSIONS_RATHER_THAN_COLLAPSE_TO_ONE_PROGRESS_VALUE
+    sibling_hooks: [SOCIAL_ROLE:LAND-USE-STAKE, NARR_ROLE:LAND-USE-CONSEQUENCE]
+    prohibited_inferences: [crop_catalogue, property_regime, yield_curve, season_schedule]
+
+lore_authority_model:
+  observation_truth_effect: MAY_RECORD_CANDIDATE_OBSERVABLE_ONLY
+  interpretation_truth_effect: NONE
+  absence_truth_effect: NONE
+  generated_prose_truth_effect: NONE
+  rules:
+    - INTERPRETATION_CANNOT_INHERIT_OBSERVATION_AUTHORITY
+    - ABSENCE_DOES_NOT_PROVE_THE_OPPOSITE_PROPOSITION
+    - IN_WORLD_CLAIM_CANNOT_MUTATE_OBJECTIVE_FACT
+    - GENERATED_CONTENT_CANNOT_FILL_UNKNOWN_BY_DESIGN
+
+lore_records:
+  - id: LORE:OLD-WORKS-LAYERS-OBSERVED
+    record_form: OBSERVATION
+    authority: CANDIDATE_OBJECTIVE
+    branch: BRANCH:BASELINE
+    subject_refs: [TRACE:WORKS-MULTI-LAYER-MODIFICATION, LOC:OLD-WORKS]
+    statement_key: MULTIPLE_MODIFICATION_LAYERS_OBSERVED
+    excludes: [builder_identity, original_purpose, exact_chronology]
+  - id: LORE:FRAGMENTATION-LOCAL-ACCOUNT
+    record_form: INTERPRETATION
+    authority: IN_WORLD_CLAIM_ONLY
+    branch: BRANCH:BASELINE
+    subject_refs: [WF:FRAGMENTATION-CAUSE, EVT:WORKS-FRAGMENTATION]
+    statement_key: LOCAL_STEWARDSHIP_DIVERGENCE_MAY_HAVE_MATTERED
+    truth_relation: ABOUT_UNKNOWN_BY_DESIGN
+    truth_effect: NONE
+  - id: LORE:OUTER-EXCHANGE-OBSERVED
+    record_form: OBSERVATION
+    authority: CANDIDATE_OBJECTIVE
+    branch: BRANCH:BASELINE
+    subject_refs: [TRACE:OUTER-EXCHANGE-RESIDUE, LOC:OUTER-THRESHOLD]
+    statement_key: EXCHANGE_BEYOND_BOUNDED_SETTING_OBSERVED
+    excludes: [external_geography, neighboring_polities, final_trade_dependency]
+  - id: LORE:ANOMALY-CAUSE-ABSENT
+    record_form: ABSENCE
+    authority: UNKNOWN_BY_DESIGN
+    branch: BRANCH:BASELINE
+    subject_refs: [WF:SUPERNATURAL-ONTOLOGY, MYS:SEASONAL-ANOMALIES]
+    statement_key: SEASONAL_ANOMALY_ONTOLOGY_NOT_RESOLVED
+    truth_effect: NONE
+
+branch_policy:
+  baseline_meaning: CANDIDATE_PART_OF_BASELINE_CONTINUATION_PACKET
+  provisional_meaning: INTERFACE_OR_HYPOTHESIS_REQUIRING_DOWNSTREAM_BINDING
+  new_permanent_mutually_exclusive_world_branch_authority: false
+  downstream_branch_may_silently_rewrite_historical_trace: false
+  downstream_branch_may_promote_interpretation_to_objective_fact: false
+  contradiction_resolution_route: W2-CONTENT-SYN-CONT-01
+
+sibling_interfaces:
+  independence:
+    reads_sibling_mutable_output: false
+    requires_sibling_completion: false
+    concrete_cross_root_binding_allowed_here: false
+  hooks:
+    social:
+      - SOCIAL_ROLE:WATER-DEPENDENT-USER
+      - SOCIAL_ROLE:PUBLIC-WORKS-STAKE
+      - SOCIAL_ROLE:COMMONS-STAKE
+      - SOCIAL_ROLE:LAND-USE-STAKE
+    character:
+      - CHAR_ROLE:HISTORY-INTERPRETER
+      - CHAR_ROLE:LOCAL-USER
+    narrative:
+      - NARR_ROLE:CONSEQUENCE-WITNESS
+      - NARR_ROLE:WORKS-CHOICE
+      - NARR_ROLE:ACCESS-CONSEQUENCE
+      - NARR_ROLE:LAND-USE-CONSEQUENCE
+  namespace_rule: ONLY_PROVISIONAL_TYPED_ROLE_IDS_NO_CONCRETE_SIBLING_ENTITIES
+
+vertical_slice_regression:
+  authority: NONCANONICAL_REFERENCE_ONLY
+  may_test:
+    - deny_by_default_secret_authority
+    - substitute_evidence_or_testimony_routes
+    - optional_objectives
+    - recoverability
+    - branch_consequence
+    - solvability_without_privileged_knowledge
+  concrete_fiction_import_allowed: false
+  mismatch_with_fixture_fiction_is_automatically_defect: false
+  mismatch_with_reviewed_semantic_constraint_is_review_finding: true
+
+wsn_evidence_ceiling:
+  E1: PASS
+  E2: PASS
+  E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  E4: NOT_RUN_EXACT_TIME_SCHEDULE_PREREQUISITES_ABSENT
+  E5: PASS_BOUNDED_MODEL_ONLY
+  E6: PASS
+  E7: PASS
+  E8: INCONCLUSIVE_SCHEDULE_REACHABILITY_BLOCKED
+  E9: PASS
+  forbidden_promotions:
+    - concrete_schedule
+    - weather_calendar
+    - npc_reachability_guarantee
+    - timed_window_completeness
+    - production_persistence
+    - human_quality_pass
+    - aggregate_verification_pass
+
+assumptions:
+  - id: ASM:WORLD-CONT-01
+    statement: SIX_PLACE_INTERFACES_ARE_SUFFICIENT_FOR_NEXT_BOUNDED_SIBLING_TRANCHE_WITHOUT_NEW_REGIONS
+    reopen_on: CLEAN_SIBLING_REVIEW_PROVES_MISSING_WORLD_INTERFACE_IS_HARD_DEPENDENCY
+  - id: ASM:WORLD-CONT-02
+    statement: RELATIVE_HISTORICAL_LAYERS_ARE_SUFFICIENT_BEFORE_GAME_TIME_POLICY
+    reopen_on: DOWNSTREAM_CONTENT_CANNOT_EXPRESS_REQUIRED_RELATION_WITHOUT_EXACT_TIME_SEMANTICS
+  - id: ASM:WORLD-CONT-03
+    statement: FOUR_TENSION_FRAMES_ARE_SUFFICIENT_WITHOUT_CONCRETE_SOCIAL_OWNERSHIP
+    reopen_on: FAN_IN_FINDS_UNREPRESENTABLE_CONFLICT
+  - id: ASM:WORLD-CONT-04
+    statement: OBSERVATIONS_AND_INTERPRETATIONS_CAN_REMAIN_SEPARATE_THROUGH_GENERATED_CONTENT_TOOLING
+    reopen_on: EVALUATION_DEMONSTRATES_AUTHORITY_LEAKAGE
+
+reopen_routes:
+  incompatible_reviewed_sibling_topology_or_history: W2-CONTENT-SYN-CONT-01_CONTRADICTION_RECONCILIATION
+  wsn_evidence_invalidates_causal_or_authority_assumption: REOPEN_ONLY_AFFECTED_CONTINUATION_RECORDS
+  originality_review_finds_material_expressive_similarity: QUARANTINE_AND_REWRITE_AFFECTED_CANDIDATE_CONTENT
+  exact_time_or_schedule_semantics_become_required: ROUTE_SCOPED_GAME_TIME_POLICY_PREREQUISITE
+  concrete_engine_dependency_emerges: RECORD_SCOPED_TECHNICAL_DEPENDENCY_ONLY
+
+checkable_rules:
+  - EVERY_INTERFACE_REFERENCES_ONLY_REVIEWED_LOCATION_IDS
+  - EVERY_HISTORY_LAYER_BINDS_TO_REVIEWED_ERA_OR_EVENT_AND_HAS_NO_EXACT_DATE_OR_DURATION
+  - EVERY_TRACE_HAS_EXPLICIT_OBSERVATION_AUTHORITY_AND_INTERPRETATION_STATE
+  - EVERY_TENSION_REFERENCES_DECLARED_INTERFACE_AND_KEEPS_DIMENSIONS_SEPARATE
+  - EVERY_LORE_INTERPRETATION_REMAINS_IN_WORLD_CLAIM_ONLY_WITH_NO_TRUTH_EFFECT
+  - EVERY_SIBLING_HOOK_USES_PROVISIONAL_TYPED_NAMESPACE
+  - VERTICAL_SLICE_CONCRETE_FICTION_IS_NOT_WORLD_TRUTH
+  - WSN_E3_E4_E8_LIMITATIONS_AND_E5_BOUNDED_MODEL_LIMIT_REMAIN_EXPLICIT
+  - NO_BRANCH_GRANTS_CANON_IMPLEMENTATION_INTEGRATION_VERIFICATION_RELEASE_OR_DECISION_AUTHORITY
+
+self_review:
+  blocker_findings: 0
+  major_findings: 0
+  correction_requiring_minor_findings: 0
+  attacks:
+    - NO_PREDECESSOR_FILE_EDIT
+    - NO_SIBLING_MUTABLE_OUTPUT_CONSUMED
+    - NO_EXACT_CALENDAR_SCHEDULE_TRAVEL_TIME_WEATHER_WINDOW_OR_NPC_REACHABILITY_CLAIM
+    - HISTORICAL_OBSERVATIONS_AND_INTERPRETATIONS_SEPARATE
+    - FRAGMENTATION_AND_SUPERNATURAL_ONTOLOGY_UNRESOLVED
+    - NO_FINAL_FACTION_CHARACTER_QUEST_OR_OWNERSHIP_BINDING
+    - VERTICAL_SLICE_REFERENCE_ONLY
+    - WSN_OUTCOMES_NOT_PROMOTED
+    - OWNED_OUTPUT_SCOPE_ONLY
+    - DOWNSTREAM_FAN_IN_NOT_MATERIALIZED_EARLY
+
+required_next_gate:
+  task_class: REQUIRED_REVIEW
+  review_scope: EXACT_IMMUTABLE_ROOT_PACKET
+  disposition_required_for_fan_in: CLEAN_FOR_BOUNDED_WORLD_CONTINUATION_CONSUMPTION
+  attacks:
+    - invented_canon
+    - chronology_or_time_overreach
+    - objective_fact_or_claim_leakage
+    - hidden_sibling_dependency
+    - mutable_path_overlap
+    - vertical_slice_authority_inflation
+    - wsn_evidence_laundering
+    - originality_boundaries
+    - scope_growth
+
+authority_negatives:
+  final_canon: false
+  engine_selection: false
+  gameplay_or_high_throughput_implementation: false
+  implementation_readiness: false
+  empirical_wsn_pass: false
+  verification_pass: false
+  release: false
+  integration: false
+  decision: false
+  canonical_authority: false
