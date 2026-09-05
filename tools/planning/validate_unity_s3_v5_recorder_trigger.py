@@ -73,6 +73,39 @@ def validate(evaluator: str, recorder: str) -> None:
     require(recorder, "actions: read", "recorder Actions read permission")
     require(recorder, "contents: write", "recorder evidence-branch permission")
 
+    # The repository token must not be persisted by either checkout. Publication
+    # authentication is injected only for the final Git push subprocess.
+    if recorder.count("persist-credentials: false") != 2:
+        raise SystemExit("recorder must retain exactly two non-persisting checkouts")
+    forbid(recorder, "persist-credentials: true", "checkout credential persistence")
+    publication_marker = "\n      - name: Publish immutable lineage evidence branch handoff\n"
+    _before_publication, publication_separator, publication = recorder.partition(publication_marker)
+    if not publication_separator:
+        raise SystemExit("missing immutable lineage publication step")
+    require(publication, "          GH_TOKEN: ${{ github.token }}\n", "publication-scoped repository token")
+    require(
+        publication,
+        "          auth_header=\"$(printf 'x-access-token:%s' \"$GH_TOKEN\" | base64 | tr -d '\\\\n')\"\n",
+        "ephemeral basic-auth header derivation",
+    )
+    authenticated_push = (
+        "          GIT_CONFIG_COUNT=1 \\\n"
+        "          GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \\\n"
+        "          GIT_CONFIG_VALUE_0=\"AUTHORIZATION: basic $auth_header\" \\\n"
+        "            git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\""
+    )
+    require(publication, authenticated_push, "ephemeral Git-config authenticated evidence push")
+    require_order(
+        publication,
+        "auth_header=",
+        "git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\"",
+        "authentication is derived before publication",
+    )
+    if publication.count('git push origin "HEAD:refs/heads/$EVIDENCE_BRANCH"') != 1:
+        raise SystemExit("recorder must contain exactly one bounded evidence-branch push")
+    forbid(publication, "https://x-access-token:", "token-bearing remote URL")
+    forbid(publication, "git config --local http", "persistent local HTTP auth configuration")
+
     # Trusted gate code is loaded from the recorder's exact main workflow head before
     # any source-head checkout, then the shared temporal gate waits on the exact source.
     require_order(
@@ -164,6 +197,20 @@ def temporal_self_test() -> None:
 
 
 def negative_static_controls(evaluator: str, recorder: str) -> None:
+    publication_marker = "\n      - name: Publish immutable lineage evidence branch handoff\n"
+    before_publication, separator, publication = recorder.partition(publication_marker)
+    if not separator:
+        raise SystemExit("negative controls cannot locate publication step")
+    unauthenticated_publication = publication.replace(
+        "          auth_header=\"$(printf 'x-access-token:%s' \"$GH_TOKEN\" | base64 | tr -d '\\\\n')\"\n"
+        "          GIT_CONFIG_COUNT=1 \\\n"
+        "          GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \\\n"
+        "          GIT_CONFIG_VALUE_0=\"AUTHORIZATION: basic $auth_header\" \\\n"
+        "            git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\"\n"
+        "          unset auth_header\n",
+        "          git push origin \"HEAD:refs/heads/$EVIDENCE_BRANCH\"\n",
+        1,
+    )
     mutations = [
         (
             evaluator.replace("permissions:\n      actions: write", "permissions:\n      contents: write", 1),
@@ -194,6 +241,16 @@ def negative_static_controls(evaluator: str, recorder: str) -> None:
             evaluator,
             recorder.replace("--max-polls 24", "--max-polls 25", 1),
             "unbounded-policy poll mutation",
+        ),
+        (
+            evaluator,
+            recorder.replace("persist-credentials: false", "persist-credentials: true", 1),
+            "credential persistence mutation",
+        ),
+        (
+            evaluator,
+            before_publication + separator + unauthenticated_publication,
+            "unauthenticated plain-push topology",
         ),
     ]
     for mutated_evaluator, mutated_recorder, label in mutations:
