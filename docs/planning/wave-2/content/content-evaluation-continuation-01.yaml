@@ -1,0 +1,283 @@
+schema: everfield_w2_content_evaluation_continuation_v1
+mission_id: W2-CONTENT-EVAL-CONT-01
+issue: 815
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+
+frozen_inputs:
+  claim_main_sha: 88b704183e99dbd0dd102131c67a99fd0013ff36
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  activation_review:
+    issue: 831
+    terminal_comment_id: 5525721241
+    review_head_sha: e823e47dd8361121d368ab6c0fa1515c8889e69f
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_ACTIVATION
+    activation_scope: [811, 812, 813, 814, 815]
+  reviewed_fan_in:
+    markdown_blob_sha: accae7e01148f19ef76b4ef0878abd3315901052
+    map_blob_sha: 5858bc3e2d87baa3740b2513b08fb938633bba54
+  vertical_slice_fixture:
+    authority: NONCANONICAL_REGRESSION_REFERENCE_ONLY
+    markdown_blob_sha: 5e94bdb0ca6146bab93264fc8e6763590aa289d2
+    yaml_blob_sha: 8d341d534ef4a27929aaabdf5b81a6d5ff86b80e
+  reviewed_wsn:
+    experiment_blob_sha: 0feb04a4a9bfdc71893ab3619621f62f862858f7
+    corpus_blob_sha: 922c2838396e6fbc8b27248d0b56b8635112059f
+    evaluator_blob_sha: 9471520355e79d4358de01bfe363905bf3de962c
+    results_blob_sha: 6c75ec437fb8f1a333614c6c2f8336683247bb55
+
+interfaces:
+  binding_phase: DOWNSTREAM_FAN_IN_AFTER_CLEAN_ROOT_REVIEW_ONLY
+  sibling_mutable_outputs_consumed: false
+  packets:
+    WORLD_CONT_PACKET:
+      state: UNBOUND
+      required_token: W2-CONTENT-WORLD-CONT-01_REVIEWED
+    SOCIAL_CONT_PACKET:
+      state: UNBOUND
+      required_token: W2-CONTENT-SOCIAL-CONT-01_REVIEWED
+    CHAR_CONT_PACKET:
+      state: UNBOUND
+      required_token: W2-CONTENT-CHAR-CONT-01_REVIEWED
+    NARR_CONT_PACKET:
+      state: UNBOUND
+      required_token: W2-CONTENT-NARR-CONT-01_REVIEWED
+
+evaluation:
+  fail_closed: true
+  single_evaluator_final_authority: false
+  finding_classes:
+    BLOCKER: blocks_clean_fan_in
+    MAJOR: blocks_clean_fan_in
+    MINOR: blocks_if_correction_required
+    INFO: no_correction_required
+  clean_requires:
+    blocker: 0
+    major: 0
+    correction_requiring_minor: 0
+
+invariants:
+  - id: INV-EVAL-FACT-01
+    family: EPISTEMIC
+    rule: objective_fact_requires_explicit_authority_and_provenance
+    forbids: [CLAIM_TO_FACT_IMPLICITLY, BELIEF_TO_FACT_IMPLICITLY, RELATIONSHIP_TO_FACT, STANDING_TO_FACT, GENERATED_PRESENTATION_TO_FACT]
+  - id: INV-EVAL-FACT-02
+    family: EPISTEMIC
+    rule: overlapping_objective_facts_must_be_compatible_or_explicitly_scoped
+    finding: GLOBAL_OBJECTIVE_CONTRADICTION
+  - id: INV-EVAL-KNOW-01
+    family: KNOWLEDGE
+    rule: character_knowledge_requires_allowed_acquisition_or_disclosure
+    forbids: [PLAYER_EXPOSURE_TO_CHARACTER_KNOWLEDGE]
+  - id: INV-EVAL-KNOW-02
+    family: KNOWLEDGE
+    rule: relationship_or_social_standing_never_grants_private_information_alone
+    finding: FORBIDDEN_KNOWLEDGE_REVEAL
+  - id: INV-EVAL-SECRET-01
+    family: SECRET
+    rule: private_information_defaults_deny_and_disclosure_requires_typed_authority_route_audience
+  - id: INV-EVAL-SECRET-02
+    family: SECRET
+    rule: optional_private_information_cannot_be_hidden_required_progression
+    requires_if_denied: [SUBSTITUTE, ALTERNATIVE, DEFER, RECOVERY]
+  - id: INV-EVAL-TIME-01
+    family: CHRONOLOGY
+    rule: exact_schedule_claims_require_reviewed_authoritative_time_and_schedule_inputs
+    relative_partial_order_allowed: true
+  - id: INV-EVAL-TIME-02
+    family: CHRONOLOGY
+    rule: absent_schedule_authority_cannot_become_hidden_required_prerequisite
+  - id: INV-EVAL-BRANCH-01
+    family: BRANCH
+    rule: mutually_exclusive_branches_cannot_be_jointly_required_and_branch_facts_are_scope_bound
+  - id: INV-EVAL-BRANCH-02
+    family: CONSEQUENCE
+    rule: high_impact_choice_requires_precommit_observability_and_aftermath_or_mitigation_or_alternative_sufficiency
+  - id: INV-EVAL-BRANCH-03
+    family: PERSISTENCE
+    rule: recovery_cannot_erase_material_branch_or_history_without_authorized_rule
+  - id: INV-EVAL-REL-01
+    family: RELATIONSHIP
+    rule: relationship_state_is_multidimensional
+    forbids: [UNIVERSAL_RELATIONSHIP_SCALAR]
+  - id: INV-EVAL-REL-02
+    family: RELATIONSHIP
+    rule: relationship_dimension_change_requires_typed_cause_and_repair_preserves_material_history
+  - id: INV-EVAL-REL-03
+    family: RELATIONSHIP
+    rule: reputation_legitimacy_trust_and_information_access_are_distinct_domains
+  - id: INV-EVAL-GATE-01
+    family: PROGRESSION_GATE
+    rule: every_gate_is_classified_and_local_optional_specialization_branch_gates_do_not_become_foundational
+  - id: INV-EVAL-GATE-02
+    family: PROGRESSION_GATE
+    rule: baseline_play_remains_legal_when_nonfoundational_gates_are_unmet_unless_exact_reviewed_contract_overrides
+  - id: INV-EVAL-QUEST-01
+    family: QUEST
+    rule: required_objective_graph_is_acyclic_or_has_bounded_reachable_exit
+    findings: [DEAD_END, UNBOUNDED_REQUIRED_CYCLE]
+  - id: INV-EVAL-QUEST-02
+    family: QUEST
+    rule: required_progression_cannot_depend_on_secret_unavailable_sibling_unbound_schedule_or_exclusive_branch_without_legal_alternative
+  - id: INV-EVAL-QUEST-03
+    family: QUEST
+    rule: failure_declares_retry_recovery_defer_alternative_or_intentional_terminal_consequence_and_retry_preserves_history_truth
+  - id: INV-EVAL-CONSEQ-01
+    family: CONSEQUENCE
+    rule: meaningful_consequence_declares_trigger_state_persistence_reversibility_observability_and_goal_impact
+  - id: INV-EVAL-CONSEQ-02
+    family: CONSEQUENCE
+    rule: high_impact_divergence_preserves_sufficient_alternative_goals_or_signals_bounded_loss
+    forbids: [FAKE_CHOICE]
+  - id: INV-EVAL-ORIG-01
+    family: ORIGINALITY
+    rule: external_expression_requires_purpose_provenance_and_applicable_originality_rights_review
+  - id: INV-EVAL-ORIG-02
+    family: ORIGINALITY
+    rule: vertical_slice_concrete_labels_remain_replaceable_noncanonical_instances
+  - id: INV-EVAL-GEN-01
+    family: GENERATED_CONTENT
+    rule: generated_presentation_has_no_fact_secret_knowledge_relationship_branch_transition_or_canon_authority
+  - id: INV-EVAL-GEN-02
+    family: GENERATED_CONTENT
+    rule: grounding_failure_yields_declared_fallback_or_inconclusive_and_grounding_outranks_preference
+
+cross_root_checks:
+  - {id: CHK-XROOT-ENTITY-SCOPE, attacks: [identifier_type_scope_conflict, objective_fact_conflict]}
+  - {id: CHK-XROOT-EPISTEMIC, attacks: [truth_claim_belief_knowledge_exposure_collapse]}
+  - {id: CHK-XROOT-SECRET, attacks: [relationship_secret_leak, standing_secret_leak, player_exposure_leak, generated_secret_leak]}
+  - {id: CHK-XROOT-CHRONOLOGY, attacks: [partial_order_cycle, unsupported_exact_schedule]}
+  - {id: CHK-XROOT-REL-HISTORY, attacks: [uncausally_changed_dimension, history_erasure, scalarization]}
+  - {id: CHK-XROOT-GATE, attacks: [hidden_global_gate, branch_gate_serialization]}
+  - {id: CHK-XROOT-QUEST, attacks: [dead_end, cycle, missing_recovery, hidden_secret_requirement]}
+  - {id: CHK-XROOT-CONSEQUENCE, attacks: [fake_choice, missing_observability, insufficient_alternative_goals]}
+  - {id: CHK-XROOT-ORIGINALITY, attacks: [reference_authority_broadening, provenance_loss]}
+  - {id: CHK-XROOT-GENERATED, attacks: [generated_authority_inflation, ungrounded_transition]}
+  - {id: CHK-XROOT-WSN, attacks: [wsn_identity_duplication, outcome_upgrade, prose_rerun_claim]}
+  - {id: CHK-XROOT-INTERFACE, attacks: [post_hoc_interface_mutation, mutable_sibling_dependency]}
+
+regression_fixtures:
+  authority: NONCANONICAL_BEHAVIORAL_REFERENCE_ONLY
+  fixtures:
+    - id: FIX-VS-SECRET-OPTIONAL
+      assert: denied_private_secret_does_not_block_required_completion
+    - id: FIX-VS-SUBSTITUTE-EVIDENCE
+      assert: public_record_and_material_trace_remain_meaningful_without_secret_reveal
+    - id: FIX-VS-TRUTH-SEPARATION
+      assert: conflicting_claim_comparison_does_not_force_objective_truth
+    - id: FIX-VS-BRANCH-EXCLUSION
+      assert: mutually_exclusive_branch_families_are_not_jointly_required
+    - id: FIX-VS-FAILURE-RECOVERY
+      assert: witness_denial_negotiation_and_project_failure_retain_recovery_or_defer_routes
+    - id: FIX-VS-RELATIONSHIP
+      assert: multidimensional_state_and_material_history_survive_repair
+    - id: FIX-VS-GENERATED-AUTHORITY
+      assert: generated_presentation_cannot_create_authoritative_state
+  canon_effect: NONE
+
+wsn_ledger:
+  mutation_allowed: false
+  duplicate_experiment_ids_allowed: false
+  prose_upgrade_allowed: false
+  experiments:
+    WSN-E1: {outcome: PASS, scope: BOUNDED_STRUCTURAL_PREDICATE_ONLY}
+    WSN-E2: {outcome: PASS, scope: BOUNDED_KNOWLEDGE_LEAK_MODEL_ONLY}
+    WSN-E3: {outcome: INCONCLUSIVE, reason: REQUIRED_COVERAGE_BLOCKED, blocked: [timed]}
+    WSN-E4: {outcome: NOT_RUN, reason: BLOCKED_BY_EXACT_PREREQUISITE, blocked: [closures, concrete_schedules, events, quest_overrides, travel, weather]}
+    WSN-E5: {outcome: PASS, scope: BOUNDED_MODEL_ONLY_NOT_PRODUCTION_PERSISTENCE}
+    WSN-E6: {outcome: PASS, scope: BOUNDED_GENERATED_GROUNDING_MODEL_ONLY}
+    WSN-E7: {outcome: PASS, scope: BOUNDED_DISTINCTNESS_MODEL_ONLY}
+    WSN-E8: {outcome: INCONCLUSIVE, reason: REQUIRED_COVERAGE_BLOCKED, blocked: [npc_reachability, schedule_deadlock]}
+    WSN-E9: {outcome: PASS, scope: NO_SINGLE_CRITIC_AUTHORITY_DISAGREEMENT_PRESERVED}
+  authority_from_results:
+    human_quality: NOT_ESTABLISHED
+    production_persistence: NOT_ESTABLISHED
+    production_schedule: NOT_ESTABLISHED
+    verification_pass: false
+    canonical: false
+
+evidence_debt:
+  - id: DEBT-E3-TIMED
+    current: INCONCLUSIVE
+    clear_only_with_reviewed_authoritative: [GAME_TIME_POLICY, REQUIRED_TIMED_WINDOW_SEMANTICS]
+  - id: DEBT-E4-SCHEDULE
+    current: NOT_RUN
+    clear_only_with_reviewed_authoritative: [CONCRETE_SCHEDULES, EVENTS, CLOSURES, TRAVEL_WEATHER_INTERACTIONS, QUEST_OVERRIDES]
+  - id: DEBT-E8-REACHABILITY
+    current: INCONCLUSIVE
+    clear_only_with_reviewed_authoritative: [GAME_TIME_POLICY, CONCRETE_SCHEDULES, NPC_REACHABILITY_SEMANTICS]
+  issue_creates_successor_for_debt: false
+
+evaluator_trust:
+  no_single_critic_final_authority: true
+  structural_consistency_establishes_human_quality: false
+  structural_consistency_establishes_fun: false
+  structural_consistency_establishes_emotional_impact: false
+  structural_consistency_establishes_production_persistence: false
+  structural_consistency_establishes_production_schedule: false
+  grounding_failures_outrank_preference: true
+  disagreement_is_data_not_consensus: true
+  inconclusive_or_blocked_requires_exact_prerequisite_to_upgrade: true
+
+fan_in:
+  target_mission: W2-CONTENT-SYN-CONT-01
+  entry_requires:
+    - W2-CONTENT-WORLD-CONT-01_REVIEWED
+    - W2-CONTENT-SOCIAL-CONT-01_REVIEWED
+    - W2-CONTENT-CHAR-CONT-01_REVIEWED
+    - W2-CONTENT-NARR-CONT-01_REVIEWED
+    - W2-CONTENT-EVAL-CONT-01_REVIEWED
+    - EXACT_IMMUTABLE_PRODUCER_AND_REVIEW_IDENTITIES
+    - FRESH_CANONICAL_BINDING
+    - NO_MUTABLE_PATH_COLLISION
+    - NO_DUPLICATE_FAN_IN_OWNERSHIP
+  dispositions:
+    CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_SYNTHESIS:
+      requires: ZERO_UNRESOLVED_BLOCKER_MAJOR_CORRECTION_MINOR
+      authority: BOUNDED_SYNTHESIS_CONSIDERATION_ONLY
+    CHANGES_NEEDED_ROOT:
+      action: MINIMUM_EXACT_ROOT_REMEDIATION_AND_REREVIEW
+    CHANGES_NEEDED_FAN_IN:
+      action: REMEDIATE_CROSS_ROOT_BINDING_ONLY
+    BLOCKED_BY_EVIDENCE_PREREQUISITE:
+      action: PRESERVE_BLOCKED_STATE_AND_ROUTE_ONLY_IF_EXISTING_AUTHORITY_REQUIRES
+    INVALIDATED:
+      action: FAIL_CLOSED_AND_REDERIVE
+  precreate_successor_tasks: false
+
+authority:
+  empirical_wsn_upgrade: false
+  human_quality_pass: false
+  production_validation: false
+  final_canon: false
+  engine_selection: false
+  gameplay_implementation: false
+  implementation_readiness: false
+  verification_pass: false
+  release: false
+  decision: false
+  integration: false
+  canonical: false
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  attacks:
+    - false_wsn_upgrade
+    - duplicate_wsn_identity
+    - secret_knowledge_leakage
+    - mutable_sibling_dependency
+    - non_parameterized_rule
+    - chronology_schedule_overreach
+    - scalar_relationship_collapse
+    - hidden_foundational_gate
+    - quest_dead_end_or_cycle
+    - fake_consequence
+    - generated_authority_inflation
+    - vertical_slice_canon_inflation
+    - evaluator_final_authority_inflation
+  fresh_required_root_review: true
+  reviewed_token_if_clean: W2-CONTENT-EVAL-CONT-01_REVIEWED
