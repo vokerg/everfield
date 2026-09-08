@@ -40,6 +40,12 @@ def explicit_successor_generation_consumed(
     source: base.OperationalRecord,
     issues_by_number: dict[int, dict[str, Any]],
 ) -> bool:
+    """Recognize a route-declared successor without inventing a graph edge.
+
+    The route must encode exactly one issue number and that issue must already
+    exist as a trusted/eligible non-PR, non-transition issue. This only proves
+    liveness materialization; it does not grant any authority to the successor.
+    """
     successor_number = explicit_successor_issue_number(source.route)
     if successor_number is None:
         return False
@@ -54,6 +60,62 @@ def explicit_successor_generation_consumed(
         f"route {source.route}: explicit trusted successor issue #{successor_number} already exists"
     )
     return True
+
+
+def explicit_transition_redundancy_reason(
+    transition: dict[str, Any],
+    current_source: base.OperationalRecord | None,
+    issues_by_number: dict[int, dict[str, Any]],
+) -> str | None:
+    generation = v2.factory_transition_generation(transition)
+    if generation is None or current_source is None:
+        return None
+    current_generation = v2.source_generation(current_source)
+    if current_generation is None or generation != current_generation:
+        return None
+    if explicit_successor_generation_consumed(current_source, issues_by_number):
+        return "EXPLICIT_SUCCESSOR_ALREADY_EXISTS"
+    return None
+
+
+def retire_explicit_successor_transitions(
+    open_issues: list[dict[str, Any]],
+    issues_by_number: dict[int, dict[str, Any]],
+) -> int:
+    """Close unowned wrappers made unnecessary by an explicit route successor."""
+    retired = 0
+    retained: list[dict[str, Any]] = []
+    source_cache: dict[int, base.OperationalRecord | None] = {}
+    for issue in open_issues:
+        generation = v2.factory_transition_generation(issue)
+        if generation is None:
+            retained.append(issue)
+            continue
+        source_issue = generation[0]
+        if source_issue not in source_cache:
+            source_cache[source_issue] = v3.routable_terminal(source_issue)
+        reason = explicit_transition_redundancy_reason(
+            issue, source_cache[source_issue], issues_by_number
+        )
+        if reason is None:
+            retained.append(issue)
+            continue
+
+        number = int(issue["number"])
+        if v2.transition_has_active_operational_state(number):
+            print(f"preserve claimed transition #{number}: {reason}")
+            retained.append(issue)
+            continue
+        print(f"retire redundant transition #{number}: {reason}")
+        if not base.DRY_RUN:
+            base.request(
+                "PATCH",
+                f"/repos/{base.REPO}/issues/{number}",
+                {"state": "closed", "state_reason": "not_planned"},
+            )
+        retired += 1
+    open_issues[:] = retained
+    return retired
 
 
 def transition_generations(
@@ -133,6 +195,9 @@ def materialize_missing_transitions(
         resolved_generations,
         factory_issue_numbers,
         registered_routes,
+    )
+    retired += retire_explicit_successor_transitions(
+        open_issues, issues_by_number
     )
 
     # Rebuild after retirement because the live list may have changed, while
@@ -234,23 +299,40 @@ def self_test() -> None:
     dead_successor = dict(trusted_successor, state="closed", state_reason="duplicate")
     assert not explicit_successor_generation_consumed(source, {917: dead_successor})
 
-    generation = (10, 2, "NEXT")
-    old = {
+    generation = (10, 2, "EXISTING_REQUIRED_REVIEW_917")
+    wrapper = {
         "number": 100,
         "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
-        "body": "Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `NEXT`",
-        "state": "closed",
-        "state_reason": "duplicate",
+        "body": (
+            "Source terminal issue: #10\n"
+            "Source terminal comment: 2\n"
+            "Required next route: `EXISTING_REQUIRED_REVIEW_917`"
+        ),
+        "state": "open",
+        "state_reason": None,
         "author_association": "CONTRIBUTOR",
         "user": {"login": "github-actions[bot]"},
     }
+    assert explicit_transition_redundancy_reason(
+        wrapper, source, {917: trusted_successor, 100: wrapper}
+    ) == "EXPLICIT_SUCCESSOR_ALREADY_EXISTS"
+
+    old = dict(
+        wrapper,
+        state="closed",
+        state_reason="duplicate",
+        body="Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `NEXT`",
+    )
+    old_generation = (10, 2, "NEXT")
     open_wrapper = dict(old, number=101, state="open", state_reason=None)
     mapping = transition_generations([old, open_wrapper])
-    assert mapping[generation] == [old, open_wrapper]
-    assert stable_transition_for_generation(generation, mapping) is open_wrapper
+    assert mapping[old_generation] == [old, open_wrapper]
+    assert stable_transition_for_generation(old_generation, mapping) is open_wrapper
 
     completed = dict(old, number=102, state_reason="completed")
-    assert stable_transition_for_generation(generation, {generation: [completed]}) is None
+    assert stable_transition_for_generation(
+        old_generation, {old_generation: [completed]}
+    ) is None
 
     print("frontier maintenance v5 self-test: PASS")
 
