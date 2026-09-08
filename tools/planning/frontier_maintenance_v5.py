@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 import sys
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 
 import frontier_maintenance_v4 as v4
 
@@ -133,22 +133,29 @@ def transition_generations(
 def stable_transition_for_generation(
     generation: v2.Generation,
     transitions_by_generation: dict[v2.Generation, list[dict[str, Any]]],
+    *,
+    active_state_checker: Callable[[int], bool] | None = None,
+    perform_reopen: bool = True,
 ) -> dict[str, Any] | None:
     """Return one existing wrapper to reuse instead of creating another.
 
     Prefer an open wrapper. Otherwise reuse the newest duplicate/not-planned
-    wrapper by reopening it. A completed wrapper is never reopened here.
+    wrapper only when it has no live trusted schema-3 operational state. A
+    completed wrapper is never reopened here. The injectable checker/reopen
+    switch exists only to keep the deterministic self-test network-free.
     """
     candidates = transitions_by_generation.get(generation, [])
     open_candidates = [item for item in candidates if item.get("state") == "open"]
     if open_candidates:
         return max(open_candidates, key=lambda item: int(item["number"]))
 
+    checker = active_state_checker or v2.transition_has_active_operational_state
     reopenable = [
         item
         for item in candidates
         if item.get("state") == "closed"
         and item.get("state_reason") in {"duplicate", "not_planned"}
+        and not checker(int(item["number"]))
     ]
     if not reopenable:
         return None
@@ -156,14 +163,15 @@ def stable_transition_for_generation(
     print(
         f"reuse transition #{int(chosen['number'])} for exact generation {generation}; reopen instead of duplicating"
     )
-    if not base.DRY_RUN:
+    if perform_reopen and not base.DRY_RUN:
         base.request(
             "PATCH",
             f"/repos/{base.REPO}/issues/{int(chosen['number'])}",
             {"state": "open"},
         )
-    chosen["state"] = "open"
-    chosen["state_reason"] = None
+    if perform_reopen:
+        chosen["state"] = "open"
+        chosen["state_reason"] = None
     return chosen
 
 
@@ -327,11 +335,33 @@ def self_test() -> None:
     open_wrapper = dict(old, number=101, state="open", state_reason=None)
     mapping = transition_generations([old, open_wrapper])
     assert mapping[old_generation] == [old, open_wrapper]
-    assert stable_transition_for_generation(old_generation, mapping) is open_wrapper
+    assert stable_transition_for_generation(
+        old_generation,
+        mapping,
+        active_state_checker=lambda _: False,
+        perform_reopen=False,
+    ) is open_wrapper
+
+    chosen_closed = stable_transition_for_generation(
+        old_generation,
+        {old_generation: [old]},
+        active_state_checker=lambda _: False,
+        perform_reopen=False,
+    )
+    assert chosen_closed is old
+    assert stable_transition_for_generation(
+        old_generation,
+        {old_generation: [old]},
+        active_state_checker=lambda _: True,
+        perform_reopen=False,
+    ) is None
 
     completed = dict(old, number=102, state_reason="completed")
     assert stable_transition_for_generation(
-        old_generation, {old_generation: [completed]}
+        old_generation,
+        {old_generation: [completed]},
+        active_state_checker=lambda _: False,
+        perform_reopen=False,
     ) is None
 
     print("frontier maintenance v5 self-test: PASS")
