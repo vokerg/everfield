@@ -1,0 +1,317 @@
+{
+  "adaptation_seed": {
+    "bounds": {
+      "action_count": 10,
+      "entity_count": 32,
+      "normal_ticks": 600
+    },
+    "candidate_id": "Unity",
+    "extra_evidence": [],
+    "failure_injections": [
+      "FI-S3-INPUT-PERTURB-v2"
+    ],
+    "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+    "fixed_input_refs": [
+      "SLICE:logical_state",
+      "SLICE:action_vocabulary"
+    ],
+    "harness_id": "W2-ENG-HARNESS-v5",
+    "hidden_context_transfer": false,
+    "mappings": {
+      "exact_seed_input": "EQUIVALENT",
+      "perturbation_distinguishable": "EQUIVALENT",
+      "real_or_shared_rules": "EQUIVALENT",
+      "repeatable_state_events": "EQUIVALENT"
+    },
+    "mechanism_authority": "REAL_OR_SHARED_RULES",
+    "package_target": null,
+    "resource_exception": false,
+    "scenario_id": "S3",
+    "start_profile": {
+      "cache_mode": "COLD",
+      "generated_state_policy": "REGENERATE_FROM_REPO",
+      "profile_id": "W2-ENG-START-COLD-v2",
+      "resource_class": "W2-ENG-HOST-COMMON-v2"
+    },
+    "undocumented_manual_intervention": false
+  },
+  "all_attempt_refs": [
+    "UNITY-S3-N1",
+    "UNITY-S3-N2",
+    "UNITY-S3-FI1"
+  ],
+  "attempts": {
+    "UNITY-S3-FI1": {
+      "attempt_id": "UNITY-S3-FI1",
+      "candidate_generation_id": "f7b5cf6a488402efc77f536ac4ca6b514d5745cdab7dd3b9e7f5337cb594ac0d",
+      "candidate_id": "Unity",
+      "editor": {
+        "executable_name": "Unity",
+        "executable_sha256": "1b4a0ff281bd3ff77afec1f704e21a0953f5942e34731e8e76b68d4a9dda0f0d",
+        "version": "6000.5.6f1"
+      },
+      "executor_identity": {
+        "execution_context": "PERSISTENT_SELF_HOSTED_WORKSTATION",
+        "runner_arch": "ARM64",
+        "runner_name": "everfield-unity-mac",
+        "runner_os": "macOS"
+      },
+      "expected_checksum": 405122,
+      "failure_class": "NONE",
+      "injection_id": "FI-S3-INPUT-PERTURB-v2",
+      "kind": "FAILURE_INJECTION",
+      "lineage_digest": "e53927373b85809a6805bcceb20c4d4461b8859f88c16d2dacd62dcfd97b0e7d",
+      "native_command_id": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+      "normal_index": null,
+      "observed_checksum": 405122,
+      "process": {
+        "exit": 0,
+        "seconds": 6.797,
+        "timed_out": false
+      },
+      "raw_attempt_digest": "29cc9387ba29019c4329462339233c44c1e0865a2d1669cc9f0c045a9420d625",
+      "reset_facts": {
+        "fixed_input_digest_matches": true,
+        "fresh_attempt_directory_created": true,
+        "no_preexisting_generated_state": true,
+        "pre_generation_directory_empty": true,
+        "project_version_matches": true,
+        "source_materialized_from_embedded_contract": true,
+        "workspace_marker_created_before_project": true
+      },
+      "reset_id": "db38d2de920392522349f0c180b71370aea91e4117209db91511ef5036e5cee6",
+      "reset_verified": true,
+      "resource_class": "W2-ENG-HOST-COMMON-v2",
+      "result": "PASS",
+      "scenario_id": "S3",
+      "source": {
+        "fixed_input_digest": "f8ee64db45b4473fe8e3870edce1567e38b43c73ccc342fe4c396f3e6d5a8aae",
+        "generated_files": {
+          "Assets/Editor/EverfieldS3.cs": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81",
+          "ProjectSettings/ProjectVersion.txt": "89c8f01f2cb307f29e27cddd2bc788c1cae3bd4d31fb18d20070a99f729d34da"
+        },
+        "generated_project_source_digest": "faa53c261904f9a30092001ad59d37e2c1fcd9af20aad2af7051e3465aab302d",
+        "unity_script_sha256": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81"
+      },
+      "source_binding_id": "4b4f389f8f674a655a9ad81edbd64f879fb4a4506ad6d0856f8cc9da790d3034",
+      "workspace_id": "7046427d2a6631de3cc64e3c5817cc19c992d818310a1ad46960df0bb0434762",
+      "workspace_marker_sha256": "f5609c76e384e4bfaa23d575cc4cf926667d376923dba3dbe6241a1fa61770dc"
+    },
+    "UNITY-S3-N1": {
+      "attempt_id": "UNITY-S3-N1",
+      "candidate_generation_id": "f7b5cf6a488402efc77f536ac4ca6b514d5745cdab7dd3b9e7f5337cb594ac0d",
+      "candidate_id": "Unity",
+      "editor": {
+        "executable_name": "Unity",
+        "executable_sha256": "1b4a0ff281bd3ff77afec1f704e21a0953f5942e34731e8e76b68d4a9dda0f0d",
+        "version": "6000.5.6f1"
+      },
+      "executor_identity": {
+        "execution_context": "PERSISTENT_SELF_HOSTED_WORKSTATION",
+        "runner_arch": "ARM64",
+        "runner_name": "everfield-unity-mac",
+        "runner_os": "macOS"
+      },
+      "expected_checksum": 405227,
+      "failure_class": "NONE",
+      "injection_id": null,
+      "kind": "NORMAL",
+      "lineage_digest": "d88260b3e9d19f90dbbd113a7f7c288a9251f0527c99d1666d38afb2069d2015",
+      "native_command_id": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+      "normal_index": 1,
+      "observed_checksum": 405227,
+      "process": {
+        "exit": 0,
+        "seconds": 8.06,
+        "timed_out": false
+      },
+      "raw_attempt_digest": "e3c1b1316561bedc35d68f567e8b8f7ca415a263e4e1af17b6e880cf52f1562b",
+      "reset_facts": {
+        "fixed_input_digest_matches": true,
+        "fresh_attempt_directory_created": true,
+        "no_preexisting_generated_state": true,
+        "pre_generation_directory_empty": true,
+        "project_version_matches": true,
+        "source_materialized_from_embedded_contract": true,
+        "workspace_marker_created_before_project": true
+      },
+      "reset_id": "643f6c5d040f050beedc0db200325c4c38c633ab5b1db31c139614707e45aca8",
+      "reset_verified": true,
+      "resource_class": "W2-ENG-HOST-COMMON-v2",
+      "result": "PASS",
+      "scenario_id": "S3",
+      "source": {
+        "fixed_input_digest": "f8ee64db45b4473fe8e3870edce1567e38b43c73ccc342fe4c396f3e6d5a8aae",
+        "generated_files": {
+          "Assets/Editor/EverfieldS3.cs": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81",
+          "ProjectSettings/ProjectVersion.txt": "89c8f01f2cb307f29e27cddd2bc788c1cae3bd4d31fb18d20070a99f729d34da"
+        },
+        "generated_project_source_digest": "faa53c261904f9a30092001ad59d37e2c1fcd9af20aad2af7051e3465aab302d",
+        "unity_script_sha256": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81"
+      },
+      "source_binding_id": "a3a410420246913056e8684621748e74b5828a8589a491f05b89b94d6a3d0f59",
+      "workspace_id": "122857406b9598666eb559c693273dd725dd9fecefbaa5c2220687e7cdad18de",
+      "workspace_marker_sha256": "5795179ee7ace96808ae1de25700381315fe1c5e86a9ea7edfd3b2bb91e29073"
+    },
+    "UNITY-S3-N2": {
+      "attempt_id": "UNITY-S3-N2",
+      "candidate_generation_id": "f7b5cf6a488402efc77f536ac4ca6b514d5745cdab7dd3b9e7f5337cb594ac0d",
+      "candidate_id": "Unity",
+      "editor": {
+        "executable_name": "Unity",
+        "executable_sha256": "1b4a0ff281bd3ff77afec1f704e21a0953f5942e34731e8e76b68d4a9dda0f0d",
+        "version": "6000.5.6f1"
+      },
+      "executor_identity": {
+        "execution_context": "PERSISTENT_SELF_HOSTED_WORKSTATION",
+        "runner_arch": "ARM64",
+        "runner_name": "everfield-unity-mac",
+        "runner_os": "macOS"
+      },
+      "expected_checksum": 405227,
+      "failure_class": "NONE",
+      "injection_id": null,
+      "kind": "NORMAL",
+      "lineage_digest": "03bc6e1eab735a26484ae9a98cca7de7892e9ec9f49001b24a69537e76b25aa1",
+      "native_command_id": "Unity Editor -batchmode -executeMethod EverfieldS3.Run",
+      "normal_index": 2,
+      "observed_checksum": 405227,
+      "process": {
+        "exit": 0,
+        "seconds": 6.998,
+        "timed_out": false
+      },
+      "raw_attempt_digest": "46a6513a64797f9ea53351ab7087d7047012847e4eb3f110496dd0d74e5b82de",
+      "reset_facts": {
+        "fixed_input_digest_matches": true,
+        "fresh_attempt_directory_created": true,
+        "no_preexisting_generated_state": true,
+        "pre_generation_directory_empty": true,
+        "project_version_matches": true,
+        "source_materialized_from_embedded_contract": true,
+        "workspace_marker_created_before_project": true
+      },
+      "reset_id": "f6d5e7fa54d5eaa14068df0278ce2568c6cb4dffae5bb5e654b31b32b170e544",
+      "reset_verified": true,
+      "resource_class": "W2-ENG-HOST-COMMON-v2",
+      "result": "PASS",
+      "scenario_id": "S3",
+      "source": {
+        "fixed_input_digest": "f8ee64db45b4473fe8e3870edce1567e38b43c73ccc342fe4c396f3e6d5a8aae",
+        "generated_files": {
+          "Assets/Editor/EverfieldS3.cs": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81",
+          "ProjectSettings/ProjectVersion.txt": "89c8f01f2cb307f29e27cddd2bc788c1cae3bd4d31fb18d20070a99f729d34da"
+        },
+        "generated_project_source_digest": "faa53c261904f9a30092001ad59d37e2c1fcd9af20aad2af7051e3465aab302d",
+        "unity_script_sha256": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81"
+      },
+      "source_binding_id": "1a960d6b62b6e9bba6424457647c3bf040920c16f207d5113ed0675e4d1e2ae9",
+      "workspace_id": "1e5b865efc4610a066b4c3a33b772b55cc4bc057c79729971b5914912d1b484e",
+      "workspace_marker_sha256": "c0b05c29a195d6cbe1b0787aa0c206677621f7ff79131e6de3db9176035116c2"
+    }
+  },
+  "authority": {
+    "canonicality": "NOT_CANONICAL",
+    "commercial_authority": false,
+    "decision_authority": false,
+    "engine_selected": false,
+    "implementation_readiness": false,
+    "integration_authority": false,
+    "legal_clearance": false,
+    "pass_for_comparison": false,
+    "production_authority": false,
+    "provider_pass": false,
+    "release_authority": false,
+    "verification_pass_authority": false
+  },
+  "candidate": {
+    "candidate_generation_id": "f7b5cf6a488402efc77f536ac4ca6b514d5745cdab7dd3b9e7f5337cb594ac0d",
+    "candidate_id": "Unity",
+    "candidate_work_id": "11f337cb1c53cf5ff74bcc00f09e2cdb58a89fbbb866cedc0c745b880f1f8279"
+  },
+  "contract": {
+    "action_count": 10,
+    "entity_count": 32,
+    "mechanism_authority": "REAL_OR_SHARED_RULES",
+    "minimum_normal_attempts": 2,
+    "normal_ticks": 600,
+    "required_failure_injection_attempts": 1,
+    "required_injection": "FI-S3-INPUT-PERTURB-v2",
+    "resource_class": "W2-ENG-HOST-COMMON-v2",
+    "scenario_id": "S3",
+    "seed": 424242
+  },
+  "editor": {
+    "executable_name": "Unity",
+    "executable_sha256": "1b4a0ff281bd3ff77afec1f704e21a0953f5942e34731e8e76b68d4a9dda0f0d",
+    "version": "6000.5.6f1"
+  },
+  "historical_not_run_cells_mutated": false,
+  "historical_not_run_cells_preserved": 50,
+  "mission_id": "W2-ENG-TECH-UNITY-S3-V5-RERUN-01",
+  "native_s3_pass": true,
+  "publication": {
+    "direct_main_push": false,
+    "draft_pr_created_by_workflow": false,
+    "fresh_expected_head_check_required": true,
+    "integration_authority": false,
+    "mode": "IMMUTABLE_UNITY_S3_V5_LINEAGE_EVIDENCE_BRANCH",
+    "separate_draft_pr_handoff_required": true,
+    "squash_only_required": true
+  },
+  "reviewed_v5": {
+    "feature_slice_id": "W2-ENG-FEATURE-SLICE-v2",
+    "harness_id": "W2-ENG-HARNESS-v5",
+    "scenario_manifest_id": "W2-ENG-SCENARIO-INPUTS-v2",
+    "validator_id": "W2-ENG-PROTOCOL-VALIDATOR-v5"
+  },
+  "run": {
+    "branch": "main",
+    "conclusion": "success",
+    "event": "workflow_dispatch",
+    "head_sha": "9a8a6a23cef77962bc5797b0365280a35c0e2b43",
+    "projection_code_sha": "9a8a6a23cef77962bc5797b0365280a35c0e2b43",
+    "publication_base_main_sha": "9a8a6a23cef77962bc5797b0365280a35c0e2b43",
+    "run_attempt": "1",
+    "run_id": "34260064275",
+    "workflow": {
+      "id": "341006830",
+      "name": "Everfield Unity S3 reviewed-v5 lineage evaluator",
+      "path": ".github/workflows/unity-s3-v5-lineage-evaluator.yml"
+    }
+  },
+  "run_registry_refs": [
+    "UNITY-S3-N1",
+    "UNITY-S3-N2",
+    "UNITY-S3-FI1"
+  ],
+  "schema": "W2-ENG-UNITY-S3-V5-LINEAGE-EVIDENCE-v1",
+  "source": {
+    "fixed_input_digest": "f8ee64db45b4473fe8e3870edce1567e38b43c73ccc342fe4c396f3e6d5a8aae",
+    "generated_files": {
+      "Assets/Editor/EverfieldS3.cs": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81",
+      "ProjectSettings/ProjectVersion.txt": "89c8f01f2cb307f29e27cddd2bc788c1cae3bd4d31fb18d20070a99f729d34da"
+    },
+    "generated_project_source_digest": "faa53c261904f9a30092001ad59d37e2c1fcd9af20aad2af7051e3465aab302d",
+    "unity_script_sha256": "6d9ee1a5f718c182212aa9822f3f7e4a8c95ed6adb82dabbea91d0817f07ff81"
+  },
+  "source_registry": {
+    "UNITY-S3-FI1": {
+      "lineage_digest": "e53927373b85809a6805bcceb20c4d4461b8859f88c16d2dacd62dcfd97b0e7d",
+      "raw_attempt_digest": "29cc9387ba29019c4329462339233c44c1e0865a2d1669cc9f0c045a9420d625",
+      "source_binding_id": "4b4f389f8f674a655a9ad81edbd64f879fb4a4506ad6d0856f8cc9da790d3034"
+    },
+    "UNITY-S3-N1": {
+      "lineage_digest": "d88260b3e9d19f90dbbd113a7f7c288a9251f0527c99d1666d38afb2069d2015",
+      "raw_attempt_digest": "e3c1b1316561bedc35d68f567e8b8f7ca415a263e4e1af17b6e880cf52f1562b",
+      "source_binding_id": "a3a410420246913056e8684621748e74b5828a8589a491f05b89b94d6a3d0f59"
+    },
+    "UNITY-S3-N2": {
+      "lineage_digest": "03bc6e1eab735a26484ae9a98cca7de7892e9ec9f49001b24a69537e76b25aa1",
+      "raw_attempt_digest": "46a6513a64797f9ea53351ab7087d7047012847e4eb3f110496dd0d74e5b82de",
+      "source_binding_id": "1a960d6b62b6e9bba6424457647c3bf040920c16f207d5113ed0675e4d1e2ae9"
+    }
+  },
+  "source_schema": "W2-ENG-UNITY-S3-V5-LINEAGE-v1",
+  "workflow_success_is_not_comparison_authority": true
+}
