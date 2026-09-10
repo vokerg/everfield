@@ -1,12 +1,13 @@
 # W2-CONTENT-NARR-CONT-01 — bounded narrative / quest / consequence continuation candidate
 
-**Issue:** #814  
-**Mission:** `W2-CONTENT-NARR-CONT-01`  
-**State:** PRODUCER CANDIDATE / NONCANONICAL  
+**Source producer:** Issue #814 / PR #847 / head `29546599244ff37c990221bed4692e8ad54a533d`  
+**Remediation:** Issue #972 / `W2-CONTENT-NARR-CONT-REM-01`  
+**Finding remediated:** `NARR-917-MAJ-01`  
+**State:** REMEDIATION CANDIDATE / NONCANONICAL  
 **Conflict domain:** `CONTENT_NARRATIVE_CONTINUATION`  
-**Claim base:** `main@88b704183e99dbd0dd102131c67a99fd0013ff36`  
+**Remediation base:** `main@9a8a6a23cef77962bc5797b0365280a35c0e2b43`  
 **Activation review:** #831 terminal `5525721241` / `CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_ACTIVATION`  
-**Required next gate:** one fresh independent/degraded-independent root review of the exact terminal packet  
+**Required next gate:** one fresh independent/degraded-independent root review of the exact remediation packet  
 **Integration authority:** NONE
 
 ## 1. Purpose and authority boundary
@@ -19,7 +20,7 @@ Concrete sibling continuation outputs from #811–#813 and the parameterized eva
 
 ## 2. Frozen reviewed basis
 
-The producer freezes these exact inputs:
+The remediation preserves these exact producer inputs:
 
 | Input | Exact identity | Permitted use |
 |---|---|---|
@@ -31,8 +32,9 @@ The producer freezes these exact inputs:
 | Reviewed narrative architecture | remediation #396 head `5955d56ab304785d8149fef483ff8bb10d521124`; Markdown/YAML blobs `4e31fb0e812f4dcbc65303740c252553d07f7286` / `75844d9c24f5ed2073a2c36a782c52f8b7d5c127`; clean review #419 terminal `5307411116` | quest grammar, gate contract, consequence and information invariants |
 | Corrected authored vertical slice | #444/#449; Markdown/YAML blobs `5e94bdb0ca6146bab93264fc8e6763590aa289d2` / `8d341d534ef4a27929aaabdf5b81a6d5ff86b80e`; `CLEAN_FOR_BOUNDED_AUTHORED_CONTENT_CONSUMPTION` | noncanonical regression/reference fixture only |
 | Reviewed WSN packet | #432/#437; review terminal `5308501587`; results blob `6c75ec437fb8f1a333614c6c2f8336683247bb55`; `CLEAN_FOR_BOUNDED_WSN_CONSUMPTION` | bounded structural evidence plus explicit debt |
+| Required review finding | #917 / PR #971; terminal `5614477500`; report blob `f2bfa91af96cf98a6fe02314e21a5462fac59c8f`; `CHANGES_NEEDED` | requires bounded repair of `NARR-917-MAJ-01` only |
 
-The reviewed fan-in and predecessor narrative packets remain immutable. This continuation does not overwrite, extend, or reinterpret their concrete root records as final canon.
+The reviewed fan-in, predecessor narrative packets, producer #814/#847, and review #917/#971 remain immutable. This remediation does not overwrite, extend, or reinterpret their concrete root records as final canon.
 
 ## 3. Evidence truth that constrains this continuation
 
@@ -60,9 +62,9 @@ Structural purpose: after a player has encountered a contested situation and at 
 
 The three stages are:
 
-1. `QFAM_CONT:REASSESS_AFTER_CONSEQUENCE` — inspect the consequence, compare at least two materially different evidence/claim routes, and choose a current interpretation or explicit deferral.
-2. `QFAM_CONT:RECOMMIT_REDIRECT_OR_DEFER` — choose whether to maintain a prior direction, redirect it, compensate/repair, or defer further commitment after trade-offs are signaled.
-3. `QFAM_CONT:AFTERMATH_CONTINUATION` — consume the resulting branch/consequence state and expose at least two meaningful continued-goal families, or record a separately reviewed exception.
+1. `QFAM_CONT:REASSESS_AFTER_CONSEQUENCE` — inspect the consequence, compare at least two materially different non-private evidence/claim routes, and choose a current interpretation or explicit deferral; if fewer than two such routes are legal, remain in a pre-comparison deferred state rather than activate an impossible comparison.
+2. `QFAM_CONT:RECOMMIT_REDIRECT_OR_DEFER` — choose whether to maintain a prior direction, redirect it, compensate/repair, or defer further commitment after trade-offs are signaled; selection activates only while at least two materially differentiated direction route kinds are simultaneously legal.
+3. `QFAM_CONT:AFTERMATH_CONTINUATION` — consume the resulting branch/consequence state and expose at least two meaningful continued-goal families; if fewer than two survive, remain in a pre-goal-selection deferred state rather than activate an impossible choice.
 
 These are grammar fixtures. They do not prescribe concrete locations, factions, characters, events, dialogue, rewards, or final outcomes.
 
@@ -105,7 +107,7 @@ A continuation information record uses:
 
 The representative optional private-information role is `SECRET_ROLE:CONT_PRIVATE_CONTEXT`. It is **not a concrete secret**. Its default access is `DENY`; legal access is limited to explicit holder disclosure or a later validated authority effect. Relationship state, public standing, player exposure, proximity, repeated interaction, or substitute testimony never grants the secret.
 
-The required continuation path must remain solvable when `SECRET_ROLE:CONT_PRIVATE_CONTEXT` is unavailable forever. Public record/material evidence/other testimony may provide enough information to act, defer, or select a different route without disclosing the private context.
+The required continuation path must remain solvable when `SECRET_ROLE:CONT_PRIVATE_CONTEXT` is unavailable forever. Private context never counts toward the required route minimum for `OBJ_CONT:COMPARE_PERSPECTIVES`. Public record, material evidence, and other non-private testimony provide the qualifying comparison routes, or the stage remains legally deferred before the comparison objective activates.
 
 ## 7. Quest-family contract
 
@@ -133,10 +135,11 @@ Graph invariants:
 1. the required subgraph is acyclic unless a declared bounded loop has a monotonic progress measure and legal exit;
 2. optional evidence or private information is never hidden-required;
 3. mutually exclusive branch objectives are never jointly required;
-4. every active required objective has at least one supported route or an explicit legal failure/recovery outcome;
-5. unavailable actor/site/service roles require substitution, deferral, compensation, or legal terminal failure;
-6. retry cannot erase material history merely to restore eligibility;
-7. no generated prose performs authoritative state mutation.
+4. every active required objective has its objective-declared minimum number of simultaneously legal, materially distinct supported routes, or a legal transition occurs before that objective activates;
+5. recovery that removes a qualifying route must recompute the objective's route cardinality before continuing the active objective;
+6. unavailable actor/site/service roles require substitution, deferral, compensation, or legal terminal failure;
+7. retry cannot erase material history merely to restore eligibility;
+8. no generated prose performs authoritative state mutation.
 
 ## 8. Stage semantics
 
@@ -144,31 +147,33 @@ Graph invariants:
 
 **Availability**
 - a prior observable consequence, branch effect, or unresolved contested-state marker exists;
-- at least one public/non-private evidence route is available;
+- at least two materially distinct non-private evidence/perspective routes are simultaneously legal;
+- optional private context does not count toward that minimum;
 - no exact schedule or private secret is required.
 
 **Required objectives**
 - `OBJ_CONT:OBSERVE_CURRENT_EFFECT` — observe a material current effect or consequence surface;
-- `OBJ_CONT:COMPARE_PERSPECTIVES` — compare at least two claim/evidence perspectives, at least one of which is independent of the optional private secret;
+- `OBJ_CONT:COMPARE_PERSPECTIVES` — compare at least two materially distinct claim/evidence perspectives, both available without requiring the optional private secret;
 - `OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER` — select a working interpretation, acknowledge uncertainty, or explicitly defer conclusion.
 
 **Optional objective**
-- `OBJ_CONT:PRIVATE_CONTEXT` — access `SECRET_ROLE:CONT_PRIVATE_CONTEXT` only through legal authority.
+- `OBJ_CONT:PRIVATE_CONTEXT` — access `SECRET_ROLE:CONT_PRIVATE_CONTEXT` only through legal authority; it may enrich comparison but never satisfies the two-route minimum.
 
 **Failure/recovery**
-- perspective holder unavailable → public/material/substitute route;
-- private context denied → secret remains undisclosed; required path remains legal;
-- evidence remains contradictory → defer conclusion is legal;
-- affected surface temporarily inaccessible → defer/alternate evidence route; no foundational soft lock.
+- perspective holder unavailable → recompute qualifying non-private routes; use public/material/substitute routes if at least two remain, otherwise transition to `STATE_CONT:PRE_COMPARE_DEFERRED` before `OBJ_CONT:COMPARE_PERSPECTIVES` activates;
+- private context denied → secret remains undisclosed; required route cardinality is unchanged because private context never counts toward the minimum;
+- evidence remains contradictory → after a legal two-perspective comparison, deferred conclusion remains legal;
+- affected surface or evidence route becomes inaccessible → recompute qualifying non-private routes; if fewer than two remain, transition to `STATE_CONT:PRE_COMPARE_DEFERRED` before the comparison objective is active; no foundational soft lock.
 
 ### 8.2 `QFAM_CONT:RECOMMIT_REDIRECT_OR_DEFER`
 
 **Availability**
 - reassessment stage completed or explicitly deferred;
-- material options and likely affected goal classes are signaled.
+- material options and likely affected goal classes are signaled;
+- at least two materially differentiated direction route kinds among maintain, redirect, compensate/repair, or defer are simultaneously legal.
 
 **Required objective**
-- `OBJ_CONT:SELECT_DIRECTION` with at least two legal route kinds among maintain, redirect, compensate/repair, or defer.
+- `OBJ_CONT:SELECT_DIRECTION` with at least two simultaneously legal, materially differentiated route kinds among maintain, redirect, compensate/repair, or defer.
 
 **Branch requirements**
 - each branch declares affected goals/content, reversibility, observability, recovery/mitigation, and evidence needs;
@@ -176,17 +181,18 @@ Graph invariants:
 - irreversible/high-impact variants require a `BranchImpactEvidence` ref before they can be treated as sufficient.
 
 **Failure/recovery**
-- chosen service/actor route unavailable → substitute, compensation, changed-goal, or deferral route;
-- commitment rejected by affected group → continued nonaligned goals remain;
-- resource/site state invalidates route → redirect/defer instead of silent failure.
+- chosen service/actor route unavailable → substitute, compensation, changed-goal, redirect, or deferral routes are recomputed; if fewer than two materially differentiated route kinds remain, transition to `STATE_CONT:PRE_DIRECTION_DEFERRED` before `OBJ_CONT:SELECT_DIRECTION` remains active;
+- commitment rejected by affected group → recompute route kinds; continued nonaligned goals remain, and underflow below two route kinds transitions to `STATE_CONT:PRE_DIRECTION_DEFERRED` before another selection objective activates;
+- resource/site state invalidates route → recompute route kinds and redirect/defer when sufficient alternatives remain; otherwise use `STATE_CONT:PRE_DIRECTION_DEFERRED` instead of silent failure.
 
 ### 8.3 `QFAM_CONT:AFTERMATH_CONTINUATION`
 
 **Availability**
-- a material consequence or branch state exists.
+- a material consequence or branch state exists;
+- at least two materially distinct continued-goal families are simultaneously legal.
 
 **Required objective**
-- `OBJ_CONT:CHOOSE_CONTINUED_GOAL` — choose from at least two materially different continued-goal families, unless a later fresh review approves a narrow exception.
+- `OBJ_CONT:CHOOSE_CONTINUED_GOAL` — choose from at least two simultaneously legal, materially different continued-goal families.
 
 Goal-family fixtures:
 - `GOAL_CONT:MAINTAIN_OR_STEWARD`;
@@ -198,10 +204,10 @@ Goal-family fixtures:
 These labels express functional differences, not canonical quests.
 
 **Failure/recovery**
-- one goal family becomes unavailable → another materially distinct family remains;
-- repair cannot restore prior state → compensation or changed-goal route must exist;
-- relationship access changes → does not revoke unrelated foundational play;
-- unresolved truth remains unresolved → aftermath goals can proceed without forcing mystery closure.
+- one goal family becomes unavailable → recompute legal goal families; if at least two materially distinct families remain, selection may continue, otherwise transition to `STATE_CONT:PRE_GOAL_SELECTION_DEFERRED` before `OBJ_CONT:CHOOSE_CONTINUED_GOAL` is active;
+- repair cannot restore prior state → compensation or changed-goal route must exist and the two-family minimum must still hold before goal selection activates;
+- relationship access changes → does not revoke unrelated foundational play; any resulting goal-family underflow transitions to `STATE_CONT:PRE_GOAL_SELECTION_DEFERRED` before selection;
+- unresolved truth remains unresolved → aftermath goals can proceed without forcing mystery closure only while at least two materially distinct goal families are legal; otherwise pre-goal-selection deferral remains legal.
 
 ## 9. Progression-gate discipline
 
@@ -209,15 +215,15 @@ This continuation authors **zero `FOUNDATIONAL` narrative gates**. New continuat
 
 ### `GATE:NARR-CONT:CONSEQUENCE_REASSESSMENT` — `OPTIONAL`
 
-Unlocks deeper interpretation/reassessment content. It never blocks ordinary foundational play. Legal routes include public/material evidence and substitute testimony. Private context may enrich but cannot be required.
+Unlocks deeper interpretation/reassessment content. It never blocks ordinary foundational play. `OBJ_CONT:COMPARE_PERSPECTIVES` activates only while at least two materially distinct non-private evidence/perspective routes are simultaneously legal. Private context may enrich but never counts toward this minimum; route underflow uses `STATE_CONT:PRE_COMPARE_DEFERRED` before the comparison objective activates.
 
 ### `GATE:NARR-CONT:PUBLIC_RECOMMITMENT` — `BRANCH_EXCLUSIVE`
 
-Unlocks commitment-specific consequences and aftermath. It requires trade-off signaling and provides a defer/nonalignment route until commitment is made.
+Unlocks commitment-specific consequences and aftermath. It requires trade-off signaling and provides a defer/nonalignment route until commitment is made. `OBJ_CONT:SELECT_DIRECTION` activates only while at least two materially differentiated direction route kinds are simultaneously legal; route-kind underflow uses `STATE_CONT:PRE_DIRECTION_DEFERRED` before selection.
 
 ### `GATE:NARR-CONT:AFTERMATH_STEWARDSHIP` — `SPECIALIZATION`
 
-Unlocks specialized stewardship/repair/leadership aftermath goals. Alternative non-stewardship continued-goal families remain legal.
+Unlocks specialized stewardship/repair/leadership aftermath goals. Alternative non-stewardship continued-goal families remain legal. The containing aftermath selection stage activates only while at least two materially distinct continued-goal families are simultaneously legal; underflow uses `STATE_CONT:PRE_GOAL_SELECTION_DEFERRED` before choice.
 
 For every gate, version, class, blocks/unlocks, requirements, route IDs/kinds/prerequisites/lifestyle impacts, visibility/discovery, recovery, branch scope, evidence requirements, and exception-rationale/null are explicit in YAML.
 
@@ -269,15 +275,15 @@ The continuation must retain these behavioral regressions:
 
 | Regression ID | Fixture behavior | Continuation assertion |
 |---|---|---|
-| `REG_CONT:VS_SECRET_OPTIONAL` | Anwen private provenance gap is deny-by-default and optional | required continuation graph excludes `SECRET_ROLE:CONT_PRIVATE_CONTEXT` |
-| `REG_CONT:VS_SUBSTITUTE_EVIDENCE` | testimony/public/material routes can substitute without revealing the private secret | reassessment stage has public/material/substitute routes |
-| `REG_CONT:VS_SOLVABLE_WITHOUT_SECRET` | quest can complete with private testimony denied | secret denial is a tested legal state, not a failure of the required path |
-| `REG_CONT:VS_TRUTH_NOT_FORCED` | conflicting accounts may remain unresolved | `DECLARE_INTERPRETATION_OR_DEFER` permits explicit uncertainty |
-| `REG_CONT:VS_BRANCH_SIGNALING` | public commitment trade-offs are surfaced | recommitment requires affected-goal/reversibility signaling before selection |
-| `REG_CONT:VS_FAILURE_RECOVERY` | unavailable witness/denied testimony/stalled negotiation retain recovery | every representative failure has substitute/deferral/changed-goal recovery |
+| `REG_CONT:VS_SECRET_OPTIONAL` | Anwen private provenance gap is deny-by-default and optional | required continuation graph excludes `SECRET_ROLE:CONT_PRIVATE_CONTEXT` from all required route minima |
+| `REG_CONT:VS_SUBSTITUTE_EVIDENCE` | testimony/public/material routes can substitute without revealing the private secret | reassessment requires two materially distinct non-private routes while comparison is active, otherwise pre-comparison deferral |
+| `REG_CONT:VS_SOLVABLE_WITHOUT_SECRET` | quest can complete with private testimony denied | secret denial is a tested legal state and never reduces the qualifying required-route count |
+| `REG_CONT:VS_TRUTH_NOT_FORCED` | conflicting accounts may remain unresolved | `DECLARE_INTERPRETATION_OR_DEFER` permits explicit uncertainty after legal comparison |
+| `REG_CONT:VS_BRANCH_SIGNALING` | public commitment trade-offs are surfaced | recommitment requires affected-goal/reversibility signaling and two legal differentiated route kinds before selection |
+| `REG_CONT:VS_FAILURE_RECOVERY` | unavailable witness/denied testimony/stalled negotiation retain recovery | every representative failure recomputes cardinality and uses substitute/deferral/changed-goal recovery before an impossible objective can activate |
 | `REG_CONT:VS_HISTORY_PERSISTS` | retry/recovery does not erase meaningful history | continuation retry preserves material consequence/disclosure history |
 
-A later review should fail this root if any machine-readable required path accidentally depends on private context, concrete schedule, one irreplaceable provisional actor, or a branch that removes meaningful continued play without reviewed evidence.
+A later review should fail this root if any machine-readable required path accidentally depends on private context, concrete schedule, one irreplaceable provisional actor, a branch that removes meaningful continued play without reviewed evidence, or an active required objective whose route set is below its declared minimum.
 
 ## 13. WSN linkage and explicit non-claims
 
@@ -319,10 +325,10 @@ These are explicit fan-in/review attacks, not reasons to serialize root producti
 
 ## 15. Review contract
 
-Fresh root review must freeze the exact #814 terminal claim/head/PR/blob identities and attack at least:
+Fresh root review must freeze the exact #972 remediation claim/head/PR/blob identities plus immutable #814/#847 and #917/#971 provenance and attack at least:
 
-1. required-graph cycles, hidden prerequisites, actor/site availability soft locks, and retry/history erasure;
-2. whether private information is genuinely optional and deny-by-default;
+1. required-graph cycles, hidden prerequisites, actor/site availability soft locks, retry/history erasure, and whether required-objective route cardinality is preserved through activation and recovery;
+2. whether private information is genuinely optional, deny-by-default, and excluded from the reassessment route minimum;
 3. claim/knowledge/player-exposure/objective-truth separation;
 4. hidden or composed `FOUNDATIONAL` narrative gates;
 5. completeness of all three `ProgressionGateContract` v1 records;
@@ -338,14 +344,16 @@ Clean review may issue only the bounded token `W2-CONTENT-NARR-CONT-01_REVIEWED`
 
 ## 16. Self-review
 
-Producer self-review result: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR** in the bounded producer scope.
+Remediation self-review result: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR** in the bounded remediation scope, pending fresh required review.
 
 Checks performed:
 - exactly one continuation arc with three structural quest-family stages, not a per-quest backlog;
 - no sibling mutable output consumed;
 - no exact engine or runtime syntax selected;
-- required objective graph remains solvable without private context;
-- all representative failure cases have legal substitute/deferral/changed-goal recovery;
+- `OBJ_CONT:COMPARE_PERSPECTIVES` activates only with two materially distinct non-private routes; private context is excluded from the minimum, and underflow transitions to `STATE_CONT:PRE_COMPARE_DEFERRED` before activation;
+- `OBJ_CONT:SELECT_DIRECTION` activates only with two simultaneously legal materially differentiated route kinds, and underflow transitions to `STATE_CONT:PRE_DIRECTION_DEFERRED` before activation;
+- `OBJ_CONT:CHOOSE_CONTINUED_GOAL` activates only with two simultaneously legal materially distinct goal families, and underflow transitions to `STATE_CONT:PRE_GOAL_SELECTION_DEFERRED` before activation;
+- every representative failure recomputes route cardinality before continuing an active required objective;
 - three new gates are non-foundational and mechanically complete;
 - consequence required-vs-conditional fields are explicit;
 - no exact time or schedule assertion is authored;
@@ -356,4 +364,4 @@ Checks performed:
 
 ## 17. Authority statement
 
-`NOT_CANONICAL`. This packet is a bounded engine-neutral content candidate. It authorizes no final plot/lore/cast, engine selection, gameplay/high-throughput implementation, implementation readiness, empirical WSN upgrade, human-quality PASS, production validation, verification-PASS, release, decision, integration, or canonicalization.
+`NOT_CANONICAL`. This packet is a bounded engine-neutral remediation candidate. It authorizes no final plot/lore/cast, engine selection, gameplay/high-throughput implementation, implementation readiness, empirical WSN upgrade, human-quality PASS, production validation, verification-PASS, release, decision, integration, or canonicalization.
