@@ -1,0 +1,652 @@
+schema: everfield_w2_content_narrative_continuation_v1
+mission_id: W2-CONTENT-NARR-CONT-01
+issue: 814
+state: PRODUCER_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_NARRATIVE_CONTINUATION
+engine_dependency: ENGINE_NEUTRAL_NOW
+canonicality: NOT_CANONICAL
+
+authority:
+  canonical_content: false
+  integration: false
+  verification_pass: false
+  engine_selection: false
+  gameplay_implementation: false
+  high_throughput_implementation: false
+  implementation_readiness: false
+  empirical_wsn_upgrade: false
+  human_quality_pass: false
+  production_validation: false
+  release: false
+  decision: false
+  canonicalization: false
+
+producer:
+  branch: planning/issue-814
+  actor_session_id: content-narr-cont-814-gpt56sol-20260904-01
+  claim_comment_id: 5537122341
+  claim_base_main_sha: 88b704183e99dbd0dd102131c67a99fd0013ff36
+
+canonical_basis:
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  binding_issue: 6
+  binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  owner_content_frontier_directive_comment_id: 5511637902
+
+activation:
+  compiler_issue: 806
+  compiler_work_sha: 13c1d268b368c4272308b33e5c960486c9686164
+  compiler_head_sha: ffdb55f3ac103d4f57da9b758df8a3676eb89a09
+  compiler_contract_blob_sha: c47a65ace3b71a3aacd2457faad657a04b7d1454
+  compiler_map_blob_sha: d4c415bcdc319ba56e08aba63ca5616623489ea1
+  review_issue: 831
+  review_terminal_comment_id: 5525721241
+  disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_ACTIVATION
+  activates_exact_root_issues: [811, 812, 813, 814, 815]
+  integration_authority: false
+  canonical_authority: false
+
+frozen_reviewed_inputs:
+  content_fan_in:
+    producer_issue: 422
+    producer_work_sha: db4bfbcc7387425989ec5902103e53953db9576b
+    markdown_blob_sha: accae7e01148f19ef76b4ef0878abd3315901052
+    map_blob_sha: 5858bc3e2d87baa3740b2513b08fb938633bba54
+    review_issue: 426
+    review_terminal_comment_id: 5307505361
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_CONSUMPTION
+  narrative_architecture:
+    remediation_issue: 396
+    remediation_head_sha: 5955d56ab304785d8149fef483ff8bb10d521124
+    markdown_blob_sha: 4e31fb0e812f4dcbc65303740c252553d07f7286
+    yaml_blob_sha: 75844d9c24f5ed2073a2c36a782c52f8b7d5c127
+    review_issue: 419
+    review_terminal_comment_id: 5307411116
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FANIN
+  authored_vertical_slice:
+    remediation_issue: 444
+    review_issue: 449
+    markdown_blob_sha: 5e94bdb0ca6146bab93264fc8e6763590aa289d2
+    yaml_blob_sha: 8d341d534ef4a27929aaabdf5b81a6d5ff86b80e
+    disposition: CLEAN_FOR_BOUNDED_AUTHORED_CONTENT_CONSUMPTION
+    use_classification: NONCANONICAL_REGRESSION_REFERENCE_ONLY
+  wsn:
+    remediation_issue: 432
+    review_issue: 437
+    review_terminal_comment_id: 5308501587
+    results_blob_sha: 6c75ec437fb8f1a333614c6c2f8336683247bb55
+    disposition: CLEAN_FOR_BOUNDED_WSN_CONSUMPTION
+    outcomes:
+      WSN-E1: PASS_BOUNDED_CONTRADICTION_CHRONOLOGY_STRUCTURE
+      WSN-E2: PASS_BOUNDED_KNOWLEDGE_LEAK_INVARIANTS
+      WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+      WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+      WSN-E5: PASS_BOUNDED_MODEL_ONLY
+      WSN-E6: PASS_GENERATED_PRESENTATION_NONAUTHORITATIVE
+      WSN-E7: PASS_BOUNDED_REPETITION_MOTIF_CONTROL
+      WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+      WSN-E9: PASS_NO_SINGLE_EVALUATOR_FINAL_AUTHORITY
+    authority_limits:
+      aggregate_verification_pass: false
+      human_quality_evidence: NOT_ESTABLISHED
+      production_persistence_validation: NOT_ESTABLISHED
+      production_schedule_validation: NOT_ESTABLISHED
+      production_reachability_validation: NOT_ESTABLISHED
+
+sibling_policy:
+  consumes_mutable_sibling_outputs: false
+  concrete_sibling_details_settled: false
+  world_continuation_issue: 811
+  social_continuation_issue: 812
+  character_continuation_issue: 813
+  evaluation_continuation_issue: 815
+  resolution_owner: W2-CONTENT-SYN-CONT-01
+  allowed_binding_state: PROVISIONAL_TYPED_ONLY
+
+provisional_interfaces:
+  world:
+    - id: WORLD_ROLE:CONT_CONTESTED_SITE
+      meaning: scoped site/resource/project surface affected by prior or possible action
+    - id: WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE
+      meaning: non-character evidence-bearing world surface
+    - id: WORLD_ROLE:CONT_AFTERMATH_SURFACE
+      meaning: world/project surface on which a consequence can remain observable
+  social:
+    - id: SOCIAL_ROLE:CONT_AFFECTED_GROUP
+      meaning: group/community materially affected by the decision
+    - id: SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+      meaning: group supporting maintenance, repair, mitigation, or alternatives
+    - id: SOCIAL_ROLE:CONT_COUNTERPRESSURE
+      meaning: group/institution representing a materially different pressure or objective
+  character:
+    - id: CHAR_ROLE:CONT_PERSPECTIVE_HOLDER
+      meaning: claimant or witness with bounded knowledge
+    - id: CHAR_ROLE:CONT_PRIVATE_CONTEXT_HOLDER
+      meaning: holder of optional deny-by-default information
+    - id: CHAR_ROLE:CONT_AFFECTED_TIE
+      meaning: relationship surface affected by consequences but never information authority by itself
+
+information_model:
+  authority_layers:
+    - OBJECTIVE_FACT_REF
+    - CLAIM_REF
+    - KNOWLEDGE_REF
+    - PLAYER_DISCOVERY_REF
+    - SECRET_REF
+    - BRANCH_FACT_REF
+  invariants:
+    - CLAIM_DOES_NOT_IMPLY_OBJECTIVE_FACT
+    - KNOWLEDGE_DOES_NOT_PROMOTE_CLAIM_TO_OBJECTIVE_FACT
+    - PLAYER_EXPOSURE_DOES_NOT_GRANT_UNIVERSAL_CHARACTER_KNOWLEDGE
+    - RELATIONSHIP_STATE_DOES_NOT_GRANT_INFORMATION_AUTHORITY
+    - PUBLIC_STANDING_DOES_NOT_GRANT_INFORMATION_AUTHORITY
+    - SUBSTITUTE_TESTIMONY_DOES_NOT_GRANT_PRIVATE_SECRET
+    - DISCLOSURE_DOES_NOT_SETTLE_UNRESOLVED_OBJECTIVE_TRUTH
+    - BRANCH_FACT_REQUIRES_COMPATIBLE_BRANCH_PREDICATE
+    - GENERATED_PRESENTATION_CANNOT_MUTATE_AUTHORITATIVE_STATE
+  optional_private_context:
+    secret_role_id: SECRET_ROLE:CONT_PRIVATE_CONTEXT
+    concrete_secret_authored: false
+    access_default: DENY
+    legal_access_routes:
+      - EXPLICIT_HOLDER_DISCLOSURE
+      - VALIDATED_AUTHORITY_EFFECT
+    forbidden_access_inference:
+      - RELATIONSHIP_STATE
+      - PUBLIC_STANDING
+      - PLAYER_EXPOSURE
+      - PROXIMITY
+      - REPEATED_INTERACTION
+      - SUBSTITUTE_TESTIMONY
+    required_for_completion: false
+    permanent_denial_keeps_required_path_solvable: true
+
+continuation:
+  arc_count: 1
+  authored_concrete_quest_count: 0
+  arc:
+    arc_id: ARC_CONT:REASSESS_COMMIT_CONTINUE
+    candidate_only: true
+    purpose: >-
+      Move from interpretation through recommitment or deferral into aftermath continuation after
+      an observable consequence, without requiring private information, one concrete sibling entity,
+      a hidden foundational gate, or exact timing.
+    stage_sequence:
+      - QFAM_CONT:REASSESS_AFTER_CONSEQUENCE
+      - QFAM_CONT:RECOMMIT_REDIRECT_OR_DEFER
+      - QFAM_CONT:AFTERMATH_CONTINUATION
+
+quest_family_contract:
+  name: ContinuationQuestFamilyContract
+  version: 1
+  required_fields:
+    - quest_or_family_id
+    - version
+    - availability
+    - forbidden_predicates
+    - objectives
+    - objective_edges
+    - progression_gate_refs
+    - branches
+    - effect_refs
+    - consequence_refs
+    - failure_cases
+    - retry_recovery_policy
+    - abandon_reaccept_policy
+    - alternative_or_substitute_routes
+    - observability
+    - provisional_role_refs
+    - time_policy_refs_if_used
+    - evidence_refs
+    - reopen_refs
+  graph_invariants:
+    - REQUIRED_SUBGRAPH_ACYCLIC_UNLESS_BOUNDED_MONOTONIC_LOOP_WITH_LEGAL_EXIT
+    - OPTIONAL_EVIDENCE_NOT_HIDDEN_REQUIRED
+    - PRIVATE_INFORMATION_NOT_HIDDEN_REQUIRED
+    - MUTUALLY_EXCLUSIVE_BRANCH_OBJECTIVES_NOT_JOINTLY_REQUIRED
+    - EVERY_ACTIVE_REQUIRED_OBJECTIVE_HAS_SUPPORTED_ROUTE_OR_LEGAL_FAILURE_RECOVERY
+    - UNAVAILABLE_ACTOR_SITE_SERVICE_HAS_SUBSTITUTION_DEFERRAL_COMPENSATION_OR_LEGAL_FAILURE
+    - RETRY_DOES_NOT_ERASE_MATERIAL_HISTORY
+    - GENERATED_PROSE_DOES_NOT_PERFORM_AUTHORITATIVE_STATE_MUTATION
+
+quest_family_stages:
+  - id: QFAM_CONT:REASSESS_AFTER_CONSEQUENCE
+    stage_class: STRUCTURAL_GRAMMAR_FIXTURE
+    availability:
+      required:
+        - OBSERVABLE_PRIOR_CONSEQUENCE_OR_BRANCH_EFFECT_OR_CONTESTED_STATE
+        - AT_LEAST_ONE_PUBLIC_OR_NONPRIVATE_EVIDENCE_ROUTE
+      forbidden_hidden_requirements:
+        - SECRET_ROLE:CONT_PRIVATE_CONTEXT
+        - EXACT_SCHEDULE
+        - FOUNDATIONAL_NARRATIVE_GATE
+    required_objectives:
+      - objective_id: OBJ_CONT:OBSERVE_CURRENT_EFFECT
+        completion: observe one material current effect or consequence surface
+      - objective_id: OBJ_CONT:COMPARE_PERSPECTIVES
+        completion: compare at least two claim or evidence perspectives with at least one route independent of private context
+      - objective_id: OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER
+        completion: choose a working interpretation, acknowledge uncertainty, or explicitly defer conclusion
+    optional_objectives:
+      - objective_id: OBJ_CONT:PRIVATE_CONTEXT
+        information_ref: SECRET_ROLE:CONT_PRIVATE_CONTEXT
+        required: false
+        access_rule: EXPLICIT_HOLDER_DISCLOSURE_OR_VALIDATED_AUTHORITY_EFFECT
+    objective_edges:
+      - {from: OBJ_CONT:OBSERVE_CURRENT_EFFECT, to: OBJ_CONT:COMPARE_PERSPECTIVES, edge: ENABLES}
+      - {from: OBJ_CONT:COMPARE_PERSPECTIVES, to: OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER, edge: ENABLES}
+      - {from: OBJ_CONT:PRIVATE_CONTEXT, to: OBJ_CONT:COMPARE_PERSPECTIVES, edge: OPTIONAL_ENRICHES}
+    required_route_kinds:
+      - PUBLIC_OR_MATERIAL_EVIDENCE
+      - SUBSTITUTE_TESTIMONY_OR_OTHER_NONPRIVATE_EVIDENCE
+    failure_cases:
+      - failure_id: FAIL_CONT:PERSPECTIVE_HOLDER_UNAVAILABLE
+        recovery: use public/material/substitute route
+      - failure_id: FAIL_CONT:PRIVATE_CONTEXT_DENIED
+        recovery: secret remains undisclosed and required path remains legal
+      - failure_id: FAIL_CONT:EVIDENCE_REMAINS_CONTRADICTORY
+        recovery: explicit deferred conclusion remains legal
+      - failure_id: FAIL_CONT:AFFECTED_SURFACE_INACCESSIBLE
+        recovery: defer or use alternate evidence route; foundational play remains legal
+    progression_gate_refs:
+      - GATE:NARR-CONT:CONSEQUENCE_REASSESSMENT
+    provisional_role_refs:
+      - WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE
+      - CHAR_ROLE:CONT_PERSPECTIVE_HOLDER
+      - CHAR_ROLE:CONT_PRIVATE_CONTEXT_HOLDER
+
+  - id: QFAM_CONT:RECOMMIT_REDIRECT_OR_DEFER
+    stage_class: STRUCTURAL_GRAMMAR_FIXTURE
+    availability:
+      required:
+        - REASSESSMENT_COMPLETED_OR_EXPLICITLY_DEFERRED
+        - MATERIAL_OPTIONS_AND_AFFECTED_GOAL_CLASSES_SIGNALED
+    required_objectives:
+      - objective_id: OBJ_CONT:SELECT_DIRECTION
+        completion: select maintain, redirect, compensate/repair, or defer through at least two legal route kinds
+    branch_requirements:
+      - AFFECTED_GOALS_AND_CONTENT_EXPLICIT
+      - REVERSIBILITY_EXPLICIT
+      - OBSERVABILITY_AND_PRECOMMITMENT_SIGNALING_EXPLICIT
+      - RECOVERY_MITIGATION_OR_COMPENSATION_EXPLICIT
+      - EVIDENCE_NEEDS_EXPLICIT
+      - BRANCH_EXCLUSIVE_OR_IRREVERSIBLE_ROUTE_MAY_NOT_REMOVE_ORDINARY_FOUNDATIONAL_PLAY
+      - HIGH_IMPACT_OR_IRREVERSIBLE_REQUIRES_BRANCH_IMPACT_EVIDENCE
+    failure_cases:
+      - failure_id: FAIL_CONT:SERVICE_OR_ACTOR_ROUTE_UNAVAILABLE
+        recovery: substitute, compensation, changed-goal, or deferral route
+      - failure_id: FAIL_CONT:COMMITMENT_REJECTED
+        recovery: continued nonaligned goals remain
+      - failure_id: FAIL_CONT:SITE_OR_RESOURCE_STATE_INVALIDATES_ROUTE
+        recovery: redirect or defer rather than silent failure
+    progression_gate_refs:
+      - GATE:NARR-CONT:PUBLIC_RECOMMITMENT
+    provisional_role_refs:
+      - WORLD_ROLE:CONT_CONTESTED_SITE
+      - SOCIAL_ROLE:CONT_AFFECTED_GROUP
+      - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+      - SOCIAL_ROLE:CONT_COUNTERPRESSURE
+      - CHAR_ROLE:CONT_AFFECTED_TIE
+
+  - id: QFAM_CONT:AFTERMATH_CONTINUATION
+    stage_class: STRUCTURAL_GRAMMAR_FIXTURE
+    availability:
+      required:
+        - MATERIAL_CONSEQUENCE_OR_BRANCH_STATE_EXISTS
+    required_objectives:
+      - objective_id: OBJ_CONT:CHOOSE_CONTINUED_GOAL
+        completion: choose from at least two materially different continued-goal families unless a later fresh review approves a narrow exception
+    continued_goal_families:
+      - GOAL_CONT:MAINTAIN_OR_STEWARD
+      - GOAL_CONT:REPAIR_OR_COMPENSATE
+      - GOAL_CONT:LEARN_OR_RECONTEXTUALIZE
+      - GOAL_CONT:REDIRECT_PROJECT
+      - GOAL_CONT:NONALIGNED_BASELINE_CONTINUATION
+    failure_cases:
+      - failure_id: FAIL_CONT:ONE_GOAL_FAMILY_UNAVAILABLE
+        recovery: another materially distinct continued-goal family remains
+      - failure_id: FAIL_CONT:RESTORATION_IMPOSSIBLE
+        recovery: compensation or changed-goal route required
+      - failure_id: FAIL_CONT:RELATIONSHIP_ACCESS_CHANGED
+        recovery: unrelated foundational play remains legal
+      - failure_id: FAIL_CONT:OBJECTIVE_TRUTH_UNRESOLVED
+        recovery: aftermath goals proceed without forced mystery closure
+    progression_gate_refs:
+      - GATE:NARR-CONT:AFTERMATH_STEWARDSHIP
+    provisional_role_refs:
+      - WORLD_ROLE:CONT_AFTERMATH_SURFACE
+      - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+      - CHAR_ROLE:CONT_AFFECTED_TIE
+
+progression_gates:
+  contract_name: ProgressionGateContract
+  contract_version: 1
+  foundational_gate_count: 0
+  gates:
+    - gate_id: GATE:NARR-CONT:CONSEQUENCE_REASSESSMENT
+      version: 1
+      gate_class: OPTIONAL
+      blocks_or_unlocks:
+        - optional deeper interpretation and reassessment content
+      requirements:
+        - observable prior consequence or contested-state marker
+        - at least one nonprivate evidence route
+      routes:
+        - route_id: ROUTE:NARR-CONT:REASSESS:PUBLIC_MATERIAL
+          route_kind: KNOWLEDGE
+          prerequisite_refs:
+            - WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT:REASSESS:SUBSTITUTE
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - CHAR_ROLE:CONT_PERSPECTIVE_HOLDER
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT:REASSESS:PRIVATE_OPTIONAL
+          route_kind: RELATIONSHIP
+          prerequisite_refs:
+            - SECRET_ROLE:CONT_PRIVATE_CONTEXT
+          lifestyle_impacts: []
+          optional: true
+      visibility_or_discovery:
+        - optional status explicit
+        - private context never presented as required
+      miss_failure_recovery: remain optional; public/material/substitute routes preserve required continuation and ordinary play
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E1
+        - WSN-E2
+      exception_rationale: null
+
+    - gate_id: GATE:NARR-CONT:PUBLIC_RECOMMITMENT
+      version: 1
+      gate_class: BRANCH_EXCLUSIVE
+      blocks_or_unlocks:
+        - commitment-specific consequences and aftermath content
+      requirements:
+        - reassessment completed or explicitly deferred
+        - material tradeoffs and affected goal classes signaled
+      routes:
+        - route_id: ROUTE:NARR-CONT:RECOMMIT:MAINTAIN_OR_REDIRECT
+          route_kind: QUEST
+          prerequisite_refs:
+            - OBJ_CONT:SELECT_DIRECTION
+          lifestyle_impacts:
+            - branch-specific goals and content may change
+        - route_id: ROUTE:NARR-CONT:RECOMMIT:COMPENSATE_OR_REPAIR
+          route_kind: SERVICE
+          prerequisite_refs:
+            - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+          lifestyle_impacts:
+            - specialized repair or compensation effort may be required for that branch goal
+        - route_id: ROUTE:NARR-CONT:RECOMMIT:DEFER
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - QFAM_CONT:REASSESS_AFTER_CONSEQUENCE
+          lifestyle_impacts:
+            - preserves noncommitted and baseline routes temporarily
+      visibility_or_discovery:
+        - affected-goal classes and reversibility class signaled before commitment
+        - defer or nonalignment route visible before commitment
+      miss_failure_recovery: substitute, redirect, compensate, or defer; no silent permanent soft lock
+      branch_scope: BRANCH_FAMILY:NARR-CONT:PUBLIC_DIRECTION
+      evidence_requirements:
+        - WSN-E3
+        - WSN-E5
+      exception_rationale: null
+
+    - gate_id: GATE:NARR-CONT:AFTERMATH_STEWARDSHIP
+      version: 1
+      gate_class: SPECIALIZATION
+      blocks_or_unlocks:
+        - specialized stewardship, repair, maintenance, or leadership aftermath goals
+      requirements:
+        - material aftermath state exists
+      routes:
+        - route_id: ROUTE:NARR-CONT:AFTERMATH:STEWARDSHIP
+          route_kind: SERVICE
+          prerequisite_refs:
+            - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+          lifestyle_impacts:
+            - specialization-specific work and goals
+        - route_id: ROUTE:NARR-CONT:AFTERMATH:REDIRECT
+          route_kind: QUEST
+          prerequisite_refs:
+            - GOAL_CONT:REDIRECT_PROJECT
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT:AFTERMATH:NONALIGNED
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - GOAL_CONT:NONALIGNED_BASELINE_CONTINUATION
+          lifestyle_impacts: []
+      visibility_or_discovery:
+        - specialization status explicit
+        - alternative non-stewardship goal families visible
+      miss_failure_recovery: alternative aftermath goal families remain; unrelated foundational play stays legal
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E5
+        - WSN-E8
+      exception_rationale: null
+
+consequence_contract:
+  name: ContinuationConsequenceContract
+  version: 1
+  reversibility_classes:
+    - REVERSIBLE
+    - CONDITIONALLY_REVERSIBLE
+    - IRREVERSIBLE
+  required_fields:
+    - consequence_id
+    - trigger_ref
+    - affected_state_refs
+    - preconditions
+    - effect_operations
+    - reversibility
+    - reversal_or_mitigation
+    - persistence_obligation
+    - observability
+    - downstream_dependencies
+  conditionally_required_fields:
+    - field: branch_impact_ref
+      condition: high-impact, branch-exclusive, or irreversible consequence
+    - field: compensation_or_alternative_goal_refs
+      condition: restoration is impossible
+  invariants:
+    - PROSE_DOES_NOT_PERFORM_STATE_TRANSITION
+    - DISCLOSURE_DOES_NOT_PROMOTE_CLAIM_TO_OBJECTIVE_TRUTH
+    - RETRY_OR_REPAIR_DOES_NOT_ERASE_MATERIAL_HISTORY
+    - IRREVERSIBLE_REQUIRES_BRANCH_IMPACT_EVIDENCE
+    - IRREVERSIBLE_REQUIRES_MEANINGFUL_CONTINUED_PLAY_OR_SEPARATELY_REVIEWED_EXCEPTION
+  templates:
+    - id: CONSEQ_TEMPLATE:INFORMATION_EXPOSURE
+      default_reversibility: CONDITIONALLY_REVERSIBLE
+      required_semantics:
+        - later correction or context may alter interpretation or access effects
+        - disclosure history persists
+        - objective truth authority is unchanged
+    - id: CONSEQ_TEMPLATE:PROJECT_REDIRECTION
+      allowed_reversibility:
+        - REVERSIBLE
+        - CONDITIONALLY_REVERSIBLE
+      required_semantics:
+        - restored state and persistent history explicit
+        - alternative goals remain explicit
+    - id: CONSEQ_TEMPLATE:LOCKED_WORLD_CHANGE
+      allowed_reversibility:
+        - IRREVERSIBLE
+      concrete_instance_authorized_here: false
+      required_before_later_instance_can_be_treated_as_sufficient:
+        - explicit BranchImpactEvidence
+        - precommitment signaling
+        - meaningful continued play
+        - alternative goals or content
+        - no hidden foundational gameplay removal
+
+branch_family_fixtures:
+  - id: BRANCH_FAMILY:NARR-CONT:PUBLIC_DIRECTION
+    high_impact_possible: true
+    invariants:
+      - ordinary foundational play remains legal
+      - at least one nonaligned or defer route exists before commitment
+      - high-impact variant requires branch-impact evidence
+      - consequences change goals or content materially rather than only setting a flag
+
+retry_recovery_policy:
+  abandon_reaccept_may_be_supported: true
+  retry_erases_history: false
+  retry_promotes_claim_to_truth: false
+  repair_restores_relationship_automatically: false
+  current_state_change_requires_typed_effect_or_evidence: true
+  unavailable_provisional_role_requires_substitution_deferral_compensation_or_legal_failure: true
+
+time_policy:
+  exact_game_time_policy_version: UNBOUND
+  timed_content_authored: false
+  exact_calendar_values_authored: false
+  concrete_npc_schedules_authored: false
+  required_timed_objectives: []
+  implicit_wall_time_allowed: false
+  future_timing_requirements:
+    - exact reviewed GameTimePolicy binding
+    - typed opening and closing predicates
+    - pause and scale semantics
+    - accessibility timing alternatives
+    - retry and recovery semantics
+    - actor reachability evidence
+    - evidence scenario refs
+  current_evidence_constraints:
+    WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+    WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+    WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  schedule_completeness_claimed: false
+
+vertical_slice_regression:
+  fixture_id: VS:OLD-WORKS-ACCOUNTS-01
+  classification: NONCANONICAL_REGRESSION_REFERENCE_ONLY
+  concrete_fixture_details_become_continuation_canon: false
+  assertions:
+    - regression_id: REG_CONT:VS_SECRET_OPTIONAL
+      fixture_behavior: private provenance gap is deny-by-default and optional
+      continuation_assertion: required continuation graph excludes SECRET_ROLE:CONT_PRIVATE_CONTEXT
+    - regression_id: REG_CONT:VS_SUBSTITUTE_EVIDENCE
+      fixture_behavior: testimony, public record, and material routes can substitute without revealing private information
+      continuation_assertion: reassessment provides public/material/substitute nonprivate routes
+    - regression_id: REG_CONT:VS_SOLVABLE_WITHOUT_SECRET
+      fixture_behavior: quest can complete when private testimony is denied
+      continuation_assertion: permanent private-context denial preserves a legal required path
+    - regression_id: REG_CONT:VS_TRUTH_NOT_FORCED
+      fixture_behavior: conflicting accounts may remain unresolved
+      continuation_assertion: OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER permits explicit uncertainty
+    - regression_id: REG_CONT:VS_BRANCH_SIGNALING
+      fixture_behavior: public commitment tradeoffs are surfaced before selection
+      continuation_assertion: recommitment requires affected-goal and reversibility signaling
+    - regression_id: REG_CONT:VS_FAILURE_RECOVERY
+      fixture_behavior: unavailable witness, denied private testimony, stalled negotiation, or declined repair retain recovery routes
+      continuation_assertion: representative failures use substitute, defer, compensate, redirect, or changed-goal recovery
+    - regression_id: REG_CONT:VS_HISTORY_PERSISTS
+      fixture_behavior: retry and recovery do not erase meaningful history
+      continuation_assertion: retry preserves material consequence and disclosure history
+  fail_if:
+    - REQUIRED_PATH_DEPENDS_ON_PRIVATE_CONTEXT
+    - REQUIRED_PATH_DEPENDS_ON_CONCRETE_SCHEDULE
+    - REQUIRED_PATH_DEPENDS_ON_ONE_IRREPLACEABLE_PROVISIONAL_ACTOR
+    - HIGH_IMPACT_BRANCH_REMOVES_MEANINGFUL_CONTINUED_PLAY_WITHOUT_REVIEWED_EVIDENCE
+
+wsn_policy:
+  may_modify_existing_wsn_state: false
+  E1_use: bounded contradiction and chronology invariant support only
+  E2_use: bounded information-authority invariant support only
+  E3_claim: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  E4_claim: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  E5_claim: PASS_BOUNDED_MODEL_ONLY
+  E6_claim: generated presentation remains nonauthoritative
+  E7_claim: no final authored variety or human-quality certification
+  E8_claim: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  E9_claim: no single evaluator score is final authority
+  human_quality_pass: false
+  production_persistence_pass: false
+  production_schedule_pass: false
+  aggregate_verification_pass: false
+
+open_bindings:
+  - id: OPEN:NARR-CONT:WORLD_SITE_BINDING
+    owner: W2-CONTENT-SYN-CONT-01
+  - id: OPEN:NARR-CONT:EVIDENCE_SOURCE_BINDING
+    owner: W2-CONTENT-SYN-CONT-01
+  - id: OPEN:NARR-CONT:AFFECTED_GROUP_BINDING
+    owner: W2-CONTENT-SYN-CONT-01
+  - id: OPEN:NARR-CONT:PRIVATE_CONTEXT_HOLDER_BINDING
+    owner: W2-CONTENT-SYN-CONT-01
+    private_context_may_remain_unused: true
+  - id: OPEN:NARR-CONT:AFTERMATH_ROLE_BINDING
+    owner: W2-CONTENT-SYN-CONT-01
+  - id: OPEN:NARR-CONT:GAME_TIME_POLICY
+    owner: LATER_REVIEWED_FANIN_OR_EVIDENCE_ROUTE
+  - id: OPEN:NARR-CONT:SEMANTIC_GRAPH_VERSION
+    owner: LATER_REVIEWED_FANIN_OR_EVIDENCE_ROUTE
+  - id: OPEN:NARR-CONT:BRANCH_IMPACT_EVIDENCE
+    owner: LATER_EMPIRICAL_EVIDENCE_ROUTE
+  - id: OPEN:NARR-CONT:WSN_E3_E4_E8
+    owner: EXISTING_WSN_PREREQUISITE_AND_EVIDENCE_ROUTE
+  - id: OPEN:NARR-CONT:HUMAN_QUALITY
+    owner: LATER_APPROPRIATELY_AUTHORIZED_HUMAN_QUALITY_EVIDENCE_ROUTE
+
+contradiction_risks:
+  - SIBLING_BINDING_UNAVAILABLE_IN_ONE_BRANCH
+  - WORLD_CHRONOLOGY_INVALIDATES_PROPOSED_EVIDENCE_SOURCE
+  - SOCIAL_OR_CHARACTER_CONTINUATION_OVEREXPOSES_PRIVATE_CONTEXT
+  - NARRATIVE_BRANCHES_COLLAPSE_TO_SAME_GAMEPLAY_TRAJECTORY
+  - NONFOUNDATIONAL_GATE_COMPOSITION_CREATES_DEFACTO_FOUNDATIONAL_TAX
+  - AFTERMATH_GOALS_ARE_COSMETIC_RATHER_THAN_MATERIALLY_DISTINCT
+
+review_contract:
+  required: true
+  trust: FRESH_INDEPENDENT_OR_DEGRADED_INDEPENDENT
+  reviewed_token_if_clean: W2-CONTENT-NARR-CONT-01_REVIEWED
+  clean_authority: BOUNDED_CONTENT_FANIN_CONSUMPTION_ONLY
+  required_attacks:
+    - REQUIRED_GRAPH_CYCLES_HIDDEN_PREREQUISITES_AND_ROLE_AVAILABILITY_SOFTLOCKS
+    - PRIVATE_INFORMATION_OPTIONALITY_AND_DENY_BY_DEFAULT_AUTHORITY
+    - TRUTH_CLAIM_KNOWLEDGE_PLAYER_EXPOSURE_SEPARATION
+    - HIDDEN_OR_COMPOSED_FOUNDATIONAL_NARRATIVE_GATES
+    - PROGRESSION_GATE_CONTRACT_COMPLETENESS
+    - HIGH_IMPACT_BRANCH_SIGNALING_MITIGATION_COMPENSATION_ALTERNATIVE_CONTENT_AND_EVIDENCE
+    - UNSUPPORTED_TIMING_OR_SCHEDULE_ASSUMPTIONS
+    - SIBLING_MUTABLE_OUTPUT_LEAKAGE
+    - VERTICAL_SLICE_CANON_INFLATION
+    - WSN_LAUNDERING_OR_OVERCLAIM
+    - MARKDOWN_YAML_CONSISTENCY
+    - QUEST_CATALOG_OR_IMPLEMENTATION_SCOPE_GROWTH
+  integration_authority: false
+  canonical_authority: false
+
+owned_paths:
+  - docs/planning/wave-2/content/narrative-consequence-continuation-01.md
+  - docs/planning/wave-2/content/narrative-consequence-continuation-01.yaml
+  - docs/planning/handoffs/issue-814.md
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  bounded_arc_count: 1
+  quest_family_stage_count: 3
+  authored_concrete_quest_count: 0
+  foundational_gate_count: 0
+  progression_gate_record_count: 3
+  sibling_mutable_outputs_consumed: false
+  private_secret_required_for_completion: false
+  exact_schedule_assertion_count: 0
+  vertical_slice_regression_count: 7
+  vertical_slice_canon_inflation_found: false
+  wsn_state_laundering_found: false
+  false_engine_dependency_found: false
+  integration_authority_claimed: false
+
+downstream:
+  fan_in_mission_id: W2-CONTENT-SYN-CONT-01
+  prerequisite_token: W2-CONTENT-NARR-CONT-01_REVIEWED
+  concrete_cross_root_binding_deferred_to_fan_in: true
+  fan_in_materialization_authorized_here: false
