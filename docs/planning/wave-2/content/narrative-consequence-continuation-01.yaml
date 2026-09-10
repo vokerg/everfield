@@ -1,7 +1,7 @@
 schema: everfield_w2_content_narrative_continuation_v1
 mission_id: W2-CONTENT-NARR-CONT-01
 issue: 814
-state: PRODUCER_CANDIDATE_NONCANONICAL
+state: REMEDIATION_CANDIDATE_NONCANONICAL
 conflict_domain: CONTENT_NARRATIVE_CONTINUATION
 engine_dependency: ENGINE_NEUTRAL_NOW
 canonicality: NOT_CANONICAL
@@ -26,6 +26,35 @@ producer:
   actor_session_id: content-narr-cont-814-gpt56sol-20260904-01
   claim_comment_id: 5537122341
   claim_base_main_sha: 88b704183e99dbd0dd102131c67a99fd0013ff36
+  terminal_head_sha: 29546599244ff37c990221bed4692e8ad54a533d
+  draft_pr: 847
+  markdown_blob_sha: 9b1fa8d5c46185add7e259028a449b49a9b576b7
+  yaml_blob_sha: 9798d0e665728434407f536f169b8d1ed8aaa588
+  handoff_blob_sha: 86e1bd1f5ce4d708622b629d71cb0776fe8a4b53
+
+remediation:
+  issue: 972
+  mission_id: W2-CONTENT-NARR-CONT-REM-01
+  branch: planning/issue-972
+  finding_id: NARR-917-MAJ-01
+  base_main_sha: 9a8a6a23cef77962bc5797b0365280a35c0e2b43
+  predecessor_review_issue: 917
+  predecessor_review_pr: 971
+  predecessor_review_head_sha: 8a5e1b6e80dd71462eeb59bf93746554ab2d451a
+  predecessor_review_terminal_comment_id: 5614477500
+  predecessor_review_report_blob_sha: f2bfa91af96cf98a6fe02314e21a5462fac59c8f
+  predecessor_disposition: CHANGES_NEEDED
+  original_claim_comment_id: 5614553048
+  winning_resume_intent_comment_id: 5622006066
+  ownership_generation_comment_id: 5622011196
+  actor_session_id: frontier-drain-narr-rem-972-recovery-gpt56sol-20260910-02
+  scope: REQUIRED_ROUTE_CARDINALITY_ONLY
+  integration_authority: false
+  verification_pass_authority: false
+  reviewed_token_authority: false
+  implementation_authority: false
+  decision_authority: false
+  canonicality: NOT_CANONICAL
 
 canonical_basis:
   planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
@@ -160,6 +189,7 @@ information_model:
       - REPEATED_INTERACTION
       - SUBSTITUTE_TESTIMONY
     required_for_completion: false
+    counts_toward_required_route_minimum: false
     permanent_denial_keeps_required_path_solvable: true
 
 continuation:
@@ -205,7 +235,8 @@ quest_family_contract:
     - OPTIONAL_EVIDENCE_NOT_HIDDEN_REQUIRED
     - PRIVATE_INFORMATION_NOT_HIDDEN_REQUIRED
     - MUTUALLY_EXCLUSIVE_BRANCH_OBJECTIVES_NOT_JOINTLY_REQUIRED
-    - EVERY_ACTIVE_REQUIRED_OBJECTIVE_HAS_SUPPORTED_ROUTE_OR_LEGAL_FAILURE_RECOVERY
+    - EVERY_ACTIVE_REQUIRED_OBJECTIVE_HAS_OBJECTIVE_MINIMUM_MATERIALLY_DISTINCT_ROUTES_OR_PREACTIVATION_LEGAL_TRANSITION
+    - RECOVERY_RECOMPUTES_REQUIRED_ROUTE_CARDINALITY_BEFORE_OBJECTIVE_CONTINUES
     - UNAVAILABLE_ACTOR_SITE_SERVICE_HAS_SUBSTITUTION_DEFERRAL_COMPENSATION_OR_LEGAL_FAILURE
     - RETRY_DOES_NOT_ERASE_MATERIAL_HISTORY
     - GENERATED_PROSE_DOES_NOT_PERFORM_AUTHORITATIVE_STATE_MUTATION
@@ -216,7 +247,7 @@ quest_family_stages:
     availability:
       required:
         - OBSERVABLE_PRIOR_CONSEQUENCE_OR_BRANCH_EFFECT_OR_CONTESTED_STATE
-        - AT_LEAST_ONE_PUBLIC_OR_NONPRIVATE_EVIDENCE_ROUTE
+        - AT_LEAST_TWO_MATERIALLY_DISTINCT_NONPRIVATE_EVIDENCE_OR_PERSPECTIVE_ROUTES
       forbidden_hidden_requirements:
         - SECRET_ROLE:CONT_PRIVATE_CONTEXT
         - EXACT_SCHEDULE
@@ -225,7 +256,7 @@ quest_family_stages:
       - objective_id: OBJ_CONT:OBSERVE_CURRENT_EFFECT
         completion: observe one material current effect or consequence surface
       - objective_id: OBJ_CONT:COMPARE_PERSPECTIVES
-        completion: compare at least two claim or evidence perspectives with at least one route independent of private context
+        completion: compare at least two materially distinct claim or evidence perspectives, both legally available without requiring private context
       - objective_id: OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER
         completion: choose a working interpretation, acknowledge uncertainty, or explicitly defer conclusion
     optional_objectives:
@@ -233,6 +264,7 @@ quest_family_stages:
         information_ref: SECRET_ROLE:CONT_PRIVATE_CONTEXT
         required: false
         access_rule: EXPLICIT_HOLDER_DISCLOSURE_OR_VALIDATED_AUTHORITY_EFFECT
+        counts_toward_required_route_minimum: false
     objective_edges:
       - {from: OBJ_CONT:OBSERVE_CURRENT_EFFECT, to: OBJ_CONT:COMPARE_PERSPECTIVES, edge: ENABLES}
       - {from: OBJ_CONT:COMPARE_PERSPECTIVES, to: OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER, edge: ENABLES}
@@ -240,15 +272,23 @@ quest_family_stages:
     required_route_kinds:
       - PUBLIC_OR_MATERIAL_EVIDENCE
       - SUBSTITUTE_TESTIMONY_OR_OTHER_NONPRIVATE_EVIDENCE
+    route_cardinality_contract:
+      objective_id: OBJ_CONT:COMPARE_PERSPECTIVES
+      minimum_simultaneously_legal_routes: 2
+      materially_distinct: true
+      private_context_counts_toward_minimum: false
+      enforcement_phase: PRE_OBJECTIVE_ACTIVATION_AND_AFTER_RECOVERY
+      underflow_transition: STATE_CONT:PRE_COMPARE_DEFERRED
+      underflow_transition_before_objective_activation: true
     failure_cases:
       - failure_id: FAIL_CONT:PERSPECTIVE_HOLDER_UNAVAILABLE
-        recovery: use public/material/substitute route
+        recovery: recompute qualifying nonprivate routes; use public/material/substitute routes if at least two remain, otherwise enter STATE_CONT:PRE_COMPARE_DEFERRED before OBJ_CONT:COMPARE_PERSPECTIVES activates
       - failure_id: FAIL_CONT:PRIVATE_CONTEXT_DENIED
-        recovery: secret remains undisclosed and required path remains legal
+        recovery: secret remains undisclosed; private context is excluded from the required route minimum so cardinality is unchanged
       - failure_id: FAIL_CONT:EVIDENCE_REMAINS_CONTRADICTORY
-        recovery: explicit deferred conclusion remains legal
+        recovery: after a legal two-perspective comparison, explicit deferred conclusion remains legal
       - failure_id: FAIL_CONT:AFFECTED_SURFACE_INACCESSIBLE
-        recovery: defer or use alternate evidence route; foundational play remains legal
+        recovery: recompute qualifying nonprivate routes; if fewer than two remain, enter STATE_CONT:PRE_COMPARE_DEFERRED before comparison activates; foundational play remains legal
     progression_gate_refs:
       - GATE:NARR-CONT:CONSEQUENCE_REASSESSMENT
     provisional_role_refs:
@@ -262,9 +302,22 @@ quest_family_stages:
       required:
         - REASSESSMENT_COMPLETED_OR_EXPLICITLY_DEFERRED
         - MATERIAL_OPTIONS_AND_AFFECTED_GOAL_CLASSES_SIGNALED
+        - AT_LEAST_TWO_SIMULTANEOUS_LEGAL_MATERIALLY_DIFFERENTIATED_DIRECTION_ROUTE_KINDS
     required_objectives:
       - objective_id: OBJ_CONT:SELECT_DIRECTION
-        completion: select maintain, redirect, compensate/repair, or defer through at least two legal route kinds
+        completion: select among at least two simultaneously legal materially differentiated route kinds
+    route_cardinality_contract:
+      objective_id: OBJ_CONT:SELECT_DIRECTION
+      allowed_route_kinds:
+        - MAINTAIN
+        - REDIRECT
+        - COMPENSATE_OR_REPAIR
+        - DEFER
+      minimum_simultaneously_legal_route_kinds: 2
+      materially_differentiated: true
+      enforcement_phase: PRE_OBJECTIVE_ACTIVATION_AND_AFTER_RECOVERY
+      underflow_transition: STATE_CONT:PRE_DIRECTION_DEFERRED
+      underflow_transition_before_objective_activation: true
     branch_requirements:
       - AFFECTED_GOALS_AND_CONTENT_EXPLICIT
       - REVERSIBILITY_EXPLICIT
@@ -275,11 +328,11 @@ quest_family_stages:
       - HIGH_IMPACT_OR_IRREVERSIBLE_REQUIRES_BRANCH_IMPACT_EVIDENCE
     failure_cases:
       - failure_id: FAIL_CONT:SERVICE_OR_ACTOR_ROUTE_UNAVAILABLE
-        recovery: substitute, compensation, changed-goal, or deferral route
+        recovery: recompute direction route kinds after substitution or route loss; if fewer than two materially differentiated kinds remain, enter STATE_CONT:PRE_DIRECTION_DEFERRED before OBJ_CONT:SELECT_DIRECTION is active
       - failure_id: FAIL_CONT:COMMITMENT_REJECTED
-        recovery: continued nonaligned goals remain
+        recovery: continued nonaligned goals remain and direction route kinds are recomputed; underflow below two enters STATE_CONT:PRE_DIRECTION_DEFERRED before another selection activates
       - failure_id: FAIL_CONT:SITE_OR_RESOURCE_STATE_INVALIDATES_ROUTE
-        recovery: redirect or defer rather than silent failure
+        recovery: recompute direction route kinds and redirect or defer when at least two kinds remain; otherwise enter STATE_CONT:PRE_DIRECTION_DEFERRED before selection
     progression_gate_refs:
       - GATE:NARR-CONT:PUBLIC_RECOMMITMENT
     provisional_role_refs:
@@ -294,24 +347,32 @@ quest_family_stages:
     availability:
       required:
         - MATERIAL_CONSEQUENCE_OR_BRANCH_STATE_EXISTS
+        - AT_LEAST_TWO_SIMULTANEOUS_MATERIALLY_DISTINCT_CONTINUED_GOAL_FAMILIES
     required_objectives:
       - objective_id: OBJ_CONT:CHOOSE_CONTINUED_GOAL
-        completion: choose from at least two materially different continued-goal families unless a later fresh review approves a narrow exception
+        completion: choose from at least two simultaneously legal materially distinct continued-goal families
     continued_goal_families:
       - GOAL_CONT:MAINTAIN_OR_STEWARD
       - GOAL_CONT:REPAIR_OR_COMPENSATE
       - GOAL_CONT:LEARN_OR_RECONTEXTUALIZE
       - GOAL_CONT:REDIRECT_PROJECT
       - GOAL_CONT:NONALIGNED_BASELINE_CONTINUATION
+    route_cardinality_contract:
+      objective_id: OBJ_CONT:CHOOSE_CONTINUED_GOAL
+      minimum_simultaneously_legal_goal_families: 2
+      materially_distinct: true
+      enforcement_phase: PRE_OBJECTIVE_ACTIVATION_AND_AFTER_RECOVERY
+      underflow_transition: STATE_CONT:PRE_GOAL_SELECTION_DEFERRED
+      underflow_transition_before_objective_activation: true
     failure_cases:
       - failure_id: FAIL_CONT:ONE_GOAL_FAMILY_UNAVAILABLE
-        recovery: another materially distinct continued-goal family remains
+        recovery: recompute legal goal families; selection continues only if at least two materially distinct families remain, otherwise enter STATE_CONT:PRE_GOAL_SELECTION_DEFERRED before OBJ_CONT:CHOOSE_CONTINUED_GOAL activates
       - failure_id: FAIL_CONT:RESTORATION_IMPOSSIBLE
-        recovery: compensation or changed-goal route required
+        recovery: compensation or changed-goal route required and the two-family minimum must hold before goal selection activates
       - failure_id: FAIL_CONT:RELATIONSHIP_ACCESS_CHANGED
-        recovery: unrelated foundational play remains legal
+        recovery: unrelated foundational play remains legal; any resulting goal-family underflow enters STATE_CONT:PRE_GOAL_SELECTION_DEFERRED before selection
       - failure_id: FAIL_CONT:OBJECTIVE_TRUTH_UNRESOLVED
-        recovery: aftermath goals proceed without forced mystery closure
+        recovery: aftermath goals may proceed without forced mystery closure only while two materially distinct goal families remain legal; otherwise pre-goal-selection deferral remains legal
     progression_gate_refs:
       - GATE:NARR-CONT:AFTERMATH_STEWARDSHIP
     provisional_role_refs:
@@ -331,7 +392,8 @@ progression_gates:
         - optional deeper interpretation and reassessment content
       requirements:
         - observable prior consequence or contested-state marker
-        - at least one nonprivate evidence route
+        - at least two materially distinct nonprivate evidence or perspective routes while OBJ_CONT:COMPARE_PERSPECTIVES is active
+      route_cardinality_ref: QFAM_CONT:REASSESS_AFTER_CONSEQUENCE.route_cardinality_contract
       routes:
         - route_id: ROUTE:NARR-CONT:REASSESS:PUBLIC_MATERIAL
           route_kind: KNOWLEDGE
@@ -349,10 +411,11 @@ progression_gates:
             - SECRET_ROLE:CONT_PRIVATE_CONTEXT
           lifestyle_impacts: []
           optional: true
+          counts_toward_required_route_minimum: false
       visibility_or_discovery:
         - optional status explicit
         - private context never presented as required
-      miss_failure_recovery: remain optional; public/material/substitute routes preserve required continuation and ordinary play
+      miss_failure_recovery: recompute nonprivate route cardinality; underflow below two enters STATE_CONT:PRE_COMPARE_DEFERRED before comparison activates; ordinary play remains legal
       branch_scope: null
       evidence_requirements:
         - WSN-E1
@@ -367,6 +430,8 @@ progression_gates:
       requirements:
         - reassessment completed or explicitly deferred
         - material tradeoffs and affected goal classes signaled
+        - at least two materially differentiated direction route kinds simultaneously legal while OBJ_CONT:SELECT_DIRECTION is active
+      route_cardinality_ref: QFAM_CONT:RECOMMIT_REDIRECT_OR_DEFER.route_cardinality_contract
       routes:
         - route_id: ROUTE:NARR-CONT:RECOMMIT:MAINTAIN_OR_REDIRECT
           route_kind: QUEST
@@ -389,7 +454,7 @@ progression_gates:
       visibility_or_discovery:
         - affected-goal classes and reversibility class signaled before commitment
         - defer or nonalignment route visible before commitment
-      miss_failure_recovery: substitute, redirect, compensate, or defer; no silent permanent soft lock
+      miss_failure_recovery: recompute direction route-kind cardinality; underflow below two enters STATE_CONT:PRE_DIRECTION_DEFERRED before selection; no silent permanent soft lock
       branch_scope: BRANCH_FAMILY:NARR-CONT:PUBLIC_DIRECTION
       evidence_requirements:
         - WSN-E3
@@ -403,6 +468,8 @@ progression_gates:
         - specialized stewardship, repair, maintenance, or leadership aftermath goals
       requirements:
         - material aftermath state exists
+        - containing aftermath selection stage has at least two materially distinct continued-goal families while OBJ_CONT:CHOOSE_CONTINUED_GOAL is active
+      route_cardinality_ref: QFAM_CONT:AFTERMATH_CONTINUATION.route_cardinality_contract
       routes:
         - route_id: ROUTE:NARR-CONT:AFTERMATH:STEWARDSHIP
           route_kind: SERVICE
@@ -423,7 +490,7 @@ progression_gates:
       visibility_or_discovery:
         - specialization status explicit
         - alternative non-stewardship goal families visible
-      miss_failure_recovery: alternative aftermath goal families remain; unrelated foundational play stays legal
+      miss_failure_recovery: recompute aftermath goal-family cardinality; underflow below two enters STATE_CONT:PRE_GOAL_SELECTION_DEFERRED before selection; unrelated foundational play stays legal
       branch_scope: null
       evidence_requirements:
         - WSN-E5
@@ -500,6 +567,8 @@ retry_recovery_policy:
   repair_restores_relationship_automatically: false
   current_state_change_requires_typed_effect_or_evidence: true
   unavailable_provisional_role_requires_substitution_deferral_compensation_or_legal_failure: true
+  route_cardinality_recomputed_after_recovery: true
+  objective_underflow_transitions_before_activation: true
 
 time_policy:
   exact_game_time_policy_version: UNBOUND
@@ -529,22 +598,22 @@ vertical_slice_regression:
   assertions:
     - regression_id: REG_CONT:VS_SECRET_OPTIONAL
       fixture_behavior: private provenance gap is deny-by-default and optional
-      continuation_assertion: required continuation graph excludes SECRET_ROLE:CONT_PRIVATE_CONTEXT
+      continuation_assertion: required continuation graph excludes SECRET_ROLE:CONT_PRIVATE_CONTEXT from all required route minima
     - regression_id: REG_CONT:VS_SUBSTITUTE_EVIDENCE
       fixture_behavior: testimony, public record, and material routes can substitute without revealing private information
-      continuation_assertion: reassessment provides public/material/substitute nonprivate routes
+      continuation_assertion: reassessment requires at least two materially distinct nonprivate routes while comparison is active, otherwise pre-comparison deferral
     - regression_id: REG_CONT:VS_SOLVABLE_WITHOUT_SECRET
       fixture_behavior: quest can complete when private testimony is denied
-      continuation_assertion: permanent private-context denial preserves a legal required path
+      continuation_assertion: permanent private-context denial does not reduce qualifying required-route cardinality
     - regression_id: REG_CONT:VS_TRUTH_NOT_FORCED
       fixture_behavior: conflicting accounts may remain unresolved
-      continuation_assertion: OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER permits explicit uncertainty
+      continuation_assertion: OBJ_CONT:DECLARE_INTERPRETATION_OR_DEFER permits explicit uncertainty after legal comparison
     - regression_id: REG_CONT:VS_BRANCH_SIGNALING
       fixture_behavior: public commitment tradeoffs are surfaced before selection
-      continuation_assertion: recommitment requires affected-goal and reversibility signaling
+      continuation_assertion: recommitment requires affected-goal and reversibility signaling plus two legal differentiated route kinds before selection
     - regression_id: REG_CONT:VS_FAILURE_RECOVERY
       fixture_behavior: unavailable witness, denied private testimony, stalled negotiation, or declined repair retain recovery routes
-      continuation_assertion: representative failures use substitute, defer, compensate, redirect, or changed-goal recovery
+      continuation_assertion: representative failures recompute route cardinality and use substitute, defer, compensate, redirect, or changed-goal recovery before an impossible objective activates
     - regression_id: REG_CONT:VS_HISTORY_PERSISTS
       fixture_behavior: retry and recovery do not erase meaningful history
       continuation_assertion: retry preserves material consequence and disclosure history
@@ -552,6 +621,7 @@ vertical_slice_regression:
     - REQUIRED_PATH_DEPENDS_ON_PRIVATE_CONTEXT
     - REQUIRED_PATH_DEPENDS_ON_CONCRETE_SCHEDULE
     - REQUIRED_PATH_DEPENDS_ON_ONE_IRREPLACEABLE_PROVISIONAL_ACTOR
+    - ACTIVE_REQUIRED_OBJECTIVE_ROUTE_COUNT_BELOW_DECLARED_MINIMUM
     - HIGH_IMPACT_BRANCH_REMOVES_MEANINGFUL_CONTINUED_PLAY_WITHOUT_REVIEWED_EVIDENCE
 
 wsn_policy:
@@ -608,6 +678,7 @@ review_contract:
   clean_authority: BOUNDED_CONTENT_FANIN_CONSUMPTION_ONLY
   required_attacks:
     - REQUIRED_GRAPH_CYCLES_HIDDEN_PREREQUISITES_AND_ROLE_AVAILABILITY_SOFTLOCKS
+    - REQUIRED_OBJECTIVE_ROUTE_CARDINALITY_PRESERVED_THROUGH_ACTIVATION_AND_RECOVERY
     - PRIVATE_INFORMATION_OPTIONALITY_AND_DENY_BY_DEFAULT_AUTHORITY
     - TRUTH_CLAIM_KNOWLEDGE_PLAYER_EXPOSURE_SEPARATION
     - HIDDEN_OR_COMPOSED_FOUNDATIONAL_NARRATIVE_GATES
@@ -625,7 +696,7 @@ review_contract:
 owned_paths:
   - docs/planning/wave-2/content/narrative-consequence-continuation-01.md
   - docs/planning/wave-2/content/narrative-consequence-continuation-01.yaml
-  - docs/planning/handoffs/issue-814.md
+  - docs/planning/handoffs/issue-972.md
 
 self_review:
   blocker: 0
@@ -638,6 +709,12 @@ self_review:
   progression_gate_record_count: 3
   sibling_mutable_outputs_consumed: false
   private_secret_required_for_completion: false
+  private_secret_counts_toward_reassessment_minimum: false
+  reassessment_minimum_nonprivate_routes_when_compare_active: 2
+  recommitment_minimum_route_kinds_when_select_direction_active: 2
+  aftermath_minimum_goal_families_when_choose_goal_active: 2
+  preactivation_underflow_transitions_declared: 3
+  route_cardinality_finding_closed: NARR-917-MAJ-01
   exact_schedule_assertion_count: 0
   vertical_slice_regression_count: 7
   vertical_slice_canon_inflation_found: false
