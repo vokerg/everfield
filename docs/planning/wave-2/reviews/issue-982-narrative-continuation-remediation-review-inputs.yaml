@@ -1,0 +1,50 @@
+schema: everfield_required_review_cold_start_inputs_v1
+review_issue: 982
+mission_id: W2-CONTENT-NARR-CONT-REM-01-REV-01
+reviewer_episode: frontier-drain-narr-rem-review-982-gpt56sol-20260910-01
+trust_mode: DEGRADED_SINGLE_AGENT
+resource_constraint_comment_id: 5244416013
+canonical:
+  main_sha: 9a8a6a23cef77962bc5797b0365280a35c0e2b43
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  binding_issue: 6
+  binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+judged_remediation:
+  issue: 972
+  terminal_comment_id: 5622134662
+  branch: planning/issue-972
+  pr: 981
+  exact_head_sha: 15f1d8549e984519958bcb3bb9d668fdfe60f888
+  markdown_blob_sha: a5ccc99a937cfdbca0ed293f4a70f8191d7b800a
+  yaml_blob_sha: 14c748fdc870d24d804fea84416c25b2956f0288
+  handoff_blob_sha: ecce89f1f60ba95482e5c15d11f3b6a51c4233ec
+frozen_predecessor:
+  producer_issue: 814
+  producer_pr: 847
+  producer_head_sha: 29546599244ff37c990221bed4692e8ad54a533d
+  producer_markdown_blob_sha: 9b1fa8d5c46185add7e259028a449b49a9b576b7
+  producer_yaml_blob_sha: 9798d0e665728434407f536f169b8d1ed8aaa588
+  failed_review_issue: 917
+  failed_review_pr: 971
+  failed_review_head_sha: 8a5e1b6e80dd71462eeb59bf93746554ab2d451a
+  failed_review_report_blob_sha: f2bfa91af96cf98a6fe02314e21a5462fac59c8f
+  frozen_finding: NARR-917-MAJ-01
+review_constraints:
+  candidate_edit_prohibited: true
+  prior_rationale_gate: AFTER_INITIAL_EVIDENCE
+  initial_evidence_acquired_before_prior_review_rationale: true
+  initial_evidence:
+    - exact PR 981 three-path patch inspection
+    - exact remediation Markdown and YAML blob inspection
+    - exact frozen producer Markdown and YAML blob inspection
+  attack_plan:
+    - reassessment two-nonprivate-route activation and recovery cardinality
+    - recommitment two-materially-differentiated-direction-kind activation and recovery cardinality
+    - aftermath two-materially-distinct-goal-family activation and recovery cardinality
+    - private-context exclusion from route minima
+    - preactivation underflow transition legality
+    - bounded semantic/provenance diff against frozen producer
+    - preservation of clean prior review surfaces
+    - authority inflation and fan-in token boundaries
+reopen_condition: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE
