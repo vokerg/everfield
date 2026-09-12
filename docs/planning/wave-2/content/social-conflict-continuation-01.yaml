@@ -1,0 +1,296 @@
+schema: everfield_w2_content_social_conflict_continuation_v1
+mission_id: W2-CONTENT-SOCIAL-CONT-01
+issue: 812
+state: CONTENT_CANDIDATE_NONCANONICAL
+conflict_domain: CONTENT_SOCIAL_CONTINUATION
+engine_dependency: ENGINE_NEUTRAL
+required_next_gate: FRESH_REQUIRED_CONTENT_ROOT_REVIEW
+
+input_binding:
+  recovery_main_sha: 9d93cc779f46ac4b08b4ad2633066af740512bef
+  canonical_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  canonical_activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  activation_review:
+    issue: 831
+    terminal_comment_id: 5525721241
+    head_sha: e823e47dd8361121d368ab6c0fa1515c8889e69f
+    review_blob_sha: 3c96bcb0b6d220ef91220267d4f863c2990c0665
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_ACTIVATION
+    activation_scope: [811, 812, 813, 814, 815]
+  reviewed_social_root:
+    remediation_issue: 387
+    review_issue: 391
+    review_terminal_comment_id: 5306043969
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FANIN
+    markdown_blob_sha: 7a4c5431aa08597b96778b5a89b98dbd9d103401
+    yaml_blob_sha: 16c55eb0dba4530a4936b6da3695e752d8f21e68
+  reviewed_fanin:
+    producer_issue: 422
+    review_issue: 426
+    work_sha: db4bfbcc7387425989ec5902103e53953db9576b
+    review_terminal_comment_id: 5307505361
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_CONSUMPTION
+    markdown_blob_sha: accae7e01148f19ef76b4ef0878abd3315901052
+    map_blob_sha: 5858bc3e2d87baa3740b2513b08fb938633bba54
+  corrected_vertical_slice:
+    remediation_issue: 444
+    review_issue: 449
+    review_terminal_comment_id: 5308612900
+    disposition: CLEAN_FOR_BOUNDED_AUTHORED_CONTENT_CONSUMPTION
+    markdown_blob_sha: 5e94bdb0ca6146bab93264fc8e6763590aa289d2
+    yaml_blob_sha: 8d341d534ef4a27929aaabdf5b81a6d5ff86b80e
+    authority: NONCANONICAL_REGRESSION_FIXTURE_ONLY
+  reviewed_wsn:
+    remediation_issue: 432
+    review_issue: 437
+    review_terminal_comment_id: 5308501587
+    disposition: CLEAN_FOR_BOUNDED_WSN_CONSUMPTION
+    experiment_blob_sha: 0feb04a4a9bfdc71893ab3619621f62f862858f7
+    corpus_blob_sha: 922c2838396e6fbc8b27248d0b56b8635112059f
+    evaluator_blob_sha: 9471520355e79d4358de01bfe363905bf3de962c
+    results_blob_sha: 6c75ec437fb8f1a333614c6c2f8336683247bb55
+    reviewed_outcomes:
+      WSN-E1: PASS
+      WSN-E2: PASS
+      WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+      WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+      WSN-E5: PASS_BOUNDED_MODEL_ONLY
+      WSN-E6: PASS
+      WSN-E7: PASS
+      WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+      WSN-E9: PASS
+    authorship_may_upgrade_outcomes: false
+    human_quality_evidence: NOT_ESTABLISHED
+
+authority:
+  canonical_content_authority: false
+  integration_authority: false
+  implementation_readiness_authority: false
+  gameplay_implementation_authority: false
+  engine_selection_authority: false
+  empirical_wsn_upgrade_authority: false
+  verification_pass_authority: false
+  decision_authority: false
+  bounded_fanin_consumption_authority: false
+
+preserved_social_surface:
+  actor_ids: [FAC-COMMONS-01, FAC-FIELDWARD-01, FAC-MAKERS-01, FAC-ARCHIVE-01, FAC-WAYKEEPERS-01, COM-NEIGHBOR-01]
+  new_faction_ids: []
+  relationship_dimensions: [trust, reliability, reciprocity, value_alignment, public_standing, access_state]
+  access_state_semantics: DERIVED_SCOPE_SPECIFIC_NOT_UNIVERSAL_POWER_SCORE
+  history_contract:
+    record_type: SocialHistoryEvent
+    durable: true
+    recovery_may_change_current_effects: true
+    recovery_may_delete_material_history: false
+    repeated_low_risk_actions_can_satisfy_all_dimensions: false
+  baseline_access:
+    must_not_depend_on_faction_standing: [ordinary community interaction, basic repair and crafting opportunity, baseline cultivation participation, baseline movement and exploration, public information, ordinary mutual aid]
+
+invariants:
+  - {id: SOC-CONT-INV-001, rule: PRESSURE_RECORDS_EXTEND_REVIEWED_ACTORS_AND_DO_NOT_CREATE_A_FACTION_CATALOG}
+  - {id: SOC-CONT-INV-002, rule: SOCIAL_STANDING_RELATIONSHIP_OR_LEGITIMACY_NEVER_CREATES_OBJECTIVE_TRUTH}
+  - {id: SOC-CONT-INV-003, rule: PRIVATE_OR_SECRET_KNOWLEDGE_REQUIRES_EXPLICIT_LAWFUL_DISCLOSURE_OR_VALIDATED_AUTHORITY_EFFECT}
+  - {id: SOC-CONT-INV-004, rule: PLAYER_EXPOSURE_IS_NOT_CHARACTER_KNOWLEDGE}
+  - {id: SOC-CONT-INV-005, rule: RELATIONSHIP_AND_LEGITIMACY_STATE_ARE_MULTIDIMENSIONAL_AND_NEVER_ONE_UNIVERSAL_SCORE}
+  - {id: SOC-CONT-INV-006, rule: MATERIAL_SOCIAL_HISTORY_SURVIVES_REPAIR_RECOVERY_AND_RETRY}
+  - {id: SOC-CONT-INV-007, rule: NO_SOCIAL_GATE_IN_THIS_PACKET_IS_FOUNDATIONAL}
+  - {id: SOC-CONT-INV-008, rule: SPECIALIST_OR_BRANCH_EXCLUSION_PRESERVES_BASELINE_PLAY_AND_HAS_RECOVERY_OR_ALTERNATIVE}
+  - {id: SOC-CONT-INV-009, rule: SIBLING_MUTABLE_OUTPUTS_ARE_NOT_PREREQUISITES}
+  - {id: SOC-CONT-INV-010, rule: VERTICAL_SLICE_IS_NONCANONICAL_REGRESSION_INPUT_ONLY}
+  - {id: SOC-CONT-INV-011, rule: AUTHORSHIP_CANNOT_RERUN_OR_UPGRADE_WSN_RESULTS}
+  - {id: SOC-CONT-INV-012, rule: EXACT_TIME_SCHEDULE_AND_NPC_REACHABILITY_REMAIN_DEFERRED}
+
+institutional_legitimacy:
+  dimensions: [procedural_fairness, responsibility_fulfillment, burden_distribution, domain_competence, transparency_fit, constituency_support]
+  scalarization_forbidden: true
+  aliases_player_relationship_dimensions: false
+  observation_contract:
+    record_type: LegitimacyObservation
+    required_fields: [observation_id, institution_ref, dimension, evidence_refs, scope_ref, branch_scope, consequence_refs]
+    objective_fact_authority: false
+    private_knowledge_authority: false
+    canonicality_effect: false
+
+pressure_model:
+  record_type: InstitutionalPressure
+  required_fields: [pressure_id, domain, carrier_refs, responsibility_refs, incentive_refs, authority_scope, authority_exclusions, tension_refs, obligation_refs, legitimacy_dimensions, consequence_refs, branch_scope]
+  pressures:
+    - pressure_id: SOC-PRESS-001
+      domain: CIVIC_BURDEN_AND_LEGITIMACY
+      carrier_refs: [FAC-COMMONS-01, COM-NEIGHBOR-01]
+      responsibility_refs: [RESP:PUBLIC_WORK_LEGIBILITY, RESP:BURDEN_DISTRIBUTION, RESP:REPAIR_ROUTE_VISIBILITY]
+      incentive_refs: [INCENTIVE:COORDINATION_RELIABILITY, INCENTIVE:FAIR_PARTICIPATION]
+      authority_scope: BOUNDED_PUBLIC_WORK_COORDINATION
+      authority_exclusions: [OBJECTIVE_TRUTH, PRIVATE_KNOWLEDGE, UNIVERSAL_PROGRESSION, BASELINE_COMMUNITY_EXCLUSION]
+      tension_refs: [SOC-TENSION-001]
+      obligation_refs: [SOC-OBL-001]
+      legitimacy_dimensions: [procedural_fairness, responsibility_fulfillment, burden_distribution, constituency_support]
+      consequence_refs: [SOC-CONSEQ:REPAIR, SOC-CONSEQ:COMPROMISE, SOC-CONSEQ:ALTERNATIVE-PARTICIPATION, SOC-CONSEQ:PUBLIC-DISSENT]
+      branch_scope: NARR_ROLE:SOCIAL_DISPUTE
+    - pressure_id: SOC-PRESS-002
+      domain: LAND_RESOURCE_STEWARDSHIP_AND_SCARCITY
+      carrier_refs: [FAC-FIELDWARD-01]
+      world_role_refs: [WORLD_ROLE:COMMON_RESOURCE, WORLD_ROLE:CULTIVATION_ZONE, WORLD_ROLE:CONTESTED_COMMON]
+      responsibility_refs: [RESP:STEWARDSHIP, RESP:SCARCITY_DISCLOSURE, RESP:RESTORATION]
+      incentive_refs: [INCENTIVE:RESOURCE_CONTINUITY, INCENTIVE:LAND_STEWARDSHIP, INCENTIVE:FAIR_SPECIALIST_ALLOCATION]
+      authority_scope: BOUNDED_SCARCE_SPECIALIST_SUPPORT_AND_STEWARDSHIP
+      authority_exclusions: [OBJECTIVE_TRUTH_FROM_ASSERTION, UNIVERSAL_LAND_OWNERSHIP, BASELINE_CULTIVATION_DENIAL]
+      tension_refs: [SOC-TENSION-001, SOC-TENSION-003]
+      obligation_refs: [SOC-OBL-002]
+      legitimacy_dimensions: [domain_competence, burden_distribution, responsibility_fulfillment, procedural_fairness]
+      consequence_refs: [SOC-CONSEQ:REPAIR, SOC-CONSEQ:COMPROMISE, SOC-CONSEQ:EXCLUSION, SOC-CONSEQ:ALTERNATIVE-PARTICIPATION]
+      branch_scope: NARR_ROLE:SOCIAL_DISPUTE
+    - pressure_id: SOC-PRESS-003
+      domain: RECORDS_TESTIMONY_AND_CONFIDENTIALITY
+      carrier_refs: [FAC-ARCHIVE-01]
+      character_role_refs: [CHAR_ROLE:FACTION_LIAISON, CHAR_ROLE:INDEPENDENT_MEDIATOR, CHAR_ROLE:COMMUNITY_NEIGHBOR]
+      responsibility_refs: [RESP:PUBLIC_RECORD_ACCESS, RESP:CONFIDENTIALITY, RESP:PROVENANCE]
+      incentive_refs: [INCENTIVE:ACCOUNTABILITY, INCENTIVE:SOURCE_PROTECTION, INCENTIVE:CORROBORATION]
+      authority_scope: BOUNDED_RECORD_CLASSIFICATION_AND_DISCLOSURE
+      authority_exclusions: [OBJECTIVE_TRUTH_FROM_RECORD_STATUS, SECRET_ACCESS_FROM_STANDING, AUTOMATIC_CHARACTER_KNOWLEDGE]
+      tension_refs: [SOC-TENSION-002]
+      obligation_refs: [SOC-OBL-003]
+      legitimacy_dimensions: [transparency_fit, procedural_fairness, domain_competence, responsibility_fulfillment]
+      consequence_refs: [SOC-CONSEQ:REPAIR, SOC-CONSEQ:COMPROMISE, SOC-CONSEQ:EXCLUSION, SOC-CONSEQ:PUBLIC-DISSENT]
+      branch_scope: NARR_ROLE:PUBLIC_COMMITMENT
+    - pressure_id: SOC-PRESS-004
+      domain: REPAIR_CAPACITY_ACCESS_AND_SAFETY
+      carrier_refs: [FAC-MAKERS-01, FAC-WAYKEEPERS-01]
+      world_role_refs: [WORLD_ROLE:TRANSIT_EDGE, WORLD_ROLE:COMMON_RESOURCE]
+      responsibility_refs: [RESP:SERVICE_CAPACITY, RESP:SAFETY_CONSTRAINT, RESP:SUBSTITUTE_ROUTE]
+      incentive_refs: [INCENTIVE:SAFE_SERVICE, INCENTIVE:CAPACITY_STEWARDSHIP, INCENTIVE:REPAIR_RELIABILITY]
+      authority_scope: BOUNDED_SPECIALIST_SERVICE_AND_SAFETY_SUPPORT
+      authority_exclusions: [UNIVERSAL_REPAIR_GATE, UNIVERSAL_MOVEMENT_GATE, SECRET_ACCESS, OBJECTIVE_TRUTH]
+      tension_refs: [SOC-TENSION-003, SOC-TENSION-004]
+      obligation_refs: [SOC-OBL-004]
+      legitimacy_dimensions: [domain_competence, responsibility_fulfillment, transparency_fit]
+      consequence_refs: [SOC-CONSEQ:REPAIR, SOC-CONSEQ:EXCLUSION, SOC-CONSEQ:ALTERNATIVE-PARTICIPATION]
+      branch_scope: null
+
+tensions:
+  - {tension_id: SOC-TENSION-001, name: BURDEN_VS_STEWARDSHIP, pressure_refs: [SOC-PRESS-001, SOC-PRESS-002], conflict: Civic allocation expectations can exceed legitimate land/resource stewardship capacity., must_preserve: [VISIBLE_BURDEN, SCARCITY_REASON, BASELINE_PARTICIPATION, REPAIR_OR_ALTERNATIVE]}
+  - {tension_id: SOC-TENSION-002, name: TRANSPARENCY_VS_CONFIDENTIALITY, pressure_refs: [SOC-PRESS-001, SOC-PRESS-003], conflict: Public accountability can conflict with source protection or bounded private information., must_preserve: [PUBLIC_RECORD_ROUTE, SOURCE_AUTHORITY, NO_TRUTH_PROMOTION, NO_SECRET_FROM_STANDING]}
+  - {tension_id: SOC-TENSION-003, name: SCARCITY_VS_REPAIR_CAPACITY, pressure_refs: [SOC-PRESS-002, SOC-PRESS-004], conflict: Resource scarcity can constrain specialist repair or coordinated support., must_preserve: [VISIBLE_SCARCITY, SUBSTITUTE_OR_DEFER_ROUTE, NO_BASELINE_REPAIR_TAX]}
+  - {tension_id: SOC-TENSION-004, name: ACCESS_SAFETY_VS_INCLUSION, pressure_refs: [SOC-PRESS-001, SOC-PRESS-004], conflict: Bounded safety constraints can conflict with broad participation expectations., must_preserve: [TYPED_SAFETY_REASON, BOUNDED_SCOPE, BASELINE_MOVEMENT, RECOVERY_OR_ALTERNATIVE]}
+
+obligation_contract:
+  record_type: InstitutionalObligation
+  required_fields: [obligation_id, obligor_ref, beneficiary_scope, duty_type, trigger, satisfaction_evidence, breach_class, repair_routes, branch_scope, authority_exclusions]
+  obligations:
+    - {obligation_id: SOC-OBL-001, obligor_ref: FAC-COMMONS-01, beneficiary_scope: COMMUNITY_PARTICIPANTS, duty_type: PUBLIC_WORK_COORDINATION, trigger: DECLARED_PUBLIC_WORK_BURDEN, satisfaction_evidence: [SOCIAL_HISTORY_EVENT_ROLE:PUBLIC_WORK, PUBLIC_BURDEN_RECORD], breach_class: MATERIAL_ONLY_IF_DECLARED_AND_RELEVANT, repair_routes: [RESTITUTION, BOUNDED_SERVICE, MEDIATION, DEFER_AND_RETURN], branch_scope: null, authority_exclusions: [UNIVERSAL_PROGRESSION, SECRET_ACCESS, OBJECTIVE_TRUTH]}
+    - {obligation_id: SOC-OBL-002, obligor_ref: FAC-FIELDWARD-01, beneficiary_scope: SHARED_RESOURCE_PARTICIPANTS, duty_type: STEWARDSHIP_AND_SCARCITY_DISCLOSURE, trigger: MATERIAL_SHARED_RESOURCE_ALLOCATION, satisfaction_evidence: [STEWARDSHIP_RECORD, SCARCITY_STATE_REF, RESTORATION_RECORD], breach_class: MATERIAL_MISALLOCATION_OR_UNDISCLOSED_SCARCITY, repair_routes: [RESTORATION, SUBSTITUTE_RESOURCE, REBALANCED_ALLOCATION, DEFER_AND_RETURN], branch_scope: NARR_ROLE:SOCIAL_DISPUTE, authority_exclusions: [UNIVERSAL_LAND_OWNERSHIP, BASELINE_CULTIVATION_DENIAL, OBJECTIVE_TRUTH_FROM_CLAIM]}
+    - {obligation_id: SOC-OBL-003, obligor_ref: FAC-ARCHIVE-01, beneficiary_scope: RECORD_SOURCE_AND_AUTHORIZED_AUDIENCE, duty_type: CONFIDENTIALITY_AND_PUBLIC_RECORD_ACCESS, trigger: RECORD_OR_TESTIMONY_ACCESS_REQUEST, satisfaction_evidence: [PROVENANCE_RECORD, DISCLOSURE_AUTHORITY_REF, EXPOSURE_SCOPE_REF], breach_class: UNAUTHORIZED_DISCLOSURE_OR_PUBLIC_RECORD_SUPPRESSION, repair_routes: [CORRECTION, SOURCE_NOTICE, ACCESS_REVIEW, PUBLIC_RECORD_ROUTE], branch_scope: NARR_ROLE:PUBLIC_COMMITMENT, authority_exclusions: [TRUTH_PROMOTION, SECRET_ACCESS_FROM_STANDING, AUTOMATIC_ONWARD_DISCLOSURE]}
+    - {obligation_id: SOC-OBL-004, obligor_ref: FAC-MAKERS-01, co_obligor_refs: [FAC-WAYKEEPERS-01], beneficiary_scope: BOUNDED_SERVICE_PARTICIPANTS, duty_type: SPECIALIST_SERVICE_AND_SAFETY_REASON, trigger: SPECIALIST_SUPPORT_OR_SAFETY_CONSTRAINT, satisfaction_evidence: [CAPACITY_STATE_REF, SAFETY_REASON_REF, SUBSTITUTE_ROUTE_REF], breach_class: UNEXPLAINED_OR_OVERBROAD_SERVICE_DENIAL, repair_routes: [LOWER_RISK_PROOF, SUBSTITUTE_SERVICE, INDEPENDENT_ACQUISITION, DEFER_AND_RETURN], branch_scope: null, authority_exclusions: [UNIVERSAL_REPAIR_GATE, UNIVERSAL_MOVEMENT_GATE, SECRET_ACCESS]}
+
+social_information_extension:
+  preserved_record_type: SocialClaimBelief
+  objective_fact_authority: false
+  promotion_forbidden: true
+  disclosure_record_type: SocialDisclosureDecision
+  required_fields: [disclosure_id, information_ref, holder_ref, recipient_scope, authority_path, prior_exposure_scope, resulting_exposure_scope, recipient_knowledge_effect, objective_truth_effect, onward_sharing_default, history_event_ref, branch_scope]
+  lawful_authority_paths: [EXPLICIT_HOLDER_DISCLOSURE, VALIDATED_AUTHORITY_EFFECT, PUBLIC_RECORD_SCOPE]
+  insufficient_authority_alone: [public_standing, trust, faction_membership, institutional_endorsement, player_visibility, generated_presentation, repeated_testimony, institutional_record_status]
+  objective_truth_effect_allowed: false
+  onward_sharing_default: DENY
+  character_knowledge_requires_explicit_effect: true
+
+relationship_and_history:
+  relationship_dimensions: [trust, reliability, reciprocity, value_alignment, public_standing, access_state]
+  institutional_legitimacy_dimensions: [procedural_fairness, responsibility_fulfillment, burden_distribution, domain_competence, transparency_fit, constituency_support]
+  scalarization_forbidden: true
+  cross_vector_automatic_aliasing_forbidden: true
+  history_event_types: [OBLIGATION_FULFILLED, OBLIGATION_BREACHED, RESTITUTION, COMPROMISE, DISCLOSURE, WITHHELD, EXCLUSION, ALTERNATIVE_PARTICIPATION, BURDEN_SHIFT, PUBLIC_DISSENT]
+  history_durable: true
+  repair_erases_history: false
+  anti_grind:
+    repeated_identical_low_risk_action_can_raise_all_dimensions: false
+    unrelated_repetition_can_erase_material_breach: false
+    standing_can_bypass_confidentiality: false
+    standing_can_bypass_evidence_requirements: false
+    current_state_change_requires_typed_cause_and_evidence: true
+
+progression_gates:
+  contract: ProgressionGateContract
+  version: 1
+  foundational_gate_count: 0
+  preserved:
+    - {gate_id: GATE-SOC-COMMONS-DELEGATION-01, gate_class: SPECIALIZATION, foundational_dependency: false}
+    - {gate_id: GATE-SOC-FIELDWARD-SHARED-STOCK-01, gate_class: SPECIALIZATION, foundational_dependency: false}
+    - {gate_id: GATE-SOC-MAKERS-COMMISSION-01, gate_class: OPTIONAL, foundational_dependency: false}
+    - {gate_id: GATE-SOC-ARCHIVE-SENSITIVE-01, gate_class: OPTIONAL, foundational_dependency: false}
+    - {gate_id: GATE-SOC-WAYKEEPER-SPONSOR-01, gate_class: OPTIONAL, foundational_dependency: false}
+    - {gate_id: GATE-SOC-COALITION-COMMITMENT-01, gate_class: BRANCH_EXCLUSIVE, foundational_dependency: false}
+  escalation_rule:
+    silent_reclassification_forbidden: true
+    if_common_progression_requires_gate: REOPEN_FOR_EXPLICIT_REVIEW_AND_RECLASSIFICATION
+    baseline_play_must_remain_available: true
+
+consequence_contract:
+  record_type: SocialConsequence
+  required_fields: [consequence_id, class, trigger_refs, current_state_effects, durable_history_effect, denied_surface_scope, recovery_routes, alternative_participation, truth_effect, knowledge_effect, branch_scope]
+  consequences:
+    - {consequence_id: SOC-CONSEQ:REPAIR, class: REPAIR, trigger_refs: [RESTITUTION, CORRECTION, MATERIAL_REPAIR], current_state_effects: [TYPED_DIMENSION_UPDATE, ACCESS_REEVALUATION], durable_history_effect: PRESERVE_CAUSE_AND_REPAIR_EVENTS, denied_surface_scope: NONE_REQUIRED, recovery_routes: [RESTITUTION, CORRECTION, BOUNDED_SERVICE], alternative_participation: PRESERVE_BASELINE_PLAY, truth_effect: NONE, knowledge_effect: NONE_UNLESS_SEPARATE_DISCLOSURE_DECISION, branch_scope: null}
+    - {consequence_id: SOC-CONSEQ:COMPROMISE, class: COMPROMISE, trigger_refs: [MATERIAL_DISAGREEMENT, RESOURCE_TRADEOFF, DISCLOSURE_TRADEOFF], current_state_effects: [SCOPED_OBLIGATION_CHANGE, TYPED_RELATIONSHIP_EFFECT], durable_history_effect: RECORD_TRADEOFF_AND_UNRESOLVED_DISAGREEMENT, denied_surface_scope: SPECIALIST_OR_BRANCH_SURFACE_ONLY, recovery_routes: [RENEGOTIATION, REPAIR, DEFER_AND_RETURN], alternative_participation: REQUIRED, truth_effect: NONE, knowledge_effect: ONLY_EXPLICIT_DISCLOSURE_EFFECTS, branch_scope: NARR_ROLE:SOCIAL_DISPUTE}
+    - {consequence_id: SOC-CONSEQ:EXCLUSION, class: EXCLUSION, trigger_refs: [MATERIAL_BREACH, SCARCITY, SAFETY_CONSTRAINT, CONFIDENTIALITY_CONSTRAINT], current_state_effects: [BOUNDED_ACCESS_DENIAL_WITH_VISIBLE_REASON], durable_history_effect: RECORD_EXCLUSION_REASON, denied_surface_scope: SPECIALIST_OPTIONAL_OR_BRANCH_EXCLUSIVE_ONLY, recovery_routes: [REPAIR, SUBSTITUTE, LOWER_RISK_PROOF, DEFER_AND_RETURN], alternative_participation: REQUIRED, truth_effect: NONE, knowledge_effect: NO_SECRET_GRANT, branch_scope: null}
+    - {consequence_id: SOC-CONSEQ:ALTERNATIVE-PARTICIPATION, class: ALTERNATIVE_PARTICIPATION, trigger_refs: [DENIED_SPECIALIST_ROUTE, UNAVAILABLE_TESTIMONY, SCARCITY, STALLED_NEGOTIATION], current_state_effects: [ALTERNATE_ROUTE_AVAILABLE], durable_history_effect: RECORD_MATERIAL_ROUTE_CHANGE_IF_ANY, denied_surface_scope: ORIGINAL_SPECIALIST_OR_BRANCH_ROUTE_ONLY, recovery_routes: [PUBLIC_RECORD, MATERIAL_EVIDENCE, SUBSTITUTE_SERVICE, INDEPENDENT_ACQUISITION, DEFER_AND_RETURN], alternative_participation: THIS_RECORD_IS_THE_ALTERNATIVE, truth_effect: NONE, knowledge_effect: ONLY_BY_EXPLICIT_ROUTE, branch_scope: null}
+    - {consequence_id: SOC-CONSEQ:PUBLIC-DISSENT, class: PUBLIC_DISSENT, trigger_refs: [PUBLIC_DISAGREEMENT, BURDEN_OBJECTION, LEGITIMACY_CHALLENGE], current_state_effects: [SCOPED_PUBLIC_STANDING_OR_VALUE_ALIGNMENT_EFFECT], durable_history_effect: RECORD_DISSENT, denied_surface_scope: NONE_BY_DEFAULT, recovery_routes: [MEDIATION, REPAIR, ACCEPT_CONTINUED_DISAGREEMENT], alternative_participation: PRESERVE_BASELINE_PLAY, truth_effect: NONE, knowledge_effect: NONE, branch_scope: NARR_ROLE:SOCIAL_DISPUTE}
+
+conflict_patterns:
+  - {pattern_id: SOC-CONFLICT-001, tension_ref: SOC-TENSION-001, participant_refs: [FAC-COMMONS-01, FAC-FIELDWARD-01, COM-NEIGHBOR-01], provisional_world_refs: [WORLD_ROLE:COMMON_RESOURCE, WORLD_ROLE:CULTIVATION_ZONE, WORLD_ROLE:CONTESTED_COMMON], allowed_consequence_refs: [SOC-CONSEQ:REPAIR, SOC-CONSEQ:COMPROMISE, SOC-CONSEQ:ALTERNATIVE-PARTICIPATION, SOC-CONSEQ:PUBLIC-DISSENT], concrete_binding_owner: W2-CONTENT-SYN-CONT-01}
+  - {pattern_id: SOC-CONFLICT-002, tension_ref: SOC-TENSION-002, participant_refs: [FAC-COMMONS-01, FAC-ARCHIVE-01], provisional_character_refs: [CHAR_ROLE:FACTION_LIAISON, CHAR_ROLE:INDEPENDENT_MEDIATOR, CHAR_ROLE:COMMUNITY_NEIGHBOR], provisional_narrative_refs: [NARR_ROLE:SOCIAL_DISPUTE, NARR_ROLE:PUBLIC_COMMITMENT], allowed_consequence_refs: [SOC-CONSEQ:COMPROMISE, SOC-CONSEQ:EXCLUSION, SOC-CONSEQ:PUBLIC-DISSENT], concrete_binding_owner: W2-CONTENT-SYN-CONT-01}
+  - {pattern_id: SOC-CONFLICT-003, tension_ref: SOC-TENSION-003, participant_refs: [FAC-FIELDWARD-01, FAC-MAKERS-01, FAC-WAYKEEPERS-01], provisional_world_refs: [WORLD_ROLE:COMMON_RESOURCE, WORLD_ROLE:TRANSIT_EDGE], allowed_consequence_refs: [SOC-CONSEQ:REPAIR, SOC-CONSEQ:EXCLUSION, SOC-CONSEQ:ALTERNATIVE-PARTICIPATION], concrete_binding_owner: W2-CONTENT-SYN-CONT-01}
+  - {pattern_id: SOC-CONFLICT-004, tension_ref: SOC-TENSION-004, participant_refs: [FAC-COMMONS-01, FAC-WAYKEEPERS-01, COM-NEIGHBOR-01], provisional_world_refs: [WORLD_ROLE:TRANSIT_EDGE], provisional_narrative_refs: [NARR_ROLE:SOCIAL_DISPUTE], allowed_consequence_refs: [SOC-CONSEQ:COMPROMISE, SOC-CONSEQ:ALTERNATIVE-PARTICIPATION, SOC-CONSEQ:PUBLIC-DISSENT], concrete_binding_owner: W2-CONTENT-SYN-CONT-01}
+
+vertical_slice_regressions:
+  fixture_id: VS:OLD-WORKS-ACCOUNTS-01
+  fixture_authority: NONCANONICAL_REGRESSION_ONLY
+  concrete_fixture_details_not_promoted_to_canon: true
+  cases:
+    - {case_id: SOC-REG-VS-001, name: PUBLIC_RECORD_EXPOSURE, must_hold: [PLAYER_EXPOSURE_MAY_UPDATE, OBJECTIVE_TRUTH_UNCHANGED, UNRELATED_CHARACTER_KNOWLEDGE_UNCHANGED, SECRET_ACCESS_NOT_IMPLIED]}
+    - {case_id: SOC-REG-VS-002, name: TESTIMONY_UNAVAILABLE, must_hold: [PUBLIC_RECORD_OR_MATERIAL_EVIDENCE_OR_DEFER_ROUTE_REMAINS, SECRET_REMAINS_UNDISCLOSED, RELATIONSHIP_OR_STANDING_NOT_REQUIRED_FOR_BASELINE_PARTICIPATION]}
+    - {case_id: SOC-REG-VS-003, name: LAWFUL_SECRET_ACCESS, must_hold: [AUTHORIZED_RECIPIENT_KNOWLEDGE_MAY_UPDATE, OBJECTIVE_TRUTH_UNCHANGED, DURABLE_DISCLOSURE_HISTORY_RECORDED, ONWARD_SHARING_REMAINS_DENY_BY_DEFAULT]}
+    - {case_id: SOC-REG-VS-004, name: DISCLOSURE_OR_WITHHOLDING, must_hold: [AUDIENCE_EXPOSURE_IS_SCOPED, OBJECTIVE_TRUTH_UNCHANGED, HISTORY_SURVIVES_REPAIR, CONCRETE_SLICE_ACTORS_AND_EVENTS_REMAIN_NONCANONICAL]}
+
+provisional_interfaces:
+  world: [WORLD_ROLE:HUB_COMMUNITY, WORLD_ROLE:CULTIVATION_ZONE, WORLD_ROLE:COMMON_RESOURCE, WORLD_ROLE:CONTESTED_COMMON, WORLD_ROLE:TRANSIT_EDGE, WORLD_ROLE:SENSITIVE_SITE]
+  character: [CHAR_ROLE:FACTION_LIAISON, CHAR_ROLE:INDEPENDENT_MEDIATOR, CHAR_ROLE:COMMUNITY_NEIGHBOR]
+  narrative: [NARR_ROLE:SOCIAL_DISPUTE, NARR_ROLE:PUBLIC_COMMITMENT]
+  sibling_mutable_outputs_consumed: false
+  concrete_cross_root_binding_owner: W2-CONTENT-SYN-CONT-01
+
+open_bindings:
+  - {id: SOC-CONT-OPEN-001, subject: contested_resource_or_site_concretion, state: UNRESOLVED, compatible_refs: [LOC:OLD-WORKS, LOC:RIPARIAN-CORRIDOR, LOC:COMMONS-BELT], route: W2-CONTENT-SYN-CONT-01}
+  - {id: SOC-CONT-OPEN-002, subject: sensitive_site_identity, state: UNRESOLVED, typed_ref: WORLD_ROLE:SENSITIVE_SITE, route: W2-CONTENT-SYN-CONT-01}
+  - {id: SOC-CONT-OPEN-003, subject: outside_pressure_or_polity_identity, state: UNKNOWN_BY_DESIGN, route: EXPLICIT_REVIEWED_WORLD_BINDING_BEFORE_CONCRETION}
+  - {id: SOC-CONT-OPEN-004, subject: social_proposition_to_objective_world_fact, state: AUTHORITY_DEFERRED, route: SEPARATELY_REVIEWED_EXTERNAL_WORLD_FACT_BINDING}
+  - {id: SOC-CONT-OPEN-005, subject: concrete_character_role_assignments, state: UNRESOLVED, route: W2-CONTENT-SYN-CONT-01}
+  - {id: SOC-CONT-OPEN-006, subject: concrete_narrative_branch_and_consequence_bindings, state: UNRESOLVED, route: W2-CONTENT-SYN-CONT-01}
+  - {id: SOC-CONT-OPEN-007, subject: chronology_position_for_new_social_history_instances, state: RELATIVE_ONLY, route: EXPLICIT_REVIEWED_WORLD_ORDER_CONSTRAINT_BEFORE_CHRONOLOGY_SENSITIVE_USE}
+  - {id: SOC-CONT-OPEN-008, subject: exact_time_policy_schedules_and_npc_reachability, state: BLOCKED_BY_EXACT_PREREQUISITE, evidence_refs: [WSN-E3, WSN-E4, WSN-E8], route: REVIEWED_TIME_POLICY_AND_CONCRETE_SCHEDULE_BINDING}
+  - {id: SOC-CONT-OPEN-009, subject: legitimacy_to_character_relationship_mapping, state: NO_AUTOMATIC_ALIAS, route: EXPLICIT_TYPED_FANIN_MAPPING_IF_LATER_JUSTIFIED}
+
+reopen_conditions: [LATER_REVIEW_REQUIRES_FOUNDATIONAL_SOCIAL_GATE, BASELINE_PLAY_WOULD_BE_PERMANENTLY_EXCLUDED, SOCIAL_ASSERTION_WOULD_PROMOTE_TO_OBJECTIVE_FACT, SECRET_ACCESS_WOULD_DEPEND_ONLY_ON_STANDING_OR_RELATIONSHIP, RELATIONSHIP_OR_LEGITIMACY_STATE_WOULD_COLLAPSE_TO_ONE_SCORE, EXACT_TIME_SCHEDULE_OR_REACHABILITY_DEPENDENCY_BECOMES_REQUIRED, CONCRETE_SIBLING_BINDING_CONTRADICTS_THIS_PACKET, REVIEWED_WSN_EVIDENCE_INVALIDATES_A_BOUNDED_ASSUMPTION]
+
+wsn_boundary:
+  creates_new_experiment_identity: false
+  reruns_evidence: false
+  upgrades_reviewed_outcome: false
+  E2: {reviewed_state: PASS, consumption_scope: EXACT_REVIEWED_BOUNDED_LEAK_ATTACKS_ONLY}
+  E8: {reviewed_state: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED, schedule_or_reachability_claim_authored_here: false}
+  human_quality_evidence: NOT_ESTABLISHED
+  production_validation: NOT_ESTABLISHED
+
+self_review:
+  attacks: [FACTION_CATALOG_EXPANSION, INVENTED_CANON, AUTHORITY_OVERREACH, ASSERTION_TO_FACT_PROMOTION, SECRET_LEAKAGE_VIA_STANDING_OR_RELATIONSHIP, LEGITIMACY_SCALARIZATION, RELATIONSHIP_SCALARIZATION, HISTORY_ERASURE, LOW_RISK_GRIND, HIDDEN_FOUNDATIONAL_GATE, BASELINE_SERVICE_EXCLUSION, SHALLOW_ONE_WAY_CONSEQUENCE, SIBLING_MUTABLE_OUTPUT_DEPENDENCY, VERTICAL_SLICE_AUTHORITY_INFLATION, WSN_LAUNDERING, TIME_OR_SCHEDULE_INVENTION, ENGINE_COUPLING, SCOPE_GROWTH]
+  findings: {blocker: 0, major: 0, correction_requiring_minor: 0}
+  foundational_gate_count: 0
+  new_faction_count: 0
+  empirical_wsn_outcomes_created_or_upgraded: 0
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_REVIEW
+
+downstream:
+  required_review_token: W2-CONTENT-SOCIAL-CONT-01_REVIEWED
+  after_clean_review: W2-CONTENT-SYN-CONT-01
+  concrete_cross_root_bindings_deferred_to_fanin: true
