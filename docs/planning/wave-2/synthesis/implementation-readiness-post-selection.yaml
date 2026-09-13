@@ -1,0 +1,258 @@
+schema: implementation_readiness_post_selection_v1
+mission_id: W2-IMPLEMENTATION-READINESS-CONT-01
+issue: 1031
+winning_claim_comment_id: 5651266078
+claim_base_main_sha: 4dc9472c721fed311a54eee1f70dad0bc2982cea
+canonical:
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  binding_issue: 6
+  binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+selected_engine:
+  name: Godot
+  version: 4.7.1-stable
+  selected_engine_canonical: true
+  publication_issue: 1028
+  publication_pr: 1030
+  publication_main_sha: 4dc9472c721fed311a54eee1f70dad0bc2982cea
+  record_path: docs/planning/SELECTED-ENGINE.md
+  record_blob_sha: 6b2ac7c1ef4c023c780af8c6b14ba7003e9bd5bd
+  authority_issue: 919
+  authority_comment_id: 5651198366
+producer_state:
+  implementation_ready: false
+  gameplay_high_throughput_authorized: false
+  candidate_outcome: BLOCKED
+  canonicality: NOT_CANONICAL
+  verification_pass_authority: false
+  integration_authority: false
+historical_readiness:
+  synthesis_issue: 335
+  synthesis_terminal_comment_id: 5301227373
+  verification_issue: 337
+  verification_terminal_comment_id: 5301245099
+  verification_result: PASS
+  verified_candidate_outcome: BLOCKED
+  reconstruction_rule: REEVALUATE_CURRENT_STATE_DO_NOT_BLINDLY_REPLAY_OLD_BLOCKERS
+current_predicates:
+  - predicate_id: IR-BLOCKER-ENGINE-DECISION
+    category: TECHNICAL
+    scope: GLOBAL
+    current_status: SATISFIED
+    blocks_when_open:
+      - ENGINE_SELECTION
+      - PRODUCTION_IMPLEMENTATION
+    satisfied_by:
+      - issue: 804
+        terminal_comment_id: 5521287905
+        disposition: ENGINE_SELECTION_READY_FOR_CANONICAL_DECISION
+      - issue: 832
+        terminal_comment_id: 5536194396
+        disposition: CLEAN_FOR_FORMAL_ENGINE_DECISION_GATE
+      - issue: 895
+        terminal_comment_id: 5580950990
+        disposition: ONE_EXACT_AUTHORITY_OR_READINESS_PREDICATE_REQUIRED
+      - issue: 919
+        authority_comment_id: 5651198366
+      - issue: 1028
+        publication_pr: 1030
+        publication_main_sha: 4dc9472c721fed311a54eee1f70dad0bc2982cea
+    residual_debt:
+      comparison_evidence_complete: false
+      provider_comparison_pass_inferred: false
+      aggregate_verification_pass_inferred: false
+      meaning: >-
+        Historical comparison incompleteness is preserved but is no longer a
+        blocker to the already-canonical engine choice under the later reviewed
+        decision chain and explicit owner authority.
+    reopen_condition: >-
+      A later reviewed material contradiction or explicit repository authority
+      reopens the selected-engine decision.
+  - predicate_id: GODOT-DEVELOPMENT-OPERABILITY
+    category: TECHNICAL
+    scope: DOMAIN
+    current_status: SATISFIED
+    blocks_when_open:
+      - SELECTED_ENGINE_BOOTSTRAP_EVIDENCE
+    evidence:
+      decision_synthesis_issue: 804
+      decision_synthesis_comment_id: 5521287905
+      reviewed_scenarios:
+        - S3
+        - S4
+        - S5
+        - S6
+        - S7
+      public_toolchain_route: true
+      protected_commercial_provider_unlock_required: false
+    limitation: >-
+      Development operability does not grant production implementation readiness,
+      provider PASS, release authority, or aggregate verification PASS.
+  - predicate_id: IR-BLOCKER-GAME-EVIDENCE
+    category: PRODUCT
+    scope: DOMAIN
+    scope_id: SCOPE-CORE-GAMEPLAY-v1
+    current_status: SATISFIED
+    evidence:
+      accepted_delta_issue: 230
+      preserved_by_verification_issue: 237
+      current_convergence_verification_issue: 337
+      current_convergence_verification_comment_id: 5301245099
+    limitation: >-
+      Resolution is scope-bounded and does not resolve accessibility, evidence
+      foundation, platform, rights, provider, legal, release, or readiness authority.
+  - predicate_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
+    category: ACCESSIBILITY
+    scope: GLOBAL
+    current_status: OPEN_BOUNDED
+    blocks_when_open:
+      - PRODUCTION_IMPLEMENTATION
+      - ACCESSIBILITY_CLEARANCE
+      - RELEASE_CLEARANCE
+    evidence:
+      mapping_review_issue: 329
+      empirical_evidence_issue: 331
+      empirical_terminal_comment_id: 5297479372
+      convergence_verification_issue: 337
+      convergence_verification_comment_id: 5301245099
+      mapping_review_complete: true
+      mapping_complete: false
+      target_build_identity: UNBOUND
+      test_environment_identity: UNBOUND
+      empirical_accessibility_evidence: NOT_RUN
+      empirical_accessibility_pass: false
+    reopen_condition: >-
+      Bind a reproducibly identifiable executable/build or equivalent same
+      gameplay kernel plus test-environment and assistive-technology/input
+      identity; execute the required empirical accessibility matrix against the
+      exact reviewed mapping; complete the required independent authority route.
+  - predicate_id: IR-BLOCKER-EVIDENCE-FOUNDATION
+    category: EVIDENCE
+    scope: GLOBAL
+    current_status: OPEN_BOUNDED
+    blocks_when_open:
+      - PRODUCTION_IMPLEMENTATION
+      - EVIDENCE_PROVIDER_READINESS
+    evidence_progress:
+      ci_remediation_issue: 343
+      ci_remediation_terminal_comment_id: 5302522499
+      ci_run: 31888041342
+      ci_review_issue: 344
+      ci_review_terminal_comment_id: 5302539709
+      ci_review_disposition: PASS_BOUNDED_CAPABILITY_WITH_MINOR_NOTE
+      provider_intake_issue: 347
+      provider_intake_terminal_comment_id: 5302579528
+      provider_intake_disposition: AUTHORITY_REQUIRED_EXACT
+      owner_sequencing_directive_comment_id: 5303081124
+    formal_source_finding:
+      issue: 84
+      finding_id: W2-REV-M03
+      state: OPEN_BOUNDED
+    rationale: >-
+      Later CI/toolchain work materially improves the evidence stack, but no
+      trusted terminal record explicitly closes the formal production-control
+      predicate for production implementation. Commercial/provider authority is
+      nonblocking for lawful bounded technical prototyping under owner directive
+      5303081124, but that directive does not grant gameplay/high-throughput or
+      production implementation readiness.
+    reopen_condition: >-
+      Supply exact production-scope evidence-provider/control binding and
+      empirical proof of the required operational controls plus independent
+      authority, or an explicit reviewed supersession that makes the predicate
+      not applicable to the target implementation scope without manufacturing PASS.
+  - predicate_id: IR-BLOCKER-PLATFORM-SCOPE
+    category: PLATFORM
+    scope: GLOBAL
+    current_status: OPEN_BOUNDED
+    blocks_when_open:
+      - PRODUCTION_IMPLEMENTATION
+      - RELEASE_SCOPE
+    evidence:
+      remediation_issue: 92
+      remediation_terminal_comment_id: 5270335386
+      independent_review_issue: 100
+      independent_review_comment_id: 5271940062
+      candidate: PLAT-PC-FIRST-R1
+      candidate_status: REVERSIBLE_PLANNING_CANDIDATE
+      production_commitment: false
+      release_commitment: false
+    reopen_condition: >-
+      Explicitly authorize the target product/platform implementation scope.
+      Release certification/commitment remains a separate later boundary unless
+      the exact implementation scope depends on it.
+  - predicate_id: IR-BLOCKER-RIGHTS-SCOPED
+    category: RIGHTS
+    scope: FEATURE_CLASS
+    current_status: NOT_APPLICABLE
+    applicability: >-
+      Not a global blocker to generic core implementation solely by existence.
+      Re-enters as OPEN_BOUNDED when the implementation scope consumes generated
+      content, external-reference content, or provider-terms-dependent content.
+    authority_state:
+      legal_clearance: false
+      provider_permission: false
+      release_authority: false
+    reopen_condition: ACTUAL_SCOPED_LEGAL_CLEARANCE_OR_PROVIDER_PERMISSION_WHEN_REQUIRED
+  - predicate_id: TRUST-DEBT
+    category: FACTORY_TRUST
+    scope: GLOBAL
+    current_status: OPEN_BOUNDED
+    blocks_production_implementation: false
+    mode: DEGRADED_SINGLE_AGENT
+    authority_effect: QUALITY_DEBT_ONLY
+    reopen_condition: MULTI_AGENT_OR_ISOLATED_CONTEXT_AVAILABLE
+historical_finding_dispositions:
+  W2-REV-M01:
+    current_readiness_effect: SATISFIED
+    disposition: SUPERSEDED_AS_ENGINE_SELECTION_BLOCKER
+    basis:
+      - owner_engine_decision_directive_comment_id: 5511466516
+      - producer_issue: 804
+      - review_issue: 832
+      - authority_issue: 919
+      - canonical_publication_issue: 1028
+    empirical_comparison_gap_preserved: true
+  W2-REV-M02:
+    current_readiness_effect: OPEN_BOUNDED
+    disposition: EMPIRICAL_ACCESSIBILITY_PREDICATE_STILL_OPEN
+  W2-REV-M03:
+    current_readiness_effect: OPEN_BOUNDED
+    disposition: PRODUCTION_CONTROL_PREDICATE_NOT_TERMINALLY_CLOSED
+material_open_conditions:
+  newly_discovered_blockers: 0
+  inherited_formal_major_predicates_open:
+    - W2-REV-M02
+    - W2-REV-M03
+  canonical_global_readiness_entries_open:
+    - IR-BLOCKER-ACCESSIBILITY-CURRENT
+    - IR-BLOCKER-EVIDENCE-FOUNDATION
+    - IR-BLOCKER-PLATFORM-SCOPE
+  candidate_outcome: BLOCKED
+content_and_wsn_boundary:
+  reviewed_continuation_provenance_available: true
+  final_canon_inferred: false
+  human_quality_pass_inferred: false
+  wsn_e3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  wsn_e4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  wsn_e5: PASS_BOUNDED_MODEL_ONLY
+  wsn_e8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  global_readiness_blocker_inferred_from_wsn_debt: false
+required_next_route:
+  task_class: INDEPENDENT_IMPLEMENTATION_READINESS_VERIFICATION
+  target_mission: W2-IMPLEMENTATION-READINESS-CONT-01-VER-01
+  exact_producer_head_required: true
+  producer_self_verification_forbidden: true
+  verifier_may_grant_readiness_only_if_exact_authority_allows: true
+  optional_review_substitution_allowed: false
+authority_boundary:
+  implementation_ready: false
+  gameplay_high_throughput_authorized: false
+  provider_comparison_pass: false
+  aggregate_verification_pass: false
+  production_authority: false
+  release_authority: false
+  legal_authority: false
+  platform_authority: false
+  integration_authority: false
+  decision_authority: false
+  canonicality: NOT_CANONICAL
