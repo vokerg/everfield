@@ -1,0 +1,124 @@
+version: 1
+state: NONCANONICAL_COMPILER_CANDIDATE
+mission_id: W2-CONTENT-FRONTIER-CONT-02
+compiler_issue: 1047
+recovery_ownership_comment_id: 5654868473
+canonical:
+  program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  binding_issue: 6
+  binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+owner_directives:
+  parallel_content_comment_id: 5511637902
+predecessor:
+  synthesis:
+    issue: 986
+    terminal_comment_id: 5644862732
+    pr: 1008
+    head_sha: 5e7621da1a77d5d3213adb90ee6368df18b88b90
+    publication_main_sha: 09e54f7b8d9414a7af6ccb8d93010766af95dfa7
+  required_review:
+    issue: 1009
+    terminal_comment_id: 5645006619
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_CONSUMPTION
+    publication_main_sha: 57baff94d14e1397816034b67d9681f74f0a3525
+wsn_evidence:
+  E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  E5: PASS_BOUNDED_MODEL_ONLY
+  E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+activation_review:
+  issue: 1063
+  mission_id: W2-CONTENT-FRONTIER-CONT-02-REV-01
+  required_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_02_ACTIVATION
+  status_before_clean_review: BLOCKED_PENDING_COMPILER_TERMINAL
+roots:
+  - mission_id: W2-CONTENT-WORLD-CONT-02
+    issue: 1049
+    family: WORLD_LORE_HISTORY_LOCATION
+    activation_state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_02_REVIEW
+    paths:
+      - docs/planning/wave-2/content/world-lore-continuation-02.md
+      - docs/planning/wave-2/content/world-lore-continuation-02.yaml
+      - docs/planning/handoffs/issue-N.md
+    clean_review_token: W2-CONTENT-WORLD-CONT-02_REVIEWED
+    sibling_interfaces: [SOCIAL_ROLE, CHAR_ROLE, NARR_ROLE]
+  - mission_id: W2-CONTENT-SOCIAL-CONT-02
+    issue: 1050
+    family: FACTIONS_INSTITUTIONS_SOCIAL_CONFLICT
+    activation_state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_02_REVIEW
+    paths:
+      - docs/planning/wave-2/content/social-conflict-continuation-02.md
+      - docs/planning/wave-2/content/social-conflict-continuation-02.yaml
+      - docs/planning/handoffs/issue-N.md
+    clean_review_token: W2-CONTENT-SOCIAL-CONT-02_REVIEWED
+    sibling_interfaces: [WORLD_ROLE, CHAR_ROLE, NARR_ROLE]
+  - mission_id: W2-CONTENT-CHAR-CONT-02
+    issue: 1051
+    family: PRINCIPAL_CHARACTER_RELATIONSHIP_CHANGE_ARC
+    activation_state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_02_REVIEW
+    paths:
+      - docs/planning/wave-2/content/character-arcs-continuation-02.md
+      - docs/planning/wave-2/content/character-arcs-continuation-02.yaml
+      - docs/planning/handoffs/issue-N.md
+    clean_review_token: W2-CONTENT-CHAR-CONT-02_REVIEWED
+    sibling_interfaces: [WORLD_ROLE, SOCIAL_ROLE, NARR_ROLE]
+  - mission_id: W2-CONTENT-NARR-CONT-02
+    issue: 1052
+    family: NARRATIVE_QUEST_CONSEQUENCE
+    activation_state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_02_REVIEW
+    paths:
+      - docs/planning/wave-2/content/narrative-consequence-continuation-02.md
+      - docs/planning/wave-2/content/narrative-consequence-continuation-02.yaml
+      - docs/planning/handoffs/issue-N.md
+    clean_review_token: W2-CONTENT-NARR-CONT-02_REVIEWED
+    sibling_interfaces: [WORLD_ROLE, SOCIAL_ROLE, CHAR_ROLE]
+  - mission_id: W2-CONTENT-EVAL-CONT-02
+    issue: 1053
+    family: CONTENT_CONSISTENCY_EVALUATION
+    activation_state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_02_REVIEW
+    paths:
+      - docs/planning/wave-2/content/content-evaluation-continuation-02.md
+      - docs/planning/wave-2/content/content-evaluation-continuation-02.yaml
+      - docs/planning/handoffs/issue-N.md
+    clean_review_token: W2-CONTENT-EVAL-CONT-02_REVIEWED
+    sibling_interfaces:
+      - WORLD_CONT_02_PACKET
+      - SOCIAL_CONT_02_PACKET
+      - CHAR_CONT_02_PACKET
+      - NARR_CONT_02_PACKET
+conflicts:
+  mutable_path_sets_pairwise_disjoint: true
+  sibling_mutable_consumption_before_fanin: forbidden
+  compiler_foundation_mutation_by_roots: forbidden
+  predecessor_packet_mutation: forbidden
+  selected_engine_or_readiness_mutation: forbidden
+shared_invariants:
+  private_information_default: DENY_BY_DEFAULT
+  player_exposure_implies_character_knowledge: false
+  relationship_or_role_implies_knowledge: false
+  claim_or_belief_implies_objective_truth: false
+  hidden_foundational_progression_gate: forbidden
+  wsn_evidence_upgrade_without_new_authorized_evidence: forbidden
+  final_canon_by_authorship: false
+root_lifecycle:
+  exact_head_draft_pr_before_review_ready: true
+  fresh_required_root_review_count: 1
+  clean_review_required_for_fanin_token: true
+fanin:
+  mission_id: W2-CONTENT-SYN-CONT-02
+  materialized: false
+  materialization_requires_all_tokens:
+    - W2-CONTENT-WORLD-CONT-02_REVIEWED
+    - W2-CONTENT-SOCIAL-CONT-02_REVIEWED
+    - W2-CONTENT-CHAR-CONT-02_REVIEWED
+    - W2-CONTENT-NARR-CONT-02_REVIEWED
+    - W2-CONTENT-EVAL-CONT-02_REVIEWED
+authority:
+  canonicality: NOT_CANONICAL
+  integration_authority: false
+  implementation_readiness_authority: false
+  verification_pass_authority: false
+  engine_selection_authority: false
+  release_authority: false
+  decision_authority: false
