@@ -36,6 +36,31 @@ SHA40_RE = re.compile(r"^[0-9a-fA-F]{40}$")
 FACTORY_TRANSITION_RE = re.compile(r"\[FACTORY-TRANSITION-(\d+)\]")
 DISPATCH_MARKER_VERSION = "1"
 DISPATCH_MARKER_STATES = {"ACCEPTED", "OBSERVED"}
+RATE_LIMIT_MESSAGE_MARKERS = (
+    "api rate limit exceeded",
+    "secondary rate limit",
+)
+
+
+class GitHubRateLimitExceeded(RuntimeError):
+    """Retryable GitHub API rate exhaustion; grants no maintenance authority."""
+
+
+def github_api_error(method: str, url: str, code: int, detail: str) -> RuntimeError:
+    message = detail
+    try:
+        parsed = json.loads(detail)
+        if isinstance(parsed, dict):
+            message = str(parsed.get("message") or detail)
+    except json.JSONDecodeError:
+        pass
+
+    normalized = message.lower()
+    if code in {403, 429} and any(marker in normalized for marker in RATE_LIMIT_MESSAGE_MARKERS):
+        return GitHubRateLimitExceeded(
+            f"GitHub API {method} {url} deferred by rate limit: {code} {detail}"
+        )
+    return RuntimeError(f"GitHub API {method} {url} failed: {code} {detail}")
 
 
 @dataclass(frozen=True)
@@ -76,7 +101,7 @@ def request(method: str, path: str, payload: Any | None = None) -> Any:
             return None if not raw else json.loads(raw.decode("utf-8"))
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"GitHub API {method} {url} failed: {exc.code} {detail}") from exc
+        raise github_api_error(method, url, exc.code, detail) from exc
 
 
 def paged(path: str) -> Iterable[dict[str, Any]]:
@@ -549,6 +574,22 @@ def self_test() -> None:
     assert trusted_dispatch_marker_from_comments([marker], 10, "OTHER") is None
     edited_marker = dict(marker, updated_at="2026-08-25T00:01:09Z")
     assert trusted_dispatch_marker_from_comments([edited_marker], 10, "NEXT") is None
+
+    rate_limited = github_api_error(
+        "GET",
+        "https://api.github.com/repos/vokerg/everfield/pulls",
+        403,
+        '{"message":"API rate limit exceeded for installation."}',
+    )
+    assert isinstance(rate_limited, GitHubRateLimitExceeded)
+    generic_forbidden = github_api_error(
+        "GET",
+        "https://api.github.com/repos/vokerg/everfield/pulls",
+        403,
+        '{"message":"Resource not accessible by integration"}',
+    )
+    assert isinstance(generic_forbidden, RuntimeError)
+    assert not isinstance(generic_forbidden, GitHubRateLimitExceeded)
 
     print("frontier maintenance self-test: PASS")
 
