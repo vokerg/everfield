@@ -18,7 +18,7 @@ import frontier_maintenance_v2 as v2
 base = v2.base
 
 ROUTABLE_TERMINAL_STATES = base.TERMINAL_STATES | {"REVIEW_READY"}
-NO_ROUTE_SENTINELS = {"NONE_FROM_THIS_TRANSITION"}
+NO_ROUTE_SENTINELS = {"NONE"}
 ADDITIONAL_SUCCESSOR_RELATION_PATTERNS = (
     r"(?i)\brecovery transition:\s*#(\d+)\b",
     r"(?im)^\s*source_transition_issue:\s*(\d+)\s*$",
@@ -26,7 +26,11 @@ ADDITIONAL_SUCCESSOR_RELATION_PATTERNS = (
 
 
 def route_is_actionable(route: str | None) -> bool:
-    return bool(route and route not in NO_ROUTE_SENTINELS)
+    return bool(
+        route
+        and route not in NO_ROUTE_SENTINELS
+        and not route.startswith("NONE_")
+    )
 
 
 def routable_terminal_from_comments(
@@ -359,7 +363,12 @@ def self_test() -> None:
     assert routed is not None and routed.state == "REVIEW_READY" and routed.route == "FRESH_REVIEW"
 
     assert route_is_actionable("FRESH_REVIEW")
+    assert not route_is_actionable("NONE")
     assert not route_is_actionable("NONE_FROM_THIS_TRANSITION")
+    assert not route_is_actionable("NONE_FACTORY_V5_CHAIN_COMPLETE")
+    assert not route_is_actionable("NONE_REVIEW_ROUTE_CONSUMED")
+    assert route_is_actionable("NONEISH")
+    assert route_is_actionable("SOME_NONE_ROUTE")
     assert not route_is_actionable(None)
 
     recovery_successor = {
