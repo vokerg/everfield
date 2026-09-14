@@ -1,0 +1,210 @@
+schema: everfield_w2_world_lore_continuation_02_candidate_v1
+mission_id: W2-CONTENT-WORLD-CONT-02
+issue: 1049
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+engine_dependency: ENGINE_NEUTRAL
+
+authority:
+  final_canon: false
+  integration: false
+  verification_pass: false
+  implementation_readiness: false
+  gameplay_implementation: false
+  engine_selection: false
+  release: false
+  decision: false
+  canonicalization: false
+
+basis:
+  base_main_sha: 586d4cf9e6ec413246184c27a23424f699ad0137
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  canonical_binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  activation_review_issue: 1063
+  activation_review_status_comment_id: 5654948592
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_02_ACTIVATION
+  predecessor_synthesis_issue: 986
+  predecessor_synthesis_terminal_comment_id: 5644862732
+  predecessor_markdown_blob_sha: b39f535dc71639f3ebc67e33a2d692a2b3a77588
+  predecessor_yaml_blob_sha: 78148f50649ada789feb3cca61182e18465bb628
+  predecessor_review_issue: 1009
+  predecessor_review_terminal_comment_id: 5645006619
+  predecessor_review_disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_CONSUMPTION
+
+producer_policy:
+  sibling_mutable_consumption: false
+  concrete_cross_root_binding: false
+  unresolved_binding_states: [OPEN, OPEN_BOUNDED_SET]
+  exact_dates_allowed: false
+  exact_durations_allowed: false
+  exact_schedules_allowed: false
+  exact_travel_times_allowed: false
+  exact_weather_windows_allowed: false
+  exact_npc_reachability_allowed: false
+  final_ownership_allowed: false
+  final_polity_allowed: false
+  irreversible_concrete_branch_authorized: false
+
+world_structures:
+  - id: WORLD02:CULTIVATION-MARGIN
+    source_interface: WORLD_IFACE:CULTIVATION-MARGIN
+    dimensions:
+      productive_use_state: [ACTIVE, RECOVERING, FALLOW, DISPUTED]
+      water_condition: [ADEQUATE, STRESSED, VARIABLE, UNKNOWN]
+      habitat_continuity: [CONNECTED, FRAGMENTED, RESTORING, UNKNOWN]
+      access_pressure: [LOW, MODERATE, HIGH, DISPUTED]
+    unresolved: [crop_identity, ownership, yield, seasonal_timing]
+    hooks: [SOCIAL_ROLE:LAND-USE-STAKE, CHAR_ROLE:LOCAL-USER, NARR_ROLE:LAND-USE-CONSEQUENCE]
+
+  - id: WORLD02:COMMONS-EDGE
+    source_interface: WORLD_IFACE:COMMONS-EDGE
+    dimensions: [physical_condition, permitted_use_claims, observed_use, ecological_pressure, maintenance_burden]
+    authority_rule: USE_OR_STANDING_NEVER_IMPLIES_OWNERSHIP_OR_LEGITIMACY
+    unresolved: [custodian, quota, ownership, species_catalog, closure_schedule]
+    hooks: [SOCIAL_ROLE:COMMONS-STAKE, CHAR_ROLE:LOCAL-USER, NARR_ROLE:ACCESS-CONSEQUENCE]
+
+  - id: WORLD02:OUTER-CONNECTION
+    source_interface: WORLD_IFACE:OUTER-CONNECTION
+    evidence_types: [OBJECT_PROVENANCE, TRAFFIC_TRACE, REPAIR_TRACE, CLAIM, BRANCH_LOCAL_OBSERVATION]
+    forbidden_inference: [route_timetable, travel_duration, neighboring_polity, trade_monopoly, route_safety_guarantee]
+    hooks: [SOCIAL_ROLE:PUBLIC-WORKS-STAKE, CHAR_ROLE:LOCAL-USER, NARR_ROLE:ACCESS-CONSEQUENCE]
+
+  - id: WORLD02:WATER-DEPENDENCY
+    source_interface: WORLD_IFACE:WATER-DEPENDENCY
+    layers: [PHYSICAL_OBSERVATION, PRACTICAL_DEPENDENCY, ENTITLEMENT_OR_CAUSE_CLAIM, PRIVATE_OR_SPECIALIZED_INTERPRETATION]
+    authority_rule: PHYSICAL_FACT_AND_SOCIAL_ENTITLEMENT_ARE_ORTHOGONAL
+    unresolved: [capacity, seasonal_cycle, timed_scarcity]
+    hooks: [SOCIAL_ROLE:WATER-DEPENDENT-USER, CHAR_ROLE:LOCAL-USER, NARR_ROLE:WORKS-CHOICE]
+
+  - id: WORLD02:SHARED-WORKS-JUNCTION
+    source_interface: WORLD_IFACE:SHARED-WORKS-JUNCTION
+    operability_states: [SERVICEABLE, DEGRADED, PARTIAL, UNKNOWN]
+    repair_trace_append_only: true
+    access_state_is_information_authority: false
+    burden_trace_auto_attribution: false
+    hooks: [SOCIAL_ROLE:PUBLIC-WORKS-STAKE, CHAR_ROLE:HISTORY-INTERPRETER, NARR_ROLE:WORKS-CHOICE]
+
+  - id: WORLD02:HISTORY-TRACE
+    source_interface: WORLD_IFACE:HISTORY-TRACE
+    entry_classes: [OBSERVED_TRACE, DATED_RELATIVE, CLAIMED_ATTRIBUTION, INTERPRETATION, ABSENCE_RECORD]
+    contradictory_attributions_allowed: true
+    claim_or_interpretation_mutates_history: false
+    hooks: [CHAR_ROLE:HISTORY-INTERPRETER, NARR_ROLE:CONSEQUENCE-WITNESS]
+
+  - id: WORLD02:SETTLEMENT-CORE
+    source_interface: LOC:SETTLEMENT-CORE
+    affordances: [BASELINE_MOVEMENT, ORDINARY_COMMUNITY_INTERACTION, PUBLIC_INFORMATION, ADJACENT_WORLD_INTERFACE_REFERENCE]
+    unresolved: [institution_identity, private_access, faction_control, office_holding, population, ownership, polity]
+    hooks: [SOCIAL_ROLE:PUBLIC-WORKS-STAKE, CHAR_ROLE:LOCAL-USER, NARR_ROLE:CONSEQUENCE-WITNESS]
+
+  - id: WORLD02:AFTERMATH-SURFACE
+    source_interface: WORLD_ROLE:CONT_AFTERMATH_SURFACE
+    selection_state: OPEN_BOUNDED_SET
+    compatible_interfaces:
+      - WORLD_IFACE:WATER-DEPENDENCY
+      - WORLD_IFACE:SHARED-WORKS-JUNCTION
+      - WORLD_IFACE:COMMONS-EDGE
+      - WORLD_IFACE:CULTIVATION-MARGIN
+      - WORLD_IFACE:HISTORY-TRACE
+      - WORLD_IFACE:OUTER-CONNECTION
+    required_record_fields:
+      - affected_interface_refs
+      - observable_physical_delta
+      - persistence_or_reversibility
+      - recovery_or_mitigation_evidence
+      - branch_scope
+      - authority_class
+    authority_classes: [PROPOSED, BRANCH_FACT, OBJECTIVE_FACT]
+    irreversible_requires: [BranchImpactEvidence, PRECOMMITMENT_SIGNALING, MEANINGFUL_CONTINUED_PLAY, ALTERNATIVE_GOALS_OR_CONTENT, REVIEW]
+
+epistemic_contract:
+  proposition_id_prefix: PROP:WORLD02
+  claim_id_prefix: CLM:WORLD02
+  fact_id_prefix: FACT:WORLD02
+  mystery_id_prefix: MYST:WORLD02
+  claim_promotes_fact: false
+  repetition_promotes_fact: false
+  knowledge_determines_truth: false
+  public_visibility_implies_truth: false
+  secrecy_implies_falsity: false
+  generated_presentation_mutates_authority: false
+  fragmentation_cause: UNRESOLVED
+
+chronology:
+  model: RELATIVE_ONLY
+  era_order: [ERA:PRE-WORKS, ERA:WORKS-BUILDOUT, ERA:PATCHWORK-PRESENT]
+  event_bands:
+    - {id: EVB:WORLD02:PRE-WORKS-USE, contained_by: ERA:PRE-WORKS}
+    - {id: EVB:WORLD02:BUILDOUT-ALTERATION, contained_by: ERA:WORKS-BUILDOUT}
+    - {id: EVB:WORLD02:PATCHWORK-REPAIR, contained_by: ERA:PATCHWORK-PRESENT}
+    - {id: EVB:WORLD02:PRESENT-OBSERVATION, contained_by: ERA:PATCHWORK-PRESENT}
+  list_order_is_chronology_authority: false
+  explicit_relation_required: true
+
+provisional_interfaces:
+  social:
+    - SOCIAL_ROLE:WATER-DEPENDENT-USER
+    - SOCIAL_ROLE:PUBLIC-WORKS-STAKE
+    - SOCIAL_ROLE:COMMONS-STAKE
+    - SOCIAL_ROLE:LAND-USE-STAKE
+  character: [CHAR_ROLE:HISTORY-INTERPRETER, CHAR_ROLE:LOCAL-USER]
+  narrative:
+    - NARR_ROLE:CONSEQUENCE-WITNESS
+    - NARR_ROLE:WORKS-CHOICE
+    - NARR_ROLE:ACCESS-CONSEQUENCE
+    - NARR_ROLE:LAND-USE-CONSEQUENCE
+  concrete_binding_owner: W2-CONTENT-SYN-CONT-02
+
+wsn_ledger:
+  mutation_allowed: false
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  exact_schedule_authority: false
+  exact_reachability_authority: false
+  production_persistence_established: false
+  human_quality_established: false
+  aggregate_verification_pass: false
+
+open_ledger:
+  - final_custodians_owners_polity
+  - concrete_crop_species_yield_catalog
+  - exact_water_capacity_and_seasonality
+  - external_geography_and_route_timetable
+  - historical_fragmentation_cause
+  - concrete_sensitive_site_identity
+  - final_branch_to_site_assignment
+  - exact_social_and_character_role_occupants
+  - exact_dates_durations_schedules_reachability
+  - concrete_irreversible_or_high_impact_BranchImpactEvidence
+  - final_canon_and_production_quality
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  attacks:
+    - SIBLING_MUTABLE_CONSUMPTION
+    - INVENTED_FINAL_CANON
+    - FACT_CLAIM_PROMOTION
+    - PRIVATE_INFORMATION_LEAK
+    - CHRONOLOGY_OVERREACH
+    - HIDDEN_SCHEDULE_ASSUMPTION
+    - OWNERSHIP_OR_POLITY_INFERENCE
+    - IRREVERSIBLE_CONSEQUENCE_AUTHORIZATION
+    - WSN_LAUNDERING
+    - ENGINE_COUPLING
+    - SCOPE_EXPANSION
+    - HIGHER_AUTHORITY_INFLATION
+
+downstream:
+  required_fresh_review: true
+  token_on_clean_review: W2-CONTENT-WORLD-CONT-02_REVIEWED
+  fanin_mission_id: W2-CONTENT-SYN-CONT-02
+  fanin_materialization_before_all_five_tokens: false
+  integration_authority: false
+  verification_pass_authority: false
+  implementation_readiness_authority: false
+  canonicality: NOT_CANONICAL
