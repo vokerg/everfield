@@ -182,6 +182,8 @@ Unlocks specialized aftermath goals while nonaligned baseline continuation remai
 
 Composition of these non-foundational gates must not create a de facto foundational tax.
 
+Each gate is a complete `ProgressionGateContract` v1 record in YAML: ID/version/class, blocks-or-unlocks, requirements, route/cardinality reference, explicit route records with kinds/prerequisites/lifestyle impacts, visibility/discovery, miss/failure/recovery semantics, branch scope, evidence requirements, and exception rationale are all present. Optional private-context routes are explicitly marked optional and excluded from required minima.
+
 ## 8. Time and WSN discipline
 
 No exact timing is authored.
