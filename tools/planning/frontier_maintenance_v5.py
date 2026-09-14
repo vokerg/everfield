@@ -36,10 +36,10 @@ def terminal_owner_generation_is_current(
 
     The shared v1 terminal parser proves linkage to one trusted ownership
     record. This liveness-suppressing v5 consumer additionally reconstructs the
-    winning ownership chain for the terminal mission: the lowest valid initial
-    CLAIM wins contention, and only a later RESUME/RECOVER generation that
-    explicitly links the current winner may supersede it. Later duplicate
-    contenders therefore have zero authority effect.
+    winning ownership chain for the terminal mission. Initial CLAIM contention
+    is first-valid-wins; RESUME/RECOVER generations must bind the winning
+    RESUME_INTENT and the current generation. Losing contenders therefore have
+    zero authority effect.
     """
     records = sorted(
         (
@@ -47,33 +47,138 @@ def terminal_owner_generation_is_current(
             for record in base.operational_records_from_comments(
                 transition_issue_number, comments
             )
-            if record.kind in base.OWNERSHIP_KINDS
-            and record.state == "IN_PROGRESS"
-            and record.declared_issue == transition_issue_number
+            if record.declared_issue == transition_issue_number
             and record.mission_id == terminal.mission_id
-            and record.actor_session_id
             and record.comment_id < terminal.comment_id
         ),
         key=lambda record: record.comment_id,
     )
+    by_id = {record.comment_id: record for record in records}
+    used_intents: set[int] = set()
+
+    def winning_intent_for(grant: base.OperationalRecord) -> base.OperationalRecord | None:
+        intent_id = base.integer_scalar(grant.body, "winning_intent_comment_id")
+        observed_head = base.scalar(grant.body, "observed_head_sha")
+        if grant.kind == "RESUME":
+            reason = "HANDOFF"
+            source_id = base.integer_scalar(grant.body, "source_status_comment_id")
+        else:
+            reason = base.scalar(grant.body, "recovery_reason")
+            source_id = base.integer_scalar(grant.body, "source_comment_id")
+        if (
+            intent_id is None
+            or source_id is None
+            or observed_head is None
+            or not base.SHA40_RE.fullmatch(observed_head)
+        ):
+            return None
+
+        contenders = [
+            record
+            for record in records
+            if record.kind == "RESUME_INTENT"
+            and record.comment_id < grant.comment_id
+            and record.actor_session_id
+            and base.scalar(record.body, "reason") == reason
+            and base.integer_scalar(record.body, "source_comment_id") == source_id
+            and base.scalar(record.body, "observed_head_sha") == observed_head
+        ]
+        if not contenders:
+            return None
+        intent = min(contenders, key=lambda record: record.comment_id)
+        if (
+            intent.comment_id != intent_id
+            or intent.actor_session_id != grant.actor_session_id
+            or intent.comment_id in used_intents
+        ):
+            return None
+        return intent
 
     winner: base.OperationalRecord | None = None
     for record in records:
+        if (
+            record.kind not in base.OWNERSHIP_KINDS
+            or record.state != "IN_PROGRESS"
+            or not record.actor_session_id
+        ):
+            continue
+
         previous_owner = base.integer_scalar(
             record.body, "previous_ownership_comment_id"
         )
+        observed_head = base.scalar(record.body, "observed_head_sha")
+        if observed_head is None or not base.SHA40_RE.fullmatch(observed_head):
+            continue
+
         if record.kind == "CLAIM":
-            if winner is None and previous_owner is None:
+            base_sha = base.scalar(record.body, "base_sha")
+            if (
+                winner is None
+                and previous_owner is None
+                and base_sha is not None
+                and base.SHA40_RE.fullmatch(base_sha)
+            ):
                 winner = record
             continue
-        if winner is not None and previous_owner == winner.comment_id:
-            winner = record
+
+        if record.kind not in {"RESUME", "RECOVER"}:
+            continue
+
+        intent = winning_intent_for(record)
+        if intent is None:
+            continue
+
+        if record.kind == "RESUME":
+            source_id = base.integer_scalar(record.body, "source_status_comment_id")
+            source = by_id.get(source_id) if source_id is not None else None
+            if (
+                winner is not None
+                and previous_owner == winner.comment_id
+                and source is not None
+                and source.kind == "STATUS"
+                and source.state == "HANDOFF_READY"
+                and source.ownership_generation_comment_id == winner.comment_id
+            ):
+                winner = record
+                used_intents.add(intent.comment_id)
+            continue
+
+        recovery_reason = base.scalar(record.body, "recovery_reason")
+        source_id = base.integer_scalar(record.body, "source_comment_id")
+        source = by_id.get(source_id) if source_id is not None else None
+        if recovery_reason == "STALE":
+            source_matches_winner = (
+                winner is not None
+                and source is not None
+                and (
+                    source.comment_id == winner.comment_id
+                    or (
+                        source.kind == "PROGRESS"
+                        and source.ownership_generation_comment_id
+                        == winner.comment_id
+                    )
+                )
+            )
+            if (
+                source_matches_winner
+                and previous_owner == winner.comment_id
+            ):
+                winner = record
+                used_intents.add(intent.comment_id)
+        elif recovery_reason == "ORPHAN":
+            if (
+                winner is None
+                and previous_owner is None
+                and source is not None
+                and source.kind == "ORPHAN_PROBE"
+            ):
+                winner = record
+                used_intents.add(intent.comment_id)
 
     return (
         winner is not None
         and winner.comment_id == terminal.ownership_generation_comment_id
     )
-
 
 
 def explicit_successor_issue_number(route: str | None) -> int | None:
