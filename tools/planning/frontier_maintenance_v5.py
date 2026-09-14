@@ -106,22 +106,17 @@ def terminal_owner_generation_is_current(
         previous_owner = base.integer_scalar(
             record.body, "previous_ownership_comment_id"
         )
-        observed_head = base.scalar(record.body, "observed_head_sha")
-        if observed_head is None or not base.SHA40_RE.fullmatch(observed_head):
-            continue
 
         if record.kind == "CLAIM":
-            base_sha = base.scalar(record.body, "base_sha")
-            if (
-                winner is None
-                and previous_owner is None
-                and base_sha is not None
-                and base.SHA40_RE.fullmatch(base_sha)
-            ):
+            if winner is None and previous_owner is None:
                 winner = record
             continue
 
         if record.kind not in {"RESUME", "RECOVER"}:
+            continue
+
+        observed_head = base.scalar(record.body, "observed_head_sha")
+        if observed_head is None or not base.SHA40_RE.fullmatch(observed_head):
             continue
 
         intent = winning_intent_for(record)
