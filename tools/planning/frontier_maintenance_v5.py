@@ -371,17 +371,34 @@ def main() -> int:
     if "--self-test" in sys.argv:
         self_test()
         return 0
-    open_items = list(
-        base.paged(f"/repos/{base.REPO}/issues?state=open&sort=created&direction=asc&")
-    )
-    open_prs = list(
-        base.paged(f"/repos/{base.REPO}/pulls?state=open&sort=created&direction=asc&")
-    )
-    issue_closed = base.close_terminal_open_issues(open_items)
-    pr_closed = base.close_rejected_open_prs(open_prs)
-    transition_created, dispatched, transition_retired, transition_reused = (
-        materialize_missing_transitions(open_items, base.load_routes())
-    )
+    try:
+        open_items = list(
+            base.paged(f"/repos/{base.REPO}/issues?state=open&sort=created&direction=asc&")
+        )
+        open_prs = list(
+            base.paged(f"/repos/{base.REPO}/pulls?state=open&sort=created&direction=asc&")
+        )
+        issue_closed = base.close_terminal_open_issues(open_items)
+        pr_closed = base.close_rejected_open_prs(open_prs)
+        transition_created, dispatched, transition_retired, transition_reused = (
+            materialize_missing_transitions(open_items, base.load_routes())
+        )
+    except base.GitHubRateLimitExceeded as exc:
+        print(f"::warning title=Frontier maintenance deferred::{exc}")
+        print(
+            base.json.dumps(
+                {
+                    "authority_created": False,
+                    "deferred": True,
+                    "deferred_reason": "GITHUB_API_RATE_LIMIT",
+                    "dry_run": base.DRY_RUN,
+                    "reconciliation_complete": False,
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+
     print(
         base.json.dumps(
             {
@@ -392,6 +409,7 @@ def main() -> int:
                 "transitions_created": transition_created,
                 "transitions_reused": transition_reused,
                 "registered_routes_dispatched": dispatched,
+                "reconciliation_complete": True,
             },
             sort_keys=True,
         )
