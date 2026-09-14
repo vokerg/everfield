@@ -1,0 +1,67 @@
+version: 1
+verification_issue: 1134
+mission_id: FACTORY-LEASE-CANON-VERIFY-01
+result: FAIL
+disposition: CHANGES_NEEDED
+verified_base_main_sha: 51cc20dbbc4ebbbdea9bbde91e480776b0e4b047
+producer:
+  issue: 1128
+  terminal_comment_id: 5659852198
+  head_sha: cccf9b32764ff4c7fdaf9bc8b0a19ce1da7ebc8a
+  candidate_blob_sha: fe2c832f4da5971956b7f83ce651fd3f1586dabe
+  manifest_blob_sha: 55909cb6400584e9238bf149da09bb406ec3dc93
+active_canonical:
+  binding_comment_id: 5245368879
+  program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+finding_counts:
+  blocker: 0
+  major: 1
+  correction_requiring_minor: 0
+attacks:
+  exact_source_composition: PASS
+  six_hour_new_decision_not_active_canon: PASS
+  created_at_only_and_malformed_fail_closed: PASS
+  exact_boundary_expiry: PASS
+  progress_renewal_and_three_evidence_cap: PASS
+  post_expiry_progress_no_resurrection: PASS
+  handoff_and_terminal_current_unexpired_owner: PASS
+  stale_premature_invalid_exact_boundary_temporally_eligible: PASS
+  orphan_600_seconds_and_later_owner_invalidates: PASS
+  losing_claim_resume_recover_zero_authority: PASS
+  prefix_scoped_nonretroactivity: PASS
+  canonical_active_bootstrap_provenance_only: PASS
+  stage_b_ttls_inactive_separate: PASS
+  active_canonical_regression_guards: PASS
+  mechanical_promotion_without_postverification_mutation: FAIL
+  current_base_exact_payload_selection: PASS
+temporal_scenarios:
+  - id: stale_boundary
+    claim: 2026-09-14T12:00:00Z
+    stale_before: 2026-09-14T17:59:59.999Z
+    stale_before_result: INVALID
+    stale_exact: 2026-09-14T18:00:00Z
+    stale_exact_result: TEMPORALLY_ELIGIBLE_SUBJECT_TO_STRUCTURAL_PREDICATES
+  - id: progress_moves_boundary
+    claim: 2026-09-14T12:00:00Z
+    progress: 2026-09-14T17:00:00Z
+    new_expiry: 2026-09-14T23:00:00Z
+    stale_at_1801: INVALID_PREMATURE
+  - id: evidence_cap
+    e1: VALID_RENEWS
+    e2: VALID_RENEWS
+    e3: VALID_RENEWS
+    e4: INVALID_NO_RENEWAL
+    expiry_anchor: E3
+  - id: orphan_boundary
+    probe: 2026-09-14T12:00:00Z
+    before: 2026-09-14T12:09:59.999Z
+    before_result: INVALID
+    exact: 2026-09-14T12:10:00Z
+    exact_result: TEMPORALLY_ELIGIBLE_IF_NO_LATER_OWNER
+finding:
+  id: FACTORY-LEASE-CANON-VERIFY-MAJ01
+  severity: MAJOR
+  summary: missing deterministic canonical promotion transform
+  required_correction: exact_source_destination_and_header_transform_simulatable_before_verification
+fresh_verification_required_after_correction: true
