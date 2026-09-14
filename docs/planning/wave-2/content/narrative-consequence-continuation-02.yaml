@@ -217,33 +217,126 @@ consequence_contract:
   refusal_history_erasure_allowed: false
 
 progression_gates:
+  contract_name: ProgressionGateContract
+  contract_version: 1
   foundational_gate_count: 0
   gates:
     - gate_id: GATE:NARR-CONT02:CAUSAL_TRACE
       version: 1
-      class: OPTIONAL
-      unlocks: DEEPER_REASSESSMENT
-      cardinality_ref: QFAM_CONT02:TRACE_CAUSAL_ACCOUNTS.route_cardinality
-      underflow_transition: STATE_CONT02:PRE_TRACE_DEFERRED
-      baseline_play_blocked: false
+      gate_class: OPTIONAL
+      blocks_or_unlocks:
+        - deeper reassessment and causal-account comparison
+      requirements:
+        - observable prior consequence or contested-state marker
+        - at least two materially distinct nonprivate evidence or perspective routes while OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS is active
+      route_cardinality_ref: QFAM_CONT02:TRACE_CAUSAL_ACCOUNTS.route_cardinality
+      routes:
+        - route_id: ROUTE:NARR-CONT02:TRACE:PUBLIC_MATERIAL
+          route_kind: KNOWLEDGE
+          prerequisite_refs:
+            - WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT02:TRACE:SUBSTITUTE_PERSPECTIVE
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - CHAR_ROLE:CONT_PERSPECTIVE_HOLDER
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT02:TRACE:PRIVATE_OPTIONAL
+          route_kind: RELATIONSHIP
+          prerequisite_refs:
+            - CHAR_ROLE:CONT_PRIVATE_CONTEXT_HOLDER
+          lifestyle_impacts: []
+          optional: true
+          counts_toward_required_route_minimum: false
+      visibility_or_discovery:
+        - optional status is explicit
+        - private context is never presented as required
+      miss_failure_recovery: recompute nonprivate route cardinality; underflow below two enters STATE_CONT02:PRE_TRACE_DEFERRED before comparison activation
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E1
+        - WSN-E2
       exception_rationale: null
+      baseline_play_blocked: false
+
     - gate_id: GATE:NARR-CONT02:RESPONSE_SELECTION
       version: 1
-      class: BRANCH_EXCLUSIVE
-      unlocks: RESPONSE_SPECIFIC_CONSEQUENCE_CONTENT
-      cardinality_ref: QFAM_CONT02:SELECT_RESPONSE_PORTFOLIO.route_cardinality
-      underflow_transition: STATE_CONT02:PRE_RESPONSE_DEFERRED
-      baseline_play_blocked: false
+      gate_class: BRANCH_EXCLUSIVE
+      blocks_or_unlocks:
+        - response-specific consequence and aftermath content
+      requirements:
+        - causal trace completed or explicitly deferred
+        - material tradeoffs and affected goal or content classes are signaled
+        - at least two materially differentiated response families are simultaneously legal while OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO is active
+      route_cardinality_ref: QFAM_CONT02:SELECT_RESPONSE_PORTFOLIO.route_cardinality
+      routes:
+        - route_id: ROUTE:NARR-CONT02:RESPONSE:MAINTAIN_OR_REDIRECT
+          route_kind: QUEST
+          prerequisite_refs:
+            - OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+          lifestyle_impacts:
+            - branch-specific goals or content may change
+        - route_id: ROUTE:NARR-CONT02:RESPONSE:REPAIR_OR_COMPENSATE
+          route_kind: SERVICE
+          prerequisite_refs:
+            - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+          lifestyle_impacts:
+            - specialized repair or compensation effort may be required for the selected branch goal
+        - route_id: ROUTE:NARR-CONT02:RESPONSE:DEFER_OR_NONALIGN
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - QFAM_CONT02:TRACE_CAUSAL_ACCOUNTS
+          lifestyle_impacts:
+            - preserves noncommitted and baseline routes
+      visibility_or_discovery:
+        - affected goal or content classes and reversibility are signaled before commitment
+        - defer or nonalignment remains visible before commitment
+      miss_failure_recovery: recompute response-family cardinality after rejection, substitution, or route loss; underflow below two enters STATE_CONT02:PRE_RESPONSE_DEFERRED before selection activation
+      branch_scope: BRANCH_FAMILY:NARR-CONT02:RESPONSE
+      evidence_requirements:
+        - WSN-E3
+        - WSN-E5
       exception_rationale: null
+      baseline_play_blocked: false
+
     - gate_id: GATE:NARR-CONT02:AFTERMATH_CONTINUITY
       version: 1
-      class: SPECIALIZATION
-      unlocks: SPECIALIZED_AFTERMATH_GOALS
-      cardinality_ref: QFAM_CONT02:VALIDATE_AFTERMATH_CONTINUITY.route_cardinality
-      underflow_transition: STATE_CONT02:PRE_CONTINUED_GOAL_DEFERRED
+      gate_class: SPECIALIZATION
+      blocks_or_unlocks:
+        - specialized stewardship, repair, investigation, or redirection aftermath goals
+      requirements:
+        - material response effect or aftermath state exists
+        - at least two materially distinct continued-goal families are simultaneously legal while OBJ_CONT02:CHOOSE_CONTINUED_GOAL is active
+      route_cardinality_ref: QFAM_CONT02:VALIDATE_AFTERMATH_CONTINUITY.route_cardinality
+      routes:
+        - route_id: ROUTE:NARR-CONT02:AFTERMATH:STEWARDSHIP
+          route_kind: SERVICE
+          prerequisite_refs:
+            - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+          lifestyle_impacts:
+            - specialization-specific work and goals
+        - route_id: ROUTE:NARR-CONT02:AFTERMATH:REDIRECTION
+          route_kind: QUEST
+          prerequisite_refs:
+            - GOAL_CONT02:REDIRECTION
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT02:AFTERMATH:NONALIGNED
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - GOAL_CONT02:NONALIGNED_BASELINE_CONTINUATION
+          lifestyle_impacts: []
+      visibility_or_discovery:
+        - specialization status is explicit
+        - alternative non-specialized and nonaligned goal families remain visible
+      miss_failure_recovery: recompute continued-goal cardinality; underflow below two enters STATE_CONT02:PRE_CONTINUED_GOAL_DEFERRED before goal selection activation
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E5
+        - WSN-E8
+      exception_rationale: null
       baseline_play_blocked: false
       nonaligned_baseline_continuation_remains_legal: true
-      exception_rationale: null
+
   composition_may_create_hidden_foundational_tax: false
 
 time_policy:
