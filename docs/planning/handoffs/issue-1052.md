@@ -32,12 +32,12 @@ No mutable CONT-02 sibling packet was read or consumed.
 ## Producer artifacts frozen before handoff
 
 - `docs/planning/wave-2/content/narrative-consequence-continuation-02.md`
-  - blob `8599abfa4d207955fe67d457182545ba2b3cd46f`
+  - blob `3ef5829ad1fcf7d554a55b6fb1a9ca94fa65721f`
 - `docs/planning/wave-2/content/narrative-consequence-continuation-02.yaml`
-  - blob `31d8fe1bc3c5c164578e441e223736f95a3185d2`
-- branch head after the two producer surfaces: `dadce245a2ed14e885406ac4607a227385b83760`
+  - blob `5093e4a1d1d149d21afc0690a352a051e4319aa3`
+- branch head after the two producer surfaces: `8331ff61bec35d3d7323505c094e8e6d9bd14616`
 
-The terminal producer head will additionally include this handoff only.
+The producer surfaces above include the inherited full `ProgressionGateContract` v1 fields. The terminal producer head will additionally include this refreshed handoff only.
 
 ## Bounded semantics
 
