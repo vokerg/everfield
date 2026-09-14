@@ -1,0 +1,467 @@
+schema: everfield_w2_content_narrative_continuation_02_v1
+mission_id: W2-CONTENT-NARR-CONT-02
+issue: 1052
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+engine_dependency: ENGINE_NEUTRAL
+
+authority:
+  integration: false
+  verification_pass: false
+  implementation_readiness: false
+  gameplay_implementation: false
+  engine_selection: false
+  human_quality_pass: false
+  production_validation: false
+  release: false
+  decision: false
+  final_canon: false
+  canonicalization: false
+
+canonical_basis:
+  producer_base_main_sha: e82f12b52087f3820294048451fadc8e29418999
+  planning_program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  binding_issue: 6
+  binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  activation_review_issue: 1063
+  activation_review_comment_id: 5654948592
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_02_ACTIVATION
+
+reviewed_predecessor:
+  synthesis_issue: 986
+  synthesis_terminal_comment_id: 5644862732
+  fanin_markdown_blob_sha: b39f535dc71639f3ebc67e33a2d692a2b3a77588
+  fanin_yaml_blob_sha: 78148f50649ada789feb3cca61182e18465bb628
+  review_issue: 1009
+  review_terminal_comment_id: 5645006619
+  review_disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_CONSUMPTION
+  narrative_cont01_markdown_blob_sha: a5ccc99a937cfdbca0ed293f4a70f8191d7b800a
+  narrative_cont01_yaml_blob_sha: 14c748fdc870d24d804fea84416c25b2956f0288
+
+input_policy:
+  sibling_cont02_mutable_outputs_consumed: false
+  semantic_interface_binding_only: true
+  final_fiction_binding_allowed: false
+  concrete_world_social_character_binding_allowed: false
+
+provisional_interfaces:
+  world:
+    - WORLD_ROLE:CONT_CONTESTED_SITE
+    - WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE
+    - WORLD_ROLE:CONT_AFTERMATH_SURFACE
+  social:
+    - SOCIAL_ROLE:CONT_AFFECTED_GROUP
+    - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+    - SOCIAL_ROLE:CONT_COUNTERPRESSURE
+  character:
+    - CHAR_ROLE:CONT_PERSPECTIVE_HOLDER
+    - CHAR_ROLE:CONT_AFFECTED_TIE
+    - CHAR_ROLE:CONT_PRIVATE_CONTEXT_HOLDER
+  rules:
+    concrete_selection_owner: W2-CONTENT-SYN-CONT-02_OR_LATER_REVIEWED_AUTHORED_INSTANCE
+    private_context_default_access: DENY
+    private_context_required_for_completion: false
+    private_context_counts_toward_required_route_minimum: false
+  reviewed_world_bindings:
+    WORLD_ROLE:CONT_CONTESTED_SITE:
+      state: BOUNDED_SET
+      target_refs:
+        - WORLD_IFACE:SHARED-WORKS-JUNCTION
+        - WORLD_IFACE:COMMONS-EDGE
+        - WORLD_IFACE:CULTIVATION-MARGIN
+      selection_owner: LATER_CONCRETE_AUTHORED_INSTANCE_REVIEW
+      widening_allowed: false
+    WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE:
+      state: BOUND_INTERFACE
+      target_refs:
+        - WORLD_IFACE:HISTORY-TRACE
+      authority: OBSERVATION_AND_PROVENANCE_ONLY
+      widening_allowed: false
+    WORLD_ROLE:CONT_AFTERMATH_SURFACE:
+      state: BOUNDED_SET
+      target_refs:
+        - WORLD_IFACE:WATER-DEPENDENCY
+        - WORLD_IFACE:SHARED-WORKS-JUNCTION
+        - WORLD_IFACE:COMMONS-EDGE
+        - WORLD_IFACE:CULTIVATION-MARGIN
+        - WORLD_IFACE:HISTORY-TRACE
+        - WORLD_IFACE:OUTER-CONNECTION
+      selection_owner: LATER_CONCRETE_AUTHORED_INSTANCE_REVIEW
+      widening_allowed: false
+
+arc:
+  id: ARC_CONT02:TRACE_RESPOND_VALIDATE
+  class: STRUCTURAL_GRAMMAR_FIXTURE
+  authored_concrete_quest_count: 0
+  stages:
+    - id: QFAM_CONT02:TRACE_CAUSAL_ACCOUNTS
+      purpose: TRACE_OBSERVABLE_CONSEQUENCE_WITHOUT_FORCING_UNRESOLVED_CAUSE
+      required_objectives:
+        - OBJ_CONT02:OBSERVE_DELTA
+        - OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS
+        - OBJ_CONT02:REGISTER_WORKING_ACCOUNT_OR_UNCERTAINTY
+      optional_objectives:
+        - OBJ_CONT02:PRIVATE_CONTEXT
+      route_cardinality:
+        objective_id: OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS
+        minimum_simultaneously_legal_materially_distinct_nonprivate_routes: 2
+        private_context_counts: false
+        enforcement_phase: PRE_OBJECTIVE_ACTIVATION_AND_AFTER_RECOVERY
+        underflow_transition: STATE_CONT02:PRE_TRACE_DEFERRED
+        underflow_before_objective_activation: true
+      recovery:
+        evidence_route_unavailable: RECOMPUTE_SUBSTITUTE_OR_DEFER
+        private_context_denied: CONTINUE_WITH_NONPRIVATE_ROUTES
+        unresolved_cause: UNCERTAINTY_MAY_REMAIN_EXPLICIT
+      provisional_refs:
+        - WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE
+        - CHAR_ROLE:CONT_PERSPECTIVE_HOLDER
+        - CHAR_ROLE:CONT_PRIVATE_CONTEXT_HOLDER
+
+    - id: QFAM_CONT02:SELECT_RESPONSE_PORTFOLIO
+      purpose: SELECT_BOUNDED_RESPONSE_WITH_EXPLICIT_TRADEOFFS_AND_ALTERNATIVES
+      required_objectives:
+        - OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+      response_families:
+        - RESPONSE_CONT02:MAINTAIN_OR_STEWARD
+        - RESPONSE_CONT02:REPAIR_OR_COMPENSATE
+        - RESPONSE_CONT02:REDIRECT
+        - RESPONSE_CONT02:LEARN_OR_RECONTEXTUALIZE
+        - RESPONSE_CONT02:DEFER_OR_NONALIGN
+      route_cardinality:
+        objective_id: OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+        minimum_simultaneously_legal_materially_differentiated_response_families: 2
+        enforcement_phase: PRE_OBJECTIVE_ACTIVATION_AND_AFTER_RECOVERY
+        underflow_transition: STATE_CONT02:PRE_RESPONSE_DEFERRED
+        underflow_before_objective_activation: true
+      each_selectable_response_requires:
+        - AFFECTED_GOAL_OR_CONTENT_CLASSES
+        - OBSERVABILITY
+        - PRECOMMITMENT_SIGNALING
+        - PERSISTENCE_AND_REVERSIBILITY
+        - RECOVERY_MITIGATION_COMPENSATION_OR_MEANINGFUL_ALTERNATIVE
+        - BRANCH_SCOPE
+        - BASELINE_PLAY_REMAINS_LEGAL
+        - EVIDENCE_FOR_HIGH_IMPACT_OR_IRREVERSIBLE_VARIANT
+      refusal_policy:
+        rejection_may_be_overridden_by_retry: false
+        rejection_may_be_overridden_by_standing_or_gifts: false
+        rejection_may_be_overridden_by_prior_quest_success: false
+        rejection_may_be_overridden_by_relationship_state: false
+        legal_recovery:
+          - RECOMPUTE
+          - SUBSTITUTE
+          - DEFER_OR_NONALIGN
+          - LEGAL_FAILURE
+      provisional_refs:
+        - WORLD_ROLE:CONT_CONTESTED_SITE
+        - SOCIAL_ROLE:CONT_AFFECTED_GROUP
+        - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+        - SOCIAL_ROLE:CONT_COUNTERPRESSURE
+        - CHAR_ROLE:CONT_AFFECTED_TIE
+
+    - id: QFAM_CONT02:VALIDATE_AFTERMATH_CONTINUITY
+      purpose: PRESERVE_MEANINGFUL_CONTINUED_PLAY_AFTER_RESPONSE
+      required_objectives:
+        - OBJ_CONT02:OBSERVE_RESPONSE_EFFECT
+        - OBJ_CONT02:CHOOSE_CONTINUED_GOAL
+      continued_goal_families:
+        - GOAL_CONT02:STEWARDSHIP_OR_MAINTENANCE
+        - GOAL_CONT02:REPAIR_OR_COMPENSATION
+        - GOAL_CONT02:INVESTIGATION_OR_RECONTEXTUALIZATION
+        - GOAL_CONT02:REDIRECTION
+        - GOAL_CONT02:NONALIGNED_BASELINE_CONTINUATION
+      route_cardinality:
+        objective_id: OBJ_CONT02:CHOOSE_CONTINUED_GOAL
+        minimum_simultaneously_legal_materially_distinct_goal_families: 2
+        enforcement_phase: PRE_OBJECTIVE_ACTIVATION_AND_AFTER_RECOVERY
+        underflow_transition: STATE_CONT02:PRE_CONTINUED_GOAL_DEFERRED
+        underflow_before_objective_activation: true
+      recovery:
+        goal_family_unavailable: RECOMPUTE_OR_DEFER
+        restoration_impossible: COMPENSATION_OR_CHANGED_GOAL_REQUIRED
+        truth_unresolved: MYSTERY_CLOSURE_NOT_REQUIRED
+        relationship_access_changed: UNRELATED_FOUNDATIONAL_PLAY_REMAINS_LEGAL
+      provisional_refs:
+        - WORLD_ROLE:CONT_AFTERMATH_SURFACE
+        - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+        - CHAR_ROLE:CONT_AFFECTED_TIE
+
+information_authority:
+  dimensions:
+    - OBJECTIVE_FACT_AUTHORITY
+    - CLAIM_TESTIMONY_INTERPRETATION
+    - CHARACTER_KNOWLEDGE_AND_ACQUISITION_PROVENANCE
+    - PLAYER_EXPOSURE
+    - CONFIDENTIALITY_AND_ACCESS_POLICY
+    - BRANCH_APPLICABILITY
+  objective_fact_requires_explicit_authority: true
+  claim_promotes_fact: false
+  belief_promotes_fact: false
+  testimony_promotes_fact: false
+  interpretation_promotes_fact: false
+  generated_summary_promotes_fact: false
+  relationship_promotes_fact: false
+  public_standing_promotes_fact: false
+  legitimacy_promotes_fact: false
+  player_exposure_grants_character_knowledge: false
+  private_information_default_access: DENY
+  allowed_private_acquisition:
+    - EXPLICIT_HOLDER_DISCLOSURE
+    - LATER_VALIDATED_AUTHORITY_EFFECT
+  retry_rewrites_refusal_or_disclosure_history: false
+
+consequence_contract:
+  name: Continuation02ConsequenceContract
+  version: 1
+  reversibility_classes:
+    - REVERSIBLE
+    - CONDITIONALLY_REVERSIBLE
+    - IRREVERSIBLE
+  required_fields:
+    - consequence_id
+    - trigger_ref
+    - branch_scope
+    - affected_state_refs
+    - affected_goal_or_content_refs
+    - effect_operations
+    - observability
+    - persistence_obligation
+    - reversibility
+    - reversal_or_mitigation
+    - downstream_dependencies
+    - evidence_refs
+  compensation_or_alternative_goal_required_when_restoration_impossible: true
+  branch_impact_evidence_required_for:
+    - HIGH_IMPACT
+    - BRANCH_EXCLUSIVE_HIGH_IMPACT
+    - IRREVERSIBLE
+  irreversible_concrete_instance_authorized_here: false
+  retry_or_repair_may_erase_material_history: false
+  disclosure_history_erasure_allowed: false
+  refusal_history_erasure_allowed: false
+
+progression_gates:
+  contract_name: ProgressionGateContract
+  contract_version: 1
+  foundational_gate_count: 0
+  gates:
+    - gate_id: GATE:NARR-CONT02:CAUSAL_TRACE
+      version: 1
+      gate_class: OPTIONAL
+      blocks_or_unlocks:
+        - deeper reassessment and causal-account comparison
+      requirements:
+        - observable prior consequence or contested-state marker
+        - at least two materially distinct nonprivate evidence or perspective routes while OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS is active
+      route_cardinality_ref: QFAM_CONT02:TRACE_CAUSAL_ACCOUNTS.route_cardinality
+      routes:
+        - route_id: ROUTE:NARR-CONT02:TRACE:PUBLIC_MATERIAL
+          route_kind: KNOWLEDGE
+          prerequisite_refs:
+            - WORLD_ROLE:CONT_HISTORY_OR_EVIDENCE_SOURCE
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT02:TRACE:SUBSTITUTE_PERSPECTIVE
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - CHAR_ROLE:CONT_PERSPECTIVE_HOLDER
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT02:TRACE:PRIVATE_OPTIONAL
+          route_kind: RELATIONSHIP
+          prerequisite_refs:
+            - CHAR_ROLE:CONT_PRIVATE_CONTEXT_HOLDER
+          lifestyle_impacts: []
+          optional: true
+          counts_toward_required_route_minimum: false
+      visibility_or_discovery:
+        - optional status is explicit
+        - private context is never presented as required
+      miss_failure_recovery: recompute nonprivate route cardinality; underflow below two enters STATE_CONT02:PRE_TRACE_DEFERRED before comparison activation
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E1
+        - WSN-E2
+      exception_rationale: null
+      baseline_play_blocked: false
+
+    - gate_id: GATE:NARR-CONT02:RESPONSE_SELECTION
+      version: 1
+      gate_class: BRANCH_EXCLUSIVE
+      blocks_or_unlocks:
+        - response-specific consequence and aftermath content
+      requirements:
+        - causal trace completed or explicitly deferred
+        - material tradeoffs and affected goal or content classes are signaled
+        - at least two materially differentiated response families are simultaneously legal while OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO is active
+      route_cardinality_ref: QFAM_CONT02:SELECT_RESPONSE_PORTFOLIO.route_cardinality
+      routes:
+        - route_id: ROUTE:NARR-CONT02:RESPONSE:MAINTAIN_OR_REDIRECT
+          route_kind: QUEST
+          prerequisite_refs:
+            - OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+          lifestyle_impacts:
+            - branch-specific goals or content may change
+        - route_id: ROUTE:NARR-CONT02:RESPONSE:REPAIR_OR_COMPENSATE
+          route_kind: SERVICE
+          prerequisite_refs:
+            - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+          lifestyle_impacts:
+            - specialized repair or compensation effort may be required for the selected branch goal
+        - route_id: ROUTE:NARR-CONT02:RESPONSE:DEFER_OR_NONALIGN
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - QFAM_CONT02:TRACE_CAUSAL_ACCOUNTS
+          lifestyle_impacts:
+            - preserves noncommitted and baseline routes
+      visibility_or_discovery:
+        - affected goal or content classes and reversibility are signaled before commitment
+        - defer or nonalignment remains visible before commitment
+      miss_failure_recovery: recompute response-family cardinality after rejection, substitution, or route loss; underflow below two enters STATE_CONT02:PRE_RESPONSE_DEFERRED before selection activation
+      branch_scope: BRANCH_FAMILY:NARR-CONT02:RESPONSE
+      evidence_requirements:
+        - WSN-E3
+        - WSN-E5
+      exception_rationale: null
+      baseline_play_blocked: false
+
+    - gate_id: GATE:NARR-CONT02:AFTERMATH_CONTINUITY
+      version: 1
+      gate_class: SPECIALIZATION
+      blocks_or_unlocks:
+        - specialized stewardship, repair, investigation, or redirection aftermath goals
+      requirements:
+        - material response effect or aftermath state exists
+        - at least two materially distinct continued-goal families are simultaneously legal while OBJ_CONT02:CHOOSE_CONTINUED_GOAL is active
+      route_cardinality_ref: QFAM_CONT02:VALIDATE_AFTERMATH_CONTINUITY.route_cardinality
+      routes:
+        - route_id: ROUTE:NARR-CONT02:AFTERMATH:STEWARDSHIP
+          route_kind: SERVICE
+          prerequisite_refs:
+            - SOCIAL_ROLE:CONT_STEWARDSHIP_OR_SERVICE
+          lifestyle_impacts:
+            - specialization-specific work and goals
+        - route_id: ROUTE:NARR-CONT02:AFTERMATH:REDIRECTION
+          route_kind: QUEST
+          prerequisite_refs:
+            - GOAL_CONT02:REDIRECTION
+          lifestyle_impacts: []
+        - route_id: ROUTE:NARR-CONT02:AFTERMATH:NONALIGNED
+          route_kind: SUBSTITUTE
+          prerequisite_refs:
+            - GOAL_CONT02:NONALIGNED_BASELINE_CONTINUATION
+          lifestyle_impacts: []
+      visibility_or_discovery:
+        - specialization status is explicit
+        - alternative non-specialized and nonaligned goal families remain visible
+      miss_failure_recovery: recompute continued-goal cardinality; underflow below two enters STATE_CONT02:PRE_CONTINUED_GOAL_DEFERRED before goal selection activation
+      branch_scope: null
+      evidence_requirements:
+        - WSN-E5
+        - WSN-E8
+      exception_rationale: null
+      baseline_play_blocked: false
+      nonaligned_baseline_continuation_remains_legal: true
+
+  composition_may_create_hidden_foundational_tax: false
+
+time_policy:
+  exact_game_time_policy_version: UNBOUND
+  exact_dates_authored: false
+  exact_durations_authored: false
+  exact_schedules_authored: false
+  timed_windows_authored: false
+  exact_travel_times_authored: false
+  weather_windows_authored: false
+  npc_reachability_claims_authored: false
+  timed_objectives_authored: false
+
+wsn_ledger:
+  mutation_allowed: false
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  human_quality: NOT_ESTABLISHED
+  production_persistence: NOT_ESTABLISHED
+  aggregate_verification_pass: false
+
+failure_recovery_invariants:
+  mutually_exclusive_branches_jointly_required: false
+  optional_private_context_hidden_required: false
+  unavailable_role_requires_substitution_deferral_compensation_or_legal_failure: true
+  route_cardinality_recomputed_after_recovery: true
+  objective_underflow_transitions_before_activation: true
+  ordinary_foundational_play_remains_legal: true
+  unresolved_truth_may_remain_unresolved: true
+
+open_bindings:
+  - id: OPEN:NARR-CONT02:WORLD_SURFACE_SELECTION
+    state: OPEN_BOUNDED_SET
+    inherited_binding_refs:
+      - WORLD_ROLE:CONT_CONTESTED_SITE
+      - WORLD_ROLE:CONT_AFTERMATH_SURFACE
+    selection_must_remain_within_reviewed_target_sets: true
+    widening_allowed: false
+    owner: W2-CONTENT-SYN-CONT-02_OR_LATER_REVIEWED_AUTHORED_INSTANCE
+  - id: OPEN:NARR-CONT02:SOCIAL_CARRIER
+    state: OPEN
+    owner: W2-CONTENT-SYN-CONT-02_OR_LATER_REVIEWED_AUTHORED_INSTANCE
+  - id: OPEN:NARR-CONT02:CHARACTER_HOLDER
+    state: OPEN
+    owner: W2-CONTENT-SYN-CONT-02_OR_LATER_REVIEWED_AUTHORED_INSTANCE
+  - id: OPEN:NARR-CONT02:PRIVATE_CONTEXT
+    state: OPEN_OPTIONAL
+    owner: LATER_REVIEWED_AUTHORED_INSTANCE
+  - id: OPEN:NARR-CONT02:EXACT_CHRONOLOGY
+    state: RELATIVE_ONLY
+    owner: LATER_REVIEWED_FANIN_OR_EVIDENCE_ROUTE
+  - id: OPEN:NARR-CONT02:TIME_AND_REACHABILITY
+    state: BLOCKED_BY_EXACT_PREREQUISITE
+    evidence_refs: [WSN-E3, WSN-E4, WSN-E8]
+  - id: OPEN:NARR-CONT02:BRANCH_IMPACT_EVIDENCE
+    state: LATER_EMPIRICAL_EVIDENCE_REQUIRED
+  - id: OPEN:NARR-CONT02:FINAL_CANON_AND_HIGHER_AUTHORITY
+    state: NOT_AUTHORIZED
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  attacks:
+    - SIBLING_MUTABLE_OUTPUT_LEAKAGE
+    - ROUTE_CARDINALITY_UNDERFLOW
+    - HIDDEN_REQUIRED_PRIVATE_CONTEXT
+    - TRUTH_CLAIM_KNOWLEDGE_EXPOSURE_COLLAPSE
+    - HIDDEN_FOUNDATIONAL_GATE_COMPOSITION
+    - ACTOR_OR_SITE_AVAILABILITY_SOFTLOCK
+    - REFUSAL_OR_CONSENT_LAUNDERING
+    - CONSEQUENCE_HISTORY_ERASURE
+    - HIGH_IMPACT_AUTHORITY_INFLATION
+    - EXACT_TIME_OR_SCHEDULE_OVERREACH
+    - WSN_LAUNDERING
+    - ENGINE_COUPLING
+    - CONCRETE_CANON_INVENTION
+    - MARKDOWN_YAML_CONSISTENCY
+    - HIGHER_AUTHORITY_INFLATION
+  sibling_mutable_outputs_consumed: false
+  authored_concrete_quest_count: 0
+  foundational_gate_count: 0
+  exact_schedule_assertion_count: 0
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_REVIEW
+
+downstream:
+  required_fresh_review: true
+  suggested_mission: W2-CONTENT-NARR-CONT-02-REV-01
+  allowed_clean_outcome: CLEAN_FOR_BOUNDED_CONTENT_FAN_IN_CONSUMPTION
+  reviewed_token_if_clean: W2-CONTENT-NARR-CONT-02_REVIEWED
+  fan_in_mission: W2-CONTENT-SYN-CONT-02
+  fan_in_materialized: false
+  integration_authority: false
+  verification_pass_authority: false
+  implementation_readiness_authority: false
+  engine_selection_authority: false
+  release_authority: false
+  decision_authority: false
+  final_canon_authority: false
+  canonicality: NOT_CANONICAL
