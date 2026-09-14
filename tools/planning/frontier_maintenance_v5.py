@@ -25,6 +25,56 @@ EXPLICIT_SUCCESSOR_ROUTE_PATTERNS = (
     re.compile(r"(?:^|_)REMEDIATION_(?:ISSUE_)?(\d+)(?:_|$)"),
 )
 
+TERMINAL_NO_ROUTE_STATES = {"DONE", "SUPERSEDED"}
+
+def terminal_owner_generation_is_current(
+    transition_issue_number: int,
+    terminal: base.OperationalRecord,
+    comments: Iterable[dict[str, Any]],
+) -> bool:
+    """Fail closed unless the terminal references the winning owner generation.
+
+    The shared v1 terminal parser proves linkage to one trusted ownership
+    record. This liveness-suppressing v5 consumer additionally reconstructs the
+    winning ownership chain for the terminal mission: the lowest valid initial
+    CLAIM wins contention, and only a later RESUME/RECOVER generation that
+    explicitly links the current winner may supersede it. Later duplicate
+    contenders therefore have zero authority effect.
+    """
+    records = sorted(
+        (
+            record
+            for record in base.operational_records_from_comments(
+                transition_issue_number, comments
+            )
+            if record.kind in base.OWNERSHIP_KINDS
+            and record.state == "IN_PROGRESS"
+            and record.declared_issue == transition_issue_number
+            and record.mission_id == terminal.mission_id
+            and record.actor_session_id
+            and record.comment_id < terminal.comment_id
+        ),
+        key=lambda record: record.comment_id,
+    )
+
+    winner: base.OperationalRecord | None = None
+    for record in records:
+        previous_owner = base.integer_scalar(
+            record.body, "previous_ownership_comment_id"
+        )
+        if record.kind == "CLAIM":
+            if winner is None and previous_owner is None:
+                winner = record
+            continue
+        if winner is not None and previous_owner == winner.comment_id:
+            winner = record
+
+    return (
+        winner is not None
+        and winner.comment_id == terminal.ownership_generation_comment_id
+    )
+
+
 
 def explicit_successor_issue_number(route: str | None) -> int | None:
     """Return one unambiguous issue number explicitly encoded by a route."""
@@ -60,6 +110,67 @@ def explicit_successor_generation_consumed(
         f"route {source.route}: explicit trusted successor issue #{successor_number} already exists"
     )
     return True
+
+
+def terminal_no_route_generation_from_comments(
+    transition_issue: dict[str, Any],
+    comments: Iterable[dict[str, Any]],
+) -> v2.Generation | None:
+    """Resolve one exact wrapper generation from a trusted terminal no-route outcome.
+
+    This is intentionally narrower than general terminal handling: INVALIDATED
+    remains unresolved, and an actionable terminal route cannot suppress future
+    liveness work.
+    """
+    generation = v2.factory_transition_generation(transition_issue)
+    if generation is None or not v2.trusted_issue_author(transition_issue):
+        return None
+    if transition_issue.get("state") != "closed":
+        return None
+
+    number = int(transition_issue["number"])
+    comments_list = list(comments)
+    terminal = base.reconcilable_terminal_from_comments(number, comments_list)
+    if terminal is None or terminal.state not in TERMINAL_NO_ROUTE_STATES:
+        return None
+    if not terminal_owner_generation_is_current(
+        number, terminal, comments_list
+    ):
+        return None
+    if v3.route_is_actionable(terminal.route):
+        return None
+    return generation
+
+
+def v5_resolved_transition_generations(
+    closed_issues: Iterable[dict[str, Any]],
+    recent_issues: Iterable[dict[str, Any]],
+) -> set[v2.Generation]:
+    """Compose v4 semantic consumption with terminal no-route resolution.
+
+    Comments are fetched once per closed transition for both checks, avoiding a
+    third API pass while preserving all existing v4 validation.
+    """
+    issues_by_number = {int(issue["number"]): issue for issue in recent_issues}
+    consumed: set[v2.Generation] = set()
+    for issue in closed_issues:
+        if v2.factory_transition_generation(issue) is None:
+            continue
+        number = int(issue["number"])
+        comments = list(base.paged(f"/repos/{base.REPO}/issues/{number}/comments?"))
+
+        semantic = v4.semantic_generation_from_comments(
+            issue, comments, issues_by_number
+        )
+        if semantic is not None:
+            consumed.add(semantic)
+
+        terminal_no_route = terminal_no_route_generation_from_comments(
+            issue, comments
+        )
+        if terminal_no_route is not None:
+            consumed.add(terminal_no_route)
+    return consumed
 
 
 def explicit_transition_redundancy_reason(
@@ -188,7 +299,7 @@ def materialize_missing_transitions(
     issues_by_number = {int(item["number"]): item for item in recent_issues}
     edges = v3.successor_edges(recent_issues)
     resolved_generations = v2.resolved_transition_generations(closed)
-    resolved_generations |= v4.semantic_resolved_transition_generations(
+    resolved_generations |= v5_resolved_transition_generations(
         closed, recent_issues
     )
     factory_issue_numbers = {
@@ -363,6 +474,253 @@ def self_test() -> None:
         active_state_checker=lambda _: False,
         perform_reopen=False,
     ) is None
+
+    terminal_wrapper = {
+        "number": 103,
+        "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
+        "body": (
+            "Source terminal issue: #10\n"
+            "Source terminal comment: 2\n"
+            "Required next route: `NEXT`"
+        ),
+        "state": "closed",
+        "state_reason": "not_planned",
+        "author_association": "CONTRIBUTOR",
+        "user": {"login": "github-actions[bot]"},
+    }
+    terminal_claim = v3._comment(
+        1,
+        "CLAIM",
+        "IN_PROGRESS",
+        issue=103,
+        actor="actor-103",
+        mission="M-103",
+    )
+    superseded_no_route = v3._comment(
+        2,
+        "STATUS",
+        "SUPERSEDED",
+        issue=103,
+        actor="actor-103",
+        mission="M-103",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'b' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper, [terminal_claim, superseded_no_route]
+    ) == (10, 2, "NEXT")
+
+    done_null_route = v3._comment(
+        3,
+        "STATUS",
+        "DONE",
+        issue=103,
+        actor="actor-103",
+        mission="M-103",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'b' * 40}\n"
+            "required_next_route: null\n"
+        ),
+    )
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper, [terminal_claim, done_null_route]
+    ) == (10, 2, "NEXT")
+
+    invalidated = v3._comment(
+        4,
+        "STATUS",
+        "INVALIDATED",
+        issue=103,
+        actor="actor-103",
+        mission="M-103",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'b' * 40}\n"
+            "required_next_route: NONE\n"
+        ),
+    )
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper, [terminal_claim, invalidated]
+    ) is None
+
+    superseded_actionable = v3._comment(
+        5,
+        "STATUS",
+        "SUPERSEDED",
+        issue=103,
+        actor="actor-103",
+        mission="M-103",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'b' * 40}\n"
+            "required_next_route: REQUIRED_REVIEW\n"
+        ),
+    )
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper, [terminal_claim, superseded_actionable]
+    ) is None
+
+    untrusted_wrapper = dict(
+        terminal_wrapper,
+        author_association="NONE",
+        user={"login": "outsider"},
+    )
+    assert terminal_no_route_generation_from_comments(
+        untrusted_wrapper, [terminal_claim, superseded_no_route]
+    ) is None
+    open_terminal_wrapper = dict(terminal_wrapper, state="open", state_reason=None)
+    assert terminal_no_route_generation_from_comments(
+        open_terminal_wrapper, [terminal_claim, superseded_no_route]
+    ) is None
+
+    recovery_intent = v3._comment(
+        6,
+        "RESUME_INTENT",
+        "IN_PROGRESS",
+        issue=103,
+        actor="actor-103-b",
+        mission="M-103",
+        extra=(
+            "reason: STALE\n"
+            "source_comment_id: 1\n"
+            f"observed_head_sha: {'c' * 40}\n"
+        ),
+    )
+    recovered_owner = v3._comment(
+        7,
+        "RECOVER",
+        "IN_PROGRESS",
+        issue=103,
+        actor="actor-103-b",
+        mission="M-103",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'c' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 6\n"
+            "source_comment_id: 1\n"
+        ),
+    )
+    stale_prior_owner_terminal = v3._comment(
+        8,
+        "STATUS",
+        "SUPERSEDED",
+        issue=103,
+        actor="actor-103",
+        mission="M-103",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'b' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    ownership_race = [
+        terminal_claim,
+        recovery_intent,
+        recovered_owner,
+        stale_prior_owner_terminal,
+    ]
+    # The shared parser accepts this stale-A terminal because it validates the
+    # referenced prior owner but not ownership supersession. v5 must not.
+    assert base.reconcilable_terminal_from_comments(103, ownership_race) is not None
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper, ownership_race
+    ) is None
+
+    current_owner_terminal = v3._comment(
+        9,
+        "STATUS",
+        "SUPERSEDED",
+        issue=103,
+        actor="actor-103-b",
+        mission="M-103",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 7\n"
+            f"head_sha: {'c' * 40}\n"
+            f"work_sha: {'d' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper,
+        [terminal_claim, recovery_intent, recovered_owner, current_owner_terminal],
+    ) == (10, 2, "NEXT")
+
+    losing_duplicate_claim = v3._comment(
+        9,
+        "CLAIM",
+        "IN_PROGRESS",
+        issue=103,
+        actor="actor-103-c",
+        mission="M-103",
+    )
+    current_owner_after_losing_claim = v3._comment(
+        10,
+        "STATUS",
+        "SUPERSEDED",
+        issue=103,
+        actor="actor-103-b",
+        mission="M-103",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 7\n"
+            f"head_sha: {'c' * 40}\n"
+            f"work_sha: {'d' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    losing_claim_race = [
+        terminal_claim,
+        recovery_intent,
+        recovered_owner,
+        losing_duplicate_claim,
+        current_owner_after_losing_claim,
+    ]
+    assert base.reconcilable_terminal_from_comments(103, losing_claim_race) is not None
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper, losing_claim_race
+    ) == (10, 2, "NEXT")
+
+    losing_duplicate_recover = v3._comment(
+        9,
+        "RECOVER",
+        "IN_PROGRESS",
+        issue=103,
+        actor="actor-103-c",
+        mission="M-103",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'e' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 6\n"
+            "source_comment_id: 1\n"
+        ),
+    )
+    losing_recover_race = [
+        terminal_claim,
+        recovery_intent,
+        recovered_owner,
+        losing_duplicate_recover,
+        current_owner_after_losing_claim,
+    ]
+    assert terminal_no_route_generation_from_comments(
+        terminal_wrapper, losing_recover_race
+    ) == (10, 2, "NEXT")
 
     print("frontier maintenance v5 self-test: PASS")
 
