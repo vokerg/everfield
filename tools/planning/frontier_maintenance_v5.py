@@ -557,6 +557,214 @@ def materialize_missing_transitions(
 def self_test() -> None:
     v4.self_test()
 
+    def timed_comment(
+        cid: int,
+        created_at: str,
+        kind: str,
+        state: str,
+        *,
+        actor: str,
+        extra: str = "",
+        issue: int = 104,
+        mission: str = "M-104",
+    ) -> dict[str, Any]:
+        return {
+            "id": cid,
+            "author_association": "OWNER",
+            "user": {"login": "vokerg"},
+            "created_at": created_at,
+            "updated_at": created_at,
+            "body": (
+                "protocol: planning-v1\n"
+                "schema: 3\n"
+                f"kind: {kind}\n"
+                f"issue: {issue}\n"
+                f"mission_id: {mission}\n"
+                f"actor_session_id: {actor}\n"
+                f"state: {state}\n"
+                f"{extra}"
+            ),
+        }
+
+    def owner_terminal(
+        cid: int, created_at: str, actor: str, generation: int, head: str
+    ) -> dict[str, Any]:
+        return timed_comment(
+            cid,
+            created_at,
+            "STATUS",
+            "SUPERSEDED",
+            actor=actor,
+            extra=(
+                "authority_mode: OWNER\n"
+                f"ownership_generation_comment_id: {generation}\n"
+                f"head_sha: {head}\n"
+                f"work_sha: {'d' * 40}\n"
+                "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+            ),
+        )
+
+    def parsed_terminal(comments: list[dict[str, Any]]) -> base.OperationalRecord:
+        terminal = base.reconcilable_terminal_from_comments(104, comments)
+        assert terminal is not None
+        return terminal
+
+    claim = timed_comment(
+        1, "2026-09-15T12:00:00Z", "CLAIM", "IN_PROGRESS", actor="actor-a",
+        extra=f"observed_head_sha: {'a' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    premature_intent = timed_comment(
+        2, "2026-09-15T17:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    premature_recover = timed_comment(
+        3, "2026-09-15T17:01:00Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    old_owner_terminal = owner_terminal(
+        4, "2026-09-15T17:02:00Z", "actor-a", 1, "a" * 40
+    )
+    premature = [claim, premature_intent, premature_recover, old_owner_terminal]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(premature), premature
+    )
+
+    premature_new_terminal = owner_terminal(
+        4, "2026-09-15T17:02:00Z", "actor-b", 3, "a" * 40
+    )
+    premature_new = [claim, premature_intent, premature_recover, premature_new_terminal]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(premature_new), premature_new
+    )
+
+    exact_intent = timed_comment(
+        2, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    exact_recover = timed_comment(
+        3, "2026-09-15T18:00:01Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    recovered_terminal = owner_terminal(
+        4, "2026-09-15T18:00:02Z", "actor-b", 3, "a" * 40
+    )
+    exact = [claim, exact_intent, exact_recover, recovered_terminal]
+    assert terminal_owner_generation_is_current(104, parsed_terminal(exact), exact)
+
+    stale_old_terminal = owner_terminal(
+        4, "2026-09-15T18:00:02Z", "actor-a", 1, "a" * 40
+    )
+    stale_old = [claim, exact_intent, exact_recover, stale_old_terminal]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(stale_old), stale_old
+    )
+
+    progress = timed_comment(
+        2, "2026-09-15T17:00:00Z", "PROGRESS", "IN_PROGRESS", actor="actor-a",
+        extra=(
+            "ownership_generation_comment_id: 1\n"
+            f"observed_head_sha: {'b' * 40}\n"
+            "progress_basis: HEAD_ADVANCE\nevidence_refs: []\n"
+        ),
+    )
+    renewed_intent = timed_comment(
+        3, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 2\n"
+            f"observed_head_sha: {'b' * 40}\n"
+        ),
+    )
+    renewed_recover = timed_comment(
+        4, "2026-09-15T18:01:00Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'b' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 3\nsource_comment_id: 2\n"
+        ),
+    )
+    renewed_terminal = owner_terminal(
+        5, "2026-09-15T18:02:00Z", "actor-a", 1, "b" * 40
+    )
+    renewed = [claim, progress, renewed_intent, renewed_recover, renewed_terminal]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(renewed), renewed
+    )
+
+    probe = timed_comment(
+        1, "2026-09-15T12:00:00Z", "ORPHAN_PROBE", "IN_PROGRESS", actor="actor-p",
+        extra=f"observed_head_sha: {'c' * 40}\n",
+    )
+    orphan_intent = timed_comment(
+        2, "2026-09-15T12:10:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: ORPHAN\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'c' * 40}\n"
+        ),
+    )
+    orphan_recover = timed_comment(
+        3, "2026-09-15T12:10:01Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: ORPHAN\n"
+            f"observed_head_sha: {'c' * 40}\n"
+            "previous_ownership_comment_id: null\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    orphan_terminal = owner_terminal(
+        4, "2026-09-15T12:10:02Z", "actor-b", 3, "c" * 40
+    )
+    orphan_exact = [probe, orphan_intent, orphan_recover, orphan_terminal]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(orphan_exact), orphan_exact
+    )
+
+    early_orphan_intent = timed_comment(
+        2, "2026-09-15T12:09:59Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: ORPHAN\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'c' * 40}\n"
+        ),
+    )
+    early_orphan_recover = timed_comment(
+        3, "2026-09-15T12:09:59.500000Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: ORPHAN\n"
+            f"observed_head_sha: {'c' * 40}\n"
+            "previous_ownership_comment_id: null\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    later_claim = timed_comment(
+        4, "2026-09-15T12:10:00Z", "CLAIM", "IN_PROGRESS", actor="actor-a",
+        extra=f"observed_head_sha: {'c' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    later_claim_terminal = owner_terminal(
+        5, "2026-09-15T12:10:01Z", "actor-a", 4, "c" * 40
+    )
+    orphan_early = [
+        probe, early_orphan_intent, early_orphan_recover, later_claim, later_claim_terminal
+    ]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(orphan_early), orphan_early
+    )
+
     assert explicit_successor_issue_number("ISSUE_895_FORMAL_ENGINE_SELECTION_READINESS_DECISION_GATE") == 895
     assert explicit_successor_issue_number("EXISTING_REQUIRED_REVIEW_917") == 917
     assert explicit_successor_issue_number("BLOCKING_REMEDIATION_ISSUE_833") == 833
