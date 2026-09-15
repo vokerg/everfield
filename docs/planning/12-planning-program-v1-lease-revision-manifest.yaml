@@ -1,0 +1,210 @@
+version: 2
+state: NONCANONICAL_LEASE_REVISION_REMEDIATED_CANDIDATE
+mission_id: FACTORY-LEASE-CANON-REV-REM-01
+revision_issue: 1137
+
+remediation_source:
+  verification_issue: 1134
+  verification_terminal_comment_id: 5660250078
+  verification_result: FAIL
+  disposition: CHANGES_NEEDED
+  finding_id: FACTORY-LEASE-CANON-VERIFY-MAJ01
+  judged_producer_issue: 1128
+  judged_producer_head_sha: cccf9b32764ff4c7fdaf9bc8b0a19ce1da7ebc8a
+  judged_candidate_blob_sha: fe2c832f4da5971956b7f83ce651fd3f1586dabe
+  judged_manifest_blob_sha: 55909cb6400584e9238bf149da09bb406ec3dc93
+
+active_canonical_base:
+  path: docs/planning/PLANNING-PROGRAM-v1.md
+  blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  binding_issue: 6
+  binding_comment_id: 5245368879
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  preservation_rule: all_semantics_preserved_except_explicit_temporal_additions
+
+reviewed_governance_source:
+  issue: 1124
+  terminal_comment_id: 5659746316
+  pr: 1125
+  head_sha: d5a04ee0bd7d3dab00c0de518c1c8b73aa01f024
+  candidate_path: docs/planning/architecture/SCHEMA3-OWNERSHIP-LEASE-SEMANTICS-v1.md
+  candidate_blob_sha: a59f04feb2c7e0344fdaab1fcbf4fa291e79a107
+  handoff_blob_sha: 53163cd454e09b618377840176b082f586b034e0
+
+required_review_source:
+  issue: 1126
+  winning_claim_comment_id: 5659749162
+  terminal_comment_id: 5659773876
+  disposition: PASS_FOR_CANONICAL_LEASE_SEMANTICS_REVISION
+  review_head_sha: 9aed318aa62f04078f6c3d9d838f4f0296f53718
+  review_report_blob_sha: f7d2ec84570c6691931f1d3c9d6a6b6ee3e9face
+  review_handoff_blob_sha: 837b9bdcb2aa1d1dcf14953ada190db4aa0688d9
+  finding_counts:
+    blocker: 0
+    major: 0
+    correction_requiring_minor: 0
+    info: 2
+
+revision_payload:
+  candidate_path: docs/planning/12-planning-program-v1-lease-revision-candidate.md
+  candidate_blob_sha: 2d98f95c58d15bddf7c00be3fd5905aa8ca501e5
+  manifest_path: docs/planning/12-planning-program-v1-lease-revision-manifest.yaml
+  manifest_identity: exact_blob_sha_of_this_manifest_at_verified_work_state
+  canonicality: NOT_CANONICAL
+  direct_active_program_mutation: false
+  direct_binding_mutation: false
+  maintenance_mutation: false
+
+lease_semantics:
+  schema3_task_ownership_lease_seconds: 21600
+  duration_status: NEW_REVIEWED_GOVERNANCE_DECISION_NOT_YET_CANONICAL
+  authoritative_clock: github_server_comment_created_at
+  timestamp_requirements:
+    format: RFC3339_TIMEZONE_AWARE
+    compare_as: ABSOLUTE_INSTANT
+    updated_at_authority: NONE
+    body_or_local_clock_authority: NONE
+    malformed_or_missing: FAIL_CLOSED_NO_STALENESS_AUTHORITY
+  ownership_generation:
+    anchor: winning_generation_comment_created_at
+    applies_only_to_canonically_declared_generation_kinds: true
+    expired_when: t_greater_than_or_equal_anchor_plus_21600_seconds
+    unexpired_when: t_less_than_anchor_plus_21600_seconds
+  progress:
+    creates_new_generation: false
+    renewal_requires_current_unexpired_generation: true
+    renewal_anchor: progress_comment_created_at
+    head_advance_existing_rules_preserved: true
+    evidence_existing_rules_preserved: true
+    max_consecutive_evidence_renewals_without_head_advance: 3
+    fourth_consecutive_evidence_authority: INVALID_NO_RENEWAL
+    at_or_after_expiry: INVALID_NO_RESURRECTION
+  owner_required_status:
+    handoff_ready_requires_current_unexpired_owner: true
+    terminal_status_requires_current_unexpired_owner_when_kind_requires_owner: true
+    valid_preexpiry_handoff_uses_existing_handoff_resume_route: true
+  stale_recovery:
+    intent_before_expiry: INVALID_ZERO_AUTHORITY
+    exact_expiry_boundary: TEMPORALLY_ELIGIBLE
+    existing_source_head_generation_winner_first_grant_predicates_preserved: true
+    intervening_valid_renewal_handoff_terminal_or_owner_invalidates_route: true
+  orphan_recovery:
+    maturity_seconds: 600
+    authoritative_clock: github_server_comment_created_at
+    exact_boundary_is_mature: true
+    later_valid_owner_invalidates_route: true
+    existing_probe_head_winner_first_grant_predicates_preserved: true
+  contention:
+    lowest_valid_comment_id_rules_preserved: true
+    losing_claim_resume_recover_authority: NONE
+  reconstruction:
+    order: GITHUB_COMMENT_ORDER
+    evaluation_scope: PREFIX_THROUGH_OPERATIONAL_COMMENT
+    later_recovery_retroactively_invalidates_prior_valid_terminal: false
+    stale_prior_owner_terminal_after_valid_recovery: INVALID
+  canonical_active_guards:
+    historical_bootstrap_numbered_work: PROVENANCE_ONLY
+    verification_restart_refresh_not_broadened_beyond_declared_tasks: true
+  stage_b:
+    integrationunit_global_ttls_activated: false
+    conflated_with_schema3_task_ownership: false
+
+required_verification:
+  mode: FRESH_DEGRADED_INDEPENDENT_COMPATIBILITY
+  verified_base_must_equal_then_current_main: true
+  exact_candidate_and_manifest_identity_required: true
+  full_active_canonical_base_regression_required: true
+  pass_forbidden_with:
+    blocker: any
+    major: any
+    correction_requiring_minor: any
+  scenarios:
+    - premature_stale_intent_invalid
+    - exact_boundary_stale_temporally_eligible
+    - valid_progress_moves_expiry_boundary
+    - fourth_consecutive_evidence_does_not_renew
+    - progress_at_expiry_cannot_resurrect
+    - expired_owner_terminal_invalid
+    - preexpiry_handoff_uses_handoff_resume_route
+    - orphan_before_600_seconds_invalid
+    - orphan_exact_600_seconds_mature
+    - later_owner_invalidates_orphan
+    - losing_ownership_contenders_have_zero_authority
+    - malformed_timestamp_fails_closed
+    - prefix_scoped_terminal_nonretroactivity
+    - stale_prior_owner_terminal_after_recovery_invalid
+    - canonical_active_bootstrap_provenance_only_preserved
+    - undeclared_generic_verification_mechanisms_not_activated
+    - stage_b_ttls_remain_inactive_and_separate
+    - deterministic_promotion_transform_applies_exactly_four_replacements
+    - canonicalization_issue_parameter_is_provenance_only_and_contract_bound
+    - promotion_fails_on_literal_identity_or_undeclared_byte_drift
+
+promotion_transform:
+  source_candidate:
+    path: docs/planning/12-planning-program-v1-lease-revision-candidate.md
+    blob_sha: 2d98f95c58d15bddf7c00be3fd5905aa8ca501e5
+  source_manifest:
+    path: docs/planning/12-planning-program-v1-lease-revision-manifest.yaml
+    identity: exact_blob_sha_of_this_manifest_at_verified_work_state
+  destination: docs/planning/PLANNING-PROGRAM-v1.md
+  type: exact_literal_replacements_then_byte_identical_remainder_with_bound_parameter
+  runtime_parameters:
+    canonicalization_issue_number:
+      type: positive_integer
+      encoding: canonical_base10_no_leading_zero
+      source: separately_authorized_canonicalization_issue_number
+      semantic_effect: provenance_only
+      preconditions:
+        issue_contract_binds_exact_verified_candidate_blob: true
+        issue_contract_binds_exact_verified_manifest_identity: true
+        issue_contract_requires_exact_verified_base: true
+        terminal_INTEGRATION_STATUS_must_be_published_on_same_issue: true
+  replacements:
+    - from: "# Planning Program v1 — Schema-3 Ownership Lease Revision Remediated Candidate"
+      to: "# Planning Program v1 — Canonical"
+    - from: "**State:** REVIEWED-LEASE-REVISION-REMEDIATED-CANDIDATE  "
+      to: "**State:** CANONICAL  "
+    - from: "**Authority:** NON-CANONICAL until fresh verification/compatibility and separately authorized squash-only canonicalization complete.  "
+      to: "**Authority:** CANONICAL planning operating model for the current pre-implementation PLANNING phase.  "
+    - from: "**Revision issue:** #1137 / `FACTORY-LEASE-CANON-REV-REM-01`  "
+      to_template: "**Canonicalized by:** Issue #${canonicalization_issue_number}  "
+  rules:
+    every_from_literal_matches_exactly_once: true
+    parameter_substitution_only_in_declared_to_template: true
+    parameter_is_not_semantic_choice: true
+    all_remaining_candidate_bytes_byte_identical: true
+    source_candidate_blob_must_match: true
+    source_manifest_identity_must_match_verified_result: true
+    missing_duplicate_literal_or_identity_mismatch: FAIL_CLOSED
+    undeclared_byte_change: FAIL_CLOSED
+  verification_simulation:
+    required: true
+    test_canonicalization_issue_number: 999999
+    assert_exactly_four_replacements: true
+    assert_only_parameterized_output_bytes_vary_with_issue_number: true
+    assert_destination_parses_canonicalized_by_issue: true
+    assert_lease_overlay_and_active_base_composition_unchanged: true
+
+canonicalization_route:
+  prerequisite: FRESH_VERIFICATION_COMPATIBILITY_PASS_FOR_EXACT_CANDIDATE_AND_MANIFEST
+  promotion_transform: promotion_transform
+  canonicalization_issue_must_be_separately_scoped_and_authorized: true
+  canonicalization_issue_contract_must_bind_verified_payload_before_transform: true
+  changed_candidate_or_manifest_after_verification: NEW_FULL_VERIFICATION_REQUIRED
+  publication: SEPARATELY_AUTHORIZED_SQUASH_ONLY_CANONICALIZATION
+  expected_head_and_base_checks_required: true
+  durable_new_binding_required_before_consumption: true
+  terminal_binding_issue_must_equal_runtime_parameter: true
+  current_binding_remains_active_until_new_binding: true
+  blocked_factory_remediation_may_rederive_only_after_new_binding: true
+
+non_authority:
+  integration: false
+  maintenance_implementation: false
+  verification_pass: false
+  implementation_readiness: false
+  engine_selection: false
+  release: false
+  decision: false
+  canonical: false
