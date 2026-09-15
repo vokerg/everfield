@@ -171,10 +171,7 @@ def stable_transition_for_generation(
 
     terminal_checker = terminal_state_checker or transition_has_stable_terminal_state
     closed_candidates = [
-        item
-        for item in candidates
-        if item.get("state") == "closed"
-        and item.get("state_reason") in {"duplicate", "not_planned"}
+        item for item in candidates if item.get("state") == "closed"
     ]
     terminal_candidates = [
         item
@@ -193,7 +190,8 @@ def stable_transition_for_generation(
     reopenable = [
         item
         for item in closed_candidates
-        if not checker(int(item["number"]))
+        if item.get("state_reason") in {"duplicate", "not_planned"}
+        and not checker(int(item["number"]))
     ]
     if not reopenable:
         return None, False
@@ -416,10 +414,10 @@ def self_test() -> None:
         old_generation,
         {old_generation: [completed]},
         active_state_checker=lambda _: False,
-        terminal_state_checker=lambda _: False,
+        terminal_state_checker=lambda _: True,
         perform_reopen=False,
     )
-    assert blocked is None and not settled
+    assert blocked is None and settled
 
     assert stable_transition_terminal(source)
     invalidated = base.OperationalRecord(
