@@ -1,0 +1,98 @@
+version: 2
+verification_issue: 1138
+mission_id: FACTORY-LEASE-CANON-VERIFY-02
+result: PASS
+disposition: PASS_FOR_SEPARATE_CANONICALIZATION
+trust_mode: DEGRADED_SINGLE_AGENT
+verified_base_main_sha: 8468daf824aee6e5ef48ffead0918a5512bd4b0c
+producer:
+  issue: 1137
+  terminal_comment_id: 5668329071
+  head_sha: e0f87494eea335ff195ace746689b486bc40909d
+  pr: 1139
+  candidate_blob_sha: 2d98f95c58d15bddf7c00be3fd5905aa8ca501e5
+  manifest_blob_sha: d075d7bd92e1c7636ab77a962a677c521c9db7b5
+source_failed_verification:
+  issue: 1134
+  terminal_comment_id: 5660250078
+  finding_id: FACTORY-LEASE-CANON-VERIFY-MAJ01
+  finding_disposition: CLOSED_BY_EXACT_REMEDIATION
+active_canonical:
+  binding_comment_id: 5245368879
+  program_blob_sha: e3120ec203c4156328770aa86c12fbb7187966dc
+  activation_sha: 413e729e8d2d5ac2eb138903f3f2ace07283b23e
+  activation_ancestor_of_verified_base: true
+finding_counts:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+attacks:
+  exact_source_composition: PASS
+  remediation_bounded_sections_1_through_12_preserved: PASS
+  six_hour_new_decision_not_active_canon: PASS
+  created_at_only_and_malformed_fail_closed: PASS
+  exact_boundary_expiry: PASS
+  progress_renewal: PASS
+  three_evidence_cap: PASS
+  post_expiry_progress_no_resurrection: PASS
+  handoff_and_terminal_current_unexpired_owner: PASS
+  stale_premature_invalid_exact_boundary_temporally_eligible: PASS
+  orphan_600_seconds_and_later_owner_invalidates: PASS
+  losing_claim_resume_recover_zero_authority: PASS
+  prefix_scoped_nonretroactivity: PASS
+  canonical_active_bootstrap_provenance_only: PASS
+  stage_b_ttls_inactive_separate: PASS
+  active_canonical_regression_guards: PASS
+  manifest_exact_payload_binding: PASS
+  deterministic_promotion_four_replacements: PASS
+  promotion_byte_identical_remainder: PASS
+  canonicalization_issue_parameter_encoding: PASS
+  canonicalization_parameter_provenance_only_contract_bound: PASS
+  same_issue_terminal_integration_binding: PASS
+  missing_or_duplicate_literal_fails_closed: PASS
+  wrong_payload_or_undeclared_drift_fails_closed: PASS
+  changed_payload_requires_fresh_full_verification: PASS
+  current_base_exact_payload_selection: PASS
+temporal_scenarios:
+  stale_boundary:
+    claim: 2026-09-14T12:00:00Z
+    stale_before: 2026-09-14T17:59:59.999Z
+    stale_before_result: INVALID
+    stale_exact: 2026-09-14T18:00:00Z
+    stale_exact_result: TEMPORALLY_ELIGIBLE_SUBJECT_TO_STRUCTURAL_PREDICATES
+  progress_moves_boundary:
+    claim: 2026-09-14T12:00:00Z
+    progress: 2026-09-14T17:00:00Z
+    new_expiry: 2026-09-14T23:00:00Z
+    stale_at_1801: INVALID_PREMATURE
+  evidence_cap:
+    e1: VALID_RENEWS
+    e2: VALID_RENEWS
+    e3: VALID_RENEWS
+    e4: INVALID_NO_RENEWAL
+    expiry_anchor: E3
+  orphan_boundary:
+    probe: 2026-09-14T12:00:00Z
+    before: 2026-09-14T12:09:59.999Z
+    before_result: INVALID
+    exact: 2026-09-14T12:10:00Z
+    exact_result: TEMPORALLY_ELIGIBLE_IF_NO_LATER_OWNER
+promotion_simulation:
+  test_canonicalization_issue_number: 999999
+  source_literal_match_counts: [1, 1, 1, 1]
+  replacements_applied: 4
+  promoted_blob_sha: 94561b26a7553f02c64da87f528f5d37b914a7e5
+  expected_promoted_blob_match: true
+  invalid_parameter_samples_rejected: ["0", "-1", "001", "abc", "1.5"]
+  missing_source_literal_rejected: true
+  duplicate_source_literal_rejected: true
+required_next_route: SEPARATELY_SCOPED_CANONICALIZATION_OF_EXACT_VERIFIED_LEASE_REVISION_PACKET
+authority:
+  integration: false
+  maintenance_implementation: false
+  implementation_readiness: false
+  engine_selection: false
+  release: false
+  production: false
+  decision: false
+  canonical: false
