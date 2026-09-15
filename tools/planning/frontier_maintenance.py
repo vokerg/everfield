@@ -15,6 +15,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from typing import Any, Iterable
 
 API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
@@ -40,6 +41,9 @@ RATE_LIMIT_MESSAGE_MARKERS = (
     "api rate limit exceeded",
     "secondary rate limit",
 )
+
+SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS = 21_600
+SCHEMA3_ORPHAN_PROBE_MATURITY_SECONDS = 600
 
 
 class GitHubRateLimitExceeded(RuntimeError):
@@ -128,6 +132,176 @@ def scalar(body: str, key: str) -> str | None:
 def integer_scalar(body: str, key: str) -> int | None:
     value = scalar(body, key)
     return int(value) if value and value.isdigit() else None
+
+
+def list_scalar(body: str, key: str) -> list[str]:
+    """Read one conservative YAML-like scalar/list field from an operational body."""
+    lines = body.splitlines()
+    key_re = re.compile(rf"^(?P<indent>\\s*){re.escape(key)}:\\s*(?P<value>.*?)\\s*$")
+    for index, line in enumerate(lines):
+        match = key_re.match(line)
+        if not match:
+            continue
+        value = match.group("value").strip()
+        if value.startswith("[") and value.endswith("]"):
+            inner = value[1:-1].strip()
+            if not inner:
+                return []
+            return [
+                item.strip().strip("'\\\"")
+                for item in inner.split(",")
+                if item.strip().strip("'\\\"")
+            ]
+        if value and value.lower() not in {"null", "none"}:
+            return [value.strip("'\\\"")]
+
+        indent = len(match.group("indent"))
+        values: list[str] = []
+        for following in lines[index + 1 :]:
+            if not following.strip():
+                continue
+            leading = len(following) - len(following.lstrip())
+            item = re.match(r"^\\s*-\\s*(.+?)\\s*$", following)
+            if item and leading > indent:
+                parsed = item.group(1).strip().strip("'\\\"")
+                if parsed:
+                    values.append(parsed)
+                continue
+            if leading <= indent:
+                break
+        return values
+    return []
+
+
+def parse_github_server_time(value: str | None) -> datetime | None:
+    """Parse authoritative GitHub `created_at`; naive/malformed values fail closed."""
+    if not value:
+        return None
+    normalized = value[:-1] + "+00:00" if value.endswith("Z") else value
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        return None
+    return parsed.astimezone(timezone.utc)
+
+
+@dataclass(frozen=True)
+class OwnershipLeaseState:
+    anchor_comment_id: int
+    anchor_created_at: datetime
+    observed_head_sha: str
+    consecutive_evidence: int
+
+
+def schema3_ownership_lease_state(
+    owner: OperationalRecord,
+    records: Iterable[OperationalRecord],
+    *,
+    before_comment_id: int,
+) -> OwnershipLeaseState | None:
+    """Reconstruct the canonical lease anchor through valid PROGRESS renewals.
+
+    This helper intentionally evaluates only temporal/current-generation PROGRESS
+    predicates that maintenance can prove from immutable operational comments.
+    Ambiguous records have zero renewal effect.
+    """
+    if (
+        owner.kind not in OWNERSHIP_KINDS
+        or owner.state != "IN_PROGRESS"
+        or not owner.actor_session_id
+        or owner.comment_id >= before_comment_id
+    ):
+        return None
+    anchor = parse_github_server_time(owner.created_at)
+    observed_head = scalar(owner.body, "observed_head_sha")
+    if anchor is None or observed_head is None or not SHA40_RE.fullmatch(observed_head):
+        return None
+
+    anchor_comment_id = owner.comment_id
+    consecutive_evidence = 0
+    for record in sorted(records, key=lambda item: item.comment_id):
+        if not (owner.comment_id < record.comment_id < before_comment_id):
+            continue
+        if (
+            record.kind != "PROGRESS"
+            or record.state != "IN_PROGRESS"
+            or record.declared_issue != owner.declared_issue
+            or record.mission_id != owner.mission_id
+            or record.actor_session_id != owner.actor_session_id
+            or record.ownership_generation_comment_id != owner.comment_id
+        ):
+            continue
+        progress_time = parse_github_server_time(record.created_at)
+        progress_head = scalar(record.body, "observed_head_sha")
+        progress_basis = scalar(record.body, "progress_basis")
+        if (
+            progress_time is None
+            or progress_head is None
+            or not SHA40_RE.fullmatch(progress_head)
+            or progress_time >= anchor + timedelta(seconds=SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
+        ):
+            continue
+
+        if progress_basis == "HEAD_ADVANCE":
+            if progress_head == observed_head:
+                continue
+            observed_head = progress_head
+            consecutive_evidence = 0
+        elif progress_basis == "EVIDENCE":
+            if progress_head != observed_head or not list_scalar(record.body, "evidence_refs"):
+                continue
+            if consecutive_evidence >= 3:
+                continue
+            consecutive_evidence += 1
+        else:
+            continue
+
+        anchor = progress_time
+        anchor_comment_id = record.comment_id
+
+    return OwnershipLeaseState(
+        anchor_comment_id=anchor_comment_id,
+        anchor_created_at=anchor,
+        observed_head_sha=observed_head,
+        consecutive_evidence=consecutive_evidence,
+    )
+
+
+def schema3_owner_unexpired_at(
+    owner: OperationalRecord,
+    records: Iterable[OperationalRecord],
+    at_record: OperationalRecord,
+) -> bool | None:
+    """Return owner lease liveness at an operational record, or None on bad time."""
+    at_time = parse_github_server_time(at_record.created_at)
+    if at_time is None:
+        return None
+    state = schema3_ownership_lease_state(
+        owner, records, before_comment_id=at_record.comment_id
+    )
+    if state is None:
+        return None
+    return at_time < state.anchor_created_at + timedelta(
+        seconds=SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS
+    )
+
+
+def schema3_orphan_probe_mature_at(
+    probe: OperationalRecord,
+    at_record: OperationalRecord,
+) -> bool | None:
+    """Return canonical 600-second ORPHAN maturity at a later record."""
+    if probe.kind != "ORPHAN_PROBE" or probe.comment_id >= at_record.comment_id:
+        return False
+    probe_time = parse_github_server_time(probe.created_at)
+    at_time = parse_github_server_time(at_record.created_at)
+    if probe_time is None or at_time is None:
+        return None
+    return at_time >= probe_time + timedelta(
+        seconds=SCHEMA3_ORPHAN_PROBE_MATURITY_SECONDS
+    )
 
 
 def immutable_comment(comment: dict[str, Any]) -> bool:
