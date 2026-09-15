@@ -25,6 +25,8 @@ EXPLICIT_SUCCESSOR_ROUTE_PATTERNS = (
     re.compile(r"(?:^|_)REMEDIATION_(?:ISSUE_)?(\d+)(?:_|$)"),
 )
 
+STABLE_TRANSITION_TERMINAL_STATES = {"DONE", "SUPERSEDED"}
+
 
 def explicit_successor_issue_number(route: str | None) -> int | None:
     """Return one unambiguous issue number explicitly encoded by a route."""
@@ -130,35 +132,71 @@ def transition_generations(
     return found
 
 
+def stable_transition_terminal(
+    terminal: base.OperationalRecord | None,
+) -> bool:
+    """Return whether a wrapper terminal makes exact-generation reuse unsafe."""
+    return bool(
+        terminal
+        and terminal.kind in base.TERMINAL_KINDS
+        and terminal.state in STABLE_TRANSITION_TERMINAL_STATES
+    )
+
+
+def transition_has_stable_terminal_state(issue_number: int) -> bool:
+    """Recognize DONE/SUPERSEDED wrappers that maintenance must never reopen."""
+    return stable_transition_terminal(base.reconcilable_terminal(issue_number))
+
+
 def stable_transition_for_generation(
     generation: v2.Generation,
     transitions_by_generation: dict[v2.Generation, list[dict[str, Any]]],
     *,
     active_state_checker: Callable[[int], bool] | None = None,
+    terminal_state_checker: Callable[[int], bool] | None = None,
     perform_reopen: bool = True,
-) -> dict[str, Any] | None:
-    """Return one existing wrapper to reuse instead of creating another.
+) -> tuple[dict[str, Any] | None, bool]:
+    """Return a reusable wrapper plus whether the generation is terminally settled.
 
-    Prefer an open wrapper. Otherwise reuse the newest duplicate/not-planned
-    wrapper only when it has no live trusted schema-3 operational state. A
-    completed wrapper is never reopened here. The injectable checker/reopen
-    switch exists only to keep the deterministic self-test network-free.
+    Prefer an open wrapper. A closed exact-generation wrapper with a trusted
+    DONE/SUPERSEDED terminal is a durable maintenance stop: do not reopen it and
+    do not create another wrapper for the same source generation. Otherwise a
+    duplicate/not-planned wrapper may be reused only when it has no live trusted
+    schema-3 operational state.
     """
     candidates = transitions_by_generation.get(generation, [])
     open_candidates = [item for item in candidates if item.get("state") == "open"]
     if open_candidates:
-        return max(open_candidates, key=lambda item: int(item["number"]))
+        return max(open_candidates, key=lambda item: int(item["number"])), False
 
-    checker = active_state_checker or v2.transition_has_active_operational_state
-    reopenable = [
+    terminal_checker = terminal_state_checker or transition_has_stable_terminal_state
+    closed_candidates = [
         item
         for item in candidates
         if item.get("state") == "closed"
         and item.get("state_reason") in {"duplicate", "not_planned"}
-        and not checker(int(item["number"]))
+    ]
+    terminal_candidates = [
+        item
+        for item in closed_candidates
+        if terminal_checker(int(item["number"]))
+    ]
+    if terminal_candidates:
+        chosen = max(terminal_candidates, key=lambda item: int(item["number"]))
+        print(
+            f"exact generation {generation} already has terminal transition "
+            f"#{int(chosen['number'])}; do not reopen or duplicate"
+        )
+        return None, True
+
+    checker = active_state_checker or v2.transition_has_active_operational_state
+    reopenable = [
+        item
+        for item in closed_candidates
+        if not checker(int(item["number"]))
     ]
     if not reopenable:
-        return None
+        return None, False
     chosen = max(reopenable, key=lambda item: int(item["number"]))
     print(
         f"reuse transition #{int(chosen['number'])} for exact generation {generation}; reopen instead of duplicating"
@@ -172,7 +210,7 @@ def stable_transition_for_generation(
     if perform_reopen:
         chosen["state"] = "open"
         chosen["state_reason"] = None
-    return chosen
+    return chosen, False
 
 
 def materialize_missing_transitions(
@@ -250,9 +288,11 @@ def materialize_missing_transitions(
 
         transition = v2.find_matching_open_transition(open_issues, source)
         if transition is None:
-            transition = stable_transition_for_generation(
+            transition, terminally_settled = stable_transition_for_generation(
                 generation, transitions_by_generation
             )
+            if terminally_settled:
+                continue
             if transition is not None:
                 reused += 1
                 if transition not in open_issues:
@@ -335,34 +375,70 @@ def self_test() -> None:
     open_wrapper = dict(old, number=101, state="open", state_reason=None)
     mapping = transition_generations([old, open_wrapper])
     assert mapping[old_generation] == [old, open_wrapper]
-    assert stable_transition_for_generation(
+    selected, settled = stable_transition_for_generation(
         old_generation,
         mapping,
         active_state_checker=lambda _: False,
+        terminal_state_checker=lambda _: False,
         perform_reopen=False,
-    ) is open_wrapper
+    )
+    assert selected is open_wrapper and not settled
 
-    chosen_closed = stable_transition_for_generation(
+    chosen_closed, settled = stable_transition_for_generation(
         old_generation,
         {old_generation: [old]},
         active_state_checker=lambda _: False,
+        terminal_state_checker=lambda _: False,
         perform_reopen=False,
     )
-    assert chosen_closed is old
-    assert stable_transition_for_generation(
+    assert chosen_closed is old and not settled
+    blocked, settled = stable_transition_for_generation(
         old_generation,
         {old_generation: [old]},
         active_state_checker=lambda _: True,
+        terminal_state_checker=lambda _: False,
         perform_reopen=False,
-    ) is None
+    )
+    assert blocked is None and not settled
 
-    completed = dict(old, number=102, state_reason="completed")
-    assert stable_transition_for_generation(
+    terminal_wrapper = dict(old, number=102, state_reason="not_planned")
+    blocked, settled = stable_transition_for_generation(
+        old_generation,
+        {old_generation: [terminal_wrapper]},
+        active_state_checker=lambda _: False,
+        terminal_state_checker=lambda _: True,
+        perform_reopen=False,
+    )
+    assert blocked is None and settled
+
+    completed = dict(old, number=103, state_reason="completed")
+    blocked, settled = stable_transition_for_generation(
         old_generation,
         {old_generation: [completed]},
         active_state_checker=lambda _: False,
+        terminal_state_checker=lambda _: False,
         perform_reopen=False,
-    ) is None
+    )
+    assert blocked is None and not settled
+
+    assert stable_transition_terminal(source)
+    invalidated = base.OperationalRecord(
+        issue_number=100,
+        comment_id=3,
+        created_at="2026-09-08T00:00:01Z",
+        kind="STATUS",
+        state="INVALIDATED",
+        route=None,
+        body="",
+        declared_issue=100,
+        mission_id="M-100",
+        actor_session_id="actor-100",
+        authority_mode="OWNER",
+        ownership_generation_comment_id=1,
+        head_sha="a" * 40,
+        work_sha="b" * 40,
+    )
+    assert not stable_transition_terminal(invalidated)
 
     print("frontier maintenance v5 self-test: PASS")
 
