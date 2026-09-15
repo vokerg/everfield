@@ -173,6 +173,19 @@ def list_scalar(body: str, key: str) -> list[str]:
     return []
 
 
+def immutable_ref(value: str) -> bool:
+    """Validate the canonical immutable-ref forms maintenance can prove locally."""
+    candidate = value.strip()
+    if SHA40_RE.fullmatch(candidate):
+        return True
+    if candidate.isdigit() and int(candidate) > 0:
+        return True
+    if "@" in candidate:
+        path, work_sha = candidate.rsplit("@", 1)
+        return bool(path and SHA40_RE.fullmatch(work_sha))
+    return False
+
+
 def parse_github_server_time(value: str | None) -> datetime | None:
     """Parse authoritative GitHub `created_at`; naive/malformed values fail closed."""
     if not value:
@@ -238,6 +251,7 @@ def schema3_ownership_lease_state(
         progress_basis = scalar(record.body, "progress_basis")
         if (
             progress_time is None
+            or progress_time < anchor
             or progress_head is None
             or not SHA40_RE.fullmatch(progress_head)
             or progress_time >= anchor + timedelta(seconds=SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
@@ -250,7 +264,12 @@ def schema3_ownership_lease_state(
             observed_head = progress_head
             consecutive_evidence = 0
         elif progress_basis == "EVIDENCE":
-            if progress_head != observed_head or not list_scalar(record.body, "evidence_refs"):
+            evidence_refs = list_scalar(record.body, "evidence_refs")
+            if (
+                progress_head != observed_head
+                or not evidence_refs
+                or not all(immutable_ref(ref) for ref in evidence_refs)
+            ):
                 continue
             if consecutive_evidence >= 3:
                 continue
@@ -281,7 +300,7 @@ def schema3_owner_unexpired_at(
     state = schema3_ownership_lease_state(
         owner, records, before_comment_id=at_record.comment_id
     )
-    if state is None:
+    if state is None or at_time < state.anchor_created_at:
         return None
     return at_time < state.anchor_created_at + timedelta(
         seconds=SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS
@@ -815,7 +834,7 @@ def self_test() -> None:
                 body=(
                     f"observed_head_sha: {'a' * 40}\n"
                     "progress_basis: EVIDENCE\n"
-                    "evidence_refs:\n  - immutable-ref\n"
+                    f"evidence_refs:\n  - {'e' * 40}\n"
                 ),
                 declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
                 authority_mode=None, ownership_generation_comment_id=1,
