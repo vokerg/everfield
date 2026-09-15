@@ -137,7 +137,7 @@ def integer_scalar(body: str, key: str) -> int | None:
 def list_scalar(body: str, key: str) -> list[str]:
     """Read one conservative YAML-like scalar/list field from an operational body."""
     lines = body.splitlines()
-    key_re = re.compile(rf"^(?P<indent>\\s*){re.escape(key)}:\\s*(?P<value>.*?)\\s*$")
+    key_re = re.compile(rf"^(?P<indent>\s*){re.escape(key)}:\s*(?P<value>.*?)\s*$")
     for index, line in enumerate(lines):
         match = key_re.match(line)
         if not match:
@@ -161,7 +161,7 @@ def list_scalar(body: str, key: str) -> list[str]:
             if not following.strip():
                 continue
             leading = len(following) - len(following.lstrip())
-            item = re.match(r"^\\s*-\\s*(.+?)\\s*$", following)
+            item = re.match(r"^\s*-\s*(.+?)\s*$", following)
             if item and leading > indent:
                 parsed = item.group(1).strip().strip("'\\\"")
                 if parsed:
