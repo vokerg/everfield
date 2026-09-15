@@ -765,6 +765,94 @@ def self_test() -> None:
     assert isinstance(generic_forbidden, RuntimeError)
     assert not isinstance(generic_forbidden, GitHubRateLimitExceeded)
 
+    assert parse_github_server_time("2026-09-15T12:00:00Z") is not None
+    assert parse_github_server_time("2026-09-15T12:00:00") is None
+    assert parse_github_server_time("not-a-time") is None
+
+    owner = OperationalRecord(
+        issue_number=77, comment_id=1, created_at="2026-09-15T12:00:00Z",
+        kind="CLAIM", state="IN_PROGRESS", route=None,
+        body=f"observed_head_sha: {'a' * 40}\n", declared_issue=77,
+        mission_id="M-77", actor_session_id="actor-77", authority_mode=None,
+        ownership_generation_comment_id=None, head_sha=None, work_sha=None,
+    )
+    progress = OperationalRecord(
+        issue_number=77, comment_id=2, created_at="2026-09-15T17:00:00Z",
+        kind="PROGRESS", state="IN_PROGRESS", route=None,
+        body=(
+            f"observed_head_sha: {'b' * 40}\n"
+            "progress_basis: HEAD_ADVANCE\n"
+            "evidence_refs: []\n"
+        ),
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+        authority_mode=None, ownership_generation_comment_id=1,
+        head_sha=None, work_sha=None,
+    )
+    before_old_boundary = OperationalRecord(
+        issue_number=77, comment_id=3, created_at="2026-09-15T18:00:00Z",
+        kind="RESUME_INTENT", state="IN_PROGRESS", route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    exact_new_boundary = OperationalRecord(
+        issue_number=77, comment_id=4, created_at="2026-09-15T23:00:00Z",
+        kind="RESUME_INTENT", state="IN_PROGRESS", route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    assert schema3_owner_unexpired_at(owner, [owner, progress], before_old_boundary) is True
+    assert schema3_owner_unexpired_at(owner, [owner, progress], exact_new_boundary) is False
+
+    evidence_records = [owner]
+    for cid, hour in ((2, 13), (3, 14), (4, 15), (5, 16)):
+        evidence_records.append(
+            OperationalRecord(
+                issue_number=77, comment_id=cid,
+                created_at=f"2026-09-15T{hour:02d}:00:00Z",
+                kind="PROGRESS", state="IN_PROGRESS", route=None,
+                body=(
+                    f"observed_head_sha: {'a' * 40}\n"
+                    "progress_basis: EVIDENCE\n"
+                    "evidence_refs:\n  - immutable-ref\n"
+                ),
+                declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+                authority_mode=None, ownership_generation_comment_id=1,
+                head_sha=None, work_sha=None,
+            )
+        )
+    evidence_state = schema3_ownership_lease_state(
+        owner, evidence_records, before_comment_id=6
+    )
+    assert evidence_state is not None
+    assert evidence_state.anchor_comment_id == 4
+    assert evidence_state.consecutive_evidence == 3
+
+    probe = OperationalRecord(
+        issue_number=77, comment_id=10, created_at="2026-09-15T12:00:00Z",
+        kind="ORPHAN_PROBE", state=None, route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    early = OperationalRecord(
+        issue_number=77, comment_id=11, created_at="2026-09-15T12:09:59Z",
+        kind="RESUME_INTENT", state=None, route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    mature = OperationalRecord(
+        issue_number=77, comment_id=12, created_at="2026-09-15T12:10:00Z",
+        kind="RESUME_INTENT", state=None, route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    assert schema3_orphan_probe_mature_at(probe, early) is False
+    assert schema3_orphan_probe_mature_at(probe, mature) is True
+
     print("frontier maintenance self-test: PASS")
 
 
