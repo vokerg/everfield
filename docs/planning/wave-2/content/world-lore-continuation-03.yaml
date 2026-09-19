@@ -1,0 +1,417 @@
+schema: everfield_w2_world_lore_continuation_03_candidate_v1
+mission_id: W2-CONTENT-WORLD-CONT-03
+issue: 1170
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+engine_dependency: ENGINE_NEUTRAL
+
+authority:
+  final_canon: false
+  integration: false
+  verification_pass: false
+  implementation_readiness: false
+  gameplay_implementation: false
+  engine_selection: false
+  release: false
+  production: false
+  decision: false
+  canonicalization: false
+
+basis:
+  execution_base_main_sha: 6d7a8815baebf953440966d049f4210589e129fa
+  planning_program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  canonical_binding_issue: 1147
+  canonical_binding_comment_id: 5675066392
+  canonical_activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+  compiler_issue: 1169
+  compiler_contract_blob_sha: bdae0204774a0ab1a42a32e32cbb7786862017b0
+  compiler_map_blob_sha: a32b4157f7358f5cb3a098dd1d6fdc8d3564ddb9
+  activation_review_issue: 1175
+  activation_review_terminal_comment_id: 5744391071
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_03_ACTIVATION
+  predecessor_remediation_issue: 1164
+  predecessor_terminal_comment_id: 5743326577
+  predecessor_markdown_blob_sha: 15d38f751d8baa5649695154db4b84fbb3fdbba4
+  predecessor_yaml_blob_sha: e3f93dc85527a484233e194f7143c91aa10e1c69
+  predecessor_review_issue: 1167
+  predecessor_review_terminal_comment_id: 5743361245
+  predecessor_review_disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_02_CONSUMPTION
+  prior_world_markdown_blob_sha: 9f27bd5ce9e22c6746dfb4c86cc8fe3387887207
+  prior_world_yaml_blob_sha: 51425fc5d2eed57f86a30457fc4df38efb1f7d15
+
+residual_scope:
+  targets:
+    SYN-CONT02-OPEN-001: OPEN_BOUNDED_SET
+    SYN-CONT02-OPEN-006: UNRESOLVED
+  not_targets:
+    SYN-CONT02-OPEN-008: BLOCKED_BY_EXACT_PREREQUISITE
+    SYN-CONT02-OPEN-010: FINAL_CANON_NOT_AUTHORIZED
+    SYN-CONT02-OPEN-011: HIGHER_AUTHORITY_NOT_ESTABLISHED
+
+producer_policy:
+  sibling_mutable_consumption: false
+  concrete_cross_root_binding: false
+  fanin_materialization_authority: false
+  reviewed_bounded_set_widening: false
+  silent_open_narrowing: false
+  exact_dates_allowed: false
+  exact_durations_allowed: false
+  exact_schedules_allowed: false
+  exact_travel_times_allowed: false
+  exact_weather_windows_allowed: false
+  exact_npc_reachability_allowed: false
+  final_ownership_allowed: false
+  final_polity_allowed: false
+  causal_truth_assignment_allowed: false
+  irreversible_concrete_branch_authorized: false
+  private_information_default_access: DENY
+  material_history_append_only: true
+  baseline_shared_play_preserved: true
+
+contested_site_bounded_set:
+  source_role: WORLD_ROLE:CONT_CONTESTED_SITE
+  selection_state: OPEN_BOUNDED_SET
+  widening_allowed: false
+  producer_selection: null
+  exact_members:
+    - WORLD_IFACE:SHARED-WORKS-JUNCTION
+    - WORLD_IFACE:COMMONS-EDGE
+    - WORLD_IFACE:CULTIVATION-MARGIN
+
+surface_candidates:
+  - id: WORLD03:SURFACE-WORKS-JUNCTION
+    anchor_interface: WORLD_IFACE:SHARED-WORKS-JUNCTION
+    selection_authority: LATER_REVIEWED_AUTHORED_INSTANCE
+    public_affordances:
+      - INSPECT_PHYSICAL_OPERABILITY
+      - COMPARE_APPEND_ONLY_REPAIR_OR_WEAR_TRACES
+      - OBSERVE_MATERIAL_DEPENDENCIES_WITHOUT_RESPONSIBILITY_ATTRIBUTION
+      - PROPOSE_OR_OBSERVE_BOUNDED_REVERSIBLE_MAINTENANCE_EFFECT
+      - PRESERVE_INHERITED_PUBLIC_BASELINE_TRAVERSAL
+    evidence_classes: [OBSERVED_TRACE, REPAIR_TRACE, BURDEN_TRACE, DATED_RELATIVE]
+    unresolved:
+      - maintainer_identity
+      - office_holder
+      - institution_ownership
+      - work_schedule
+      - service_interval
+      - exact_degradation_cause
+      - sibling_character_social_narrative_carrier
+    forbidden_inference:
+      - repair_gap_proves_negligence
+      - visible_burden_trace_proves_responsibility
+
+  - id: WORLD03:SURFACE-COMMONS-EDGE
+    anchor_interface: WORLD_IFACE:COMMONS-EDGE
+    selection_authority: LATER_REVIEWED_AUTHORED_INSTANCE
+    public_affordances:
+      - DISTINGUISH_OBSERVED_USE_FROM_PERMITTED_USE_CLAIM
+      - INSPECT_PHYSICAL_OR_ECOLOGICAL_PRESSURE
+      - RETAIN_COMPETING_ACCESS_OR_STEWARDSHIP_CLAIMS
+      - EXPOSE_REVERSIBLE_CONDITION_MANAGEMENT_ALTERNATIVES
+      - PRESERVE_INHERITED_ORDINARY_PUBLIC_INTERACTION
+    evidence_classes:
+      - DIRECT_PHYSICAL_OBSERVATION
+      - SCOPED_OBSERVED_USE
+      - CLAIMED_ATTRIBUTION
+      - ABSENCE_RECORD
+    unresolved:
+      - ownership
+      - custodian
+      - quota
+      - closure_schedule
+      - species_catalog
+      - social_legitimacy
+      - concrete_branch_assignment
+    forbidden_inference:
+      - frequency_of_use_proves_ownership
+      - institutional_assertion_proves_legitimacy
+
+  - id: WORLD03:SURFACE-CULTIVATION-MARGIN
+    anchor_interface: WORLD_IFACE:CULTIVATION-MARGIN
+    selection_authority: LATER_REVIEWED_AUTHORED_INSTANCE
+    public_affordances:
+      - OBSERVE_PRODUCTIVE_USE_STATE_SEPARATELY_FROM_OWNERSHIP
+      - INSPECT_WATER_CONDITION
+      - INSPECT_HABITAT_CONTINUITY
+      - RECORD_ACCESS_PRESSURE_WITHOUT_LEGITIMACY_PROMOTION
+      - EXPOSE_REVERSIBLE_LAND_USE_OR_RESTORATION_ALTERNATIVES
+    evidence_classes:
+      - DIRECT_CONDITION_OBSERVATION
+      - RELATIVE_CHANGE_TRACE
+      - PRACTICAL_DEPENDENCY_OBSERVATION
+      - CLAIM_OR_INTERPRETATION
+    unresolved:
+      - crop_identity
+      - owner
+      - yield
+      - seasonal_timing
+      - exact_water_capacity
+      - exact_habitat_cause
+      - concrete_social_character_narrative_binding
+    forbidden_inference:
+      - productive_use_proves_ownership
+      - water_stress_proves_entitlement_or_blame
+
+aftermath_surface_preservation:
+  source_role: WORLD_ROLE:CONT_AFTERMATH_SURFACE
+  selection_state: OPEN_BOUNDED_SET
+  narrowed_by_this_packet: false
+  exact_members:
+    - WORLD_IFACE:WATER-DEPENDENCY
+    - WORLD_IFACE:SHARED-WORKS-JUNCTION
+    - WORLD_IFACE:COMMONS-EDGE
+    - WORLD_IFACE:CULTIVATION-MARGIN
+    - WORLD_IFACE:HISTORY-TRACE
+    - WORLD_IFACE:OUTER-CONNECTION
+
+causal_evidence_packet:
+  id: WORLD03:CAUSAL-EVIDENCE-PACKET
+  authority_class: EVIDENCE_FOR_EVALUATION_NOT_CAUSAL_TRUTH
+  required_fields:
+    - observation_refs
+    - relative_order_relations
+    - claim_refs
+    - interpretation_refs
+    - absence_records
+    - counterevidence_refs
+    - unknowns
+  truth_vote: false
+  repetition_promotes_truth: false
+  institutional_source_promotes_truth: false
+  relationship_state_promotes_truth: false
+  public_standing_promotes_truth: false
+
+causal_accounts:
+  - id: WORLD03:ACCOUNT-MAINTENANCE-DIVERGENCE
+    state: HYPOTHESIS_NOT_FACT
+    question: DIVERGENT_MAINTENANCE_OR_REPAIR_PATTERNS_MAY_CONTRIBUTE
+    permitted_support: [REPAIR_TRACE, WEAR_TRACE, RELATIVE_OPERABILITY_CHANGE, BURDEN_TRACE]
+    required_unknowns:
+      - actor_or_omission_attribution
+      - causation_vs_coincidence
+      - competing_pressure_strength
+    forbidden_inference:
+      - visible_repair_gap_proves_negligence
+      - trace_proves_specific_actor_fault
+      - trace_proves_ownership_failure
+
+  - id: WORLD03:ACCOUNT-RESOURCE-PRESSURE
+    state: HYPOTHESIS_NOT_FACT
+    question: SHARED_PHYSICAL_DEPENDENCY_PRESSURE_MAY_CONTRIBUTE
+    permitted_support:
+      - WATER_CONDITION_OBSERVATION
+      - ECOLOGICAL_PRESSURE_INDICATOR
+      - PRACTICAL_DEPENDENCY_TRACE
+      - RELATIVE_CONDITION_CHANGE
+    required_unknowns:
+      - exact_capacity
+      - seasonal_cycle
+      - scarcity_attribution
+      - entitlement_or_priority
+      - exact_timing
+    forbidden_inference:
+      - physical_stress_proves_social_entitlement
+      - physical_stress_proves_blame
+      - physical_stress_proves_deliberate_restriction
+
+  - id: WORLD03:ACCOUNT-ACCESS-USE-CONFLICT
+    state: HYPOTHESIS_NOT_FACT
+    question: OBSERVED_USE_AND_ACCESS_CLAIM_DIVERGENCE_MAY_CONTRIBUTE
+    permitted_support:
+      - SCOPED_OBSERVED_USE
+      - PERMITTED_USE_CLAIM
+      - PUBLIC_PHYSICAL_ACCESS_CHANGE
+      - MAINTENANCE_BURDEN_OBSERVATION
+    required_unknowns:
+      - legal_or_social_legitimacy
+      - ownership_or_custodianship
+      - causation_vs_cooccurrence
+    forbidden_inference:
+      - frequency_of_use_proves_legitimacy
+      - prominence_proves_causal_primacy
+      - institutional_assertion_proves_causal_primacy
+
+  - id: WORLD03:ACCOUNT-MULTICAUSAL-OR-UNDERDETERMINED
+    state: HYPOTHESIS_ENVELOPE_NOT_FACT
+    question: EVIDENCE_MAY_SUPPORT_MULTIPLE_ACCOUNTS_OR_FAIL_TO_DISCRIMINATE
+    required_when_evidence_does_not_discriminate: true
+    establishes_default_truth: false
+
+causal_comparison_policy:
+  simultaneous_viability_allowed: true
+  one_observation_may_bear_on_multiple_accounts: true
+  contradictory_claims_allowed: true
+  absence_record_globalizes_absence: false
+  relative_order_implies_causation: false
+  promotion_requires_later_explicit_reviewed_authority_effect: true
+  sibling_output_may_close_truth_before_fanin: false
+  historical_fragmentation_cause: UNRESOLVED
+
+history_trace_cluster:
+  id: WORLD03:TRACE-CLUSTER
+  source_interface: WORLD_IFACE:HISTORY-TRACE
+  append_only: true
+  allowed_members:
+    - OBSERVED_TRACE
+    - EXPLICIT_RELATIVE_ORDER_EDGE
+    - CLAIM
+    - INTERPRETATION
+    - SCOPED_ABSENCE_RECORD
+    - CAUSAL_ACCOUNT_RELEVANCE_ANNOTATION
+  relevance_annotations: [SUPPORTS, WEAKENS, NONDISCRIMINATING]
+  causal_truth_field_allowed: false
+  later_repair_erases_prior_trace: false
+  later_interpretation_erases_prior_trace: false
+
+epistemic_contract:
+  claim_promotes_fact: false
+  belief_promotes_fact: false
+  testimony_promotes_fact: false
+  interpretation_promotes_fact: false
+  institutional_record_promotes_fact: false
+  knowledge_or_exposure_determines_truth: false
+  public_visibility_implies_truth: false
+  secrecy_implies_falsity: false
+  generated_presentation_mutates_authority: false
+  observed_use_implies_ownership: false
+  role_or_standing_implies_legitimacy: false
+
+chronology:
+  model: RELATIVE_ONLY
+  era_order: [ERA:PRE-WORKS, ERA:WORKS-BUILDOUT, ERA:PATCHWORK-PRESENT]
+  allowed_relation_classes: [BEFORE, AFTER, SAME_REVIEWED_ERA_UNKNOWN_ORDER]
+  exact_dates_allowed: false
+  exact_durations_allowed: false
+  exact_schedules_allowed: false
+  exact_travel_times_allowed: false
+  exact_weather_windows_allowed: false
+  exact_npc_reachability_allowed: false
+  list_order_is_authority: false
+  causal_account_name_is_authority: false
+
+provisional_interfaces:
+  - WORLD03_ROLE:SELECTABLE_CONTESTED_SURFACE
+  - WORLD03_ROLE:PUBLIC_OBSERVATION_SOURCE
+  - WORLD03_ROLE:CAUSAL_ACCOUNT_EVIDENCE
+  - WORLD03_ROLE:HISTORY_TRACE_CLUSTER
+  - WORLD03_ROLE:REVERSIBLE_CONDITION_DELTA
+  - WORLD03_ROLE:AFTERMATH_OBSERVATION
+cross_root_binding_state: OPEN
+allowed_cross_root_reference_classes:
+  - OPEN
+  - OPEN_OPTIONAL
+  - OPEN_BOUNDED_SET
+  - UNRESOLVED
+  - TYPED_ROLE_OR_INTERFACE
+
+route_cardinality:
+  active_concrete_objective_instances: 0
+  measurement_status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+  observed_active_route_count: null
+  candidate_surface_count_is_narrative_route_measurement: false
+  recompute_on: [ACTIVATION, RECOVERY, SUBSTITUTION, REJECTION, ROUTE_LOSS]
+  private_context_counts_toward_nonprivate_minimum: false
+  preserved_contracts:
+    OBJ_CONT:COMPARE_PERSPECTIVES:
+      minimum_nonprivate_routes: 2
+    OBJ_CONT:SELECT_DIRECTION:
+      minimum_legal_differentiated_route_kinds: 2
+    OBJ_CONT:CHOOSE_CONTINUED_GOAL:
+      minimum_legal_distinct_goal_families: 2
+    OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS:
+      minimum_nonprivate_routes: 2
+    OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO:
+      minimum_legal_differentiated_response_families: 2
+    OBJ_CONT02:CHOOSE_CONTINUED_GOAL:
+      minimum_legal_distinct_goal_families: 2
+
+reopen_conditions:
+  preservation: ALL_17_REMAIN_ACTIVE_DOWNSTREAM
+  classes:
+    SOURCE_OR_REVIEW_IDENTITY_DRIFT: PRESERVED
+    BOUND_INTERFACE_REQUIRES_UNSUPPORTED_CONCRETE_ENTITY: PRESERVED
+    REVIEWED_BOUNDED_SET_BROADENED_OR_SILENTLY_NARROWED: PRESERVED
+    MUTABLE_SIBLING_OUTPUT_CONSUMED_BEFORE_FANIN: PRESERVED
+    PRIVATE_INFORMATION_REQUIRED_FOR_ROUTE_MINIMUM: PRESERVED
+    PRIVATE_INFORMATION_REQUIRED_FOR_FOUNDATIONAL_PLAY: PRESERVED
+    FACT_CLAIM_BELIEF_TESTIMONY_KNOWLEDGE_EXPOSURE_AUTHORITY_COLLAPSE: PRESERVED
+    RELATIONSHIP_OR_LEGITIMACY_SCALARIZED_OR_AUTOMATICALLY_ALIASED: PRESERVED
+    MATERIAL_HISTORY_ERASED_BY_RETRY_REPAIR_OR_RECONCILIATION: PRESERVED
+    NONFOUNDATIONAL_GATE_COMPOSITION_BECOMES_DEFACTO_FOUNDATIONAL: PRESERVED
+    NARRATIVE_ROUTE_CARDINALITY_DROPS_BELOW_REVIEWED_MINIMUM: PRESERVED
+    MUTUALLY_EXCLUSIVE_BRANCHES_BECOME_JOINTLY_REQUIRED: PRESERVED
+    EXACT_TIME_SCHEDULE_WEATHER_TRAVEL_OR_NPC_REACHABILITY_BECOMES_REQUIRED: PRESERVED
+    CONCRETE_HIGH_IMPACT_OR_IRREVERSIBLE_BRANCH_LACKS_REVIEWED_BRANCH_IMPACT_EVIDENCE: PRESERVED
+    WSN_OUTCOME_REQUIRES_PROMOTION_WITHOUT_EXACT_PREREQUISITE: PRESERVED
+    GENERATED_PRESENTATION_MUTATES_AUTHORITATIVE_STATE: PRESERVED
+    STRUCTURAL_RESULT_USED_AS_HIGHER_AUTHORITY: PRESERVED
+
+wsn_ledger:
+  mutation_allowed: false
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  exact_schedule_authority: false
+  exact_reachability_authority: false
+  production_persistence_established: false
+  human_quality_established: false
+  aggregate_verification_pass: false
+
+open_ledger:
+  - exact_contested_site_candidate_selection
+  - social_case_to_site_binding
+  - principal_character_to_site_binding
+  - narrative_branch_to_site_binding
+  - truth_of_any_causal_account
+  - final_ownership_custodianship_polity
+  - crop_species_yield_catalog
+  - exact_water_capacity_and_seasonality
+  - exact_schedules_weather_travel_and_npc_reachability
+  - private_context_holder_and_lawful_disclosure
+  - concrete_irreversible_or_high_impact_BranchImpactEvidence
+  - human_quality
+  - production_persistence
+  - aggregate_verification
+  - implementation_readiness
+  - engine_selection
+  - release_or_production_authority
+  - decision_or_final_canon
+  - canonicalization
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  attacks:
+    - SOURCE_IDENTITY_DRIFT
+    - BOUNDED_SET_WIDENING_OR_SILENT_NARROWING
+    - HIDDEN_CONCRETE_SITE_SELECTION
+    - CAUSAL_TRUTH_LAUNDERING
+    - FACT_CLAIM_AUTHORITY_COLLAPSE
+    - ABSENCE_AS_GLOBAL_PROOF
+    - SIBLING_MUTABLE_CONSUMPTION
+    - PRIVATE_INFORMATION_LEAK
+    - CHRONOLOGY_OVERREACH
+    - SCHEDULE_OR_REACHABILITY_INVENTION
+    - OWNERSHIP_OR_LEGITIMACY_INFERENCE
+    - MATERIAL_HISTORY_ERASURE
+    - HIDDEN_FOUNDATIONAL_GATE
+    - ROUTE_MINIMUM_SUBSTITUTION
+    - IRREVERSIBLE_CONSEQUENCE_AUTHORIZATION
+    - WSN_UPGRADE
+    - ENGINE_COUPLING
+    - HIGHER_AUTHORITY_INFLATION
+
+downstream:
+  required_fresh_review: true
+  suggested_review_mission: W2-CONTENT-WORLD-CONT-03-REV-01
+  token_on_clean_review: W2-CONTENT-WORLD-CONT-03_REVIEWED
+  fanin_mission_id: W2-CONTENT-SYN-CONT-03
+  fanin_materialized: false
+  required_reviewed_token_count_before_fanin: 5
+  integration_authority: false
+  verification_pass_authority: false
+  implementation_readiness_authority: false
+  canonicality: NOT_CANONICAL
