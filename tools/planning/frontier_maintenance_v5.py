@@ -63,6 +63,23 @@ def terminal_owner_generation_is_current(
                 return True
         return False
 
+    def valid_owner_terminal(
+        owner: base.OperationalRecord, before_comment_id: int
+    ) -> bool:
+        for record in records:
+            if not (owner.comment_id < record.comment_id < before_comment_id):
+                continue
+            if (
+                record.kind in base.TERMINAL_KINDS
+                and record.state in v3.ROUTABLE_TERMINAL_STATES
+                and record.authority_mode == "OWNER"
+                and record.ownership_generation_comment_id == owner.comment_id
+                and record.actor_session_id == owner.actor_session_id
+                and base.schema3_owner_unexpired_at(owner, records, record) is True
+            ):
+                return True
+        return False
+
     def stale_source_valid(
         owner: base.OperationalRecord,
         source: base.OperationalRecord,
@@ -77,6 +94,7 @@ def terminal_owner_generation_is_current(
             and unexpired is False
             and source.comment_id == state.anchor_comment_id
             and not valid_handoff(owner, at_record.comment_id)
+            and not valid_owner_terminal(owner, at_record.comment_id)
         )
 
     def winning_intent_for(
@@ -224,6 +242,7 @@ def terminal_owner_generation_is_current(
         and winner.comment_id == terminal.ownership_generation_comment_id
         and base.schema3_owner_unexpired_at(winner, records, terminal) is True
         and not valid_handoff(winner, terminal.comment_id)
+        and not valid_owner_terminal(winner, terminal.comment_id)
     )
 
 
@@ -666,6 +685,94 @@ def self_test() -> None:
     )
     exact = [claim, exact_intent, exact_recover, recovered_terminal]
     assert terminal_owner_generation_is_current(104, parsed_terminal(exact), exact)
+
+    pre_expiry_terminal = timed_comment(
+        2,
+        "2026-09-15T17:59:59Z",
+        "STATUS",
+        "DONE",
+        actor="actor-a",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'a' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    terminal_then_stale_intent = timed_comment(
+        3, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    terminal_then_stale_recover = timed_comment(
+        4, "2026-09-15T18:00:01Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 3\nsource_comment_id: 1\n"
+        ),
+    )
+    terminal_then_recovered_terminal = owner_terminal(
+        5, "2026-09-15T18:00:02Z", "actor-b", 4, "a" * 40
+    )
+    terminal_then_stale = [
+        claim,
+        pre_expiry_terminal,
+        terminal_then_stale_intent,
+        terminal_then_stale_recover,
+        terminal_then_recovered_terminal,
+    ]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(terminal_then_stale), terminal_then_stale
+    )
+
+    exact_expiry_terminal = timed_comment(
+        2,
+        "2026-09-15T18:00:00Z",
+        "STATUS",
+        "DONE",
+        actor="actor-a",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'a' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    post_boundary_intent = timed_comment(
+        3, "2026-09-15T18:00:01Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    post_boundary_recover = timed_comment(
+        4, "2026-09-15T18:00:02Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 3\nsource_comment_id: 1\n"
+        ),
+    )
+    post_boundary_terminal = owner_terminal(
+        5, "2026-09-15T18:00:03Z", "actor-b", 4, "a" * 40
+    )
+    expired_terminal_then_stale = [
+        claim,
+        exact_expiry_terminal,
+        post_boundary_intent,
+        post_boundary_recover,
+        post_boundary_terminal,
+    ]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(expired_terminal_then_stale), expired_terminal_then_stale
+    )
 
     stale_old_terminal = owner_terminal(
         4, "2026-09-15T18:00:02Z", "actor-a", 1, "a" * 40
