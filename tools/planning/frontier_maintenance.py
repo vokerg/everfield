@@ -35,7 +35,7 @@ TERMINAL_STATES = {"DONE", "SUPERSEDED", "INVALIDATED"}
 TERMINAL_KINDS = {"STATUS", "REVIEW_STATUS", "VERIFICATION_STATUS", "INTEGRATION_STATUS"}
 SHA40_RE = re.compile(r"^[0-9a-fA-F]{40}$")
 RFC3339_RE = re.compile(
-    r"^\\d{4}-\\d{2}-\\d{2}[Tt]\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:[Zz]|[+-]\\d{2}:\\d{2})$"
+    r"^\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[Zz]|[+-]\d{2}:\d{2})$"
 )
 FACTORY_TRANSITION_RE = re.compile(r"\[FACTORY-TRANSITION-(\d+)\]")
 DISPATCH_MARKER_VERSION = "1"
