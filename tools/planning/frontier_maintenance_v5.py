@@ -28,6 +28,273 @@ EXPLICIT_SUCCESSOR_ROUTE_PATTERNS = (
 STABLE_TRANSITION_TERMINAL_STATES = {"DONE", "SUPERSEDED"}
 
 
+def terminal_owner_generation_is_current(
+    transition_issue_number: int,
+    terminal: base.OperationalRecord,
+    comments: Iterable[dict[str, Any]],
+) -> bool:
+    """Validate winning ownership plus canonical temporal recovery predicates."""
+    records = sorted(
+        (
+            record
+            for record in base.operational_records_from_comments(
+                transition_issue_number, comments
+            )
+            if record.declared_issue == transition_issue_number
+            and record.mission_id == terminal.mission_id
+            and record.comment_id < terminal.comment_id
+        ),
+        key=lambda record: record.comment_id,
+    )
+    by_id = {record.comment_id: record for record in records}
+    used_intents: set[int] = set()
+
+    def valid_handoff(owner: base.OperationalRecord, before_comment_id: int) -> bool:
+        for record in records:
+            if not (owner.comment_id < record.comment_id < before_comment_id):
+                continue
+            if (
+                record.kind == "STATUS"
+                and record.state == "HANDOFF_READY"
+                and record.ownership_generation_comment_id == owner.comment_id
+                and record.actor_session_id == owner.actor_session_id
+                and base.schema3_owner_unexpired_at(owner, records, record) is True
+            ):
+                return True
+        return False
+
+    def valid_owner_terminal(
+        owner: base.OperationalRecord, before_comment_id: int
+    ) -> bool:
+        for record in records:
+            if not (owner.comment_id < record.comment_id < before_comment_id):
+                continue
+            if (
+                record.kind in base.TERMINAL_KINDS
+                and record.state in v3.ROUTABLE_TERMINAL_STATES
+                and record.authority_mode == "OWNER"
+                and record.ownership_generation_comment_id == owner.comment_id
+                and record.actor_session_id == owner.actor_session_id
+                and record.head_sha is not None
+                and base.SHA40_RE.fullmatch(record.head_sha)
+                and record.work_sha is not None
+                and base.SHA40_RE.fullmatch(record.work_sha)
+                and base.schema3_owner_unexpired_at(owner, records, record) is True
+            ):
+                return True
+        return False
+
+    def stale_source_valid(
+        owner: base.OperationalRecord,
+        source: base.OperationalRecord,
+        at_record: base.OperationalRecord,
+    ) -> bool:
+        state = base.schema3_ownership_lease_state(
+            owner, records, before_comment_id=at_record.comment_id
+        )
+        unexpired = base.schema3_owner_unexpired_at(owner, records, at_record)
+        return bool(
+            state is not None
+            and unexpired is False
+            and source.comment_id == state.anchor_comment_id
+            and not valid_handoff(owner, at_record.comment_id)
+            and not valid_owner_terminal(owner, at_record.comment_id)
+        )
+
+    def winning_intent_for(
+        grant: base.OperationalRecord,
+        current_owner: base.OperationalRecord | None,
+    ) -> base.OperationalRecord | None:
+        intent_id = base.integer_scalar(grant.body, "winning_intent_comment_id")
+        observed_head = base.scalar(grant.body, "observed_head_sha")
+        if grant.kind == "RESUME":
+            reason = "HANDOFF"
+            source_id = base.integer_scalar(grant.body, "source_status_comment_id")
+        else:
+            reason = base.scalar(grant.body, "recovery_reason")
+            source_id = base.integer_scalar(grant.body, "source_comment_id")
+        source = by_id.get(source_id) if source_id is not None else None
+        if (
+            intent_id is None
+            or source is None
+            or observed_head is None
+            or not base.SHA40_RE.fullmatch(observed_head)
+        ):
+            return None
+
+        contenders: list[base.OperationalRecord] = []
+        for record in records:
+            if (
+                record.kind != "RESUME_INTENT"
+                or record.comment_id >= grant.comment_id
+                or not record.actor_session_id
+                or base.scalar(record.body, "reason") != reason
+                or base.integer_scalar(record.body, "source_comment_id") != source_id
+                or base.scalar(record.body, "observed_head_sha") != observed_head
+            ):
+                continue
+            if reason == "HANDOFF":
+                if (
+                    current_owner is None
+                    or source.kind != "STATUS"
+                    or source.state != "HANDOFF_READY"
+                    or source.ownership_generation_comment_id != current_owner.comment_id
+                    or source.actor_session_id != current_owner.actor_session_id
+                    or base.schema3_owner_unexpired_at(
+                        current_owner, records, source
+                    )
+                    is not True
+                ):
+                    continue
+            elif reason == "STALE":
+                if (
+                    current_owner is None
+                    or not stale_source_valid(current_owner, source, record)
+                ):
+                    continue
+            elif reason == "ORPHAN":
+                if (
+                    current_owner is not None
+                    or source.kind != "ORPHAN_PROBE"
+                    or base.schema3_orphan_probe_mature_at(source, record) is not True
+                ):
+                    continue
+            else:
+                continue
+            contenders.append(record)
+
+        if not contenders:
+            return None
+        intent = min(contenders, key=lambda record: record.comment_id)
+        if (
+            intent.comment_id != intent_id
+            or intent.actor_session_id != grant.actor_session_id
+            or intent.comment_id in used_intents
+        ):
+            return None
+        return intent
+
+    winner: base.OperationalRecord | None = None
+    for record in records:
+        if (
+            record.kind not in base.OWNERSHIP_KINDS
+            or record.state != "IN_PROGRESS"
+            or not record.actor_session_id
+            or base.parse_github_server_time(record.created_at) is None
+        ):
+            continue
+        observed_head = base.scalar(record.body, "observed_head_sha")
+        if observed_head is None or not base.SHA40_RE.fullmatch(observed_head):
+            continue
+        previous_owner = base.integer_scalar(
+            record.body, "previous_ownership_comment_id"
+        )
+
+        if record.kind == "CLAIM":
+            if winner is None and previous_owner is None:
+                winner = record
+            continue
+        if record.kind not in {"RESUME", "RECOVER"}:
+            continue
+
+        intent = winning_intent_for(record, winner)
+        if intent is None:
+            continue
+
+        if record.kind == "RESUME":
+            source_id = base.integer_scalar(record.body, "source_status_comment_id")
+            source = by_id.get(source_id) if source_id is not None else None
+            if (
+                winner is not None
+                and previous_owner == winner.comment_id
+                and source is not None
+                and source.kind == "STATUS"
+                and source.state == "HANDOFF_READY"
+                and source.ownership_generation_comment_id == winner.comment_id
+                and source.actor_session_id == winner.actor_session_id
+                and base.schema3_owner_unexpired_at(winner, records, source) is True
+            ):
+                winner = record
+                used_intents.add(intent.comment_id)
+            continue
+
+        recovery_reason = base.scalar(record.body, "recovery_reason")
+        source_id = base.integer_scalar(record.body, "source_comment_id")
+        source = by_id.get(source_id) if source_id is not None else None
+        if recovery_reason == "STALE":
+            if (
+                winner is not None
+                and source is not None
+                and previous_owner == winner.comment_id
+                and stale_source_valid(winner, source, record)
+            ):
+                winner = record
+                used_intents.add(intent.comment_id)
+        elif recovery_reason == "ORPHAN":
+            if (
+                winner is None
+                and previous_owner is None
+                and source is not None
+                and source.kind == "ORPHAN_PROBE"
+                and base.schema3_orphan_probe_mature_at(source, record) is True
+            ):
+                winner = record
+                used_intents.add(intent.comment_id)
+
+    return bool(
+        winner is not None
+        and winner.comment_id == terminal.ownership_generation_comment_id
+        and base.schema3_owner_unexpired_at(winner, records, terminal) is True
+        and not valid_handoff(winner, terminal.comment_id)
+        and not valid_owner_terminal(winner, terminal.comment_id)
+    )
+
+
+def terminal_no_route_generation_from_comments(
+    transition_issue: dict[str, Any],
+    comments: Iterable[dict[str, Any]],
+) -> v2.Generation | None:
+    generation = v2.factory_transition_generation(transition_issue)
+    if generation is None or not v2.trusted_issue_author(transition_issue):
+        return None
+    if transition_issue.get("state") != "closed":
+        return None
+    number = int(transition_issue["number"])
+    comments_list = list(comments)
+    terminal = base.reconcilable_terminal_from_comments(number, comments_list)
+    if terminal is None or terminal.state not in STABLE_TRANSITION_TERMINAL_STATES:
+        return None
+    if not terminal_owner_generation_is_current(number, terminal, comments_list):
+        return None
+    if v3.route_is_actionable(terminal.route):
+        return None
+    return generation
+
+
+def v5_resolved_transition_generations(
+    closed_issues: Iterable[dict[str, Any]],
+    recent_issues: Iterable[dict[str, Any]],
+) -> set[v2.Generation]:
+    issues_by_number = {int(issue["number"]): issue for issue in recent_issues}
+    consumed: set[v2.Generation] = set()
+    for issue in closed_issues:
+        if v2.factory_transition_generation(issue) is None:
+            continue
+        number = int(issue["number"])
+        comments = list(base.paged(f"/repos/{base.REPO}/issues/{number}/comments?"))
+        semantic = v4.semantic_generation_from_comments(
+            issue, comments, issues_by_number
+        )
+        if semantic is not None:
+            consumed.add(semantic)
+        terminal_no_route = terminal_no_route_generation_from_comments(
+            issue, comments
+        )
+        if terminal_no_route is not None:
+            consumed.add(terminal_no_route)
+    return consumed
+
+
 def explicit_successor_issue_number(route: str | None) -> int | None:
     """Return one unambiguous issue number explicitly encoded by a route."""
     if not route:
@@ -144,8 +411,14 @@ def stable_transition_terminal(
 
 
 def transition_has_stable_terminal_state(issue_number: int) -> bool:
-    """Recognize DONE/SUPERSEDED wrappers that maintenance must never reopen."""
-    return stable_transition_terminal(base.reconcilable_terminal(issue_number))
+    """Recognize only temporally valid DONE/SUPERSEDED wrapper terminals."""
+    comments = list(base.paged(f"/repos/{base.REPO}/issues/{issue_number}/comments?"))
+    terminal = base.reconcilable_terminal_from_comments(issue_number, comments)
+    return bool(
+        stable_transition_terminal(terminal)
+        and terminal is not None
+        and terminal_owner_generation_is_current(issue_number, terminal, comments)
+    )
 
 
 def stable_transition_for_generation(
@@ -224,7 +497,7 @@ def materialize_missing_transitions(
     issues_by_number = {int(item["number"]): item for item in recent_issues}
     edges = v3.successor_edges(recent_issues)
     resolved_generations = v2.resolved_transition_generations(closed)
-    resolved_generations |= v4.semantic_resolved_transition_generations(
+    resolved_generations |= v5_resolved_transition_generations(
         closed, recent_issues
     )
     factory_issue_numbers = {
@@ -306,6 +579,373 @@ def materialize_missing_transitions(
 
 def self_test() -> None:
     v4.self_test()
+
+    def timed_comment(
+        cid: int,
+        created_at: str,
+        kind: str,
+        state: str,
+        *,
+        actor: str,
+        extra: str = "",
+        issue: int = 104,
+        mission: str = "M-104",
+    ) -> dict[str, Any]:
+        return {
+            "id": cid,
+            "author_association": "OWNER",
+            "user": {"login": "vokerg"},
+            "created_at": created_at,
+            "updated_at": created_at,
+            "body": (
+                "protocol: planning-v1\n"
+                "schema: 3\n"
+                f"kind: {kind}\n"
+                f"issue: {issue}\n"
+                f"mission_id: {mission}\n"
+                f"actor_session_id: {actor}\n"
+                f"state: {state}\n"
+                f"{extra}"
+            ),
+        }
+
+    def owner_terminal(
+        cid: int, created_at: str, actor: str, generation: int, head: str
+    ) -> dict[str, Any]:
+        return timed_comment(
+            cid,
+            created_at,
+            "STATUS",
+            "SUPERSEDED",
+            actor=actor,
+            extra=(
+                "authority_mode: OWNER\n"
+                f"ownership_generation_comment_id: {generation}\n"
+                f"head_sha: {head}\n"
+                f"work_sha: {'d' * 40}\n"
+                "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+            ),
+        )
+
+    def parsed_terminal(comments: list[dict[str, Any]]) -> base.OperationalRecord:
+        terminal = base.reconcilable_terminal_from_comments(104, comments)
+        assert terminal is not None
+        return terminal
+
+    claim = timed_comment(
+        1, "2026-09-15T12:00:00Z", "CLAIM", "IN_PROGRESS", actor="actor-a",
+        extra=f"observed_head_sha: {'a' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    premature_intent = timed_comment(
+        2, "2026-09-15T17:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    premature_recover = timed_comment(
+        3, "2026-09-15T17:01:00Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    old_owner_terminal = owner_terminal(
+        4, "2026-09-15T17:02:00Z", "actor-a", 1, "a" * 40
+    )
+    premature = [claim, premature_intent, premature_recover, old_owner_terminal]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(premature), premature
+    )
+
+    premature_new_terminal = owner_terminal(
+        4, "2026-09-15T17:02:00Z", "actor-b", 3, "a" * 40
+    )
+    premature_new = [claim, premature_intent, premature_recover, premature_new_terminal]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(premature_new), premature_new
+    )
+
+    exact_intent = timed_comment(
+        2, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    exact_recover = timed_comment(
+        3, "2026-09-15T18:00:01Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    recovered_terminal = owner_terminal(
+        4, "2026-09-15T18:00:02Z", "actor-b", 3, "a" * 40
+    )
+    exact = [claim, exact_intent, exact_recover, recovered_terminal]
+    assert terminal_owner_generation_is_current(104, parsed_terminal(exact), exact)
+
+    pre_expiry_terminal = timed_comment(
+        2,
+        "2026-09-15T17:59:59Z",
+        "STATUS",
+        "DONE",
+        actor="actor-a",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'a' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    terminal_then_stale_intent = timed_comment(
+        3, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    terminal_then_stale_recover = timed_comment(
+        4, "2026-09-15T18:00:01Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 3\nsource_comment_id: 1\n"
+        ),
+    )
+    terminal_then_recovered_terminal = owner_terminal(
+        5, "2026-09-15T18:00:02Z", "actor-b", 4, "a" * 40
+    )
+    terminal_then_stale = [
+        claim,
+        pre_expiry_terminal,
+        terminal_then_stale_intent,
+        terminal_then_stale_recover,
+        terminal_then_recovered_terminal,
+    ]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(terminal_then_stale), terminal_then_stale
+    )
+
+    malformed_terminal_variants = [
+        (
+            "missing-head",
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"work_sha: {'a' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n",
+        ),
+        (
+            "missing-work",
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n",
+        ),
+        (
+            "bad-head",
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            "head_sha: not-a-sha\n"
+            f"work_sha: {'a' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n",
+        ),
+        (
+            "bad-work",
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            "work_sha: short\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n",
+        ),
+    ]
+    for _label, malformed_extra in malformed_terminal_variants:
+        malformed_owner_terminal = timed_comment(
+            2,
+            "2026-09-15T17:59:59Z",
+            "STATUS",
+            "DONE",
+            actor="actor-a",
+            extra=malformed_extra,
+        )
+        lawful_intent = timed_comment(
+            3, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+            extra=(
+                "reason: STALE\nsource_comment_id: 1\n"
+                f"observed_head_sha: {'a' * 40}\n"
+            ),
+        )
+        lawful_recover = timed_comment(
+            4, "2026-09-15T18:00:01Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+            extra=(
+                "recovery_reason: STALE\n"
+                f"observed_head_sha: {'a' * 40}\n"
+                "previous_ownership_comment_id: 1\n"
+                "winning_intent_comment_id: 3\nsource_comment_id: 1\n"
+            ),
+        )
+        lawful_terminal = owner_terminal(
+            5, "2026-09-15T18:00:02Z", "actor-b", 4, "a" * 40
+        )
+        malformed_then_stale = [
+            claim,
+            malformed_owner_terminal,
+            lawful_intent,
+            lawful_recover,
+            lawful_terminal,
+        ]
+        assert terminal_owner_generation_is_current(
+            104, parsed_terminal(malformed_then_stale), malformed_then_stale
+        ), _label
+
+    exact_expiry_terminal = timed_comment(
+        2,
+        "2026-09-15T18:00:00Z",
+        "STATUS",
+        "DONE",
+        actor="actor-a",
+        extra=(
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 1\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'a' * 40}\n"
+            "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
+        ),
+    )
+    post_boundary_intent = timed_comment(
+        3, "2026-09-15T18:00:01Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+        ),
+    )
+    post_boundary_recover = timed_comment(
+        4, "2026-09-15T18:00:02Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 3\nsource_comment_id: 1\n"
+        ),
+    )
+    post_boundary_terminal = owner_terminal(
+        5, "2026-09-15T18:00:03Z", "actor-b", 4, "a" * 40
+    )
+    expired_terminal_then_stale = [
+        claim,
+        exact_expiry_terminal,
+        post_boundary_intent,
+        post_boundary_recover,
+        post_boundary_terminal,
+    ]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(expired_terminal_then_stale), expired_terminal_then_stale
+    )
+
+    stale_old_terminal = owner_terminal(
+        4, "2026-09-15T18:00:02Z", "actor-a", 1, "a" * 40
+    )
+    stale_old = [claim, exact_intent, exact_recover, stale_old_terminal]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(stale_old), stale_old
+    )
+
+    progress = timed_comment(
+        2, "2026-09-15T17:00:00Z", "PROGRESS", "IN_PROGRESS", actor="actor-a",
+        extra=(
+            "ownership_generation_comment_id: 1\n"
+            f"observed_head_sha: {'b' * 40}\n"
+            "progress_basis: HEAD_ADVANCE\nevidence_refs: []\n"
+        ),
+    )
+    renewed_intent = timed_comment(
+        3, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: STALE\nsource_comment_id: 2\n"
+            f"observed_head_sha: {'b' * 40}\n"
+        ),
+    )
+    renewed_recover = timed_comment(
+        4, "2026-09-15T18:01:00Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: STALE\n"
+            f"observed_head_sha: {'b' * 40}\n"
+            "previous_ownership_comment_id: 1\n"
+            "winning_intent_comment_id: 3\nsource_comment_id: 2\n"
+        ),
+    )
+    renewed_terminal = owner_terminal(
+        5, "2026-09-15T18:02:00Z", "actor-a", 1, "b" * 40
+    )
+    renewed = [claim, progress, renewed_intent, renewed_recover, renewed_terminal]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(renewed), renewed
+    )
+
+    probe = timed_comment(
+        1, "2026-09-15T12:00:00Z", "ORPHAN_PROBE", "IN_PROGRESS", actor="actor-p",
+        extra=f"observed_head_sha: {'c' * 40}\n",
+    )
+    orphan_intent = timed_comment(
+        2, "2026-09-15T12:10:00Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: ORPHAN\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'c' * 40}\n"
+        ),
+    )
+    orphan_recover = timed_comment(
+        3, "2026-09-15T12:10:01Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: ORPHAN\n"
+            f"observed_head_sha: {'c' * 40}\n"
+            "previous_ownership_comment_id: null\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    orphan_terminal = owner_terminal(
+        4, "2026-09-15T12:10:02Z", "actor-b", 3, "c" * 40
+    )
+    orphan_exact = [probe, orphan_intent, orphan_recover, orphan_terminal]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(orphan_exact), orphan_exact
+    )
+
+    early_orphan_intent = timed_comment(
+        2, "2026-09-15T12:09:59Z", "RESUME_INTENT", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "reason: ORPHAN\nsource_comment_id: 1\n"
+            f"observed_head_sha: {'c' * 40}\n"
+        ),
+    )
+    early_orphan_recover = timed_comment(
+        3, "2026-09-15T12:09:59.500000Z", "RECOVER", "IN_PROGRESS", actor="actor-b",
+        extra=(
+            "recovery_reason: ORPHAN\n"
+            f"observed_head_sha: {'c' * 40}\n"
+            "previous_ownership_comment_id: null\n"
+            "winning_intent_comment_id: 2\nsource_comment_id: 1\n"
+        ),
+    )
+    later_claim = timed_comment(
+        4, "2026-09-15T12:10:00Z", "CLAIM", "IN_PROGRESS", actor="actor-a",
+        extra=f"observed_head_sha: {'c' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    later_claim_terminal = owner_terminal(
+        5, "2026-09-15T12:10:01Z", "actor-a", 4, "c" * 40
+    )
+    orphan_early = [
+        probe, early_orphan_intent, early_orphan_recover, later_claim, later_claim_terminal
+    ]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(orphan_early), orphan_early
+    )
 
     assert explicit_successor_issue_number("ISSUE_895_FORMAL_ENGINE_SELECTION_READINESS_DECISION_GATE") == 895
     assert explicit_successor_issue_number("EXISTING_REQUIRED_REVIEW_917") == 917

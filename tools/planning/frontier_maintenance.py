@@ -15,6 +15,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from typing import Any, Iterable
 
 API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
@@ -33,6 +34,9 @@ OWNERSHIP_KINDS = {"CLAIM", "RESUME", "RECOVER", "BOOTSTRAP_RESUME"}
 TERMINAL_STATES = {"DONE", "SUPERSEDED", "INVALIDATED"}
 TERMINAL_KINDS = {"STATUS", "REVIEW_STATUS", "VERIFICATION_STATUS", "INTEGRATION_STATUS"}
 SHA40_RE = re.compile(r"^[0-9a-fA-F]{40}$")
+RFC3339_RE = re.compile(
+    r"^\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[Zz]|[+-]\d{2}:\d{2})$"
+)
 FACTORY_TRANSITION_RE = re.compile(r"\[FACTORY-TRANSITION-(\d+)\]")
 DISPATCH_MARKER_VERSION = "1"
 DISPATCH_MARKER_STATES = {"ACCEPTED", "OBSERVED"}
@@ -40,6 +44,9 @@ RATE_LIMIT_MESSAGE_MARKERS = (
     "api rate limit exceeded",
     "secondary rate limit",
 )
+
+SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS = 21_600
+SCHEMA3_ORPHAN_PROBE_MATURITY_SECONDS = 600
 
 
 class GitHubRateLimitExceeded(RuntimeError):
@@ -128,6 +135,195 @@ def scalar(body: str, key: str) -> str | None:
 def integer_scalar(body: str, key: str) -> int | None:
     value = scalar(body, key)
     return int(value) if value and value.isdigit() else None
+
+
+def list_scalar(body: str, key: str) -> list[str]:
+    """Read one conservative YAML-like scalar/list field from an operational body."""
+    lines = body.splitlines()
+    key_re = re.compile(rf"^(?P<indent>\s*){re.escape(key)}:\s*(?P<value>.*?)\s*$")
+    for index, line in enumerate(lines):
+        match = key_re.match(line)
+        if not match:
+            continue
+        value = match.group("value").strip()
+        if value.startswith("[") and value.endswith("]"):
+            inner = value[1:-1].strip()
+            if not inner:
+                return []
+            return [
+                item.strip().strip("'\\\"")
+                for item in inner.split(",")
+                if item.strip().strip("'\\\"")
+            ]
+        if value and value.lower() not in {"null", "none"}:
+            return [value.strip("'\\\"")]
+
+        indent = len(match.group("indent"))
+        values: list[str] = []
+        for following in lines[index + 1 :]:
+            if not following.strip():
+                continue
+            leading = len(following) - len(following.lstrip())
+            item = re.match(r"^\s*-\s*(.+?)\s*$", following)
+            if item and leading > indent:
+                parsed = item.group(1).strip().strip("'\\\"")
+                if parsed:
+                    values.append(parsed)
+                continue
+            if leading <= indent:
+                break
+        return values
+    return []
+
+
+def immutable_ref(value: str) -> bool:
+    """Validate the canonical immutable-ref forms maintenance can prove locally."""
+    candidate = value.strip()
+    if SHA40_RE.fullmatch(candidate):
+        return True
+    if candidate.isdigit() and int(candidate) > 0:
+        return True
+    if "@" in candidate:
+        path, work_sha = candidate.rsplit("@", 1)
+        return bool(path and SHA40_RE.fullmatch(work_sha))
+    return False
+
+
+def parse_github_server_time(value: str | None) -> datetime | None:
+    """Parse authoritative GitHub RFC3339 `created_at`; malformed values fail closed."""
+    if not value or RFC3339_RE.fullmatch(value) is None:
+        return None
+    normalized = value[:-1] + "+00:00" if value[-1] in {"Z", "z"} else value
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        return None
+    return parsed.astimezone(timezone.utc)
+
+
+@dataclass(frozen=True)
+class OwnershipLeaseState:
+    anchor_comment_id: int
+    anchor_created_at: datetime
+    observed_head_sha: str
+    consecutive_evidence: int
+
+
+def schema3_ownership_lease_state(
+    owner: OperationalRecord,
+    records: Iterable[OperationalRecord],
+    *,
+    before_comment_id: int,
+) -> OwnershipLeaseState | None:
+    """Reconstruct the canonical lease anchor through valid PROGRESS renewals.
+
+    This helper intentionally evaluates only temporal/current-generation PROGRESS
+    predicates that maintenance can prove from immutable operational comments.
+    Ambiguous records have zero renewal effect.
+    """
+    if (
+        owner.kind not in OWNERSHIP_KINDS
+        or owner.state != "IN_PROGRESS"
+        or not owner.actor_session_id
+        or owner.comment_id >= before_comment_id
+    ):
+        return None
+    anchor = parse_github_server_time(owner.created_at)
+    observed_head = scalar(owner.body, "observed_head_sha")
+    if anchor is None or observed_head is None or not SHA40_RE.fullmatch(observed_head):
+        return None
+
+    anchor_comment_id = owner.comment_id
+    consecutive_evidence = 0
+    for record in sorted(records, key=lambda item: item.comment_id):
+        if not (owner.comment_id < record.comment_id < before_comment_id):
+            continue
+        if (
+            record.kind != "PROGRESS"
+            or record.state != "IN_PROGRESS"
+            or record.declared_issue != owner.declared_issue
+            or record.mission_id != owner.mission_id
+            or record.actor_session_id != owner.actor_session_id
+            or record.ownership_generation_comment_id != owner.comment_id
+        ):
+            continue
+        progress_time = parse_github_server_time(record.created_at)
+        progress_head = scalar(record.body, "observed_head_sha")
+        progress_basis = scalar(record.body, "progress_basis")
+        if (
+            progress_time is None
+            or progress_time < anchor
+            or progress_head is None
+            or not SHA40_RE.fullmatch(progress_head)
+            or progress_time >= anchor + timedelta(seconds=SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
+        ):
+            continue
+
+        if progress_basis == "HEAD_ADVANCE":
+            if progress_head == observed_head:
+                continue
+            observed_head = progress_head
+            consecutive_evidence = 0
+        elif progress_basis == "EVIDENCE":
+            evidence_refs = list_scalar(record.body, "evidence_refs")
+            if (
+                progress_head != observed_head
+                or not evidence_refs
+                or not all(immutable_ref(ref) for ref in evidence_refs)
+            ):
+                continue
+            if consecutive_evidence >= 3:
+                continue
+            consecutive_evidence += 1
+        else:
+            continue
+
+        anchor = progress_time
+        anchor_comment_id = record.comment_id
+
+    return OwnershipLeaseState(
+        anchor_comment_id=anchor_comment_id,
+        anchor_created_at=anchor,
+        observed_head_sha=observed_head,
+        consecutive_evidence=consecutive_evidence,
+    )
+
+
+def schema3_owner_unexpired_at(
+    owner: OperationalRecord,
+    records: Iterable[OperationalRecord],
+    at_record: OperationalRecord,
+) -> bool | None:
+    """Return owner lease liveness at an operational record, or None on bad time."""
+    at_time = parse_github_server_time(at_record.created_at)
+    if at_time is None:
+        return None
+    state = schema3_ownership_lease_state(
+        owner, records, before_comment_id=at_record.comment_id
+    )
+    if state is None or at_time < state.anchor_created_at:
+        return None
+    return at_time < state.anchor_created_at + timedelta(
+        seconds=SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS
+    )
+
+
+def schema3_orphan_probe_mature_at(
+    probe: OperationalRecord,
+    at_record: OperationalRecord,
+) -> bool | None:
+    """Return canonical 600-second ORPHAN maturity at a later record."""
+    if probe.kind != "ORPHAN_PROBE" or probe.comment_id >= at_record.comment_id:
+        return False
+    probe_time = parse_github_server_time(probe.created_at)
+    at_time = parse_github_server_time(at_record.created_at)
+    if probe_time is None or at_time is None:
+        return None
+    return at_time >= probe_time + timedelta(
+        seconds=SCHEMA3_ORPHAN_PROBE_MATURITY_SECONDS
+    )
 
 
 def immutable_comment(comment: dict[str, Any]) -> bool:
@@ -590,6 +786,99 @@ def self_test() -> None:
     )
     assert isinstance(generic_forbidden, RuntimeError)
     assert not isinstance(generic_forbidden, GitHubRateLimitExceeded)
+
+    assert parse_github_server_time("2026-09-15T12:00:00Z") is not None
+    assert parse_github_server_time("2026-09-15T12:00:00.123456Z") is not None
+    assert parse_github_server_time("2026-09-15T12:00:00+02:30") is not None
+    assert parse_github_server_time("2026-09-15t12:00:00z") is not None
+    assert parse_github_server_time("2026-09-15T12:00:00") is None
+    assert parse_github_server_time("2026-09-15 12:00:00+00:00") is None
+    assert parse_github_server_time("20260915T120000+00:00") is None
+    assert parse_github_server_time("not-a-time") is None
+
+    owner = OperationalRecord(
+        issue_number=77, comment_id=1, created_at="2026-09-15T12:00:00Z",
+        kind="CLAIM", state="IN_PROGRESS", route=None,
+        body=f"observed_head_sha: {'a' * 40}\n", declared_issue=77,
+        mission_id="M-77", actor_session_id="actor-77", authority_mode=None,
+        ownership_generation_comment_id=None, head_sha=None, work_sha=None,
+    )
+    progress = OperationalRecord(
+        issue_number=77, comment_id=2, created_at="2026-09-15T17:00:00Z",
+        kind="PROGRESS", state="IN_PROGRESS", route=None,
+        body=(
+            f"observed_head_sha: {'b' * 40}\n"
+            "progress_basis: HEAD_ADVANCE\n"
+            "evidence_refs: []\n"
+        ),
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+        authority_mode=None, ownership_generation_comment_id=1,
+        head_sha=None, work_sha=None,
+    )
+    before_old_boundary = OperationalRecord(
+        issue_number=77, comment_id=3, created_at="2026-09-15T18:00:00Z",
+        kind="RESUME_INTENT", state="IN_PROGRESS", route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    exact_new_boundary = OperationalRecord(
+        issue_number=77, comment_id=4, created_at="2026-09-15T23:00:00Z",
+        kind="RESUME_INTENT", state="IN_PROGRESS", route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    assert schema3_owner_unexpired_at(owner, [owner, progress], before_old_boundary) is True
+    assert schema3_owner_unexpired_at(owner, [owner, progress], exact_new_boundary) is False
+
+    evidence_records = [owner]
+    for cid, hour in ((2, 13), (3, 14), (4, 15), (5, 16)):
+        evidence_records.append(
+            OperationalRecord(
+                issue_number=77, comment_id=cid,
+                created_at=f"2026-09-15T{hour:02d}:00:00Z",
+                kind="PROGRESS", state="IN_PROGRESS", route=None,
+                body=(
+                    f"observed_head_sha: {'a' * 40}\n"
+                    "progress_basis: EVIDENCE\n"
+                    f"evidence_refs:\n  - {'e' * 40}\n"
+                ),
+                declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+                authority_mode=None, ownership_generation_comment_id=1,
+                head_sha=None, work_sha=None,
+            )
+        )
+    evidence_state = schema3_ownership_lease_state(
+        owner, evidence_records, before_comment_id=6
+    )
+    assert evidence_state is not None
+    assert evidence_state.anchor_comment_id == 4
+    assert evidence_state.consecutive_evidence == 3
+
+    probe = OperationalRecord(
+        issue_number=77, comment_id=10, created_at="2026-09-15T12:00:00Z",
+        kind="ORPHAN_PROBE", state=None, route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    early = OperationalRecord(
+        issue_number=77, comment_id=11, created_at="2026-09-15T12:09:59Z",
+        kind="RESUME_INTENT", state=None, route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    mature = OperationalRecord(
+        issue_number=77, comment_id=12, created_at="2026-09-15T12:10:00Z",
+        kind="RESUME_INTENT", state=None, route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    assert schema3_orphan_probe_mature_at(probe, early) is False
+    assert schema3_orphan_probe_mature_at(probe, mature) is True
 
     print("frontier maintenance self-test: PASS")
 
