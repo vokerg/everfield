@@ -5,6 +5,7 @@
 - trust mode: `DEGRADED_SINGLE_AGENT`
 - ownership claim: Issue #1189 comment `5744929892`
 - review branch: `planning/issue-1189`
+- review draft PR: #1192
 - review base: `8ee8f651baf94aa22daec90b7d73394593f75453`
 - terminal-observed main before handoff: `0cf2083152c07bc4d8ddc8766c8d46a5536c4db7`
 - canonical binding: Issue #1147 comment `5675066392`
