@@ -32,7 +32,7 @@ No producer mutation occurred in this review.
 ## Review result
 
 - report: `docs/planning/wave-2/reviews/w2-content-frontier-continuation-04-review.md`
-- report blob: `f18b2f303e0653ee38b3272f1d1742e4f33f3e71`
+- report blob: `a34822d8171f752b0d8f0d0600bd0b1ce697eda3`
 - disposition: `CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_04_ACTIVATION`
 - BLOCKER: 0
 - MAJOR: 0
@@ -72,7 +72,7 @@ During this review, `main` advanced from `f8fec7bd94a1e67d44117e82bde672c4118255
 
 The active canonical program blob remains `fd4cf1119c3f86acc3af620024eea72235e81ce4`, and the exact judged #1201 compiler blobs remain unchanged. This unrelated main advance does not alter the bounded activation-review result.
 
-However, PR #1208 now reports `mergeable: false`. This review grants no compiler integration/publication authority and does not waive compatibility, exact-head, or squash-only gates. Any later compiler publication must freshly re-derive the current main, PR compatibility, ownership, authority, and changed paths and route compatibility recovery if required.
+A transient post-advance query reported PR #1208 non-mergeable while GitHub recalculated; the final pre-terminal check reports it open, draft, and mergeable at exact head `5915f82c7c9fb74a7a693051405c250ebdc283a7`. This review nevertheless grants no compiler integration/publication authority and does not waive compatibility, exact-head, ownership, squash-only, or changed-path gates. Any later compiler publication must freshly re-derive those conditions and route compatibility recovery if required.
 
 Likewise, publication of this review provenance is a separate authority episode. A draft PR for this exact review packet is required before terminal `REVIEW_READY`, but mergeability or the clean disposition alone does not authorize integration.
 
