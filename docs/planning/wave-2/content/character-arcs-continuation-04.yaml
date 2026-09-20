@@ -125,60 +125,61 @@ hypothesis_deepening:
   selection_made: false
   lenses_are_final_people: false
   lenses_expand_reviewed_parent_member_count: false
-  - parent_hypothesis: CHAR03:HYP:ROOTED-PRACTICE-INDEPENDENT
-    concrete_identity: OPEN
-    lenses:
-      - id: CHAR04:LENS:CARE-WITHOUT-CAPTURE
-        tests:
-          - SUSTAINED_CARE_WITHOUT_OWNERSHIP
-          - COMPETENCE_WITHOUT_TITLE
-          - CONTRIBUTION_WITHOUT_PERMANENT_DUTY
-        mandatory_alternatives: [VOLUNTARY_CONTRIBUTION, BOUNDED_CONTRIBUTION, PAUSE, REFUSAL]
-      - id: CHAR04:LENS:EXIT-AFTER-CONTRIBUTION
-        tests:
-          - PRIOR_CONTRIBUTION_IS_NOT_CONTINUING_CONSENT
-          - EXIT_REMAINS_LEGAL
-          - BASELINE_PLAY_REMAINS_LEGAL
-  - parent_hypothesis: CHAR03:HYP:HISTORY-WITNESS-WITH-UNCERTAINTY
-    concrete_identity: OPEN
-    lenses:
-      - id: CHAR04:LENS:CONFIDENCE-WITHOUT-TRUTH-AUTHORITY
-        tests:
-          - CONFIDENCE_SEPARATE_FROM_OBJECTIVE_TRUTH
-          - MEMORY_TESTIMONY_INTERPRETATION_AND_RECORD_PROVENANCE_SEPARATE
-          - SYN_CONT02_OPEN_006_REMAINS_UNRESOLVED
-      - id: CHAR04:LENS:DISCLOSURE-BOUNDARY
-        tests:
-          - DISCLOSE_PARTIALLY_DISCLOSE_DEFER_OR_REFUSE_ALL_LEGAL
-          - REFUSAL_DOES_NOT_PROVE_DECEPTION
-          - LATER_DISCLOSURE_IS_NEW_APPEND_ONLY_EVENT
-  - parent_hypothesis: CHAR03:HYP:BOUNDARY-CONTACT-NONREPRESENTATIVE
-    concrete_identity: OPEN
-    lenses:
-      - id: CHAR04:LENS:CONTACT-WITHOUT-MANDATE
-        tests:
-          - REPEATED_CONTACT_DOES_NOT_IMPLY_MEMBERSHIP
-          - REPEATED_CONTACT_DOES_NOT_IMPLY_REPRESENTATION
-          - ACCESS_DOES_NOT_IMPLY_ROUTE_SAFETY_AUTHORITY
-      - id: CHAR04:LENS:REVOCABLE-MEDIATION
-        tests:
-          - LATER_DELEGATION_REQUIRES_EXPLICIT_AUTHORITY
-          - SCOPE_ACCEPTANCE_AND_REVOCATION_MUST_BE_EXPLICIT
-          - DECLINING_OR_WITHDRAWING_REMAINS_LEGAL
-  - parent_hypothesis: CHAR03:HYP:AFFECTED-TIE-WITH-BOUNDARIES
-    concrete_identity: OPEN
-    lenses:
-      - id: CHAR04:LENS:MULTIAXIS-DIVERGENCE
-        tests:
-          - ONE_DIMENSION_MAY_IMPROVE_WHILE_ANOTHER_WORSENS
-          - NO_SCALAR_AVERAGING
-          - TIE_CLASS_REMAINS_OPEN
-      - id: CHAR04:LENS:REPAIR-WITH-RESIDUAL-BOUNDARY
-        tests:
-          - REPAIR_DOES_NOT_FORCE_FORGIVENESS
-          - REPAIR_DOES_NOT_FORCE_WARMTH_OR_INTIMACY
-          - REPAIR_DOES_NOT_ERASE_PRIOR_BREACH_OR_REFUSAL
-
+  parents:
+    - parent_hypothesis: CHAR03:HYP:ROOTED-PRACTICE-INDEPENDENT
+      concrete_identity: OPEN
+      lenses:
+        - id: CHAR04:LENS:CARE-WITHOUT-CAPTURE
+          tests:
+            - SUSTAINED_CARE_WITHOUT_OWNERSHIP
+            - COMPETENCE_WITHOUT_TITLE
+            - CONTRIBUTION_WITHOUT_PERMANENT_DUTY
+          mandatory_alternatives: [VOLUNTARY_CONTRIBUTION, BOUNDED_CONTRIBUTION, PAUSE, REFUSAL]
+        - id: CHAR04:LENS:EXIT-AFTER-CONTRIBUTION
+          tests:
+            - PRIOR_CONTRIBUTION_IS_NOT_CONTINUING_CONSENT
+            - EXIT_REMAINS_LEGAL
+            - BASELINE_PLAY_REMAINS_LEGAL
+    - parent_hypothesis: CHAR03:HYP:HISTORY-WITNESS-WITH-UNCERTAINTY
+      concrete_identity: OPEN
+      lenses:
+        - id: CHAR04:LENS:CONFIDENCE-WITHOUT-TRUTH-AUTHORITY
+          tests:
+            - CONFIDENCE_SEPARATE_FROM_OBJECTIVE_TRUTH
+            - MEMORY_TESTIMONY_INTERPRETATION_AND_RECORD_PROVENANCE_SEPARATE
+            - SYN_CONT02_OPEN_006_REMAINS_UNRESOLVED
+        - id: CHAR04:LENS:DISCLOSURE-BOUNDARY
+          tests:
+            - DISCLOSE_PARTIALLY_DISCLOSE_DEFER_OR_REFUSE_ALL_LEGAL
+            - REFUSAL_DOES_NOT_PROVE_DECEPTION
+            - LATER_DISCLOSURE_IS_NEW_APPEND_ONLY_EVENT
+    - parent_hypothesis: CHAR03:HYP:BOUNDARY-CONTACT-NONREPRESENTATIVE
+      concrete_identity: OPEN
+      lenses:
+        - id: CHAR04:LENS:CONTACT-WITHOUT-MANDATE
+          tests:
+            - REPEATED_CONTACT_DOES_NOT_IMPLY_MEMBERSHIP
+            - REPEATED_CONTACT_DOES_NOT_IMPLY_REPRESENTATION
+            - ACCESS_DOES_NOT_IMPLY_ROUTE_SAFETY_AUTHORITY
+        - id: CHAR04:LENS:REVOCABLE-MEDIATION
+          tests:
+            - LATER_DELEGATION_REQUIRES_EXPLICIT_AUTHORITY
+            - SCOPE_ACCEPTANCE_AND_REVOCATION_MUST_BE_EXPLICIT
+            - DECLINING_OR_WITHDRAWING_REMAINS_LEGAL
+    - parent_hypothesis: CHAR03:HYP:AFFECTED-TIE-WITH-BOUNDARIES
+      concrete_identity: OPEN
+      lenses:
+        - id: CHAR04:LENS:MULTIAXIS-DIVERGENCE
+          tests:
+            - ONE_DIMENSION_MAY_IMPROVE_WHILE_ANOTHER_WORSENS
+            - NO_SCALAR_AVERAGING
+            - TIE_CLASS_REMAINS_OPEN
+        - id: CHAR04:LENS:REPAIR-WITH-RESIDUAL-BOUNDARY
+          tests:
+            - REPAIR_DOES_NOT_FORCE_FORGIVENESS
+            - REPAIR_DOES_NOT_FORCE_WARMTH_OR_INTIMACY
+            - REPAIR_DOES_NOT_ERASE_PRIOR_BREACH_OR_REFUSAL
+  
 role_occupancy:
   state: OPEN
   producer_selection: null
@@ -224,29 +225,30 @@ relationship_history_templates:
   template_only: true
   concrete_counterpart_selected: false
   tie_class_selected: false
-  - id: REL04:CASE:REQUEST-REFUSAL-RECONSIDERATION
-    sequence: [REQUEST, REFUSAL, OPTIONAL_LATER_RECONSIDERATION]
-    refusal_remains_material_history: true
-    reconsideration_requires_new_voluntary_event: true
-    repetition_or_standing_rewrites_refusal: false
-  - id: REL04:CASE:BREACH-RESTITUTION-RESIDUAL-CAUTION
-    sequence: [BREACH, OPTIONAL_RESTITUTION_OR_REPAIR, OPTIONAL_LATER_DIMENSION_CHANGE]
-    repair_erases_breach: false
-    caution_may_remain_independently_high: true
-    forgiveness_or_warmth_forced: false
-  - id: REL04:CASE:OBLIGATION-RELEASE-WITHOUT-AFFECTION
-    sequence: [BOUNDED_OBLIGATION, SATISFY_WAIVE_DISPUTE_OR_RELEASE]
-    obligation_aliases_warmth: false
-    obligation_aliases_trust: false
-    obligation_aliases_respect: false
-    obligation_aliases_legitimacy_or_standing: false
-  - id: REL04:CASE:DELEGATION-WITHDRAWAL
-    sequence: [OPTIONAL_LATER_DELEGATION, OPTIONAL_LATER_WITHDRAWAL]
-    delegation_authorized_here: false
-    withdrawal_erases_history: false
-    membership_or_permanent_representation_created: false
-    withdrawal_implies_disloyalty: false
-
+  cases:
+    - id: REL04:CASE:REQUEST-REFUSAL-RECONSIDERATION
+      sequence: [REQUEST, REFUSAL, OPTIONAL_LATER_RECONSIDERATION]
+      refusal_remains_material_history: true
+      reconsideration_requires_new_voluntary_event: true
+      repetition_or_standing_rewrites_refusal: false
+    - id: REL04:CASE:BREACH-RESTITUTION-RESIDUAL-CAUTION
+      sequence: [BREACH, OPTIONAL_RESTITUTION_OR_REPAIR, OPTIONAL_LATER_DIMENSION_CHANGE]
+      repair_erases_breach: false
+      caution_may_remain_independently_high: true
+      forgiveness_or_warmth_forced: false
+    - id: REL04:CASE:OBLIGATION-RELEASE-WITHOUT-AFFECTION
+      sequence: [BOUNDED_OBLIGATION, SATISFY_WAIVE_DISPUTE_OR_RELEASE]
+      obligation_aliases_warmth: false
+      obligation_aliases_trust: false
+      obligation_aliases_respect: false
+      obligation_aliases_legitimacy_or_standing: false
+    - id: REL04:CASE:DELEGATION-WITHDRAWAL
+      sequence: [OPTIONAL_LATER_DELEGATION, OPTIONAL_LATER_WITHDRAWAL]
+      delegation_authorized_here: false
+      withdrawal_erases_history: false
+      membership_or_permanent_representation_created: false
+      withdrawal_implies_disloyalty: false
+  
 change_arc_alternatives:
   canonical_arc_selected: false
   forced_convergence: false
