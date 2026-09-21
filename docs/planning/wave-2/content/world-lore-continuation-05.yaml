@@ -1,0 +1,438 @@
+schema: everfield_w2_world_lore_continuation_05_candidate_v1
+mission_id: W2-CONTENT-WORLD-CONT-05
+issue: 1231
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+engine_dependency: ENGINE_NEUTRAL
+
+authority:
+  integration: false
+  verification_pass: false
+  implementation_readiness: false
+  gameplay_implementation: false
+  engine_selection: false
+  release: false
+  production: false
+  human_quality: false
+  decision: false
+  final_canon: false
+  canonical: false
+
+basis:
+  execution_base_main_sha: e842852c9c7d60cf59923c88bd5174dda1c31853
+  ownership_comment_id: 5755515340
+  planning_program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  canonical_binding_issue: 1147
+  canonical_binding_terminal_comment_id: 5675066392
+  canonical_activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+  compiler_issue: 1230
+  compiler_terminal_comment_id: 5755329122
+  compiler_integration_comment_id: 5755436699
+  compiler_head_sha: 19bdfeed6ffdb6df2bf2bdd70524258f18175d3e
+  compiler_contract_blob_sha: b3be9f4860c31d0ced785e1ea0c56b7964c04562
+  compiler_map_blob_sha: 5db1399e61e66defd37e96287b163e8853b3b887
+  activation_review_issue: 1236
+  activation_review_terminal_comment_id: 5755392675
+  activation_review_integration_comment_id: 5755498638
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_05_ACTIVATION
+  frozen_fanin:
+    issue: 1225
+    terminal_comment_id: 5750440511
+    head_sha: a0ccb6eb0568cc248d3c23b041414123aba39a31
+    markdown_blob_sha: ed8adb966ac467896ead65a773695b30b81e9974
+    yaml_blob_sha: d2f03329975bbb8ceb0f4765c367e18fa04a8bf7
+    handoff_blob_sha: a41a56071e5da46461b246fa3785412cfef64d25
+    publication_comment_id: 5750485912
+    publication_main_sha: 229ab4de2ff91e4cc361d122dd5c2bfd86de50d5
+  frozen_fanin_review:
+    issue: 1228
+    terminal_comment_id: 5750477894
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_04_CONSUMPTION
+    report_blob_sha: 67c27ba6c0b6207ac7033bec5ba7927f9fb9a2dc
+    handoff_blob_sha: e547515253e0650262072cd119358de7e58ff5bc
+    publication_comment_id: 5750505792
+    publication_main_sha: 74effa6e743478b7e7c6c0b967ea0faff86fd934
+
+input_rules:
+  sibling_cont05_mutable_output_consumed: false
+  final_cross_root_binding_allowed: false
+  reviewed_refinement_replaces_inherited_state: false
+  compatibility_envelope_selects_concrete_entity: false
+
+inherited_state_contract:
+  SYN-CONT02-OPEN-001: OPEN_BOUNDED_SET
+  SYN-CONT02-OPEN-002: OPEN
+  SYN-CONT02-OPEN-003: OPEN
+  SYN-CONT02-OPEN-004: OPEN
+  SYN-CONT02-OPEN-005: OPEN_OPTIONAL
+  SYN-CONT02-OPEN-006: UNRESOLVED
+  SYN-CONT02-OPEN-007: RELATIVE_ONLY
+  SYN-CONT02-OPEN-008: BLOCKED_BY_EXACT_PREREQUISITE
+  SYN-CONT02-OPEN-009: LATER_EMPIRICAL_EVIDENCE_REQUIRED
+  SYN-CONT02-OPEN-010: FINAL_CANON_NOT_AUTHORIZED
+  SYN-CONT02-OPEN-011: HIGHER_AUTHORITY_NOT_ESTABLISHED
+
+world_surface_set:
+  state: OPEN_BOUNDED_SET
+  exact_members:
+    - WORLD_IFACE:SHARED-WORKS-JUNCTION
+    - WORLD_IFACE:COMMONS-EDGE
+    - WORLD_IFACE:CULTIVATION-MARGIN
+  member_count: 3
+  selection_made: false
+  preferred_member: null
+  default_member: null
+  widening_allowed: false
+  silent_narrowing_allowed: false
+
+immutable_cont04_interfaces:
+  - WORLD04:OBSERVATION-FRAME
+  - WORLD04:ACCOUNT-COMPARISON
+  - WORLD04:CONDITION-TRANSITION
+  - WORLD04_ROLE:PUBLIC_WORLD_EVIDENCE
+  - WORLD04_ROLE:REVERSIBLE_CONDITION_ALTERNATIVE
+  bearing_labels:
+    - SUPPORTS
+    - WEAKENS
+    - NONDISCRIMINATING
+    - INSUFFICIENT_SCOPE
+  bearing_labels_are_truth_votes: false
+
+interfaces:
+  triangulation_packet:
+    id: WORLD05:TRIANGULATION-PACKET
+    required_fields:
+      - surface_ref
+      - scope_ref
+      - observation_frame_refs
+      - material_trace_refs
+      - public_record_refs
+      - claim_or_testimony_refs
+      - counterevidence_refs
+      - scoped_absence_refs
+      - unknowns
+      - private_sidecar_refs
+      - authority_class
+    authority_class: EVIDENCE_FOR_LATER_REVIEW_NOT_FINAL_WORLD_TRUTH
+    disagreement_legal: true
+    agreement_promotes_truth: false
+    source_count_promotes_truth: false
+    institutional_provenance_promotes_truth: false
+    public_standing_promotes_truth: false
+    relationship_state_promotes_truth: false
+    player_exposure_promotes_truth: false
+    generated_presentation_promotes_truth: false
+    private_information_default_access: DENY
+    private_context_counts_toward_required_nonprivate_minimum: false
+    private_context_required_for_foundational_play: false
+    private_context_absence_legal: true
+
+  scope_bound_disagreement:
+    id: WORLD05:SCOPE-BOUND-DISAGREEMENT
+    minimum_refs_when_instantiated: 2
+    scope_relations:
+      - OVERLAPPING
+      - PARTIALLY_OVERLAPPING
+      - DISJOINT
+      - UNKNOWN
+    disagreement_classes:
+      - OBSERVATION_DIFFERENCE
+      - CLAIM_DIFFERENCE
+      - INTERPRETATION_DIFFERENCE
+      - MIXED
+    resolution_state: UNRESOLVED
+    majority_field_allowed: false
+    credibility_score_allowed: false
+    winner_field_allowed: false
+    scoped_absence_globalizes_to_world_absence: false
+    establishes_motive: false
+    establishes_responsibility: false
+    establishes_ownership: false
+    establishes_legitimacy: false
+    establishes_causal_primacy: false
+    establishes_exact_timing: false
+
+  account_discrimination_ledger:
+    id: WORLD05:ACCOUNT-DISCRIMINATION-LEDGER
+    inherited_account_refs:
+      - WORLD03:ACCOUNT-MAINTENANCE-DIVERGENCE
+      - WORLD03:ACCOUNT-RESOURCE-PRESSURE
+      - WORLD03:ACCOUNT-ACCESS-USE-CONFLICT
+      - WORLD03:ACCOUNT-MULTICAUSAL-OR-UNDERDETERMINED
+    inherited_truth_state: UNRESOLVED
+    item_fields:
+      - account_ref
+      - evidence_ref
+      - bearing
+      - evidence_scope
+      - provenance_or_authority_class
+      - bounded_rationale
+      - counterevidence_refs
+      - unknowns
+    bearing_values:
+      - SUPPORTS
+      - WEAKENS
+      - NONDISCRIMINATING
+      - INSUFFICIENT_SCOPE
+    minimum_candidate_accounts_for_comparison: 2
+    evidence_may_bear_on_multiple_accounts: true
+    aggregate_numeric_score_allowed: false
+    rank_allowed: false
+    vote_count_allowed: false
+    preferred_account_allowed: false
+    winner_allowed: false
+    underdetermined_or_multicausal_outcome_legal: true
+    causal_truth: UNRESOLVED
+    promotion_authority: LATER_EXPLICIT_REVIEWED_AUTHORITY_ONLY
+
+  condition_history_chain:
+    id: WORLD05:CONDITION-HISTORY-CHAIN
+    transition_source_type: WORLD04:CONDITION-TRANSITION
+    required_fields:
+      - surface_ref
+      - transition_refs
+      - relative_order_constraints
+      - retained_trace_refs
+      - current_observation_refs
+      - attribution_state
+      - sequence_unknowns
+      - authority_class
+    relative_order_values:
+      - BEFORE
+      - AFTER
+      - SAME_REVIEWED_ERA_UNKNOWN_ORDER
+    authoritative_era_order:
+      - ERA:PRE-WORKS
+      - ERA:WORKS-BUILDOUT
+      - ERA:PATCHWORK-PRESENT
+    attribution_default: UNRESOLVED
+    authority_class: RELATIVE_APPEND_ONLY_HISTORY_ONLY
+    append_only: true
+    repair_erases_prior_trace: false
+    retry_erases_prior_trace: false
+    compensation_erases_prior_trace: false
+    reconciliation_erases_prior_trace: false
+    reinterpretation_erases_prior_trace: false
+    later_success_erases_prior_trace: false
+    exact_dates_allowed: false
+    exact_durations_allowed: false
+    exact_schedules_allowed: false
+    weather_windows_allowed: false
+    travel_times_allowed: false
+    timed_objective_guarantees_allowed: false
+    npc_reachability_allowed: false
+
+  change_envelope:
+    id: WORLD05:CHANGE-ENVELOPE
+    observed_change_classes:
+      - DEGRADATION
+      - REPAIR
+      - RECONFIGURATION
+      - ACCESS_CHANGE
+      - RESOURCE_CONDITION_CHANGE
+      - UNKNOWN
+    descriptive_only: true
+    final_attribution_allowed: false
+    concrete_high_impact_or_irreversible_branch_authorized: false
+    reviewed_branch_impact_evidence_required_for_later_concrete_high_impact_or_irreversible_instance: true
+
+surface_inquiry_packs:
+  - id: WORLD05:INQUIRY-WORKS-TRACE-CONTINUITY
+    surface_ref: WORLD_IFACE:SHARED-WORKS-JUNCTION
+    selection_effect: NONE
+    remains_unresolved:
+      - maintainer_identity
+      - ownership
+      - office
+      - exact_degradation_cause
+      - service_interval
+      - schedule
+      - concrete_cross_root_carrier
+  - id: WORLD05:INQUIRY-COMMONS-PRESSURE-HISTORY
+    surface_ref: WORLD_IFACE:COMMONS-EDGE
+    selection_effect: NONE
+    remains_unresolved:
+      - ownership
+      - custodian
+      - quota
+      - closure_schedule
+      - legitimacy
+      - species_catalog
+      - concrete_branch_assignment
+  - id: WORLD05:INQUIRY-CULTIVATION-DEPENDENCY-HISTORY
+    surface_ref: WORLD_IFACE:CULTIVATION-MARGIN
+    selection_effect: NONE
+    remains_unresolved:
+      - crop_identity
+      - owner
+      - yield
+      - exact_resource_capacity
+      - seasonality
+      - exact_habitat_cause
+      - concrete_cross_root_binding
+
+emitted_roles:
+  - WORLD05_ROLE:TRIANGULATION_PACKET
+  - WORLD05_ROLE:SCOPE_BOUND_DISAGREEMENT
+  - WORLD05_ROLE:ACCOUNT_DISCRIMINATION_LEDGER
+  - WORLD05_ROLE:CONDITION_HISTORY_CHAIN
+  - WORLD05_ROLE:CHANGE_ENVELOPE
+  - WORLD05_ROLE:PUBLIC_WORLD_EVIDENCE
+  - WORLD05_ROLE:REVERSIBLE_CONDITION_ALTERNATIVE
+
+semantic_firewalls:
+  objective_fact_claim_belief_testimony_interpretation_knowledge_player_exposure_separate: true
+  generated_presentation_separate_from_authoritative_state: true
+  private_information_default_access: DENY
+  private_information_counts_toward_required_nonprivate_minimum: false
+  private_information_required_for_foundational_play: false
+  chronology_model: RELATIVE_ONLY
+  material_history_append_only: true
+  relationship_dimensions:
+    - TRUST
+    - WARMTH
+    - RESPECT
+    - OBLIGATION
+    - RIVALRY
+    - CAUTION
+  universal_relationship_scalar: false
+  relationship_aliases_legitimacy_or_public_standing: false
+  use_repair_repetition_or_visibility_establishes_ownership_or_legitimacy: false
+  refusal_nonalignment_legal: true
+  baseline_shared_play_legal: true
+  hidden_foundational_gate_allowed: false
+  generated_presentation_mutates_authoritative_state: false
+
+route_cardinality:
+  concrete_active_objective_instances_authored: 0
+  candidate_or_envelope_count_is_active_route_measurement: false
+  no_active_instance_status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+  recompute_triggers:
+    - ACTIVATION
+    - REFUSAL
+    - REJECTION
+    - SUBSTITUTION
+    - RECOVERY
+    - ROUTE_LOSS
+  contracts:
+    - objective_id: OBJ_CONT:COMPARE_PERSPECTIVES
+      minimum_materially_distinct_nonprivate_routes: 2
+      active_instance: false
+      observed_active_route_count: null
+    - objective_id: OBJ_CONT:SELECT_DIRECTION
+      minimum_legal_differentiated_route_kinds: 2
+      active_instance: false
+      observed_active_route_count: null
+    - objective_id: OBJ_CONT:CHOOSE_CONTINUED_GOAL
+      minimum_legal_distinct_goal_families: 2
+      active_instance: false
+      observed_active_route_count: null
+    - objective_id: OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS
+      minimum_materially_distinct_nonprivate_routes: 2
+      active_instance: false
+      observed_active_route_count: null
+    - objective_id: OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+      minimum_legal_differentiated_response_families: 2
+      active_instance: false
+      observed_active_route_count: null
+    - objective_id: OBJ_CONT02:CHOOSE_CONTINUED_GOAL
+      minimum_legal_distinct_goal_families: 2
+      active_instance: false
+      observed_active_route_count: null
+
+reopen_conditions:
+  count: 17
+  clearing_semantics: PACKET_LOCAL_ONLY
+  authorship_preclears_future_instances: false
+  results:
+    SOURCE_OR_REVIEW_IDENTITY_DRIFT: CLEARED_PACKET_LOCAL
+    BOUND_INTERFACE_REQUIRES_UNSUPPORTED_CONCRETE_ENTITY: CLEARED_PACKET_LOCAL
+    REVIEWED_BOUNDED_SET_BROADENED_OR_SILENTLY_NARROWED: CLEARED_PACKET_LOCAL
+    MUTABLE_SIBLING_OUTPUT_CONSUMED_BEFORE_FANIN: CLEARED_PACKET_LOCAL
+    PRIVATE_INFORMATION_REQUIRED_FOR_ROUTE_MINIMUM: CLEARED_PACKET_LOCAL
+    PRIVATE_INFORMATION_REQUIRED_FOR_FOUNDATIONAL_PLAY: CLEARED_PACKET_LOCAL
+    FACT_CLAIM_BELIEF_TESTIMONY_KNOWLEDGE_EXPOSURE_AUTHORITY_COLLAPSE: CLEARED_PACKET_LOCAL
+    RELATIONSHIP_OR_LEGITIMACY_SCALARIZED_OR_AUTOMATICALLY_ALIASED: CLEARED_PACKET_LOCAL
+    MATERIAL_HISTORY_ERASED_BY_RETRY_REPAIR_OR_RECONCILIATION: CLEARED_PACKET_LOCAL
+    NONFOUNDATIONAL_GATE_COMPOSITION_BECOMES_DEFACTO_FOUNDATIONAL: CLEARED_PACKET_LOCAL
+    NARRATIVE_ROUTE_CARDINALITY_DROPS_BELOW_REVIEWED_MINIMUM: CLEARED_PACKET_LOCAL
+    MUTUALLY_EXCLUSIVE_BRANCHES_BECOME_JOINTLY_REQUIRED: CLEARED_PACKET_LOCAL
+    EXACT_TIME_SCHEDULE_WEATHER_TRAVEL_OR_NPC_REACHABILITY_BECOMES_REQUIRED: CLEARED_PACKET_LOCAL
+    CONCRETE_HIGH_IMPACT_OR_IRREVERSIBLE_BRANCH_LACKS_REVIEWED_BRANCH_IMPACT_EVIDENCE: CLEARED_PACKET_LOCAL
+    WSN_OUTCOME_REQUIRES_PROMOTION_WITHOUT_EXACT_PREREQUISITE: CLEARED_PACKET_LOCAL
+    GENERATED_PRESENTATION_MUTATES_AUTHORITATIVE_STATE: CLEARED_PACKET_LOCAL
+    STRUCTURAL_RESULT_USED_AS_HIGHER_AUTHORITY: CLEARED_PACKET_LOCAL
+
+wsn:
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  empirical_upgrade_authority: false
+  exact_schedule_authority: false
+  exact_weather_authority: false
+  exact_travel_authority: false
+  exact_timed_objective_authority: false
+  exact_npc_reachability_authority: false
+
+residual_open_ledger:
+  final_world_surface_selection: OPEN
+  social_site_binding: OPEN
+  character_site_binding: OPEN
+  narrative_site_binding: OPEN
+  ownership_custodian_polity_office_membership_representation_legitimacy: OPEN
+  contested_causal_truth: UNRESOLVED
+  exact_chronology_schedule_weather_travel_timed_objective_npc_reachability: BLOCKED
+  private_context_holder_and_disclosure: OPEN_OPTIONAL
+  concrete_high_impact_branch_impact_evidence: LATER_EMPIRICAL_EVIDENCE_REQUIRED
+  human_quality: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  production_persistence: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  aggregate_verification: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  implementation_readiness: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  gameplay_implementation: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  engine_selection: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  final_canon: FINAL_CANON_NOT_AUTHORIZED
+  canonicality: NOT_CANONICAL
+
+fan_in:
+  mission_id: W2-CONTENT-SYN-CONT-05
+  materialized: false
+  this_root_review_token: W2-CONTENT-WORLD-CONT-05_REVIEWED
+  token_granted_by_producer: false
+  required_reviewed_tokens:
+    - W2-CONTENT-WORLD-CONT-05_REVIEWED
+    - W2-CONTENT-SOCIAL-CONT-05_REVIEWED
+    - W2-CONTENT-CHAR-CONT-05_REVIEWED
+    - W2-CONTENT-NARR-CONT-05_REVIEWED
+    - W2-CONTENT-EVAL-CONT-05_REVIEWED
+
+self_review:
+  blocker_count: 0
+  major_count: 0
+  correction_requiring_minor_count: 0
+  attacks:
+    - SOURCE_IDENTITY_DRIFT
+    - BOUNDED_SET_WIDENING_OR_SILENT_NARROWING
+    - HIDDEN_SITE_SELECTION_OR_PREFERENCE
+    - CAUSAL_TRUTH_LAUNDERING
+    - MAJORITY_SCORE_RANK_AUTHORITY_LAUNDERING
+    - SCOPED_ABSENCE_GLOBALIZATION
+    - FACT_CLAIM_TESTIMONY_INTERPRETATION_KNOWLEDGE_EXPOSURE_COLLAPSE
+    - PRIVATE_INFORMATION_LEAK
+    - SIBLING_MUTABLE_CONSUMPTION
+    - UNSUPPORTED_CONCRETE_BINDING
+    - EXACT_TIME_OR_REACHABILITY_INVENTION
+    - MATERIAL_HISTORY_ERASURE
+    - OWNERSHIP_OR_LEGITIMACY_INFERENCE
+    - RELATIONSHIP_LEGITIMACY_ALIASING
+    - REFUSAL_OR_AGENCY_BYPASS
+    - HIDDEN_FOUNDATIONAL_GATE
+    - ROUTE_CARDINALITY_WEAKENING_OR_FABRICATED_MEASUREMENT
+    - MUTUALLY_EXCLUSIVE_BRANCH_JOINT_REQUIREMENT
+    - MISSING_BRANCH_IMACT_EVIDENCE
+    - WSN_UPGRADE
+    - GENERATED_STATE_MUTATION
+    - ENGINE_COUPLING
+    - HIGHER_AUTHORITY_INFLATION
+  result: CLEAN_PRODUCER_SELF_REVIEW_ONLY
+  satisfies_required_independent_review: false
