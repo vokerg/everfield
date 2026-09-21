@@ -40,7 +40,7 @@ The branch contains the bounded CONT-05 character candidate packet:
 - docs/planning/wave-2/content/character-arcs-continuation-05.md
   - blob cd3ab08621cb9a28af39f5c47756341fd065884e
 - docs/planning/wave-2/content/character-arcs-continuation-05.yaml
-  - blob a8e63a3e89a02c061160820197d4629049ea254f
+  - blob ee9c9ab793089b3e8250be763bbe35c901849889
 - this handoff
 
 The packet adds only typed candidate structure:
