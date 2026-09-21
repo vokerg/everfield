@@ -4,7 +4,8 @@
 
 - mission: `W2-CONTENT-FRONTIER-CONT-05`
 - compiler issue: #1230
-- ownership generation: comment `5750523078`
+- original ownership generation: comment `5750523078`
+- recovered ownership generation: comment `5755310492` from winning STALE intent `5755308741`
 - compiler branch: `planning/issue-1230`
 - materialization/execution base: `74effa6e743478b7e7c6c0b967ea0faff86fd934`
 - active canonical binding: Issue #1147 terminal comment `5675066392`

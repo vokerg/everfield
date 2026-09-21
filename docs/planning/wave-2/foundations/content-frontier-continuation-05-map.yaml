@@ -5,7 +5,9 @@ artifact: W2-CONTENT-FRONTIER-CONT-05-MAP
 compiler:
   issue: 1230
   mission_id: W2-CONTENT-FRONTIER-CONT-05
-  ownership_comment_id: 5750523078
+  ownership_comment_id: 5755310492
+  previous_ownership_comment_id: 5750523078
+  winning_stale_intent_comment_id: 5755308741
   branch: planning/issue-1230
   materialization_main_sha: 74effa6e743478b7e7c6c0b967ea0faff86fd934
   execution_base_main_sha: 74effa6e743478b7e7c6c0b967ea0faff86fd934
