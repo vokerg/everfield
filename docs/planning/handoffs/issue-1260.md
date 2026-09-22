@@ -14,7 +14,7 @@
 - review base: `main@ac4905959c51022055c0b8cd2ab2dd0b26d636dd`
 - canonical binding: Issue #1147 terminal `5675066392`
 - canonical program blob: `fd4cf1119c3f86acc3af620024eea72235e81ce4`
-- canonical activation: `87c85cecfa9a2ffa4c4b36816a138bf41441af`
+- canonical activation: `87c85cecfa9a2ffa464c4b36816a138bf41441af`
 
 ## Frozen provenance
 
