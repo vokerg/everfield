@@ -116,3 +116,19 @@ Exact token granted for the frozen remediation packet:
 This review is review provenance only. It does not itself publish or integrate #1256, and it creates no verification PASS, implementation/readiness, gameplay implementation, engine selection, human-quality, release/production, decision/final-canon, or canonical authority.
 
 Any publication of the remediation or this review remains a separate squash-only authority episode with fresh current-main compatibility checks. Conceptual CONT-05 fan-in remains separately gated.
+
+## Continuation recovery and terminalization audit
+
+The original review ownership generation `5771747926` was created at GitHub server time `2026-09-22T05:41:23Z` and, under the active six-hour lease overlay, expired at `2026-09-22T11:41:23Z` without a later valid `PROGRESS`, handoff, terminal status, or replacement owner.
+
+Recovery provenance:
+- winning `RESUME_INTENT(STALE)`: Issue #1260 comment `5777175732`, created `2026-09-22T13:14:05Z`;
+- recovered ownership generation: Issue #1260 comment `5777181530`, created `2026-09-22T13:14:24Z`;
+- recovery actor/session: `frontier-recover-review-content-narr-rem01-1260-gpt56sol-20260922-01`;
+- inherited branch head at recovery: `9c6515172dc264b3fe4f04af40f17e742a95134e`;
+- judged remediation #1256 remains immutable.
+
+Before terminalization, the recovery episode independently re-fetched the exact source and remediation blobs and rechecked the inherited review conclusions. It confirmed the source/remediation blob identities, zero remediated bindings of both rejected C/D aliases, unchanged A/B identity counts, preserved inherited state/WSN/route-cardinality/BranchImpactEvidence markers, and no changed PR path outside this review report plus handoff.
+
+This continuation changes no substantive review finding or judged remediation byte. The clean disposition and exact token remain those recorded above; recovery creates no integration, verification, implementation, release, decision, final-canon, or canonical authority.
+
