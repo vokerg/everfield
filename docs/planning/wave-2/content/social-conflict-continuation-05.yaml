@@ -1,0 +1,555 @@
+schema: everfield_w2_content_social_conflict_continuation_05_candidate_v1
+mission_id: W2-CONTENT-SOCIAL-CONT-05
+issue: 1232
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+engine_dependency: ENGINE_NEUTRAL
+
+authority:
+  integration: false
+  verification_pass: false
+  implementation_readiness: false
+  gameplay_implementation: false
+  engine_selection: false
+  human_quality: false
+  release: false
+  production: false
+  decision: false
+  final_canon: false
+  canonical: false
+
+basis:
+  execution_base_main_sha: 58fa3f1a8a2a444096b56d2f4493a653f795a3d5
+  ownership_comment_id: 5762088471
+  planning_program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  canonical_binding_issue: 1147
+  canonical_binding_terminal_comment_id: 5675066392
+  canonical_activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+  compiler:
+    issue: 1230
+    terminal_comment_id: 5755329122
+    integration_comment_id: 5755436699
+    head_sha: 19bdfeed6ffdb6df2bf2bdd70524258f18175d3e
+    contract_blob_sha: b3be9f4860c31d0ced785e1ea0c56b7964c04562
+    map_blob_sha: 5db1399e61e66defd37e96287b163e8853b3b887
+  activation_review:
+    issue: 1236
+    terminal_comment_id: 5755392675
+    integration_comment_id: 5755498638
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_05_ACTIVATION
+  frozen_fanin:
+    issue: 1225
+    terminal_comment_id: 5750440511
+    head_sha: a0ccb6eb0568cc248d3c23b041414123aba39a31
+    markdown_blob_sha: ed8adb966ac467896ead65a773695b30b81e9974
+    yaml_blob_sha: d2f03329975bbb8ceb0f4765c367e18fa04a8bf7
+    handoff_blob_sha: a41a56071e5da46461b246fa3785412cfef64d25
+    publication_comment_id: 5750485912
+    publication_main_sha: 229ab4de2ff91e4cc361d122dd5c2bfd86de50d5
+  frozen_fanin_review:
+    issue: 1228
+    terminal_comment_id: 5750477894
+    disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_04_CONSUMPTION
+    report_blob_sha: 67c27ba6c0b6207ac7033bec5ba7927f9fb9a2dc
+    handoff_blob_sha: e547515253e0650262072cd119358de7e58ff5bc
+    publication_comment_id: 5750505792
+    publication_main_sha: 74effa6e743478b7e7c6c0b967ea0faff86fd934
+
+input_rules:
+  sibling_cont05_mutable_output_consumed: false
+  final_cross_root_binding_allowed: false
+  reviewed_refinement_replaces_inherited_state: false
+  compatibility_envelope_selects_concrete_entity: false
+  direct_mutable_predecessor_bytes_consumed: false
+  frozen_reviewed_fanin_only: true
+
+inherited_state_contract:
+  SYN-CONT02-OPEN-001: OPEN_BOUNDED_SET
+  SYN-CONT02-OPEN-002: OPEN
+  SYN-CONT02-OPEN-003: OPEN
+  SYN-CONT02-OPEN-004: OPEN
+  SYN-CONT02-OPEN-005: OPEN_OPTIONAL
+  SYN-CONT02-OPEN-006: UNRESOLVED
+  SYN-CONT02-OPEN-007: RELATIVE_ONLY
+  SYN-CONT02-OPEN-008: BLOCKED_BY_EXACT_PREREQUISITE
+  SYN-CONT02-OPEN-009: LATER_EMPIRICAL_EVIDENCE_REQUIRED
+  SYN-CONT02-OPEN-010: FINAL_CANON_NOT_AUTHORIZED
+  SYN-CONT02-OPEN-011: HIGHER_AUTHORITY_NOT_ESTABLISHED
+
+scope:
+  social_open_binding: SYN-CONT02-OPEN-003
+  cross_root_open_binding: SYN-CONT02-OPEN-004
+  private_context_binding: SYN-CONT02-OPEN-005
+  final_institution_assignment: false
+  final_polity_assignment: false
+  final_membership_assignment: false
+  final_office_assignment: false
+  final_occupant_assignment: false
+  final_representation_assignment: false
+  final_constituency_assignment: false
+  final_jurisdiction_assignment: false
+  final_legitimacy_assignment: false
+  final_consent_assignment: false
+  final_cross_root_binding: false
+  concrete_quest_instances_authored: 0
+  concrete_objective_instances_authored: 0
+  final_branch_selected: false
+  conceptual_fanin_materialized: false
+
+immutable_reviewed_interfaces:
+  - SOCIAL04:IFACE:MANDATE-REVIEW
+  - SOCIAL04:IFACE:CONSTITUENCY-INPUT
+  - SOCIAL04:IFACE:RECUSAL-AND-SUBSTITUTE
+  - SOCIAL04:IFACE:REMEDY-APPEAL
+  - SOCIAL04:IFACE:INTERINSTITUTIONAL-REFERRAL
+  - SOC04-CASE-002
+  - SOC04-CASE-003
+  - ENVELOPE-04-A
+  - ENVELOPE-04-B
+  - ENVELOPE-04-C
+  - ENVELOPE-04-D
+  references_select_host_or_occupant: false
+  references_select_branch: false
+
+interfaces:
+  procedure_trace:
+    id: SOCIAL05:PROCEDURE-TRACE
+    authority_class: PROCEDURAL_HISTORY_FOR_LATER_REVIEW_ONLY
+    required_fields:
+      - procedure_interface_ref
+      - host_ref
+      - initiating_claim_ref
+      - participant_role_refs
+      - public_evidence_refs
+      - optional_private_sidecar_refs
+      - procedure_event_refs
+      - refusal_recusal_nonparticipation_events
+      - substitute_route_refs
+      - unresolved_scope_questions
+      - authority_class
+    typed_roles_are_permanent_occupants: false
+    participation_establishes_membership: false
+    participation_establishes_representation: false
+    participation_establishes_consent: false
+    participation_establishes_legitimacy: false
+    participation_establishes_jurisdiction: false
+    participation_establishes_truth: false
+    recusal_establishes_wrongdoing: false
+    recusal_establishes_guilt: false
+    recusal_establishes_permanent_disqualification: false
+    substitute_erases_trigger_event: false
+    material_history_append_only: true
+    chronology_mode: RELATIVE_ONLY
+
+  representation_claim_ledger:
+    id: SOCIAL05:REPRESENTATION-CLAIM-LEDGER
+    entry_status: CLAIM_ONLY_NOT_ESTABLISHED_REPRESENTATION
+    required_fields:
+      - claimant_ref
+      - represented_scope_ref
+      - representation_basis_ref
+      - mandate_scope
+      - provenance_refs
+      - branch_scope
+      - contestability
+      - refusal_or_nonparticipation_handling
+      - event_relative_termination_or_supersession_rule
+      - public_support_evidence_refs
+      - public_dissent_evidence_refs
+      - scoped_absence_refs
+      - private_information_classification
+      - unresolved_authority_questions
+      - status
+    winner_field_allowed: false
+    majority_as_consent_allowed: false
+    popularity_rank_allowed: false
+    universal_support_score_allowed: false
+    preferred_claimant_allowed: false
+    silence_establishes_consent: false
+    nonparticipation_establishes_consent: false
+    standing_establishes_representation: false
+    relationship_state_establishes_representation: false
+    repetition_establishes_representation: false
+    office_eligibility_establishes_representation: false
+    claim_establishes_representation: false
+    later_reviewed_authority_required_for_representation: true
+
+  legitimacy_evidence_matrix:
+    id: SOCIAL05:LEGITIMACY-EVIDENCE-MATRIX
+    final_legitimacy_assignment_authorized: false
+    aggregate_legitimacy_score_authorized: false
+    dimensions:
+      - procedural_fairness
+      - transparency_fit
+      - burden_distribution
+      - responsibility_fulfillment
+      - domain_competence
+      - constituency_support
+    evidence_required_fields:
+      - provenance
+      - affected_dimensions
+      - unaffected_dimensions_preserved
+      - visibility
+      - branch_scope
+      - evidentiary_limits
+      - counterevidence_refs
+      - unknowns
+    cross_dimension_averaging_allowed: false
+    scalarization_allowed: false
+    automatic_aliasing_allowed: false
+    competence_establishes_overall_legitimacy: false
+    participation_establishes_universal_consent: false
+    burden_evidence_establishes_ownership: false
+    burden_evidence_establishes_causal_truth: false
+    public_standing_establishes_legitimacy: false
+    public_standing_establishes_representation: false
+    public_standing_establishes_truth: false
+    public_standing_establishes_consent: false
+    public_standing_establishes_private_access: false
+    relationship_dimensions_separate:
+      - TRUST
+      - WARMTH
+      - RESPECT
+      - OBLIGATION
+      - RIVALRY
+      - CAUTION
+
+  refusal_and_substitution_lattice:
+    id: SOCIAL05:REFUSAL-AND-SUBSTITUTION-LATTICE
+    structural_only: true
+    candidate_route_families:
+      - PUBLIC_CHALLENGE
+      - SCOPED_MEDIATION
+      - CLARIFY_MANDATE
+      - RECUSAL_AND_SUBSTITUTE
+      - SUBSTITUTE_REPRESENTATION_ROUTE
+      - INTERINSTITUTIONAL_REFERRAL
+      - PUBLIC_RECORD_ONLY
+      - REDIRECT
+      - NONALIGN_AND_CONTINUE
+      - DEFER_AND_RETURN
+      - CONTINUE_WITH_UNRESOLVED_CLAIM
+    refusal_invalidates_only_dependent_routes: true
+    refusal_rewritten_as_consent: false
+    standing_overrides_refusal: false
+    gifts_or_grind_override_refusal: false
+    relationship_state_overrides_refusal: false
+    prior_success_overrides_refusal: false
+    repetition_overrides_refusal: false
+    proximity_overrides_refusal: false
+    private_context_counts_toward_required_nonprivate_minimum: false
+    private_context_required_for_foundational_play: false
+
+  remedy_portfolio:
+    id: SOCIAL05:REMEDY-PORTFOLIO
+    candidate_outcome_families:
+      - RESTORATION_IF_LAWFUL_AND_AVAILABLE
+      - COMPENSATION
+      - MITIGATION
+      - CHANGED_LEGAL_GOAL
+      - CONTINUED_DISAGREEMENT
+      - SUBSTITUTE_PROCESS_ROUTE
+      - NONALIGN_AND_CONTINUE
+      - DEFER_AND_RETURN
+    required_for_later_instance:
+      - material_history_event_id
+      - provenance
+      - affected_dimensions
+      - branch_scope
+      - durability
+      - reversibility
+      - unresolved_effects
+      - remaining_refusal_or_nonalignment_state
+    restoration_guaranteed: false
+    retry_erases_history: false
+    repair_erases_history: false
+    compensation_erases_history: false
+    reconciliation_erases_history: false
+    apology_erases_history: false
+    later_success_erases_history: false
+    remedy_forces_forgiveness: false
+    remedy_forces_alignment: false
+    remedy_establishes_legitimacy: false
+    remedy_establishes_representation: false
+    reviewed_branch_impact_evidence_required_for_concrete_high_impact_or_irreversible_instance: true
+
+  interinstitutional_conflict_register:
+    id: SOCIAL05:INTERINSTITUTIONAL-CONFLICT-REGISTER
+    required_fields:
+      - question_scope_ref
+      - claiming_interface_refs
+      - claimed_scope_refs
+      - provenance_refs
+      - overlap_class
+      - disagreement_class
+      - refusal_or_partial_acceptance_refs
+      - referral_or_return_for_clarification_refs
+      - unresolved_authority_questions
+      - resolution_state
+    overlap_classes:
+      - OVERLAPPING
+      - PARTIALLY_OVERLAPPING
+      - DISJOINT
+      - UNKNOWN
+    disagreement_classes:
+      - MANDATE
+      - JURISDICTION_CLAIM
+      - PROCEDURE
+      - BURDEN
+      - DISCLOSURE
+      - REMEDY
+      - MIXED
+    resolution_state: OPEN
+    jurisdiction_claim_establishes_jurisdiction: false
+    referral_transfers_truth_authority: false
+    referral_transfers_private_access: false
+    referral_transfers_ownership: false
+    referral_transfers_legitimacy: false
+    referral_transfers_consent: false
+    referral_transfers_permanent_jurisdiction: false
+    cooperation_creates_coalition: false
+    cooperation_creates_permanent_alliance: false
+    mutually_exclusive_commitments_jointly_required: false
+    baseline_nonaligned_continuation_legal: true
+
+case_families:
+  record_type: Social05CaseFamily
+  concrete_quest_authority: false
+  concrete_objective_authority: false
+  concrete_site_selection_authority: false
+  concrete_character_assignment_authority: false
+  final_branch_authority: false
+  cases:
+    - id: SOCIAL05:CASE-A
+      name: CONTESTED_REPRESENTATION_WITH_DISSENT
+      interfaces:
+        - SOCIAL05:PROCEDURE-TRACE
+        - SOCIAL05:REPRESENTATION-CLAIM-LEDGER
+        - SOCIAL05:LEGITIMACY-EVIDENCE-MATRIX
+      selected_representative: false
+      selected_constituency_boundary: false
+      selected_legitimacy: false
+      selected_mandate: false
+      selected_occupant: false
+    - id: SOCIAL05:CASE-B
+      name: PROTECTED_CONTEXT_WITH_PUBLIC_ROUTE_PRESERVATION
+      interfaces:
+        - ENVELOPE-04-D
+        - SOCIAL04:IFACE:RECUSAL-AND-SUBSTITUTE
+        - SOCIAL05:REFUSAL-AND-SUBSTITUTION-LATTICE
+      private_context: OPEN_OPTIONAL
+      private_access_default: DENY
+      private_context_absence_legal: true
+      private_context_counts_toward_required_nonprivate_minimum: false
+      secrecy_establishes_guilt: false
+      recusal_establishes_truth: false
+    - id: SOCIAL05:CASE-C
+      name: BURDEN_COMPETENCE_CONFLICT_WITH_SUBSTITUTION
+      interfaces:
+        - SOCIAL05:LEGITIMACY-EVIDENCE-MATRIX
+        - SOCIAL05:REMEDY-PORTFOLIO
+        - SOCIAL05:REFUSAL-AND-SUBSTITUTION-LATTICE
+      competence_establishes_representation: false
+      competence_establishes_overall_legitimacy: false
+      exact_schedule_or_reachability_inferred: false
+    - id: SOCIAL05:CASE-D
+      name: INTERINSTITUTIONAL_SCOPE_DISPUTE
+      interfaces:
+        - SOCIAL05:INTERINSTITUTIONAL-CONFLICT-REGISTER
+        - SOCIAL04:IFACE:INTERINSTITUTIONAL-REFERRAL
+      selected_permanent_jurisdiction: false
+      coalition_created: false
+      polity_created: false
+      universal_authority_created: false
+    - id: SOCIAL05:CASE-E
+      name: REMEDY_AFTER_MATERIAL_BREACH
+      interfaces:
+        - SOCIAL05:PROCEDURE-TRACE
+        - SOCIAL05:REMEDY-PORTFOLIO
+      restoration_guaranteed: false
+      continued_disagreement_legal: true
+      changed_legal_goal_legal: true
+      nonalignment_legal: true
+
+open_binding_continuation:
+  SYN-CONT02-OPEN-003:
+    state: OPEN
+    descriptive_additions:
+      - SOCIAL05:PROCEDURE-TRACE
+      - SOCIAL05:REPRESENTATION-CLAIM-LEDGER
+      - SOCIAL05:LEGITIMACY-EVIDENCE-MATRIX
+      - SOCIAL05:REFUSAL-AND-SUBSTITUTION-LATTICE
+      - SOCIAL05:REMEDY-PORTFOLIO
+      - SOCIAL05:INTERINSTITUTIONAL-CONFLICT-REGISTER
+    selected_membership: false
+    selected_office_existence_or_permanence: false
+    selected_office_occupant: false
+    selected_representation: false
+    selected_constituency: false
+    selected_jurisdiction: false
+    selected_legitimacy: false
+    selected_consent: false
+  SYN-CONT02-OPEN-004:
+    state: OPEN
+    descriptive_additions:
+      - SOCIAL05_CASE_FAMILIES
+    concrete_cross_root_binding_authored: false
+    sibling_cont05_output_consumed: false
+  SYN-CONT02-OPEN-005:
+    state: OPEN_OPTIONAL
+    private_information_default: DENY
+    foundational_play_required: false
+    nonprivate_route_minimum_eligible: false
+    absence_legal: true
+
+semantic_firewalls:
+  objective_fact_claim_belief_testimony_interpretation_knowledge_exposure_separate: true
+  institutional_record_is_objective_fact: false
+  generated_presentation_is_objective_fact: false
+  player_exposure_grants_character_knowledge: false
+  private_information_default_deny: true
+  private_information_counts_toward_required_nonprivate_minimum: false
+  private_information_required_for_foundational_play: false
+  chronology_relative_only: true
+  material_history_append_only: true
+  relationship_dimensions_separate_from_legitimacy_and_public_standing: true
+  refusal_nonalignment_legal: true
+  baseline_play_hiddenly_gated: false
+  branch_impact_evidence_required_for_concrete_high_impact_or_irreversible_branch: true
+  generated_presentation_mutates_authoritative_state: false
+
+baseline_play:
+  foundational_gate_count: 0
+  protected:
+    - BASELINE_MOVEMENT_AND_EXPLORATION
+    - ORDINARY_COMMUNITY_INTERACTION
+    - PUBLIC_INFORMATION
+    - BASIC_REPAIR_AND_CRAFTING
+    - BASELINE_CULTIVATION
+    - ORDINARY_MUTUAL_AID
+  nonfoundational_gate_composition_into_foundational: FORBIDDEN
+
+chronology:
+  mode: RELATIVE_ONLY
+  exact_date_authority: false
+  exact_duration_authority: false
+  exact_deadline_authority: false
+  exact_office_term_authority: false
+  exact_schedule_authority: false
+  weather_window_authority: false
+  exact_travel_time_authority: false
+  timed_objective_authority: false
+  exact_opening_hour_authority: false
+  npc_reachability_authority: false
+
+route_cardinality:
+  concrete_objective_instances_authored: 0
+  observed_active_route_count: null
+  no_active_instance_status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+  candidate_or_case_counts_are_route_measurements: false
+  recompute_on:
+    - ACTIVATION
+    - REFUSAL
+    - REJECTION
+    - SUBSTITUTION
+    - RECOVERY
+    - ROUTE_LOSS
+  contracts:
+    OBJ_CONT:COMPARE_PERSPECTIVES:
+      minimum_materially_distinct_nonprivate_routes: 2
+    OBJ_CONT:SELECT_DIRECTION:
+      minimum_simultaneously_legal_differentiated_route_kinds: 2
+    OBJ_CONT:CHOOSE_CONTINUED_GOAL:
+      minimum_simultaneously_legal_distinct_goal_families: 2
+    OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS:
+      minimum_materially_distinct_nonprivate_routes: 2
+    OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO:
+      minimum_simultaneously_legal_differentiated_response_families: 2
+    OBJ_CONT02:CHOOSE_CONTINUED_GOAL:
+      minimum_simultaneously_legal_distinct_goal_families: 2
+
+reopen_conditions:
+  count: 17
+  authorship_preclears_future_instances: false
+  packet_local_result: CLEARED_PACKET_LOCAL
+  classes:
+    - SOURCE_OR_REVIEW_IDENTITY_DRIFT
+    - BOUND_INTERFACE_REQUIRES_UNSUPPORTED_CONCRETE_ENTITY
+    - REVIEWED_BOUNDED_SET_BROADENED_OR_SILENTLY_NARROWED
+    - MUTABLE_SIBLING_OUTPUT_CONSUMED_BEFORE_FANIN
+    - PRIVATE_INFORMATION_REQUIRED_FOR_ROUTE_MINIMUM
+    - PRIVATE_INFORMATION_REQUIRED_FOR_FOUNDATIONAL_PLAY
+    - FACT_CLAIM_BELIEF_TESTIMONY_KNOWLEDGE_EXPOSURE_AUTHORITY_COLLAPSE
+    - RELATIONSHIP_OR_LEGITIMACY_SCALARIZED_OR_AUTOMATICALLY_ALIASED
+    - MATERIAL_HISTORY_ERASED_BY_RETRY_REPAIR_OR_RECONCILIATION
+    - NONFOUNDATIONAL_GATE_COMPOSITION_BECOMES_DEFACTO_FOUNDATIONAL
+    - NARRATIVE_ROUTE_CARDINALITY_DROPS_BELOW_REVIEWED_MINIMUM
+    - MUTUALLY_EXCLUSIVE_BRANCHES_BECOME_JOINTLY_REQUIRED
+    - EXACT_TIME_SCHEDULE_WEATHER_TRAVEL_OR_NPC_REACHABILITY_BECOMES_REQUIRED
+    - CONCRETE_HIGH_IMPACT_OR_IRREVERSIBLE_BRANCH_LACKS_REVIEWED_BRANCH_IMPACT_EVIDENCE
+    - WSN_OUTCOME_REQUIRES_PROMOTION_WITHOUT_EXACT_PREREQUISITE
+    - GENERATED_PRESENTATION_MUTATES_AUTHORITATIVE_STATE
+    - STRUCTURAL_RESULT_USED_AS_HIGHER_AUTHORITY
+
+wsn:
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  empirical_upgrade_authority: false
+  exact_schedule_authority: false
+  exact_reachability_authority: false
+  human_quality_established: false
+  production_persistence_established: false
+  aggregate_verification_pass: false
+  implementation_readiness_established: false
+
+residual_open:
+  - FINAL_INSTITUTION_POLITY_COALITION_OWNERSHIP_OR_JURISDICTION
+  - PERMANENT_MEMBERSHIP_OR_OFFICE
+  - OFFICE_EXISTENCE_PERMANENCE_OCCUPANT_MANDATE_REPRESENTATION_OR_CONSTITUENCY
+  - FINAL_LEGITIMACY_OR_CONSENT
+  - CONCRETE_SOCIAL_SITE_CHARACTER_NARRATIVE_BINDING
+  - OPTIONAL_PRIVATE_CONTEXT_HOLDER_AND_LAWFUL_DISCLOSURE
+  - DISPUTED_CAUSAL_OR_HISTORICAL_TRUTH
+  - EXACT_CHRONOLOGY_SCHEDULE_WEATHER_TRAVEL_TIMED_OBJECTIVE_OR_REACHABILITY
+  - CONCRETE_REVIEWED_BRANCH_IMPACT_EVIDENCE
+  - FINAL_CHARACTER_BIOGRAPHY_RELATIONSHIP_ENDING_OR_BRANCH
+  - HUMAN_QUALITY_PRODUCTION_VERIFICATION_READINESS_GAMEPLAY_ENGINE_RELEASE_CANON_AUTHORITY
+
+self_review:
+  blocker: 0
+  major: 0
+  correction_requiring_minor: 0
+  attacks:
+    - FROZEN_SOURCE_DRIFT
+    - UNSUPPORTED_INSTITUTION_OR_POLITY_INVENTION
+    - OFFICE_OCCUPANT_OR_MEMBERSHIP_SMUGGLING
+    - REPRESENTATION_OR_CONSENT_BY_REPETITION_MAJORITY_OR_STANDING
+    - LEGITIMACY_SCALARIZATION
+    - RELATIONSHIP_LEGITIMACY_ALIASING
+    - CLAIM_TESTIMONY_OR_RECORD_TRUTH_PROMOTION
+    - PRIVATE_INFORMATION_LEAKAGE
+    - SIBLING_CONT05_MUTABLE_CONSUMPTION
+    - UNSUPPORTED_CONCRETE_BINDING
+    - EXACT_TIME_OR_REACHABILITY_INVENTION
+    - MATERIAL_HISTORY_ERASURE
+    - REFUSAL_TO_CONSENT_COERCION
+    - HIDDEN_FOUNDATIONAL_GATING
+    - ROUTE_CARDINALITY_WEAKENING_OR_FABRICATED_MEASUREMENT
+    - MUTUALLY_EXCLUSIVE_BRANCH_CONJUNCTION
+    - MISSING_BRANCH_IMPACT_EVIDENCE
+    - WSN_PROMOTION
+    - GENERATED_STATE_MUTATION
+    - ENGINE_COUPLING
+    - EARLY_FANIN
+    - HIGHER_AUTHORITY_INFLATION
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_REVIEW
+
+downstream:
+  required_fresh_review: true
+  review_mission_id: W2-CONTENT-SOCIAL-CONT-05-REV-01
+  token_on_clean_review: W2-CONTENT-SOCIAL-CONT-05_REVIEWED
+  conceptual_fanin_mission: W2-CONTENT-SYN-CONT-05
+  fanin_materialized: false
+  fanin_materialization_before_all_five_reviewed_tokens: false
