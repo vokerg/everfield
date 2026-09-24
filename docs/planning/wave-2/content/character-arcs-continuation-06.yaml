@@ -21,8 +21,8 @@ authority:
 
 execution:
   branch: planning/issue-1271
-  ownership_comment_id: 5815956032
-  actor_session_id: frontier-drain-content-char-cont06-1271-gpt56sol-20260924-01
+  ownership_comment_id: 5815974757
+  actor_session_id: frontier-drain-content-char-cont06-1271-gpt56sol-20260924-03
   base_main_sha: 93f95a589fde5b85eb0f84d8ee7e18eeb50ed4a3
 
 canonical_basis:
@@ -53,6 +53,7 @@ frozen_input:
   fanin_review_report_blob_sha: c22862d006054aac86398cb701fada1763757a6f
   fanin_review_handoff_blob_sha: b634a8a3da706e600c8c4c5e73b49a74576770af
   sibling_cont06_mutable_output_consumed: false
+  direct_character_cont05_root_bytes_consumed: false
 
 scope:
   final_named_identity_selected: false
@@ -90,11 +91,14 @@ interfaces:
   agency_transition_guard:
     id: CHAR06:AGENCY-TRANSITION-GUARD
     states:
-      - VOLUNTARY
-      - CONDITIONAL
+      - VOLUNTARY_SCOPED
+      - CONDITIONAL_SCOPED
       - DEFERRED
       - REFUSED
       - WITHDRAWN
+      - SUBSTITUTED
+      - NONALIGNED
+      - UNAVAILABLE_OR_UNKNOWN
     required_fields:
       - PRIOR_STATE
       - NEXT_STATE
@@ -103,6 +107,7 @@ interfaces:
       - EXPLICIT_CONDITIONS_IF_ANY
       - DEPENDENT_ROUTE_EFFECT
     deferred_is_consent_in_waiting: false
+    candidate_states_replace_inherited_state_vocabulary: false
     conditional_scope_broadening_allowed: false
     refusal_is_legal: true
     withdrawal_is_legal: true
@@ -181,11 +186,10 @@ interfaces:
   counterpart_admissibility_matrix:
     id: CHAR06:COUNTERPART-ADMISSIBILITY-MATRIX
     slots:
-      - COUNTERPART_PEER
-      - COUNTERPART_REQUESTER
-      - COUNTERPART_WITNESS
-      - COUNTERPART_MEDIATOR
-      - COUNTERPART_AFFECTED_PARTY
+      - INFORMATION_COUNTERPART
+      - COOPERATION_COUNTERPART
+      - DISAGREEMENT_COUNTERPART
+      - REPAIR_COUNTERPART
     selected_person_count: 0
     slots_may_remain_unfilled: true
     substitution_allowed_when_later_route_contract_permits: true
@@ -211,11 +215,12 @@ interfaces:
   arc_composition_envelope:
     id: CHAR06:ARC-COMPOSITION-ENVELOPE
     source_alternatives:
-      - RECIPROCITY_WITH_RETAINED_BOUNDARY
-      - REPAIR_WITH_RESIDUAL_CAUTION
-      - RESPECTFUL_DISTANCE
-      - BOUNDED_COOPERATION_AMID_RIVALRY
-      - DELEGATION_WITHDRAWN_CONTACT_RETAINED
+      - BOUNDARY_CLARIFICATION
+      - EVIDENCE_REVISION
+      - RELATIONSHIP_RENEGOTIATION
+      - OBLIGATION_RESCOPING
+      - CAUTION_WITH_RECOVERY
+      - STABLE_NONALIGNMENT
     ranked: false
     preferred: false
     default: false
@@ -232,8 +237,8 @@ interfaces:
     mutually_exclusive_commitments_may_be_jointly_required: false
     example_unselected_composition:
       components:
-        - REPAIR_WITH_RESIDUAL_CAUTION
-        - RESPECTFUL_DISTANCE
+        - CAUTION_WITH_RECOVERY
+        - STABLE_NONALIGNMENT
       selected: false
 
   knowledge_provenance_gate:
@@ -391,6 +396,7 @@ self_review:
   producer_self_review_grants_root_token: false
   attacks:
     - FROZEN_INPUT_IDENTITY_DRIFT
+    - DIRECT_CHARACTER_CONT05_ROOT_BYTE_LEAKAGE
     - SIBLING_CONT06_MUTABLE_CONSUMPTION
     - UNSUPPORTED_CONCRETE_ENTITY_SELECTION
     - FINAL_IDENTITY_BIOGRAPHY_OR_OCCUPATION_SELECTION

@@ -2,14 +2,16 @@
 
 ## Status
 
-Producer packet prepared on `planning/issue-1271` under winning ownership generation comment `5815956032`.
+Producer packet prepared on `planning/issue-1271` under valid ownership generation comment `5815974757`.
 
-- actor session: `frontier-drain-content-char-cont06-1271-gpt56sol-20260924-01`
+- actor session: `frontier-drain-content-char-cont06-1271-gpt56sol-20260924-03`
 - claimed base: `93f95a589fde5b85eb0f84d8ee7e18eeb50ed4a3`
 - canonical binding: Issue #1147 terminal `5675066392`
 - canonical program blob: `fd4cf1119c3f86acc3af620024eea72235e81ce4`
 - canonical activation: `87c85cecfa9a2ffa464c4b36816a138bf41441af`
 - canonicality: `NOT_CANONICAL`
+
+Earlier claim-shaped comments `5815956032`, `5815957987`, and `5815959928` were posted before branch creation and have no ownership effect. Their subsequent branch bytes were treated as draft material only and revalidated/normalized under comment `5815974757` before terminalization.
 
 ## Frozen input
 
@@ -41,6 +43,8 @@ The packet introduces only bounded structural character interfaces:
 - `CHAR06:ARC-COMPOSITION-ENVELOPE`
 - `CHAR06:KNOWLEDGE-PROVENANCE-GATE`
 
+Final normalization additionally verifies that no direct Character05 root bytes are consumed; only identifiers explicitly surfaced by the frozen fan-in are used.
+
 It selects no final identity, biography, occupation, membership, office, representation, jurisdiction, legitimacy, counterpart, romance/family ending, relationship ending, or canonical change arc.
 
 ## Invariants checked
@@ -62,7 +66,7 @@ It selects no final identity, biography, occupation, membership, office, represe
 
 ## Self-review
 
-Findings: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR**.
+Findings: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR**. Direct Character05 root-byte leakage was explicitly attacked and is absent in the normalized final packet.
 
 Producer self-review grants no root review token and no integration/publication, verification PASS, implementation/readiness, gameplay implementation, engine selection, human-quality, release/production, decision/final-canon, or canonical authority.
 

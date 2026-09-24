@@ -22,6 +22,9 @@ CONT-06 routing basis:
 - activation Review #1274 terminal `5810566235`;
 - activation disposition `CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_06_ACTIVATION`;
 - activation-review publication `5810650403`.
+- valid producer ownership generation: comment `5815974757`, actor session `frontier-drain-content-char-cont06-1271-gpt56sol-20260924-03`.
+
+Earlier claim-shaped comments `5815956032`, `5815957987`, and `5815959928` predated branch creation and have no ownership effect. Draft bytes written from that losing path were treated only as untrusted draft material; the final packet is revalidated and normalized by the valid owner.
 
 Frozen CONT-05 fan-in:
 - producer #1263 terminal `5789756463`, head `48f22351747700e8f84dafeabb17d3f0b179919a`;
@@ -29,7 +32,7 @@ Frozen CONT-05 fan-in:
 - required Review #1265 terminal `5794863746`, disposition `CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_05_CONSUMPTION`;
 - review blobs `c22862d006054aac86398cb701fada1763757a6f` / `b634a8a3da706e600c8c4c5e73b49a74576770af`.
 
-The inherited character interface is the CONT-05 reviewed character packet represented in the fan-in by `CHAR05:AGENCY-STATE-LATTICE`, `CHAR05:RELATIONSHIP-HISTORY-LEDGER`, `CHAR05:DISCLOSURE-BOUNDARY-MATRIX`, `CHAR05:EPISTEMIC-CONFIDENCE-TRACK`, `CHAR05:COUNTERPART-SLOT-CONTRACT`, `CHAR05:CHANGE-ARC-ALTERNATIVE-SET`, and `CHAR05:PUBLIC-STANDING-SEPARATION`. These are immutable descriptive inputs, not authority to instantiate a person.
+The only Character05 identifiers consumed here are those explicitly surfaced by the frozen fan-in compatibility envelopes: `CHAR05:AGENCY-STATE-LATTICE`, `CHAR05:RELATIONSHIP-HISTORY-LEDGER`, `CHAR05:DISCLOSURE-BOUNDARY-MATRIX`, `CHAR05:EPISTEMIC-CONFIDENCE-TRACK`, and `CHAR05:COUNTERPART-SLOT-CONTRACT`. No direct Character05 root bytes or sibling CONT-06 mutable bytes are consumed. These inherited identifiers are descriptive inputs only, not authority to instantiate a person.
 
 ## Scope and non-goals
 
@@ -77,12 +80,15 @@ Reviewed refinements do not replace these states. The six CONT-05 compatibility 
 
 ### CHAR06:AGENCY-TRANSITION-GUARD
 
-The inherited agency states remain exactly:
-- `VOLUNTARY`
-- `CONDITIONAL`
+CONT-06 defines these bounded candidate agency states without claiming they replace an inherited vocabulary:
+- `VOLUNTARY_SCOPED`
+- `CONDITIONAL_SCOPED`
 - `DEFERRED`
 - `REFUSED`
 - `WITHDRAWN`
+- `SUBSTITUTED`
+- `NONALIGNED`
+- `UNAVAILABLE_OR_UNKNOWN`
 
 A transition record is admissible only when it states:
 1. the prior agency state;
@@ -95,7 +101,7 @@ A transition record is admissible only when it states:
 Rules:
 - refusal and withdrawal are lawful outcomes, not failure states;
 - `DEFERRED` is not consent-in-waiting;
-- `CONDITIONAL` authorizes only the exact stated scope;
+- `CONDITIONAL_SCOPED` authorizes only the exact stated scope;
 - a new voluntary choice does not erase a prior refusal/withdrawal event;
 - gifts, standing, legitimacy claims, public approval, repetition, grinding, proximity, relationship values, prior success, or generated presentation cannot promote an agency state;
 - route loss is local to dependent routes;
@@ -154,12 +160,11 @@ Repair, retry, compensation, reconciliation, reinterpretation, later success, re
 
 ### CHAR06:COUNTERPART-ADMISSIBILITY-MATRIX
 
-The inherited typed slots remain:
-- `COUNTERPART_PEER`
-- `COUNTERPART_REQUESTER`
-- `COUNTERPART_WITNESS`
-- `COUNTERPART_MEDIATOR`
-- `COUNTERPART_AFFECTED_PARTY`
+CONT-06 defines only typed placeholder roles; none is a selected person or an inherited concrete occupancy:
+- `INFORMATION_COUNTERPART`
+- `COOPERATION_COUNTERPART`
+- `DISAGREEMENT_COUNTERPART`
+- `REPAIR_COUNTERPART`
 
 A later concrete binding is admissible only if separately authorized and if the candidate:
 - is not inferred from relationship value, popularity, legitimacy, office, membership, or player preference;
@@ -173,12 +178,13 @@ Slot substitution triggers route recomputation and never rewrites prior history.
 
 ### CHAR06:ARC-COMPOSITION-ENVELOPE
 
-CONT-05 arc alternatives remain non-ranked hypotheses:
-- `RECIPROCITY_WITH_RETAINED_BOUNDARY`
-- `REPAIR_WITH_RESIDUAL_CAUTION`
-- `RESPECTFUL_DISTANCE`
-- `BOUNDED_COOPERATION_AMID_RIVALRY`
-- `DELEGATION_WITHDRAWN_CONTACT_RETAINED`
+CONT-06 authors bounded non-ranked candidate arc families derived only from the inherited envelopes and semantic firewalls:
+- `BOUNDARY_CLARIFICATION`
+- `EVIDENCE_REVISION`
+- `RELATIONSHIP_RENEGOTIATION`
+- `OBLIGATION_RESCOPING`
+- `CAUTION_WITH_RECOVERY`
+- `STABLE_NONALIGNMENT`
 
 CONT-06 permits structural composition only when all component invariants remain simultaneously satisfiable. Composition:
 - creates no preferred/default arc;
@@ -190,7 +196,7 @@ CONT-06 permits structural composition only when all component invariants remain
 - cannot jointly require mutually exclusive commitments;
 - remains reversible at the planning-hypothesis level until a later reviewed binding.
 
-Example admissible composition: `REPAIR_WITH_RESIDUAL_CAUTION` + `RESPECTFUL_DISTANCE` can remain a hypothesis because repair need not imply closeness. This is not a selected character outcome.
+Example admissible composition: `CAUTION_WITH_RECOVERY` + `STABLE_NONALIGNMENT` can remain a hypothesis because repair need not imply closeness or alignment. This is not a selected character outcome.
 
 ### CHAR06:KNOWLEDGE-PROVENANCE-GATE
 
@@ -356,6 +362,8 @@ Attacks performed:
 - engine coupling;
 - higher-authority inflation;
 - Markdown/YAML consistency.
+
+Additional provenance attack: direct Character05 root-byte leakage. Final result: no direct Character05 root bytes are consumed; only interface identifiers explicitly named in the frozen fan-in are used.
 
 Findings: **0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR**.
 
