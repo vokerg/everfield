@@ -1,0 +1,520 @@
+protocol: planning-v1
+schema: 1
+artifact: W2-CONTENT-SYN-CONT-06
+
+identity:
+  issue: 1302
+  mission_id: W2-CONTENT-SYN-CONT-06
+  branch: planning/issue-1302
+  ownership_comment_id: 5827007549
+  execution_base_main_sha: 9a5b68438908115e8986c43f808711696e4c64d1
+  canonicality: NOT_CANONICAL
+
+canonical:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+
+compiler:
+  issue: 1267
+  terminal_comment_id: 5795173101
+  integration_comment_id: 5810608769
+  contract_blob_sha: 8e932cbb6da9ec8fe6171729bfbfd4dd11c3d525
+  map_blob_sha: 36908992e713a3cdcda71a183795f1d215391628
+  activation_review_issue: 1274
+  activation_review_terminal_comment_id: 5810566235
+  activation_review_integration_comment_id: 5810650403
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_06_ACTIVATION
+
+reviewed_inputs:
+  world:
+    producer_issue: 1269
+    producer_terminal_comment_id: 5810778856
+    producer_head_sha: 1421853c35c1c27661368d53b6c7f5e9fcc3fa27
+    markdown_blob_sha: 4a2397910a691ca939fa9a3b07126af850382db6
+    yaml_blob_sha: 4bc2c6b9231c01fa2587b6a013e83549e10eabc0
+    handoff_blob_sha: 97db4ddff56f87a4bddf4082e1f0ae0dbdd80cb1
+    producer_integration_comment_id: 5815903497
+    review_issue: 1280
+    review_terminal_comment_id: 5810923182
+    review_integration_comment_id: 5815949482
+    token: W2-CONTENT-WORLD-CONT-06_REVIEWED
+  social:
+    producer_issue: 1270
+    producer_terminal_comment_id: 5810779374
+    producer_head_sha: 4812487492ce727a6a252883dec80f8baed4314d
+    markdown_blob_sha: b0b54bccca8873fd4a03d4f77e94b9304f74f668
+    yaml_blob_sha: f7a54d5bd7bdc44b7fd1b8ac967494c80fe1c98c
+    handoff_blob_sha: bb45aa0141718ea6ad5d40aadbff9eebe1cbd7b2
+    producer_integration_comment_id: 5816090945
+    review_issue: 1281
+    review_terminal_comment_id: 5816040761
+    review_integration_comment_id: 5816117348
+    token: W2-CONTENT-SOCIAL-CONT-06_REVIEWED
+  character:
+    producer_issue: 1271
+    producer_terminal_comment_id: 5816155576
+    producer_head_sha: 86a5281df0ec19f03c599eeb68c47a07a97ba8bb
+    markdown_blob_sha: b895d411da0a27dddc2bf29f9a22c4d427978caa
+    yaml_blob_sha: 300142ee9a5e13a40b51469bf5be5b82d72fecc6
+    handoff_blob_sha: c65d89fe0586c87cdbe9147651540b04494da8e1
+    producer_integration_comment_id: 5816486922
+    review_issue: 1288
+    review_terminal_comment_id: 5816451780
+    review_integration_comment_id: 5826978719
+    review_mode: RECOVERED_CLEAN_NORMALIZED_PACKET
+    stale_preterminal_review_lineage_authority: ZERO
+    token: W2-CONTENT-CHAR-CONT-06_REVIEWED
+  narrative:
+    producer_issue: 1272
+    producer_terminal_comment_id: 5816117756
+    producer_head_sha: 55d4ba16bd8ca487d398cee46974f3b65719a6a4
+    markdown_blob_sha: 263b02a5b4a1b2003816cebca92ed818ca8dbe90
+    yaml_blob_sha: 6afd81ce12dd889769dead21eeaa20d8186dffcf
+    handoff_blob_sha: babf268272fdff7a45ed31c2f564e33d92373d85
+    producer_integration_comment_id: 5816261858
+    review_issue: 1290
+    review_terminal_comment_id: 5816223055
+    review_integration_comment_id: 5816294510
+    token: W2-CONTENT-NARR-CONT-06_REVIEWED
+  evaluation:
+    producer_issue: 1273
+    producer_terminal_comment_id: 5816125453
+    producer_head_sha: a60c1a6320469f7dcf942a3f7a455b792cbc43a9
+    markdown_blob_sha: 58c5462c78ae1f44d27c822352ae0a7c1f8ba065
+    yaml_blob_sha: 8b7fba215345ab761a8efa7f3471b1de59f3a1a0
+    handoff_blob_sha: ba2bdbdf5d958df49ec92950fd73e63af56fb957
+    producer_integration_comment_id: 5816248160
+    review_issue: 1292
+    review_terminal_comment_id: 5816209177
+    review_integration_comment_id: 5816316780
+    token: W2-CONTENT-EVAL-CONT-06_REVIEWED
+
+token_barrier:
+  required_count: 5
+  observed_count: 5
+  all_exact_tokens_present: true
+  publication_alone_satisfies_token: false
+  unreviewed_or_stale_lineage_consumed: false
+
+synthesis_policy:
+  final_fiction_selected: false
+  concrete_world_member_selected: false
+  concrete_institution_or_office_selected: false
+  concrete_character_identity_selected: false
+  concrete_counterpart_selected: false
+  concrete_romance_or_family_ending_selected: false
+  concrete_quest_or_objective_instance_authored: false
+  concrete_branch_selected: false
+  causal_truth_resolved: false
+  exact_chronology_authored: false
+  sibling_mutable_output_consumed_before_review: false
+  reviewed_refinement_replaces_inherited_open_state: false
+  compatibility_envelope_is_final_binding: false
+  generated_presentation_mutates_authoritative_state: false
+
+inherited_state_contract:
+  SYN-CONT02-OPEN-001: OPEN_BOUNDED_SET
+  SYN-CONT02-OPEN-002: OPEN
+  SYN-CONT02-OPEN-003: OPEN
+  SYN-CONT02-OPEN-004: OPEN
+  SYN-CONT02-OPEN-005: OPEN_OPTIONAL
+  SYN-CONT02-OPEN-006: UNRESOLVED
+  SYN-CONT02-OPEN-007: RELATIVE_ONLY
+  SYN-CONT02-OPEN-008: BLOCKED_BY_EXACT_PREREQUISITE
+  SYN-CONT02-OPEN-009: LATER_EMPIRICAL_EVIDENCE_REQUIRED
+  SYN-CONT02-OPEN-010: FINAL_CANON_NOT_AUTHORIZED
+  SYN-CONT02-OPEN-011: HIGHER_AUTHORITY_NOT_ESTABLISHED
+
+world_surface_set:
+  state: OPEN_BOUNDED_SET
+  exact_members:
+    - WORLD_IFACE:SHARED-WORKS-JUNCTION
+    - WORLD_IFACE:COMMONS-EDGE
+    - WORLD_IFACE:CULTIVATION-MARGIN
+  member_count: 3
+  selection_made: false
+  widening_allowed: false
+  silent_narrowing_allowed: false
+
+compatibility_envelopes:
+  - id: ENVELOPE-05-A-EVIDENCE-TRIANGULATION
+    status: COMPATIBLE_INTERFACE_ENVELOPE_ONLY
+    selection_made: false
+    world_refs:
+      - WORLD06:PROVENANCE-DEPENDENCY-MAP
+      - WORLD06:ACCOUNT-EVIDENCE-CROSSWALK
+    social_refs:
+      - SOCIAL06:MANDATE-SCOPE-DOSSIER
+      - SOCIAL06:LEGITIMACY-EVIDENCE-DELTA
+    character_refs:
+      - CHAR06:KNOWLEDGE-PROVENANCE-GATE
+    narrative_refs:
+      - NARR06:CASE-A:EVIDENCE-ROUTE-REGISTER
+    causal_truth_resolved: false
+    repetition_promotes_truth: false
+    majority_promotes_truth: false
+    unanimity_promotes_truth: false
+    institutional_provenance_promotes_truth: false
+  - id: ENVELOPE-05-B-REFUSAL-SAFE-PORTFOLIO
+    status: COMPATIBLE_INTERFACE_ENVELOPE_ONLY
+    selection_made: false
+    world_refs:
+      - WORLD06:CONDITION-HISTORY-FORK-REGISTER
+    social_refs:
+      - SOCIAL06:PARTICIPATION-DISSENT-TRACE
+      - SOCIAL06:RECUSAL-SUBSTITUTION-PLAN
+      - SOCIAL06:REMEDY-APPEAL-CHAIN
+    character_refs:
+      - CHAR06:AGENCY-TRANSITION-GUARD
+    narrative_refs:
+      - NARR06:CASE-B:AGENCY-SAFE-ROUTE-TRANSITION
+    refusal_rewritten_as_consent: false
+    dependent_route_loss_is_local: true
+    route_recompute_required_after_transition: true
+  - id: ENVELOPE-05-C-APPEND-ONLY-AFTERMATH
+    status: COMPATIBLE_INTERFACE_ENVELOPE_ONLY
+    selection_made: false
+    world_refs:
+      - WORLD06:CONDITION-HISTORY-FORK-REGISTER
+      - WORLD06:REVERSIBILITY-TRACE-ENVELOPE
+    social_refs:
+      - SOCIAL06:PARTICIPATION-DISSENT-TRACE
+      - SOCIAL06:REMEDY-APPEAL-CHAIN
+    character_refs:
+      - CHAR06:DISCLOSURE-REVOCATION-LEDGER
+      - CHAR06:RELATIONSHIP-HISTORY-TEMPLATE-SET
+    narrative_refs:
+      - NARR06:CASE-C:CONSEQUENCE-OBSERVATION-LEDGER
+      - NARR06:CASE-F:BOUNDED-RECOVERY-PORTFOLIO
+    material_history_append_only: true
+    repair_erases_history: false
+    reconciliation_erases_history: false
+    universal_restored_flag_allowed: false
+  - id: ENVELOPE-05-D-OPTIONAL-PRIVATE-CONTEXT
+    status: COMPATIBLE_INTERFACE_ENVELOPE_ONLY
+    selection_made: false
+    social_refs:
+      - SOCIAL06:MANDATE-SCOPE-DOSSIER
+      - SOCIAL06:PARTICIPATION-DISSENT-TRACE
+    character_refs:
+      - CHAR06:DISCLOSURE-REVOCATION-LEDGER
+      - CHAR06:KNOWLEDGE-PROVENANCE-GATE
+    narrative_refs:
+      - NARR06:CASE-D:OPTIONAL-PRIVATE-DISCLOSURE-RECEIPT
+    state: OPEN_OPTIONAL
+    private_access_default: DENY
+    onward_sharing_default: DENY
+    private_context_counts_toward_required_nonprivate_minimum: false
+    private_context_required_for_foundational_play: false
+    private_context_absence_legal: true
+  - id: ENVELOPE-05-E-EXCLUSIVE-COMMITMENT-GUARD
+    status: COMPATIBLE_INTERFACE_ENVELOPE_ONLY
+    selection_made: false
+    social_refs:
+      - SOCIAL06:RECUSAL-SUBSTITUTION-PLAN
+      - SOCIAL06:INTERINSTITUTIONAL-CLAIM-GRAPH
+    character_refs:
+      - CHAR06:COUNTERPART-ADMISSIBILITY-MATRIX
+      - CHAR06:ARC-COMPOSITION-ENVELOPE
+    narrative_refs:
+      - NARR06:CASE-E:COMMITMENT-PREFLIGHT
+    mutually_exclusive_alternatives_jointly_required: false
+    concrete_commitment_authorized: false
+    concrete_counterpart_bound: false
+  - id: ENVELOPE-05-F-BRANCH-IMPACT-BARRIER
+    status: COMPATIBLE_INTERFACE_ENVELOPE_ONLY
+    selection_made: false
+    world_refs:
+      - WORLD06:REVERSIBILITY-TRACE-ENVELOPE
+    social_refs:
+      - SOCIAL06:REMEDY-APPEAL-CHAIN
+      - SOCIAL06:INTERINSTITUTIONAL-CLAIM-GRAPH
+    character_refs:
+      - CHAR06:ARC-COMPOSITION-ENVELOPE
+    narrative_refs:
+      - NARR06:CASE-G:BRANCH-IMPACT-ACTIVATION-BARRIER
+    concrete_high_impact_or_irreversible_branch_authorized: false
+    later_reviewed_branch_impact_evidence_required: true
+    required_obligations_when_applicable:
+      - BIE04:SIGNALING
+      - BIE04:OBSERVED-EFFECT
+      - BIE04:CONTINUED-PLAY
+
+information_authority:
+  objective_fact_separate: true
+  claim_separate: true
+  belief_separate: true
+  testimony_separate: true
+  interpretation_separate: true
+  institutional_record_separate: true
+  confidence_separate: true
+  knowledge_separate: true
+  player_exposure_separate: true
+  scoped_absence_separate: true
+  generated_presentation_separate: true
+  repetition_promotes_truth: false
+  majority_promotes_truth: false
+  unanimity_promotes_truth: false
+  institutional_provenance_promotes_truth: false
+  relationship_state_promotes_truth: false
+  public_standing_promotes_truth: false
+  player_exposure_grants_character_knowledge: false
+  private_information_default_access: DENY
+  onward_private_sharing_default: DENY
+
+history_relationship_agency:
+  material_history_append_only: true
+  refusal_history_append_only: true
+  disclosure_history_append_only: true
+  relationship_history_append_only: true
+  repair_erases_history: false
+  compensation_erases_history: false
+  reconciliation_erases_history: false
+  later_success_erases_failed_restoration: false
+  relationship_dimensions:
+    - TRUST
+    - WARMTH
+    - RESPECT
+    - OBLIGATION
+    - RIVALRY
+    - CAUTION
+  relationship_dimensions_independent: true
+  aggregate_relationship_scalar_allowed: false
+  institutional_legitimacy_separate: true
+  public_standing_separate: true
+  refusal_withdrawal_deferral_substitution_recusal_rejection_nonalignment_legal: true
+  foundational_gate_count: 0
+  hidden_foundational_tax_allowed: false
+  baseline_play_remains_legal: true
+
+chronology:
+  state: RELATIVE_ONLY
+  exact_dates_authored: 0
+  exact_durations_authored: 0
+  exact_schedules_authored: 0
+  weather_windows_authored: 0
+  exact_travel_times_authored: 0
+  timed_objectives_authored: 0
+  npc_reachability_guarantees_authored: 0
+
+evaluator_application:
+  evaluator_issue: 1273
+  evaluator_terminal_comment_id: 5816125453
+  evaluator_yaml_blob_sha: 8b7fba215345ab761a8efa7f3471b1de59f3a1a0
+  evaluator_review_issue: 1292
+  evaluator_review_terminal_comment_id: 5816209177
+  immutable_identity_complete: true
+  aggregate_numeric_score_allowed: false
+  pass_percentage_allowed: false
+  weighted_score_allowed: false
+  ranking_allowed: false
+  tiering_allowed: false
+  quality_grade_allowed: false
+  winner_or_recommendation_allowed: false
+  check_count: 19
+  checks:
+    E06-IDENTITY: PASS_BOUNDED_STRUCTURAL
+    E06-STATE-VOCAB: PASS_BOUNDED_STRUCTURAL
+    E06-SIBLING-BARRIER: PASS_BOUNDED_STRUCTURAL
+    E06-ENTITY-SCOPE: PASS_BOUNDED_STRUCTURAL
+    E06-EPISTEMIC: PASS_BOUNDED_STRUCTURAL
+    E06-PRIVATE: PASS_BOUNDED_STRUCTURAL
+    E06-CHRONOLOGY: PASS_BOUNDED_STRUCTURAL
+    E06-HISTORY: PASS_BOUNDED_STRUCTURAL
+    E06-RELATIONSHIP: PASS_BOUNDED_STRUCTURAL
+    E06-AGENCY: PASS_BOUNDED_STRUCTURAL
+    E06-FOUNDATIONAL: PASS_BOUNDED_STRUCTURAL
+    E06-CARDINALITY: PASS_BOUNDED_STRUCTURAL
+    E06-RECOMPUTE: PASS_BOUNDED_STRUCTURAL
+    E06-REOPEN: PASS_BOUNDED_STRUCTURAL
+    E06-BRANCH-IMPACT: PASS_BOUNDED_STRUCTURAL
+    E06-WSN: PASS_BOUNDED_STRUCTURAL
+    E06-GENERATED: PASS_BOUNDED_STRUCTURAL
+    E06-CONSISTENCY: PASS_BOUNDED_STRUCTURAL
+    E06-AUTHORITY: PASS_BOUNDED_STRUCTURAL
+  structural_result_is_human_quality: false
+  structural_result_is_empirical_validation: false
+  structural_result_is_aggregate_verification_pass: false
+  structural_result_is_implementation_readiness: false
+  structural_result_is_release_or_production_evidence: false
+  structural_result_is_final_canon: false
+
+route_cardinality:
+  concrete_active_objective_instance_count: 0
+  observed_active_route_count: null
+  candidate_interface_envelope_case_template_slot_probe_or_fork_count_is_measurement: false
+  no_active_instance_status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+  private_context_counts_toward_nonprivate_minimum: false
+  blocked_unavailable_or_mutually_exclusive_routes_may_be_double_counted: false
+  recompute_triggers:
+    - ACTIVATION
+    - REFUSAL
+    - REJECTION
+    - SUBSTITUTION
+    - RECOVERY
+    - ROUTE_LOSS
+  contracts:
+    - objective_id: OBJ_CONT:COMPARE_PERSPECTIVES
+      minimum_kind: MATERIALLY_DISTINCT_NONPRIVATE_ROUTES
+      minimum: 2
+      active_instance: false
+      observed_active_route_count: null
+      status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+    - objective_id: OBJ_CONT:SELECT_DIRECTION
+      minimum_kind: SIMULTANEOUSLY_LEGAL_DIFFERENTIATED_ROUTE_KINDS
+      minimum: 2
+      active_instance: false
+      observed_active_route_count: null
+      status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+    - objective_id: OBJ_CONT:CHOOSE_CONTINUED_GOAL
+      minimum_kind: SIMULTANEOUSLY_LEGAL_DISTINCT_GOAL_FAMILIES
+      minimum: 2
+      active_instance: false
+      observed_active_route_count: null
+      status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+    - objective_id: OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS
+      minimum_kind: MATERIALLY_DISTINCT_NONPRIVATE_ROUTES
+      minimum: 2
+      active_instance: false
+      observed_active_route_count: null
+      status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+    - objective_id: OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+      minimum_kind: SIMULTANEOUSLY_LEGAL_DIFFERENTIATED_RESPONSE_FAMILIES
+      minimum: 2
+      active_instance: false
+      observed_active_route_count: null
+      status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+    - objective_id: OBJ_CONT02:CHOOSE_CONTINUED_GOAL
+      minimum_kind: SIMULTANEOUSLY_LEGAL_DISTINCT_GOAL_FAMILIES
+      minimum: 2
+      active_instance: false
+      observed_active_route_count: null
+      status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+
+reopen_conditions:
+  count: 17
+  clearing_is_packet_local_only: true
+  future_instances_precleared: false
+  results:
+    SOURCE_OR_REVIEW_IDENTITY_DRIFT:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [reviewed_inputs, token_barrier]
+    BOUND_INTERFACE_REQUIRES_UNSUPPORTED_CONCRETE_ENTITY:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [synthesis_policy, compatibility_envelopes]
+    REVIEWED_BOUNDED_SET_BROADENED_OR_SILENTLY_NARROWED:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [world_surface_set]
+    MUTABLE_SIBLING_OUTPUT_CONSUMED_BEFORE_FANIN:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [reviewed_inputs, synthesis_policy]
+    PRIVATE_INFORMATION_REQUIRED_FOR_ROUTE_MINIMUM:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [route_cardinality, information_authority]
+    PRIVATE_INFORMATION_REQUIRED_FOR_FOUNDATIONAL_PLAY:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [history_relationship_agency, compatibility_envelopes]
+    FACT_CLAIM_BELIEF_TESTIMONY_KNOWLEDGE_EXPOSURE_AUTHORITY_COLLAPSE:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [information_authority]
+    RELATIONSHIP_OR_LEGITIMACY_SCALARIZED_OR_AUTOMATICALLY_ALIASED:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [history_relationship_agency]
+    MATERIAL_HISTORY_ERASED_BY_RETRY_REPAIR_OR_RECONCILIATION:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [history_relationship_agency, compatibility_envelopes]
+    NONFOUNDATIONAL_GATE_COMPOSITION_BECOMES_DEFACTO_FOUNDATIONAL:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [history_relationship_agency]
+    NARRATIVE_ROUTE_CARDINALITY_DROPS_BELOW_REVIEWED_MINIMUM:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [route_cardinality]
+    MUTUALLY_EXCLUSIVE_BRANCHES_BECOME_JOINTLY_REQUIRED:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [compatibility_envelopes, route_cardinality]
+    EXACT_TIME_SCHEDULE_WEATHER_TRAVEL_OR_NPC_REACHABILITY_BECOMES_REQUIRED:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [chronology, wsn]
+    CONCRETE_HIGH_IMPACT_OR_IRREVERSIBLE_BRANCH_LACKS_REVIEWED_BRANCH_IMPACT_EVIDENCE:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [compatibility_envelopes]
+    WSN_OUTCOME_REQUIRES_PROMOTION_WITHOUT_EXACT_PREREQUISITE:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [wsn]
+    GENERATED_PRESENTATION_MUTATES_AUTHORITATIVE_STATE:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [information_authority, synthesis_policy]
+    STRUCTURAL_RESULT_USED_AS_HIGHER_AUTHORITY:
+      status: CLEARED_IN_THIS_EVALUATION
+      evidence_refs: [authority, evaluator_application]
+
+wsn:
+  mutation_allowed: false
+  experiment_identity_mutation_allowed: false
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  empirical_upgrade_authority: false
+  exact_schedule_authority: false
+  exact_weather_authority: false
+  exact_travel_authority: false
+  exact_timed_objective_authority: false
+  exact_npc_reachability_authority: false
+  human_quality_established: false
+  production_persistence_established: false
+  aggregate_verification_pass: false
+  implementation_readiness_established: false
+
+self_review:
+  blocker_count: 0
+  major_count: 0
+  correction_requiring_minor_count: 0
+  exact_reviewed_token_count: 5
+  inherited_state_binding_count: 11
+  compatibility_envelope_count: 6
+  evaluator_check_count: 19
+  route_cardinality_contract_count: 6
+  route_recompute_trigger_count: 6
+  reopen_condition_class_count: 17
+  active_concrete_objective_count: 0
+  observed_active_route_count: null
+  concrete_cross_root_binding_authored: false
+  concrete_branch_selected: false
+  concrete_branch_impact_evidence_claimed: false
+  exact_time_claims_authored: false
+  unreviewed_or_stale_input_consumed: false
+  aggregate_scoring_or_ranking_authored: false
+  disposition: SELF_REVIEW_CLEAN_PENDING_FRESH_REQUIRED_FANIN_REVIEW
+
+downstream:
+  required_fresh_review: true
+  required_review_mission_id: W2-CONTENT-SYN-CONT-06-REV-01
+  reviewed_token_if_clean: W2-CONTENT-SYN-CONT-06_REVIEWED
+  reviewed_consumption_authority_granted_by_authorship: false
+  integration_authority: false
+  verification_pass_authority: false
+  implementation_readiness_authority: false
+  gameplay_implementation_authority: false
+  engine_selection_authority: false
+  human_quality_authority: false
+  release_authority: false
+  production_authority: false
+  decision_authority: false
+  final_canon_authority: false
+  canonicality: NOT_CANONICAL
+
+authority:
+  integration: false
+  verification_pass: false
+  implementation_readiness: false
+  gameplay_implementation: false
+  engine_selection: false
+  human_quality: false
+  release: false
+  production: false
+  decision: false
+  final_canon: false
+  canonical: false
