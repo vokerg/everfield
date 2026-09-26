@@ -1,0 +1,383 @@
+protocol: planning-v1
+schema: 1
+artifact: W2-CONTENT-FRONTIER-CONT-07-MAP
+
+compiler:
+  issue: 1306
+  mission_id: W2-CONTENT-FRONTIER-CONT-07
+  ownership_comment_id: 5827221005
+  branch: planning/issue-1306
+  materialization_main_sha: f27a2ac9613953501efc023724a0efa6ecbb0330
+  execution_base_main_sha: f27a2ac9613953501efc023724a0efa6ecbb0330
+  canonicality: NOT_CANONICAL
+  duplicate_invalidated_issue: 1307
+  duplicate_invalidated_comment_id: 5827231215
+
+canonical:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+
+directives:
+  convergence_comment_id: 5277825639
+  parallel_frontier_comment_id: 5305563203
+  parallel_content_comment_id: 5511637902
+
+foundation:
+  fanin_issue: 1302
+  fanin_terminal_comment_id: 5827101152
+  fanin_head_sha: 1c5966d1965c4ca36bb2ef53561137a2ff88e61a
+  markdown_blob_sha: 1689cb397173556e87d0dce507bd64712da1eaf2
+  yaml_blob_sha: 400b929442fb36b63318a9eecaca6a08ca12f05e
+  fanin_handoff_blob_sha: 55943d3b98a928fea0c34d7a924ba705a70f3936
+  fanin_publication_comment_id: 5827199426
+  fanin_publication_main_sha: f27a2ac9613953501efc023724a0efa6ecbb0330
+  review_issue: 1304
+  review_terminal_comment_id: 5827159994
+  review_disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_06_CONSUMPTION
+  review_report_blob_sha: f5ea0e5327c2828e9a88f3b08a84f94f3aac8006
+  review_handoff_blob_sha: 4d6106a602004557102f441faf29ed0fe3e34476
+  review_publication_comment_id: 5827187612
+  review_publication_main_sha: 4a50d925246f1637638877c7a1b960261953eefe
+  reviewed_token: W2-CONTENT-SYN-CONT-06_REVIEWED
+
+activation_review:
+  issue: 1308
+  mission_id: W2-CONTENT-FRONTIER-CONT-07-REV-01
+  required_clean_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_07_ACTIVATION
+  state_before_compiler_terminal: BLOCKED_PENDING_COMPILER_TERMINAL
+  output_paths:
+    - docs/planning/wave-2/reviews/w2-content-frontier-continuation-07-review.md
+    - docs/planning/handoffs/issue-1308.md
+  producer_branch_read_only: true
+  integration_authority: false
+  verification_pass_authority: false
+  implementation_readiness_authority: false
+
+root_activation:
+  by_compiler_authorship: false
+  required_review_issue: 1308
+  required_clean_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_07_ACTIVATION
+  blocked_state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_07_REVIEW
+
+inherited_state_contract:
+  SYN-CONT02-OPEN-001: OPEN_BOUNDED_SET
+  SYN-CONT02-OPEN-002: OPEN
+  SYN-CONT02-OPEN-003: OPEN
+  SYN-CONT02-OPEN-004: OPEN
+  SYN-CONT02-OPEN-005: OPEN_OPTIONAL
+  SYN-CONT02-OPEN-006: UNRESOLVED
+  SYN-CONT02-OPEN-007: RELATIVE_ONLY
+  SYN-CONT02-OPEN-008: BLOCKED_BY_EXACT_PREREQUISITE
+  SYN-CONT02-OPEN-009: LATER_EMPIRICAL_EVIDENCE_REQUIRED
+  SYN-CONT02-OPEN-010: FINAL_CANON_NOT_AUTHORIZED
+  SYN-CONT02-OPEN-011: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  reviewed_refinement_replaces_state: false
+  compatibility_envelope_is_final_binding: false
+
+world_surface_set:
+  state: OPEN_BOUNDED_SET
+  exact_members:
+    - WORLD_IFACE:SHARED-WORKS-JUNCTION
+    - WORLD_IFACE:COMMONS-EDGE
+    - WORLD_IFACE:CULTIVATION-MARGIN
+  member_count: 3
+  selection_made: false
+  widening_allowed: false
+  silent_narrowing_allowed: false
+
+compatibility_envelopes:
+  immutable: true
+  descriptive_only: true
+  nonselecting: true
+  ids:
+    - ENVELOPE-05-A-EVIDENCE-TRIANGULATION
+    - ENVELOPE-05-B-REFUSAL-SAFE-PORTFOLIO
+    - ENVELOPE-05-C-APPEND-ONLY-AFTERMATH
+    - ENVELOPE-05-D-OPTIONAL-PRIVATE-CONTEXT
+    - ENVELOPE-05-E-EXCLUSIVE-COMMITMENT-GUARD
+    - ENVELOPE-05-F-BRANCH-IMPACT-BARRIER
+
+roots:
+  - issue: 1309
+    mission_id: W2-CONTENT-WORLD-CONT-07
+    family: WORLD
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_07_REVIEW
+    mutable_paths:
+      - docs/planning/wave-2/content/world-lore-continuation-07.md
+      - docs/planning/wave-2/content/world-lore-continuation-07.yaml
+      - docs/planning/handoffs/issue-1309.md
+    reviewed_token: W2-CONTENT-WORLD-CONT-07_REVIEWED
+    required_root_review_mission_id: W2-CONTENT-WORLD-CONT-07-REV-01
+    acceptance:
+      exact_three_world_surface_set_preserved: true
+      final_site_selection_allowed: false
+      contested_causal_truth_may_be_authored: false
+      exact_time_or_reachability_authority: false
+      concrete_active_objective_instance_count: 0
+      concrete_high_impact_branch_allowed: false
+
+  - issue: 1310
+    mission_id: W2-CONTENT-SOCIAL-CONT-07
+    family: SOCIAL
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_07_REVIEW
+    mutable_paths:
+      - docs/planning/wave-2/content/social-conflict-continuation-07.md
+      - docs/planning/wave-2/content/social-conflict-continuation-07.yaml
+      - docs/planning/handoffs/issue-1310.md
+    reviewed_token: W2-CONTENT-SOCIAL-CONT-07_REVIEWED
+    required_root_review_mission_id: W2-CONTENT-SOCIAL-CONT-07-REV-01
+    acceptance:
+      final_membership_or_office_allowed: false
+      final_representation_or_legitimacy_allowed: false
+      private_information_foundational: false
+      refusal_or_nonalignment_rewritable: false
+      concrete_active_objective_instance_count: 0
+
+  - issue: 1311
+    mission_id: W2-CONTENT-CHAR-CONT-07
+    family: CHARACTER
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_07_REVIEW
+    mutable_paths:
+      - docs/planning/wave-2/content/character-arcs-continuation-07.md
+      - docs/planning/wave-2/content/character-arcs-continuation-07.yaml
+      - docs/planning/handoffs/issue-1311.md
+    reviewed_token: W2-CONTENT-CHAR-CONT-07_REVIEWED
+    required_root_review_mission_id: W2-CONTENT-CHAR-CONT-07-REV-01
+    acceptance:
+      final_named_identity_allowed: false
+      final_counterpart_allowed: false
+      final_romance_family_or_arc_allowed: false
+      relationship_scalar_allowed: false
+      refusal_or_withdrawal_rewritable: false
+      concrete_active_objective_instance_count: 0
+
+  - issue: 1312
+    mission_id: W2-CONTENT-NARR-CONT-07
+    family: NARRATIVE
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_07_REVIEW
+    mutable_paths:
+      - docs/planning/wave-2/content/narrative-consequence-continuation-07.md
+      - docs/planning/wave-2/content/narrative-consequence-continuation-07.yaml
+      - docs/planning/handoffs/issue-1312.md
+    reviewed_token: W2-CONTENT-NARR-CONT-07_REVIEWED
+    required_root_review_mission_id: W2-CONTENT-NARR-CONT-07-REV-01
+    acceptance:
+      concrete_quest_or_objective_instance_count: 0
+      concrete_branch_selection_allowed: false
+      private_context_may_satisfy_nonprivate_minimum: false
+      branch_impact_evidence_bypass_allowed: false
+      baseline_play_hidden_tax_allowed: false
+
+  - issue: 1313
+    mission_id: W2-CONTENT-EVAL-CONT-07
+    family: EVALUATION
+    state: BLOCKED_PENDING_CONTENT_FRONTIER_CONT_07_REVIEW
+    mutable_paths:
+      - docs/planning/wave-2/content/content-evaluation-continuation-07.md
+      - docs/planning/wave-2/content/content-evaluation-continuation-07.yaml
+      - docs/planning/handoffs/issue-1313.md
+    reviewed_token: W2-CONTENT-EVAL-CONT-07_REVIEWED
+    required_root_review_mission_id: W2-CONTENT-EVAL-CONT-07-REV-01
+    acceptance:
+      predecessor_attack_surface_count: 19
+      aggregate_score_allowed: false
+      ranking_or_tier_allowed: false
+      higher_authority_promotion_allowed: false
+      sibling_mutable_bytes_consumed: false
+      concrete_active_objective_instance_count: 0
+
+path_partition:
+  pairwise_disjoint: true
+  compiler_paths:
+    - docs/planning/wave-2/foundations/content-frontier-continuation-07-contract.md
+    - docs/planning/wave-2/foundations/content-frontier-continuation-07-map.yaml
+    - docs/planning/handoffs/issue-1306.md
+  activation_review_paths:
+    - docs/planning/wave-2/reviews/w2-content-frontier-continuation-07-review.md
+    - docs/planning/handoffs/issue-1308.md
+  sibling_mutable_consumption_before_fanin: false
+
+information_authority:
+  objective_fact_separate: true
+  claim_separate: true
+  belief_separate: true
+  testimony_separate: true
+  interpretation_separate: true
+  institutional_record_separate: true
+  confidence_separate: true
+  knowledge_separate: true
+  player_exposure_separate: true
+  scoped_absence_separate: true
+  generated_presentation_separate: true
+  generated_presentation_mutates_authoritative_state: false
+  repetition_promotes_truth: false
+  majority_promotes_truth: false
+  unanimity_promotes_truth: false
+  institutional_provenance_promotes_truth: false
+  relationship_state_promotes_truth: false
+  public_standing_promotes_truth: false
+  player_exposure_grants_character_knowledge: false
+
+private_information:
+  access_default: DENY
+  onward_sharing_default: DENY
+  optional: true
+  foundational: false
+  may_satisfy_required_nonprivate_route_minimum: false
+  absence_legal: true
+
+history_relationship_agency:
+  material_history_append_only: true
+  refusal_history_append_only: true
+  disclosure_history_append_only: true
+  relationship_history_append_only: true
+  remedy_history_append_only: true
+  retry_erases_history: false
+  repair_erases_history: false
+  compensation_erases_history: false
+  reconciliation_erases_history: false
+  later_success_erases_history: false
+  relationship_dimensions:
+    - TRUST
+    - WARMTH
+    - RESPECT
+    - OBLIGATION
+    - RIVALRY
+    - CAUTION
+  relationship_dimensions_independent: true
+  relationship_scalar_allowed: false
+  legitimacy_or_public_standing_alias_allowed: false
+  refusal_legal: true
+  withdrawal_legal: true
+  deferral_legal: true
+  substitution_legal: true
+  recusal_legal: true
+  rejection_legal: true
+  nonalignment_legal: true
+  baseline_play_remains_legal: true
+  hidden_foundational_tax_allowed: false
+
+route_cardinality:
+  concrete_active_objective_instance_count: 0
+  observed_active_route_count: null
+  no_active_instance_status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+  candidate_or_interface_count_is_measurement: false
+  private_only_routes_count_toward_nonprivate_minimum: false
+  blocked_routes_count: false
+  unavailable_routes_count: false
+  mutually_exclusive_routes_may_be_double_counted: false
+  recompute_triggers:
+    - ACTIVATION
+    - REFUSAL
+    - REJECTION
+    - SUBSTITUTION
+    - RECOVERY
+    - ROUTE_LOSS
+  contracts:
+    - objective: OBJ_CONT:COMPARE_PERSPECTIVES
+      minimum_count: 2
+      minimum_semantics: MATERIALLY_DISTINCT_NONPRIVATE_ROUTES
+    - objective: OBJ_CONT:SELECT_DIRECTION
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DIFFERENTIATED_ROUTE_KINDS
+    - objective: OBJ_CONT:CHOOSE_CONTINUED_GOAL
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DISTINCT_GOAL_FAMILIES
+    - objective: OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS
+      minimum_count: 2
+      minimum_semantics: MATERIALLY_DISTINCT_NONPRIVATE_ROUTES
+    - objective: OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DIFFERENTIATED_RESPONSE_FAMILIES
+    - objective: OBJ_CONT02:CHOOSE_CONTINUED_GOAL
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DISTINCT_GOAL_FAMILIES
+
+reopen_conditions:
+  count: 17
+  future_instances_precleared: false
+  classes:
+    - SOURCE_OR_REVIEW_IDENTITY_DRIFT
+    - BOUND_INTERFACE_REQUIRES_UNSUPPORTED_CONCRETE_ENTITY
+    - REVIEWED_BOUNDED_SET_BROADENED_OR_SILENTLY_NARROWED
+    - MUTABLE_SIBLING_OUTPUT_CONSUMED_BEFORE_FANIN
+    - PRIVATE_INFORMATION_REQUIRED_FOR_ROUTE_MINIMUM
+    - PRIVATE_INFORMATION_REQUIRED_FOR_FOUNDATIONAL_PLAY
+    - FACT_CLAIM_BELIEF_TESTIMONY_KNOWLEDGE_EXPOSURE_AUTHORITY_COLLAPSE
+    - RELATIONSHIP_OR_LEGITIMACY_SCALARIZED_OR_AUTOMATICALLY_ALIASED
+    - MATERIAL_HISTORY_ERASED_BY_RETRY_REPAIR_OR_RECONCILIATION
+    - NONFOUNDATIONAL_GATE_COMPOSITION_BECOMES_DEFACTO_FOUNDATIONAL
+    - NARRATIVE_ROUTE_CARDINALITY_DROPS_BELOW_REVIEWED_MINIMUM
+    - MUTUALLY_EXCLUSIVE_BRANCHES_BECOME_JOINTLY_REQUIRED
+    - EXACT_TIME_SCHEDULE_WEATHER_TRAVEL_OR_NPC_REACHABILITY_BECOMES_REQUIRED
+    - CONCRETE_HIGH_IMPACT_OR_IRREVERSIBLE_BRANCH_LACKS_REVIEWED_BRANCH_IMPACT_EVIDENCE
+    - WSN_OUTCOME_REQUIRES_PROMOTION_WITHOUT_EXACT_PREREQUISITE
+    - GENERATED_PRESENTATION_MUTATES_AUTHORITATIVE_STATE
+    - STRUCTURAL_RESULT_USED_AS_HIGHER_AUTHORITY
+
+branch_impact:
+  concrete_high_impact_or_irreversible_activation_authorized: false
+  separately_reviewed_branch_impact_evidence_required: true
+  applicable_obligations:
+    - BIE04:SIGNALING
+    - BIE04:OBSERVED-EFFECT
+    - BIE04:CONTINUED-PLAY
+
+wsn:
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  exact_schedule_authority: false
+  weather_authority: false
+  travel_duration_authority: false
+  timed_objective_authority: false
+  npc_reachability_authority: false
+  empirical_promotion_authority: false
+
+fanin_barrier:
+  mission_id: W2-CONTENT-SYN-CONT-07
+  materialized: false
+  required_reviewed_tokens:
+    - W2-CONTENT-WORLD-CONT-07_REVIEWED
+    - W2-CONTENT-SOCIAL-CONT-07_REVIEWED
+    - W2-CONTENT-CHAR-CONT-07_REVIEWED
+    - W2-CONTENT-NARR-CONT-07_REVIEWED
+    - W2-CONTENT-EVAL-CONT-07_REVIEWED
+  required_token_count: 5
+  partial_tokens_allow_fanin: false
+  producer_authorship_allows_fanin: false
+
+authority:
+  integration: false
+  verification_pass: false
+  implementation_readiness: false
+  gameplay_implementation: false
+  engine_selection: false
+  human_quality: false
+  release: false
+  production: false
+  decision: false
+  final_canon: false
+  canonical: false
+
+self_review:
+  blocker_count: 0
+  major_count: 0
+  correction_requiring_minor_count: 0
+  root_count: 5
+  activation_review_count: 1
+  pairwise_disjoint_mutable_paths: true
+  inherited_state_binding_count: 11
+  compatibility_envelope_count: 6
+  world_bounded_set_member_count: 3
+  route_cardinality_contract_count: 6
+  route_recompute_trigger_count: 6
+  reopen_condition_class_count: 17
+  active_concrete_objective_count: 0
+  observed_active_route_count: null
+  sibling_mutable_outputs_consumed: false
+  aggregate_scoring_or_ranking_authored: false
+  final_selection_authored: false
