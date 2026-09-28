@@ -1,0 +1,545 @@
+protocol: planning-v1
+schema: 1
+artifact: W2-CONTENT-SOCIAL-CONT-07
+
+identity:
+  issue: 1310
+  mission_id: W2-CONTENT-SOCIAL-CONT-07
+  branch: planning/issue-1310
+  ownership_comment_id: 5875513729
+  execution_base_main_sha: 0f2c1e4e174b7ff9c2dd95a5d51ab7cdca041ecc
+  canonicality: NOT_CANONICAL
+
+canonical:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+
+activation:
+  compiler_issue: 1306
+  compiler_terminal_comment_id: 5827305785
+  activation_review_issue: 1308
+  activation_review_terminal_comment_id: 5827378595
+  activation_disposition: CLEAN_FOR_BOUNDED_CONTENT_FRONTIER_CONTINUATION_07_ACTIVATION
+
+frozen_predecessor:
+  fanin_issue: 1302
+  fanin_terminal_comment_id: 5827101152
+  fanin_head_sha: 1c5966d1965c4ca36bb2ef53561137a2ff88e61a
+  markdown_blob_sha: 1689cb397173556e87d0dce507bd64712da1eaf2
+  yaml_blob_sha: 400b929442fb36b63318a9eecaca6a08ca12f05e
+  handoff_blob_sha: 55943d3b98a928fea0c34d7a924ba705a70f3936
+  review_issue: 1304
+  review_terminal_comment_id: 5827159994
+  review_disposition: CLEAN_FOR_BOUNDED_CONTENT_CONTINUATION_06_CONSUMPTION
+  review_report_blob_sha: f5ea0e5327c2828e9a88f3b08a84f94f3aac8006
+  review_handoff_blob_sha: 4d6106a602004557102f441faf29ed0fe3e34476
+  reviewed_token: W2-CONTENT-SYN-CONT-06_REVIEWED
+  sibling_cont07_mutable_output_consumed: false
+
+inherited_state_contract:
+  SYN-CONT02-OPEN-001: OPEN_BOUNDED_SET
+  SYN-CONT02-OPEN-002: OPEN
+  SYN-CONT02-OPEN-003: OPEN
+  SYN-CONT02-OPEN-004: OPEN
+  SYN-CONT02-OPEN-005: OPEN_OPTIONAL
+  SYN-CONT02-OPEN-006: UNRESOLVED
+  SYN-CONT02-OPEN-007: RELATIVE_ONLY
+  SYN-CONT02-OPEN-008: BLOCKED_BY_EXACT_PREREQUISITE
+  SYN-CONT02-OPEN-009: LATER_EMPIRICAL_EVIDENCE_REQUIRED
+  SYN-CONT02-OPEN-010: FINAL_CANON_NOT_AUTHORIZED
+  SYN-CONT02-OPEN-011: HIGHER_AUTHORITY_NOT_ESTABLISHED
+  reviewed_refinement_replaces_state: false
+
+world_surface_set:
+  state: OPEN_BOUNDED_SET
+  exact_members:
+    - WORLD_IFACE:SHARED-WORKS-JUNCTION
+    - WORLD_IFACE:COMMONS-EDGE
+    - WORLD_IFACE:CULTIVATION-MARGIN
+  member_count: 3
+  selection_made: false
+  ranking_allowed: false
+  widening_allowed: false
+  silent_narrowing_allowed: false
+
+compatibility_envelopes:
+  immutable: true
+  descriptive_only: true
+  nonselecting: true
+  ids:
+    - ENVELOPE-05-A-EVIDENCE-TRIANGULATION
+    - ENVELOPE-05-B-REFUSAL-SAFE-PORTFOLIO
+    - ENVELOPE-05-C-APPEND-ONLY-AFTERMATH
+    - ENVELOPE-05-D-OPTIONAL-PRIVATE-CONTEXT
+    - ENVELOPE-05-E-EXCLUSIVE-COMMITMENT-GUARD
+    - ENVELOPE-05-F-BRANCH-IMPACT-BARRIER
+
+reviewed_social_interfaces_consumed:
+  - SOCIAL06:MANDATE-SCOPE-DOSSIER
+  - SOCIAL06:LEGITIMACY-EVIDENCE-DELTA
+  - SOCIAL06:PARTICIPATION-DISSENT-TRACE
+  - SOCIAL06:RECUSAL-SUBSTITUTION-PLAN
+  - SOCIAL06:REMEDY-APPEAL-CHAIN
+  - SOCIAL06:INTERINSTITUTIONAL-CLAIM-GRAPH
+
+interfaces:
+  procedure_claim_register:
+    id: SOCIAL07:PROCEDURE-CLAIM-REGISTER
+    authority_class: PROCEDURE_CLAIM_ONLY_NOT_LEGITIMACY_OR_TRUTH
+    required_fields:
+      - procedure_ref
+      - claimant_role_ref
+      - procedure_claim_class
+      - scope_ref
+      - public_evidence_refs
+      - institutional_record_refs
+      - counterclaim_refs
+      - scoped_absence_refs
+      - unknowns
+    allowed_claim_classes:
+      - PROCEDURE_AVAILABLE_CLAIM
+      - PROCEDURE_INVOKED_CLAIM
+      - PROCEDURE_FOLLOWED_CLAIM
+      - PROCEDURE_DEPARTURE_CLAIM
+      - PROCEDURE_CONTESTED
+      - PROCEDURE_STATUS_UNRESOLVED
+    outcome_correctness_established: false
+    legitimacy_established: false
+    consent_established: false
+    representation_established: false
+    institutional_record_promotes_truth: false
+    no_recorded_objection_means_consent: false
+    aggregate_score_allowed: false
+
+  mandate_boundary_trace:
+    id: SOCIAL07:MANDATE-BOUNDARY-TRACE
+    authority_class: MANDATE_BOUNDARY_DESCRIPTION_ONLY
+    required_fields:
+      - mandate_ref
+      - asserted_scope_refs
+      - excluded_scope_refs
+      - contested_boundary_refs
+      - source_claim_refs
+      - public_evidence_refs
+      - private_sidecar_refs
+      - unknowns
+      - scope_state
+    allowed_scope_states:
+      - ASSERTED_WITHIN_SCOPE
+      - ASSERTED_OUTSIDE_SCOPE
+      - BOUNDARY_CONTESTED
+      - SCOPE_EVIDENCE_INSUFFICIENT
+      - SCOPE_UNRESOLVED
+    final_jurisdiction_established: false
+    final_membership_established: false
+    final_office_established: false
+    representation_established: false
+    legitimacy_established: false
+    consent_established: false
+    scope_broadens_by_popularity: false
+    scope_broadens_by_relationship_state: false
+    scope_broadens_by_repetition: false
+    history_append_only: true
+
+  representation_claim_test:
+    id: SOCIAL07:REPRESENTATION-CLAIM-TEST
+    authority_class: REPRESENTATION_CLAIM_EXAMINATION_ONLY
+    representation_status: UNRESOLVED
+    required_fields:
+      - representation_claim_ref
+      - represented_role_or_group_ref
+      - claimant_role_ref
+      - declared_basis_classes
+      - required_public_evidence_roles
+      - available_public_evidence_refs
+      - counterclaim_refs
+      - dissent_trace_refs
+      - mandate_boundary_trace_ref
+      - private_context_refs
+      - test_state
+    allowed_test_states:
+      - EVIDENCE_ROLES_PRESENT_FOR_BOUNDED_EXAMINATION
+      - PUBLIC_EVIDENCE_ROLE_MISSING
+      - MANDATE_BOUNDARY_UNRESOLVED
+      - DISSENT_REQUIRES_RETENTION
+      - CLAIM_BASIS_CONTESTED
+      - INSUFFICIENT_SCOPE
+    evidence_count_selects_representation: false
+    unanimity_selects_representation: false
+    public_standing_selects_representation: false
+    relationship_state_selects_representation: false
+    private_only_evidence_satisfies_public_role: false
+    refusal_implies_representation: false
+
+  legitimacy_evidence_matrix:
+    id: SOCIAL07:LEGITIMACY-EVIDENCE-MATRIX
+    authority_class: LEGITIMACY_EVIDENCE_BEARING_ONLY
+    legitimacy_status: UNRESOLVED
+    allowed_bearings:
+      - SUPPORTS
+      - WEAKENS
+      - NONDISCRIMINATING
+      - INSUFFICIENT_SCOPE
+    required_row_fields:
+      - legitimacy_claim_ref
+      - evidence_ref
+      - evidence_authority_class
+      - bearing
+      - scope_limits
+      - dependency_refs
+      - counterevidence_refs
+      - unknowns
+    numeric_weight_allowed: false
+    aggregate_score_allowed: false
+    confidence_scalar_allowed: false
+    rank_allowed: false
+    tier_allowed: false
+    winner_allowed: false
+    threshold_allowed: false
+    recommendation_allowed: false
+    evidence_count_promotes_legitimacy: false
+    majority_promotes_legitimacy: false
+    unanimity_promotes_legitimacy: false
+    institutional_provenance_promotes_legitimacy: false
+    relationship_state_promotes_legitimacy: false
+    public_standing_promotes_legitimacy: false
+    establishes_ownership: false
+    establishes_membership: false
+    establishes_office: false
+    establishes_representation: false
+    establishes_jurisdiction: false
+    establishes_consent: false
+    establishes_objective_truth: false
+
+  recusal_substitution_ledger:
+    id: SOCIAL07:RECUSAL-SUBSTITUTION-LEDGER
+    authority_class: APPEND_ONLY_AGENCY_TRANSITION_PROVENANCE
+    selection_effect: NONE
+    required_fields:
+      - procedure_ref
+      - role_slot_ref
+      - event_class
+      - event_basis_refs
+      - prior_role_state_ref
+      - successor_role_slot_ref
+      - scope_limits
+      - retained_dissent_refs
+      - retained_refusal_refs
+      - unknowns
+    allowed_event_classes:
+      - RECUSAL
+      - SUBSTITUTION_REQUESTED
+      - SUBSTITUTION_ACCEPTED_WITHIN_SCOPE
+      - SUBSTITUTION_REJECTED
+      - WITHDRAWAL
+      - DEFERRAL
+      - ROLE_AVAILABILITY_LOST
+      - ROLE_STATE_UNRESOLVED
+    concrete_successor_selected: false
+    recusal_erased_by_later_substitution: false
+    refusal_erased_by_later_route: false
+    relationship_state_forces_substitution: false
+    popularity_forces_substitution: false
+    gifts_force_substitution: false
+    grinding_forces_substitution: false
+    proximity_forces_substitution: false
+    prior_success_forces_substitution: false
+
+  remedy_appeal_delta_ledger:
+    id: SOCIAL07:REMEDY-APPEAL-DELTA-LEDGER
+    authority_class: APPEND_ONLY_REMEDY_AND_APPEAL_PROVENANCE
+    required_fields:
+      - subject_ref
+      - prior_remedy_state_ref
+      - event_class
+      - public_evidence_refs
+      - optional_private_context_refs
+      - observed_effect_refs
+      - residual_effect_refs
+      - counterevidence_refs
+      - scope_limits
+      - unknowns
+      - restoration_status
+    allowed_event_classes:
+      - REMEDY_PROPOSED
+      - REMEDY_ACCEPTED_WITHIN_SCOPE
+      - REMEDY_REJECTED
+      - APPEAL_INVOKED
+      - APPEAL_DECLINED
+      - REPAIR_OBSERVED_WITHIN_SCOPE
+      - COMPENSATION_OBSERVED_WITHIN_SCOPE
+      - RESIDUAL_EFFECT_OBSERVED
+      - OUTCOME_UNRESOLVED
+    allowed_restoration_statuses:
+      - NOT_EVALUATED
+      - SCOPED_EFFECT_OBSERVED
+      - RESIDUAL_EFFECT_RETAINED
+      - RESTORATION_UNRESOLVED
+    fully_restored_state_exists: false
+    global_reset_exists: false
+    universal_repaired_flag_exists: false
+    remedy_erases_history: false
+    appeal_erases_history: false
+    repair_erases_history: false
+    compensation_erases_history: false
+    reconciliation_erases_history: false
+    later_success_erases_history: false
+
+  interinstitutional_conflict_frame:
+    id: SOCIAL07:INTERINSTITUTIONAL-CONFLICT-FRAME
+    authority_class: CONFLICT_DESCRIPTION_ONLY_NOT_SELECTION
+    selection_effect: NONE
+    minimum_claimant_role_refs_when_instantiated: 2
+    required_fields:
+      - claimant_role_refs
+      - contested_subject_ref
+      - procedure_claim_refs
+      - mandate_boundary_refs
+      - representation_claim_refs
+      - legitimacy_matrix_refs
+      - recusal_substitution_refs
+      - remedy_appeal_refs
+      - public_evidence_refs
+      - counterclaim_refs
+      - private_context_required
+      - conflict_state
+    allowed_conflict_states:
+      - CLAIMS_COEXIST_UNRESOLVED
+      - SCOPE_CONFLICT_UNRESOLVED
+      - PROCEDURE_CONFLICT_UNRESOLVED
+      - REPRESENTATION_CONFLICT_UNRESOLVED
+      - LEGITIMACY_CONFLICT_UNRESOLVED
+      - INSUFFICIENT_SCOPE
+    private_context_required: false
+    claimant_ranking_allowed: false
+    claimant_preference_allowed: false
+    claimant_default_allowed: false
+    claimant_selection_allowed: false
+    legitimacy_selection_allowed: false
+    final_authority_selection_allowed: false
+
+information_authority:
+  objective_fact_separate: true
+  claim_separate: true
+  belief_separate: true
+  testimony_separate: true
+  interpretation_separate: true
+  institutional_record_separate: true
+  confidence_separate: true
+  entity_knowledge_separate: true
+  player_exposure_separate: true
+  scoped_absence_separate: true
+  generated_presentation_separate: true
+  institutional_record_promotes_truth: false
+  repetition_promotes_truth: false
+  majority_promotes_truth: false
+  unanimity_promotes_truth: false
+  public_standing_promotes_truth: false
+  relationship_state_promotes_truth: false
+  player_exposure_grants_entity_knowledge: false
+  generated_presentation_mutates_authoritative_state: false
+
+private_information:
+  access_default: DENY_BY_DEFAULT
+  onward_sharing_default: DENY_BY_DEFAULT
+  optional: true
+  foundational: false
+  absence_legal: true
+  may_satisfy_required_nonprivate_evidence_role: false
+  may_satisfy_route_minimum: false
+  may_gate_baseline_play: false
+  may_establish_public_representation: false
+  may_establish_public_mandate: false
+  one_use_permission_implies_onward_sharing: false
+  revocation_history_append_only: true
+
+relationship_and_agency:
+  relationship_dimensions:
+    - TRUST
+    - WARMTH
+    - RESPECT
+    - OBLIGATION
+    - RIVALRY
+    - CAUTION
+  dimensions_independent: true
+  aggregate_relationship_scalar_allowed: false
+  legitimacy_alias_allowed: false
+  public_standing_alias_allowed: false
+  representation_alias_allowed: false
+  office_alias_allowed: false
+  consent_alias_allowed: false
+  refusal_legal: true
+  withdrawal_legal: true
+  deferral_legal: true
+  substitution_legal: true
+  recusal_legal: true
+  rejection_legal: true
+  nonalignment_legal: true
+  refusal_rewritable_by_popularity: false
+  refusal_rewritable_by_gifts: false
+  refusal_rewritable_by_grinding: false
+  refusal_rewritable_by_proximity: false
+  refusal_rewritable_by_prior_success: false
+  refusal_rewritable_by_relationship_state: false
+  refusal_rewritable_by_public_standing: false
+  baseline_play_remains_legal: true
+  hidden_foundational_tax_allowed: false
+
+history:
+  material_history_append_only: true
+  refusal_history_append_only: true
+  dissent_history_append_only: true
+  disclosure_history_append_only: true
+  relationship_history_append_only: true
+  remedy_history_append_only: true
+  repair_history_append_only: true
+  compensation_history_append_only: true
+  reconciliation_history_append_only: true
+  failed_restoration_history_append_only: true
+  universal_restoration_flag_allowed: false
+
+route_cardinality:
+  concrete_active_objective_instance_count: 0
+  observed_active_route_count: null
+  no_active_instance_status: NOT_APPLICABLE_NO_ACTIVE_CONCRETE_OBJECTIVE_INSTANCE
+  candidate_or_interface_count_is_measurement: false
+  private_only_routes_count_toward_nonprivate_minimum: false
+  blocked_routes_count_toward_minimum: false
+  unavailable_routes_count_toward_minimum: false
+  mutually_exclusive_routes_may_be_double_counted: false
+  recompute_triggers:
+    - ACTIVATION
+    - REFUSAL
+    - REJECTION
+    - SUBSTITUTION
+    - RECOVERY
+    - ROUTE_LOSS
+  contracts:
+    - objective: OBJ_CONT:COMPARE_PERSPECTIVES
+      minimum_count: 2
+      minimum_semantics: MATERIALLY_DISTINCT_NONPRIVATE_ROUTES
+    - objective: OBJ_CONT:SELECT_DIRECTION
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DIFFERENTIATED_ROUTE_KINDS
+    - objective: OBJ_CONT:CHOOSE_CONTINUED_GOAL
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DISTINCT_GOAL_FAMILIES
+    - objective: OBJ_CONT02:COMPARE_CAUSAL_ACCOUNTS
+      minimum_count: 2
+      minimum_semantics: MATERIALLY_DISTINCT_NONPRIVATE_ROUTES
+    - objective: OBJ_CONT02:SELECT_RESPONSE_PORTFOLIO
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DIFFERENTIATED_RESPONSE_FAMILIES
+    - objective: OBJ_CONT02:CHOOSE_CONTINUED_GOAL
+      minimum_count: 2
+      minimum_semantics: SIMULTANEOUSLY_LEGAL_DISTINCT_GOAL_FAMILIES
+
+reopen_conditions:
+  count: 17
+  future_instances_precleared: false
+  classes:
+    - SOURCE_OR_REVIEW_IDENTITY_DRIFT
+    - BOUND_INTERFACE_REQUIRES_UNSUPPORTED_CONCRETE_ENTITY
+    - REVIEWED_BOUNDED_SET_BROADENED_OR_SILENTLY_NARROWED
+    - MUTABLE_SIBLING_OUTPUT_CONSUMED_BEFORE_FANIN
+    - PRIVATE_INFORMATION_REQUIRED_FOR_ROUTE_MINIMUM
+    - PRIVATE_INFORMATION_REQUIRED_FOR_FOUNDATIONAL_PLAY
+    - FACT_CLAIM_BELIEF_TESTIMONY_KNOWLEDGE_EXPOSURE_AUTHORITY_COLLAPSE
+    - RELATIONSHIP_OR_LEGITIMACY_SCALARIZED_OR_AUTOMATICALLY_ALIASED
+    - MATERIAL_HISTORY_ERASED_BY_RETRY_REPAIR_OR_RECONCILIATION
+    - NONFOUNDATIONAL_GATE_COMPOSITION_BECOMES_DEFACTO_FOUNDATIONAL
+    - NARRATIVE_ROUTE_CARDINALITY_DROPS_BELOW_REVIEWED_MINIMUM
+    - MUTUALLY_EXCLUSIVE_BRANCHES_BECOME_JOINTLY_REQUIRED
+    - EXACT_TIME_SCHEDULE_WEATHER_TRAVEL_OR_NPC_REACHABILITY_BECOMES_REQUIRED
+    - CONCRETE_HIGH_IMPACT_OR_IRREVERSIBLE_BRANCH_LACKS_REVIEWED_BRANCH_IMPACT_EVIDENCE
+    - WSN_OUTCOME_REQUIRES_PROMOTION_WITHOUT_EXACT_PREREQUISITE
+    - GENERATED_PRESENTATION_MUTATES_AUTHORITATIVE_STATE
+    - STRUCTURAL_RESULT_USED_AS_HIGHER_AUTHORITY
+
+branch_impact:
+  concrete_high_impact_or_irreversible_activation_authorized: false
+  separately_reviewed_branch_impact_evidence_required: true
+  obligations:
+    - BIE04:SIGNALING
+    - BIE04:OBSERVED-EFFECT
+    - BIE04:CONTINUED-PLAY
+
+wsn:
+  WSN-E3: INCONCLUSIVE_TIMED_COVERAGE_BLOCKED
+  WSN-E4: NOT_RUN_BLOCKED_BY_EXACT_PREREQUISITE
+  WSN-E5: PASS_BOUNDED_MODEL_ONLY
+  WSN-E8: INCONCLUSIVE_SCHEDULE_COVERAGE_BLOCKED
+  exact_schedule_authority: false
+  weather_authority: false
+  travel_duration_authority: false
+  timed_objective_authority: false
+  npc_reachability_authority: false
+  empirical_promotion_authority: false
+
+selection_and_authority:
+  final_institution_selected: false
+  final_polity_selected: false
+  final_membership_selected: false
+  final_office_selected: false
+  final_occupant_selected: false
+  final_representation_selected: false
+  final_jurisdiction_selected: false
+  final_legitimacy_selected: false
+  final_consent_selected: false
+  concrete_cross_root_binding_selected: false
+  concrete_active_objective_instance_count: 0
+  integration_authority: false
+  publication_authority: false
+  verification_pass_authority: false
+  implementation_readiness_authority: false
+  gameplay_implementation_authority: false
+  engine_selection_authority: false
+  human_quality_authority: false
+  release_authority: false
+  production_authority: false
+  decision_authority: false
+  final_canon_authority: false
+  canonical_authority: false
+
+fanin_barrier:
+  mission_id: W2-CONTENT-SYN-CONT-07
+  materialized: false
+  this_producer_grants_reviewed_token: false
+  this_root_reviewed_token: W2-CONTENT-SOCIAL-CONT-07_REVIEWED
+  required_reviewed_tokens:
+    - W2-CONTENT-WORLD-CONT-07_REVIEWED
+    - W2-CONTENT-SOCIAL-CONT-07_REVIEWED
+    - W2-CONTENT-CHAR-CONT-07_REVIEWED
+    - W2-CONTENT-NARR-CONT-07_REVIEWED
+    - W2-CONTENT-EVAL-CONT-07_REVIEWED
+  required_token_count: 5
+  partial_tokens_allow_fanin: false
+  producer_authorship_allows_fanin: false
+
+self_review:
+  blocker_count: 0
+  major_count: 0
+  correction_requiring_minor_count: 0
+  inherited_state_binding_count: 11
+  compatibility_envelope_count: 6
+  world_bounded_set_member_count: 3
+  social07_interface_count: 7
+  route_cardinality_contract_count: 6
+  route_recompute_trigger_count: 6
+  reopen_condition_class_count: 17
+  active_concrete_objective_count: 0
+  observed_active_route_count: null
+  sibling_mutable_outputs_consumed: false
+  aggregate_scoring_or_ranking_authored: false
+  universal_restoration_flag_authored: false
+  final_selection_authored: false
+  future_reopen_instances_precleared: false
+
+required_next_route:
+  mission_id: W2-CONTENT-SOCIAL-CONT-07-REV-01
+  review_required: true
+  clean_disposition_required: CLEAN_FOR_BOUNDED_CONTENT_SOCIAL_CONTINUATION_07_CONSUMPTION
+  token_on_clean_review: W2-CONTENT-SOCIAL-CONT-07_REVIEWED
+  integration_or_publication_authority_granted: false
