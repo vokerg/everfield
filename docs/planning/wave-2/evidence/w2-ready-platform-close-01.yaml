@@ -1,0 +1,85 @@
+schema: readiness_platform_scope_closure_v1
+mission_id: W2-READY-PLATFORM-CLOSE-01
+issue: 1337
+claim_comment_id: 5889954076
+base_main_sha: 271ceee5a8af967403b2cba460afdb493fa14ac1
+canonical:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+authority:
+  human_implementation_transition_comment_id: 5889817307
+  selected_engine: GODOT_4_7_1_STABLE
+  selected_engine_issue: 1028
+  selected_engine_terminal_comment_id: 5651263207
+predecessor:
+  readiness_producer_issue: 1031
+  readiness_producer_terminal_comment_id: 5651299741
+  readiness_verifier_issue: 1038
+  readiness_verifier_terminal_comment_id: 5651326367
+  prior_platform_state: OPEN_BOUNDED
+platform_evidence:
+  source_producer_issue: 79
+  remediation_issue: 92
+  remediation_terminal_comment_id: 5270335386
+  remediation_head_sha: 9d51099be4d53eff876104f482e3c163d34519e3
+  corrected_report_blob_sha: d6a20c2200cedad97ede36beb9871d420ca7a8ca
+  source_records_blob_sha: f2a9333436c9cbc4fe91ec71507997f46f2247e4
+  independent_review_issue: 100
+  independent_review_terminal_comment_id: 5271940062
+  independent_review_disposition: CLEAN_FOR_W2_REVIEW_INPUT
+  parent_scope_id: PLAT-PC-FIRST-R1
+freshness_check:
+  observed_on: "2026-09-29"
+  windows:
+    source: https://learn.microsoft.com/lifecycle/products/windows-11-home-and-pro
+    state: IN_SUPPORT
+    first_playable_rule: SUPPORTED_WINDOWS_11_HOME_OR_PRO_RELEASE_AT_EXECUTION_TIME
+  steam_deck:
+    source: https://partner.steamgames.com/doc/steamhardware/compat
+    required_surface_preserved: true
+    windows_build_via_proton_preserved: true
+    controller_access_required_when_applicable: true
+    active_input_glyphs_required_when_applicable: true
+    controller_text_entry_required_when_applicable: true
+    deck_default_performance_target: 30_FPS_AT_800P
+    deck_resolution_target: 1280x800
+  steam_survey:
+    source: https://store.steampowered.com/hwsurvey/hw/
+    latest_visible_month: August_2026
+    windows_percent: 93.95
+    windows_11_64bit_percent: 70.97
+    authority_class: DIRECTIONAL_ONLY
+  material_reopen_trigger_observed: false
+closure:
+  platform_scope_predicate: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+  first_playable_scope_id: PLAT-PC-FIRST-R1
+  primary_execution_target: WINDOWS_11_64BIT_DESKTOP_SUPPORTED_RELEASE
+  exact_execution_os_identity_required_in_implementation_evidence: true
+  required_compatibility_evidence_target: STEAM_DECK_STEAMOS_WINDOWS_BUILD_VIA_PROTON
+  native_linux: CONDITIONAL
+  macos_apple_silicon: CONDITIONAL
+  additional_pc_storefronts: OPTIONAL_CONDITIONAL
+  xbox_console: DEFERRED_PARTNER_GATED
+  playstation: DEFERRED_PARTNER_GATED
+  nintendo: DEFERRED_PARTNER_GATED
+  ios_ipados_android: DEFERRED_PRODUCT_SCOPE
+  shipping_platform_commitment: false
+  storefront_commitment: false
+  deck_verified_claim: false
+  release_authority: false
+  production_authority: false
+  aggregate_implementation_readiness_authority: false
+reopen_conditions:
+  - WINDOWS_PRIMARY_BASELINE_INVALIDATED
+  - SELECTED_GODOT_WINDOWS_OR_DECK_PATH_INVALIDATED
+  - STEAM_DECK_OR_PROTON_CRITERIA_MATERIAL_DRIFT
+  - ACCESSIBILITY_EVIDENCE_INVALIDATES_INPUT_DISPLAY_ENVELOPE
+  - MEASURED_DECK_IMPLEMENTATION_COST_INVALIDATES_REVERSIBILITY
+  - PRODUCT_AUTHORITY_PROMOTES_DEFERRED_PLATFORM_INTO_FIRST_PLAYABLE_SCOPE
+  - SOURCE_OR_CONTROLLING_AUTHORITY_IDENTITY_INVALIDATED
+required_review:
+  issue: 1340
+  mission_id: W2-READY-PLATFORM-CLOSE-REV-01
+canonicality: NOT_CANONICAL
