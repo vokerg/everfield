@@ -52,7 +52,7 @@ READINESS_ROUTING_DIRECTIVE_MARKERS = (
     "A verified `BLOCKED` readiness state may not terminate with no successor",
 )
 READINESS_RECOVERY_NOTE_MARKER = "Owner-directed readiness recovery"
-READINESS_DEAD_END_RE = re.compile(r"\\[FACTORY-READINESS-DEAD-END-(\\d+)\\]")
+READINESS_ROUTING_HISTORICAL_SOURCE_ISSUE = 1038
 
 SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS = 21_600
 SCHEMA3_ORPHAN_PROBE_MATURITY_SECONDS = 600
@@ -468,7 +468,10 @@ def reconcilable_terminal(issue_number: int) -> OperationalRecord | None:
 
 
 def readiness_dead_end_terminal_from_comments(
-    issue_number: int, comments: Iterable[dict[str, Any]]
+    issue_number: int,
+    comments: Iterable[dict[str, Any]],
+    *,
+    directive_created_at: str | None = None,
 ) -> OperationalRecord | None:
     """Return a blocked readiness terminal that illegally dead-ends under the directive.
 
@@ -482,6 +485,8 @@ def readiness_dead_end_terminal_from_comments(
         return None
     latest = max(records, key=lambda item: item.comment_id)
     if latest.kind not in {"STATUS", "VERIFICATION_STATUS"}:
+        return None
+    if latest.state not in {"DONE", "VERIFICATION_READY"}:
         return None
     if scalar(latest.body, "terminal") != "true":
         return None
@@ -513,8 +518,21 @@ def readiness_dead_end_terminal_from_comments(
         return None
     if owner.mission_id != latest.mission_id:
         return None
+    if schema3_owner_unexpired_at(owner, records, latest) is not True:
+        return None
     if latest.route is not None:
         return None
+
+    if directive_created_at is not None:
+        directive_time = parse_github_server_time(directive_created_at)
+        terminal_time = parse_github_server_time(latest.created_at)
+        if directive_time is None or terminal_time is None:
+            return None
+        if (
+            terminal_time < directive_time
+            and issue_number != READINESS_ROUTING_HISTORICAL_SOURCE_ISSUE
+        ):
+            return None
 
     blocked_outcomes = {
         (scalar(latest.body, "candidate_outcome") or "").upper(),
@@ -854,7 +872,11 @@ def materialize_readiness_dead_end_diagnostics(
             continue
         number = int(issue["number"])
         comments = list(paged(f"/repos/{REPO}/issues/{number}/comments?"))
-        source = readiness_dead_end_terminal_from_comments(number, comments)
+        source = readiness_dead_end_terminal_from_comments(
+            number,
+            comments,
+            directive_created_at=directive.get("created_at"),
+        )
         if source is None:
             continue
         if readiness_recovery_recorded(comments, source):
@@ -1089,6 +1111,7 @@ def self_test() -> None:
     readiness_claim = c(
         20, "CLAIM", "IN_PROGRESS", issue=1038,
         actor="readiness-verifier", mission="W2-IMPLEMENTATION-READINESS-CONT-01-VER-01",
+        extra=f"observed_head_sha: {'c' * 40}\nprevious_ownership_comment_id: null\n",
     )
     readiness_blocked = c(
         21, "VERIFICATION_STATUS", "DONE", issue=1038,
@@ -1139,6 +1162,36 @@ def self_test() -> None:
     assert readiness_dead_end_terminal_from_comments(
         2000, [unrelated_claim, unrelated_none]
     ) is None
+
+    legacy_readiness_claim = c(
+        26, "CLAIM", "IN_PROGRESS", issue=2001,
+        actor="legacy-readiness", mission="W2-IMPLEMENTATION-READINESS-LEGACY",
+        extra=f"observed_head_sha: {'e' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    legacy_readiness_none = c(
+        27, "STATUS", "DONE", issue=2001,
+        actor="legacy-readiness", mission="W2-IMPLEMENTATION-READINESS-LEGACY",
+        extra=(
+            "terminal: true\n"
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 26\n"
+            f"head_sha: {'e' * 40}\n"
+            f"work_sha: {'e' * 40}\n"
+            "candidate_outcome: BLOCKED\n"
+            "implementation_ready: false\n"
+            "required_next_route: NONE\n"
+        ),
+    )
+    assert readiness_dead_end_terminal_from_comments(
+        2001,
+        [legacy_readiness_claim, legacy_readiness_none],
+        directive_created_at="2026-09-29T12:00:02Z",
+    ) is None
+    assert readiness_dead_end_terminal_from_comments(
+        1038,
+        [readiness_claim, readiness_blocked],
+        directive_created_at="2026-09-29T12:00:02Z",
+    ) is not None
 
     readiness_ready = dict(
         readiness_blocked,
