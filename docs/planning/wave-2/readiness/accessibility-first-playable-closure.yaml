@@ -1,0 +1,122 @@
+schema: first_playable_accessibility_readiness_closure_v1
+mission_id: W2-READY-ACC-CLOSE-01
+issue: 1335
+claim_comment_id: 5889906417
+actor_session_id: frontier-drain-ready-acc-close-1335-gpt56sol-20260929-02
+execution_base_main_sha: 271ceee5a8af967403b2cba460afdb493fa14ac1
+canonical:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+selected_engine:
+  issue: 1028
+  terminal_comment_id: 5651263207
+  value: GODOT_4_7_1_STABLE
+controlling_transition:
+  issue: 84
+  comment_id: 5889817307
+  target_scope: BOUNDED_GODOT_FIRST_PLAYABLE
+  production_authority_granted: false
+  release_authority_granted: false
+
+verified_predecessor:
+  producer_issue: 1031
+  producer_terminal_comment_id: 5651299741
+  producer_yaml_blob_sha: fedfeb546b6de4d2ef7c6a00114484b15bf9c0a9
+  verifier_issue: 1038
+  verification_terminal_comment_id: 5651326367
+  verification_result: PASS
+  verified_candidate_outcome: BLOCKED
+  accessibility_status_at_verification: OPEN_BOUNDED
+  implementation_ready_at_verification: false
+
+historical_accessibility_predicate:
+  predicate_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
+  status: OPEN_BOUNDED
+  blocks_when_open:
+    - PRODUCTION_IMPLEMENTATION
+    - ACCESSIBILITY_CLEARANCE
+    - RELEASE_CLEARANCE
+  does_not_claim_to_block:
+    - BOUNDED_FIRST_PLAYABLE_BOOTSTRAP
+  retained_reopen_condition: >-
+    Bind a reproducibly identifiable gameplay executable/build or equivalent
+    same gameplay kernel plus test environment and assistive-technology/input
+    identity; execute the empirical accessibility matrix; complete the
+    independent authority route.
+
+mapping_provenance:
+  policy_blob_sha: 5e3c932dd34ca81945e345eff30860ade540f2b4
+  report_blob_sha: c2b60278dc5a4e689756d6a73bcbd5dd7f8acad4
+  historical_review_issue: 329
+  historical_clean_terminal_comment_id: 5297430151
+  historical_review_integration_comment_id: 5297445862
+  later_recovery_invalidation_comment_id: 5316068655
+  current_clean_review_authority_relied_on_for_this_closure: false
+  preservation_rule: INTEGRATED_MAPPING_BYTES_ARE_PROVENANCE_ONLY_FOR_THIS_SCOPE_DECISION
+
+empirical_evidence:
+  issue: 331
+  terminal_comment_id: 5297479372
+  integration_comment_id: 5297498142
+  disposition: EVIDENCE_INCOMPLETE
+  reason: NO_CONCRETE_EXECUTABLE_OR_BUILD_ARTIFACT_AVAILABLE
+  target_build_identity: UNBOUND
+  test_environment_identity: UNBOUND
+  empirical_accessibility_evidence: NOT_RUN
+  empirical_accessibility_pass: false
+  mapping_complete: false
+  recovery_trigger: CONCRETE_REPRODUCIBLY_IDENTIFIABLE_GAMEPLAY_BUILD_OR_EXECUTABLE_PLUS_ENVIRONMENT_IDENTITY
+
+fresh_execution_base_probe:
+  project_godot_found: false
+  first_playable_project_found: false
+  packaged_pck_found: false
+  gameplay_executable_found: false
+  empirical_matrix_runnable_against_first_playable_now: false
+
+closure:
+  accessibility_readiness_predicate: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+  satisfaction_basis: SCOPE_BOUNDARY_NOT_EMPIRICAL_PASS
+  first_playable_bootstrap_blocked_by_accessibility_predicate: false
+  empirical_accessibility_pass_claimed: false
+  production_accessibility_clearance_claimed: false
+  production_implementation_readiness_claimed: false
+  release_clearance_claimed: false
+  legal_or_compliance_claimed: false
+  platform_certification_claimed: false
+  historical_w2_rev_m02: OPEN_BOUNDED_FOR_PRODUCTION_ACCESSIBILITY_RELEASE
+  post_bootstrap_empirical_evidence_required: true
+
+first_playable_guardrail:
+  required_future_binding:
+    - EXACT_EXECUTABLE_OR_GAMEPLAY_KERNEL_IDENTITY
+    - TEST_ENVIRONMENT_PLATFORM_IDENTITY
+    - ASSISTIVE_TECHNOLOGY_OR_INPUT_IDENTITIES_WHERE_APPLICABLE
+    - REPRODUCIBLE_ACCESSIBILITY_MATRIX
+    - POSITIVE_AND_NEGATIVE_EVIDENCE
+    - FAIL_CLOSED_UNKNOWN_AND_UNTESTABLE_CASES
+  independent_authority_route_required_before:
+    - PRODUCTION_IMPLEMENTATION_CLEARANCE
+    - ACCESSIBILITY_CLEARANCE
+    - RELEASE_CLEARANCE
+
+self_review:
+  blocker_count: 0
+  major_count: 0
+  correction_requiring_minor_count: 0
+
+required_review:
+  issue: 1338
+  mission_id: W2-READY-ACC-CLOSE-REV-01
+  producer_authorship_grants_reviewed_token: false
+  possible_clean_token: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+
+authority_boundary:
+  aggregate_implementation_readiness: false
+  gameplay_implementation_authority: false
+  production_authority: false
+  release_authority: false
+  final_canon_authority: false
+  canonicality: NOT_CANONICAL
