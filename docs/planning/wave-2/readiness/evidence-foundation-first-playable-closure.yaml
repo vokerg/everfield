@@ -1,0 +1,100 @@
+schema: evidence_foundation_first_playable_closure_v1
+mission_id: W2-READY-EVIDENCE-CLOSE-01
+issue: 1336
+winning_claim_comment_id: 5889935847
+claim_base_main_sha: 271ceee5a8af967403b2cba460afdb493fa14ac1
+canonical:
+  planning_program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+directives:
+  implementation_transition_comment_id: 5889817307
+  prototype_vs_production_scoping_comment_id: 5303081124
+source_readiness:
+  producer_issue: 1031
+  producer_terminal_comment_id: 5651299741
+  verification_issue: 1038
+  verification_terminal_comment_id: 5651326367
+  verified_candidate_outcome: BLOCKED
+  historical_evidence_foundation_status: OPEN_BOUNDED
+selected_engine:
+  name: Godot
+  version: 4.7.1-stable
+  record_path: docs/planning/SELECTED-ENGINE.md
+  record_blob_sha: 6b2ac7c1ef4c023c780af8c6b14ba7003e9bd5bd
+  canonical_selected_engine: true
+reviewed_control_lineage:
+  remediation_issue: 343
+  remediation_terminal_comment_id: 5302522499
+  ci_run_id: 31888041342
+  ci_artifact_id: 9247801348
+  ci_artifact_digest: sha256:d4ec43c649024e124bf7ab450d4c8e994575867a89036213fc2533457d1694d1
+  required_review_issue: 344
+  required_review_terminal_comment_id: 5302539709
+  review_disposition: PASS_BOUNDED_CAPABILITY_WITH_MINOR_NOTE
+  blocker_count: 0
+  major_count: 0
+  correction_requiring_minor_count: 0
+  workflow_blob_sha: 6573cdf8d855ea92ec110703890a3a1862727a94
+  probe_blob_sha: fd41c33b96602714233412bc054b541a0f22628f
+  fail_closed_policy_blob_sha: 97c574899239616e056a69dd6ed2844f842f9542
+  artifact_lock_blob_sha: 4a88990ae24768eb4f83a8a1311e2a830834649f
+  godot_artifact:
+    version: 4.7.1-stable
+    platform: linux_x86_64
+    sha256: c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba
+    digest_source: OBSERVED_RUN_TOFU_LOCK
+    substitution_rejected: true
+provider_debt:
+  source_issue: 347
+  terminal_comment_id: 5302579528
+  disposition: AUTHORITY_REQUIRED_EXACT
+  provider_permission: false
+  full_production_debt_preserved: true
+  applicable_to_current_public_godot_first_playable_path: false
+first_playable_predicate:
+  predicate_id: IR-BLOCKER-EVIDENCE-FOUNDATION
+  target_scope: BOUNDED_GODOT_FIRST_PLAYABLE
+  status: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+  conditions:
+    canonical_godot_4_7_1_selected: true
+    reviewed_ci_control_lineage_exact: true
+    exact_godot_artifact_lock_present: true
+    artifact_mismatch_fails_closed: true
+    durable_run_artifact_identity_available: true
+    exact_head_review_verification_required: true
+    squash_only_integration_required: true
+    provider_protected_input_required_by_scope: false
+full_production_predicate:
+  status: OPEN_BOUNDED
+  historical_finding: W2-REV-M03
+  production_provider_selected: false
+  provider_permission: false
+  release_authority: false
+  meaning: >-
+    The first-playable closure does not close full-production evidence,
+    provider, commercial, legal, retention, release, or deployment controls.
+reopen_conditions:
+  - SELECTED_GODOT_VERSION_CHANGES
+  - REVIEWED_GODOT_ARTIFACT_IDENTITY_CHANGES
+  - FAIL_CLOSED_MISMATCH_REJECTION_REMOVED_OR_BYPASSED
+  - DURABLE_EVIDENCE_RETENTION_REMOVED
+  - FIRST_PLAYABLE_CONSUMES_PROVIDER_PROTECTED_OR_COMMERCIAL_INPUT
+  - CANONICAL_EVIDENCE_CONTROL_CONTRACT_CHANGES
+  - REQUIRED_REVIEW_1339_FINDS_MATERIAL_DEFECT
+required_next_route:
+  issue: 1339
+  mission_id: W2-READY-EVIDENCE-CLOSE-REV-01
+  exact_packet_review_required: true
+authority_boundary:
+  implementation_ready: false
+  gameplay_implementation_authority: false
+  production_authority: false
+  release_authority: false
+  legal_authority: false
+  provider_authority: false
+  verification_pass_authority: false
+  decision_authority: false
+  integration_authority: false
+  canonicality: NOT_CANONICAL
