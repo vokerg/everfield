@@ -45,6 +45,15 @@ RATE_LIMIT_MESSAGE_MARKERS = (
     "secondary rate limit",
 )
 
+READINESS_ROUTING_DIRECTIVE_ISSUE = 84
+READINESS_ROUTING_DIRECTIVE_COMMENT_ID = 5_889_817_307
+READINESS_ROUTING_DIRECTIVE_MARKERS = (
+    "If readiness remains false, route exact remaining blockers.",
+    "A verified `BLOCKED` readiness state may not terminate with no successor",
+)
+READINESS_RECOVERY_NOTE_MARKER = "Owner-directed readiness recovery"
+READINESS_ROUTING_HISTORICAL_SOURCE_ISSUE = 1038
+
 SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS = 21_600
 SCHEMA3_ORPHAN_PROBE_MATURITY_SECONDS = 600
 
@@ -332,6 +341,44 @@ def immutable_comment(comment: dict[str, Any]) -> bool:
     return bool(created_at and updated_at and created_at == updated_at)
 
 
+def trusted_readiness_routing_directive(comment: dict[str, Any]) -> bool:
+    """Prove the exact owner directive that requires blocked-readiness routing."""
+    if int(comment.get("id") or 0) != READINESS_ROUTING_DIRECTIVE_COMMENT_ID:
+        return False
+    if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
+        return False
+    if not immutable_comment(comment):
+        return False
+    if not (comment.get("issue_url") or "").endswith(
+        f"/issues/{READINESS_ROUTING_DIRECTIVE_ISSUE}"
+    ):
+        return False
+    body = comment.get("body") or ""
+    return all(marker in body for marker in READINESS_ROUTING_DIRECTIVE_MARKERS)
+
+
+def readiness_recovery_recorded(
+    comments: Iterable[dict[str, Any]], terminal: OperationalRecord
+) -> bool:
+    """Recognize a later immutable owner recovery that already routes the dead end."""
+    directive_id = str(READINESS_ROUTING_DIRECTIVE_COMMENT_ID)
+    for comment in comments:
+        if int(comment.get("id") or 0) <= terminal.comment_id:
+            continue
+        if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
+            continue
+        if not immutable_comment(comment):
+            continue
+        body = comment.get("body") or ""
+        if (
+            READINESS_RECOVERY_NOTE_MARKER in body
+            and directive_id in body
+            and "explicit live successors" in body
+        ):
+            return True
+    return False
+
+
 def parse_operational(issue_number: int, comment: dict[str, Any]) -> OperationalRecord | None:
     body = comment.get("body") or ""
     if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
@@ -417,6 +464,163 @@ def reconcilable_terminal(issue_number: int) -> OperationalRecord | None:
     return reconcilable_terminal_from_comments(
         issue_number,
         paged(f"/repos/{REPO}/issues/{issue_number}/comments?"),
+    )
+
+
+def readiness_dead_end_terminal_from_comments(
+    issue_number: int,
+    comments: Iterable[dict[str, Any]],
+    *,
+    directive_created_at: str | None = None,
+) -> OperationalRecord | None:
+    """Return the latest valid blocked readiness decision that illegally dead-ends.
+
+    Publication/integration provenance is not itself a readiness decision and
+    therefore cannot erase an earlier still-controlling decision. A genuinely
+    newer valid STATUS/VERIFICATION_STATUS readiness decision does supersede an
+    older one. Arbitrary `NONE` routes remain uninterpreted.
+    """
+    records = operational_records_from_comments(issue_number, comments)
+    if not records:
+        return None
+
+    directive_time = (
+        parse_github_server_time(directive_created_at)
+        if directive_created_at is not None
+        else None
+    )
+    if directive_created_at is not None and directive_time is None:
+        return None
+
+    selected: OperationalRecord | None = None
+    for candidate in sorted(records, key=lambda item: item.comment_id, reverse=True):
+        if candidate.kind not in {"STATUS", "VERIFICATION_STATUS"}:
+            continue
+        if candidate.state not in {"DONE", "VERIFICATION_READY"}:
+            continue
+        if scalar(candidate.body, "terminal") != "true":
+            continue
+        if candidate.declared_issue != issue_number:
+            continue
+        if (
+            not candidate.mission_id
+            or "IMPLEMENTATION-READINESS" not in candidate.mission_id.upper()
+        ):
+            continue
+
+        expected_authority = (
+            "VERIFIER" if candidate.kind == "VERIFICATION_STATUS" else "OWNER"
+        )
+        if candidate.authority_mode != expected_authority:
+            continue
+        if candidate.ownership_generation_comment_id is None:
+            continue
+        if not candidate.head_sha or not candidate.work_sha:
+            continue
+        if (
+            not SHA40_RE.fullmatch(candidate.head_sha)
+            or not SHA40_RE.fullmatch(candidate.work_sha)
+        ):
+            continue
+
+        owner = next(
+            (
+                record
+                for record in records
+                if record.comment_id == candidate.ownership_generation_comment_id
+            ),
+            None,
+        )
+        if owner is None or owner.comment_id >= candidate.comment_id:
+            continue
+        if owner.kind not in OWNERSHIP_KINDS:
+            continue
+        if owner.declared_issue != issue_number:
+            continue
+        if owner.actor_session_id != candidate.actor_session_id:
+            continue
+        if owner.mission_id != candidate.mission_id:
+            continue
+        if schema3_owner_unexpired_at(owner, records, candidate) is not True:
+            continue
+
+        if directive_time is not None:
+            terminal_time = parse_github_server_time(candidate.created_at)
+            if terminal_time is None:
+                continue
+            if (
+                terminal_time < directive_time
+                and issue_number != READINESS_ROUTING_HISTORICAL_SOURCE_ISSUE
+            ):
+                continue
+
+        selected = candidate
+        break
+
+    if selected is None:
+        return None
+    if selected.route is not None:
+        return None
+
+    blocked_outcomes = {
+        (scalar(selected.body, "candidate_outcome") or "").upper(),
+        (scalar(selected.body, "verified_candidate_outcome") or "").upper(),
+    }
+    implementation_ready = (
+        scalar(selected.body, "implementation_ready") or ""
+    ).lower()
+    if "BLOCKED" not in blocked_outcomes and implementation_ready != "false":
+        return None
+    return selected
+
+
+def readiness_dead_end_title(source_issue: int) -> str:
+    return (
+        f"[PLAN-v1][FACTORY-READINESS-DEAD-END-{source_issue}] "
+        f"Recover blocked readiness routing from #{source_issue}"
+    )
+
+
+def find_readiness_dead_end_issue(
+    issues: Iterable[dict[str, Any]], source_issue: int
+) -> dict[str, Any] | None:
+    marker = f"[FACTORY-READINESS-DEAD-END-{source_issue}]"
+    return next(
+        (
+            item
+            for item in issues
+            if "pull_request" not in item and marker in (item.get("title") or "")
+        ),
+        None,
+    )
+
+
+def create_readiness_dead_end_issue(source: OperationalRecord) -> dict[str, Any] | None:
+    body = (
+        "## Factory readiness liveness diagnostic\n\n"
+        f"Source readiness issue: #{source.issue_number}\n"
+        f"Source terminal comment: {source.comment_id}\n"
+        f"Controlling routing directive: Issue #{READINESS_ROUTING_DIRECTIVE_ISSUE} "
+        f"comment `{READINESS_ROUTING_DIRECTIVE_COMMENT_ID}`\n\n"
+        "The exact authoritative terminal represents implementation readiness as "
+        "blocked/not-ready but declares no required successor. The controlling owner "
+        "directive requires exact remaining blockers to be routed rather than treating "
+        "that state as project-terminal.\n\n"
+        "Re-derive current main, canonical binding, the source terminal, and its exact "
+        "remaining blockers. Materialize only the smallest successor/recovery required "
+        "by the controlling task contract/directive. Do not fabricate readiness PASS, "
+        "implementation authority, or reinterpret unrelated legitimate `NONE` routes.\n"
+    )
+    print(
+        f"materialize readiness dead-end diagnostic from #{source.issue_number}: "
+        f"terminal {source.comment_id}"
+    )
+    if DRY_RUN:
+        return None
+    return request(
+        "POST",
+        f"/repos/{REPO}/issues",
+        {"title": readiness_dead_end_title(source.issue_number), "body": body},
     )
 
 
@@ -665,6 +869,60 @@ def materialize_missing_transitions(open_issues: list[dict[str, Any]], routes: d
     return created, dispatched
 
 
+def materialize_readiness_dead_end_diagnostics(
+    open_issues: list[dict[str, Any]],
+) -> int:
+    """Surface only directive-bound implementation-readiness terminal dead ends."""
+    directive = request(
+        "GET",
+        f"/repos/{REPO}/issues/comments/{READINESS_ROUTING_DIRECTIVE_COMMENT_ID}",
+    )
+    if not trusted_readiness_routing_directive(directive):
+        print(
+            "readiness dead-end guard: controlling directive missing/drifted; "
+            "fail closed without creating diagnostics"
+        )
+        return 0
+
+    closed = list(
+        paged(
+            f"/repos/{REPO}/issues?state=closed&sort=updated&direction=desc&"
+            "since=2026-09-01T00:00:00Z&"
+        )
+    )
+    recent_issues = [
+        item for item in open_issues + closed if "pull_request" not in item
+    ]
+    by_number = {int(item["number"]): item for item in recent_issues}
+    created = 0
+
+    for issue in list(by_number.values()):
+        text = f"{issue.get('title') or ''}\n{issue.get('body') or ''}".upper()
+        if "IMPLEMENTATION-READINESS" not in text and "IMPLEMENTATION_READINESS" not in text:
+            continue
+        number = int(issue["number"])
+        comments = list(paged(f"/repos/{REPO}/issues/{number}/comments?"))
+        source = readiness_dead_end_terminal_from_comments(
+            number,
+            comments,
+            directive_created_at=directive.get("created_at"),
+        )
+        if source is None:
+            continue
+        if readiness_recovery_recorded(comments, source):
+            continue
+        if find_readiness_dead_end_issue(by_number.values(), number):
+            continue
+
+        diagnostic = create_readiness_dead_end_issue(source)
+        created += 1
+        if diagnostic:
+            by_number[int(diagnostic["number"])] = diagnostic
+            open_issues.append(diagnostic)
+
+    return created
+
+
 def self_test() -> None:
     def c(
         cid: int, kind: str, state: str, *, issue: int = 10, actor: str = "actor-a",
@@ -880,6 +1138,202 @@ def self_test() -> None:
     assert schema3_orphan_probe_mature_at(probe, early) is False
     assert schema3_orphan_probe_mature_at(probe, mature) is True
 
+    readiness_claim = c(
+        20, "CLAIM", "IN_PROGRESS", issue=1038,
+        actor="readiness-verifier", mission="W2-IMPLEMENTATION-READINESS-CONT-01-VER-01",
+        extra=f"observed_head_sha: {'c' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    readiness_blocked = c(
+        21, "VERIFICATION_STATUS", "DONE", issue=1038,
+        actor="readiness-verifier", mission="W2-IMPLEMENTATION-READINESS-CONT-01-VER-01",
+        extra=(
+            "terminal: true\n"
+            "authority_mode: VERIFIER\n"
+            "ownership_generation_comment_id: 20\n"
+            f"head_sha: {'c' * 40}\n"
+            f"work_sha: {'c' * 40}\n"
+            "verified_candidate_outcome: BLOCKED\n"
+            "implementation_ready: false\n"
+            "required_next_route: NONE\n"
+        ),
+    )
+    dead_end = readiness_dead_end_terminal_from_comments(
+        1038, [readiness_claim, readiness_blocked]
+    )
+    assert dead_end is not None
+    assert dead_end.comment_id == 21
+
+
+    integration_claim = c(
+        30, "CLAIM", "IN_PROGRESS", issue=1038,
+        actor="readiness-integration",
+        mission="W2-IMPLEMENTATION-READINESS-CONT-01-VER-01-INTEGRATION",
+        extra=f"observed_head_sha: {'c' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    integration_done = c(
+        31, "INTEGRATION_STATUS", "DONE", issue=1038,
+        actor="readiness-integration",
+        mission="W2-IMPLEMENTATION-READINESS-CONT-01-VER-01-INTEGRATION",
+        extra=(
+            "terminal: true\n"
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 30\n"
+            f"head_sha: {'c' * 40}\n"
+            f"work_sha: {'c' * 40}\n"
+            "canonicality: NON_CANONICAL_VERIFICATION_PROVENANCE\n"
+        ),
+    )
+    persisted_dead_end = readiness_dead_end_terminal_from_comments(
+        1038,
+        [readiness_claim, readiness_blocked, integration_claim, integration_done],
+    )
+    assert persisted_dead_end is not None
+    assert persisted_dead_end.comment_id == 21
+
+    newer_ready_claim = c(
+        32, "CLAIM", "IN_PROGRESS", issue=1038,
+        actor="new-readiness-verifier",
+        mission="W2-IMPLEMENTATION-READINESS-CONT-02-VER-01",
+        extra=f"observed_head_sha: {'f' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    newer_ready = c(
+        33, "VERIFICATION_STATUS", "DONE", issue=1038,
+        actor="new-readiness-verifier",
+        mission="W2-IMPLEMENTATION-READINESS-CONT-02-VER-01",
+        extra=(
+            "terminal: true\n"
+            "authority_mode: VERIFIER\n"
+            "ownership_generation_comment_id: 32\n"
+            f"head_sha: {'f' * 40}\n"
+            f"work_sha: {'f' * 40}\n"
+            "verified_candidate_outcome: READY\n"
+            "implementation_ready: true\n"
+            "required_next_route: NONE\n"
+        ),
+    )
+    assert readiness_dead_end_terminal_from_comments(
+        1038,
+        [
+            readiness_claim,
+            readiness_blocked,
+            integration_claim,
+            integration_done,
+            newer_ready_claim,
+            newer_ready,
+        ],
+    ) is None
+
+    readiness_routed = dict(
+        readiness_blocked,
+        id=22,
+        created_at="2026-08-25T00:00:22Z",
+        updated_at="2026-08-25T00:00:22Z",
+        body=readiness_blocked["body"].replace(
+            "required_next_route: NONE", "required_next_route: EXACT_BLOCKER_ROUTE"
+        ),
+    )
+    assert readiness_dead_end_terminal_from_comments(
+        1038, [readiness_claim, readiness_routed]
+    ) is None
+
+    unrelated_claim = c(23, "CLAIM", "IN_PROGRESS", issue=2000, mission="OTHER-MISSION")
+    unrelated_none = c(
+        24, "STATUS", "DONE", issue=2000, mission="OTHER-MISSION",
+        extra=(
+            "terminal: true\n"
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 23\n"
+            f"head_sha: {'d' * 40}\n"
+            f"work_sha: {'d' * 40}\n"
+            "implementation_ready: false\n"
+            "required_next_route: NONE\n"
+        ),
+    )
+    assert readiness_dead_end_terminal_from_comments(
+        2000, [unrelated_claim, unrelated_none]
+    ) is None
+
+    legacy_readiness_claim = c(
+        26, "CLAIM", "IN_PROGRESS", issue=2001,
+        actor="legacy-readiness", mission="W2-IMPLEMENTATION-READINESS-LEGACY",
+        extra=f"observed_head_sha: {'e' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    legacy_readiness_none = c(
+        27, "STATUS", "DONE", issue=2001,
+        actor="legacy-readiness", mission="W2-IMPLEMENTATION-READINESS-LEGACY",
+        extra=(
+            "terminal: true\n"
+            "authority_mode: OWNER\n"
+            "ownership_generation_comment_id: 26\n"
+            f"head_sha: {'e' * 40}\n"
+            f"work_sha: {'e' * 40}\n"
+            "candidate_outcome: BLOCKED\n"
+            "implementation_ready: false\n"
+            "required_next_route: NONE\n"
+        ),
+    )
+    assert readiness_dead_end_terminal_from_comments(
+        2001,
+        [legacy_readiness_claim, legacy_readiness_none],
+        directive_created_at="2026-09-29T12:00:02Z",
+    ) is None
+    assert readiness_dead_end_terminal_from_comments(
+        1038,
+        [readiness_claim, readiness_blocked],
+        directive_created_at="2026-09-29T12:00:02Z",
+    ) is not None
+
+    readiness_ready = dict(
+        readiness_blocked,
+        id=25,
+        created_at="2026-08-25T00:00:25Z",
+        updated_at="2026-08-25T00:00:25Z",
+        body=readiness_blocked["body"]
+            .replace("verified_candidate_outcome: BLOCKED", "verified_candidate_outcome: READY")
+            .replace("implementation_ready: false", "implementation_ready: true"),
+    )
+    assert readiness_dead_end_terminal_from_comments(
+        1038, [readiness_claim, readiness_ready]
+    ) is None
+
+    directive_time = "2026-09-29T12:00:02Z"
+    directive = {
+        "id": READINESS_ROUTING_DIRECTIVE_COMMENT_ID,
+        "issue_url": f"https://api.github.com/repos/{REPO}/issues/{READINESS_ROUTING_DIRECTIVE_ISSUE}",
+        "author_association": "OWNER",
+        "created_at": directive_time,
+        "updated_at": directive_time,
+        "body": (
+            "If readiness remains false, route exact remaining blockers.\n"
+            "A verified `BLOCKED` readiness state may not terminate with no successor "
+            "while a concrete internally resolvable blocker remains.\n"
+        ),
+    }
+    assert trusted_readiness_routing_directive(directive)
+    assert not trusted_readiness_routing_directive(
+        dict(directive, updated_at="2026-09-29T12:01:02Z")
+    )
+
+    recovery_time = "2026-09-29T12:03:33Z"
+    recovery = {
+        "id": 5_889_876_653,
+        "author_association": "OWNER",
+        "created_at": recovery_time,
+        "updated_at": recovery_time,
+        "body": (
+            "## Owner-directed readiness recovery\n"
+            f"Directive {READINESS_ROUTING_DIRECTIVE_COMMENT_ID}.\n"
+            "The previously open predicates now have explicit live successors.\n"
+        ),
+    }
+    assert readiness_recovery_recorded(
+        [readiness_claim, readiness_blocked, recovery], dead_end
+    )
+
+    assert readiness_dead_end_title(1038).startswith(
+        "[PLAN-v1][FACTORY-READINESS-DEAD-END-1038]"
+    )
+
     print("frontier maintenance self-test: PASS")
 
 
@@ -891,11 +1345,13 @@ def main() -> int:
     open_prs = list(paged(f"/repos/{REPO}/pulls?state=open&sort=created&direction=asc&"))
     issue_closed = close_terminal_open_issues(open_items)
     pr_closed = close_rejected_open_prs(open_prs)
+    readiness_dead_ends_created = materialize_readiness_dead_end_diagnostics(open_items)
     transition_created, dispatched = materialize_missing_transitions(open_items, load_routes())
     print(json.dumps({
         "dry_run": DRY_RUN,
         "terminal_issues_closed": issue_closed,
         "rejected_prs_closed": pr_closed,
+        "readiness_dead_ends_created": readiness_dead_ends_created,
         "transitions_created": transition_created,
         "registered_routes_dispatched": dispatched,
     }, sort_keys=True))
