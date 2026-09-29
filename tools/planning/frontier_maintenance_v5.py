@@ -1094,6 +1094,9 @@ def main() -> int:
         )
         issue_closed = base.close_terminal_open_issues(open_items)
         pr_closed = base.close_rejected_open_prs(open_prs)
+        readiness_dead_ends_created = base.materialize_readiness_dead_end_diagnostics(
+            open_items
+        )
         transition_created, dispatched, transition_retired, transition_reused = (
             materialize_missing_transitions(open_items, base.load_routes())
         )
@@ -1119,6 +1122,7 @@ def main() -> int:
                 "dry_run": base.DRY_RUN,
                 "terminal_issues_closed": issue_closed,
                 "rejected_prs_closed": pr_closed,
+                "readiness_dead_ends_created": readiness_dead_ends_created,
                 "redundant_transitions_closed": transition_retired,
                 "transitions_created": transition_created,
                 "transitions_reused": transition_reused,
