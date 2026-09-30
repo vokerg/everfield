@@ -5,14 +5,23 @@
 - issue: #1340
 - mission: `W2-READY-PLATFORM-CLOSE-REV-01`
 - branch: `planning/issue-1340`
-- ownership generation: comment `5910681483`
-- actor/session: `frontier-drain-ready-platform-review-1340-gpt56sol-20260930-01`
+- ownership generation: recovery comment `5910815494`
+- actor/session: `frontier-drain-recover-platform-review-1340-gpt56sol-20260930-02`
 - review base: `main@3323031da678a8d524598ba624190a9dbc715c04`
 - canonical binding: Issue #1147 comment `5675066392`
 - canonical program blob: `fd4cf1119c3f86acc3af620024eea72235e81ce4`
 - canonical activation: `87c85cecfa9a2ffa464c4b36816a138bf41441af`
 - trust mode: `DEGRADED_SINGLE_AGENT`
 - canonicality: `NOT_CANONICAL`
+- stale source generation: comment `5890153039`
+- winning STALE intent: comment `5910809429`
+- invalid intervening fresh CLAIM: comment `5910681483` (zero ownership authority)
+- invalid intervening terminal: comment `5910808571` (zero terminal authority)
+- recovered/adopted review report blob: `5a1477e20fb6f35c6616dab4bfee0b154ad3a289`
+
+## Recovery validation
+
+The canonical six-hour lease expired the original owner generation before any authoritative review terminal. Recovery generation `5910815494` was acquired through the canonical STALE path at the exact inherited branch head. The inherited report was then independently checked against #1337/PR #1347 exact identities, #92/#100/#1031/#1038/#1028/#84 provenance, current main and canonical binding, and refreshed first-party Microsoft/Valve evidence. The clean scoped disposition was retained; only recovery provenance was corrected. The producer branch remains immutable.
 
 ## Reviewed producer packet
 
