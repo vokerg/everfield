@@ -17,6 +17,13 @@
 **Reviewed root token:** `W2-READY-PLATFORM-CLOSE-01_REVIEWED`  
 **Canonicality:** `NOT_CANONICAL`
 
+**Recovery ownership:** Issue #1340 comment `5910815494`  
+**Recovery actor/session:** `frontier-drain-recover-platform-review-1340-gpt56sol-20260930-02`
+
+## Recovery revalidation
+
+The original valid review owner generation (`5890153039`) expired under the canonical six-hour lease. A later fresh `CLAIM` (`5910681483`) and its terminal record (`5910808571`) do not supply ownership authority for a stale-owner task. Recovery generation `5910815494`, won through STALE intent `5910809429`, independently revalidated the inherited review bytes against the exact producer packet, predecessor comments, current canonical binding, current `main`, and current first-party platform sources before adopting this report. No producer mutation or authority inflation was accepted through recovery.
+
 ## 1. Exact subject and review boundary
 
 This review consumes only the frozen #1337 packet at exact head
