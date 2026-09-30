@@ -1,0 +1,298 @@
+schema: implementation_readiness_first_playable_reconciliation_v1
+mission_id: W2-IMPLEMENTATION-READINESS-CONT-02
+issue: 1341
+ownership_generation_comment_id: 5911033515
+actor_session_id: frontier-drain-readiness-reconcile-1341-gpt56sol-20260930-02
+execution_base_main_sha: c81e47b53c50a951691b709874298c84b3d8904c
+
+canonical:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+
+controlling_transition:
+  issue: 84
+  comment_id: 5889817307
+  target_scope: BOUNDED_GODOT_FIRST_PLAYABLE
+  production_authority_granted: false
+  release_authority_granted: false
+  legal_authority_granted: false
+  certification_authority_granted: false
+
+selected_engine:
+  value: GODOT_4_7_1_STABLE
+  issue: 1028
+  terminal_comment_id: 5651263207
+  record_path: docs/planning/SELECTED-ENGINE.md
+  record_blob_sha: 6b2ac7c1ef4c023c780af8c6b14ba7003e9bd5bd
+  canonical_selected_engine: true
+  selection_implies_implementation_readiness: false
+
+verified_predecessor:
+  producer_issue: 1031
+  producer_terminal_comment_id: 5651299741
+  producer_yaml_blob_sha: fedfeb546b6de4d2ef7c6a00114484b15bf9c0a9
+  candidate_outcome: BLOCKED
+  verifier_issue: 1038
+  verification_terminal_comment_id: 5651326367
+  verification_result: PASS
+  verified_candidate_outcome: BLOCKED
+  historical_truth_rewritten: false
+  routing_recovery_comment_id: 5889876653
+
+reviewed_roots:
+  accessibility:
+    producer_issue: 1335
+    producer_terminal_comment_id: 5890049254
+    producer_head_sha: bab0aab7e56cd6c55f25688002e99bcc4912f4b9
+    producer_yaml_blob_sha: 704e45fb374ef131be2e6daa31bba27abb493a18
+    producer_publication_terminal_comment_id: 5910840820
+    review_issue: 1338
+    review_terminal_comment_id: 5910770650
+    review_disposition: CLEAN_FOR_FIRST_PLAYABLE_ACCESSIBILITY_SCOPE_CONSUMPTION
+    reviewed_token: W2-READY-ACC-CLOSE-01_REVIEWED
+    review_report_blob_sha: e2bda96a2c8aa4f311c1aec97a75f3362ead0f17
+    review_publication_terminal_comment_id: 5910888631
+    first_playable_predicate: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+    satisfaction_basis: SCOPE_BOUNDARY_NOT_EMPIRICAL_PASS
+    empirical_accessibility_evidence: NOT_RUN
+    empirical_accessibility_pass: false
+    mapping_complete: false
+    stronger_predicate: OPEN_BOUNDED
+    stronger_blocks:
+      - PRODUCTION_IMPLEMENTATION
+      - ACCESSIBILITY_CLEARANCE
+      - RELEASE_CLEARANCE
+
+  evidence_foundation:
+    producer_issue: 1336
+    producer_terminal_comment_id: 5890025720
+    producer_head_sha: cc299a94d1c0b81aaf96754c61e1e05ccfc87f30
+    producer_yaml_blob_sha: abe5a8328ce60a5690213029576a29ac6ee56c20
+    producer_publication_terminal_comment_id: 5890115886
+    review_issue: 1339
+    review_terminal_comment_id: 5890092309
+    review_disposition: CLEAN_FOR_FIRST_PLAYABLE_EVIDENCE_FOUNDATION_CONSUMPTION
+    reviewed_token: W2-READY-EVIDENCE-CLOSE-01_REVIEWED
+    review_report_blob_sha: df20d876fcbcab1b719b72674a60f0c0d272a987
+    review_publication_terminal_comment_id: 5890130462
+    first_playable_predicate: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+    full_production_predicate: OPEN_BOUNDED
+    public_godot_control_lineage_sufficient_for_first_playable: true
+    commercial_provider_authority_inferred: false
+
+  platform_scope:
+    producer_issue: 1337
+    producer_terminal_comment_id: 5890062337
+    producer_head_sha: 179620a9c765a02f9b7a73514594134f089244c8
+    producer_yaml_blob_sha: 6c2269ce0b814732c6ad02273e6c5fec875cee74
+    producer_publication_terminal_comment_id: 5910916764
+    review_issue: 1340
+    review_terminal_comment_id: 5910970043
+    review_disposition: CLEAN_FOR_FIRST_PLAYABLE_PLATFORM_SCOPE_CONSUMPTION
+    reviewed_token: W2-READY-PLATFORM-CLOSE-01_REVIEWED
+    review_report_blob_sha: 5a1477e20fb6f35c6616dab4bfee0b154ad3a289
+    review_handoff_blob_sha: af32741661cda004f9779591ae89a91e6d1a4ee6
+    review_publication_terminal_comment_id: 5911016194
+    invalid_intervening_review_terminal_comment_id: 5910808571
+    invalid_intervening_terminal_consumed: false
+    first_playable_predicate: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+    parent_scope_id: PLAT-PC-FIRST-R1
+    primary_execution_target: WINDOWS_11_64BIT_DESKTOP_SUPPORTED_RELEASE
+    required_compatibility_evidence_target: STEAM_DECK_STEAMOS_WINDOWS_BUILD_VIA_PROTON
+    shipping_platform_commitment: false
+    storefront_commitment: false
+    deck_verified_claim: false
+    production_authority: false
+    release_authority: false
+
+first_playable_target:
+  successor_issue: 1343
+  successor_mission_id: W2-GODOT-FIRST-PLAYABLE-BOOTSTRAP-01
+  activation_requires:
+    verifier_issue: 1342
+    exact_terminal_disposition: PASS_READY_FOR_GODOT_FIRST_PLAYABLE
+  required_surface:
+    - VALID_GODOT_4_7_1_PROJECT
+    - BOOTABLE_EXECUTABLE_SCENE_OR_PATH
+    - PLAYER_INPUT_AND_CONTROLLABLE_MOVEMENT_OR_REVIEWED_CANONICAL_EQUIVALENT
+    - CONCRETE_WORLD_OR_LOCATION_SCENE
+    - MEANINGFUL_REVIEWED_GAMEPLAY_INTERACTION_LOOP
+    - MINIMAL_STATE_OR_SAVE_LOAD_ONLY_IF_REQUIRED
+    - AUTOMATED_OR_HEADLESS_SMOKE_VALIDATION_WHERE_SUPPORTED
+    - RECONSTRUCTABLE_RUN_INSTRUCTIONS_AND_HANDOFF
+    - OBSERVABLE_FAILURE_DIAGNOSTICS
+    - EXACT_HEAD_DRAFT_PR_AND_FRESH_INDEPENDENT_IMPLEMENTATION_REVIEW
+  production_hardening_required_in_this_tranche: false
+  broad_platform_support_required_in_this_tranche: false
+  release_packaging_required_in_this_tranche: false
+
+current_readiness_ledger:
+  - predicate_id: IR-BLOCKER-ENGINE-DECISION
+    category: TECHNICAL
+    scope: GLOBAL
+    first_playable_status: SATISFIED
+    evidence:
+      selected_engine: GODOT_4_7_1_STABLE
+      selected_engine_record_blob_sha: 6b2ac7c1ef4c023c780af8c6b14ba7003e9bd5bd
+      selected_engine_issue: 1028
+      selected_engine_terminal_comment_id: 5651263207
+    residual_debt:
+      historical_comparison_complete: false
+      provider_comparison_pass_inferred: false
+      aggregate_verification_pass_inferred: false
+    blocks_first_playable: false
+
+  - predicate_id: GODOT-DEVELOPMENT-OPERABILITY
+    category: TECHNICAL
+    scope: DOMAIN
+    first_playable_status: SATISFIED
+    basis: REVIEWED_PUBLIC_TOOLCHAIN_SELECTED_ENGINE_LINEAGE
+    production_provider_pass_inferred: false
+    blocks_first_playable: false
+
+  - predicate_id: IR-BLOCKER-GAME-EVIDENCE
+    category: PRODUCT
+    scope: DOMAIN
+    scope_id: SCOPE-CORE-GAMEPLAY-v1
+    first_playable_status: SATISFIED_IN_ACCEPTED_SCOPE
+    limitation: >-
+      This resolution supplies reviewed game evidence for the bounded slice but
+      does not resolve accessibility, platform, evidence-foundation, rights,
+      provider, production, release, or readiness authority.
+    blocks_first_playable: false
+
+  - predicate_id: IR-BLOCKER-ACCESSIBILITY-CURRENT
+    category: ACCESSIBILITY
+    scope: GLOBAL
+    first_playable_status: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+    reviewed_token: W2-READY-ACC-CLOSE-01_REVIEWED
+    production_accessibility_release_status: OPEN_BOUNDED
+    empirical_accessibility_evidence: NOT_RUN
+    empirical_accessibility_pass: false
+    mapping_complete: false
+    satisfaction_basis: SCOPE_BOUNDARY_NOT_EMPIRICAL_PASS
+    post_bootstrap_empirical_route_required: true
+    blocks_first_playable: false
+    blocks_stronger_surfaces:
+      - PRODUCTION_IMPLEMENTATION
+      - ACCESSIBILITY_CLEARANCE
+      - RELEASE_CLEARANCE
+
+  - predicate_id: IR-BLOCKER-EVIDENCE-FOUNDATION
+    category: EVIDENCE
+    scope: GLOBAL
+    first_playable_status: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+    reviewed_token: W2-READY-EVIDENCE-CLOSE-01_REVIEWED
+    full_production_status: OPEN_BOUNDED
+    public_godot_artifact_and_replay_controls: REVIEWED_BOUNDED_SUFFICIENT
+    protected_commercial_provider_authority: NOT_GRANTED
+    blocks_first_playable: false
+    blocks_stronger_surfaces:
+      - FULL_PRODUCTION_IMPLEMENTATION
+      - COMMERCIAL_PROVIDER_DEPENDENT_EVIDENCE
+
+  - predicate_id: IR-BLOCKER-PLATFORM-SCOPE
+    category: PLATFORM
+    scope: PLATFORM
+    first_playable_status: SATISFIED_FOR_FIRST_PLAYABLE_SCOPE
+    reviewed_token: W2-READY-PLATFORM-CLOSE-01_REVIEWED
+    scope_id: PLAT-PC-FIRST-R1
+    primary_execution_target: WINDOWS_11_64BIT_DESKTOP_SUPPORTED_RELEASE
+    exact_execution_os_identity_required: true
+    required_compatibility_evidence_target: STEAM_DECK_STEAMOS_WINDOWS_BUILD_VIA_PROTON
+    release_platform_status: DEFERRED_OR_CONDITIONAL
+    certification_status: NOT_GRANTED
+    blocks_first_playable: false
+
+  - predicate_id: RIGHTS-LEGAL-PROVIDER-USE-BOUNDARY
+    category: RIGHTS
+    scope: FEATURE_CLASS
+    first_playable_status: NOT_APPLICABLE_GLOBALLY_FAIL_CLOSED_WHEN_AFFECTED
+    rule: >-
+      Do not invent a global mega-gate. Any concrete external-content,
+      protected-provider, commercial, legal, or rights dependency must satisfy
+      its exact authority at the use boundary or be excluded from the slice.
+    authority_granted: false
+    blocks_first_playable: false_unless_affected
+
+  - predicate_id: TRUST-DEBT
+    category: FACTORY_TRUST
+    scope: GLOBAL
+    first_playable_status: OPEN_BOUNDED_QUALITY_DEBT
+    trust_mode_preserved: DEGRADED_SINGLE_AGENT
+    stronger_independence_inferred: false
+    fresh_readiness_verifier_required: true
+    blocks_first_playable: false_by_itself
+
+  - predicate_id: FRESH-FIRST-PLAYABLE-READINESS-VERIFICATION
+    category: OTHER
+    scope: GLOBAL
+    first_playable_status: PENDING_REQUIRED_VERIFICATION
+    verifier_issue: 1342
+    allowed_ready_disposition: PASS_READY_FOR_GODOT_FIRST_PLAYABLE
+    producer_may_satisfy: false
+    blocks_first_playable_until_verified: true
+
+scope_guards:
+  accessibility:
+    - DO_NOT_REPRESENT_NOT_RUN_AS_PASS
+    - PRESERVE_POST_BOOTSTRAP_EMPIRICAL_ACCESSIBILITY_ROUTE
+    - PRESERVE_PRODUCTION_ACCESSIBILITY_RELEASE_DEBT
+  evidence:
+    - USE_REVIEWED_PUBLIC_GODOT_EXACT_ARTIFACT_AND_REPLAY_CONTROLS
+    - FAIL_CLOSED_ON_UNKNOWN_OR_PROTECTED_PROVIDER_DEPENDENCY
+    - PRESERVE_FULL_PRODUCTION_PROVIDER_DEBT
+  platform:
+    - RECORD_EXACT_SUPPORTED_WINDOWS_11_EXECUTION_IDENTITY
+    - EXERCISE_DECK_STEAMOS_PROTON_COMPATIBILITY_WHERE_APPLICABLE
+    - DO_NOT_CLAIM_STEAM_DECK_VERIFIED
+    - DO_NOT_PROMOTE_DEFERRED_PLATFORMS_WITHOUT_AUTHORITY
+  product:
+    - USE_EXISTING_REVIEWED_GAME_AND_CONTENT_CONTRACTS
+    - DO_NOT_CREATE_LARGE_SPECULATIVE_BACKLOG_BEFORE_SLICE_RUNS
+  integration:
+    - REQUIRE_EXACT_HEAD_DRAFT_PR
+    - REQUIRE_FRESH_INDEPENDENT_IMPLEMENTATION_REVIEW_TEST_ROUTE
+    - MAIN_INTEGRATION_MUST_BE_SQUASH_ONLY
+
+reopen_conditions:
+  - CANONICAL_BINDING_OR_SELECTED_ENGINE_IDENTITY_INVALIDATED
+  - ANY_REVIEWED_ROOT_TOKEN_INVALIDATED_OR_SUPERSEDED
+  - FIRST_PLAYABLE_SCOPE_EXPANDS_BEYOND_REVIEWED_ROOT_APPLICABILITY
+  - REQUIRED_WINDOWS_OR_DECK_PATH_BECOMES_INFEASIBLE_OR_MATERIALLY_DRIFTS
+  - ACCESSIBILITY_REQUIREMENTS_INVALIDATE_THE_REVIEWED_INPUT_DISPLAY_ENVELOPE
+  - PUBLIC_GODOT_EVIDENCE_CONTROL_LINEAGE_NO_LONGER_RECONSTRUCTABLE
+  - CONCRETE_RIGHTS_LEGAL_PROVIDER_DEPENDENCY_ADDED_WITHOUT_AUTHORITY
+  - FRESH_VERIFIER_RETURNS_PASS_BLOCKED_FAIL_OR_INVALIDATED
+
+producer_state:
+  candidate_outcome: READY_FOR_FIRST_PLAYABLE_VERIFICATION
+  implementation_ready: false
+  gameplay_high_throughput_authorized: false
+  successor_1343_ready: false
+  verification_pass_authority: false
+  integration_authority: false
+  production_authority: false
+  release_authority: false
+  legal_authority: false
+  provider_authority: false
+  certification_authority: false
+  canonicality: NOT_CANONICAL
+
+required_verification:
+  issue: 1342
+  mission_id: W2-IMPLEMENTATION-READINESS-CONT-02-VER-01
+  subject: EXACT_ISSUE_1341_TERMINAL_PACKET
+  allowed_dispositions:
+    - PASS_READY_FOR_GODOT_FIRST_PLAYABLE
+    - PASS_BLOCKED
+    - FAIL
+    - INVALIDATED
+  ready_successor_only_if_pass_ready:
+    issue: 1343
+    mission_id: W2-GODOT-FIRST-PLAYABLE-BOOTSTRAP-01
+
+required_next_route: W2-IMPLEMENTATION-READINESS-CONT-02-VER-01
+canonicality: NOT_CANONICAL
