@@ -77,7 +77,7 @@ All IDs below are implementation-facing presentation IDs. They have no direct fa
 | `OW_HEARING_OPEN_SELKA_01` | Selka | opening | “Then keep the choice bounded: record the scope, the burden, and how we can stop or revise it.” |
 | `OW_HEARING_REPAIR_SELKA_01` | Selka | repair-pilot position | “A repair pilot is a trial, not a title to the Works. State the limit before anyone calls it settled.” |
 | `OW_HEARING_REPAIR_MAELIN_01` | Maelin | repair-pilot position | “And state who is carrying the repair. If that burden is hidden, I do not support the pilot.” |
-| `OW_HEARING_RECORDS_MAELIN_01` | Maelin | records-first position | “Records first is slower, but it leaves the burden visible instead of burying it under urgency.” |
+| `OW_HEARING_RECORDS_MAELIN_01` | Maelin | records-first position | “Records first keeps the burden visible instead of burying it under urgency.” |
 | `OW_HEARING_RECORDS_SELKA_01` | Selka | records-first position | “Then record the limit: document, use narrowly, and reopen repair only by another public choice.” |
 | `OW_HEARING_DEFER_SELKA_01` | Selka | defer/nonalignment | “No assent is recorded. Reopen the hearing only when someone chooses to.” |
 | `OW_HEARING_DEFER_MAELIN_01` | Maelin | defer/nonalignment | “Then leave the burden on the table too. Deferral is not agreement with either account.” |
