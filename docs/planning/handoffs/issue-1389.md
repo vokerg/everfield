@@ -38,14 +38,12 @@ The producer branch was not mutated by this review.
 
 ## Main movement during review
 
-After the review claim, `main` advanced from `5665667877f2c15a5aff42ca571b483bd7e3572e` to `086628fe1d52172577a3d9d0e1f180b1a3b4d43f` via squash publication of the clean #1383 review provenance.
+After the review claim, `main` advanced from `5665667877f2c15a5aff42ca571b483bd7e3572e` through two compatible squash publications:
 
-That main commit adds only:
+1. `086628fe1d52172577a3d9d0e1f180b1a3b4d43f` — clean #1383 review provenance;
+2. `9c06e99e4b21b226f934b841709ff9aeee7534c7` — exact clean-reviewed #1378 world/evidence producer publication.
 
-- `docs/planning/handoffs/issue-1383.md`
-- `docs/planning/wave-2/reviews/content-demand-old-works-world-01-review.md`
-
-There is no path or semantic overlap with the exact #1380 producer packet or its exact implementation source. The canonical binding/program blob remain unchanged.
+The second publication adds only #1378's world/evidence Markdown/YAML and handoff. #1380 did not consume that sibling output, and neither main delta overlaps the exact #1380 producer packet or its exact implementation source. Current compatible main at freeze is `9c06e99e4b21b226f934b841709ff9aeee7534c7`. The canonical binding/program blob remain unchanged.
 
 ## Review artifact
 
