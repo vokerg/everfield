@@ -1,0 +1,20 @@
+; Engine configuration file.
+; Everfield bounded first playable — Godot 4.7.1-stable.
+config_version=5
+
+[application]
+config/name="Everfield — Accounts at the Old Works"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+run/main_scene="res://main.tscn"
+
+[display]
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/size/window_width_override=960
+window/size/window_height_override=540
+window/stretch/mode="canvas_items"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.035, 0.047, 0.055, 1)
