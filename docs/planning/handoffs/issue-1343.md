@@ -172,3 +172,12 @@ At producer terminal:
 - empirical accessibility PASS: **false**;
 - canonical content/final canon: **false**;
 - canonicality: `NOT_CANONICAL`.
+
+
+## Recovery continuation — 2026-10-01
+
+The original producer ownership generation at comment `5925694231` expired without a terminal record after its exact implementation packet and final-head CI had already been published. The task was recovered through winning STALE intent `5935482390` and RECOVER generation `5935484769` by actor `frontier-drain-recover-godot-first-playable-1343-gpt56sol-20261001-02`.
+
+Recovery cold-inspection found the inherited executable packet unchanged at pre-recovery head `5aefb403b35bde1ab754b9feca2916e3f5b4ea03`, PR #1370 still open/draft, and exact-head workflow run `36823961380` successful with retained artifact `11144396689` (digest `sha256:f856686e0c8bdd9b3bad275961e6a4ff34d98f1a9807827b0f75a2bc46ddea97`). No gameplay or implementation semantics were changed during recovery. This handoff-only recovery commit intentionally retriggers the selected-engine smoke workflow; terminal REVIEW_READY is permitted only after that new exact-head run succeeds.
+
+Current-main movement through `32a93df5e6f70771a28b673e1777c4c0aa223b4e` consists of separate planning/readiness/content provenance and does not itself grant integration, canonical, production, release, accessibility, provider, legal, or certification authority. Fresh Issue #1371 review must independently re-check compatibility at its own claim/terminal time.
