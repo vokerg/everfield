@@ -1,0 +1,236 @@
+schema: everfield_content_demand_old_works_consequence_01_v1
+mission_id: CONTENT-DEMAND-OLD-WORKS-CONSEQUENCE-01
+issue: 1380
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+
+execution:
+  branch: planning/issue-1380
+  ownership_comment_id: 5927375049
+  base_main_sha: 5665667877f2c15a5aff42ca571b483bd7e3572e
+  actor_session_id: frontier-drain-content-consequence-1380-gpt56sol-20261001-01
+
+canonical_basis:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+
+demand_source:
+  intake_issue: 1377
+  intake_terminal_comment_id: 5926633748
+  implementation_issue: 1343
+  implementation_pr: 1370
+  implementation_head: 5aefb403b35bde1ab754b9feca2916e3f5b4ea03
+  slice_id: "VS:OLD-WORKS-ACCOUNTS-01"
+
+reviewed_content_source:
+  markdown_path: docs/planning/wave-2/content/authored-vertical-slice.md
+  markdown_blob_sha: 5e94bdb0ca6146bab93264fc8e6763590aa289d2
+  corrected_yaml_path: docs/planning/wave-2/content/authored-vertical-slice.yaml
+  corrected_yaml_blob_sha: 8d341d534ef4a27929aaabdf5b81a6d5ff86b80e
+  remediation_review_issue: 449
+  remediation_review_disposition: CLEAN_FOR_BOUNDED_AUTHORED_CONTENT_CONSUMPTION
+
+authority:
+  candidate_presentation_only: true
+  gameplay_code: false
+  direct_state_mutation: false
+  branch_activation: false
+  branch_impact_evidence_pass: false
+  wsn_e5_persistence_evidence: false
+  implementation_readiness: false
+  verification_pass: false
+  final_narrative_canon: false
+  integration: false
+  production: false
+  release: false
+
+truth_model:
+  mystery_ref: "MYS:FRAGMENTATION-CAUSE"
+  mystery_state_required: UNKNOWN_BY_DESIGN
+  claim_refs:
+    - "CLM:FRAGMENTATION-ACCOUNT-A"
+    - "CLM:FRAGMENTATION-ACCOUNT-B"
+  claim_truth_effect: NONE
+  commitment_may_resolve_mystery: false
+  project_completion_may_resolve_mystery: false
+  documentation_may_promote_claim_to_fact: false
+  repair_may_promote_claim_to_fact: false
+
+agency:
+  deferral_legal: true
+  nonalignment_legal: true
+  deferred_is_consent_in_waiting: false
+  later_participation_erases_prior_deferral: false
+  commitment_establishes_consent_beyond_exact_act: false
+  commitment_establishes_ownership: false
+  commitment_establishes_legitimacy: false
+  commitment_establishes_representation: false
+
+implementation_binding:
+  current_history_container: in_session_append_only_array
+  production_persistence_claimed: false
+  manual_reset_is_production_world_history_semantics: false
+  project_table_requires_nonempty_commitment: true
+  committed_routes:
+    repair_pilot:
+      branch_ref: "BRANCH:VS:REPAIR-PILOT"
+      selection_event: COMMITMENT_REPAIR_PILOT
+      completion_event: BOUNDED_REPAIR_PILOT_STARTED
+      implementation_outcome: BOUNDED_REPAIR_PILOT_STARTED
+      completion_allowed: true
+    records_first:
+      branch_ref: "BRANCH:VS:RECORDS-FIRST"
+      selection_event: COMMITMENT_RECORDS_FIRST
+      completion_event: RECORDS_FIRST_PACKAGE_FILED
+      implementation_outcome: RECORDS_FIRST_PACKAGE_FILED
+      completion_allowed: true
+  deferral:
+    selection_event: PUBLIC_COMMITMENT_DEFERRED
+    commitment_after_choice: ""
+    project_table_completion_allowed: false
+    consent_pending: false
+    automatic_reopen: false
+    fresh_explicit_hearing_action_required: true
+
+presentation:
+  repair_pilot:
+    title:
+      id: OW_CONSEQ_REPAIR_TITLE
+      text: "Repair Pilot — Bounded Start"
+    immediate:
+      id: OW_CONSEQ_REPAIR_BODY
+      text: "The project table records a limited repair pilot as the next shared-use step. Work beyond the pilot remains uncommitted."
+    history:
+      id: OW_CONSEQ_REPAIR_HISTORY
+      text: "This commitment stays in the record even if the pilot is later paused, reframed, or replaced by a fresh public choice."
+    truth_guard:
+      id: OW_CONSEQ_REPAIR_TRUTH
+      text: "Starting repair does not decide why the Old Works fragmented, or which account was right."
+    followup:
+      id: OW_CONSEQ_REPAIR_FOLLOWUP
+      text: "When observable pilot evidence exists, reassess the bounded pilot: continue it, pause it, or reframe it through a fresh explicit decision."
+
+  records_first:
+    title:
+      id: OW_CONSEQ_RECORDS_TITLE
+      text: "Records First — Package Filed"
+    immediate:
+      id: OW_CONSEQ_RECORDS_BODY
+      text: "The project table records documentation and limited use before broader repair. Broader physical repair remains deferred, not silently selected."
+    history:
+      id: OW_CONSEQ_RECORDS_HISTORY
+      text: "The records-first commitment remains part of the route history if a later reassessment opens a different bounded choice."
+    truth_guard:
+      id: OW_CONSEQ_RECORDS_TRUTH
+      text: "Filing the package preserves competing accounts; documentation does not convert either account into a finding."
+    followup:
+      id: OW_CONSEQ_RECORDS_FOLLOWUP
+      text: "After a bounded record and present-condition reassessment, make a fresh choice about whether to open a repair pilot or continue records-first."
+
+  deferral:
+    title:
+      id: OW_CONSEQ_DEFER_TITLE
+      text: "No Public Commitment"
+    immediate:
+      id: OW_CONSEQ_DEFER_BODY
+      text: "Nothing is committed. Deferral records nonalignment for now; it is not approval waiting to happen."
+    reopen:
+      id: OW_CONSEQ_DEFER_REOPEN
+      text: "The hearing may be reopened only through a new explicit act. The prior deferral remains in the history."
+    project_table:
+      id: OW_CONSEQ_DEFER_TABLE
+      text: "The project table remains open because no supported public commitment was made."
+    truth_guard:
+      id: OW_CONSEQ_DEFER_TRUTH
+      text: "Deferring action does not settle the historical dispute."
+
+history_contract:
+  append_only: true
+  overwrite_prior_route_events: false
+  retry_erases_history: false
+  later_commitment_rewrites_prior_deferral_as_consent: false
+  later_repair_erases_records_first: false
+  later_records_first_erases_repair_pilot: false
+  project_completion_erases_prior_investigation_or_hearing_events: false
+  manual_demo_reset_grants_world_history_erasure_semantics: false
+  production_persistence_migration_evidence_required: WSN-E5
+  production_persistence_migration_evidence_satisfied_here: false
+
+followup_hooks:
+  - hook_id: "HOOK:OW:REPAIR-PILOT-REASSESS"
+    source_branch_ref: "BRANCH:VS:REPAIR-PILOT"
+    prerequisite: LATER_AUTHORIZED_OBSERVABLE_PILOT_EVIDENCE_EXISTS
+    candidate_next_stances:
+      - CONTINUE_BOUNDED_PILOT
+      - PAUSE
+      - REFRAME_WITH_FRESH_EXPLICIT_DECISION
+    auto_trigger: false
+    exact_time_or_schedule: false
+    guaranteed_future_evidence: false
+    creates_active_objective: false
+    erases_prior_history: false
+    mystery_truth_effect: NONE
+
+  - hook_id: "HOOK:OW:RECORDS-FIRST-REASSESS"
+    source_branch_ref: "BRANCH:VS:RECORDS-FIRST"
+    prerequisite: LATER_BOUNDED_RECORD_AND_PRESENT_CONDITION_REASSESSMENT_EXISTS
+    candidate_next_stances:
+      - CONTINUE_RECORDS_FIRST
+      - OPEN_FRESH_BOUNDED_REPAIR_DECISION
+    auto_trigger: false
+    exact_time_or_schedule: false
+    record_count_is_truth_strength: false
+    archive_custody_is_truth_authority: false
+    creates_active_objective: false
+    erases_prior_history: false
+    mystery_truth_effect: NONE
+
+reviewed_consequence_compatibility:
+  repair_pilot_conditionally_reversible: true
+  repair_reversal_route: pause_or_reframe_pilot_with_history_preserved
+  records_first_defers_broader_repair: true
+  records_first_preserves_later_repair_route: true
+  shared_foundational_play_preserved: true
+  community_mitigation_alternative_deleted: false
+  exact_schedule_authored: false
+  private_secret_required: false
+  branch_impact_evidence_claimed: false
+  observed_material_effect_claimed: false
+
+invariants:
+  - MYSTERY_REMAINS_UNKNOWN_BY_DESIGN
+  - CLAIM_A_AND_B_REMAIN_CLAIMS_WITH_ZERO_TRUTH_EFFECT
+  - COMMITMENT_DOES_NOT_ESTABLISH_OWNERSHIP_LEGITIMACY_OR_REPRESENTATION
+  - DEFERRAL_IS_NOT_CONSENT_IN_WAITING
+  - HISTORY_IS_APPEND_ONLY
+  - MANUAL_DEMO_RESET_IS_NOT_WORLD_HISTORY_ERASURE
+  - REPAIR_PILOT_REMAINS_BOUNDED_AND_CONDITIONALLY_REVERSIBLE
+  - RECORDS_FIRST_DEFERS_BROADER_REPAIR_AND_PRESERVES_LATER_REPAIR
+  - FOLLOWUP_HOOKS_DO_NOT_AUTO_TRIGGER_OR_CREATE_BACKLOG
+  - NO_EXACT_TIME_OR_SCHEDULE
+  - NO_PRIVATE_SECRET_REQUIRED
+  - NO_WSN_E5_OR_BRANCH_IMPACT_PASS_CLAIM
+  - PRESENTATION_HAS_ZERO_DIRECT_STATE_OR_CANON_AUTHORITY
+
+owned_paths:
+  - docs/planning/wave-2/content/demand/old-works-consequence-01.md
+  - docs/planning/wave-2/content/demand/old-works-consequence-01.yaml
+  - docs/planning/handoffs/issue-1380.md
+
+excluded_scope:
+  sibling_world_evidence_issue: 1378
+  sibling_commons_hearing_dialogue_issue: 1379
+  consume_unreviewed_sibling_outputs: false
+  gameplay_code: true
+  final_canon: true
+  production_persistence: true
+  speculative_quest_backlog: true
+
+review_gate:
+  required: true
+  exact_head_required: true
+  fresh_review_issue_required: true
+  consumption_before_clean_review_allowed: false
+  integration_before_clean_review_allowed: false
