@@ -1,0 +1,79 @@
+name: Godot first-playable smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'game/**'
+      - 'tools/implementation/run_godot_smoke.sh'
+      - '.github/workflows/godot-first-playable-smoke.yml'
+      - 'docs/implementation/first-playable.md'
+      - 'docs/planning/handoffs/issue-1343.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: godot-first-playable-smoke-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+
+      - name: Resolve reviewed Godot artifact lock
+        id: godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path('docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json').read_text())
+          entry = lock['entries']['godot_4.7.1_linux_x86_64_zip']
+          if entry['version'] != '4.7.1-stable':
+              raise SystemExit(f"unexpected reviewed Godot version: {entry['version']}")
+          print(f"url={entry['url']}")
+          print(f"sha256={entry['sha256']}")
+          print(f"version={entry['version']}")
+          PY
+
+      - name: Acquire exact reviewed Godot 4.7.1 artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.godot.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Run import and deterministic headless smoke
+        shell: bash
+        env:
+          GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          mkdir -p .first-playable-evidence
+          tools/implementation/run_godot_smoke.sh 2>&1 | tee .first-playable-evidence/smoke.log
+          printf 'trigger_sha=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\n' \
+            "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            '${{ steps.godot.outputs.version }}' '${{ steps.godot.outputs.sha256 }}' \
+            > .first-playable-evidence/run-identity.txt
+          sha256sum game/project.godot game/main.tscn game/main.gd game/smoke_test.gd \
+            > .first-playable-evidence/implementation.sha256
+
+      - name: Upload smoke evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: godot-first-playable-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .first-playable-evidence/
+          if-no-files-found: error
+          retention-days: 30
