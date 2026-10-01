@@ -27,14 +27,14 @@ The implementation reference was independently checked at exact source head `5ae
 
 Review claim base was `main@5665667877f2c15a5aff42ca571b483bd7e3572e`.
 
-During review, `main` advanced once to `086628fe1d52172577a3d9d0e1f180b1a3b4d43f` via squash publication of #1383 review provenance. That commit changes only:
+During review, `main` advanced through two squash publications:
 
-- `docs/planning/handoffs/issue-1383.md`
-- `docs/planning/wave-2/reviews/content-demand-old-works-world-01-review.md`
+1. `086628fe1d52172577a3d9d0e1f180b1a3b4d43f` — #1383 clean review provenance, changing only its review report and handoff;
+2. `9c06e99e4b21b226f934b841709ff9aeee7534c7` — exact clean-reviewed #1378 world/evidence producer publication, changing only #1378's two bounded content artifacts and handoff.
 
-Those paths and semantics do not overlap the #1380 producer packet or the exact source implementation. The active canonical binding remains Issue #1147 comment `5675066392` and Planning Program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`.
+Neither delta overlaps the #1380 producer paths or exact source implementation. The #1378 publication is a sibling content root that #1380 did not consume; its later publication does not retroactively change the frozen #1380 packet. The active canonical binding remains Issue #1147 comment `5675066392` and Planning Program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`.
 
-The review branch is based on the refreshed compatible `main@086628fe1d52172577a3d9d0e1f180b1a3b4d43f`.
+The review branch was created from compatible `main@086628fe1d52172577a3d9d0e1f180b1a3b4d43f`; current compatible main at freeze is `9c06e99e4b21b226f934b841709ff9aeee7534c7`.
 
 ## Review attacks and results
 
@@ -120,7 +120,7 @@ PR #1388 contains exactly three changed paths, all owned by #1380.
 - correction-requiring MINOR: 0
 - informational: 1
 
-Informational note: review-time `main` advanced only by disjoint #1383 review-provenance publication. This does not alter the exact #1380 judgment, grant producer integration authority, or make PR mergeability itself an authority signal.
+Informational note: review-time `main` advanced only through disjoint #1383 review-provenance and exact #1378 sibling-content publication. Neither alters the exact #1380 judgment, grants producer integration authority, or makes PR mergeability itself an authority signal.
 
 ## Disposition
 
