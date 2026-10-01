@@ -1,0 +1,262 @@
+schema: everfield_content_demand_old_works_world_evidence_01_v1
+mission_id: CONTENT-DEMAND-OLD-WORKS-WORLD-01
+issue: 1378
+state: PRODUCER_CANDIDATE_NONCANONICAL
+canonicality: NOT_CANONICAL
+
+execution:
+  branch: planning/issue-1378
+  ownership_comment_id: 5926648259
+  base_main_sha: 5665667877f2c15a5aff42ca571b483bd7e3572e
+  actor_session_id: frontier-drain-content-world-1378-gpt56sol-20261001-01
+
+canonical_basis:
+  binding_issue: 1147
+  binding_comment_id: 5675066392
+  program_blob_sha: fd4cf1119c3f86acc3af620024eea72235e81ce4
+  activation_sha: 87c85cecfa9a2ffa464c4b36816a138bf41441af
+
+demand_source:
+  intake_issue: 1377
+  implementation_issue: 1343
+  implementation_pr: 1370
+  implementation_head_observed: 5aefb403b35bde1ab754b9feca2916e3f5b4ea03
+  slice_id: VS:OLD-WORKS-ACCOUNTS-01
+
+reviewed_content_sources:
+  authored_slice:
+    markdown_path: docs/planning/wave-2/content/authored-vertical-slice.md
+    markdown_blob_sha: 5e94bdb0ca6146bab93264fc8e6763590aa289d2
+    corrected_yaml_path: docs/planning/wave-2/content/authored-vertical-slice.yaml
+    corrected_yaml_blob_sha: 8d341d534ef4a27929aaabdf5b81a6d5ff86b80e
+    remediation_review_issue: 449
+    remediation_review_blob_sha: 6b9c4e09e47fb9cd1fa53c743d4aaacc36cfb190
+    remediation_review_disposition: CLEAN_FOR_BOUNDED_AUTHORED_CONTENT_CONSUMPTION
+  world_foundation:
+    facts_path: docs/planning/wave-2/content/world-setting-facts.yaml
+    facts_blob_sha: baa827528994864faa3f50c8b0785dd89a775a14
+    foundation_path: docs/planning/wave-2/content/world-setting-foundation.md
+    foundation_blob_sha: 3caaddf10e27cefb91c35b6a4f374740aa3c6731
+
+authority:
+  candidate_presentation_only: true
+  gameplay_code: false
+  implementation_readiness: false
+  verification_pass: false
+  final_canon: false
+  integration: false
+  production: false
+  release: false
+  legal_provider_certification: false
+  truth_resolution: false
+
+frozen_refs:
+  location_ref: LOC:OLD-WORKS
+  fragmentation_event_ref: EVT:WORKS-FRAGMENTATION
+  world_mystery_ref: MYS:FRAGMENTATION-CAUSE
+  contested_proposition_ref: PROP:FRAGMENTATION-SINGLE-DOMINANT-CAUSE
+  claim_refs:
+    - CLM:FRAGMENTATION-ACCOUNT-A
+    - CLM:FRAGMENTATION-ACCOUNT-B
+  public_record_role: DISC_ROLE:PUBLIC_RECORD
+  material_trace_role: DISC_ROLE:MATERIAL_TRACE
+  archive_ref: FAC-ARCHIVE-01
+  private_information_ref: INFO:anwen_contested_record_provenance_gap
+
+truth_model:
+  fragmentation_cause_authority: UNKNOWN_BY_DESIGN
+  account_a:
+    stance: ASSERTS
+    truth_effect: NONE
+  account_b:
+    stance: DENIES
+    truth_effect: NONE
+  forced_truth_conclusion_allowed: false
+  completion_may_resolve_mystery: false
+  material_trace_may_select_claim_winner: false
+  public_record_may_select_claim_winner: false
+
+location_presentation:
+  working_name: The Old Works
+  scope: VS:OLD-WORKS-ACCOUNTS-01_ONLY
+  identity: >-
+    A compact working yard where inherited stone channels, timber walkways,
+    patched housings, reused fittings, and newer braces show continued use,
+    bypass, repair, and repurposing without identifying one original layer or
+    one final historical cause.
+  material_cues:
+    - inherited_stone_channel
+    - later_timber_crossing
+    - layered_braces_and_fasteners
+    - capped_opening_and_working_bypass
+    - reused_fitting_with_multiple_placement_marks
+  forbidden_implications:
+    - final_owner
+    - final_custodian
+    - final_polity
+    - exact_calendar_date
+    - single_original_purpose
+    - universal_restoration_preference
+    - single_resolved_fragmentation_cause
+
+spatial_presentation:
+  stations:
+    - station_id: public_record
+      presentation_id: OW_ARCHIVE_TITLE
+      role: DISC_ROLE:PUBLIC_RECORD
+      relation: PUBLIC_NONPRIVATE_RECORD_SURFACE
+    - station_id: material_trace
+      presentation_id: OW_TRACE_TITLE
+      role: DISC_ROLE:MATERIAL_TRACE
+      relation: BOUNDED_PHYSICAL_OBSERVATION_SURFACE
+    - station_id: defer_conclusion
+      presentation_id: OW_DEFER_TITLE
+      relation: EXPLICIT_LEGAL_TRUTH_DEFERRAL
+    - station_id: commons_hearing
+      relation: EVIDENCE_TO_NEGOTIATION_WITHOUT_TRUTH_PROMOTION
+    - station_id: project_table
+      relation: PRESENT_ACTION_WITHOUT_HISTORICAL_TRUTH_PROMOTION
+  final_geometry_authority: false
+  property_boundary_authority: false
+
+strings:
+  OW_WORLD_TITLE:
+    surface: scene_title
+    text: "The Old Works"
+  OW_WORLD_SUBTITLE:
+    surface: scene_subtitle
+    text: "Inherited channels, patched routes, unfinished arguments."
+  OW_WORLD_ENTRY:
+    surface: entry_cue
+    text: "Old stone, newer timber, and repairs from more than one hand meet in the same working yard. Nothing here explains itself in one layer."
+  OW_WORLD_ROUTE_CUE:
+    surface: traversal_cue
+    text: "The ledger table, exposed repair seam, hearing space, and project table all face the same inherited works."
+
+  OW_ARCHIVE_TITLE:
+    surface: public_record_title
+    text: "Archive Ledger"
+  OW_ARCHIVE_PROMPT:
+    surface: public_record_prompt
+    text: "Read the public record."
+  OW_ARCHIVE_BODY_01:
+    surface: public_record_body
+    text: "The surviving entries agree that coordinated upkeep broke apart. They do not agree that one cause explains why."
+  OW_ARCHIVE_BODY_02:
+    surface: public_record_body
+    text: "One recorded account argues for a single dominant cause. Another rejects that reading. Both remain recorded as accounts, not findings."
+  OW_ARCHIVE_BODY_03:
+    surface: public_record_body
+    text: "Later pages list local repairs, bypasses, and changed uses without resolving the older dispute."
+  OW_ARCHIVE_EXIT:
+    surface: public_record_exit
+    text: "The ledger gives you claims and a sequence of changes—not a verdict. Compare it with something independent, or leave the conclusion open."
+
+  OW_TRACE_TITLE:
+    surface: material_trace_title
+    text: "Material Trace"
+  OW_TRACE_PROMPT:
+    surface: material_trace_prompt
+    text: "Inspect the repair seam."
+  OW_TRACE_BODY_01:
+    surface: material_trace_body
+    text: "A dressed stone channel continues beneath a later timber crossing. Their wear patterns do not match exactly."
+  OW_TRACE_BODY_02:
+    surface: material_trace_body
+    text: "Several fasteners and braces were added after the surrounding surface had already weathered. Some older fixing points are empty."
+  OW_TRACE_BODY_03:
+    surface: material_trace_body
+    text: "The trace supports a history of alteration and repeated maintenance. It does not identify a single cause for the fragmentation."
+  OW_TRACE_EXIT:
+    surface: material_trace_exit
+    text: "This is independent material evidence within the inspected surface, not proof of either account."
+
+  OW_DEFER_TITLE:
+    surface: truth_deferral_title
+    text: "Leave the Cause Open"
+  OW_DEFER_PROMPT:
+    surface: truth_deferral_prompt
+    text: "Record that the evidence is insufficient for a final conclusion."
+  OW_DEFER_RESULT:
+    surface: truth_deferral_result
+    text: "You can act on the present condition without pretending the old dispute is settled."
+
+  OW_ENV_CHANNEL_PATCHWORK:
+    surface: environment
+    text: "Old channel edge; later patch; another repair over that."
+  OW_ENV_BYPASS:
+    surface: environment
+    text: "A capped opening sits beside a narrower working bypass."
+  OW_ENV_REUSED_FITTING:
+    surface: environment
+    text: "A reused fitting carries marks from more than one placement."
+  OW_ENV_LEDGER_TO_TRACE:
+    surface: environment
+    text: "The ledger records repairs in general; the seam shows one place where change is physically visible."
+  OW_ENV_TRACE_TO_HEARING:
+    surface: environment
+    text: "From the repair seam, the hearing space remains in view: observation can travel into debate without becoming a verdict."
+  OW_ENV_HEARING_TO_PROJECT:
+    surface: environment
+    text: "The project table is close enough to the works to make tradeoffs concrete, but no repair plan answers the historical mystery by itself."
+
+public_record_policy:
+  nonprivate: true
+  may_expose:
+    - coordinated_maintenance_fragmented
+    - conflicting_account_a
+    - conflicting_account_b
+    - later_repairs_bypasses_changed_uses
+  must_not_expose:
+    - INFO:anwen_contested_record_provenance_gap
+  record_custody_authenticates_causal_claim: false
+  relationship_route_grants_secret_access: false
+  substitute_testimony_route_grants_secret_access: false
+
+material_trace_policy:
+  evidence_scope: INSPECTED_OLD_WORKS_SURFACE_ONLY
+  observations:
+    - layered_construction_or_maintenance
+    - later_repairs
+    - reuse_or_repositioning
+    - bypass_or_capping
+  allowed_bearing: NONDISCRIMINATING
+  may_support_history_of_alteration: true
+  may_establish_single_cause: false
+  may_establish_owner_or_legitimacy: false
+  observation_count_is_truth_strength: false
+  visual_difference_alone_proves_independence: false
+
+presentation_invariants:
+  - MYS_FRAGMENTATION_CAUSE_REMAINS_UNKNOWN_BY_DESIGN
+  - CLAIM_A_REMAINS_IN_WORLD_CLAIM_WITH_ZERO_TRUTH_EFFECT
+  - CLAIM_B_REMAINS_IN_WORLD_CLAIM_WITH_ZERO_TRUTH_EFFECT
+  - PUBLIC_RECORD_DOES_NOT_REVEAL_ANWEN_SECRET
+  - MATERIAL_TRACE_DOES_NOT_SELECT_CAUSAL_WINNER
+  - INDEPENDENCE_IS_SCOPED_NOT_INFERRED_FROM_COUNT_OR_DIFFERENCE
+  - EXPLICIT_TRUTH_DEFERRAL_REMAINS_LEGAL
+  - PRIVATE_SECRET_NOT_REQUIRED_FOR_SLICE_PROGRESSION
+  - PRESENTATION_HAS_ZERO_FACT_SECRET_KNOWLEDGE_BRANCH_RELATIONSHIP_OR_CANON_AUTHORITY
+  - REPAIR_OR_RECORDS_FIRST_COMPLETION_DOES_NOT_RESOLVE_HISTORY
+  - SCENE_DRESSING_DOES_NOT_ESTABLISH_OWNER_CUSTODIAN_POLITY_OR_EXACT_CHRONOLOGY
+  - RESTORATION_IS_NOT_UNIVERSALLY_PREFERRED
+
+owned_paths:
+  - docs/planning/wave-2/content/demand/old-works-world-evidence-01.md
+  - docs/planning/wave-2/content/demand/old-works-world-evidence-01.yaml
+  - docs/planning/handoffs/issue-1378.md
+
+excluded_sibling_scope:
+  commons_hearing_participant_dialogue_issue: 1379
+  commitment_consequence_presentation_issue: 1380
+  gameplay_code: true
+  final_art_direction: true
+  final_map_geometry: true
+  broader_quest_backlog: true
+
+review_gate:
+  required: true
+  exact_head_required: true
+  fresh_review_issue_required: true
+  consumption_before_clean_review_allowed: false
+  integration_before_clean_review_allowed: false
