@@ -5,8 +5,8 @@
 - issue: #1342
 - mission: `W2-IMPLEMENTATION-READINESS-CONT-02-VER-01`
 - branch: `planning/issue-1342`
-- ownership generation: comment `5911138072`
-- actor/session: `frontier-drain-readiness-verification-1342-gpt56sol-20260930-01`
+- ownership generation: recovery comment `5925498445`
+- actor/session: `frontier-drain-recover-readiness-verification-1342-gpt56sol-20261001-01`
 - verification base: `main@c81e47b53c50a951691b709874298c84b3d8904c`
 - canonical binding: Issue #1147 comment `5675066392`
 - canonical program blob: `fd4cf1119c3f86acc3af620024eea72235e81ce4`
@@ -14,6 +14,14 @@
 - trust mode: `DEGRADED_SINGLE_AGENT`
 - disposition: `FAIL`
 - canonicality: `NOT_CANONICAL`
+- stale source generation: comment `5911138072`
+- latest valid source renewal: comment `5911267192` at `2026-09-30T12:25:58Z`
+- winning STALE intent: comment `5925495303`
+- recovered/adopted verification report blob: `0d68092a5700d9af95ffafb2cea676bb193b4b3d`
+
+## Recovery validation
+
+The prior verifier generation expired at `2026-09-30T18:25:58Z` under the canonical six-hour GitHub-server lease. Recovery comment `5925498445` won through STALE intent `5925495303` at the exact inherited branch head `331155d49c7cf19693251ca0784adb031f843dca`. The inherited verification report was independently re-read against current `main`, the active canonical binding, producer #1341 storage/ownership chronology, PR #1362 identities, and the exact reviewed readiness roots. Its single BLOCKER and `FAIL` disposition are adopted unchanged; only continuation provenance is corrected. No readiness PASS, implementation authority, or other authority upgrade is introduced.
 
 ## Judged producer
 
