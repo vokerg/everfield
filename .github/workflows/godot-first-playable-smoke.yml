@@ -26,6 +26,7 @@ jobs:
       - name: Checkout exact candidate
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 1
 
       - name: Resolve reviewed Godot artifact lock
@@ -60,20 +61,21 @@ jobs:
           GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
         run: |
           set -euo pipefail
-          mkdir -p .first-playable-evidence
-          tools/implementation/run_godot_smoke.sh 2>&1 | tee .first-playable-evidence/smoke.log
-          printf 'trigger_sha=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\n' \
-            "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+          mkdir -p first-playable-evidence
+          bash tools/implementation/run_godot_smoke.sh 2>&1 | tee first-playable-evidence/smoke.log
+          checked_out_sha="$(git rev-parse HEAD)"
+          printf 'event_sha=%s\nchecked_out_sha=%s\npr_head_sha=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\n' \
+            "$GITHUB_SHA" "$checked_out_sha" '${{ github.event.pull_request.head.sha || github.sha }}' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
             '${{ steps.godot.outputs.version }}' '${{ steps.godot.outputs.sha256 }}' \
-            > .first-playable-evidence/run-identity.txt
+            > first-playable-evidence/run-identity.txt
           sha256sum game/project.godot game/main.tscn game/main.gd game/smoke_test.gd \
-            > .first-playable-evidence/implementation.sha256
+            > first-playable-evidence/implementation.sha256
 
       - name: Upload smoke evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: godot-first-playable-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .first-playable-evidence/
+          path: first-playable-evidence/
           if-no-files-found: error
           retention-days: 30
