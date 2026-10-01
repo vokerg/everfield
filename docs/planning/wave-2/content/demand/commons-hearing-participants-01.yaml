@@ -1,0 +1,248 @@
+protocol: everfield-content-demand-v1
+packet_id: CONTENT-DEMAND-COMMONS-HEARING-CHAR-01
+issue: 1379
+state: IMPLEMENTATION_FED_CANDIDATE
+canonicality: NOT_CANONICAL
+
+demand:
+  intake_issue: 1377
+  implementation_issue: 1343
+  implementation_pr: 1370
+  observed_implementation_head: 5aefb403b35bde1ab754b9feca2916e3f5b4ea03
+
+scope:
+  slice_ref: VS:OLD-WORKS-ACCOUNTS-01
+  location_ref: LOC:OLD-WORKS
+  objective_ref: OBJ:VS:NEGOTIATE-SHARED-USE
+  quest_role_ref: QROLE:NEGOTIATE_SHARED_USE
+  mystery_ref: MYS:FRAGMENTATION-CAUSE
+  mystery_state_required: UNKNOWN_BY_DESIGN
+  sibling_world_evidence_issue: 1378
+  sibling_consequence_issue: 1380
+
+authority:
+  presentation_only: true
+  fact_authority: false
+  relationship_mutation_authority: false
+  information_access_authority: false
+  branch_authority: false
+  legitimacy_authority: false
+  representation_authority: false
+  final_character_social_canon_authority: false
+  implementation_readiness_authority: false
+  production_authority: false
+  release_authority: false
+  integration_authority: false
+
+participants:
+  - presentation_id: OW_HEARING_PARTICIPANT_MAELIN_01
+    character_ref: CHAR:maelin_sor
+    hearing_role: AFFECTED_BURDEN_VOICE
+    purpose: KEEP_MATERIAL_AND_CARE_BURDEN_VISIBLE_BEFORE_PUBLIC_COMMITMENT
+    office_asserted: false
+    faction_membership_asserted: false
+    representation_asserted: false
+    exclusive_standing_asserted: false
+    private_information_required: false
+    stance:
+      - BOUNDED_ACTION_REQUIRES_VISIBLE_BURDEN
+      - MAY_REMAIN_NONALIGNED_IF_BURDEN_IS_HIDDEN
+      - PROCEDURAL_VALIDITY_DOES_NOT_CLOSE_CONSEQUENCE_DISPUTE
+
+  - presentation_id: OW_HEARING_PARTICIPANT_SELKA_01
+    character_ref: CHAR:selka_vey
+    hearing_role: BOUNDED_PROCEDURE_VOICE
+    purpose: KEEP_PUBLIC_COMMITMENT_EXPLICIT_SCOPED_AND_NONCOERCIVE
+    office_asserted: false
+    faction_membership_asserted: false
+    representation_asserted: false
+    exclusive_standing_asserted: false
+    private_information_required: false
+    stance:
+      - CHOICE_AND_LIMITS_MUST_BE_STATED_NOT_IMPLIED
+      - DEFERRAL_AND_NONALIGNMENT_ARE_LEGAL_OUTCOMES
+      - PROCEDURAL_COMPLETION_DOES_NOT_PROVE_BURDEN_RESOLVED
+
+dialogue_beats:
+  - beat_id: OW_HEARING_OPEN_MAELIN_01
+    speaker_ref: CHAR:maelin_sor
+    phase: OPENING
+    route_scope: ANY
+    text: "Before we choose a route, name who carries the work if the Old Works fail again."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_OPEN_SELKA_01
+    speaker_ref: CHAR:selka_vey
+    phase: OPENING
+    route_scope: ANY
+    text: "Then keep the choice bounded: record the scope, the burden, and how we can stop or revise it."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_REPAIR_SELKA_01
+    speaker_ref: CHAR:selka_vey
+    phase: ROUTE_POSITION
+    route_scope: repair_pilot
+    text: "A repair pilot is a trial, not a title to the Works. State the limit before anyone calls it settled."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_REPAIR_MAELIN_01
+    speaker_ref: CHAR:maelin_sor
+    phase: ROUTE_POSITION
+    route_scope: repair_pilot
+    text: "And state who is carrying the repair. If that burden is hidden, I do not support the pilot."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_RECORDS_MAELIN_01
+    speaker_ref: CHAR:maelin_sor
+    phase: ROUTE_POSITION
+    route_scope: records_first
+    text: "Records first is slower, but it leaves the burden visible instead of burying it under urgency."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_RECORDS_SELKA_01
+    speaker_ref: CHAR:selka_vey
+    phase: ROUTE_POSITION
+    route_scope: records_first
+    text: "Then record the limit: document, use narrowly, and reopen repair only by another public choice."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_DEFER_SELKA_01
+    speaker_ref: CHAR:selka_vey
+    phase: DEFER_NONALIGNMENT
+    route_scope: defer
+    text: "No assent is recorded. Reopen the hearing only when someone chooses to."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_DEFER_MAELIN_01
+    speaker_ref: CHAR:maelin_sor
+    phase: DEFER_NONALIGNMENT
+    route_scope: defer
+    text: "Then leave the burden on the table too. Deferral is not agreement with either account."
+    required_for_progression: false
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_REFUSE_MAELIN_01
+    speaker_ref: CHAR:maelin_sor
+    phase: REFUSAL
+    route_scope: ANY
+    text: "I won’t endorse a route that hides who carries it. Put that burden in view or leave me unaligned."
+    required_for_progression: false
+    hidden_gate: false
+    consent_effect: NONE
+    authority_effect: NONE
+
+  - beat_id: OW_HEARING_REFUSE_SELKA_01
+    speaker_ref: CHAR:selka_vey
+    phase: REFUSAL
+    route_scope: ANY
+    text: "I won’t call this settled without a bounded scope and a way to revise it. Record nonalignment instead."
+    required_for_progression: false
+    hidden_gate: false
+    consent_effect: NONE
+    authority_effect: NONE
+
+choice_semantics:
+  repair_pilot:
+    bounded: true
+    conditionally_reversible: true
+    ownership_effect: NONE
+    legitimacy_effect: NONE
+    mystery_truth_effect: NONE
+    universal_endorsement_effect: NONE
+
+  records_first:
+    bounded: true
+    documentation_is_truth_authority: false
+    physical_repair_deferred: true
+    mystery_truth_effect: NONE
+    institutional_record_promotes_claim_to_fact: false
+
+  defer:
+    public_commitment_recorded: false
+    assent_inferred: false
+    consent_in_waiting: false
+    nonalignment_legal: true
+    hidden_progression_debt: false
+    hearing_may_reopen: true
+    history_erased_on_reopen: false
+
+relationship_semantics:
+  predecessor_history_ref: REL_EVT:maelin_selka_burden_objection
+  candidate_hearing_event_ref: REL_EVT:VS:MAELIN-SELKA-HEARING-01
+  direct_dimension_mutation: false
+  public_standing_substitutes_for_private_trust: false
+  relationship_state_grants_information_access: false
+  repetition_grinds_relationship_or_consent: false
+  candidate_implications:
+    - condition: BURDEN_EXPLICITLY_ACKNOWLEDGED
+      dimension: RESPECT
+      effect: MAY_REMAIN_OR_INCREASE
+      immediate_mutation: false
+    - condition: BURDEN_DISMISSED_OR_HIDDEN
+      dimension: CAUTION
+      effect: MAY_INCREASE
+      immediate_mutation: false
+    - condition: REFUSAL_OR_NONALIGNMENT_RESPECTED
+      dimension: NONE
+      effect: MAY_SUPPORT_LATER_TYPED_BOUNDARY_RESPECT_EVIDENCE
+      immediate_mutation: false
+  no_automatic_change_dimensions:
+    - TRUST
+    - WARMTH
+    - OBLIGATION
+    - RIVALRY
+
+information_firewall:
+  private_information_required: false
+  excluded_required_info_refs:
+    - INFO:anwen_contested_record_provenance_gap
+  relationship_state_grants_private_information: false
+  public_standing_grants_private_information: false
+  attendance_grants_private_information: false
+  generated_dialogue_grants_private_information: false
+  dialogue_settles_world_mystery: false
+
+implementation_contract:
+  allowed:
+    - SHOW_PARTICIPANT_CARDS
+    - EMIT_STABLE_DIALOGUE_BEAT_IDS
+    - SELECT_CONTEXT_APPROPRIATE_ROUTE_OR_REFUSAL_BEATS
+    - APPEND_ATTENDED_HEARING_HISTORY_WITH_TYPED_CAUSE
+  forbidden:
+    - DIALOGUE_AS_OBJECTIVE_TRUTH_EVIDENCE
+    - AUTOMATIC_RELATIONSHIP_DIMENSION_MUTATION
+    - UNIVERSAL_POPULARITY_APPROVAL_RELATIONSHIP_SCALAR
+    - REFUSAL_AS_HIDDEN_FOUNDATIONAL_GATE
+    - PRIVATE_SECRET_AS_REQUIRED_ROUTE
+    - OFFICE_REPRESENTATION_OR_LEGITIMACY_INFERENCE
+    - FINAL_CANON_INFERENCE
+    - SIBLING_1378_OR_1380_MUTATION
+
+integrity_invariants:
+  - MYS_FRAGMENTATION_CAUSE_REMAINS_UNKNOWN_BY_DESIGN
+  - EXACTLY_TWO_REVIEWED_SLICE_ACTORS_USED
+  - NO_OFFICE_OR_REPRESENTATION_CLAIM
+  - REFUSAL_DEFERRAL_AND_NONALIGNMENT_REMAIN_LEGAL
+  - DEFERRAL_IS_NOT_CONSENT_IN_WAITING
+  - NO_UNIVERSAL_RELATIONSHIP_OR_POPULARITY_SCALAR
+  - PRIVATE_SECRET_NOT_REQUIRED
+  - PRESENTATION_IDS_HAVE_ZERO_DIRECT_AUTHORITY
+  - RELATIONSHIP_HISTORY_IS_NOT_ERASED_BY_REOPEN_OR_REPAIR
+  - NO_GAMEPLAY_CODE_OR_SIBLING_CONTENT_MUTATION
+
+reopen_conditions:
+  - THIRD_CONCRETE_PARTICIPANT_REQUIRED
+  - HEARING_ROUTE_CARDINALITY_CHANGED
+  - REFUSAL_OR_DEFERRAL_REMOVED
+  - DIRECT_RELATIONSHIP_MUTATION_ADDED
+  - PRIVATE_INFORMATION_REQUIRED
+  - OFFICE_REPRESENTATION_OR_LEGITIMACY_CLAIM_ADDED
+  - MYSTERY_STATE_CHANGED_FROM_UNKNOWN_BY_DESIGN
+  - PRESENTATION_ID_PROMOTED_TO_FACT_SECRET_BRANCH_OR_AUTHORITY_STATE
