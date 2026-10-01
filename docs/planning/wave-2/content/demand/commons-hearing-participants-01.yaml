@@ -100,7 +100,7 @@ dialogue_beats:
     speaker_ref: CHAR:maelin_sor
     phase: ROUTE_POSITION
     route_scope: records_first
-    text: "Records first is slower, but it leaves the burden visible instead of burying it under urgency."
+    text: "Records first keeps the burden visible instead of burying it under urgency."
     required_for_progression: false
     authority_effect: NONE
 
