@@ -1,5 +1,9 @@
 extends Node2D
 
+const OldWorksPresentation = preload("res://components/old_works_world/old_works_world_presentation.gd")
+const CommonsHearingPresentation = preload("res://components/commons_hearing/commons_hearing_presentation.gd")
+const CommitmentConsequencePresentation = preload("res://components/commitment_consequences/commitment_consequence_presentation.gd")
+
 const PLAYER_SPEED := 230.0
 const INTERACT_RADIUS := 88.0
 const WORLD_BOUNDS := Rect2(36.0, 90.0, 888.0, 414.0)
@@ -43,11 +47,19 @@ var title_label: Label
 var objective_label: Label
 var status_label: Label
 var diagnostic_label: Label
+var presentation_panel: ColorRect
+var presentation_label: Label
 var station_nodes: Dictionary = {}
 
+var old_works_presentation: Variant
+var commons_hearing_presentation: Variant
+var consequence_presentation: Variant
 var state: Dictionary = {}
 
 func _ready() -> void:
+    old_works_presentation = OldWorksPresentation.new()
+    commons_hearing_presentation = CommonsHearingPresentation.new()
+    consequence_presentation = CommitmentConsequencePresentation.new()
     _build_world()
     reset_slice()
     print("[EVERFIELD][BOOT] Accounts at the Old Works first playable ready")
@@ -112,6 +124,7 @@ func _build_world() -> void:
 
     for station_id in STATIONS:
         var station_data: Dictionary = STATIONS[station_id]
+        var display := _station_display(String(station_id), station_data)
         var station := Node2D.new()
         station.name = String(station_id)
         station.position = station_data["position"]
@@ -127,7 +140,7 @@ func _build_world() -> void:
         label.position = Vector2(-74, -52)
         label.size = Vector2(148, 44)
         label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-        label.text = "%s\n%s" % [station_data["title"], station_data["hint"]]
+        label.text = "%s\n%s" % [display["title"], display["hint"]]
         label.add_theme_font_size_override("font_size", 12)
         station.add_child(label)
 
@@ -166,6 +179,24 @@ func _build_world() -> void:
     status_label.add_theme_font_size_override("font_size", 14)
     add_child(status_label)
 
+    presentation_panel = ColorRect.new()
+    presentation_panel.name = "PresentationPanel"
+    presentation_panel.position = Vector2(486, 88)
+    presentation_panel.size = Vector2(450, 154)
+    presentation_panel.color = Color(0.035, 0.047, 0.055, 0.94)
+    presentation_panel.z_index = 5
+    add_child(presentation_panel)
+
+    presentation_label = Label.new()
+    presentation_label.name = "Presentation"
+    presentation_label.position = Vector2(500, 98)
+    presentation_label.size = Vector2(422, 134)
+    presentation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    presentation_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+    presentation_label.add_theme_font_size_override("font_size", 12)
+    presentation_label.z_index = 6
+    add_child(presentation_label)
+
     diagnostic_label = Label.new()
     diagnostic_label.name = "Diagnostic"
     diagnostic_label.position = Vector2(26, 506)
@@ -188,6 +219,7 @@ func reset_slice() -> void:
     if player != null:
         player.position = Vector2(92, 286)
     _set_diagnostic("EF-RESET", "Slice state reset; durable world mystery remains unresolved.")
+    _show_world_intro()
     _refresh_hud()
 
 func interact_nearest() -> bool:
@@ -206,17 +238,20 @@ func interact_with(station_id: String) -> bool:
         "public_record":
             state["record_read"] = true
             _append_history("PUBLIC_RECORD_REVIEWED")
-            _set_diagnostic("EF-INVESTIGATE-RECORD", "The archive records incompatible accounts; neither is promoted to truth.")
+            _show_old_works_station("public_record")
+            _set_diagnostic("EF-INVESTIGATE-RECORD", "Reviewed Archive Ledger presentation; competing accounts remain claims, not findings.")
         "material_trace":
             state["trace_inspected"] = true
             _append_history("MATERIAL_TRACE_INSPECTED")
-            _set_diagnostic("EF-INVESTIGATE-TRACE", "The Old Works carries independent material evidence, still insufficient to settle the cause.")
+            _show_old_works_station("material_trace")
+            _set_diagnostic("EF-INVESTIGATE-TRACE", "Reviewed Material Trace presentation; alteration evidence does not select a causal winner.")
         "defer_conclusion":
             if not state["record_read"]:
                 _set_diagnostic("EF-GATE-DEFER", "Review the public record before explicitly deferring a conclusion.")
                 return false
             state["deferred_truth"] = true
             _append_history("TRUTH_CONCLUSION_DEFERRED")
+            _show_old_works_station("defer_conclusion")
             _set_diagnostic("EF-INVESTIGATE-DEFER", "Conclusion deferred by design; uncertainty is a legal route.")
         "commons_hearing":
             if not _investigation_ready():
@@ -224,6 +259,7 @@ func interact_with(station_id: String) -> bool:
                 return false
             state["negotiation_open"] = true
             _append_history("COMMONS_HEARING_OPENED")
+            _show_hearing_opening()
             _set_diagnostic("EF-NEGOTIATE", "Choose: [1] repair pilot, [2] records-first, or [3] defer commitment.")
         "project_table":
             if String(state["commitment"]).is_empty():
@@ -235,6 +271,7 @@ func interact_with(station_id: String) -> bool:
             else:
                 state["outcome"] = "RECORDS_FIRST_PACKAGE_FILED"
             _append_history(String(state["outcome"]))
+            _show_consequence(String(state["outcome"]))
             _set_diagnostic("EF-SLICE-COMPLETE", "First-playable loop complete; mystery remains UNKNOWN_BY_DESIGN.")
 
     _refresh_hud()
@@ -250,16 +287,19 @@ func choose_commitment(choice: String) -> bool:
             state["commitment"] = "repair_pilot"
             state["negotiation_open"] = false
             _append_history("COMMITMENT_REPAIR_PILOT")
+            _show_hearing_and_consequence("repair_pilot", "COMMITMENT_REPAIR_PILOT")
             _set_diagnostic("EF-COMMIT-REPAIR", "Repair pilot selected: bounded and conditionally reversible.")
         "records_first":
             state["commitment"] = "records_first"
             state["negotiation_open"] = false
             _append_history("COMMITMENT_RECORDS_FIRST")
+            _show_hearing_and_consequence("records_first", "COMMITMENT_RECORDS_FIRST")
             _set_diagnostic("EF-COMMIT-RECORDS", "Records-first selected: document and limit use before broader repair.")
         "defer":
             state["commitment"] = ""
             state["negotiation_open"] = false
             _append_history("PUBLIC_COMMITMENT_DEFERRED")
+            _show_hearing_and_consequence("defer", "PUBLIC_COMMITMENT_DEFERRED")
             _set_diagnostic("EF-COMMIT-DEFER", "Commitment deferred; the hearing may be reopened without erasing history.")
         _:
             _set_diagnostic("EF-COMMIT-UNKNOWN", "Unsupported commitment choice: %s" % choice, true)
@@ -270,6 +310,9 @@ func choose_commitment(choice: String) -> bool:
 
 func get_game_state() -> Dictionary:
     return state.duplicate(true)
+
+func get_presentation_text() -> String:
+    return presentation_label.text if presentation_label != null else ""
 
 func _investigation_ready() -> bool:
     return bool(state["record_read"]) and (bool(state["trace_inspected"]) or bool(state["deferred_truth"]))
@@ -292,12 +335,129 @@ func _nearest_station_id() -> String:
             best_id = String(station_id)
     return best_id if best_distance <= INTERACT_RADIUS else ""
 
+func _station_display(station_id: String, fallback: Dictionary) -> Dictionary:
+    var display := {
+        "title": String(fallback.get("title", "")),
+        "hint": String(fallback.get("hint", "")),
+    }
+    if not ["public_record", "material_trace", "defer_conclusion"].has(station_id):
+        return display
+
+    var station: Dictionary = old_works_presentation.get_station(station_id)
+    if station.is_empty():
+        return display
+    var title_id := String(station.get("title_id", ""))
+    var prompt_id := String(station.get("prompt_id", ""))
+    if old_works_presentation.has_text(title_id):
+        display["title"] = old_works_presentation.get_text(title_id)
+    if old_works_presentation.has_text(prompt_id):
+        display["hint"] = old_works_presentation.get_text(prompt_id)
+    return display
+
+func _show_world_intro() -> void:
+    var lines: Array = [
+        old_works_presentation.get_text("OW_WORLD_TITLE"),
+        old_works_presentation.get_text("OW_WORLD_SUBTITLE"),
+        old_works_presentation.get_text("OW_WORLD_ENTRY"),
+    ]
+    _set_presentation(_join_lines(lines))
+
+func _show_old_works_station(station_id: String) -> void:
+    var station: Dictionary = old_works_presentation.get_station(station_id)
+    if station.is_empty():
+        _set_presentation("Presentation unavailable for %s." % station_id)
+        return
+
+    var lines: Array = []
+    for key in ["title_id", "prompt_id"]:
+        var text_id := String(station.get(key, ""))
+        if not text_id.is_empty():
+            lines.append(old_works_presentation.get_text(text_id))
+    for body_id in station.get("body_ids", []):
+        lines.append(old_works_presentation.get_text(String(body_id)))
+    for key in ["exit_id", "result_id"]:
+        var text_id := String(station.get(key, ""))
+        if not text_id.is_empty():
+            lines.append(old_works_presentation.get_text(text_id))
+    _set_presentation(_join_lines(lines))
+
+func _show_hearing_opening() -> void:
+    var maelin: Dictionary = commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_MAELIN_01")
+    var selka: Dictionary = commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_SELKA_01")
+    var maelin_line: Dictionary = commons_hearing_presentation.get_line("OW_HEARING_OPEN_MAELIN_01")
+    var selka_line: Dictionary = commons_hearing_presentation.get_line("OW_HEARING_OPEN_SELKA_01")
+    var lines: Array = [
+        "Commons Hearing",
+        "%s — %s" % [maelin.get("display_name", "Maelin Sor"), maelin_line.get("text", "")],
+        "%s — %s" % [selka.get("display_name", "Selka Vey"), selka_line.get("text", "")],
+        "Refusal, deferral, and nonalignment remain legal outcomes.",
+    ]
+    _set_presentation(_join_lines(lines))
+
+func _hearing_route_text(route_scope: String) -> String:
+    var beat_ids: Array = []
+    match route_scope:
+        "repair_pilot":
+            beat_ids = ["OW_HEARING_REPAIR_MAELIN_01", "OW_HEARING_REPAIR_SELKA_01"]
+        "records_first":
+            beat_ids = ["OW_HEARING_RECORDS_MAELIN_01", "OW_HEARING_RECORDS_SELKA_01"]
+        "defer":
+            beat_ids = ["OW_HEARING_DEFER_MAELIN_01", "OW_HEARING_DEFER_SELKA_01"]
+        _:
+            return ""
+
+    var lines: Array = ["Commons Hearing — %s" % route_scope.replace("_", " ")]
+    for beat_id in beat_ids:
+        var beat: Dictionary = commons_hearing_presentation.get_line(String(beat_id))
+        var speaker := _speaker_name(String(beat.get("speaker_ref", "")))
+        lines.append("%s — %s" % [speaker, beat.get("text", "")])
+    return _join_lines(lines)
+
+func _speaker_name(character_ref: String) -> String:
+    if character_ref == "CHAR:maelin_sor":
+        return String(commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_MAELIN_01").get("display_name", "Maelin Sor"))
+    if character_ref == "CHAR:selka_vey":
+        return String(commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_SELKA_01").get("display_name", "Selka Vey"))
+    return "Unknown participant"
+
+func _consequence_text(event_id: String) -> String:
+    var event: Dictionary = consequence_presentation.get_event(event_id)
+    if event.is_empty():
+        return "Consequence presentation unavailable for %s." % event_id
+    var lines: Array = []
+    for text_id in event.get("ids", []):
+        lines.append(consequence_presentation.get_text(String(text_id)))
+    return _join_lines(lines)
+
+func _show_hearing_and_consequence(route_scope: String, event_id: String) -> void:
+    _set_presentation("%s\n\n%s" % [_hearing_route_text(route_scope), _consequence_text(event_id)])
+
+func _show_consequence(event_id: String) -> void:
+    _set_presentation(_consequence_text(event_id))
+
+func _set_presentation(text: String) -> void:
+    if presentation_label != null:
+        presentation_label.text = text
+    print("[EVERFIELD][PRESENTATION] %s" % text.replace("\n", " | "))
+
+func _join_lines(lines: Array) -> String:
+    var result := ""
+    for line in lines:
+        var text := String(line)
+        if text.is_empty():
+            continue
+        if not result.is_empty():
+            result += "\n"
+        result += text
+    return result
+
 func _refresh_nearby_hint() -> void:
     var station_id := _nearest_station_id()
     if station_id.is_empty():
         return
     var station_data: Dictionary = STATIONS[station_id]
-    objective_label.text = "[E] %s — %s" % [station_data["title"], station_data["hint"]]
+    var display := _station_display(station_id, station_data)
+    objective_label.text = "[E] %s — %s" % [display["title"], display["hint"]]
 
 func _refresh_hud() -> void:
     if objective_label == null:
@@ -308,7 +468,7 @@ func _refresh_hud() -> void:
     elif not bool(state["record_read"]):
         objective_label.text = "Investigate: move with WASD/arrows; reach the Archive Ledger and press E."
     elif not _investigation_ready():
-        objective_label.text = "Investigate: inspect the Material Trace OR explicitly Defer Conclusion."
+        objective_label.text = "Investigate: inspect the Material Trace OR explicitly Leave the Cause Open."
     elif bool(state["negotiation_open"]):
         objective_label.text = "Commons Hearing: [1] repair pilot · [2] records-first · [3] defer commitment."
     elif String(state["commitment"]).is_empty():
