@@ -69,7 +69,7 @@ jobs:
           version="$("$godot_bin" --version)"
           printf 'godot_version=%s\n' "$version" | tee issue-1442-evidence/engine.txt
           [[ "$version" =~ ^4\.7\.1\.stable ]]
-          GODOT_BIN="$godot_bin" tools/implementation/run_godot_movement_smoke.sh \
+          GODOT_BIN="$godot_bin" bash tools/implementation/run_godot_movement_smoke.sh \
             2>&1 | tee issue-1442-evidence/movement-smoke.log
           grep -Fx 'EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS' issue-1442-evidence/movement-smoke.log
           printf 'producer_head=%s\nmovement_smoke_blob=%s\nrunner_blob=%s\nproducer_handoff_blob=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\nsentinel=%s\n' \
