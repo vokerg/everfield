@@ -1,7 +1,7 @@
 # Handoff — Issue #1423 / IMPLEMENTATION-DEMAND-COMMITMENT-CONSEQUENCE-01-REM-01
 
 ## Scope
-Blocking runtime-evidence remediation only. The frozen #1412 producer component and smoke bytes remain read-only.
+Blocking runtime-evidence remediation only. The frozen #1412 producer component and smoke bytes remained read-only.
 
 ## Authority and activation
 - ownership: Issue #1423 comment `5970506376`
@@ -24,26 +24,42 @@ Blocking runtime-evidence remediation only. The frozen #1412 producer component 
 - `.github/workflows/verify-commitment-consequence-1423.yml`
 - `docs/planning/handoffs/issue-1423.md`
 
-The workflow is temporary evidence infrastructure and has no authority to be integrated into `main`.
+The workflow is temporary evidence infrastructure and has **no authority to be integrated into `main`**.
 
-## Exact runtime objective
-The temporary workflow must:
-1. check out exact producer head `d18d3c34cf3da6f5ab8893af8a0c0af5fce0b073`;
-2. re-check the component and smoke blob identities;
-3. acquire the repository-locked Godot `4.7.1-stable` artifact and verify its SHA-256;
-4. import the project headlessly;
-5. execute only:
-   `res://components/commitment_consequences/commitment_consequence_smoke.gd`;
-6. require exit 0 and exact sentinel `EVERFIELD_COMMITMENT_CONSEQUENCE_SMOKE_PASS`;
-7. upload immutable engine/head/blob/log evidence.
+## Authoritative runtime evidence
+Draft verification PR: #1426.
 
-## Current state
-The verification workflow is authored but runtime evidence is not yet claimed. A draft verification PR is required to trigger the workflow. The frozen producer bytes have not been modified.
+Exact successful evidence:
+- workflow run: `37132933344`
+- run number/attempt: `1 / 1`
+- job: `111231499140` / `exact-component-smoke`
+- workflow conclusion: `success`
+- frozen producer checkout: `d18d3c34cf3da6f5ab8893af8a0c0af5fce0b073`
+- verified component blob: `419688e17515bf5f67b383182c0b6330111ce4be`
+- verified smoke blob: `9eed8bc5be54863b18e70475b16e5472c7679dd1`
+- Godot runtime: `4.7.1.stable.official.a13da4feb`
+- repository-locked Godot ZIP SHA-256: `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`
+- exact smoke script: `res://components/commitment_consequences/commitment_consequence_smoke.gd`
+- required sentinel observed: `EVERFIELD_COMMITMENT_CONSEQUENCE_SMOKE_PASS`
+- artifact: `11277113730`
+- artifact name: `issue-1423-consequence-component-37132933344-1`
+- artifact digest: `sha256:70f2a10fbc12d2cc784bffc827c8ecd381e13e634a85f3ca55d6bcad4157757b`
 
-## Terminal routing
-- exact runtime PASS -> fresh independent required review of the same frozen #1412 producer packet;
-- exact runtime failure -> bounded producer-code remediation, then fresh review;
-- identity/engine/evidence ambiguity -> invalidated/bounded recovery.
+All workflow steps completed successfully, including exact producer checkout, frozen blob verification, locked-engine acquisition/digest verification, exact component smoke execution, and evidence upload.
+
+The smoke emitted explicit PASS assertions for event mappings, hook inertness, mystery state, deferral nonconsent, state/history nonmutation, and fail-closed unknown event/text/hook behavior before the required final sentinel.
+
+## Result
+`PASS_EXACT_COMPONENT_RUNTIME_EVIDENCE`
+
+The prior #1420 MAJOR was an evidence gap, not a demonstrated producer-code defect. That gap is now closed for the exact frozen producer identity above.
+
+No producer file was modified.
+
+## Required next route
+Fresh independent required re-review: **Issue #1428 / `IMPLEMENTATION-DEMAND-COMMITMENT-CONSEQUENCE-01-REV-02`**.
+
+The fresh reviewer must independently bind the static #1412 judgment and this exact runtime evidence. #1423 does not self-upgrade #1420 and does not grant publication authority.
 
 ## Authority boundary
-Runtime evidence only. No producer mutation, component publication, live-scene integration, final canon, state mutation, production/release, empirical accessibility certification, or integration authority.
+Runtime evidence only. No producer mutation, component publication, live-scene integration, final canon, state mutation, production/release, empirical accessibility certification, or integration authority. PR #1426 and its temporary workflow are evidence infrastructure only and are not authorized for merge to `main`.
