@@ -1,0 +1,92 @@
+name: Verify movement interaction smoke for Issue 1442
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-movement-interaction-1442.yml'
+      - 'docs/planning/handoffs/issue-1442.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-movement-interaction-1442-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  exact-movement-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact frozen producer
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 819afdea0452b2176cf09749b34d019fcdb49ba1
+          fetch-depth: 1
+
+      - name: Verify frozen producer identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "819afdea0452b2176cf09749b34d019fcdb49ba1"
+          test "$(git hash-object game/tests/movement_interaction_smoke.gd)" = "f7e2d19842763857ed0403e49ee8c7ba8489b8ce"
+          test "$(git hash-object tools/implementation/run_godot_movement_smoke.sh)" = "e913b8996052f6e21616d58b29cc132f2684eda5"
+          test "$(git hash-object docs/planning/handoffs/issue-1413.md)" = "f7f8ef3bc3070eb6f96fb49824602e2e2d4fb99c"
+
+      - name: Resolve reviewed Godot artifact lock
+        id: godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json").read_text())
+          entry = lock["entries"]["godot_4.7.1_linux_x86_64_zip"]
+          if entry["version"] != "4.7.1-stable":
+              raise SystemExit(f"unexpected reviewed Godot version: {entry['version']}")
+          print(f"url={entry['url']}")
+          print(f"sha256={entry['sha256']}")
+          print(f"version={entry['version']}")
+          PY
+
+      - name: Acquire exact reviewed Godot 4.7.1 artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.godot.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Run exact movement interaction smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p issue-1442-evidence
+          godot_bin="$GITHUB_WORKSPACE/.godot-bin/Godot_v4.7.1-stable_linux.x86_64"
+          version="$("$godot_bin" --version)"
+          printf 'godot_version=%s\n' "$version" | tee issue-1442-evidence/engine.txt
+          [[ "$version" =~ ^4\.7\.1\.stable ]]
+          GODOT_BIN="$godot_bin" bash tools/implementation/run_godot_movement_smoke.sh \
+            2>&1 | tee issue-1442-evidence/movement-smoke.log
+          grep -Fx 'EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS' issue-1442-evidence/movement-smoke.log
+          printf 'producer_head=%s\nmovement_smoke_blob=%s\nrunner_blob=%s\nproducer_handoff_blob=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\nsentinel=%s\n' \
+            "$(git rev-parse HEAD)" \
+            "$(git hash-object game/tests/movement_interaction_smoke.gd)" \
+            "$(git hash-object tools/implementation/run_godot_movement_smoke.sh)" \
+            "$(git hash-object docs/planning/handoffs/issue-1413.md)" \
+            "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            '${{ steps.godot.outputs.version }}' '${{ steps.godot.outputs.sha256 }}' \
+            'EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS' \
+            > issue-1442-evidence/run-identity.txt
+
+      - name: Upload exact runtime evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: issue-1442-movement-interaction-${{ github.run_id }}-${{ github.run_attempt }}
+          path: issue-1442-evidence/
+          if-no-files-found: error
+          retention-days: 30
