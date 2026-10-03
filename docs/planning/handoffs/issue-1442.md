@@ -2,7 +2,7 @@
 
 ## Scope
 
-Blocking runtime-evidence remediation only. The frozen #1413 producer movement test, runner, gameplay, and handoff bytes remain read-only.
+Blocking runtime-evidence remediation only. The frozen #1413 producer movement test, runner, gameplay, and handoff bytes remained read-only.
 
 ## Authority and activation
 
@@ -24,7 +24,7 @@ Blocking runtime-evidence remediation only. The frozen #1413 producer movement t
 - movement smoke blob: `f7e2d19842763857ed0403e49ee8c7ba8489b8ce`
 - runner blob: `e913b8996052f6e21616d58b29cc132f2684eda5`
 - producer handoff blob: `f7f8ef3bc3070eb6f96fb49824602e2e2d4fb99c`
-- required sentinel: `EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS`
+- required PASS sentinel: `EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS`
 
 ## Verification-only paths
 
@@ -33,30 +33,57 @@ Blocking runtime-evidence remediation only. The frozen #1413 producer movement t
 
 The workflow is temporary evidence infrastructure and has **no authority to be integrated into `main`**.
 
-## Verification design
+## Verifier-infrastructure correction
 
-The workflow:
-1. checks out the exact frozen producer head;
-2. verifies the exact movement smoke, runner, and producer-handoff blob identities;
-3. resolves the repository-reviewed Godot `4.7.1-stable` artifact lock and verifies its SHA-256;
-4. executes the frozen `tools/implementation/run_godot_movement_smoke.sh` with `GODOT_BIN` bound to that exact artifact;
-5. requires exit 0 and exact sentinel `EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS`;
-6. uploads engine, movement-smoke log, and run-identity evidence even on failure.
+Initial PR run `37135833933` reached the exact frozen producer and locked Godot artifact but failed before smoke execution because the frozen runner file is not executable in Git. The temporary workflow was corrected—without changing the frozen runner blob—to invoke that exact runner via `bash`, which is explicitly equivalent under the #1442 contract and preserves every runner check.
 
-The critical runtime question is whether `Input.parse_input_event(InputEventKey)` changes the global pressed state consumed by production `Input.is_key_pressed` so the real playable `_process` path moves/clamps the player and enables proximity interaction.
+## Authoritative runtime evidence — FAIL
 
-## Current result
+Draft verification PR: #1446.
 
-`PENDING_EXACT_RUNTIME_EVIDENCE`.
+Exact run after the verifier-only correction:
+- workflow run: `37135890987`
+- run number/attempt: `2 / 1`
+- job: `111240223150` / `exact-movement-smoke`
+- workflow conclusion: `failure`
+- frozen producer checkout: `819afdea0452b2176cf09749b34d019fcdb49ba1`
+- verified movement smoke blob: `f7e2d19842763857ed0403e49ee8c7ba8489b8ce`
+- verified runner blob: `e913b8996052f6e21616d58b29cc132f2684eda5`
+- verified producer handoff blob: `f7f8ef3bc3070eb6f96fb49824602e2e2d4fb99c`
+- Godot runtime: `4.7.1.stable.official.a13da4feb`
+- repository-locked Godot ZIP SHA-256: `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`
+- evidence artifact: `11278573010`
+- artifact digest: `sha256:705421b0ac6ef280e11823dfee0193224cb3c4da71a85d569a34014676e8866d`
 
-No runtime PASS is claimed by this initial handoff. After a successful primary exact-head run, update this handoff with immutable run/job/artifact evidence, then require one final-head confirmation run before terminalizing.
+Passing assertions before the movement failure:
+- real `res://main.tscn` loads;
+- Player and Diagnostic nodes exist;
+- exact bounded start is correct;
+- out-of-range interaction fails with `EF-INTERACT-RANGE`;
+- unknown interaction fails closed with `EF-INTERACT-UNKNOWN`.
 
-## Terminal routing
+Failing movement/testability assertions:
+1. synthetic D does not move the player right through production input;
+2. synthetic W does not move the player up;
+3. input-driven movement does not reach Archive Ledger radius;
+4. proximity interaction therefore does not succeed;
+5. the expected Archive Ledger state change does not occur;
+6. negative bound-clamp assertion fails;
+7. positive bound-clamp assertion fails.
 
-- PASS exact runtime evidence -> fresh required re-review of the unchanged #1413 packet; do not self-upgrade #1437.
-- Runtime failure -> route the smallest bounded producer testability remediation; do not substitute direct position assignment.
-- Identity/engine/evidence ambiguity -> `INVALIDATED` / bounded recovery.
+The exact smoke terminates with:
+`EVERFIELD_MOVEMENT_INTERACTION_SMOKE_FAIL count=7`.
+
+This closes the evidence gap with a **runtime FAIL**, not a PASS. In this headless execution shape, the current `Input.parse_input_event(InputEventKey)` harness does not establish the global pressed-key state consumed by production `Input.is_key_pressed`.
+
+## Required next route
+
+Issue #1448 — `IMPLEMENTATION-DEMAND-MOVEMENT-INTERACTION-TEST-01-REM-02` — is the bounded producer-testability remediation.
+
+It may change only the movement test/runner/handoff (plus temporary task-owned verification infrastructure if required), must keep production gameplay read-only, must not assign `player.position` directly, and must fail closed again if no supported headless mechanism can exercise the real production input path.
+
+After successful repaired runtime evidence, route a fresh independent required review; do not self-upgrade #1437 or #1442.
 
 ## Authority boundary
 
-Runtime evidence only. No producer mutation, test publication, gameplay semantics change, empirical accessibility certification, production/release, canonicality, or integration authority.
+Runtime evidence only. No producer publication, test publication, gameplay semantics change, empirical accessibility certification, production/release, canonicality, or integration authority.
