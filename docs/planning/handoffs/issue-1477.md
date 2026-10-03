@@ -2,7 +2,7 @@
 
 ## Status
 
-Verification-only episode in progress. Producer #1461 remains frozen and read-only.
+Exact frozen-producer runtime smoke has passed once under repository-locked Godot 4.7.1. This handoff update is part of the verification-only packet; because the PR workflow watches this path, the updated exact PR head must receive one final confirming run before terminalization.
 
 ## Authority and activation
 
@@ -13,6 +13,7 @@ Verification-only episode in progress. Producer #1461 remains frozen and read-on
 - sole material finding: missing exact Godot 4.7.1 runtime evidence for the frozen session-state smoke
 - branch: `planning/issue-1477`
 - execution base: `f611a4fca5d4cc2ccf91092486e6e1cd2de3d008`
+- draft verification PR: #1484
 - canonical binding: Issue #1147 comment `5675066392`
 - canonical program blob: `fd4cf1119c3f86acc3af620024eea72235e81ce4`
 
@@ -28,28 +29,42 @@ Verification-only episode in progress. Producer #1461 remains frozen and read-on
 - project blob: `9da4153ed378945ef5e9634e0e5cae48289845d8`
 - reviewed engine-lock blob: `4a88990ae24768eb4f83a8a1311e2a830834649f`
 
-## Verification route
+## Verification packet
 
-The only executable addition is `.github/workflows/verify-session-state-1477.yml` (initial blob `9ad65e2cb72a27ac694232665b7eb7e723363259`).
+The only executable addition is `.github/workflows/verify-session-state-1477.yml` (blob `9ad65e2cb72a27ac694232665b7eb7e723363259`).
 
-The workflow:
+The workflow checks out the exact frozen producer head, verifies every identity above, verifies the repository-reviewed Godot lock, downloads the locked artifact, and executes exactly:
 
-1. checks out exact producer head `dd2a4107b1a4dcba0bd097ef9e6e3cca18f2dc51`;
-2. verifies every frozen producer/toolchain identity above;
-3. resolves the repository-reviewed Godot lock and requires version `4.7.1-stable` plus archive SHA-256 `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`;
-4. downloads and hash-verifies that exact artifact;
-5. executes exactly `godot --headless --path game --script res://components/session_state/session_state_smoke.gd`;
-6. requires exit success and sentinel `EVERFIELD_SESSION_STATE_SMOKE_PASS`;
-7. uploads engine, log, and immutable run-identity evidence.
+`godot --headless --path game --script res://components/session_state/session_state_smoke.gd`
 
-No producer file is modified. The workflow is temporary evidence infrastructure and has no integration authority.
+Required success sentinel: `EVERFIELD_SESSION_STATE_SMOKE_PASS`.
 
-## Remaining work
+Producer/gameplay files are read-only. The workflow is temporary evidence infrastructure only and has no integration authority.
 
-- open an exact-head draft PR so the PR-triggered verification workflow executes;
-- inspect the exact run/job conclusion and retained evidence;
-- on PASS, freeze the final evidence packet, update this handoff, and publish terminal verification status routing a fresh required re-review of exact Producer #1461;
-- on runtime failure, route the smallest bounded producer remediation;
-- on infrastructure failure before test execution, repair only this verification route and retry.
+## Exact runtime evidence — confirming precursor run
+
+PR-head run before this handoff update:
+
+- workflow run: `37147559029`
+- job: `111274530732` / `exact-session-state-smoke`
+- workflow PR head: `79e02c2715750b46f97704f1bdb47496ed2f7cb6`
+- run conclusion: `success`
+- job conclusion: `success`
+- exact checked-out producer head: `dd2a4107b1a4dcba0bd097ef9e6e3cca18f2dc51`
+- engine: `4.7.1.stable.official.a13da4feb`
+- reviewed Godot archive SHA-256: `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`
+- observed sentinel: `EVERFIELD_SESSION_STATE_SMOKE_PASS`
+- evidence artifact: `11282127740`
+- artifact digest: `sha256:ec4971bf9deaecec6374e0c2886f5bf93d847f445488f110271adabfff41cf50`
+- artifact size: 1766 bytes
+
+The log also shows all frozen component/smoke/handoff, engine-lock, and project identity assertions succeeded before execution.
+
+## Remaining route
+
+1. require the automatic verification run for the updated exact PR head to pass the same identity/runtime gates;
+2. publish terminal verification status bound to that final head and evidence;
+3. route a fresh required re-review of exact frozen Producer #1461; do not self-upgrade Review #1470;
+4. keep PR #1484 as non-integrable verification provenance unless a later explicit authority route says otherwise.
 
 No publication, integration, gameplay semantics, persistence/save-load, canonicality, production/release, accessibility, or truth-resolution authority is created by this episode.
