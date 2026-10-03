@@ -1,0 +1,95 @@
+name: Verify movement testability remediation for Issue 1448
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-movement-testability-1448.yml'
+      - 'game/tests/movement_interaction_smoke.gd'
+      - 'tools/implementation/run_godot_movement_smoke.sh'
+      - 'docs/planning/handoffs/issue-1448.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-movement-testability-1448-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  exact-repaired-movement-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact remediation head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+
+      - name: Verify bounded identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object game/tests/movement_interaction_smoke.gd)" = "4c5bd980eecd47fcc620d72f4819e3dab687d059"
+          test "$(git hash-object tools/implementation/run_godot_movement_smoke.sh)" = "e913b8996052f6e21616d58b29cc132f2684eda5"
+          test "$(git hash-object game/main.gd)" = "b96659a1cf461a96934666293aecaa565e68579b"
+          test "$(git hash-object game/main.tscn)" = "02b943321c258bb807f9496c7a270221df112b31"
+          test "$(git hash-object game/project.godot)" = "9da4153ed378945ef5e9634e0e5cae48289845d8"
+          ! grep -nE 'player\.position[[:space:]]*=' game/tests/movement_interaction_smoke.gd
+
+      - name: Resolve reviewed Godot artifact lock
+        id: godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json").read_text())
+          entry = lock["entries"]["godot_4.7.1_linux_x86_64_zip"]
+          if entry["version"] != "4.7.1-stable":
+              raise SystemExit(f"unexpected reviewed Godot version: {entry['version']}")
+          print(f"url={entry['url']}")
+          print(f"sha256={entry['sha256']}")
+          print(f"version={entry['version']}")
+          PY
+
+      - name: Acquire exact reviewed Godot 4.7.1 artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.godot.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Run exact repaired movement interaction smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p issue-1448-evidence
+          godot_bin="$GITHUB_WORKSPACE/.godot-bin/Godot_v4.7.1-stable_linux.x86_64"
+          version="$("$godot_bin" --version)"
+          printf 'godot_version=%s\n' "$version" | tee issue-1448-evidence/engine.txt
+          [[ "$version" =~ ^4\.7\.1\.stable ]]
+          GODOT_BIN="$godot_bin" bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee issue-1448-evidence/movement-smoke.log
+          grep -Fx 'EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS' issue-1448-evidence/movement-smoke.log
+          printf 'remediation_head=%s\nmovement_smoke_blob=%s\nrunner_blob=%s\nmain_gd_blob=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\nsentinel=%s\n' \
+            "$(git rev-parse HEAD)" \
+            "$(git hash-object game/tests/movement_interaction_smoke.gd)" \
+            "$(git hash-object tools/implementation/run_godot_movement_smoke.sh)" \
+            "$(git hash-object game/main.gd)" \
+            "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            '${{ steps.godot.outputs.version }}' '${{ steps.godot.outputs.sha256 }}' \
+            'EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS' \
+            > issue-1448-evidence/run-identity.txt
+
+      - name: Upload exact runtime evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: issue-1448-movement-testability-${{ github.run_id }}-${{ github.run_attempt }}
+          path: issue-1448-evidence/
+          if-no-files-found: error
+          retention-days: 30
