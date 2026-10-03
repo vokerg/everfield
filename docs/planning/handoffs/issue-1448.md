@@ -52,6 +52,11 @@ The remediation changes only the testability surface:
   - blob: `e913b8996052f6e21616d58b29cc132f2684eda5`;
   - carried byte-identically from frozen #1413;
   - still runs Godot with `--headless` and enforces `4.7.1-stable`.
+- `.github/workflows/verify-movement-testability-1448.yml`
+  - evidence-only workflow blob: `ffe9311c7b9bbb60e77b05d069484f6b8586f919`;
+  - verifies repaired test/runner and production-gameplay blob identities;
+  - acquires the repository-locked engine artifact;
+  - runs the exact repaired smoke and uploads immutable evidence.
 
 Production gameplay remains read-only and byte-identical to the bounded first playable:
 
@@ -61,21 +66,34 @@ Production gameplay remains read-only and byte-identical to the bounded first pl
 
 ## Runtime validation
 
-A task-owned temporary verification workflow is included only to execute this exact repaired packet against the repository-locked Godot 4.7.1 artifact and retain immutable run evidence.
+Primary repaired-head CI evidence passed:
 
-Required terminal evidence:
+- workflow: `Verify movement testability remediation for Issue 1448`
+- run: `37136365849`
+- job: `111241605890` / `exact-repaired-movement-smoke`
+- conclusion: `success`
+- evidence artifact: `11277858723`
+- artifact digest: `sha256:36671e46f7488f5b10f19a9f6d01827af33a4412e1e0362a975257ddb1754dd7`
+- reviewed engine: `Godot Engine v4.7.1.stable.official.a13da4feb`
+- reviewed Godot ZIP SHA-256: `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`
+- repaired test blob: `4c5bd980eecd47fcc620d72f4819e3dab687d059`
+- runner blob: `e913b8996052f6e21616d58b29cc132f2684eda5`
+- production `main.gd` blob: `b96659a1cf461a96934666293aecaa565e68579b`
+- required sentinel: `EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS`
 
-- exact repaired test blob `4c5bd980eecd47fcc620d72f4819e3dab687d059`;
-- runner blob `e913b8996052f6e21616d58b29cc132f2684eda5`;
-- production `main.gd` blob `b96659a1cf461a96934666293aecaa565e68579b`;
-- reviewed Godot ZIP SHA-256 `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`;
-- exit success;
-- sentinel `EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS`.
+The run explicitly observed PASS for:
+- flushed D/W pressed and released global key state;
+- right/up movement through the real production `_process` input path;
+- movement into Archive Ledger proximity followed by successful `interact_nearest()`;
+- both minimum and maximum world-bound clamps;
+- out-of-range and unknown-station fail-closed diagnostics.
 
-Runtime disposition is pending the CI execution at the time of this handoff version. The issue terminal status must bind the final exact branch head and immutable run/job/artifact identity.
+The existing generic first-playable workflow also passed on the same remediation head in run `37136365875`.
+
+This handoff update changes only documentation, so the task-owned workflow is expected to run once more at the final branch head. The terminal schema-3 status on Issue #1448 must record that final-head confirmation run/job/artifact identity.
 
 ## Required next route
 
-If the exact repaired smoke passes, materialize a fresh independent required review of the exact #1448 packet. Do not self-upgrade Review #1437 or runtime remediation #1442.
+Fresh independent required review of the exact terminal #1448 packet. The review must re-check scope, no direct position substitution, production-byte immutability, root-cause correctness, and the final-head locked-Godot runtime evidence.
 
-If it fails, fail closed and route only the smallest further testability remediation permitted by the observed evidence. No gameplay seam or semantics mutation is authorized here.
+A clean review may allow separate squash publication of the remediated test packet. It grants no gameplay semantics, fan-in acceptance, accessibility, production/release, or canonical authority.
