@@ -32,7 +32,7 @@ func compose(source: Variant, event_id: String) -> Dictionary:
         if typeof(value) != TYPE_STRING or String(value).is_empty():
             return _bad("missing consequence line")
         lines.append(value)
-    return {"ok": true, "text": "\n".join(lines), "lines": lines.duplicate(true), "error": ""}
+    return {"ok": true, "text": "\n".join(PackedStringArray(lines)), "lines": lines.duplicate(true), "error": ""}
 
 func _bad(reason: String) -> Dictionary:
     return {"ok": false, "text": "[EF-PRESENTATION-INVALID] %s" % reason, "lines": [], "error": reason}
