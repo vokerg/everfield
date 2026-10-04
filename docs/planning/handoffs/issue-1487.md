@@ -44,3 +44,19 @@ No frozen remediation/component, main gameplay, sibling component, or other work
 4. If runtime FAIL: preserve failure evidence and route a smallest code-remediation successor. Infrastructure failures must be repaired in verification-only scope and rerun.
 
 No component publication, integration, gameplay, persistence/save-load, truth-resolution, canonicality, accessibility certification, production/release or legal/provider authority is granted.
+
+## Repository-native runtime evidence
+
+The first immutable PR-head run passed **before this handoff-evidence update**:
+- draft verification PR: #1489
+- tested workflow PR head: `0fce85e03d51526b80b5896829a23ad6c17a4ef4`
+- run: `37181072812`, attempt `1`
+- job: `111373601316` / `exact-diagnostic-contract-smoke`
+- run/job conclusion: `success`; every step including identity, lock, exact smoke, artifact upload: `success`
+- exact checked-out remediation head: `07ccfaf655acc103436490edf703cb4b194b87f0`
+- engine banner in full job log: `Godot Engine v4.7.1.stable.official.a13da4feb`
+- required sentinel in log: `EVERFIELD_DIAGNOSTIC_CONTRACT_SMOKE_PASS`
+- artifact: `11294624903`, size `1985` bytes, digest `sha256:13b400857e03f4015cc44f6c1c0af2b459bb94170b82a097cc703b7cf170c067`
+- immutable workflow blob: `ec7f2529772adb42f020a28ced7c67554ceb6c8b`
+
+Because this evidence update advances the verification PR head, **a new final workflow run on the resulting head must independently pass the same gates**. Final run/job/artifact are to be bound in the terminal issue `VERIFICATION_STATUS`, not inferred from this preceding success. The workflow/verification PR remains non-integrable.
