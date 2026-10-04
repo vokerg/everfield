@@ -94,41 +94,36 @@ func _unhandled_key_input(event: InputEvent) -> void:
             reset_slice()
 
 func _build_world() -> void:
+    var layout: Dictionary = station_world.get_layout()
+    station_nodes.clear()
     var backdrop := Polygon2D.new()
     backdrop.name = "OldWorksFloor"
-    backdrop.polygon = PackedVector2Array([
-        Vector2(22, 74), Vector2(938, 74), Vector2(938, 516), Vector2(22, 516)
-    ])
-    backdrop.color = Color("172129")
+    backdrop.polygon = layout["floor_polygon"]
+    backdrop.color = layout["floor_color"]
     add_child(backdrop)
 
     var path := Line2D.new()
     path.name = "WalkPath"
-    path.width = 9.0
-    path.default_color = Color("34444e")
-    path.points = PackedVector2Array([
-        Vector2(92, 286), Vector2(176, 188), Vector2(338, 382),
-        Vector2(498, 184), Vector2(676, 252), Vector2(798, 400)
-    ])
+    path.width = layout["walk_path_width"]
+    path.default_color = layout["walk_path_color"]
+    path.points = layout["walk_path"]
     add_child(path)
 
-    for station_id in STATIONS:
-        var station_data: Dictionary = STATIONS[station_id]
+    for station_id in station_world.get_station_ids():
+        var station_data: Dictionary = station_world.get_station(station_id)
         var display := _station_display(String(station_id), station_data)
         var station := Node2D.new()
         station.name = String(station_id)
         station.position = station_data["position"]
 
         var marker := Polygon2D.new()
-        marker.polygon = PackedVector2Array([
-            Vector2(-20, -20), Vector2(20, -20), Vector2(20, 20), Vector2(-20, 20)
-        ])
+        marker.polygon = layout["marker_polygon"]
         marker.color = station_data["color"]
         station.add_child(marker)
 
         var label := Label.new()
-        label.position = Vector2(-74, -52)
-        label.size = Vector2(148, 44)
+        label.position = layout["station_label_position"]
+        label.size = layout["station_label_size"]
         label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
         label.text = "%s\n%s" % [display["title"], display["hint"]]
         label.add_theme_font_size_override("font_size", 12)
@@ -197,7 +192,7 @@ func _build_world() -> void:
 func reset_slice() -> void:
     session_state.reset()
     if player != null:
-        player.position = Vector2(92, 286)
+        player.position = station_world.get_layout()["player_spawn"]
     _emit_diagnostic("EF-RESET")
     _show_world_intro()
     _refresh_hud()
@@ -210,7 +205,7 @@ func interact_nearest() -> bool:
     return interact_with(station_id)
 
 func interact_with(station_id: String) -> bool:
-    if not STATIONS.has(station_id):
+    if not station_world.has_station(station_id):
         _emit_diagnostic("EF-INTERACT-UNKNOWN", {"station_id": station_id})
         return false
 
