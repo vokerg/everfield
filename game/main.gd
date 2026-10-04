@@ -6,6 +6,9 @@ const CommitmentConsequencePresentation = preload("res://components/commitment_c
 const SessionState = preload("res://components/session_state/session_state.gd")
 const DiagnosticCatalog = preload("res://components/diagnostics/diagnostic_catalog.gd")
 const HudObjectiveModel = preload("res://components/hud_objectives/hud_objective_model.gd")
+const StationWorld = preload("res://components/station_world/station_world.gd")
+const TraversalPolicy = preload("res://components/traversal_policy/traversal_policy.gd")
+const PlayablePresentation = preload("res://components/playable_presentation/playable_presentation.gd")
 
 const PLAYER_SPEED := 230.0
 const INTERACT_RADIUS := 88.0
