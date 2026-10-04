@@ -1,0 +1,157 @@
+name: Verify corrected public presentation composite runtime for Issue 1527
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-playable-presentation-remediation-1527.yml'
+      - 'docs/planning/handoffs/issue-1527.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-playable-presentation-1527-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  exact-corrected-composite-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact original immutable producer head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 37833b1e482adaa2f123edeed02b81e24a2f3688
+          fetch-depth: 1
+
+      - name: Verify immutable producer and published-provider identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "37833b1e482adaa2f123edeed02b81e24a2f3688"
+          test "$(git hash-object game/components/playable_presentation/playable_presentation.gd)" = "340f955c6977d43cbe735216c1758764dd25f202"
+          test "$(git hash-object game/components/playable_presentation/world_reader.gd)" = "018d3c5908eca22593c7b8a6eef4a29ed1a23f0f"
+          test "$(git hash-object game/components/playable_presentation/hearing_reader.gd)" = "2c06223e5d25761523ca038e160e0bce3630f0ad"
+          test "$(git hash-object game/components/playable_presentation/consequence_reader.gd)" = "3cb9cb6887508f94fba865ebc428ba43fbdd38b2"
+          test "$(git hash-object game/components/playable_presentation/playable_presentation_smoke.gd)" = "c4f224d93c6260e6f42b93f61d7f998544893e0c"
+          test "$(git hash-object docs/planning/handoffs/issue-1506.md)" = "561be48210a2637acf37a137b6951cfbefb97aac"
+          test "$(git hash-object game/components/old_works_world/old_works_world_presentation.gd)" = "8e498156bb9a5413f53a84b14fc279c4be6c8f23"
+          test "$(git hash-object game/components/commons_hearing/commons_hearing_presentation.gd)" = "9682c47ee2c84ea42417651d0ca2e4f30ebf78b2"
+          test "$(git hash-object game/components/commitment_consequences/commitment_consequence_presentation.gd)" = "419688e17515bf5f67b383182c0b6330111ce4be"
+          test "$(git hash-object game/main.gd)" = "9b406cc0a0115f0818df633eda67d69ab7779a06"
+          test "$(git hash-object game/project.godot)" = "9da4153ed378945ef5e9634e0e5cae48289845d8"
+          test "$(git hash-object docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json)" = "4a88990ae24768eb4f83a8a1311e2a830834649f"
+
+      - name: Reconstruct exact frozen original plus scoped corrected overlay
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p issue-1527-evidence
+          correction="31869366ba234db92e0b6fda48eb7fc24ea3004a"
+          test "$(git rev-parse HEAD)" = "37833b1e482adaa2f123edeed02b81e24a2f3688"
+          git fetch --no-tags --depth=1 origin "$correction"
+          test "$(git rev-parse FETCH_HEAD)" = "$correction"
+          test "$(git show "$correction:docs/planning/handoffs/issue-1525.md" | git hash-object --stdin)" = "2094304dae533e5e2d2fb94623fdbe5024cd95f8"
+          for path in \
+            game/components/playable_presentation/hearing_reader.gd \
+            game/components/playable_presentation/playable_presentation.gd \
+            game/components/playable_presentation/playable_presentation_smoke.gd; do
+            git show "$correction:$path" > "$path"
+          done
+          test "$(git hash-object game/components/playable_presentation/hearing_reader.gd)" = "b7ce32ea0d3b841fce49f946d6efce0ccbcaf139"
+          test "$(git hash-object game/components/playable_presentation/playable_presentation.gd)" = "ba819915fc55e444d54d46671892cea35cb6b3cf"
+          test "$(git hash-object game/components/playable_presentation/playable_presentation_smoke.gd)" = "ef2628c4d691e753316fe81d218e1534e6e37a5f"
+          test "$(git hash-object game/components/playable_presentation/world_reader.gd)" = "018d3c5908eca22593c7b8a6eef4a29ed1a23f0f"
+          test "$(git hash-object game/components/playable_presentation/consequence_reader.gd)" = "3cb9cb6887508f94fba865ebc428ba43fbdd38b2"
+          diff -u <(printf '%s\n' \
+            game/components/playable_presentation/hearing_reader.gd \
+            game/components/playable_presentation/playable_presentation.gd \
+            game/components/playable_presentation/playable_presentation_smoke.gd | sort) \
+            <(git diff --name-only | sort)
+          printf 'original_head=%s\ncorrection_head=%s\n' \
+            "$(git rev-parse HEAD)" "$correction" \
+            > issue-1527-evidence/composite-identity.txt
+          printf 'original_world_reader=%s\noriginal_consequence_reader=%s\ncorrected_hearing=%s\ncorrected_assembler=%s\ncorrected_smoke=%s\ncorrected_handoff=%s\n' \
+            "$(git hash-object game/components/playable_presentation/world_reader.gd)" \
+            "$(git hash-object game/components/playable_presentation/consequence_reader.gd)" \
+            "$(git hash-object game/components/playable_presentation/hearing_reader.gd)" \
+            "$(git hash-object game/components/playable_presentation/playable_presentation.gd)" \
+            "$(git hash-object game/components/playable_presentation/playable_presentation_smoke.gd)" \
+            "2094304dae533e5e2d2fb94623fdbe5024cd95f8" \
+            >> issue-1527-evidence/composite-identity.txt
+
+      - name: Resolve reviewed Godot 4.7.1 lock
+        id: godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json").read_text())
+          entry = lock["entries"]["godot_4.7.1_linux_x86_64_zip"]
+          digest = "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba"
+          if entry["version"] != "4.7.1-stable" or entry["sha256"] != digest:
+              raise SystemExit("reviewed Godot engine-lock version/digest mismatch")
+          print(f"url={entry['url']}")
+          print(f"sha256={entry['sha256']}")
+          print(f"version={entry['version']}")
+          PY
+
+      - name: Acquire exact reviewed Godot binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.godot.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Execute isolated public narrative assembler smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p issue-1527-evidence
+          godot_bin="$GITHUB_WORKSPACE/.godot-bin/Godot_v4.7.1-stable_linux.x86_64"
+          version="$("$godot_bin" --version)"
+          printf 'godot_version=%s\n' "$version" | tee issue-1527-evidence/engine.txt
+          [[ "$version" = "4.7.1.stable.official.a13da4feb" ]]
+          "$godot_bin" --headless --path game --script res://components/playable_presentation/playable_presentation_smoke.gd 2>&1 | tee issue-1527-evidence/corrected-composite-smoke.log
+          grep -Fx 'EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_PASS' issue-1527-evidence/corrected-composite-smoke.log
+          ! grep -F '[EF-PRESENTATION][FAIL]' issue-1527-evidence/corrected-composite-smoke.log
+          ! grep -F 'EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_FAIL' issue-1527-evidence/corrected-composite-smoke.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|ERROR:|Assertion failed' issue-1527-evidence/corrected-composite-smoke.log
+          grep -Fx '[EF-PRESENTATION][PASS] empty station ID must not select world intro' issue-1527-evidence/corrected-composite-smoke.log
+          for case in 'repair speaker swap' 'records speaker swap' 'repair phase swap' 'deferral phase swap' 'missing phase' 'wrong route scope'; do
+            grep -Fx "[EF-PRESENTATION][PASS] malformed $case fails closed" issue-1527-evidence/corrected-composite-smoke.log
+          done
+          test "$(grep -Fc '[EF-PRESENTATION][PASS]' issue-1527-evidence/corrected-composite-smoke.log)" -ge 36
+          test "$(grep -Fc '[EF-PRESENTATION][FAIL]' issue-1527-evidence/corrected-composite-smoke.log)" -eq 0
+          printf 'original_producer_head=%s\nverifier_pr_head=%s\nrun_id=%s\nrun_attempt=%s\nengine_version=%s\nengine_zip_sha256=%s\nrequired_sentinel=%s\n' \
+            "$(git rev-parse HEAD)" '${{ github.event.pull_request.head.sha }}' \
+            "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            '${{ steps.godot.outputs.version }}' '${{ steps.godot.outputs.sha256 }}' \
+            'EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_PASS' > issue-1527-evidence/run-identity.txt
+          git hash-object \
+            game/components/playable_presentation/playable_presentation.gd \
+            game/components/playable_presentation/world_reader.gd \
+            game/components/playable_presentation/hearing_reader.gd \
+            game/components/playable_presentation/consequence_reader.gd \
+            game/components/playable_presentation/playable_presentation_smoke.gd \
+            docs/planning/handoffs/issue-1506.md \
+            game/components/old_works_world/old_works_world_presentation.gd \
+            game/components/commons_hearing/commons_hearing_presentation.gd \
+            game/components/commitment_consequences/commitment_consequence_presentation.gd \
+            game/project.godot game/main.gd \
+            docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            > issue-1527-evidence/source-git-blobs.txt
+
+      - name: Upload exact immutable verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: issue-1527-corrected-composite-${{ github.run_id }}-${{ github.run_attempt }}
+          path: issue-1527-evidence/
+          if-no-files-found: error
+          retention-days: 30
