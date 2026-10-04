@@ -11,6 +11,7 @@ on:
       - 'docs/implementation/first-playable.md'
       - 'docs/planning/handoffs/issue-1414.md'
       - 'docs/planning/handoffs/issue-1464.md'
+      - 'docs/planning/handoffs/issue-1507.md'
   workflow_dispatch:
 
 permissions:
@@ -43,6 +44,8 @@ jobs:
           entry = lock['entries']['godot_4.7.1_linux_x86_64_zip']
           if entry['version'] != '4.7.1-stable':
               raise SystemExit(f"unexpected reviewed Godot version: {entry['version']}")
+          if entry["sha256"] != "c7ff14fd28472c8d4f193043de30278dcf7566b02e27addaa33ba":
+              raise SystemExit("unexpected reviewed Godot ZIP lock")
           print(f"url={entry['url']}")
           print(f"sha256={entry['sha256']}")
           print(f"version={entry['version']}")
@@ -56,6 +59,21 @@ jobs:
           printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot.zip | sha256sum --check --strict
           unzip -q godot.zip -d .godot-bin
           chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Verify exact frozen published seam source identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object game/components/station_world/station_world.gd)" = '87fefab8816a2ab8795c54877299716ec86b227e'
+          test "$(git hash-object game/components/station_world/station_world_smoke.gd)" = '0c972e251de6e4fb1a86bbecbce757eaa56999ce'
+          test "$(git hash-object game/components/traversal_policy/traversal_policy.gd)" = '8376bd1289890d084fc94992ba56c4cd64588a44'
+          test "$(git hash-object game/components/traversal_policy/traversal_policy_smoke.gd)" = '3daed72928dbaecee0339e691e89403a7eaa98b2'
+          test "$(git hash-object game/components/playable_presentation/playable_presentation.gd)" = 'ba819915fc55e444d54d46671892cea35cb6b3cf'
+          test "$(git hash-object game/components/playable_presentation/world_reader.gd)" = '018d3c5908eca22593c7b8a6eef4a29ed1a23f0f'
+          test "$(git hash-object game/components/playable_presentation/hearing_reader.gd)" = 'b7ce32ea0d3b841fce49f946d6efce0ccbcaf139'
+          test "$(git hash-object game/components/playable_presentation/consequence_reader.gd)" = '3cb9cb6887508f94fba865ebc428ba43fbdd38b2'
+          test "$(git hash-object game/components/playable_presentation/playable_presentation_smoke.gd)" = 'ef2628c4d691e753316fe81d218e1534e6e37a5f'
+          test "$(git hash-object game/main.tscn)" = '02b943321c258bb807f9496c7a270221df112b31'
 
       - name: Run playable, movement and published-component smokes
         shell: bash
@@ -72,6 +90,12 @@ jobs:
           grep -Fx 'EVERFIELD_DIAGNOSTIC_CONTRACT_SMOKE_PASS' first-playable-evidence/diagnostic-contract.log
           "$GODOT_BIN" --headless --path game --script res://components/hud_objectives/hud_objective_model_smoke.gd 2>&1 | tee first-playable-evidence/hud-objectives.log
           grep -Fx 'EVERFIELD_HUD_OBJECTIVE_MODEL_SMOKE_PASS' first-playable-evidence/hud-objectives.log
+          "$GODOT_BIN" --headless --path game --script res://components/station_world/station_world_smoke.gd 2>&1 | tee first-playable-evidence/station-world.log
+          grep -Fx 'EVERFIELD_STATION_WORLD_SMOKE_PASS' first-playable-evidence/station-world.log
+          "$GODOT_BIN" --headless --path game --script res://components/traversal_policy/traversal_policy_smoke.gd 2>&1 | tee first-playable-evidence/traversal-policy.log
+          grep -Fx 'EVERFIELD_TRAVERSAL_POLICY_SMOKE_PASS' first-playable-evidence/traversal-policy.log
+          "$GODOT_BIN" --headless --path game --script res://components/playable_presentation/playable_presentation_smoke.gd 2>&1 | tee first-playable-evidence/playable-presentation.log
+          grep -Fx 'EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_PASS' first-playable-evidence/playable-presentation.log
           checked_out_sha="$(git rev-parse HEAD)"
           printf 'event_sha=%s\nchecked_out_sha=%s\npr_head_sha=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\n' \
             "$GITHUB_SHA" "$checked_out_sha" '${{ github.event.pull_request.head.sha || github.sha }}' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
@@ -93,6 +117,15 @@ jobs:
             game/components/hud_objectives/hud_objective_model_smoke.gd \
             game/components/commons_hearing/commons_hearing_presentation.gd \
             game/components/commitment_consequences/commitment_consequence_presentation.gd \
+            game/components/station_world/station_world.gd \
+            game/components/station_world/station_world_smoke.gd \
+            game/components/traversal_policy/traversal_policy.gd \
+            game/components/traversal_policy/traversal_policy_smoke.gd \
+            game/components/playable_presentation/playable_presentation.gd \
+            game/components/playable_presentation/world_reader.gd \
+            game/components/playable_presentation/hearing_reader.gd \
+            game/components/playable_presentation/consequence_reader.gd \
+            game/components/playable_presentation/playable_presentation_smoke.gd \
             > first-playable-evidence/implementation.sha256
 
       - name: Upload smoke evidence
