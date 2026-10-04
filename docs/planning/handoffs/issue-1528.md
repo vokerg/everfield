@@ -1,0 +1,28 @@
+# Handoff — Issue #1528 / IMPLEMENTATION-DEMAND-PLAYABLE-PRESENTATION-02-REM-02-REV-01
+
+## Governing review authority and ownership
+
+- Independent required-review actor/session `frontier-review-corrected-composite-1528-gpt56sol-20261004-1300-01`, winning schema-3 CLAIM comment `5979260148`; different from source Producer #1506, Verifier #1514, Reviewer #1515, Remediator #1525, and composite Verifier #1527. Reviewer owns only this handoff and the review report; original sources, remediated overlay and temporary verifier are immutable.
+- Branch `planning/issue-1528` originated at `main@d7cf5ddf1afaa8e546f81f8aeee940e72b96a98c`; terminal schema-3 review status records its exact final `work_sha`, `head_sha`, draft PR number and current-main compatibility.
+- Canonical Issue #1147 binding comment `5675066392`, program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`.
+- Review report: `docs/planning/wave-2/reviews/implementation-demand-playable-presentation-02-rem-02-rereview.md`, original immutable report Git blob `e6d5cdabee62a51a22ab524a587caa0157d081b0`. No other repository paths belong to the review.
+
+## Exact composite and predecessor gate
+
+- Original #1506 producer terminal comment `5978324440`, PR #1513 at `37833b1e482adaa2f123edeed02b81e24a2f3688`; six original source/handoff blobs. Two unchanged helpers (not present on current main) are `world_reader.gd` `018d3c5908eca22593c7b8a6eef4a29ed1a23f0f` and `consequence_reader.gd` `3cb9cb6887508f94fba865ebc428ba43fbdd38b2`.
+- Independent negative Review #1515 terminal `5979151959` / review published as provenance at `main@d7cf5ddf1afaa8e546f81f8aeee940e72b96a98c` found one major malformed hearing speaker/phase and one correction-requiring minor empty station ID. Preserve this historical `CHANGES_NEEDED` state.
+- Correction #1525 terminal comment `5979194789`, draft PR #1526 exact head `31869366ba234db92e0b6fda48eb7fc24ea3004a`, three overlay source Git blobs: hearing reader `b7ce32ea0d3b841fce49f946d6efce0ccbcaf139`, assembler `ba819915fc55e444d54d46671892cea35cb6b3cf`, smoke `ef2628c4d691e753316fe81d218e1534e6e37a5f`; correction handoff `2094304dae533e5e2d2fb94623fdbe5024cd95f8`.
+- Exact independent composite verifier #1527 final terminal `VERIFICATION_STATUS(DONE)` PASS comment `5979245764`, activated review by #1528 comment `5979247314`. Verifier workflow-only draft PR #1530 exact final head `06f2dce495ff228bb687bdea049e33ebea1a7930`, workflow blob `9663cb81e5db1f1eea58cd1fbf71ef47309465ca`, handoff blob `d752c64240aca48ee069af02af542fa212c2fde7`.
+- Final GitHub Actions run `37197033103` attempt 1 / job `111420938236` verified locked Godot 4.7.1 version and zip sha256 `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`; fetched logs show final-head successful composite reconstruction, original and corrected hash/path guards, 37 actual smoke assertions PASS, zero actual smoke FAIL, six modified-beat negative checks, rejected empty station ID, and exact `EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_PASS`. Artifact `11301462766`, digest `sha256:551b836225877ab379ba14d639ba15ba3e12aa6bc27b227471c048d74cf58d7a`, 2213 bytes.
+
+## Independent findings and closure
+
+- Disposition: `CLEAN_FOR_CORRECTED_PLAYABLE_PRESENTATION_COMPONENT_PUBLICATION`, 0 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR. Original MAJOR-01 is closed by exact expected character-ref and phase checks on each immutable hearing beat, plus retained route-scope and source-contract validation. MINOR-01 closed by explicit invalid empty station guard while legal `world_intro()` remains unchanged.
+- Inspected all original smoke assertion source lines and corrected cases, unchanged two helper scripts, published Old Works/hearing/consequence provider blobs, current `main.gd` text assembly. Route choice/event matching, all public lines, three stations, Maelin/Selka/choice order, five consequences, immutable data, noncoercive deferral, disputed Archive, nondiscriminating material trace, the unresolved fragmentation mystery, and private Anwen protection remain intact.
+- Exact published provider Git blobs retained: Old Works `8e498156bb9a5413f53a84b14fc279c4be6c8f23`, hearing `9682c47ee2c84ea42417651d0ca2e4f30ebf78b2`, consequences `419688e17515bf5f67b383182c0b6330111ce4be`, `game/main.gd` `9b406cc0a0115f0818df633eda67d69ab7779a06`, project `9da4153ed378945ef5e9634e0e5cae48289845d8`, engine-lock `4a88990ae24768eb4f83a8a1311e2a830834649f`.
+
+## Publication boundary / required next route
+
+- This review-only PR contains *exactly two documentation files*. Its terminal `REVIEW_STATUS` and independent evidence do **not** authorize merging the rejected original PR #1513, incomplete overlay-only PR #1526 or temporary verifier PR #1530.
+- Required next step after terminalization: fresh independently claimed *authorized integration* episode for the exact **full combined candidate**, assembling all original immutable source files with precisely the three corrected overlays, preserving exact reviewed and verified Git blob identities on a then-current-main-compatible integration branch. Complete only by a separate owner-authorized, **squash-only** merge to `main`; separate review provenance may be squash-integrated as noncanonical documentation under the owner convergence directive, but never substitute that for component integration.
+- Maintain `NOT_CANONICAL`: no gameplay wiring, historical truth/canon, private information, consent state/history, persistence, implementation-readiness, accessibility certification, production or release authority.
