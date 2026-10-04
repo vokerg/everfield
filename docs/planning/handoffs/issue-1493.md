@@ -31,3 +31,12 @@ No producer, review, project, shared gameplay, sibling component, workflow outsi
 
 ## Next route and boundary
 Open an exact-head draft PR. Inspect the *final* branch-head GitHub Actions run/job/log/artifact, require exit 0 and exact sentinel. If updated after a run, demand a new final confirming run. Exact PASS must route a new **independent required HUD re-review** (not self-upgrade original Review #1474); substantive FAIL routes bounded producer remediation, while workflow-only infrastructure defects remain this verifier's responsibility. There is no integration, canon/truth-resolution, gameplay-state, persistence/save-load, accessibility-certification, legal/provider, production, or release authority.
+
+## Initial repository-native runtime execution (pre-final handoff update)
+
+- GitHub Actions [run `37181974760`](https://github.com/vokerg/everfield/actions/runs/37181974760), job `111376197335`, at verifier PR #1495 head `4d34e9d740503c289b3bf0d4c18e483a55112131`: both **success**.
+- Downloaded exact reviewed Godot archive: `godot.zip: OK`; engine `4.7.1.stable.official.a13da4feb`.
+- Checkout in decoded logs independently shows exact frozen Producer #1463 head `e2be96598dca388b84c70077b7d9b304f9a9fb1f`. The component, smoke, producer handoff, project, and lock hash assertions all passed.
+- The isolated HUD smoke executed, exited successfully, contained the exact `EVERFIELD_HUD_OBJECTIVE_MODEL_SMOKE_PASS` line and no failing assertions.
+- GitHub retained initial artifact `11295970466`, size 1662 bytes, SHA-256 `6d91aa6b5838e14c41a864de843f51296557168cea4c8d602fa704f93963b310`, bound to run and verifier head above.
+- **This handoff update advances branch head and therefore invalidates initial execution as final-head evidence.** A *new successful exact checked-out producer run* on the updated workflow-PR head is mandatory; final confirming run/job/log/artifact must be recorded by terminal `VERIFICATION_STATUS` comment. No final PASS is claimed until the new run passes. Keep this verifier workflow and draft PR non-integrable.
