@@ -316,9 +316,9 @@ func get_hud_view() -> Dictionary:
 
 func _hud_station_metadata() -> Dictionary:
     var metadata := {}
-    for station_id in STATIONS:
-        var station_data: Dictionary = STATIONS[station_id]
-        metadata[station_id] = {"title": String(_station_display(String(station_id), station_data)["title"])}
+    for station_id in station_world.get_station_ids():
+        var station_data: Dictionary = station_world.get_station(station_id)
+        metadata[station_id] = {"title": String(_station_display(station_id, station_data)["title"])}
     return metadata
 
 func _investigation_ready() -> bool:
@@ -334,15 +334,13 @@ func _append_history(event_id: String) -> bool:
 func _nearest_station_id() -> String:
     if player == null:
         return ""
-    var best_id := ""
-    var best_distance := INF
-    for station_id in STATIONS:
-        var station_position: Vector2 = STATIONS[station_id]["position"]
-        var distance := player.position.distance_to(station_position)
-        if distance < best_distance:
-            best_distance = distance
-            best_id = String(station_id)
-    return best_id if best_distance <= INTERACT_RADIUS else ""
+    var nearest: Dictionary = TraversalPolicy.nearest_station(
+        player.position, station_world.get_stations(), station_world.get_station_ids(), INTERACT_RADIUS
+    )
+    if not nearest.get("ok", false):
+        push_error("[EF-TRAVERSAL-INVALID] Invalid station proximity metadata.")
+        return ""
+    return String(nearest.get("station_id", ""))
 
 func _station_display(station_id: String, fallback: Dictionary) -> Dictionary:
     var display := {
@@ -464,7 +462,7 @@ func _refresh_nearby_hint() -> void:
     var station_id := _nearest_station_id()
     if station_id.is_empty():
         return
-    var station_data: Dictionary = STATIONS[station_id]
+    var station_data: Dictionary = station_world.get_station(station_id)
     var display := _station_display(station_id, station_data)
     objective_label.text = "[E] %s — %s" % [display["title"], display["hint"]]
 
