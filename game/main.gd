@@ -12,41 +12,7 @@ const PlayablePresentation = preload("res://components/playable_presentation/pla
 
 const PLAYER_SPEED := 230.0
 const INTERACT_RADIUS := 88.0
-const WORLD_BOUNDS := Rect2(36.0, 90.0, 888.0, 414.0)
 const MYSTERY_STATE := "UNKNOWN_BY_DESIGN"
-
-const STATIONS := {
-    "public_record": {
-        "position": Vector2(176, 188),
-        "title": "Archive Ledger",
-        "hint": "Public record — required",
-        "color": Color("6ca6c8"),
-    },
-    "material_trace": {
-        "position": Vector2(338, 382),
-        "title": "Material Trace",
-        "hint": "Independent evidence — optional",
-        "color": Color("c3a56f"),
-    },
-    "defer_conclusion": {
-        "position": Vector2(498, 184),
-        "title": "Defer Conclusion",
-        "hint": "Legal investigation alternative",
-        "color": Color("8d88ba"),
-    },
-    "commons_hearing": {
-        "position": Vector2(676, 252),
-        "title": "Commons Hearing",
-        "hint": "Negotiate shared use",
-        "color": Color("7dbb8b"),
-    },
-    "project_table": {
-        "position": Vector2(798, 400),
-        "title": "Project Table",
-        "hint": "Commit the bounded next step",
-        "color": Color("d28d7b"),
-    },
-}
 
 var player: Node2D
 var title_label: Label
@@ -57,6 +23,8 @@ var presentation_panel: ColorRect
 var presentation_label: Label
 var station_nodes: Dictionary = {}
 
+var station_world: Variant
+var playable_presentation: Variant
 var old_works_presentation: Variant
 var commons_hearing_presentation: Variant
 var consequence_presentation: Variant
@@ -65,9 +33,11 @@ var diagnostic_catalog: Variant
 var hud_objective_model: Variant
 
 func _ready() -> void:
+    station_world = StationWorld.new()
     old_works_presentation = OldWorksPresentation.new()
     commons_hearing_presentation = CommonsHearingPresentation.new()
     consequence_presentation = CommitmentConsequencePresentation.new()
+    playable_presentation = PlayablePresentation.new(old_works_presentation, commons_hearing_presentation, consequence_presentation)
     session_state = SessionState.new()
     diagnostic_catalog = DiagnosticCatalog.new()
     hud_objective_model = HudObjectiveModel.new()
