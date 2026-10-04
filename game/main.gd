@@ -3,6 +3,9 @@ extends Node2D
 const OldWorksPresentation = preload("res://components/old_works_world/old_works_world_presentation.gd")
 const CommonsHearingPresentation = preload("res://components/commons_hearing/commons_hearing_presentation.gd")
 const CommitmentConsequencePresentation = preload("res://components/commitment_consequences/commitment_consequence_presentation.gd")
+const SessionState = preload("res://components/session_state/session_state.gd")
+const DiagnosticCatalog = preload("res://components/diagnostics/diagnostic_catalog.gd")
+const HudObjectiveModel = preload("res://components/hud_objectives/hud_objective_model.gd")
 
 const PLAYER_SPEED := 230.0
 const INTERACT_RADIUS := 88.0
@@ -54,12 +57,17 @@ var station_nodes: Dictionary = {}
 var old_works_presentation: Variant
 var commons_hearing_presentation: Variant
 var consequence_presentation: Variant
-var state: Dictionary = {}
+var session_state: Variant
+var diagnostic_catalog: Variant
+var hud_objective_model: Variant
 
 func _ready() -> void:
     old_works_presentation = OldWorksPresentation.new()
     commons_hearing_presentation = CommonsHearingPresentation.new()
     consequence_presentation = CommitmentConsequencePresentation.new()
+    session_state = SessionState.new()
+    diagnostic_catalog = DiagnosticCatalog.new()
+    hud_objective_model = HudObjectiveModel.new()
     _build_world()
     reset_slice()
     print("[EVERFIELD][BOOT] Accounts at the Old Works first playable ready")
@@ -205,122 +213,146 @@ func _build_world() -> void:
     add_child(diagnostic_label)
 
 func reset_slice() -> void:
-    state = {
-        "record_read": false,
-        "trace_inspected": false,
-        "deferred_truth": false,
-        "negotiation_open": false,
-        "commitment": "",
-        "completed": false,
-        "outcome": "",
-        "mystery_state": MYSTERY_STATE,
-        "history": [],
-    }
+    session_state.reset()
     if player != null:
         player.position = Vector2(92, 286)
-    _set_diagnostic("EF-RESET", "Slice state reset; durable world mystery remains unresolved.")
+    _emit_diagnostic("EF-RESET")
     _show_world_intro()
     _refresh_hud()
 
 func interact_nearest() -> bool:
     var station_id := _nearest_station_id()
     if station_id.is_empty():
-        _set_diagnostic("EF-INTERACT-RANGE", "No interaction surface is within range.")
+        _emit_diagnostic("EF-INTERACT-RANGE")
         return false
     return interact_with(station_id)
 
 func interact_with(station_id: String) -> bool:
     if not STATIONS.has(station_id):
-        _set_diagnostic("EF-INTERACT-UNKNOWN", "Unknown station: %s" % station_id, true)
+        _emit_diagnostic("EF-INTERACT-UNKNOWN", {"station_id": station_id})
         return false
 
+    var current: Dictionary = get_game_state()
     match station_id:
         "public_record":
-            state["record_read"] = true
-            _append_history("PUBLIC_RECORD_REVIEWED")
-            _show_old_works_station("public_record")
-            _set_diagnostic("EF-INVESTIGATE-RECORD", "Reviewed Archive Ledger presentation; competing accounts remain claims, not findings.")
-        "material_trace":
-            state["trace_inspected"] = true
-            _append_history("MATERIAL_TRACE_INSPECTED")
-            _show_old_works_station("material_trace")
-            _set_diagnostic("EF-INVESTIGATE-TRACE", "Reviewed Material Trace presentation; alteration evidence does not select a causal winner.")
-        "defer_conclusion":
-            if not state["record_read"]:
-                _set_diagnostic("EF-GATE-DEFER", "Review the public record before explicitly deferring a conclusion.")
+            if not session_state.set_field("record_read", true):
                 return false
-            state["deferred_truth"] = true
-            _append_history("TRUTH_CONCLUSION_DEFERRED")
+            if not _append_history("PUBLIC_RECORD_REVIEWED"):
+                return false
+            _show_old_works_station("public_record")
+            _emit_diagnostic("EF-INVESTIGATE-RECORD")
+        "material_trace":
+            if not session_state.set_field("trace_inspected", true):
+                return false
+            if not _append_history("MATERIAL_TRACE_INSPECTED"):
+                return false
+            _show_old_works_station("material_trace")
+            _emit_diagnostic("EF-INVESTIGATE-TRACE")
+        "defer_conclusion":
+            if not bool(current["record_read"]):
+                _emit_diagnostic("EF-GATE-DEFER")
+                return false
+            if not session_state.set_field("deferred_truth", true):
+                return false
+            if not _append_history("TRUTH_CONCLUSION_DEFERRED"):
+                return false
             _show_old_works_station("defer_conclusion")
-            _set_diagnostic("EF-INVESTIGATE-DEFER", "Conclusion deferred by design; uncertainty is a legal route.")
+            _emit_diagnostic("EF-INVESTIGATE-DEFER")
         "commons_hearing":
             if not _investigation_ready():
-                _set_diagnostic("EF-GATE-INVESTIGATION", "Read the public record and inspect the material trace or explicitly defer conclusion before negotiating.")
+                _emit_diagnostic("EF-GATE-INVESTIGATION")
                 return false
-            state["negotiation_open"] = true
-            _append_history("COMMONS_HEARING_OPENED")
+            if not session_state.set_field("negotiation_open", true):
+                return false
+            if not _append_history("COMMONS_HEARING_OPENED"):
+                return false
             _show_hearing_opening()
-            _set_diagnostic("EF-NEGOTIATE", "Choose: [1] repair pilot, [2] records-first, or [3] defer commitment.")
+            _emit_diagnostic("EF-NEGOTIATE")
         "project_table":
-            if String(state["commitment"]).is_empty():
-                _set_diagnostic("EF-GATE-COMMITMENT", "A supported public commitment is required before the project table can close the loop.")
+            var commitment := String(current["commitment"])
+            if commitment.is_empty():
+                _emit_diagnostic("EF-GATE-COMMITMENT")
                 return false
-            state["completed"] = true
-            if state["commitment"] == "repair_pilot":
-                state["outcome"] = "BOUNDED_REPAIR_PILOT_STARTED"
-            else:
-                state["outcome"] = "RECORDS_FIRST_PACKAGE_FILED"
-            _append_history(String(state["outcome"]))
-            _show_consequence(String(state["outcome"]))
-            _set_diagnostic("EF-SLICE-COMPLETE", "First-playable loop complete; mystery remains UNKNOWN_BY_DESIGN.")
+            var outcome := "BOUNDED_REPAIR_PILOT_STARTED" if commitment == "repair_pilot" else "RECORDS_FIRST_PACKAGE_FILED"
+            if not session_state.set_field("outcome", outcome):
+                return false
+            if not session_state.set_field("completed", true):
+                return false
+            if not _append_history(outcome):
+                return false
+            _show_consequence(outcome)
+            _emit_diagnostic("EF-SLICE-COMPLETE")
 
     _refresh_hud()
     return true
 
 func choose_commitment(choice: String) -> bool:
-    if not state["negotiation_open"]:
-        _set_diagnostic("EF-GATE-NEGOTIATION", "Open the Commons Hearing before choosing a commitment.")
+    if not bool(get_game_state()["negotiation_open"]):
+        _emit_diagnostic("EF-GATE-NEGOTIATION")
         return false
 
     match choice:
         "repair_pilot":
-            state["commitment"] = "repair_pilot"
-            state["negotiation_open"] = false
-            _append_history("COMMITMENT_REPAIR_PILOT")
+            if not session_state.set_field("commitment", "repair_pilot"):
+                return false
+            if not session_state.set_field("negotiation_open", false):
+                return false
+            if not _append_history("COMMITMENT_REPAIR_PILOT"):
+                return false
             _show_hearing_and_consequence("repair_pilot", "COMMITMENT_REPAIR_PILOT")
-            _set_diagnostic("EF-COMMIT-REPAIR", "Repair pilot selected: bounded and conditionally reversible.")
+            _emit_diagnostic("EF-COMMIT-REPAIR")
         "records_first":
-            state["commitment"] = "records_first"
-            state["negotiation_open"] = false
-            _append_history("COMMITMENT_RECORDS_FIRST")
+            if not session_state.set_field("commitment", "records_first"):
+                return false
+            if not session_state.set_field("negotiation_open", false):
+                return false
+            if not _append_history("COMMITMENT_RECORDS_FIRST"):
+                return false
             _show_hearing_and_consequence("records_first", "COMMITMENT_RECORDS_FIRST")
-            _set_diagnostic("EF-COMMIT-RECORDS", "Records-first selected: document and limit use before broader repair.")
+            _emit_diagnostic("EF-COMMIT-RECORDS")
         "defer":
-            state["commitment"] = ""
-            state["negotiation_open"] = false
-            _append_history("PUBLIC_COMMITMENT_DEFERRED")
+            if not session_state.set_field("commitment", ""):
+                return false
+            if not session_state.set_field("negotiation_open", false):
+                return false
+            if not _append_history("PUBLIC_COMMITMENT_DEFERRED"):
+                return false
             _show_hearing_and_consequence("defer", "PUBLIC_COMMITMENT_DEFERRED")
-            _set_diagnostic("EF-COMMIT-DEFER", "Commitment deferred; the hearing may be reopened without erasing history.")
+            _emit_diagnostic("EF-COMMIT-DEFER")
         _:
-            _set_diagnostic("EF-COMMIT-UNKNOWN", "Unsupported commitment choice: %s" % choice, true)
+            _emit_diagnostic("EF-COMMIT-UNKNOWN", {"choice": choice})
             return false
 
     _refresh_hud()
     return true
 
 func get_game_state() -> Dictionary:
-    return state.duplicate(true)
+    # A deep-copy snapshot is the only public state view; gameplay state lives
+    # exclusively inside the reviewed bounded session-state component.
+    return session_state.snapshot()
 
 func get_presentation_text() -> String:
     return presentation_label.text if presentation_label != null else ""
 
-func _investigation_ready() -> bool:
-    return bool(state["record_read"]) and (bool(state["trace_inspected"]) or bool(state["deferred_truth"]))
+func get_hud_view() -> Dictionary:
+    return hud_objective_model.build_view(get_game_state(), _hud_station_metadata())
 
-func _append_history(event_id: String) -> void:
-    var history: Array = state["history"]
-    history.append(event_id)
+func _hud_station_metadata() -> Dictionary:
+    var metadata := {}
+    for station_id in STATIONS:
+        var station_data: Dictionary = STATIONS[station_id]
+        metadata[station_id] = {"title": String(_station_display(String(station_id), station_data)["title"])}
+    return metadata
+
+func _investigation_ready() -> bool:
+    var current: Dictionary = get_game_state()
+    return bool(current["record_read"]) and (bool(current["trace_inspected"]) or bool(current["deferred_truth"]))
+
+func _append_history(event_id: String) -> bool:
+    if not session_state.append_history(event_id):
+        return false
     print("[EVERFIELD][STATE] %s" % event_id)
+    return true
 
 func _nearest_station_id() -> String:
     if player == null:
@@ -460,38 +492,22 @@ func _refresh_nearby_hint() -> void:
     objective_label.text = "[E] %s — %s" % [display["title"], display["hint"]]
 
 func _refresh_hud() -> void:
-    if objective_label == null:
+    if objective_label == null or status_label == null:
         return
+    var view: Dictionary = get_hud_view()
+    objective_label.text = String(view.get("objective", "[EF-HUD-STATE] Invalid bounded session state."))
+    if view.get("phase", "") == "COMPLETE":
+        objective_label.text += " Press R to reset."
+    status_label.text = String(view.get("status", "Mystery:UNKNOWN_BY_DESIGN"))
 
-    if bool(state["completed"]):
-        objective_label.text = "Loop complete: %s — press R to reset." % state["outcome"]
-    elif not bool(state["record_read"]):
-        objective_label.text = "Investigate: move with WASD/arrows; reach the Archive Ledger and press E."
-    elif not _investigation_ready():
-        objective_label.text = "Investigate: inspect the Material Trace OR explicitly Leave the Cause Open."
-    elif bool(state["negotiation_open"]):
-        objective_label.text = "Commons Hearing: [1] repair pilot · [2] records-first · [3] defer commitment."
-    elif String(state["commitment"]).is_empty():
-        objective_label.text = "Negotiate: reach the Commons Hearing and press E."
-    else:
-        objective_label.text = "Commit: reach the Project Table and press E to complete the bounded loop."
-
-    status_label.text = "Record:%s  Trace:%s  Deferred truth:%s  Commitment:%s  Mystery:%s" % [
-        _flag(state["record_read"]),
-        _flag(state["trace_inspected"]),
-        _flag(state["deferred_truth"]),
-        String(state["commitment"]) if not String(state["commitment"]).is_empty() else "none",
-        state["mystery_state"],
-    ]
-
-func _set_diagnostic(code: String, message: String, is_error: bool = false) -> void:
-    var line := "[%s] %s" % [code, message]
+func _emit_diagnostic(code: String, context: Dictionary = {}) -> void:
+    # The published catalog owns all messages, dynamic context and error flags.
+    # Missing/unknown codes are returned as visibly fail-closed errors.
+    var payload: Dictionary = diagnostic_catalog.get_diagnostic(code, context)
+    var line := "[%s] %s" % [payload["code"], payload["message"]]
     if diagnostic_label != null:
         diagnostic_label.text = line
-    if is_error:
+    if not bool(payload.get("ok", false)) or bool(payload.get("is_error", true)):
         push_error(line)
     else:
         print("[EVERFIELD][DIAG] %s" % line)
-
-func _flag(value: Variant) -> String:
-    return "yes" if bool(value) else "no"
