@@ -1,0 +1,15 @@
+# Handoff — Required Traversal Policy Review #1518
+
+## Exact review provenance
+- Mission: `IMPLEMENTATION-DEMAND-TRAVERSAL-POLICY-02-REV-01`.
+- Reviewer CLAIM: Issue #1518 comment `5978353791`, actor `frontier-drain-required-traversal-review-1518-gpt56sol-20261004-1105-b`, separate from frozen Producer #1505 and exact Verifier #1510.
+- Review base: `main@eef8a80d538a908ea685b206d97409ac48a2092f`; active canonical Issue #1147 binding `5675066392`, blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, activation `87c85cecfa9a2ffa464c4b36816a138bf41441af`.
+- Read-only source: Producer #1505 terminal `5978299201`, PR #1508 exact head `755b50d9ef0b125fef1f4358b5a4004a9d427696`; three issue-owned blobs `8376bd1289890d084fc94992ba56c4cd64588a44`, `3daed72928dbaecee0339e691e89403a7eaa98b2`, `84608ffd05a15cc83126c1319d770e0c3e592123`.
+- Read-only runtime verifier: Issue #1510 terminal `5978342736`, PR #1516 exact head `ad0aab58a6bb74098fad796fddc4ca75bc3bedaf`, isolated workflow blob `2e29583a46e3826dfab49450c148cca2055dcd3c`. Final run `37190784361`, job `111402313943`, successful locked Godot 4.7.1. Immutable artifact `11299025919` digest `sha256:5e7e70d038bb6c4aabdb6e77da6e4086c6bf0abb9f7f1353bd45553554d218a8`.
+- Review report: `docs/planning/wave-2/reviews/implementation-demand-traversal-policy-02-review.md`, blob `ea344ca04c928398de03fd6dcff4ef7a1df7eb8c`. This handoff is the **only** other review-owned path; source/test/verifier remain untouched.
+
+## Independent disposition
+**CLEAN_FOR_TRAVERSAL_POLICY_COMPONENT_PUBLICATION** — zero BLOCKER, zero MAJOR, zero correction-requiring MINOR. Independently inspected input intent/key mapping, diagonal normalization and immutable speed/radius/world bounds, station tie/order and all malformed/nonfinite guards, absence of nodes/Input/state, source main/movement smoke parity and exact frozen source/verifier PR paths/hashes. Decoded job logs show 44 policy PASS assertions and both `EVERFIELD_TRAVERSAL_POLICY_SMOKE_PASS` and `EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS`; expected unknown-station error is part of deliberate fail-closed movement smoke. Hash-locked engine zip `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`. No prior review or other candidate substituted.
+
+## Continuation and authority
+Freeze this review's two documentation blobs in an open exact-head draft PR, then record a valid terminal schema-3 `REVIEW_STATUS(REVIEW_READY)` with this exact review head and refs. A separate owner-authorized current-main-compatible **squash-only** integration episode is required to publish the frozen noncanonical Producer #1505 packet. Independently publish review provenance only with its *own* scoped authority; this reviewer grants no direct integration, no status upgrade of source/verifier, no shared controller wiring, no canon/truth, persistence, accessibility, production or release authority. Shared playable fan-in #1507 remains blocked until all three separately published component packets converge.
