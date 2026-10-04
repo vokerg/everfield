@@ -10,6 +10,7 @@ on:
       - '.github/workflows/godot-first-playable-smoke.yml'
       - 'docs/implementation/first-playable.md'
       - 'docs/planning/handoffs/issue-1414.md'
+      - 'docs/planning/handoffs/issue-1464.md'
   workflow_dispatch:
 
 permissions:
@@ -56,7 +57,7 @@ jobs:
           unzip -q godot.zip -d .godot-bin
           chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
 
-      - name: Run state-machine and movement/proximity smokes
+      - name: Run playable, movement and published-component smokes
         shell: bash
         env:
           GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
@@ -65,6 +66,12 @@ jobs:
           mkdir -p first-playable-evidence
           bash tools/implementation/run_godot_smoke.sh 2>&1 | tee first-playable-evidence/state-machine.log
           bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee first-playable-evidence/movement-interaction.log
+          "$GODOT_BIN" --headless --path game --script res://components/session_state/session_state_smoke.gd 2>&1 | tee first-playable-evidence/session-state.log
+          grep -Fx 'EVERFIELD_SESSION_STATE_SMOKE_PASS' first-playable-evidence/session-state.log
+          "$GODOT_BIN" --headless --path game --script res://components/diagnostics/diagnostic_catalog_smoke.gd 2>&1 | tee first-playable-evidence/diagnostic-contract.log
+          grep -Fx 'EVERFIELD_DIAGNOSTIC_CONTRACT_SMOKE_PASS' first-playable-evidence/diagnostic-contract.log
+          "$GODOT_BIN" --headless --path game --script res://components/hud_objectives/hud_objective_model_smoke.gd 2>&1 | tee first-playable-evidence/hud-objectives.log
+          grep -Fx 'EVERFIELD_HUD_OBJECTIVE_MODEL_SMOKE_PASS' first-playable-evidence/hud-objectives.log
           checked_out_sha="$(git rev-parse HEAD)"
           printf 'event_sha=%s\nchecked_out_sha=%s\npr_head_sha=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\n' \
             "$GITHUB_SHA" "$checked_out_sha" '${{ github.event.pull_request.head.sha || github.sha }}' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
@@ -78,6 +85,12 @@ jobs:
             game/tests/movement_interaction_smoke.gd \
             tools/implementation/run_godot_movement_smoke.sh \
             game/components/old_works_world/old_works_world_presentation.gd \
+            game/components/session_state/session_state.gd \
+            game/components/session_state/session_state_smoke.gd \
+            game/components/diagnostics/diagnostic_catalog.gd \
+            game/components/diagnostics/diagnostic_catalog_smoke.gd \
+            game/components/hud_objectives/hud_objective_model.gd \
+            game/components/hud_objectives/hud_objective_model_smoke.gd \
             game/components/commons_hearing/commons_hearing_presentation.gd \
             game/components/commitment_consequences/commitment_consequence_presentation.gd \
             > first-playable-evidence/implementation.sha256
