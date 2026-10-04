@@ -34,7 +34,8 @@ jobs:
           test "$(git hash-object game/components/station_world/station_world_smoke.gd)" = "0c972e251de6e4fb1a86bbecbce757eaa56999ce"
           test "$(git hash-object docs/planning/handoffs/issue-1504.md)" = "cc492f3671d884ea3e9c05995cdeab66af4b46c7"
           test "$(git hash-object docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json)" = "4a88990ae24768eb4f83a8a1311e2a830834649f"
-          test "$(git hash-object game/main.gd)" = "9b406cc0a0115f0818df633eda67d69ab7779a06"\n          test "$(git hash-object game/project.godot)" = "9da4153ed378945ef5e9634e0e5cae48289845d8"
+          test "$(git hash-object game/main.gd)" = "9b406cc0a0115f0818df633eda67d69ab7779a06"
+          test "$(git hash-object game/project.godot)" = "9da4153ed378945ef5e9634e0e5cae48289845d8"
 
       - name: Resolve reviewed Godot artifact lock
         id: godot
