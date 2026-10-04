@@ -44,7 +44,7 @@ jobs:
           entry = lock['entries']['godot_4.7.1_linux_x86_64_zip']
           if entry['version'] != '4.7.1-stable':
               raise SystemExit(f"unexpected reviewed Godot version: {entry['version']}")
-          if entry["sha256"] != "c7ff14fd28472c8d4f193043de30278dcf7566b02e27addaa33ba":
+          if entry["sha256"] != "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba":
               raise SystemExit("unexpected reviewed Godot ZIP lock")
           print(f"url={entry['url']}")
           print(f"sha256={entry['sha256']}")
