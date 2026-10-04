@@ -25,6 +25,48 @@ func _run() -> void:
     _expect(game.session_state != null, "published bounded session-state component wired")
     _expect(game.diagnostic_catalog != null, "published diagnostic catalog component wired")
     _expect(game.hud_objective_model != null, "published HUD objective/status component wired")
+
+    _expect(game.station_world is RefCounted, "reviewed station-world metadata provider is wired")
+    _expect(game.playable_presentation is RefCounted, "reviewed public narrative assembler is wired")
+    var ids: Array[String] = game.station_world.get_station_ids()
+    _expect(ids == ["public_record", "material_trace", "defer_conclusion", "commons_hearing", "project_table"], "exact station order is injected into live scene")
+    var world_data: Dictionary = game.station_world.get_stations()
+    var geometry: Dictionary = game.station_world.get_layout()
+    _expect(world_data.size() == 5 and game.station_nodes.size() == 5, "live scene has five source-owned station markers")
+    var floor_node := game.get_node_or_null("OldWorksFloor") as Polygon2D
+    var walk_node := game.get_node_or_null("WalkPath") as Line2D
+    _expect(floor_node != null and walk_node != null, "reviewed floor/path geometry is rendered")
+    if floor_node != null and walk_node != null:
+        _expect(floor_node.polygon == geometry["floor_polygon"] and floor_node.color == geometry["floor_color"], "scene floor exactly matches station-world snapshot")
+        _expect(walk_node.points == geometry["walk_path"] and walk_node.width == geometry["walk_path_width"] and walk_node.default_color == geometry["walk_path_color"], "scene WalkPath exactly matches station-world snapshot")
+    for station_id in ids:
+        var station_node := game.station_nodes.get(station_id) as Node2D
+        _expect(station_node != null, "%s exists as live marker" % station_id)
+        if station_node == null:
+            continue
+        var station_data: Dictionary = world_data[station_id]
+        _expect(station_node.position == station_data["position"], "%s uses exact reviewed coordinates" % station_id)
+        var marker_node := station_node.get_child(0) as Polygon2D
+        var label_node := station_node.get_child(1) as Label
+        _expect(marker_node != null and label_node != null, "%s has source-owned marker/label" % station_id)
+        if marker_node != null and label_node != null:
+            _expect(marker_node.polygon == geometry["marker_polygon"] and marker_node.color == station_data["color"], "%s has exact reviewed polygon and RGB" % station_id)
+            _expect(label_node.position == geometry["station_label_position"] and label_node.size == geometry["station_label_size"], "%s retains reviewed label geometry" % station_id)
+    var raw_station_copy: Dictionary = game.station_world.get_stations()
+    var changed_record: Dictionary = raw_station_copy["public_record"]
+    changed_record["position"] = Vector2(-999, -999)
+    _expect(game.station_world.get_station("public_record")["position"] == Vector2(176, 188), "controller cannot mutate shared station metadata via snapshots")
+    _expect(game.station_nodes["public_record"].position == Vector2(176, 188), "copy tampering cannot move the live marker")
+    var public_contract: Dictionary = game.playable_presentation.get_contract()
+    _expect(public_contract.get("mystery_state") == "UNKNOWN_BY_DESIGN" and not public_contract.get("private_information_visible", true) and not public_contract.get("deferral_is_consent", true), "new public assembler has no private, truth or implied-consent authority")
+    var world_intro_view: Dictionary = game.playable_presentation.world_intro()
+    _expect(world_intro_view.get("ok", false) and game.get_presentation_text() == world_intro_view["text"], "scene intro renders exactly reviewed assembler output")
+    game.player.position = Vector2(88, 188)
+    _expect(game._nearest_station_id() == "public_record", "live nearest station includes exact radius equality via traversal policy")
+    game.player.position = Vector2(87, 188)
+    _expect(game._nearest_station_id().is_empty(), "live nearest station rejects out-of-range position")
+    game.player.position = geometry["player_spawn"]
+    _expect(game.player.position == Vector2(92, 286), "reset spawn is exact source-world metadata")
     _expect(game.diagnostic_catalog.list_codes().size() == 16, "all sixteen reviewed diagnostics available")
     var initial_view: Dictionary = game.get_hud_view()
     _expect(initial_view.get("valid", false), "initial HUD model view is valid")
