@@ -1,0 +1,99 @@
+name: Verify exact diagnostic-contract smoke for Issue 1487
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-diagnostic-contract-1487.yml'
+      - 'docs/planning/handoffs/issue-1487.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-diagnostic-contract-1487-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  exact-diagnostic-contract-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact frozen remediation head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 07ccfaf655acc103436490edf703cb4b194b87f0
+          fetch-depth: 1
+
+      - name: Verify frozen remediation and toolchain identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "07ccfaf655acc103436490edf703cb4b194b87f0"
+          test "$(git hash-object game/components/diagnostics/diagnostic_catalog.gd)" = "f37d93783dd9d206ba6d7a4bd050c9ff8c3ad1b3"
+          test "$(git hash-object game/components/diagnostics/diagnostic_catalog_smoke.gd)" = "dd73c221d6764d734f630c0bef389c22eaa0d133"
+          test "$(git hash-object docs/planning/handoffs/issue-1481.md)" = "d2030d69ac0edc711cd3ea761ad7d28117c0c473"
+          test "$(git hash-object docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json)" = "4a88990ae24768eb4f83a8a1311e2a830834649f"
+          test "$(git hash-object game/project.godot)" = "9da4153ed378945ef5e9634e0e5cae48289845d8"
+
+      - name: Resolve reviewed Godot artifact lock
+        id: godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json").read_text())
+          entry = lock["entries"]["godot_4.7.1_linux_x86_64_zip"]
+          expected_sha = "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba"
+          if entry["version"] != "4.7.1-stable":
+              raise SystemExit(f"unexpected reviewed Godot version: {entry['version']}")
+          if entry["sha256"] != expected_sha:
+              raise SystemExit(f"unexpected reviewed Godot sha256: {entry['sha256']}")
+          print(f"url={entry['url']}")
+          print(f"sha256={entry['sha256']}")
+          print(f"version={entry['version']}")
+          PY
+
+      - name: Acquire exact reviewed Godot 4.7.1 artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.godot.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Run exact frozen diagnostic-contract smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p issue-1487-evidence
+          godot_bin="$GITHUB_WORKSPACE/.godot-bin/Godot_v4.7.1-stable_linux.x86_64"
+          version="$("$godot_bin" --version)"
+          printf 'godot_version=%s\n' "$version" | tee issue-1487-evidence/engine.txt
+          [[ "$version" =~ ^4\.7\.1\.stable ]]
+          "$godot_bin" --headless --path game --script res://components/diagnostics/diagnostic_catalog_smoke.gd 2>&1 | tee issue-1487-evidence/diagnostic-contract-smoke.log
+          grep -Fx 'EVERFIELD_DIAGNOSTIC_CONTRACT_SMOKE_PASS' issue-1487-evidence/diagnostic-contract-smoke.log
+          printf 'remediation_head=%s\nworkflow_pr_head=%s\ncomponent_blob=%s\nsmoke_blob=%s\nremediation_handoff_blob=%s\nlock_blob=%s\nproject_blob=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\nsentinel=%s\n' \
+            "$(git rev-parse HEAD)" \
+            '${{ github.event.pull_request.head.sha }}' \
+            "$(git hash-object game/components/diagnostics/diagnostic_catalog.gd)" \
+            "$(git hash-object game/components/diagnostics/diagnostic_catalog_smoke.gd)" \
+            "$(git hash-object docs/planning/handoffs/issue-1481.md)" \
+            "$(git hash-object docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json)" \
+            "$(git hash-object game/project.godot)" \
+            "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            '${{ steps.godot.outputs.version }}' '${{ steps.godot.outputs.sha256 }}' \
+            'EVERFIELD_DIAGNOSTIC_CONTRACT_SMOKE_PASS' \
+            > issue-1487-evidence/run-identity.txt
+
+      - name: Upload exact runtime evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: issue-1487-diagnostic-contract-${{ github.run_id }}-${{ github.run_attempt }}
+          path: issue-1487-evidence/
+          if-no-files-found: error
+          retention-days: 30
