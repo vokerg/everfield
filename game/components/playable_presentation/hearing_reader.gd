@@ -41,7 +41,7 @@ func compose(source: Variant, route: String = "") -> Dictionary:
             if who.is_empty() or beat.get("route_scope") != route or typeof(beat.get("text")) != TYPE_STRING or String(beat["text"]).is_empty():
                 return _bad("unknown speaker or missing route beat")
             lines.append("%s — %s" % [who, beat["text"]])
-    return {"ok": true, "text": "\n".join(lines), "lines": lines.duplicate(true), "error": ""}
+    return {"ok": true, "text": "\n".join(PackedStringArray(lines)), "lines": lines.duplicate(true), "error": ""}
 
 func _participant(source: Variant, id: String, ref: String) -> Dictionary:
     var raw: Variant = source.get_participant(id)
