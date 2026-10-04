@@ -48,21 +48,30 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     if player == null:
         return
-
-    var direction := Vector2.ZERO
-    if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
-        direction.x -= 1.0
-    if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
-        direction.x += 1.0
-    if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
-        direction.y -= 1.0
-    if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
-        direction.y += 1.0
-
+    # Controller owns physical Input; the reviewed policy owns mapping,
+    # direction cancellation, normalization, bounds and movement validation.
+    var mapping: Dictionary = TraversalPolicy.key_mapping()
+    var intents: Dictionary = {}
+    for intent in ["left", "right", "up", "down"]:
+        var keys: Array = mapping.get(intent, [])
+        if keys.size() != 2:
+            push_error("[EF-TRAVERSAL-INVALID] Invalid key mapping.")
+            return
+        intents[intent] = Input.is_key_pressed(keys[0]) or Input.is_key_pressed(keys[1])
+    var sampled: Dictionary = TraversalPolicy.direction_from_intents(intents)
+    if not sampled.get("ok", false):
+        push_error("[EF-TRAVERSAL-INVALID] Invalid sampled key intents.")
+        return
+    var direction: Vector2 = sampled.get("direction", Vector2.ZERO)
     if direction != Vector2.ZERO:
-        player.position += direction.normalized() * PLAYER_SPEED * delta
-        player.position.x = clampf(player.position.x, WORLD_BOUNDS.position.x, WORLD_BOUNDS.position.x + WORLD_BOUNDS.size.x)
-        player.position.y = clampf(player.position.y, WORLD_BOUNDS.position.y, WORLD_BOUNDS.position.y + WORLD_BOUNDS.size.y)
+        var layout: Dictionary = station_world.get_layout()
+        var movement: Dictionary = TraversalPolicy.advance(
+            player.position, direction, delta, PLAYER_SPEED, layout["world_bounds"]
+        )
+        if not movement.get("ok", false):
+            push_error("[EF-TRAVERSAL-INVALID] Invalid movement step.")
+            return
+        player.position = movement["position"]
         _refresh_nearby_hint()
 
 func _unhandled_key_input(event: InputEvent) -> void:
