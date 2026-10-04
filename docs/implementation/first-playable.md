@@ -1,6 +1,6 @@
 # Everfield bounded first playable — Accounts at the Old Works
 
-This tranche is the bounded executable Godot implementation authorized by repaired readiness verifier #1367 and extended by fan-in #1414. It consumes only clean-reviewed, squash-published noncanonical component packets on `main`; integrating them into the playable does not make their content canonical.
+This tranche is the bounded executable Godot implementation authorized by repaired readiness verifier #1367, extended by presentation fan-in #1414, and structurally modularized under Issue #1464. It consumes only clean-reviewed, squash-published noncanonical component packets on `main`; using them in the playable does not make their content canonical. Component linkage in this branch remains review-gated and noncanonical until separately authorized squash publication.
 
 ## Run
 
@@ -33,6 +33,16 @@ The playable now consumes the published presentation components directly rather 
 
 The presentation layer is visibly rendered in the playable but remains inert: the components do not mutate game state or grant canonical, truth-resolution, representation, consent, or release authority.
 
+## Modularized playable architecture (Issue #1464)
+
+The live `game/main.gd` controller now delegates three contracts previously coded inline, without changing the bounded route choices:
+
+- **Transient session state and ordered history** are owned by `game/components/session_state/session_state.gd` (published Producer #1461). Every state write uses the component's bounded `set_field` API; history uses `append_history`, and external `get_game_state()` results are deep-copy `snapshot()` values. The controller cannot mutate an independently returned snapshot to change live state.
+- **Fail-closed observability** is owned by `game/components/diagnostics/diagnostic_catalog.gd` (current-main-corrected Producer #1481, required clean Re-review #1490). The controller supplies stable `EF-*` codes and, for dynamic errors, typed `station_id` or `choice` context. The catalog supplies the message and severity. Missing/unknown codes or malformed context remain errors, never successful diagnostics.
+- **Objective/status presentation** is derived by `game/components/hud_objectives/hud_objective_model.gd` (Producer #1463, required clean Re-review #1496 and exact runtime verifier #1493) from immutable snapshots and optional station titles. The model decides phase, objective, status and fail-closed `INVALID_STATE`; the controller only displays its output, adds the original reset hint on completion, and retains the nearby interaction hint.
+
+All three source/smoke components are already separately squash-published on `main`; this change does not edit their component bytes. No session serialization, durable state, scene authority, new narrative outcome or historical truth selection is introduced. Original diagnostic Producer #1462 and Review #1475 remain non-integrable, `CHANGES_NEEDED`; the corrected #1481/#1490 chain is the sole integrated diagnostic source.
+
 ## Implemented loop
 
 The player moves through one concrete Old Works scene and can:
@@ -48,7 +58,7 @@ The loop preserves `MYS:FRAGMENTATION-CAUSE` as `UNKNOWN_BY_DESIGN` on every rou
 
 ## Failure diagnostics
 
-Guard failures remain visible in both the HUD and stderr with stable `EF-*` codes, including investigation, negotiation, commitment, interaction-range, and unknown-surface failures. The state-machine smoke intentionally exercises fail-closed guards and exits nonzero on any invariant break.
+Guard failures remain visible in the diagnostic UI and error output with stable `EF-*` codes, including investigation, negotiation, commitment, interaction-range, and unknown-surface failures. Codes, 16 current-main-compatible message contracts and error classification are now resolved by the independently reviewed catalog rather than duplicated in the controller. The state-machine smoke intentionally exercises fail-closed guards and exits nonzero on invariant breaks.
 
 ## Automated coverage
 
@@ -63,11 +73,15 @@ Guard failures remain visible in both the HUD and stderr with stable `EF-*` code
 - public-record + explicit truth-deferral + records-first completes without fabricating material-trace evidence;
 - both committed paths keep the world mystery `UNKNOWN_BY_DESIGN`;
 - commitment is blocked before negotiation;
-- unknown interaction surfaces fail visibly.
+- unknown interaction surfaces fail visibly;
+- component instances are present, and session snapshots and nested history cannot be mutated by callers;
+- invalid mystery/history writes, missing diagnostic context and malformed HUD model state fail closed;
+- both corrected `EF-INVESTIGATE-*` diagnostics come from the exact current-main catalog;
+- HUD phase transitions track record, corroboration-or-deferral, hearing, commitment, deferral/reopening and completion.
 
 `game/tests/movement_interaction_smoke.gd` independently verifies real input-driven movement, minimum/maximum world clamps, proximity interaction, and fail-closed unknown interactions.
 
-The primary CI workflow downloads the exact Godot artifact from the reviewed repository lock, verifies its SHA-256, imports the project, runs **both** the state-machine and movement/proximity smokes, and uploads run identity, logs, and implementation hashes. This test evidence does not create production/provider/release or accessibility-certification authority.
+The primary PR CI workflow downloads exact hash-locked Godot 4.7.1, imports the candidate project, and runs five fail-fast isolated test suites: `res://smoke_test.gd` (integrated playable/presentation), `res://tests/movement_interaction_smoke.gd` (real input/proximity/clamps), `res://components/session_state/session_state_smoke.gd`, `res://components/diagnostics/diagnostic_catalog_smoke.gd`, and `res://components/hud_objectives/hud_objective_model_smoke.gd`. It requires each component's exact PASS sentinel, uploads suite logs and run/head identity, and hashes each published source/smoke payload plus the shared integration paths. A green workflow is executable evidence for independent review, not a substitute for clean review, a separate squash integration authorization, production/provider/release, or accessibility certification.
 
 ## Scope intentionally deferred
 
