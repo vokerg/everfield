@@ -1,0 +1,13 @@
+# Issue #1474 Handoff — HUD objective/status review
+
+Disposition: CHANGES_NEEDED; 0 BLOCKER, 1 MAJOR (`MISSING_REQUIRED_EXACT_HUD_RUNTIME_EVIDENCE`), 0 correction-requiring MINOR. No clean review or integration authority.
+
+Canonical binding: #1147 comment `5675066392`; program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`; activation `87c85cecfa9a2ffa464c4b36816a138bf41441af`. Owner claim: #1474 comment `5977111702`. Review branch: `planning/issue-1474` from main `9096e84612e7445e1d2285b42578fb4f5cfd5f07`.
+
+Frozen producer: #1463 terminal `5972503707`, draft PR #1473 at `e2be96598dca388b84c70077b7d9b304f9a9fb1f`. Exact blobs: model `59480c7b8c7f3f8161cd261fb195704f8299679f`, smoke `821785fd941b6865e543c2bbb09fd643fcc67c1c`, handoff `2d4c9fa5039a19c0c5400458a9383747953b2b37`. Only three owned paths changed; producer files are read-only. Source `game/main.gd` `b96659a1cf461a96934666293aecaa565e68579b` and current `4ea6ab02de1fa8bfde2d976b0f3f551dc8f40b97` have compatible objective phases. Since claim, `main` also incorporated disjoint session-state files; HUD root and main GDScript remain unchanged.
+
+Review report: `docs/planning/wave-2/reviews/implementation-demand-hud-objectives-01-review.md`, blob `ad0b18d1129e19b9d086745a0e54a53df8a86a28`. The independent static review found pure bounded RefCounted presentation, correct record/trace/explicit-deferral routes, hearing/commitment/defer/reopen paths, bounded outcomes, immutable caller dictionaries, `UNKNOWN_BY_DESIGN`, and fail-closed invalid states. No static correction found. The only producer-head Actions run `37146421472` / `111271201871` did not execute the isolated HUD smoke, so success of that ordinary smoke is not sufficient to clear review.
+
+Required successor: Issue #1493, `IMPLEMENTATION-DEMAND-HUD-OBJECTIVES-01-REM-01`, a verification-only frozen-producer test route activated by the CHANGES_NEEDED terminal. It must use locked Godot 4.7.1, engine-lock blob `4a88990ae24768eb4f83a8a1311e2a830834649f`, project blob `9da4153ed378945ef5e9634e0e5cae48289845d8`, archive SHA256 `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`, execute `godot --headless --path game --script res://components/hud_objectives/hud_objective_model_smoke.gd`, and require exit 0, sentinel `EVERFIELD_HUD_OBJECTIVE_MODEL_SMOKE_PASS`, exact-head run/job/log/artifact. A PASS must route a separate fresh independent re-review, not self-upgrade this CHANGES_NEEDED record.
+
+Review only; no publication, integration, gameplay, persistence, truth/canon resolution, accessibility, provider/legal, production/release, or canonical authority.
