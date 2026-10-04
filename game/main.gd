@@ -362,101 +362,31 @@ func _station_display(station_id: String, fallback: Dictionary) -> Dictionary:
     return display
 
 func _show_world_intro() -> void:
-    var lines: Array = [
-        old_works_presentation.get_text("OW_WORLD_TITLE"),
-        old_works_presentation.get_text("OW_WORLD_SUBTITLE"),
-        old_works_presentation.get_text("OW_WORLD_ENTRY"),
-    ]
-    _set_presentation(_join_lines(lines))
+    _show_public_view(playable_presentation.world_intro())
 
 func _show_old_works_station(station_id: String) -> void:
-    var station: Dictionary = old_works_presentation.get_station(station_id)
-    if station.is_empty():
-        _set_presentation("Presentation unavailable for %s." % station_id)
-        return
-
-    var lines: Array = []
-    for key in ["title_id", "prompt_id"]:
-        var text_id := String(station.get(key, ""))
-        if not text_id.is_empty():
-            lines.append(old_works_presentation.get_text(text_id))
-    for body_id in station.get("body_ids", []):
-        lines.append(old_works_presentation.get_text(String(body_id)))
-    for key in ["exit_id", "result_id"]:
-        var text_id := String(station.get(key, ""))
-        if not text_id.is_empty():
-            lines.append(old_works_presentation.get_text(text_id))
-    _set_presentation(_join_lines(lines))
+    _show_public_view(playable_presentation.old_works_station(station_id))
 
 func _show_hearing_opening() -> void:
-    var maelin: Dictionary = commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_MAELIN_01")
-    var selka: Dictionary = commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_SELKA_01")
-    var maelin_line: Dictionary = commons_hearing_presentation.get_line("OW_HEARING_OPEN_MAELIN_01")
-    var selka_line: Dictionary = commons_hearing_presentation.get_line("OW_HEARING_OPEN_SELKA_01")
-    var lines: Array = [
-        "Commons Hearing",
-        "%s — %s" % [maelin.get("display_name", "Maelin Sor"), maelin_line.get("text", "")],
-        "%s — %s" % [selka.get("display_name", "Selka Vey"), selka_line.get("text", "")],
-        "Refusal, deferral, and nonalignment remain legal outcomes.",
-    ]
-    _set_presentation(_join_lines(lines))
-
-func _hearing_route_text(route_scope: String) -> String:
-    var beat_ids: Array = []
-    match route_scope:
-        "repair_pilot":
-            beat_ids = ["OW_HEARING_REPAIR_MAELIN_01", "OW_HEARING_REPAIR_SELKA_01"]
-        "records_first":
-            beat_ids = ["OW_HEARING_RECORDS_MAELIN_01", "OW_HEARING_RECORDS_SELKA_01"]
-        "defer":
-            beat_ids = ["OW_HEARING_DEFER_MAELIN_01", "OW_HEARING_DEFER_SELKA_01"]
-        _:
-            return ""
-
-    var lines: Array = ["Commons Hearing — %s" % route_scope.replace("_", " ")]
-    for beat_id in beat_ids:
-        var beat: Dictionary = commons_hearing_presentation.get_line(String(beat_id))
-        var speaker := _speaker_name(String(beat.get("speaker_ref", "")))
-        lines.append("%s — %s" % [speaker, beat.get("text", "")])
-    return _join_lines(lines)
-
-func _speaker_name(character_ref: String) -> String:
-    if character_ref == "CHAR:maelin_sor":
-        return String(commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_MAELIN_01").get("display_name", "Maelin Sor"))
-    if character_ref == "CHAR:selka_vey":
-        return String(commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_SELKA_01").get("display_name", "Selka Vey"))
-    return "Unknown participant"
-
-func _consequence_text(event_id: String) -> String:
-    var event: Dictionary = consequence_presentation.get_event(event_id)
-    if event.is_empty():
-        return "Consequence presentation unavailable for %s." % event_id
-    var lines: Array = []
-    for text_id in event.get("ids", []):
-        lines.append(consequence_presentation.get_text(String(text_id)))
-    return _join_lines(lines)
+    _show_public_view(playable_presentation.hearing_opening())
 
 func _show_hearing_and_consequence(route_scope: String, event_id: String) -> void:
-    _set_presentation("%s\n\n%s" % [_hearing_route_text(route_scope), _consequence_text(event_id)])
+    _show_public_view(playable_presentation.hearing_and_consequence(route_scope, event_id))
 
 func _show_consequence(event_id: String) -> void:
-    _set_presentation(_consequence_text(event_id))
+    _show_public_view(playable_presentation.consequence(event_id))
+
+func _show_public_view(view: Dictionary) -> void:
+    # Never turn missing, malformed or unauthorized public text into success.
+    if not view.get("ok", false) or typeof(view.get("text")) != TYPE_STRING or String(view.get("text", "")).is_empty():
+        _set_presentation("[EF-PRESENTATION-INVALID] Reviewed public text unavailable.")
+        return
+    _set_presentation(String(view["text"]))
 
 func _set_presentation(text: String) -> void:
     if presentation_label != null:
         presentation_label.text = text
     print("[EVERFIELD][PRESENTATION] %s" % text.replace("\n", " | "))
-
-func _join_lines(lines: Array) -> String:
-    var result := ""
-    for line in lines:
-        var text := String(line)
-        if text.is_empty():
-            continue
-        if not result.is_empty():
-            result += "\n"
-        result += text
-    return result
 
 func _refresh_nearby_hint() -> void:
     var station_id := _nearest_station_id()
