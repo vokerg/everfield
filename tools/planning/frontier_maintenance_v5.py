@@ -295,39 +295,50 @@ def v5_resolved_transition_generations(
     return consumed
 
 
-def explicit_successor_issue_number(route: str | None) -> int | None:
-    """Return one unambiguous issue number explicitly encoded by a route."""
-    if not route:
-        return None
-    matches: set[int] = set()
+def explicit_successor_issue_numbers(route: str | None) -> tuple[int, ...]:
+    """Parse exact successor IDs, including bounded multi-successor routes."""
+    if not route or re.fullmatch(r"[A-Z][A-Z0-9_]*", route) is None:
+        return ()
+    if route.startswith("TWO_INDEPENDENT_COMPONENT_PRODUCERS_"):
+        match = re.fullmatch(
+            r"TWO_INDEPENDENT_COMPONENT_PRODUCERS_(\d+)_(\d+)_"
+            r"THEN_BLOCKED_SHARED_FANIN_(\d+)", route
+        )
+        if match is None:
+            return ()
+        numbers = tuple(int(value) for value in match.groups())
+        return numbers if all(x > 0 for x in numbers) and len(set(numbers)) == 3 else ()
+    if re.search(r"(?:^|_)ISSUE_(?!\d)", route):
+        return ()
+    numbers: set[int] = set()
     for pattern in EXPLICIT_SUCCESSOR_ROUTE_PATTERNS:
-        matches.update(int(value) for value in pattern.findall(route))
-    return next(iter(matches)) if len(matches) == 1 else None
+        numbers.update(int(x) for x in pattern.findall(route))
+    return tuple(sorted(numbers)) if numbers and 0 not in numbers else ()
+
+
+def explicit_successor_issue_number(route: str | None) -> int | None:
+    """Legacy single-target API; ambiguous multi-target routes return None."""
+    numbers = explicit_successor_issue_numbers(route)
+    return numbers[0] if len(numbers) == 1 else None
 
 
 def explicit_successor_generation_consumed(
     source: base.OperationalRecord,
     issues_by_number: dict[int, dict[str, Any]],
 ) -> bool:
-    """Recognize a route-declared successor without inventing a graph edge.
-
-    The route must encode exactly one issue number and that issue must already
-    exist as a trusted/eligible non-PR, non-transition issue. This only proves
-    liveness materialization; it does not grant any authority to the successor.
-    """
-    successor_number = explicit_successor_issue_number(source.route)
-    if successor_number is None:
+    """All explicit successors must exist as trusted eligible non-wrapper issues."""
+    numbers = explicit_successor_issue_numbers(source.route)
+    if not numbers:
         return False
-    successor = issues_by_number.get(successor_number)
-    if successor is None:
-        return False
-    if "pull_request" in successor or v2.factory_transition_source(successor) is not None:
-        return False
-    if not v2.successor_issue_eligible(successor):
-        return False
-    print(
-        f"route {source.route}: explicit trusted successor issue #{successor_number} already exists"
-    )
+    for number in numbers:
+        successor = issues_by_number.get(number)
+        if successor is None:
+            return False
+        if "pull_request" in successor or v2.factory_transition_source(successor) is not None:
+            return False
+        if not v2.successor_issue_eligible(successor):
+            return False
+    print(f"route {source.route}: explicit trusted successors {numbers} already exist")
     return True
 
 
@@ -984,6 +995,47 @@ def self_test() -> None:
     assert not explicit_successor_generation_consumed(source, {})
     dead_successor = dict(trusted_successor, state="closed", state_reason="duplicate")
     assert not explicit_successor_generation_consumed(source, {917: dead_successor})
+
+    two_route = "ISSUE_1547_BLOCKING_EXACT_SMOKE_THEN_ISSUE_1548_REQUIRED_REVIEW"
+    three_route = (
+        "TWO_INDEPENDENT_COMPONENT_PRODUCERS_1543_1544_"
+        "THEN_BLOCKED_SHARED_FANIN_1545"
+    )
+    assert explicit_successor_issue_numbers(two_route) == (1547, 1548)
+    assert explicit_successor_issue_number(two_route) is None
+    assert explicit_successor_issue_numbers(three_route) == (1543, 1544, 1545)
+    assert not explicit_successor_issue_numbers(
+        "TWO_INDEPENDENT_COMPONENT_PRODUCERS_1543_1544_THEN_UNKNOWN_1545"
+    )
+    assert not explicit_successor_issue_numbers("ISSUE_BAD_THEN_ISSUE_1548")
+    assert not explicit_successor_issue_numbers("ISSUE_0_THEN_ISSUE_1548")
+    two_source = source.__class__(**{**vars(source), "route": two_route})
+    trusted_two = {i: dict(trusted_successor, number=i) for i in (1547, 1548)}
+    assert explicit_successor_generation_consumed(two_source, trusted_two)
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547]}
+    )
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547],
+                     1548: dict(trusted_two[1548], state="closed",
+                                state_reason="duplicate")}
+    )
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547],
+                     1548: dict(trusted_two[1548], user={"login": "stranger"},
+                                author_association="NONE")}
+    )
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547],
+                     1548: dict(trusted_two[1548],
+                                title="[PLAN-v1][FACTORY-TRANSITION-42] Wrapper")}
+    )
+    three_source = source.__class__(**{**vars(source), "route": three_route})
+    trusted_three = {i: dict(trusted_successor, number=i) for i in (1543, 1544, 1545)}
+    assert explicit_successor_generation_consumed(three_source, trusted_three)
+    assert not explicit_successor_generation_consumed(
+        three_source, {1543: trusted_three[1543], 1544: trusted_three[1544]}
+    )
 
     generation = (10, 2, "EXISTING_REQUIRED_REVIEW_917")
     wrapper = {
