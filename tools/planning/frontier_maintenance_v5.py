@@ -313,7 +313,17 @@ def explicit_successor_issue_numbers(route: str | None) -> tuple[int, ...]:
     numbers: set[int] = set()
     for pattern in EXPLICIT_SUCCESSOR_ROUTE_PATTERNS:
         numbers.update(int(x) for x in pattern.findall(route))
-    return tuple(sorted(numbers)) if numbers and 0 not in numbers else ()
+    if not numbers or 0 in numbers:
+        return ()
+    if len(numbers) > 1:
+        # Do not mistake multiple provenance IDs for multiple successors.
+        # The only generic multi-target shape allowed is ISSUE_N...THEN_ISSUE_M
+        # with every parsed target named as an ISSUE token. Other mixed
+        # grammars must go to explicit recovery instead of silently vanishing.
+        named_issues = re.findall(r"(?:^|_)ISSUE_(\d+)(?=_|$)", route)
+        if len(named_issues) != len(numbers) or "_THEN_ISSUE_" not in route:
+            return ()
+    return tuple(sorted(numbers))
 
 
 def explicit_successor_issue_number(route: str | None) -> int | None:
@@ -1009,6 +1019,8 @@ def self_test() -> None:
     )
     assert not explicit_successor_issue_numbers("ISSUE_BAD_THEN_ISSUE_1548")
     assert not explicit_successor_issue_numbers("ISSUE_0_THEN_ISSUE_1548")
+    assert not explicit_successor_issue_numbers("ISSUE_1547_AFTER_INTEGRATION_819")
+    assert not explicit_successor_issue_numbers("REVIEW_917_AND_REMEDIATION_909")
     two_source = source.__class__(**{**vars(source), "route": two_route})
     trusted_two = {i: dict(trusted_successor, number=i) for i in (1547, 1548)}
     assert explicit_successor_generation_consumed(two_source, trusted_two)
