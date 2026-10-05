@@ -25,6 +25,7 @@ func _run() -> void:
     _expect(game.session_state != null, "published bounded session-state component wired")
     _expect(game.diagnostic_catalog != null, "published diagnostic catalog component wired")
     _expect(game.hud_objective_model != null, "published HUD objective/status component wired")
+    _expect(game.has_method("_refresh_nearby_hint") and game.has_method("_unhandled_key_input"), "new source-frozen feedback and command dispatch seam is callable")
 
     _expect(game.station_world is RefCounted, "reviewed station-world metadata provider is wired")
     _expect(game.playable_presentation is RefCounted, "reviewed public narrative assembler is wired")
@@ -181,6 +182,43 @@ func _run() -> void:
     _expect((game.get_node("Diagnostic") as Label).text == game.diagnostic_catalog.format_line("EF-INTERACT-UNKNOWN", {"station_id": "unknown_station"}), "unknown interaction derives error-classified contextual catalog diagnostic")
     _expect(not game.choose_commitment("unsupported"), "unsupported choice before negotiation cannot bypass hearing gate")
     _expect((game.get_node("Diagnostic") as Label).text == game.diagnostic_catalog.format_line("EF-GATE-NEGOTIATION"), "early unsupported choice remains negotiation-gated")
+
+    # Assert real Label/HUD arbitration against the reviewed provider, rather
+    # than accepting only the isolated RefCounted unit smoke assertions.
+    var live_objective := game.get_node_or_null("Objective") as Label
+    _expect(live_objective != null, "actual scene objective Label available for near/far arbitration")
+    if live_objective != null:
+        game.reset_slice()
+        var record_display: Dictionary = game._station_display(
+            "public_record", game.station_world.get_station("public_record")
+        )
+        var exact_hint: String = "[E] %s — %s" % [
+            record_display["title"], record_display["hint"]
+        ]
+        game.player.position = Vector2(88, 188)
+        game._refresh_nearby_hint()
+        _expect(live_objective.text == exact_hint, "radius 88 boundary displays exactly approved source title and hint")
+        game.player.position = Vector2(87, 188)
+        game._refresh_nearby_hint()
+        _expect(live_objective.text == String(game.get_hud_view()["objective"]),
+            "outside radius 88 restores current reviewed phase objective without stale E")
+        game.player.position = Vector2(176, 188)
+        game._refresh_nearby_hint()
+        _expect(live_objective.text == exact_hint, "returning inside radius restores identical approved E prompt")
+        _expect(game.interact_with("public_record"), "nearby policy does not replace public interaction")
+        _expect(game.interact_with("defer_conclusion"), "nearby policy preserves explicit truth deferral")
+        _expect(game.interact_with("commons_hearing"), "nearby policy leaves hearing gate intact")
+        _expect(game.choose_commitment("records_first"), "nearby policy leaves approved records-first consent gate intact")
+        _expect(game.interact_with("project_table"), "nearby policy leaves bounded completion intact")
+        game._refresh_nearby_hint()
+        _expect(live_objective.text == String(game.get_hud_view()["objective"]) + " Press R to reset.",
+            "COMPLETE wins over nearby E with exact pre-existing reset instruction")
+        _expect(not live_objective.text.contains("[E]"), "completed visible label never implies another station action")
+        _expect(game.get_game_state().get("mystery_state") == "UNKNOWN_BY_DESIGN",
+            "new live HUD hint path cannot resolve private mystery")
+        game.reset_slice()
+        _expect(live_objective.text == String(game.get_hud_view()["objective"]),
+            "scene reset restores reviewed phase with no E or stale R suffix")
 
     _finish()
 

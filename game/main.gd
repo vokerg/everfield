@@ -9,6 +9,8 @@ const HudObjectiveModel = preload("res://components/hud_objectives/hud_objective
 const StationWorld = preload("res://components/station_world/station_world.gd")
 const TraversalPolicy = preload("res://components/traversal_policy/traversal_policy.gd")
 const PlayablePresentation = preload("res://components/playable_presentation/playable_presentation.gd")
+const InteractionFeedbackPolicy = preload("res://components/interaction_feedback/interaction_feedback_policy.gd")
+const ActionCommandPolicy = preload("res://components/action_commands/action_command_policy.gd")
 
 const PLAYER_SPEED := 230.0
 const INTERACT_RADIUS := 88.0
@@ -75,22 +77,17 @@ func _process(delta: float) -> void:
         _refresh_nearby_hint()
 
 func _unhandled_key_input(event: InputEvent) -> void:
-    if not (event is InputEventKey):
+    # The published pure decoder preserves logical keycode, pressed, echo and
+    # exact E/1/2/3/R meanings. Dispatch and session gates remain here.
+    var command: Dictionary = ActionCommandPolicy.decode_event(event)
+    if not command.get("ok", false):
         return
-    var key_event := event as InputEventKey
-    if not key_event.pressed or key_event.echo:
-        return
-
-    match key_event.keycode:
-        KEY_E:
+    match String(command.get("action", "")):
+        "interact":
             interact_nearest()
-        KEY_1:
-            choose_commitment("repair_pilot")
-        KEY_2:
-            choose_commitment("records_first")
-        KEY_3:
-            choose_commitment("defer")
-        KEY_R:
+        "choose_commitment":
+            choose_commitment(String(command.get("choice", "")))
+        "reset":
             reset_slice()
 
 func _build_world() -> void:
@@ -389,20 +386,27 @@ func _set_presentation(text: String) -> void:
     print("[EVERFIELD][PRESENTATION] %s" % text.replace("\n", " | "))
 
 func _refresh_nearby_hint() -> void:
-    var station_id := _nearest_station_id()
-    if station_id.is_empty():
-        return
-    var station_data: Dictionary = station_world.get_station(station_id)
-    var display := _station_display(station_id, station_data)
-    objective_label.text = "[E] %s — %s" % [display["title"], display["hint"]]
+    # Movement must arbitrate again even after walking out of range. The old
+    # early return left the most recent [E] prompt visibly stale.
+    _refresh_hud()
 
 func _refresh_hud() -> void:
     if objective_label == null or status_label == null:
         return
     var view: Dictionary = get_hud_view()
-    objective_label.text = String(view.get("objective", "[EF-HUD-STATE] Invalid bounded session state."))
-    if view.get("phase", "") == "COMPLETE":
-        objective_label.text += " Press R to reset."
+    var station_id := _nearest_station_id()
+    var display: Dictionary = {}
+    if not station_id.is_empty():
+        # Both IDs and public text come from existing reviewed providers;
+        # malformed/unknown nearest data never authorizes a new action.
+        var station_data: Dictionary = station_world.get_station(station_id)
+        display = _station_display(station_id, station_data)
+    var objective: Dictionary = InteractionFeedbackPolicy.objective_view(
+        view, station_id, display, station_world.get_station_ids()
+    )
+    objective_label.text = String(objective.get(
+        "objective", "[EF-HUD-STATE] Invalid bounded session state. Progress is not inferred."
+    ))
     status_label.text = String(view.get("status", "Mystery:UNKNOWN_BY_DESIGN"))
 
 func _emit_diagnostic(code: String, context: Dictionary = {}) -> void:

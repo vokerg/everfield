@@ -12,6 +12,7 @@ on:
       - 'docs/planning/handoffs/issue-1414.md'
       - 'docs/planning/handoffs/issue-1464.md'
       - 'docs/planning/handoffs/issue-1507.md'
+      - 'docs/planning/handoffs/issue-1545.md'
   workflow_dispatch:
 
 permissions:
@@ -74,6 +75,10 @@ jobs:
           test "$(git hash-object game/components/playable_presentation/consequence_reader.gd)" = '3cb9cb6887508f94fba865ebc428ba43fbdd38b2'
           test "$(git hash-object game/components/playable_presentation/playable_presentation_smoke.gd)" = 'ef2628c4d691e753316fe81d218e1534e6e37a5f'
           test "$(git hash-object game/main.tscn)" = '02b943321c258bb807f9496c7a270221df112b31'
+          test "$(git hash-object game/components/interaction_feedback/interaction_feedback_policy.gd)" = '0f3b32c254f00f27338202fa7f0dd53c6f2efcf8'
+          test "$(git hash-object game/components/interaction_feedback/interaction_feedback_smoke.gd)" = '90c3608288426d29fefec8e7248074ab2ca4b969'
+          test "$(git hash-object game/components/action_commands/action_command_policy.gd)" = 'd5422813a2e2bd938d9776c3f2cd12a058a9ac10'
+          test "$(git hash-object game/components/action_commands/action_command_smoke.gd)" = 'b9ff3fdfe9feea28c980e624324f6a35d45254fd'
 
       - name: Run playable, movement and published-component smokes
         shell: bash
@@ -82,6 +87,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p first-playable-evidence
+          test "$("$GODOT_BIN" --version)" = '4.7.1.stable.official.a13da4feb'
           bash tools/implementation/run_godot_smoke.sh 2>&1 | tee first-playable-evidence/state-machine.log
           bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee first-playable-evidence/movement-interaction.log
           "$GODOT_BIN" --headless --path game --script res://components/session_state/session_state_smoke.gd 2>&1 | tee first-playable-evidence/session-state.log
@@ -96,6 +102,14 @@ jobs:
           grep -Fx 'EVERFIELD_TRAVERSAL_POLICY_SMOKE_PASS' first-playable-evidence/traversal-policy.log
           "$GODOT_BIN" --headless --path game --script res://components/playable_presentation/playable_presentation_smoke.gd 2>&1 | tee first-playable-evidence/playable-presentation.log
           grep -Fx 'EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_PASS' first-playable-evidence/playable-presentation.log
+          "$GODOT_BIN" --headless --path game --script res://components/interaction_feedback/interaction_feedback_smoke.gd 2>&1 | tee first-playable-evidence/interaction-feedback.log
+          grep -Fx 'EVERFIELD_INTERACTION_FEEDBACK_SMOKE_PASS' first-playable-evidence/interaction-feedback.log
+          ! grep -F '[EF-INTERACTION-FEEDBACK][FAIL]' first-playable-evidence/interaction-feedback.log
+          "$GODOT_BIN" --headless --path game --script res://components/action_commands/action_command_smoke.gd 2>&1 | tee first-playable-evidence/action-commands.log
+          grep -Fx 'EVERFIELD_ACTION_COMMAND_SMOKE_PASS' first-playable-evidence/action-commands.log
+          ! grep -F '[EF-ACTION-COMMAND][FAIL]' first-playable-evidence/action-commands.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\[EF-MOVEMENT-SMOKE\]\[FAIL\]' first-playable-evidence/movement-interaction.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\[EF-SMOKE\]\[FAIL\]' first-playable-evidence/state-machine.log
           checked_out_sha="$(git rev-parse HEAD)"
           printf 'event_sha=%s\nchecked_out_sha=%s\npr_head_sha=%s\nrun_id=%s\nrun_attempt=%s\nreviewed_godot_version=%s\nreviewed_godot_sha256=%s\n' \
             "$GITHUB_SHA" "$checked_out_sha" '${{ github.event.pull_request.head.sha || github.sha }}' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
@@ -126,6 +140,10 @@ jobs:
             game/components/playable_presentation/hearing_reader.gd \
             game/components/playable_presentation/consequence_reader.gd \
             game/components/playable_presentation/playable_presentation_smoke.gd \
+            game/components/interaction_feedback/interaction_feedback_policy.gd \
+            game/components/interaction_feedback/interaction_feedback_smoke.gd \
+            game/components/action_commands/action_command_policy.gd \
+            game/components/action_commands/action_command_smoke.gd \
             > first-playable-evidence/implementation.sha256
 
       - name: Upload smoke evidence
