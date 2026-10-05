@@ -18,7 +18,9 @@ permissions:
   actions: write
 
 concurrency:
-  group: planning-frontier-maintenance
+  # Do not let main-push reconciliation evict pending PR validation.
+  # Live mutating maintenance stays serialized independently.
+  group: planning-frontier-maintenance-${{ github.event_name == 'pull_request' && github.head_ref || 'live' }}
   cancel-in-progress: false
 
 jobs:
