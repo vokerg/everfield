@@ -36,7 +36,7 @@ LIVE_IMPLEMENTATION_TITLE_PATTERNS = (
 )
 IMPLEMENTATION_SOURCE_MARKERS = (
     "IMPLEMENTATION / FIRST_PLAYABLE_BOOTSTRAP",
-    "IMPLEMENTATION_INCREMENT / PLAYABLE_FAN_IN",
+    "IMPLEMENTATION_INCREMENT / ",
 )
 OWNER_PARALLEL_IMPLEMENTATION_DIRECTIVE_ISSUE = 84
 OWNER_PARALLEL_IMPLEMENTATION_DIRECTIVE_COMMENT_ID = 5_968_764_259
@@ -66,7 +66,16 @@ def implementation_source_candidate(issue: dict[str, Any]) -> bool:
         or "-REV-" in title
     ):
         return False
-    return any(marker in body for marker in IMPLEMENTATION_SOURCE_MARKERS)
+    # Modern fan-in integration occurs on a separate, owner-authorized
+    # -INT- issue. It is eligible only after its own trusted squash
+    # INTEGRATION_STATUS(DONE) proves ancestry on current main below.
+    return (
+        any(marker in body for marker in IMPLEMENTATION_SOURCE_MARKERS)
+        or re.match(
+            r"^\[PLAN-v1\]\[IMPLEMENTATION-INCREMENT-[^]]+-INT-\d+\]",
+            title,
+        ) is not None
+    )
 
 
 def is_live_implementation_work(issue: dict[str, Any]) -> bool:
@@ -97,6 +106,34 @@ def consumed_implementation_sources(
         source = implementation_intake_source(issue)
         if source is not None:
             consumed.add(source)
+        # Bounded owner-authored W2 implementation intakes existed before the
+        # generic factory naming scheme. Consume only a directly named
+        # integrated source in the intake's source paragraph; a loose numeric
+        # reference elsewhere is never proof of causal routing.
+        title = issue.get("title") or ""
+        body = issue.get("body") or ""
+        if (
+            title.startswith("[PLAN-v1][W2-IMPLEMENTATION-DEMAND-")
+            and "IMPLEMENTATION_DEMAND_INTAKE" in body
+            and v2.trusted_issue_author(issue)
+            and not (
+                issue.get("state") == "closed"
+                and issue.get("state_reason") in {"duplicate", "not_planned"}
+            )
+        ):
+            source_section = body.split("## Concrete next-demand signals")[0]
+            source_section = source_section.split("## Exact bounded routing deliverable")[0]
+            consumed.update(
+                int(value) for value in re.findall(
+                    r"\bafter #(\d+)'s?\b", source_section
+                )
+            )
+            consumed.update(
+                int(value) for value in re.findall(
+                    r"(?m)^\s*- (?:integrated implementation issue|source integration issue): #(\d+)\b",
+                    source_section,
+                )
+            )
     return consumed
 
 
@@ -111,34 +148,244 @@ def _trusted_unedited_comment(comment: dict[str, Any]) -> bool:
     )
 
 
+def _integration_field(body: str, key: str) -> str | None:
+    """Read exactly one *top-level* authority field inside the YAML capsule.
+
+    Never combine a quoted example, prose, or an extension key with a capsule:
+    the full-field check fails closed on missing/duplicated authority fields.
+    """
+    if not body.startswith("```yaml\n"):
+        return None
+    capsule = body.split("\n```", 1)[0].split("\n", 1)[1]
+    authority = capsule.split("\nextensions:", 1)[0]
+    hits = re.findall(rf"(?m)^{re.escape(key)}:\s*([^\n#]*?)\s*$", authority)
+    if len(hits) != 1:
+        return None
+    result = hits[0].strip().strip("'\"")
+    return result if result and result.lower() not in {"null", "none"} else None
+
+
+def _integration_provenance(
+    issue_number: int, comments: list[dict[str, Any]]
+) -> tuple[str, str, int, str] | None:
+    """Prove a valid winning owner, exact PR and expected single-parent squash.
+
+    This is deliberately a conservative schema-3 subset: incomplete or
+    contested histories must *not* create implementation demand authority.
+    """
+    records = base.operational_records_from_comments(issue_number, comments)
+    terminal_records = [
+        rec for rec in records
+        if rec.kind == "INTEGRATION_STATUS" and rec.state == "DONE"
+    ]
+    if len(terminal_records) != 1:
+        return None
+    rec = terminal_records[0]
+    fields = {
+        key: _integration_field(rec.body, key)
+        for key in (
+            "protocol", "schema", "kind", "state", "merge_method", "main_sha",
+            "pr_number", "canonicality",
+        )
+    }
+    if (
+        fields["protocol"] != "planning-v1"
+        or fields["schema"] != "3"
+        or fields["kind"] != "INTEGRATION_STATUS"
+        or fields["state"] != "DONE"
+        or fields["merge_method"] != "squash"
+        or fields["canonicality"] not in {"NOT_CANONICAL", "NON_CANONICAL_PROVENANCE"}
+    ):
+        return None
+    main_sha = fields["main_sha"]
+    if main_sha is None or not base.SHA40_RE.fullmatch(main_sha):
+        return None
+    pr_number = fields["pr_number"]
+    if pr_number is None or not pr_number.isdigit() or int(pr_number) <= 0:
+        return None
+
+    # The original first-playable publication used a narrowly scoped legacy
+    # externally authorized integration form. Accept only its exact immutable
+    # pinned record and owner directive, never a general EXTERNAL escape.
+    legacy = issue_number == 1343 and rec.comment_id == 5935663772
+    if legacy:
+        source_head = _integration_field(rec.body, "expected_head_sha")
+        parent = _integration_field(rec.body, "observed_pre_merge_main_sha")
+        if (
+            _integration_field(rec.body, "authority_mode") != "EXTERNAL"
+            or _integration_field(rec.body, "external_authorization_comment_id")
+            != "5277825639"
+            or _integration_field(rec.body, "producer_terminal_comment_id")
+            != "5935515528"
+            or _integration_field(rec.body, "review_terminal_comment_id")
+            != "5935624483"
+            or int(pr_number) != 1370
+        ):
+            return None
+    else:
+        keys = (
+            "issue", "mission_id", "branch", "actor_session_id",
+            "authority_mode", "ownership_generation_comment_id",
+            "head_sha", "work_sha", "expected_pre_merge_head_sha",
+            "observed_pre_merge_main_sha", "source_terminal_comment_id",
+            "review_status_comment_id",
+        )
+        f = {key: _integration_field(rec.body, key) for key in keys}
+        if (
+            f["issue"] != str(issue_number)
+            or f["branch"] != f"planning/issue-{issue_number}"
+            or f["authority_mode"] != "OWNER"
+            or rec.declared_issue != issue_number
+            or rec.actor_session_id != f["actor_session_id"]
+            or rec.mission_id != f["mission_id"]
+            or not f["actor_session_id"]
+            or not f["mission_id"]
+            or not f["source_terminal_comment_id"]
+            or not f["review_status_comment_id"]
+            or not all(
+                f[key] and base.SHA40_RE.fullmatch(f[key])
+                for key in ("head_sha", "work_sha")
+            )
+        ):
+            return None
+
+        claim_id = f["ownership_generation_comment_id"]
+        if claim_id is None or not claim_id.isdigit():
+            return None
+        owner = next(
+            (record for record in records if record.comment_id == int(claim_id)),
+            None,
+        )
+        # A recovery without deterministically reconstructed winning intent
+        # is not equivalent to first-winner CLAIM; fail closed, not bypass.
+        claims = [
+            record for record in records
+            if record.kind == "CLAIM"
+            and record.declared_issue == issue_number
+            and record.mission_id == f["mission_id"]
+            and _integration_field(record.body, "branch")
+            == f"planning/issue-{issue_number}"
+            and _integration_field(record.body, "previous_ownership_comment_id")
+            is None
+        ]
+        if (
+            owner is None
+            or owner.kind != "CLAIM"
+            or not claims
+            or owner.comment_id != min(claim.comment_id for claim in claims)
+            or owner.comment_id != int(claim_id)
+            or rec.actor_session_id != owner.actor_session_id
+            or rec.mission_id != owner.mission_id
+            or base.schema3_owner_unexpired_at(owner, records, rec) is not True
+            or _integration_field(owner.body, "base_sha") is None
+            or _integration_field(owner.body, "state") != "IN_PROGRESS"
+            or _integration_field(owner.body, "observed_head_sha")
+            != _integration_field(owner.body, "base_sha")
+            or _integration_field(rec.body, "base_sha")
+            != _integration_field(owner.body, "base_sha")
+        ):
+            return None
+        lease = base.schema3_ownership_lease_state(
+            owner, records, before_comment_id=rec.comment_id,
+        )
+        if lease is None or lease.observed_head_sha.lower() != f["head_sha"].lower():
+            return None
+        # An integrator branch may remain at its claim base when publishing
+        # only the independently reviewed source PR.
+        if (
+            f["work_sha"] != f["head_sha"]
+            or not base.SHA40_RE.fullmatch(f["head_sha"])
+        ):
+            return None
+        source_head = f["expected_pre_merge_head_sha"]
+        parent = f["observed_pre_merge_main_sha"]
+        if (
+            _integration_field(rec.body, "expected_pre_merge_main_sha") != parent
+            or _integration_field(rec.body, "expected_source_head_sha") != source_head
+        ):
+            return None
+
+    if not all(
+        sha is not None and base.SHA40_RE.fullmatch(sha)
+        for sha in (parent, source_head)
+    ):
+        return None
+    return main_sha.lower(), parent.lower(), int(pr_number), source_head.lower()
+
+
+def _real_squash_main_sha(
+    main_sha: str, parent: str, pr_number: int, source_head: str
+) -> bool:
+    """Bind GitHub's merged PR, exact source blobs, and one-parent main commit."""
+    try:
+        pr = base.request("GET", f"/repos/{base.REPO}/pulls/{pr_number}")
+        commit = base.request("GET", f"/repos/{base.REPO}/commits/{main_sha}")
+        if (
+            not pr.get("merged")
+            or pr.get("state") != "closed"
+            or pr.get("merge_commit_sha", "").lower() != main_sha
+            or pr.get("base", {}).get("ref") != "main"
+            or pr.get("head", {}).get("sha", "").lower() != source_head
+            or len(commit.get("parents", [])) != 1
+            or commit["parents"][0].get("sha", "").lower() != parent
+            or commit.get("sha", "").lower() != main_sha
+        ):
+            return False
+        source_files = list(base.paged(
+            f"/repos/{base.REPO}/pulls/{pr_number}/files?"
+        ))
+        squash = base.request(
+            "GET", f"/repos/{base.REPO}/compare/{parent}...{main_sha}"
+        )
+        published_files = squash.get("files", [])
+        if (
+            squash.get("status") != "ahead"
+            or squash.get("ahead_by") != 1
+            or len(source_files) == 0
+            or len(source_files) != len(published_files)
+            or len(squash.get("commits", [])) != 1
+        ):
+            return False
+        original = {
+            file["filename"]: (file.get("sha", "").lower(), file.get("status"))
+            for file in source_files
+        }
+        published = {
+            file["filename"]: (file.get("sha", "").lower(), file.get("status"))
+            for file in published_files
+        }
+        return (
+            len(original) == len(source_files)
+            and len(published) == len(published_files)
+            and all(
+                base.SHA40_RE.fullmatch(sha) and status in {"added", "modified"}
+                for sha, status in original.values()
+            )
+            and original == published
+        )
+    except base.GitHubRateLimitExceeded:
+        raise
+    except (KeyError, TypeError, ValueError, RuntimeError):
+        return False
+
+
 def integration_main_sha_from_comments(
     issue_number: int,
     comments: Iterable[dict[str, Any]],
 ) -> str | None:
-    """Return the newest trusted squash INTEGRATION_STATUS DONE main SHA."""
-    found: list[tuple[int, str]] = []
-    for comment in comments:
-        if not _trusted_unedited_comment(comment):
-            continue
-        body = comment.get("body") or ""
-        if not re.search(r"(?m)^protocol:\s*planning-v1\s*$", body):
-            continue
-        if not re.search(r"(?m)^schema:\s*3\s*$", body):
-            continue
-        if not re.search(r"(?m)^kind:\s*INTEGRATION_STATUS\s*$", body):
-            continue
-        if not re.search(r"(?m)^state:\s*DONE\s*$", body):
-            continue
-        if not re.search(r"(?m)^merge_method:\s*squash\s*$", body):
-            continue
-        main_sha = base.scalar(body, "main_sha")
-        if main_sha is None or not base.SHA40_RE.fullmatch(main_sha):
-            continue
-        found.append((int(comment["id"]), main_sha.lower()))
-    if not found:
+    """Only actual reviewed, owned or pinned-legacy squash commits are usable."""
+    all_comments = list(comments)
+    trusted_comments = [
+        comment for comment in all_comments
+        if _trusted_unedited_comment(comment)
+    ]
+    provenance = _integration_provenance(issue_number, trusted_comments)
+    if provenance is None:
         return None
-    return max(found, key=lambda item: item[0])[1]
-
+    main_sha, parent, pr_number, source_head = provenance
+    if not _real_squash_main_sha(main_sha, parent, pr_number, source_head):
+        return None
+    return main_sha
 
 def integration_sha_is_on_current_main(integration_sha: str) -> bool:
     current = base.current_main_sha().lower()
@@ -176,25 +423,53 @@ def integrated_implementation_sources(
 def select_implementation_demand_source(
     open_issues: Iterable[dict[str, Any]],
     recent_issues: Iterable[dict[str, Any]],
-    integrated_source_numbers: set[int],
+    integrated_sources: dict[int, str],
 ) -> dict[str, Any] | None:
-    open_list = list(open_issues)
-    if any(is_live_implementation_work(issue) for issue in open_list):
-        return None
+    """Pick latest *verified squash*, not highest issue number.
 
+    The latest verified source is selected before the consumed test. Older
+    unconsumed sources are never replayed after a newer milestone is consumed.
+    """
     recent_list = list(recent_issues)
-    consumed = consumed_implementation_sources(recent_list)
     candidates = [
-        issue
-        for issue in recent_list
-        if int(issue.get("number", 0)) in integrated_source_numbers
+        issue for issue in recent_list
+        if int(issue.get("number", 0)) in integrated_sources
         and implementation_source_candidate(issue)
-        and int(issue["number"]) not in consumed
     ]
     if not candidates:
         return None
-    return max(candidates, key=lambda issue: int(issue["number"]))
-
+    newest = candidates[0]
+    newest_sha = integrated_sources[int(newest["number"])]
+    for candidate in candidates[1:]:
+        other_sha = integrated_sources[int(candidate["number"])]
+        if not all(
+            base.SHA40_RE.fullmatch(sha) for sha in (newest_sha, other_sha)
+        ) or newest_sha == other_sha:
+            return None
+        # Github 'ahead' means candidate is newer; 'behind' means older.
+        ancestry = base.request(
+            "GET", f"/repos/{base.REPO}/compare/{newest_sha}...{other_sha}"
+        )
+        if ancestry.get("status") == "ahead":
+            newest, newest_sha = candidate, other_sha
+        elif ancestry.get("status") != "behind":
+            return None  # diverged/unknown; never guess chronology
+    # Verify every candidate really precedes the winner, not merely that
+    # pairwise tournament results happened to be favorable.
+    for issue in candidates:
+        sha = integrated_sources[int(issue["number"])]
+        if sha == newest_sha:
+            if issue is not newest:
+                return None
+            continue
+        comparison = base.request(
+            "GET", f"/repos/{base.REPO}/compare/{sha}...{newest_sha}"
+        )
+        if comparison.get("status") != "ahead":
+            return None
+    if int(newest["number"]) in consumed_implementation_sources(recent_list):
+        return None
+    return newest
 
 def implementation_intake_body(source: dict[str, Any], integration_sha: str) -> str:
     source_number = int(source["number"])
@@ -291,7 +566,7 @@ def materialize_implementation_demand_intake(
     integrated_sources: dict[int, str],
 ) -> int:
     source = select_implementation_demand_source(
-        open_issues, recent_issues, set(integrated_sources)
+        open_issues, recent_issues, integrated_sources
     )
     if source is None:
         return 0
@@ -328,92 +603,177 @@ def self_test() -> None:
             "user": {"login": login},
         }
 
-    first_playable = issue(
-        1343,
-        "[PLAN-v1][W2-GODOT-FIRST-PLAYABLE-BOOTSTRAP-01] Build bounded Godot first playable",
-        "## Role / task class\n`IMPLEMENTATION / FIRST_PLAYABLE_BOOTSTRAP`.",
-        state="closed",
-        state_reason="completed",
-    )
-    factory = issue(
-        1403,
-        "[PLAN-v1][FACTORY-IMPLEMENTATION-LIVENESS-01] Keep implementation alive",
-        "factory maintenance",
-        state="closed",
-        state_reason="completed",
-    )
-    content = issue(
-        1378,
-        "[PLAN-v1][CONTENT-DEMAND-OLD-WORKS-WORLD-01] Content",
-        "CONTENT_ROOT",
-        state="closed",
-        state_reason="completed",
-    )
-    assert implementation_source_candidate(first_playable)
-    assert not implementation_source_candidate(factory)
-    assert not implementation_source_candidate(content)
+    # Explicit adversarial regression: six-field faux integration capsule
+    # must not gain ownership or cause any GitHub lookups.
+    faux = {
+        "id": 101, "created_at": "2026-10-05T10:00:00Z",
+        "updated_at": "2026-10-05T10:00:00Z",
+        "author_association": "OWNER", "user": {"login": "vokerg"},
+        "body": (
+            "```yaml\nprotocol: planning-v1\nschema: 3\n"
+            "kind: INTEGRATION_STATUS\nstate: DONE\n"
+            "merge_method: squash\nmain_sha: " + "a" * 40 + "\n```\n"
+        ),
+    }
+    assert integration_main_sha_from_comments(1539, [faux]) is None
+    assert integration_main_sha_from_comments(1558, [dict(
+        faux, body=faux["body"].replace("main_sha:", "issue: 999\\nmain_sha:"),
+    )]) is None
+    # Spoofed ownership, nonexistent source PR and unverified Git commit
+    # cannot be repaired merely by adding plausible scalar fields.
+    original_request = base.request
+    tested_comparisons: list[str] = []
+    def mock_ancestry(method: str, path: str, payload: Any = None) -> dict[str, Any]:
+        assert method == "GET" and "/compare/" in path
+        tested_comparisons.append(path)
+        refs = path.rsplit("/compare/", 1)[1].split("...")
+        assert len(refs) == 2
+        positions = {"a" * 40: 0, "b" * 40: 1, "c" * 40: 2}
+        if refs[0] not in positions or refs[1] not in positions:
+            return {"status": "diverged"}
+        if positions[refs[0]] < positions[refs[1]]:
+            return {"status": "ahead"}
+        if positions[refs[0]] > positions[refs[1]]:
+            return {"status": "behind"}
+        return {"status": "identical"}
+    base.request = mock_ancestry
+    try:
+        first_playable = issue(
+            1343,
+            "[PLAN-v1][W2-GODOT-FIRST-PLAYABLE-BOOTSTRAP-01] Build bounded Godot first playable",
+            "## Role / task class\n`IMPLEMENTATION / FIRST_PLAYABLE_BOOTSTRAP`.",
+            state="closed",
+            state_reason="completed",
+        )
+        factory = issue(
+            1403,
+            "[PLAN-v1][FACTORY-IMPLEMENTATION-LIVENESS-01] Keep implementation alive",
+            "factory maintenance",
+            state="closed",
+            state_reason="completed",
+        )
+        content = issue(
+            1378,
+            "[PLAN-v1][CONTENT-DEMAND-OLD-WORKS-WORLD-01] Content",
+            "CONTENT_ROOT",
+            state="closed",
+            state_reason="completed",
+        )
+        assert implementation_source_candidate(first_playable)
+        assert not implementation_source_candidate(factory)
+        assert not implementation_source_candidate(content)
 
-    selected = select_implementation_demand_source(
-        [],
-        [first_playable, factory, content],
-        {1343},
-    )
-    assert selected is first_playable
+        selected = select_implementation_demand_source(
+            [],
+            [first_playable, factory, content],
+            {1343: 'a' * 40},
+        )
+        assert selected is first_playable
 
-    component = issue(
-        1410,
-        "[PLAN-v1][IMPLEMENTATION-DEMAND-OLD-WORKS-WORLD-01] Implement world presentation",
-        "IMPLEMENTATION_COMPONENT / WORLD_PRESENTATION",
-    )
-    assert is_live_implementation_work(component)
-    assert select_implementation_demand_source(
-        [component],
-        [first_playable, component],
-        {1343},
-    ) is None
+        component = issue(
+            1410,
+            "[PLAN-v1][IMPLEMENTATION-DEMAND-OLD-WORKS-WORLD-01] Implement world presentation",
+            "IMPLEMENTATION_COMPONENT / WORLD_PRESENTATION",
+        )
+        assert is_live_implementation_work(component)
+        # A blocked issue is not a global veto on new integration-driven work.
+        assert select_implementation_demand_source(
+            [component],
+            [first_playable, component],
+            {1343: 'a' * 40},
+        ) is first_playable
 
-    completed_intake = issue(
-        1411,
-        "[PLAN-v1][FACTORY-IMPLEMENTATION-DEMAND-1343] Materialize parallel implementation increment from #1343",
-        state="closed",
-        state_reason="completed",
-        login="github-actions[bot]",
-        association="NONE",
-    )
-    assert 1343 in consumed_implementation_sources([completed_intake])
-    assert select_implementation_demand_source(
-        [],
-        [first_playable, completed_intake],
-        {1343},
-    ) is None
+        completed_intake = issue(
+            1411,
+            "[PLAN-v1][FACTORY-IMPLEMENTATION-DEMAND-1343] Materialize parallel implementation increment from #1343",
+            state="closed",
+            state_reason="completed",
+            login="github-actions[bot]",
+            association="NONE",
+        )
+        assert 1343 in consumed_implementation_sources([completed_intake])
+        assert select_implementation_demand_source(
+            [],
+            [first_playable, completed_intake],
+            {1343: 'a' * 40},
+        ) is None
 
-    duplicate_intake = issue(
-        1412,
-        "[PLAN-v1][FACTORY-IMPLEMENTATION-DEMAND-1343] Materialize parallel implementation increment from #1343",
-        state="closed",
-        state_reason="duplicate",
-        login="github-actions[bot]",
-        association="NONE",
-    )
-    assert 1343 not in consumed_implementation_sources([duplicate_intake])
-    assert select_implementation_demand_source(
-        [],
-        [first_playable, duplicate_intake],
-        {1343},
-    ) is first_playable
+        duplicate_intake = issue(
+            1412,
+            "[PLAN-v1][FACTORY-IMPLEMENTATION-DEMAND-1343] Materialize parallel implementation increment from #1343",
+            state="closed",
+            state_reason="duplicate",
+            login="github-actions[bot]",
+            association="NONE",
+        )
+        assert 1343 not in consumed_implementation_sources([duplicate_intake])
+        assert select_implementation_demand_source(
+            [],
+            [first_playable, duplicate_intake],
+            {1343: 'a' * 40},
+        ) is first_playable
 
-    assert select_implementation_demand_source(
-        [], [first_playable], set()
-    ) is None
+        assert select_implementation_demand_source(
+            [], [first_playable], {}
+        ) is None
 
-    fan_in = issue(
-        1420,
-        "[PLAN-v1][IMPLEMENTATION-INCREMENT-OLD-WORKS-PRESENTATION-01] Integrate presentation",
-        "## Role / task class\n`IMPLEMENTATION_INCREMENT / PLAYABLE_FAN_IN`.",
-        state="closed",
-        state_reason="completed",
-    )
-    assert implementation_source_candidate(fan_in)
+        later_integration = issue(
+            1539,
+            "[PLAN-v1][IMPLEMENTATION-INCREMENT-PLAYABLE-SEAMS-02-INT-01] Squash fan-in",
+            "AUTHORIZED_INTEGRATION / NONCANONICAL_PLAYABLE_SOURCE",
+            state="closed", state_reason="completed",
+        )
+        assert implementation_source_candidate(later_integration)
+        assert not implementation_source_candidate(
+            issue(1540, "[PLAN-v1][IMPLEMENTATION-INCREMENT-PLAYABLE-SEAMS-02-REV-INT-01] Review publication",
+                  "AUTHORIZED_INTEGRATION / REVIEW_PROVENANCE",
+                  state="closed", state_reason="completed")
+        )
+        source_history = [first_playable, completed_intake, later_integration]
+        assert select_implementation_demand_source(
+            [component], source_history, {1343: 'a' * 40, 1539: 'b' * 40}
+        ) is later_integration
+        owner_intake = issue(
+            1542,
+            "[PLAN-v1][W2-IMPLEMENTATION-DEMAND-POST-PLAYABLE-SEAMS-01] Route bounded increment",
+            "IMPLEMENTATION_DEMAND_INTAKE / ROUTING ONLY; after #1539's "
+            "clean-reviewed source squash and #1540's review-provenance squash.",
+            state="closed", state_reason="completed",
+        )
+        assert 1539 in consumed_implementation_sources([owner_intake])
+        assert select_implementation_demand_source(
+            [component], source_history + [owner_intake], {1343: 'a' * 40, 1539: 'b' * 40}
+        ) is None
+        # An explicit owner intake makes history terminal even if no issues are open.
+        assert select_implementation_demand_source(
+            [], source_history + [owner_intake], {1343: 'a' * 40, 1539: 'b' * 40}
+        ) is None
+        invalid_owner_intake = dict(owner_intake, user={"login": "attacker"},
+                                    author_association="NONE")
+        assert 1539 not in consumed_implementation_sources([invalid_owner_intake])
+
+        fan_in = issue(
+            1420,
+            "[PLAN-v1][IMPLEMENTATION-INCREMENT-OLD-WORKS-PRESENTATION-01] Integrate presentation",
+            "## Role / task class\n`IMPLEMENTATION_INCREMENT / PLAYABLE_FAN_IN`.",
+            state="closed",
+            state_reason="completed",
+        )
+        assert implementation_source_candidate(fan_in)
+        # Inverted historical issue numbers: the later actual squash wins,
+        # even where its issue number is lower.
+        assert select_implementation_demand_source(
+            [], [first_playable, later_integration],
+            {1343: "c" * 40, 1539: "b" * 40},
+        ) is first_playable
+        # A consumed latest squash does not backfill older integrated work.
+        assert select_implementation_demand_source(
+            [], [first_playable, later_integration, completed_intake],
+            {1343: "c" * 40, 1539: "b" * 40},
+        ) is None
+        assert tested_comparisons
+    finally:
+        base.request = original_request
     print("frontier maintenance v7 self-test: PASS")
 
 
