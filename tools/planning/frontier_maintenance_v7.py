@@ -36,7 +36,7 @@ LIVE_IMPLEMENTATION_TITLE_PATTERNS = (
 )
 IMPLEMENTATION_SOURCE_MARKERS = (
     "IMPLEMENTATION / FIRST_PLAYABLE_BOOTSTRAP",
-    "IMPLEMENTATION_INCREMENT / PLAYABLE_FAN_IN",
+    "IMPLEMENTATION_INCREMENT / ",
 )
 OWNER_PARALLEL_IMPLEMENTATION_DIRECTIVE_ISSUE = 84
 OWNER_PARALLEL_IMPLEMENTATION_DIRECTIVE_COMMENT_ID = 5_968_764_259
@@ -66,7 +66,16 @@ def implementation_source_candidate(issue: dict[str, Any]) -> bool:
         or "-REV-" in title
     ):
         return False
-    return any(marker in body for marker in IMPLEMENTATION_SOURCE_MARKERS)
+    # Modern fan-in integration occurs on a separate, owner-authorized
+    # -INT- issue. It is eligible only after its own trusted squash
+    # INTEGRATION_STATUS(DONE) proves ancestry on current main below.
+    return (
+        any(marker in body for marker in IMPLEMENTATION_SOURCE_MARKERS)
+        or re.match(
+            r"^\[PLAN-v1\]\[IMPLEMENTATION-INCREMENT-[^]]+-INT-\d+\]",
+            title,
+        ) is not None
+    )
 
 
 def is_live_implementation_work(issue: dict[str, Any]) -> bool:
@@ -97,6 +106,34 @@ def consumed_implementation_sources(
         source = implementation_intake_source(issue)
         if source is not None:
             consumed.add(source)
+        # Bounded owner-authored W2 implementation intakes existed before the
+        # generic factory naming scheme. Consume only a directly named
+        # integrated source in the intake's source paragraph; a loose numeric
+        # reference elsewhere is never proof of causal routing.
+        title = issue.get("title") or ""
+        body = issue.get("body") or ""
+        if (
+            title.startswith("[PLAN-v1][W2-IMPLEMENTATION-DEMAND-")
+            and "IMPLEMENTATION_DEMAND_INTAKE" in body
+            and v2.trusted_issue_author(issue)
+            and not (
+                issue.get("state") == "closed"
+                and issue.get("state_reason") in {"duplicate", "not_planned"}
+            )
+        ):
+            source_section = body.split("## Concrete next-demand signals")[0]
+            source_section = source_section.split("## Exact bounded routing deliverable")[0]
+            consumed.update(
+                int(value) for value in re.findall(
+                    r"\bafter #(\d+)'s?\b", source_section
+                )
+            )
+            consumed.update(
+                int(value) for value in re.findall(
+                    r"(?m)^\s*- (?:integrated implementation issue|source integration issue): #(\d+)\b",
+                    source_section,
+                )
+            )
     return consumed
 
 
@@ -178,22 +215,23 @@ def select_implementation_demand_source(
     recent_issues: Iterable[dict[str, Any]],
     integrated_source_numbers: set[int],
 ) -> dict[str, Any] | None:
-    open_list = list(open_issues)
-    if any(is_live_implementation_work(issue) for issue in open_list):
-        return None
-
+    # Require a *newest* squash-integrated playable/source not yet routed.
+    # Open blocked work in a different conflict domain is not an independent
+    # global stop. Never backfill old historical sources after the latest
+    # implemented milestone has already been consumed.
     recent_list = list(recent_issues)
-    consumed = consumed_implementation_sources(recent_list)
     candidates = [
         issue
         for issue in recent_list
         if int(issue.get("number", 0)) in integrated_source_numbers
         and implementation_source_candidate(issue)
-        and int(issue["number"]) not in consumed
     ]
     if not candidates:
         return None
-    return max(candidates, key=lambda issue: int(issue["number"]))
+    newest = max(candidates, key=lambda issue: int(issue["number"]))
+    if int(newest["number"]) in consumed_implementation_sources(recent_list):
+        return None
+    return newest
 
 
 def implementation_intake_body(source: dict[str, Any], integration_sha: str) -> str:
@@ -366,11 +404,12 @@ def self_test() -> None:
         "IMPLEMENTATION_COMPONENT / WORLD_PRESENTATION",
     )
     assert is_live_implementation_work(component)
+    # A blocked issue is not a global veto on new integration-driven work.
     assert select_implementation_demand_source(
         [component],
         [first_playable, component],
         {1343},
-    ) is None
+    ) is first_playable
 
     completed_intake = issue(
         1411,
@@ -405,6 +444,41 @@ def self_test() -> None:
     assert select_implementation_demand_source(
         [], [first_playable], set()
     ) is None
+
+    later_integration = issue(
+        1539,
+        "[PLAN-v1][IMPLEMENTATION-INCREMENT-PLAYABLE-SEAMS-02-INT-01] Squash fan-in",
+        "AUTHORIZED_INTEGRATION / NONCANONICAL_PLAYABLE_SOURCE",
+        state="closed", state_reason="completed",
+    )
+    assert implementation_source_candidate(later_integration)
+    assert not implementation_source_candidate(
+        issue(1540, "[PLAN-v1][IMPLEMENTATION-INCREMENT-PLAYABLE-SEAMS-02-REV-INT-01] Review publication",
+              "AUTHORIZED_INTEGRATION / REVIEW_PROVENANCE",
+              state="closed", state_reason="completed")
+    )
+    source_history = [first_playable, completed_intake, later_integration]
+    assert select_implementation_demand_source(
+        [component], source_history, {1343, 1539}
+    ) is later_integration
+    owner_intake = issue(
+        1542,
+        "[PLAN-v1][W2-IMPLEMENTATION-DEMAND-POST-PLAYABLE-SEAMS-01] Route bounded increment",
+        "IMPLEMENTATION_DEMAND_INTAKE / ROUTING ONLY; after #1539's "
+        "clean-reviewed source squash and #1540's review-provenance squash.",
+        state="closed", state_reason="completed",
+    )
+    assert 1539 in consumed_implementation_sources([owner_intake])
+    assert select_implementation_demand_source(
+        [component], source_history + [owner_intake], {1343, 1539}
+    ) is None
+    # An explicit owner intake makes history terminal even if no issues are open.
+    assert select_implementation_demand_source(
+        [], source_history + [owner_intake], {1343, 1539}
+    ) is None
+    invalid_owner_intake = dict(owner_intake, user={"login": "attacker"},
+                                author_association="NONE")
+    assert 1539 not in consumed_implementation_sources([invalid_owner_intake])
 
     fan_in = issue(
         1420,
