@@ -1,0 +1,112 @@
+name: Verify frozen feedback policy Issue 1547
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-interaction-feedback-1547.yml'
+      - 'docs/planning/handoffs/issue-1547.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-feedback-1547-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  exact-feedback-policy-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout immutable producer source, not verifier PR
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: d6b645d5a31d53003e451637ecce14541dbe40df
+          fetch-depth: 1
+
+      - name: Check source provenance, main provider identities, and exact PR-run bindings
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p issue-1547-evidence
+          test "$(git rev-parse HEAD)" = 'd6b645d5a31d53003e451637ecce14541dbe40df'
+          test "$(git hash-object game/components/interaction_feedback/interaction_feedback_policy.gd)" = '0f3b32c254f00f27338202fa7f0dd53c6f2efcf8'
+          test "$(git hash-object game/components/interaction_feedback/interaction_feedback_smoke.gd)" = '90c3608288426d29fefec8e7248074ab2ca4b969'
+          test "$(git hash-object docs/planning/handoffs/issue-1543.md)" = 'f95d2f0ac7975215217b3b8a8c54635a75176593'
+          test "$(git hash-object game/main.gd)" = '1b38126daed3db76f3c398f01c5d8cb375fa25cf'
+          test "$(git hash-object game/main.tscn)" = '02b943321c258bb807f9496c7a270221df112b31'
+          test "$(git hash-object game/components/hud_objectives/hud_objective_model.gd)" = '59480c7b8c7f3f8161cd261fb195704f8299679f'
+          test "$(git hash-object game/components/traversal_policy/traversal_policy.gd)" = '8376bd1289890d084fc94992ba56c4cd64588a44'
+          test "$(git hash-object game/components/station_world/station_world.gd)" = '87fefab8816a2ab8795c54877299716ec86b227e'
+          test "$(git hash-object game/components/playable_presentation/playable_presentation.gd)" = 'ba819915fc55e444d54d46671892cea35cb6b3cf'
+          printf 'source_head=%s\nverifier_pr_head=%s\nevent_sha=%s\nrun_id=%s\nrun_attempt=%s\n' \
+            "$(git rev-parse HEAD)" '${{ github.event.pull_request.head.sha }}' "$GITHUB_SHA" \
+            "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > issue-1547-evidence/run-identity.txt
+          printf 'source_blobs_verified=3\ncontroller_hud_scene_provider_immutable=true\n' >> issue-1547-evidence/run-identity.txt
+
+      - name: Resolve exact reviewed Godot 4.7.1 engine lock
+        id: godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json").read_text())
+          entry = lock["entries"]["godot_4.7.1_linux_x86_64_zip"]
+          if entry["version"] != "4.7.1-stable":
+              raise SystemExit("reviewed version drift")
+          if entry["sha256"] != "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba":
+              raise SystemExit("reviewed ZIP SHA-256 drift")
+          print(f"url={entry['url']}")
+          print(f"sha256={entry['sha256']}")
+          print(f"version={entry['version']}")
+          PY
+
+      - name: Download and byte-check selected Godot ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.godot.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Execute exact frozen-head isolated feedback and negative-path smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot_bin="$GITHUB_WORKSPACE/.godot-bin/Godot_v4.7.1-stable_linux.x86_64"
+          version="$("$godot_bin" --version)"
+          printf 'godot_banner=%s\n' "$version" | tee issue-1547-evidence/engine.txt
+          test "$version" = "4.7.1.stable.official.a13da4feb"
+          printf 'reviewed_engine_version=4.7.1-stable\nreviewed_engine_zip_sha256=%s\n' \
+            '${{ steps.godot.outputs.sha256 }}' >> issue-1547-evidence/run-identity.txt
+          "$godot_bin" --headless --path game --script res://components/interaction_feedback/interaction_feedback_smoke.gd 2>&1 | tee issue-1547-evidence/interaction-feedback-smoke.log
+          grep -Fx 'EVERFIELD_INTERACTION_FEEDBACK_SMOKE_PASS' issue-1547-evidence/interaction-feedback-smoke.log
+          grep -F '[EF-INTERACTION-FEEDBACK][PASS] near to far clears stale E invitation' issue-1547-evidence/interaction-feedback-smoke.log
+          ! grep -F '[EF-INTERACTION-FEEDBACK][FAIL]' issue-1547-evidence/interaction-feedback-smoke.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|ERROR:|Assertion failed|EVERFIELD_INTERACTION_FEEDBACK_SMOKE_FAIL' issue-1547-evidence/interaction-feedback-smoke.log
+          git hash-object \
+            game/components/interaction_feedback/interaction_feedback_policy.gd \
+            game/components/interaction_feedback/interaction_feedback_smoke.gd \
+            docs/planning/handoffs/issue-1543.md \
+            game/main.gd game/main.tscn \
+            game/components/hud_objectives/hud_objective_model.gd \
+            game/components/session_state/session_state.gd \
+            game/components/traversal_policy/traversal_policy.gd \
+            game/components/station_world/station_world.gd \
+            game/components/playable_presentation/playable_presentation.gd \
+            docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            > issue-1547-evidence/source-git-blobs.txt
+          sha256sum issue-1547-evidence/*.txt issue-1547-evidence/*.log > issue-1547-evidence/evidence-sha256.txt
+
+      - name: Retain complete run identity, logs and source checksums
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: issue-1547-feedback-${{ github.run_id }}-${{ github.run_attempt }}
+          path: issue-1547-evidence/
+          if-no-files-found: error
+          retention-days: 30
