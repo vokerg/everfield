@@ -83,6 +83,28 @@ Guard failures remain visible in the diagnostic UI and error output with stable 
 
 The primary PR CI workflow downloads exact hash-locked Godot 4.7.1, imports the candidate project, and runs five fail-fast isolated test suites: `res://smoke_test.gd` (integrated playable/presentation), `res://tests/movement_interaction_smoke.gd` (real input/proximity/clamps), `res://components/session_state/session_state_smoke.gd`, `res://components/diagnostics/diagnostic_catalog_smoke.gd`, and `res://components/hud_objectives/hud_objective_model_smoke.gd`. It requires each component's exact PASS sentinel, uploads suite logs and run/head identity, and hashes each published source/smoke payload plus the shared integration paths. A green workflow is executable evidence for independent review, not a substitute for clean review, a separate squash integration authorization, production/provider/release, or accessibility certification.
 
+## Reviewed three-seam live fan-in (Issue #1507)
+
+After the **separate**, immutable-source, locked-engine-verifier, independently clean-reviewed, squash-only noncanonical component publications (station-world #1504/#1511/#1512/#1535, traversal #1505/#1510/#1518/#1521, corrected playable presentation #1506/#1525/#1527/#1528/#1532), the controller now **consumes rather than duplicates** the three contracts:
+
+- `game/components/station_world/station_world.gd` supplies the exact five station IDs and order, source positions/fallback labels/marker RGB, movement world bounds, floor polygon, six-point WalkPath, label geometry and reset spawn. `game/main.gd` still owns Node creation and the actual drawable scene; caller mutations cannot alter the source's copied snapshots.
+- `game/components/traversal_policy/traversal_policy.gd` owns the published WASD/arrow key-binding table, intent combination and cancelation, diagonal normalization, clamped movement, and nearest-station choice with first-ID tie precedence and inclusive interaction radius. Only the controller reads actual `Input`, moves `Player`, emits the reviewed catalog's diagnostics and changes session state.
+- `game/components/playable_presentation/playable_presentation.gd` composes the published Old Works, Maelin/Selka hearing and consequence sources into view dictionaries for scene intro, inspected stations, hearing opening, consent/deferral decisions and final bounded outcomes. The controller rejects malformed/empty results before display. No private Anwen provenance, truth selection, implied consent, or authoritatively new narrative is introduced.
+
+The controller's published `_station_display` continues to prefer reviewed Old Works `title_id`/`prompt_id` text for the three inspected stations, instead of treating fallback map metadata as new presentation authority. The unmodified bounded session-state, diagnostic, HUD and original published content providers still own their existing behavior. Input/nearest-station errors fail closed and cannot invent a new station or outcome.
+
+The live primary smoke `game/smoke_test.gd` now checks actual drawn floor/WalkPath/marker and label geometry against copied station-world metadata, all five IDs/order/positions, isolated mutation of returned snapshots, inclusive/exclusive proximity bounds, exact assembler text on the archive/material/hearing/repair/nonconsent/records routes, unresolved `UNKNOWN_BY_DESIGN`, both complete state/history paths, missing/unknown interactions and invalid public queries. The unmodified movement smoke independently uses actual input events to verify movement/proximity/clamps. CI additionally pins all three immutable source/smoke component roots and the fixed scene, imports the exact candidate head, verifies the reviewed Godot 4.7.1 ZIP SHA-256 `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`, and runs **eight** fail-fast Godot smoke suites: primary playable, movement interaction, session state, diagnostic catalog, HUD objectives, station world, traversal policy and corrected public presentation. Each must exit zero and present its exact full-line success sentinel, with uploaded per-suite logs and source SHA-256 evidence.
+
+For manual isolated provider verification with the same selected engine:
+
+```bash
+"$GODOT_BIN" --headless --path game --script res://components/station_world/station_world_smoke.gd
+"$GODOT_BIN" --headless --path game --script res://components/traversal_policy/traversal_policy_smoke.gd
+"$GODOT_BIN" --headless --path game --script res://components/playable_presentation/playable_presentation_smoke.gd
+```
+
+This **producer fan-in branch is not independently reviewed or runtime-certified until its own exact-final-head CI/verifier and distinct required review**. A draft PR and a green component smoke are only evidence, not producer terminal, publication, canon/truth, consent/provenance, accessibility, persistence, readiness or release authority.
+
 ## Scope intentionally deferred
 
 This increment still contains no production save/load system because the bounded interaction loop does not require persistence to run or review. It also defers empirical accessibility clearance, broad platform/shipping support, production hardening, release packaging, commercial/provider authority, legal/certification authority, final canon, truth resolution, and unrelated systems. Those remain governed by their existing fail-closed routes.

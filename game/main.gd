@@ -6,44 +6,13 @@ const CommitmentConsequencePresentation = preload("res://components/commitment_c
 const SessionState = preload("res://components/session_state/session_state.gd")
 const DiagnosticCatalog = preload("res://components/diagnostics/diagnostic_catalog.gd")
 const HudObjectiveModel = preload("res://components/hud_objectives/hud_objective_model.gd")
+const StationWorld = preload("res://components/station_world/station_world.gd")
+const TraversalPolicy = preload("res://components/traversal_policy/traversal_policy.gd")
+const PlayablePresentation = preload("res://components/playable_presentation/playable_presentation.gd")
 
 const PLAYER_SPEED := 230.0
 const INTERACT_RADIUS := 88.0
-const WORLD_BOUNDS := Rect2(36.0, 90.0, 888.0, 414.0)
 const MYSTERY_STATE := "UNKNOWN_BY_DESIGN"
-
-const STATIONS := {
-    "public_record": {
-        "position": Vector2(176, 188),
-        "title": "Archive Ledger",
-        "hint": "Public record — required",
-        "color": Color("6ca6c8"),
-    },
-    "material_trace": {
-        "position": Vector2(338, 382),
-        "title": "Material Trace",
-        "hint": "Independent evidence — optional",
-        "color": Color("c3a56f"),
-    },
-    "defer_conclusion": {
-        "position": Vector2(498, 184),
-        "title": "Defer Conclusion",
-        "hint": "Legal investigation alternative",
-        "color": Color("8d88ba"),
-    },
-    "commons_hearing": {
-        "position": Vector2(676, 252),
-        "title": "Commons Hearing",
-        "hint": "Negotiate shared use",
-        "color": Color("7dbb8b"),
-    },
-    "project_table": {
-        "position": Vector2(798, 400),
-        "title": "Project Table",
-        "hint": "Commit the bounded next step",
-        "color": Color("d28d7b"),
-    },
-}
 
 var player: Node2D
 var title_label: Label
@@ -54,6 +23,8 @@ var presentation_panel: ColorRect
 var presentation_label: Label
 var station_nodes: Dictionary = {}
 
+var station_world: Variant
+var playable_presentation: Variant
 var old_works_presentation: Variant
 var commons_hearing_presentation: Variant
 var consequence_presentation: Variant
@@ -62,9 +33,11 @@ var diagnostic_catalog: Variant
 var hud_objective_model: Variant
 
 func _ready() -> void:
+    station_world = StationWorld.new()
     old_works_presentation = OldWorksPresentation.new()
     commons_hearing_presentation = CommonsHearingPresentation.new()
     consequence_presentation = CommitmentConsequencePresentation.new()
+    playable_presentation = PlayablePresentation.new(old_works_presentation, commons_hearing_presentation, consequence_presentation)
     session_state = SessionState.new()
     diagnostic_catalog = DiagnosticCatalog.new()
     hud_objective_model = HudObjectiveModel.new()
@@ -75,21 +48,30 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     if player == null:
         return
-
-    var direction := Vector2.ZERO
-    if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
-        direction.x -= 1.0
-    if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
-        direction.x += 1.0
-    if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
-        direction.y -= 1.0
-    if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
-        direction.y += 1.0
-
+    # Controller owns physical Input; the reviewed policy owns mapping,
+    # direction cancellation, normalization, bounds and movement validation.
+    var mapping: Dictionary = TraversalPolicy.key_mapping()
+    var intents: Dictionary = {}
+    for intent in ["left", "right", "up", "down"]:
+        var keys: Array = mapping.get(intent, [])
+        if keys.size() != 2:
+            push_error("[EF-TRAVERSAL-INVALID] Invalid key mapping.")
+            return
+        intents[intent] = Input.is_key_pressed(keys[0]) or Input.is_key_pressed(keys[1])
+    var sampled: Dictionary = TraversalPolicy.direction_from_intents(intents)
+    if not sampled.get("ok", false):
+        push_error("[EF-TRAVERSAL-INVALID] Invalid sampled key intents.")
+        return
+    var direction: Vector2 = sampled.get("direction", Vector2.ZERO)
     if direction != Vector2.ZERO:
-        player.position += direction.normalized() * PLAYER_SPEED * delta
-        player.position.x = clampf(player.position.x, WORLD_BOUNDS.position.x, WORLD_BOUNDS.position.x + WORLD_BOUNDS.size.x)
-        player.position.y = clampf(player.position.y, WORLD_BOUNDS.position.y, WORLD_BOUNDS.position.y + WORLD_BOUNDS.size.y)
+        var layout: Dictionary = station_world.get_layout()
+        var movement: Dictionary = TraversalPolicy.advance(
+            player.position, direction, delta, PLAYER_SPEED, layout["world_bounds"]
+        )
+        if not movement.get("ok", false):
+            push_error("[EF-TRAVERSAL-INVALID] Invalid movement step.")
+            return
+        player.position = movement["position"]
         _refresh_nearby_hint()
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -112,41 +94,36 @@ func _unhandled_key_input(event: InputEvent) -> void:
             reset_slice()
 
 func _build_world() -> void:
+    var layout: Dictionary = station_world.get_layout()
+    station_nodes.clear()
     var backdrop := Polygon2D.new()
     backdrop.name = "OldWorksFloor"
-    backdrop.polygon = PackedVector2Array([
-        Vector2(22, 74), Vector2(938, 74), Vector2(938, 516), Vector2(22, 516)
-    ])
-    backdrop.color = Color("172129")
+    backdrop.polygon = layout["floor_polygon"]
+    backdrop.color = layout["floor_color"]
     add_child(backdrop)
 
     var path := Line2D.new()
     path.name = "WalkPath"
-    path.width = 9.0
-    path.default_color = Color("34444e")
-    path.points = PackedVector2Array([
-        Vector2(92, 286), Vector2(176, 188), Vector2(338, 382),
-        Vector2(498, 184), Vector2(676, 252), Vector2(798, 400)
-    ])
+    path.width = layout["walk_path_width"]
+    path.default_color = layout["walk_path_color"]
+    path.points = layout["walk_path"]
     add_child(path)
 
-    for station_id in STATIONS:
-        var station_data: Dictionary = STATIONS[station_id]
+    for station_id in station_world.get_station_ids():
+        var station_data: Dictionary = station_world.get_station(station_id)
         var display := _station_display(String(station_id), station_data)
         var station := Node2D.new()
         station.name = String(station_id)
         station.position = station_data["position"]
 
         var marker := Polygon2D.new()
-        marker.polygon = PackedVector2Array([
-            Vector2(-20, -20), Vector2(20, -20), Vector2(20, 20), Vector2(-20, 20)
-        ])
+        marker.polygon = layout["marker_polygon"]
         marker.color = station_data["color"]
         station.add_child(marker)
 
         var label := Label.new()
-        label.position = Vector2(-74, -52)
-        label.size = Vector2(148, 44)
+        label.position = layout["station_label_position"]
+        label.size = layout["station_label_size"]
         label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
         label.text = "%s\n%s" % [display["title"], display["hint"]]
         label.add_theme_font_size_override("font_size", 12)
@@ -215,7 +192,7 @@ func _build_world() -> void:
 func reset_slice() -> void:
     session_state.reset()
     if player != null:
-        player.position = Vector2(92, 286)
+        player.position = station_world.get_layout()["player_spawn"]
     _emit_diagnostic("EF-RESET")
     _show_world_intro()
     _refresh_hud()
@@ -228,7 +205,7 @@ func interact_nearest() -> bool:
     return interact_with(station_id)
 
 func interact_with(station_id: String) -> bool:
-    if not STATIONS.has(station_id):
+    if not station_world.has_station(station_id):
         _emit_diagnostic("EF-INTERACT-UNKNOWN", {"station_id": station_id})
         return false
 
@@ -339,9 +316,9 @@ func get_hud_view() -> Dictionary:
 
 func _hud_station_metadata() -> Dictionary:
     var metadata := {}
-    for station_id in STATIONS:
-        var station_data: Dictionary = STATIONS[station_id]
-        metadata[station_id] = {"title": String(_station_display(String(station_id), station_data)["title"])}
+    for station_id in station_world.get_station_ids():
+        var station_data: Dictionary = station_world.get_station(station_id)
+        metadata[station_id] = {"title": String(_station_display(station_id, station_data)["title"])}
     return metadata
 
 func _investigation_ready() -> bool:
@@ -357,15 +334,13 @@ func _append_history(event_id: String) -> bool:
 func _nearest_station_id() -> String:
     if player == null:
         return ""
-    var best_id := ""
-    var best_distance := INF
-    for station_id in STATIONS:
-        var station_position: Vector2 = STATIONS[station_id]["position"]
-        var distance := player.position.distance_to(station_position)
-        if distance < best_distance:
-            best_distance = distance
-            best_id = String(station_id)
-    return best_id if best_distance <= INTERACT_RADIUS else ""
+    var nearest: Dictionary = TraversalPolicy.nearest_station(
+        player.position, station_world.get_stations(), station_world.get_station_ids(), INTERACT_RADIUS
+    )
+    if not nearest.get("ok", false):
+        push_error("[EF-TRAVERSAL-INVALID] Invalid station proximity metadata.")
+        return ""
+    return String(nearest.get("station_id", ""))
 
 func _station_display(station_id: String, fallback: Dictionary) -> Dictionary:
     var display := {
@@ -387,107 +362,37 @@ func _station_display(station_id: String, fallback: Dictionary) -> Dictionary:
     return display
 
 func _show_world_intro() -> void:
-    var lines: Array = [
-        old_works_presentation.get_text("OW_WORLD_TITLE"),
-        old_works_presentation.get_text("OW_WORLD_SUBTITLE"),
-        old_works_presentation.get_text("OW_WORLD_ENTRY"),
-    ]
-    _set_presentation(_join_lines(lines))
+    _show_public_view(playable_presentation.world_intro())
 
 func _show_old_works_station(station_id: String) -> void:
-    var station: Dictionary = old_works_presentation.get_station(station_id)
-    if station.is_empty():
-        _set_presentation("Presentation unavailable for %s." % station_id)
-        return
-
-    var lines: Array = []
-    for key in ["title_id", "prompt_id"]:
-        var text_id := String(station.get(key, ""))
-        if not text_id.is_empty():
-            lines.append(old_works_presentation.get_text(text_id))
-    for body_id in station.get("body_ids", []):
-        lines.append(old_works_presentation.get_text(String(body_id)))
-    for key in ["exit_id", "result_id"]:
-        var text_id := String(station.get(key, ""))
-        if not text_id.is_empty():
-            lines.append(old_works_presentation.get_text(text_id))
-    _set_presentation(_join_lines(lines))
+    _show_public_view(playable_presentation.old_works_station(station_id))
 
 func _show_hearing_opening() -> void:
-    var maelin: Dictionary = commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_MAELIN_01")
-    var selka: Dictionary = commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_SELKA_01")
-    var maelin_line: Dictionary = commons_hearing_presentation.get_line("OW_HEARING_OPEN_MAELIN_01")
-    var selka_line: Dictionary = commons_hearing_presentation.get_line("OW_HEARING_OPEN_SELKA_01")
-    var lines: Array = [
-        "Commons Hearing",
-        "%s — %s" % [maelin.get("display_name", "Maelin Sor"), maelin_line.get("text", "")],
-        "%s — %s" % [selka.get("display_name", "Selka Vey"), selka_line.get("text", "")],
-        "Refusal, deferral, and nonalignment remain legal outcomes.",
-    ]
-    _set_presentation(_join_lines(lines))
-
-func _hearing_route_text(route_scope: String) -> String:
-    var beat_ids: Array = []
-    match route_scope:
-        "repair_pilot":
-            beat_ids = ["OW_HEARING_REPAIR_MAELIN_01", "OW_HEARING_REPAIR_SELKA_01"]
-        "records_first":
-            beat_ids = ["OW_HEARING_RECORDS_MAELIN_01", "OW_HEARING_RECORDS_SELKA_01"]
-        "defer":
-            beat_ids = ["OW_HEARING_DEFER_MAELIN_01", "OW_HEARING_DEFER_SELKA_01"]
-        _:
-            return ""
-
-    var lines: Array = ["Commons Hearing — %s" % route_scope.replace("_", " ")]
-    for beat_id in beat_ids:
-        var beat: Dictionary = commons_hearing_presentation.get_line(String(beat_id))
-        var speaker := _speaker_name(String(beat.get("speaker_ref", "")))
-        lines.append("%s — %s" % [speaker, beat.get("text", "")])
-    return _join_lines(lines)
-
-func _speaker_name(character_ref: String) -> String:
-    if character_ref == "CHAR:maelin_sor":
-        return String(commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_MAELIN_01").get("display_name", "Maelin Sor"))
-    if character_ref == "CHAR:selka_vey":
-        return String(commons_hearing_presentation.get_participant("OW_HEARING_PARTICIPANT_SELKA_01").get("display_name", "Selka Vey"))
-    return "Unknown participant"
-
-func _consequence_text(event_id: String) -> String:
-    var event: Dictionary = consequence_presentation.get_event(event_id)
-    if event.is_empty():
-        return "Consequence presentation unavailable for %s." % event_id
-    var lines: Array = []
-    for text_id in event.get("ids", []):
-        lines.append(consequence_presentation.get_text(String(text_id)))
-    return _join_lines(lines)
+    _show_public_view(playable_presentation.hearing_opening())
 
 func _show_hearing_and_consequence(route_scope: String, event_id: String) -> void:
-    _set_presentation("%s\n\n%s" % [_hearing_route_text(route_scope), _consequence_text(event_id)])
+    _show_public_view(playable_presentation.hearing_and_consequence(route_scope, event_id))
 
 func _show_consequence(event_id: String) -> void:
-    _set_presentation(_consequence_text(event_id))
+    _show_public_view(playable_presentation.consequence(event_id))
+
+func _show_public_view(view: Dictionary) -> void:
+    # Never turn missing, malformed or unauthorized public text into success.
+    if not view.get("ok", false) or typeof(view.get("text")) != TYPE_STRING or String(view.get("text", "")).is_empty():
+        _set_presentation("[EF-PRESENTATION-INVALID] Reviewed public text unavailable.")
+        return
+    _set_presentation(String(view["text"]))
 
 func _set_presentation(text: String) -> void:
     if presentation_label != null:
         presentation_label.text = text
     print("[EVERFIELD][PRESENTATION] %s" % text.replace("\n", " | "))
 
-func _join_lines(lines: Array) -> String:
-    var result := ""
-    for line in lines:
-        var text := String(line)
-        if text.is_empty():
-            continue
-        if not result.is_empty():
-            result += "\n"
-        result += text
-    return result
-
 func _refresh_nearby_hint() -> void:
     var station_id := _nearest_station_id()
     if station_id.is_empty():
         return
-    var station_data: Dictionary = STATIONS[station_id]
+    var station_data: Dictionary = station_world.get_station(station_id)
     var display := _station_display(station_id, station_data)
     objective_label.text = "[E] %s — %s" % [display["title"], display["hint"]]
 
