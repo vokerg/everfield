@@ -126,7 +126,13 @@ func _run() -> void:
     _expect(game.get_game_state().get("commitment") == "records_first",
         "real 2 key invokes reviewed records-first choice only when hearing open")
     _expect(game.interact_with("project_table"), "records-first key selection closes actual bounded scene loop")
-    player.position = Vector2(176, 188)
+    _press_key(KEY_D)
+    _press_key(KEY_W)
+    game._process(0.4)
+    _release_key(KEY_W)
+    _release_key(KEY_D)
+    _expect(player.position.distance_to(Vector2(176, 188)) <= 88.0,
+        "completed player reaches actual station radius by physical input movement")
     game._refresh_nearby_hint()
     _expect(objective.text == String(game.get_hud_view()["objective"]) + " Press R to reset."
         and not objective.text.contains("[E]"), "completed nearby scene suppresses E and retains original R reset")
