@@ -1,0 +1,28 @@
+# Required negative review handoff — Issue #1562
+
+## Claimed independent episode and immutable target
+
+- Required reviewer Issue #1562, mission `FACTORY-SEEDING-FRONTIER-REPAIR-01-REV-01`, first valid owner claim **5999935364** with actor/session `frontier-review-seeder-repair-1562-gpt56sol-20261005-1947-01`. Review-only branch `planning/issue-1562` created at `main@6d601848c4c29734f319e47611390303fd351ed3`. Reviewer is **not** source producer `factory-seeding-repair-1556-gpt56sol-20261005-01`.
+- Canonical #1147 binding **5675066392**, program Git blob **`fd4cf1119c3f86acc3af620024eea72235e81ce4`**, activation ancestor **`87c85cecfa9a2ffa464c4b36816a138bf41441af`**.
+- Producer #1556 claim **5999767236** and terminal `STATUS(REVIEW_READY)` **5999918761**. Frozen source **draft PR #1560** final head **`f844a628dc2f76746541375eec6b345a637e9b8e`**, original base main `781d65ca07c7b410faaecfa1e8cbfd6f5fc8ed48`. Exactly five changed paths: `tools/planning/frontier_maintenance_v5.py`, `frontier_maintenance_v6.py`, `frontier_maintenance_v7.py`, `.github/workflows/planning-frontier-maintenance.yml`, `docs/planning/handoffs/issue-1556.md`; none overlaps the subsequently noncanonically published components.
+- Exact last frozen PR-head **pull_request** run **37350795349** attempt 1 completed success; `validate-pr` job **111900829530** ran `py_compile` and seven composed v1-v7 self-tests, all PASS. `maintain` job **111900831793** skipped on PR. Actual checkout was computed PR merge ref (not the producer SHA as worktree HEAD), though event `head_sha` bound to frozen source; prior cancelled run 37350518969 is not evidence.
+- Required independently authored report **`docs/planning/wave-2/reviews/factory-seeding-frontier-repair-1556-review.md`** contains exact code/test/workflow audit and deterministic adversarial counterexamples. The other exclusively owned file is this handoff. Review-only draft PR number, exact final review HEAD and Git blobs will be bound by terminal `REVIEW_STATUS` after final handoff commit (do not guess self-referential HEAD).
+
+## Verdict: CHANGES_NEEDED
+
+Two **unresolved correction-requiring** source defects, despite CI green:
+1. **BLOCKER FSR-1562-B01 — false integration authority:** v7 `integration_main_sha_from_comments(issue_number, comments)` ignores issue identity and accepts a **six-field INVALID schema-3 integration-looking comment** from a trusted unedited author without owner/lease/current valid terminal, source PR, real squash merge or published blob checks. Its arbitrary main SHA ancestor then counts as integrated implementation source. A no-source/no-owner synthetic six-line comment returns a valid SHA from the exact guard/selector logic. Cannot accept as trusted integration evidence; remedy terminal/owner/PR/single-parent-squash validation, including false terminal negatives.
+2. **MAJOR FSR-1562-M01 — historical replay/blocked liveness:** v7 `select_implementation_demand_source` sorts by **issue number**, not actual published squash commit ancestry; after an older-numbered issue integrates *later*, it still chooses an earlier higher-numbered issue, and if that one was consumed it returns NO source. In adversarial example #1539 integrated earlier/consumed and #1343 integrated later/not consumed, selection returns `None` rather than #1343. Correct source order by verified integration SHA ancestry; test reversal and historical dedupe/no-op.
+
+The complete report also records positive v5 multiple-successor exact-trust checks, v6 bounded active implementation increment recognition/no CONT-08, v7 valid owner intake #1542/#1539 case, CI read-only skip and all source paths, with source code audit independent of the authored seven PASS lines.
+
+**Verdict** `CHANGES_NEEDED`, 1 BLOCKER, 1 MAJOR, 0 correction-requiring MINOR. Explicitly **NOT** `CLEAN_FOR_FACTORY_SEEDING_REPAIR_PUBLICATION`. No review-green, source implementation review bypass, integration, canon/readiness/production/release authority.
+
+## Required bounded remediation route
+
+The producer #1556 exact frozen source/terminal/PR #1560 **must remain immutable and unmerged** pending a newly claimed independent **blocking remediation** exclusively targeting the v7 trust/chronology failures and regression tests, new remediation handoff/draft PR at exact head. An implementation of the fixes must:
+- Require authentic current/first-winning owner schema-3 issue-bound `INTEGRATION_STATUS(DONE)`, real exact producer PR/head and one-parent squash publication plus main-ancestry and source blob consistency. Reject incomplete/missing/edited/untrusted/wrong-issue/wrong-PR/non-squash status and stale/fabricated source.
+- Select the most recent *squash-integrated* eligible source by **verified main commit ancestry**, not by issue ID; consume only that exact latest source and prevent historical replay; preserve successful trusted #1539/#1542 owner intake, genuine #1545 content demand lane and no automatic CONT-08.
+- Keep v5/v6/workflow unchanged unless an independently identified new scoped compatibility fix requires them. Execute fresh exact remediation-head PR `py_compile` and composed v1-v7 tests with adversarial negatives, actual read-only PR CI. Require **new distinct required independent review** of remediation exact source and results, then separately authorized compatible-current-main **squash-only NONCANONICAL** publication if clean; no automatic promotion of failed original PR #1560.
+
+Do not directly mutate source PR #1560, shared gameplay, canon, content or any current source branch. Original reviewer PR is review-provenance only and nonintegrable from this decision authority.
