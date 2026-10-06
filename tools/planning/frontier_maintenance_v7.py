@@ -1135,6 +1135,69 @@ def self_test() -> None:
         assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
         archive[9001] = [source_claim, source_advance, source_intent,
                          source_recover, source_terminal]
+        # Required positive canonical recovered INTEGRATOR owner: #1572-like
+        # expiry route, separate from a recovered producer/reviewer route.
+        integ_intent = cmt(310, 9003, "2026-10-04T13:31:00Z",
+            "kind: RESUME_INTENT\nissue: 9003\nmission_id: INTEGRATION\n"
+            "branch: planning/issue-9003\nactor_session_id: integrator-recovered\n"
+            "reason: STALE\nsource_comment_id: 300\n"
+            f"observed_head_sha: {main_b}")
+        integ_recover = cmt(315, 9003, "2026-10-04T13:32:00Z",
+            "kind: RECOVER\nissue: 9003\nmission_id: INTEGRATION\n"
+            "branch: planning/issue-9003\nactor_session_id: integrator-recovered\n"
+            "state: IN_PROGRESS\nrecovery_reason: STALE\n"
+            "previous_ownership_comment_id: 300\n"
+            "winning_intent_comment_id: 310\nsource_comment_id: 300\n"
+            f"observed_head_sha: {main_b}")
+        recovered_integration = dict(
+            integration_terminal,
+            created_at="2026-10-04T13:40:00Z",
+            updated_at="2026-10-04T13:40:00Z",
+            body=integration_terminal["body"]
+            .replace("actor_session_id: integrator\n",
+                     "actor_session_id: integrator-recovered\n")
+            .replace("ownership_generation_comment_id: 300",
+                     "ownership_generation_comment_id: 315"),
+        )
+        archive[9003] = [
+            integrator_claim, integ_intent, integ_recover, recovered_integration,
+        ]
+        assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
+        for bad_record in (
+            dict(integ_intent, created_at="2026-10-04T13:29:00Z",
+                 updated_at="2026-10-04T13:29:00Z"),
+            dict(integ_intent, body=integ_intent["body"].replace(
+                "source_comment_id: 300", "source_comment_id: 999")),
+            dict(integ_recover, body=integ_recover["body"].replace(
+                "winning_intent_comment_id: 310",
+                "winning_intent_comment_id: 999")),
+            dict(integ_recover, body=integ_recover["body"].replace(
+                "previous_ownership_comment_id: 300",
+                "previous_ownership_comment_id: 999")),
+        ):
+            history = [
+                integrator_claim,
+                bad_record if bad_record["id"] == 310 else integ_intent,
+                bad_record if bad_record["id"] == 315 else integ_recover,
+                recovered_integration,
+            ]
+            assert integration_main_sha_from_comments(9003, history) is None
+        archive[9003] = [
+            integrator_claim,
+            dict(integ_intent, body=integ_intent["body"].replace(
+                "actor_session_id: integrator-recovered",
+                "actor_session_id: unrelated-winner")),
+            integ_intent, integ_recover, recovered_integration,
+        ]
+        # The actual duplicate has a prior comment ID and wins contention.
+        archive[9003][1]["id"] = 309
+        assert integration_main_sha_from_comments(9003, archive[9003]) is None
+        archive[9003] = [integrator_claim, integration_terminal]
+        # Reviewer-only documentation changes may not pose as producer paths.
+        archive[9002] = [reviewer_claim, reviewer_terminal]
+        assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
+        archive[9002] = [reviewer_claim, reviewer_advance, reviewer_terminal]
+
         # Absent/dangling source and reviewer; unrelated real review PR cannot
         # be substituted for the true source PR/squash.
         for original, tamper in (
@@ -1152,6 +1215,26 @@ def self_test() -> None:
             assert integration_main_sha_from_comments(
                 9003, [integrator_claim, bad]
             ) is None, original
+        for original, tamper in (
+            ("mission_id: INTEGRATION", "mission_id: FOREIGN"),
+            ("issue: 9003", "issue: 9002"),
+            ("state: DONE", "state: REVIEW_READY"),
+            ("authority_mode: OWNER", "authority_mode: EXTERNAL"),
+            ("merge_method: squash", "merge_method: rebase"),
+            ("ownership_generation_comment_id: 300",
+             "ownership_generation_comment_id: 999"),
+        ):
+            bad = dict(integration_terminal, body=integration_terminal[
+                "body"].replace(original, tamper))
+            assert integration_main_sha_from_comments(
+                9003, [integrator_claim, bad]
+            ) is None, original
+        edited_integrator = dict(integration_terminal,
+                                 updated_at="2026-10-04T09:00:00Z")
+        assert integration_main_sha_from_comments(
+            9003, [integrator_claim, edited_integrator]
+        ) is None
+
         # Strict canonical STALE intent maturity, winning source/head and
         # same-generation recovery; rejected recovered owner cannot publish.
         for item, original, tamper in (
