@@ -1,0 +1,133 @@
+name: Independent frozen live Godot verification 1575
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/godot-independent-live-1575.yml'
+      - 'docs/planning/wave-2/verification/implementation-feedback-command-live-1545-probe.gd'
+      - 'docs/planning/wave-2/verification/implementation-feedback-command-live-1545-verification.md'
+      - 'docs/planning/handoffs/issue-1575.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: independent-frozen-live-1575-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  independently-verify-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout verifier-only adversarial probe
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: verifier
+          fetch-depth: 1
+
+      - name: Checkout immutable original producer SHA (not verifier PR merge commit)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 1de1155429bfa657dd6e60c4f5abc969fabd86d5
+          path: source
+          fetch-depth: 1
+
+      - name: Verify exact source and immutable public providers
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd source
+          test "$(git rev-parse HEAD)" = '1de1155429bfa657dd6e60c4f5abc969fabd86d5'
+          test "$(git hash-object game/main.gd)" = '921ff7a1ce28ed4df4a67a7645752d7b441603f7'
+          test "$(git hash-object game/smoke_test.gd)" = '69d58e13455106cdff2b11bca93628d956855f69'
+          test "$(git hash-object game/tests/movement_interaction_smoke.gd)" = 'b1c03b6e387b3aeeaea3302bbc2766ced567aee0'
+          test "$(git hash-object .github/workflows/godot-first-playable-smoke.yml)" = 'a41d9ec6705959e8702557fcfc10343d909749dd'
+          test "$(git hash-object docs/implementation/first-playable.md)" = '6f6eecd3702289d7a3f3d19c10ca98f0a224ba73'
+          test "$(git hash-object docs/planning/handoffs/issue-1545.md)" = 'de234f7c511e7fd6d6fdeac5297bf0a7126f3806'
+          test "$(git hash-object game/main.tscn)" = '02b943321c258bb807f9496c7a270221df112b31'
+          test "$(git hash-object game/components/interaction_feedback/interaction_feedback_policy.gd)" = '0f3b32c254f00f27338202fa7f0dd53c6f2efcf8'
+          test "$(git hash-object game/components/interaction_feedback/interaction_feedback_smoke.gd)" = '90c3608288426d29fefec8e7248074ab2ca4b969'
+          test "$(git hash-object game/components/action_commands/action_command_policy.gd)" = 'd5422813a2e2bd938d9776c3f2cd12a058a9ac10'
+          test "$(git hash-object game/components/action_commands/action_command_smoke.gd)" = 'b9ff3fdfe9feea28c980e624324f6a35d45254fd'
+          test -z "$(git status --porcelain)"
+
+      - name: Resolve exact reviewed Godot toolchain URL and hash
+        id: godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          entry = json.loads(Path('source/docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json').read_text())['entries']['godot_4.7.1_linux_x86_64_zip']
+          assert entry['version'] == '4.7.1-stable'
+          assert entry['sha256'] == 'c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba'
+          print('url=' + entry['url'])
+          print('sha256=' + entry['sha256'])
+          PY
+
+      - name: Acquire independently downloaded, SHA-256-locked Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot-1575.zip '${{ steps.godot.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.godot.outputs.sha256 }}' godot-1575.zip | sha256sum --check --strict
+          mkdir -p .godot-independent
+          unzip -q godot-1575.zip -d .godot-independent
+          chmod +x .godot-independent/Godot_v4.7.1-stable_linux.x86_64
+          test "$(.godot-independent/Godot_v4.7.1-stable_linux.x86_64 --version)" = '4.7.1.stable.official.a13da4feb'
+
+      - name: Execute ten locked live suites plus independent adversarial Godot scene probe
+        shell: bash
+        env:
+          GODOT_BIN: ${{ github.workspace }}/.godot-independent/Godot_v4.7.1-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          mkdir -p independent-evidence
+          cd source
+          sha256sum game/project.godot game/main.tscn game/main.gd game/smoke_test.gd game/tests/movement_interaction_smoke.gd \
+            game/components/interaction_feedback/interaction_feedback_policy.gd game/components/interaction_feedback/interaction_feedback_smoke.gd \
+            game/components/action_commands/action_command_policy.gd game/components/action_commands/action_command_smoke.gd \
+            > ../independent-evidence/source.sha256
+          cp ../verifier/docs/planning/wave-2/verification/implementation-feedback-command-live-1545-probe.gd game/tests/independent_live_1575.gd
+          run_suite() {
+            local name="$1" expected="$2"
+            shift 2
+            "$@" > "../independent-evidence/${name}.log" 2>&1
+            test "$(grep -Fxc "$expected" "../independent-evidence/${name}.log")" -eq 1
+          }
+          run_suite state-machine EVERFIELD_SMOKE_PASS bash tools/implementation/run_godot_smoke.sh
+          run_suite movement-interaction EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS bash tools/implementation/run_godot_movement_smoke.sh
+          run_suite session-state EVERFIELD_SESSION_STATE_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/session_state/session_state_smoke.gd
+          run_suite diagnostic-contract EVERFIELD_DIAGNOSTIC_CONTRACT_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/diagnostics/diagnostic_catalog_smoke.gd
+          run_suite hud-objectives EVERFIELD_HUD_OBJECTIVE_MODEL_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/hud_objectives/hud_objective_model_smoke.gd
+          run_suite station-world EVERFIELD_STATION_WORLD_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/station_world/station_world_smoke.gd
+          run_suite traversal-policy EVERFIELD_TRAVERSAL_POLICY_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/traversal_policy/traversal_policy_smoke.gd
+          run_suite playable-presentation EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/playable_presentation/playable_presentation_smoke.gd
+          run_suite interaction-feedback EVERFIELD_INTERACTION_FEEDBACK_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/interaction_feedback/interaction_feedback_smoke.gd
+          run_suite action-commands EVERFIELD_ACTION_COMMAND_SMOKE_PASS "$GODOT_BIN" --headless --path game --script res://components/action_commands/action_command_smoke.gd
+          "$GODOT_BIN" --headless --path game --script res://tests/independent_live_1575.gd > ../independent-evidence/independent-probe.log 2>&1
+          test "$(grep -Ec '^EVERFIELD_INDEPENDENT_LIVE_1575_PASS checks=[0-9]+$' ../independent-evidence/independent-probe.log)" -eq 1
+          test "$(find ../independent-evidence -maxdepth 1 -name '*.log' | wc -l)" -eq 11
+          ! grep -Ei 'SCRIPT ERROR|Parse Error|Assertion failed|\[(EF-[A-Z0-9-]+)\]\[FAIL\]|EVERFIELD_[A-Z0-9_]+_FAIL' ../independent-evidence/*.log
+          # Only the two published unknown-station negative push_error probes are expected.
+          grep '^ERROR:' ../independent-evidence/*.log > ../independent-evidence/engine-errors.txt || true
+          test "$(grep -c '^' ../independent-evidence/engine-errors.txt)" -eq 2
+          test "$(grep -Ec ':ERROR: \[EF-INTERACT-UNKNOWN\] Unknown station' ../independent-evidence/engine-errors.txt)" -eq 2
+          printf 'source_sha=%s\nverifier_pr_head=%s\nrun_id=%s\nattempt=%s\ngodot_zip_sha256=%s\n' \
+            "$(git rev-parse HEAD)" '${{ github.event.pull_request.head.sha }}' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            '${{ steps.godot.outputs.sha256 }}' > ../independent-evidence/run-identity.txt
+          printf 'ten_source_suites=PASS\nindependent_live_probe=PASS\nunknown_station_expected_push_errors=2\n' \
+            > ../independent-evidence/verifier-summary.txt
+
+      - name: Preserve genuine independent logs, manifests and outcomes
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: independent-live-1575-${{ github.run_id }}-${{ github.run_attempt }}
+          path: independent-evidence/
+          if-no-files-found: error
+          retention-days: 30
