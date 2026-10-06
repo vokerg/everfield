@@ -296,10 +296,12 @@ def _valid_owner_terminal(
             != str(lease_at_intent.anchor_comment_id)
             or _integration_field(owner.body, "source_comment_id")
             != str(lease_at_intent.anchor_comment_id)
+            or (observed_recovery_head := _integration_field(
+                owner.body, "observed_head_sha"
+            )) is None
+            or base.SHA40_RE.fullmatch(observed_recovery_head) is None
             or _integration_field(intent.body, "observed_head_sha")
-            != lease_at_intent.observed_head_sha
-            or _integration_field(owner.body, "observed_head_sha")
-            != lease_at_intent.observed_head_sha
+            != observed_recovery_head
         ):
             return False
         eligible_intents = [
@@ -314,7 +316,7 @@ def _valid_owner_terminal(
             and _integration_field(r.body, "source_comment_id")
             == str(lease_at_intent.anchor_comment_id)
             and _integration_field(r.body, "observed_head_sha")
-            == lease_at_intent.observed_head_sha
+            == observed_recovery_head
             and (t := base.parse_github_server_time(r.created_at)) is not None
             and t >= lease_at_intent.anchor_created_at
             + base.timedelta(seconds=base.SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
@@ -337,7 +339,7 @@ def _valid_owner_terminal(
     )
     return bool(
         lease is not None
-        and lease.observed_head_sha == terminal.head_sha
+        and terminal.head_sha == terminal.work_sha
         and base.schema3_owner_unexpired_at(owner, records, terminal) is True
     )
 
@@ -1110,8 +1112,25 @@ def self_test() -> None:
     base.request, base.paged = fixture_request, fixture_paged
     try:
         assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
+        # Legitimate real-history shape (#1507): owner pushed the exact frozen
+        # producer branch before expiry without a PROGRESS renewal. The STALE
+        # intent observes that immutable branch HEAD rather than claim-base.
+        # GitHub source PR/terminal checks, not PROGRESS, bind that final head.
+        unrenewed_intent = dict(source_intent, body=source_intent["body"].replace(
+            "source_comment_id: 105", "source_comment_id: 100",
+        ))
+        unrenewed_recover = dict(source_recover, body=source_recover["body"].replace(
+            "source_comment_id: 105", "source_comment_id: 100",
+        ))
+        archive[9001] = [source_claim, unrenewed_intent,
+                         unrenewed_recover, source_terminal]
+        assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
+        archive[9001] = [source_claim, source_advance, source_intent,
+                         source_recover, source_terminal]
         # Positive original first-winner producer (no recovery), same reviewed
         # source and immutable PR, even while code advances HEAD.
+        archive[9001] = [source_claim, source_first_terminal]
+        assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
         archive[9001] = [source_claim, source_advance, source_first_terminal]
         assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
         archive[9001] = [source_claim, source_advance, source_intent,
