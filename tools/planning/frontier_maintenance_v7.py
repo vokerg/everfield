@@ -424,6 +424,10 @@ def _exact_causal_source_review(
         or review.authority_mode != "REVIEWER"
         or not _valid_owner_terminal(source_id, source_records, source)
         or not _valid_owner_terminal(review_id, review_records, review)
+        or any(r.kind == "STATUS" and r.comment_id > source.comment_id
+               for r in source_records)
+        or any(r.kind == "REVIEW_STATUS" and r.comment_id > review.comment_id
+               for r in review_records)
         or not source.comment_id < review.comment_id < integration.comment_id
         or len({source.actor_session_id, review.actor_session_id,
                  integration.actor_session_id}) != 3
@@ -461,8 +465,10 @@ def _exact_causal_source_review(
     ):
         return False
     disposition = _extension_field(review.body, "disposition")
+    declared_disposition = _integration_field(review.body, "review_disposition")
     if (
         disposition is None or not disposition.startswith("CLEAN_FOR_")
+        or (declared_disposition is not None and declared_disposition != disposition)
         or _extension_field(integration.body, "required_review_disposition")
         != disposition
         or any(
@@ -491,15 +497,23 @@ def _exact_causal_source_review(
     ):
         return False
     source_files = list(base.paged(f"/repos/{base.REPO}/pulls/{source_pr}/files?"))
+    review_files = list(base.paged(f"/repos/{base.REPO}/pulls/{reviewer_pr}/files?"))
     paths = {f["filename"] for f in source_files}
+    reviewed_paths = {f["filename"] for f in review_files}
     return bool(
         paths
         and any(p.startswith("game/") for p in paths)
         and paths == set(base.list_scalar(source.body, "artifact_paths"))
         and len(paths) == len(source_files)
-        and all(p.startswith("docs/") for p in base.list_scalar(
+        and reviewed_paths
+        and len(reviewed_paths) == len(review_files)
+        and reviewed_paths == set(base.list_scalar(
             review.body, "artifact_paths"
         ))
+        and all(p.startswith("docs/") for p in reviewed_paths)
+        and all(base.SHA40_RE.fullmatch(f.get("sha", ""))
+                and f.get("status") in {"added", "modified"}
+                for f in review_files)
     )
 
 
@@ -1069,6 +1083,10 @@ def self_test() -> None:
         {"filename": "docs/planning/handoffs/source.md", "sha": "2" * 40,
          "status": "added"},
     ]
+    reviewer_files = [
+        {"filename": "docs/planning/reviews/review.md", "sha": "3" * 40,
+         "status": "added"},
+    ]
     api_map = {
         f"/repos/{base.REPO}/issues/9001": producer_issue,
         f"/repos/{base.REPO}/issues/9002": reviewer_issue,
@@ -1107,6 +1125,8 @@ def self_test() -> None:
             return archive[int(match.group(1))]
         if "/pulls/9901/files" in path:
             return producer_files
+        if "/pulls/9902/files" in path:
+            return reviewer_files
         raise AssertionError(path)
 
     base.request, base.paged = fixture_request, fixture_paged
@@ -1264,6 +1284,18 @@ def self_test() -> None:
         archive[9002] = [reviewer_claim, reviewer_advance,
                          dict(reviewer_terminal, updated_at=clock[8])]
         assert integration_main_sha_from_comments(9003, archive[9003]) is None
+        archive[9002] = [reviewer_claim, reviewer_advance, reviewer_terminal,
+            cmt(221, 9002, clock[6],
+                "kind: REVIEW_STATUS\nissue: 9002\n"
+                "mission_id: REQUIRED-REVIEW\nstate: CHANGES_NEEDED\n"
+                "branch: planning/issue-9002\n"
+                "actor_session_id: distinct-reviewer")]
+        assert integration_main_sha_from_comments(9003, archive[9003]) is None
+        archive[9002] = [reviewer_claim, reviewer_advance, reviewer_terminal]
+        review_file_original = reviewer_files[0]
+        reviewer_files[0] = dict(review_file_original, filename="game/main.gd")
+        assert integration_main_sha_from_comments(9003, archive[9003]) is None
+        reviewer_files[0] = review_file_original
         print("frontier v7 source/review causal authority and STALE recovery fixtures: PASS")
     finally:
         base.request, base.paged = original_api, original_paged
