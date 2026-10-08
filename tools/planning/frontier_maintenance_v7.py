@@ -194,10 +194,10 @@ def _consistent_extension_alias(
     authority, section = capsule.split("\nextensions:\n", 1)
     present: list[str] = []
     for key in keys:
-        if re.search(rf"(?m)^[ \\t]*{re.escape(key)}:\\s*", authority):
+        if re.search(rf"(?m)^[ \t]*{re.escape(key)}:\s*", authority):
             return None
         located = re.findall(
-            rf"(?m)^([ \\t]*){re.escape(key)}:\\s*([^\\n#]*?)\\s*$",
+            rf"(?m)^([ \t]*){re.escape(key)}:\s*([^\n#]*?)\s*$",
             section,
         )
         if len(located) > 1 or any(indent != "  " for indent, _ in located):
@@ -584,7 +584,7 @@ def _required_verifier_marker(source: Any, integration: Any) -> bool:
     )
     capsule = integration.body.split("\n```", 1)[0]
     return "VERIFICATION" in route or any(
-        re.search(rf"(?m)^[ \\t]*{re.escape(key)}:\\s*", capsule)
+        re.search(rf"(?m)^[ \t]*{re.escape(key)}:\s*", capsule)
         for key in verifier_keys
     )
 
