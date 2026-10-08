@@ -191,7 +191,11 @@ def _consistent_extension_alias(
     if not body.startswith("```yaml\n") or body.count("\nextensions:\n") != 1:
         return None
     capsule = body.split("\n```", 1)[0].split("\n", 1)[1]
-    authority, section = capsule.split("\nextensions:\n", 1)
+    if capsule.startswith("extensions:\n"):
+        authority = ""
+        section = capsule[len("extensions:\n"):]
+    else:
+        authority, section = capsule.split("\nextensions:\n", 1)
     present: list[str] = []
     for key in keys:
         if re.search(rf"(?m)^[ \t]*{re.escape(key)}:\s*", authority):
