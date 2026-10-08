@@ -2,7 +2,7 @@
 
 ## Disposition
 
-**CHANGES_NEEDED — 0 BLOCKER / 1 MAJOR / 0 correction-requiring MINOR.**
+**CHANGES_NEEDED — 0 BLOCKER / 2 MAJOR / 0 correction-requiring MINOR.**
 
 Reviewed immutable producer Issue #1591 terminal `6053794956`, draft source PR #1593, exact frozen HEAD `fa0c552bab1577f088dba271aeebe64f5150b1e0`, against current `main@3d7ce70fbc4e1c26224f01c6aa3a3fc18cf3902d` and active canonical binding #1147 comment `5675066392` / program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`.
 
@@ -55,6 +55,35 @@ Add explicit adversarial fixtures for at least:
 
 Then require a new exact final producer HEAD, read-only PR compile/composed v1-v7 self-test PASS, mutation job SKIPPED, current-main compatibility, and a **new distinct mandatory required adversarial review**. This reviewer must not correct frozen PR #1593 in place.
 
+## FSR-1594-M02 — MAJOR — losing duplicate ownership contenders incorrectly invalidate the canonical winner
+
+The candidate's `_valid_owner_terminal()` reconstructs a first winning CLAIM or valid STALE recovery, but then applies this unconditional rejection before accepting the terminal:
+
+```text
+if any(
+    r.kind in {"CLAIM", "RESUME", "RECOVER"}
+    and owner.comment_id < r.comment_id < terminal.comment_id
+    ...
+):
+    return False
+```
+
+That treats **every** later ownership-shaped contender as authority-displacing, without asking whether it actually won canonical contention. The active program instead requires prefix-scoped reconstruction that rejects losing duplicate CLAIM/RESUME/RECOVER contenders and retains the existing lowest-valid-GitHub-comment-ID winner rule. Premature or losing records cannot supersede the valid current owner. The shared lease helper likewise ignores non-PROGRESS records rather than converting every later contender into a generation change.
+
+Therefore a valid first owner can publish an otherwise authoritative unexpired terminal, yet v7 rejects it solely because a later duplicate claimant lost contention in between. The same false negative applies wherever `_valid_owner_terminal()` authenticates producer, reviewer, verifier, or integrator authority. This does not create false authority, but it can discard valid reviewed/verified publication provenance and suppress the newest implementation demand source, violating the required ownership regressions and convergence/liveness semantics.
+
+### Required remediation
+
+Reconstruct effective ownership transitions canonically rather than rejecting raw later ownership-shaped records. A later record should displace the evaluated owner only when it is itself the valid winning next generation under the applicable CLAIM/HANDOFF/STALE/ORPHAN rules; losing duplicates must have zero authority effect.
+
+Add deterministic fixtures where:
+- a first valid CLAIM remains owner despite a later losing duplicate CLAIM before its terminal;
+- a valid recovered generation remains owner despite later losing duplicate ownership-shaped contenders;
+- an actually winning later valid generation still invalidates a stale prior-owner terminal;
+- source, review, verifier, and integrator authentication inherit the same behavior.
+
+Then rerun the same fresh exact-head CI and distinct-review route required for FSR-1594-M01.
+
 ## Other mandatory review dimensions
 
 No additional BLOCKER/MAJOR/correction-requiring MINOR was identified in the reviewed frozen head:
@@ -64,7 +93,7 @@ No additional BLOCKER/MAJOR/correction-requiring MINOR was identified in the rev
 - exact source/reviewer ownership and STALE recovery gates, one-parent squash identity, ancestry ordering, consumed-latest-no-backfill, v5 successor behavior, and v6 bounded demand regressions remain exercised;
 - pull-request validation is read-only and the mutation-capable job is skipped.
 
-These observations do not downgrade FSR-1594-M01 or grant integration authority.
+These observations do not downgrade FSR-1594-M01 or FSR-1594-M02 or grant integration authority.
 
 ## Authority boundary
 
