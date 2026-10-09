@@ -181,34 +181,66 @@ def _extension_field(body: str, key: str) -> str | None:
 def _consistent_extension_alias(
     body: str, keys: tuple[str, ...],
 ) -> str | None:
-    """Require one extension-scoped alias value and reject foreign placement.
+    """Fail closed unless recognized aliases are scalar direct children of extensions.
 
-    Recognized provenance aliases are authority-bearing only in the top-level
-    `extensions:` mapping. A same-name key at top level, inside another
-    top-level mapping, or nested below extensions is ambiguity, even when its
-    value agrees. Duplicate, null and conflicting aliases likewise fail closed.
+    Scan the full capsule for alias key tokens, not only lines beginning with a
+    mapping key. In particular YAML sequence-item and flow mapping keys must
+    not evade the direct-child check. Parsing just the accepted direct alias
+    while silently discarding another occurrence would create false authority.
     """
-    if not body.startswith("```yaml\n") or body.count("\nextensions:\n") != 1:
+    if not body.startswith(chr(96) * 3 + "yaml\n"):
         return None
-    capsule = body.split("\n```", 1)[0].split("\n", 1)[1]
-    if capsule.startswith("extensions:\n"):
-        authority = ""
-        section = capsule[len("extensions:\n"):]
-    else:
-        authority, section = capsule.split("\nextensions:\n", 1)
+    capsule = body.split("\n" + chr(96) * 3, 1)[0].split("\n", 1)[1]
+    lines = capsule.splitlines()
+    headers = [
+        i for i, line in enumerate(lines) if line == "extensions:"
+    ]
+    if len(headers) != 1:
+        return None
+    extension_start = headers[0]
+    extension_end = next(
+        (i for i in range(extension_start + 1, len(lines))
+         if lines[i] and not lines[i][0].isspace()),
+        len(lines),
+    )
     present: list[str] = []
     for key in keys:
-        if re.search(rf"(?m)^[ \t]*{re.escape(key)}:\s*", authority):
-            return None
-        located = re.findall(
-            rf"(?m)^([ \t]*){re.escape(key)}:\s*([^\n#]*?)\s*$",
-            section,
+        # A token followed by ':' is a YAML mapping key even when it occurs
+        # after '-' or inside a flow mapping. Quoted aliases are deliberately
+        # treated as occurrences but are not accepted as direct scalar keys.
+        token = re.compile(
+            rf"(?<![A-Za-z0-9_])['\"]?{re.escape(key)}['\"]?\s*:"
         )
-        if len(located) > 1 or any(indent != "  " for indent, _ in located):
+        occurrences = [
+            i for i, line in enumerate(lines)
+            if not line.lstrip().startswith("#") and token.search(line)
+        ]
+        direct = [
+            (i, re.fullmatch(
+                rf"  {re.escape(key)}:[ \t]*([^\n#]*?)[ \t]*",
+                line,
+            ))
+            for i, line in enumerate(lines)
+            if extension_start < i < extension_end
+        ]
+        direct = [(i, m) for i, m in direct if m is not None]
+        if len(occurrences) != len(direct):
             return None
-        if located:
-            value = located[0][1].strip().strip("'\\\"")
-            if not value or value.lower() in {"null", "none"}:
+        if len(direct) > 1:
+            return None
+        if direct:
+            if occurrences != [direct[0][0]]:
+                return None
+            value = direct[0][1].group(1).strip()
+            # A nested collection, block scalar or missing/null scalar must
+            # never serve as a trusted issue/PR provenance identifier.
+            if (
+                not value or value.startswith(("{", "[", "|", ">", "- "))
+                or value.lower() in {"null", "none", "~"}
+            ):
+                return None
+            value = value.strip("'\"")
+            if not value or value.lower() in {"null", "none", "~"}:
                 return None
             present.append(value)
     return present[0] if present and len(set(present)) == 1 else None
@@ -223,13 +255,103 @@ def _positive_comment_number(value: str | None) -> int | None:
     return int(value) if value and value.isdigit() and int(value) > 0 else None
 
 
+def _valid_stale_owner_transition(
+    issue_number: int, records: list[Any], prior: Any, grant: Any,
+) -> bool:
+    """Prove a first-valid STALE recovery grant for an exact owner generation.
+
+    Losing duplicate grants and claims are not owner transitions. A new
+    generation exists only after a winning, mature, exact-source intent and
+    its first valid recovery. Work is evaluated in comment-prefix order.
+    """
+    branch = f"planning/issue-{issue_number}"
+    if (
+        grant.kind != "RECOVER" or grant.state != "IN_PROGRESS"
+        or grant.declared_issue != issue_number
+        or grant.mission_id != prior.mission_id
+        or _integration_field(grant.body, "branch") != branch
+        or _integration_field(grant.body, "recovery_reason") != "STALE"
+        or _integration_field(grant.body, "previous_ownership_comment_id")
+        != str(prior.comment_id)
+        or not prior.comment_id < grant.comment_id
+        or not grant.actor_session_id
+        or _integration_field(grant.body, "actor_session_id")
+        != grant.actor_session_id
+    ):
+        return False
+    intent_id = _positive_comment_number(
+        _integration_field(grant.body, "winning_intent_comment_id")
+    )
+    intent = next((r for r in records if r.comment_id == intent_id), None)
+    if (
+        intent is None or intent.kind != "RESUME_INTENT"
+        or intent.declared_issue != issue_number
+        or intent.mission_id != prior.mission_id
+        or intent.actor_session_id != grant.actor_session_id
+        or _integration_field(intent.body, "branch") != branch
+        or _integration_field(intent.body, "reason") != "STALE"
+        or not prior.comment_id < intent.comment_id < grant.comment_id
+    ):
+        return False
+    at_intent = base.schema3_ownership_lease_state(
+        prior, records, before_comment_id=intent.comment_id,
+    )
+    at_grant = base.schema3_ownership_lease_state(
+        prior, records, before_comment_id=grant.comment_id,
+    )
+    intent_time = base.parse_github_server_time(intent.created_at)
+    grant_time = base.parse_github_server_time(grant.created_at)
+    if (
+        at_intent is None or at_grant is None or at_intent != at_grant
+        or intent_time is None or grant_time is None
+        or intent_time < at_intent.anchor_created_at
+        + base.timedelta(seconds=base.SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
+        or grant_time < intent_time
+        or _integration_field(intent.body, "source_comment_id")
+        != str(at_intent.anchor_comment_id)
+        or _integration_field(grant.body, "source_comment_id")
+        != str(at_intent.anchor_comment_id)
+        or (head := _integration_field(grant.body, "observed_head_sha")) is None
+        or base.SHA40_RE.fullmatch(head) is None
+        or _integration_field(intent.body, "observed_head_sha") != head
+    ):
+        return False
+    eligible_intents = []
+    for candidate in records:
+        if not (
+            candidate.kind == "RESUME_INTENT"
+            and candidate.declared_issue == issue_number
+            and candidate.mission_id == prior.mission_id
+            and prior.comment_id < candidate.comment_id <= intent.comment_id
+            and _integration_field(candidate.body, "branch") == branch
+            and _integration_field(candidate.body, "reason") == "STALE"
+            and _integration_field(candidate.body, "source_comment_id")
+            == str(at_intent.anchor_comment_id)
+            and _integration_field(candidate.body, "observed_head_sha") == head
+        ):
+            continue
+        state = base.schema3_ownership_lease_state(
+            prior, records, before_comment_id=candidate.comment_id,
+        )
+        when = base.parse_github_server_time(candidate.created_at)
+        if (
+            state is not None and state == at_intent and when is not None
+            and when >= state.anchor_created_at
+            + base.timedelta(seconds=base.SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
+        ):
+            eligible_intents.append(candidate.comment_id)
+    return bool(eligible_intents and min(eligible_intents) == intent_id)
+
+
 def _valid_owner_terminal(
     issue_number: int, records: list[Any], terminal: Any,
 ) -> bool:
-    """Fail-closed canonical first winner or matured winning STALE recovery.
+    """Authenticate the *effective* owner generation at the terminal prefix.
 
-    The shared base lease helper tracks PROGRESS but does not itself validate
-    recovery grants or competing generations. Reconstruct those explicitly.
+    Only a first valid CLAIM or an actually winning STALE recovery in this
+    bounded consumer can confer authority. A later losing CLAIM/RECOVER/RESUME
+    is inert; unsupported HANDOFF/ORPHAN authority fails closed rather than
+    being accepted from raw ownership-shaped comments.
     """
     if (
         terminal.declared_issue != issue_number
@@ -247,15 +369,13 @@ def _valid_owner_terminal(
         )
     ):
         return False
-
     owner = next(
         (r for r in records if r.comment_id == terminal.ownership_generation_comment_id),
         None,
     )
     claims = [
         r for r in records
-        if r.kind == "CLAIM"
-        and r.state == "IN_PROGRESS"
+        if r.kind == "CLAIM" and r.state == "IN_PROGRESS"
         and r.declared_issue == issue_number
         and r.mission_id == terminal.mission_id
         and _integration_field(r.body, "branch") == f"planning/issue-{issue_number}"
@@ -264,13 +384,13 @@ def _valid_owner_terminal(
         and base.SHA40_RE.fullmatch(base_sha)
         and _integration_field(r.body, "observed_head_sha") == base_sha
         and base.parse_github_server_time(r.created_at) is not None
+        and r.comment_id < terminal.comment_id
     ]
     if not claims or owner is None:
         return False
     first = min(claims, key=lambda r: r.comment_id)
     if (
-        first.comment_id >= terminal.comment_id
-        or owner.comment_id >= terminal.comment_id
+        owner.comment_id >= terminal.comment_id
         or owner.declared_issue != issue_number
         or owner.mission_id != terminal.mission_id
         or owner.actor_session_id != terminal.actor_session_id
@@ -279,94 +399,30 @@ def _valid_owner_terminal(
         != _integration_field(first.body, "base_sha")
     ):
         return False
-    if owner.kind == "CLAIM":
-        if owner.comment_id != first.comment_id:
-            return False
-    elif owner.kind == "RECOVER":
-        if (
-            _integration_field(owner.body, "recovery_reason") != "STALE"
-            or _integration_field(owner.body, "previous_ownership_comment_id")
-            != str(first.comment_id)
-            or any(
-                r.kind in {"RECOVER", "RESUME"}
-                and first.comment_id < r.comment_id < owner.comment_id
-                and r.declared_issue == issue_number
-                for r in records
-            )
+
+    effective = first
+    for candidate in sorted(records, key=lambda r: r.comment_id):
+        if not (effective.comment_id < candidate.comment_id < terminal.comment_id):
+            continue
+        if candidate.declared_issue != issue_number or candidate.mission_id != terminal.mission_id:
+            continue
+        if candidate.kind == "RECOVER" and _valid_stale_owner_transition(
+            issue_number, records, effective, candidate,
         ):
-            return False
-        intent_id = _positive_comment_number(
-            _integration_field(owner.body, "winning_intent_comment_id")
-        )
-        intent = next((r for r in records if r.comment_id == intent_id), None)
-        if (
-            intent is None
-            or intent.kind != "RESUME_INTENT"
-            or intent.declared_issue != issue_number
-            or intent.mission_id != terminal.mission_id
-            or intent.actor_session_id != owner.actor_session_id
-            or _integration_field(intent.body, "reason") != "STALE"
-            or _integration_field(intent.body, "branch")
-            != f"planning/issue-{issue_number}"
-            or not first.comment_id < intent.comment_id < owner.comment_id
+            effective = candidate
+        elif (
+            candidate.kind == "STATUS" and candidate.state == "HANDOFF_READY"
+            and candidate.ownership_generation_comment_id == effective.comment_id
+            and candidate.actor_session_id == effective.actor_session_id
+            and base.schema3_owner_unexpired_at(
+                effective, records, candidate,
+            ) is True
         ):
+            # A legitimate HANDOFF ends this active generation. Its RESUME
+            # chain must be authenticated separately; never reuse prior owner.
             return False
-        lease_at_intent = base.schema3_ownership_lease_state(
-            first, records, before_comment_id=intent.comment_id,
-        )
-        lease_at_recover = base.schema3_ownership_lease_state(
-            first, records, before_comment_id=owner.comment_id,
-        )
-        intent_time = base.parse_github_server_time(intent.created_at)
-        recover_time = base.parse_github_server_time(owner.created_at)
-        if (
-            lease_at_intent is None or lease_at_recover is None
-            or lease_at_recover != lease_at_intent
-            or intent_time is None or recover_time is None
-            or intent_time < lease_at_intent.anchor_created_at
-            + base.timedelta(seconds=base.SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
-            or recover_time < intent_time
-            or _integration_field(intent.body, "source_comment_id")
-            != str(lease_at_intent.anchor_comment_id)
-            or _integration_field(owner.body, "source_comment_id")
-            != str(lease_at_intent.anchor_comment_id)
-            or (observed_recovery_head := _integration_field(
-                owner.body, "observed_head_sha"
-            )) is None
-            or base.SHA40_RE.fullmatch(observed_recovery_head) is None
-            or _integration_field(intent.body, "observed_head_sha")
-            != observed_recovery_head
-        ):
-            return False
-        eligible_intents = [
-            r for r in records
-            if r.kind == "RESUME_INTENT"
-            and r.declared_issue == issue_number
-            and r.mission_id == terminal.mission_id
-            and first.comment_id < r.comment_id <= intent.comment_id
-            and _integration_field(r.body, "branch")
-            == f"planning/issue-{issue_number}"
-            and _integration_field(r.body, "reason") == "STALE"
-            and _integration_field(r.body, "source_comment_id")
-            == str(lease_at_intent.anchor_comment_id)
-            and _integration_field(r.body, "observed_head_sha")
-            == observed_recovery_head
-            and (t := base.parse_github_server_time(r.created_at)) is not None
-            and t >= lease_at_intent.anchor_created_at
-            + base.timedelta(seconds=base.SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS)
-        ]
-        if not eligible_intents or min(r.comment_id for r in eligible_intents) != intent_id:
-            return False
-    else:
-        # HANDOFF/ORPHAN/other grants require their distinct full route.
-        return False
-    if any(
-        r.kind in {"CLAIM", "RESUME", "RECOVER"}
-        and r.state == "IN_PROGRESS"
-        and owner.comment_id < r.comment_id < terminal.comment_id
-        and r.declared_issue == issue_number
-        for r in records
-    ):
+        # CLAIM duplicates are inert; losing RESUME/RECOVER cannot displace.
+    if effective.comment_id != owner.comment_id:
         return False
     lease = base.schema3_ownership_lease_state(
         owner, records, before_comment_id=terminal.comment_id,
@@ -1513,6 +1569,92 @@ def self_test() -> None:
                 9003, archive[9003]
             ) is None
         archive[9004] = [verifier_claim, verifier_terminal]
+
+        # FSR-1594-M01: every recognized alias key occurrence must be a
+        # scalar, sole direct extension child (including agreeing aliases).
+        for key, expected in (
+            ("original_source_issue", "9001"),
+            ("source_producer_pr_number", "9901"),
+            ("required_independent_review_issue", "9002"),
+            ("independent_verifier_issue", "9004"),
+        ):
+            clean = "yaml\nextensions:\n  " + key + ": " + expected + "\n"
+            body = chr(96) * 3 + clean + chr(96) * 3
+            assert _consistent_extension_alias(body, (key,)) == expected
+            for foreign in (
+                "  nested:\n    - " + key + ": " + expected + "\n",
+                "  nested:\n    - " + key + ": 9999\n",
+                "  nested: {" + key + ": " + expected + "}\n",
+                "  nested: {" + key + ": 9999}\n",
+                "  nested: [{ " + key + ": null }]\n",
+                "  - " + key + ": " + expected + "\n",
+                "  " + key + ": null\n",
+                "  " + key + ": " + expected + "\n",
+            ):
+                corrupt = body.replace(
+                    "  " + key + ": " + expected + "\n",
+                    "  " + key + ": " + expected + "\n" + foreign,
+                    1,
+                )
+                assert _consistent_extension_alias(corrupt, (key,)) is None, (key, foreign)
+            outside = body.replace(
+                "extensions:\n", "other: {" + key + ": " + expected + "}\nextensions:\n"
+            )
+            assert _consistent_extension_alias(outside, (key,)) is None
+        print("frontier v7 nested/flow alias direct-child fixtures: PASS")
+
+        # FSR-1594-M02: later losing CLAIMs have zero authority effect in
+        # every causal consumer (producer, required reviewer, verifier, integrator).
+        for number, record_set, terminal_record in (
+            (9001, [source_claim, source_advance], source_first_terminal),
+            (9002, [reviewer_claim, reviewer_advance], reviewer_terminal),
+            (9003, [integrator_claim], integration_terminal),
+            (9004, [verifier_claim], verifier_terminal),
+        ):
+            first_claim = record_set[0]
+            losing_claim = dict(first_claim, id=first_claim["id"] + 1)
+            ops = base.operational_records_from_comments(
+                number, record_set + [losing_claim, terminal_record]
+            )
+            actual = next(r for r in ops if r.comment_id == terminal_record["id"])
+            assert _valid_owner_terminal(number, ops, actual), number
+
+        losing_claim = dict(source_claim, id=101)
+        losing_recover = dict(source_recover, id=118)
+        ops = base.operational_records_from_comments(9001, [
+            source_claim, losing_claim, source_advance, source_intent,
+            source_recover, losing_recover, source_terminal,
+        ])
+        actual = next(r for r in ops if r.comment_id == 120)
+        assert _valid_owner_terminal(9001, ops, actual)
+        stale_first_terminal = dict(
+            source_first_terminal, created_at=clock[4], updated_at=clock[4],
+        )
+        ops = base.operational_records_from_comments(9001, [
+            source_claim, source_advance, source_intent,
+            source_recover, stale_first_terminal,
+        ])
+        actual = next(r for r in ops if r.comment_id == 120)
+        assert not _valid_owner_terminal(9001, ops, actual)
+        # A purported STALE grant made before the six-hour boundary is inert.
+        premature_intent = dict(
+            source_intent, id=109, created_at=clock[1], updated_at=clock[1],
+            body=source_intent["body"].replace("source_comment_id: 105",
+                                               "source_comment_id: 105"),
+        )
+        premature_grant = dict(
+            source_recover, id=110, created_at=clock[1], updated_at=clock[1],
+            body=source_recover["body"].replace(
+                "winning_intent_comment_id: 115", "winning_intent_comment_id: 109"
+            ),
+        )
+        ops = base.operational_records_from_comments(9001, [
+            source_claim, source_advance, premature_intent,
+            premature_grant, source_first_terminal,
+        ])
+        actual = next(r for r in ops if r.comment_id == 120)
+        assert _valid_owner_terminal(9001, ops, actual)
+        print("frontier v7 losing-owner contender/valid-recovery fixtures: PASS")
 
         for foreign in (
             "original_source_issue: 9001\n",
