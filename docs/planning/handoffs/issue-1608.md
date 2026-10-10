@@ -8,9 +8,10 @@
 
 ## Corrective candidate
 
-- Replacement `tools/planning/frontier_maintenance_v7.py`: Git blob **`d4a4bad43ce73e642261d8d141d21057ff624926`**.
+- Replacement `tools/planning/frontier_maintenance_v7.py`: Git blob **`9711d070abb0849abef9408d9bb6c9c5fa4c4226`**.
 - FSR-1606-B01: lexical YAML mapping scanner preserves real quoted keys but masks quoted scalar values; escaped double-quoted mapping-key tokens are conservatively rejected before *any* authority can be authenticated, including duplicate/overwriting `extensions` and aliases.
 - FSR-1606-M01: verifier gate scans structural mapping-key tokens only; escaped real verifier assertions still activate fail-closed authentication, whereas prose in quoted scalar fields does not.
+- Additional pre-terminal structural regression covers YAML explicit complex-key shadows (`?` key with a following-line colon) that can overwrite `extensions` or an alias. The amended exact head requires fresh PR CI.
 - Independent negative controls now include escaped `extensions`, directly escaped alias duplicates with conflicting/same/null values, nested/flow variants, escaped verifier keys, several quoted prose values, and legal commented/quoted direct aliases. The existing full v1–v7 composed suite and real #1545→#1575→#1577→#1583 causal route remain required.
 
 ## Exact bounded packet and gates

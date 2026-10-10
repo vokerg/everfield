@@ -211,8 +211,15 @@ def _yaml_mapping_structure(line: str) -> tuple[str, list[str | None]]:
     activate the fail-closed conditional verifier route. Text inside scalar
     quotes must never masquerade as a mapping key.
     """
+    # Explicit YAML complex-key syntax can put its colon on the next line.
+    # Such a key can shadow an earlier extensions/alias identity even when
+    # no quoted token ends with ':' on this line. Reject this shape before
+    # making any provenance decision.
+    if re.match(r"^\s*(?:-\s*)?\?(?:\s|$)", line):
+        return line, [None]
     chars = list(line)
     escaped_keys: list[str | None] = []
+
     i = 0
     while i < len(line):
         quote = line[i]
@@ -1960,6 +1967,10 @@ def self_test() -> None:
         for shadow in (
             r'"exten\u0073ions": null',
             r'"exten\u0073ions": {unexpected: shadow}',
+            r'? "exten\u0073ions"' + "\n: null",
+            r'? "extensions"' + "\n: null",
+            r'  ? "original_source_issu\u0065"' + "\n  : 1559",
+
             r'  "original_source_issu\u0065": 1559',
             r'  "original_source_issu\u0065": null',
             r'  "original_source_issu\u0065": 1545',
