@@ -133,12 +133,91 @@ def paged(path: str) -> Iterable[dict[str, Any]]:
         page += 1
 
 
-def scalar(body: str, key: str) -> str | None:
-    match = re.search(rf"(?m)^\s*{re.escape(key)}:\s*([^#\n]+?)\s*$", body)
-    if not match:
+def yaml_scalar_identity(raw: str) -> str | None:
+    """Decode at most one YAML scalar quoting layer; never erase quoted data.
+
+    This is a fail-closed, intentionally small scalar subset for schema-3
+    operations, not a whole-document YAML parser. JSON-compatible double
+    escapes and YAML doubled-single-quote escaping are decoded exactly once.
+    Unsupported YAML quoting/escape syntax has no authority.
+    """
+    value = raw.strip()
+    if not value:
         return None
-    value = match.group(1).strip().strip("'\"")
-    return None if value.lower() in {"null", "none", ""} else value
+    if value.startswith("'"):
+        if re.fullmatch(r"'(?:[^']|'')*'", value) is None:
+            return None
+        value = value[1:-1].replace("''", "'")
+    elif value.startswith('"'):
+        try:
+            value = json.loads(value)
+        except (ValueError, TypeError):
+            return None
+        if not isinstance(value, str):
+            return None
+    return value if value and value.lower() not in {"null", "none", "~"} else None
+
+
+def _root_mapping_fields(body: str) -> dict[str, str] | None:
+    """Conservatively authenticate direct root fields of one YAML capsule.
+
+    Nested extensions data, secondary examples, complex and escaped mapping
+    keys, and duplicate root keys never create schema-3 authority.
+    """
+    fence = chr(96) * 3
+    if body.startswith(fence + "yaml\n"):
+        cut = body.find("\n" + fence, len(fence) + 5)
+        if cut < 0:
+            return None
+        body = body[len(fence) + 5:cut]
+    elif body.startswith(fence):
+        return None
+    result: dict[str, str] = {}
+    for line in body.splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        if line[0] in " \t":
+            # Only direct root keys grant authority. Indented scalar blocks,
+            # nested maps, and lists are never root operational fields.
+            continue
+        match = re.fullmatch(r"([A-Za-z_][A-Za-z0-9_]*):[ \t]*(.*)", line)
+        if match is None or match.group(1) in result:
+            return None
+        result[match.group(1)] = match.group(2)
+    return result
+
+
+def _root_scalar_without_comment(raw: str) -> str:
+    """Exclude YAML inline comments, preserving hashes inside quotes."""
+    quote: str | None = None
+    i = 0
+    while i < len(raw):
+        ch = raw[i]
+        if quote == "'":
+            if ch == "'" and i + 1 < len(raw) and raw[i + 1] == "'":
+                i += 2
+                continue
+            if ch == "'":
+                quote = None
+        elif quote == '"':
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == '"':
+                quote = None
+        elif ch in {"'", '"'}:
+            quote = ch
+        elif ch == "#" and (i == 0 or raw[i - 1] in " \t"):
+            return raw[:i].rstrip()
+        i += 1
+    return raw.rstrip()
+
+
+def scalar(body: str, key: str) -> str | None:
+    fields = _root_mapping_fields(body)
+    if fields is None or key not in fields:
+        return None
+    return yaml_scalar_identity(_root_scalar_without_comment(fields[key]))
 
 
 def integer_scalar(body: str, key: str) -> int | None:
@@ -384,6 +463,11 @@ def parse_operational(issue_number: int, comment: dict[str, Any]) -> Operational
     if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
         return None
     if not immutable_comment(comment):
+        return None
+    root = _root_mapping_fields(body)
+    # The first direct key of a real schema-3 mapping is protocol, not an
+    # extensions container whose child fields mimic a foreign owner record.
+    if not root or next(iter(root)) != "protocol":
         return None
     if scalar(body, "protocol") != "planning-v1" or scalar(body, "schema") != "3":
         return None
@@ -961,6 +1045,60 @@ def self_test() -> None:
         ),
     )
     assert reconcilable_terminal_from_comments(10, [claim, valid_done]) is not None
+
+    # FSR-1632-B01: these two YAML documents have only root 'extensions'.
+    # A nested operational-looking CLAIM / STATUS cannot authorize closure.
+    fake_claim = dict(claim, body=(
+        "```yaml\nextensions:\n"
+        "  protocol: planning-v1\n  schema: 3\n  kind: CLAIM\n"
+        "  issue: 10\n  mission_id: M-10\n  actor_session_id: actor-a\n"
+        "  state: IN_PROGRESS\n```"
+    ))
+    fake_done = dict(valid_done, body=(
+        "```yaml\nextensions:\n"
+        "  protocol: planning-v1\n  schema: 3\n  kind: STATUS\n"
+        "  issue: 10\n  mission_id: M-10\n  actor_session_id: actor-a\n"
+        "  state: DONE\n  authority_mode: OWNER\n"
+        "  ownership_generation_comment_id: 1\n"
+        f"  head_sha: {'a' * 40}\n  work_sha: {'b' * 40}\n```"
+    ))
+    assert parse_operational(10, fake_claim) is None
+    assert parse_operational(10, fake_done) is None
+    assert reconcilable_terminal_from_comments(10, [fake_claim, fake_done]) is None
+
+    fenced_claim = dict(claim, body="```yaml\n" + claim["body"] + "```")
+    fenced_done = dict(valid_done, body="```yaml\n" + valid_done["body"] + "```")
+    assert reconcilable_terminal_from_comments(10, [fenced_claim, fenced_done]) is not None
+
+    for shadow in (
+        "protocol: planning-v1\nprotocol: planning-v1\n",
+        "protocol: planning-v1\n'protocol': other\n",
+        'protocol: planning-v1\n"prot\\u006fcol": other\n',
+        "protocol: planning-v1\n!!str protocol: other\n",
+        "protocol: planning-v1\n<<: *foreign\n",
+    ):
+        tamper = dict(claim, body=shadow + claim["body"].split("\n", 1)[1])
+        assert parse_operational(10, tamper) is None, shadow
+    block_only = dict(claim, body=(
+        "```yaml\nnote: |\n  protocol: planning-v1\n  schema: 3\n"
+        "  kind: CLAIM\n  issue: 10\n```\n"
+    ))
+    assert parse_operational(10, block_only) is None
+    late_fence = dict(claim, body=(
+        "Example, not operational:\n```yaml\n" + claim["body"] + "```"
+    ))
+    assert parse_operational(10, late_fence) is None
+    after_first_fence = dict(claim, body=(
+        "```yaml\nnotes: ordinary\n```\n\n"
+        "```yaml\n" + claim["body"] + "```"
+    ))
+    assert parse_operational(10, after_first_fence) is None
+    assert scalar("protocol: 'planning-v1' # safe\n", "protocol") == "planning-v1"
+    assert scalar('protocol: "planning-v1"\n', "protocol") == "planning-v1"
+    assert scalar("protocol: '\"planning-v1\"'\n", "protocol") == '"planning-v1"'
+    assert scalar("protocol: '\"planning-v1\"'\n", "protocol") != "planning-v1"
+    assert scalar('protocol: "a#b" # inline comment\n', "protocol") == "a#b"
+    assert scalar('protocol: "\\u0070lanning-v1"\n', "protocol") == "planning-v1"
 
     later_claim = c(3, "CLAIM", "IN_PROGRESS")
     assert reconcilable_terminal_from_comments(10, [claim, valid_done, later_claim]) is None
