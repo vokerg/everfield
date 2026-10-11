@@ -5,6 +5,10 @@ on:
     branches: [main]
   schedule:
     - cron: '17 * * * *'
+  pull_request:
+    paths:
+      - 'tools/planning/frontier_maintenance*.py'
+      - '.github/workflows/planning-frontier-maintenance.yml'
   workflow_dispatch:
 
 permissions:
@@ -14,12 +18,30 @@ permissions:
   actions: write
 
 concurrency:
-  group: planning-frontier-maintenance
+  # Do not let main-push reconciliation evict pending PR validation.
+  # Live mutating maintenance stays serialized independently.
+  group: planning-frontier-maintenance-${{ github.event_name == 'pull_request' && github.head_ref || 'live' }}
   cancel-in-progress: false
 
 jobs:
+  validate-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout proposed merge
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Offline syntax and regression tests
+        run: |
+          python3 -m py_compile tools/planning/frontier_maintenance*.py
+          python3 tools/planning/frontier_maintenance_v7.py --self-test
+
   maintain:
-    if: github.repository == 'vokerg/everfield'
+    if: github.repository == 'vokerg/everfield' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
