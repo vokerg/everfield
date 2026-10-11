@@ -1,0 +1,121 @@
+name: Verify frozen corrected public-text navigation #1626
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-public-text-navigation-1626.yml'
+      - 'docs/planning/handoffs/issue-1655.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-public-text-navigation-1626-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-public-text-navigation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout immutable source #1626, never verifier branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: d4d6ce1f55670fa6c7986a05cf82a2face4d398d
+          fetch-depth: 1
+
+      - name: Attest all four source identities, published provider and engine lock
+        id: lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public-text-navigation-evidence
+          echo "source_issue=1626" > public-text-navigation-evidence/identity.txt
+          echo "source_pr=1641" >> public-text-navigation-evidence/identity.txt
+          echo "source_head=d4d6ce1f55670fa6c7986a05cf82a2face4d398d" >> public-text-navigation-evidence/identity.txt
+          echo "actual_checkout=$(git rev-parse HEAD)" >> public-text-navigation-evidence/identity.txt
+          echo "verifier_pr_head=${{ github.event.pull_request.head.sha }}" >> public-text-navigation-evidence/identity.txt
+          echo "workflow_run_id=$GITHUB_RUN_ID" >> public-text-navigation-evidence/identity.txt
+          echo "workflow_run_attempt=$GITHUB_RUN_ATTEMPT" >> public-text-navigation-evidence/identity.txt
+          test "$(git rev-parse HEAD)" = 'd4d6ce1f55670fa6c7986a05cf82a2face4d398d'
+          test "$(git hash-object game/components/public_text_navigation/public_text_navigation.gd)" = 'b081bfe234c18884650992d7251b55effbec8c2f'
+          test "$(git hash-object game/tests/public_text_navigation/public_text_navigation_smoke.gd)" = 'ff355251c9b2f303c5c9ba1633a6a0b18b6689a3'
+          test "$(git hash-object game/tests/public_text_navigation/public_text_fit_smoke.gd)" = 'a64c88036f95f4b9e7a84219fb3bd5ebd8b6bd9a'
+          test "$(git hash-object docs/planning/handoffs/issue-1626.md)" = 'c5a2fc1e8270bfdec2d7d903a804a4bbe3184883'
+          test "$(git hash-object game/project.godot)" = '9da4153ed378945ef5e9634e0e5cae48289845d8'
+          git ls-tree -r HEAD game/main.gd game/main.tscn game/project.godot game/components/playable_presentation game/components/session_state > public-text-navigation-evidence/published-tree.txt
+          test -s public-text-navigation-evidence/published-tree.txt
+          sha256sum \
+            game/components/public_text_navigation/public_text_navigation.gd \
+            game/tests/public_text_navigation/public_text_navigation_smoke.gd \
+            game/tests/public_text_navigation/public_text_fit_smoke.gd \
+            docs/planning/handoffs/issue-1626.md \
+            game/project.godot \
+            docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            > public-text-navigation-evidence/source-files.sha256
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json").read_text())
+          entry = lock["entries"]["godot_4.7.1_linux_x86_64_zip"]
+          assert entry["version"] == "4.7.1-stable"
+          assert entry["sha256"] == "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba"
+          assert entry["url"] == "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          print("url=" + entry["url"])
+          print("sha256=" + entry["sha256"])
+          PY
+          echo "source_sha_attestation=PASS" >> public-text-navigation-evidence/identity.txt
+
+      - name: Download and SHA-256 verify official locked Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.lock.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.lock.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+          sha256sum .godot-bin/Godot_v4.7.1-stable_linux.x86_64 > public-text-navigation-evidence/godot-binary.sha256
+          echo 'engine_zip_sha256=${{ steps.lock.outputs.sha256 }}' >> public-text-navigation-evidence/identity.txt
+          echo 'engine_zip_sha256_verified=true' >> public-text-navigation-evidence/identity.txt
+
+      - name: Execute corrected isolated public-text navigation and existing regressions
+        shell: bash
+        env:
+          GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          version="$("$GODOT_BIN" --version)"
+          printf 'actual_godot_version=%s\n' "$version" >> public-text-navigation-evidence/identity.txt
+          test "$version" = '4.7.1.stable.official.a13da4feb'
+          "$GODOT_BIN" --headless --path game --script res://tests/public_text_navigation/public_text_navigation_smoke.gd 2>&1 | tee public-text-navigation-evidence/public-text-navigation-smoke.log
+          sentinel_count="$(grep -Ec '^EVERFIELD_PUBLIC_TEXT_NAV_PASS checks=[1-9][0-9]*$' public-text-navigation-evidence/public-text-navigation-smoke.log)"
+          test "$sentinel_count" = 1
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' public-text-navigation-evidence/public-text-navigation-smoke.log
+          ! grep -F '[EVERFIELD][PUBLIC-TEXT-NAV][FAIL]' public-text-navigation-evidence/public-text-navigation-smoke.log
+          grep -E '^EVERFIELD_PUBLIC_TEXT_NAV_PASS checks=[1-9][0-9]*$' public-text-navigation-evidence/public-text-navigation-smoke.log > public-text-navigation-evidence/isolated-result.txt
+          bash tools/implementation/run_godot_smoke.sh 2>&1 | tee public-text-navigation-evidence/first-playable.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' public-text-navigation-evidence/first-playable.log
+          ! grep -F '[EF-SMOKE][FAIL]' public-text-navigation-evidence/first-playable.log
+          bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee public-text-navigation-evidence/movement-interaction.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' public-text-navigation-evidence/movement-interaction.log
+          ! grep -F '[EF-MOVEMENT-SMOKE][FAIL]' public-text-navigation-evidence/movement-interaction.log
+          echo 'isolated_and_existing_smokes=PASS' >> public-text-navigation-evidence/identity.txt
+
+      - name: Write immutable manifest for all archived raw evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public-text-navigation-evidence
+          find public-text-navigation-evidence -maxdepth 1 -type f ! -name 'evidence-manifest.sha256' -print0 \
+            | LC_ALL=C sort -z | xargs -0 -r sha256sum > public-text-navigation-evidence/evidence-manifest.sha256
+
+      - name: Archive hosted pull-request exact-head verifier evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-text-navigation-1626-${{ github.run_id }}-${{ github.run_attempt }}
+          path: public-text-navigation-evidence/
+          if-no-files-found: error
+          retention-days: 30
