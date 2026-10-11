@@ -22,6 +22,11 @@ func _run() -> void:
         return
 
     var scene: Node = (scene_resource as PackedScene).instantiate()
+    # SceneTree --headless --script starts with a 64x64 root even when project.godot
+    # declares 960x540 (and CLI --resolution may be ignored). Establish the
+    # actual published canvas geometry explicitly before measuring any Label.
+    root.size = EXPECTED_VIEWPORT
+    await process_frame
     root.add_child(scene)
     await process_frame
 
@@ -33,6 +38,8 @@ func _run() -> void:
         return
 
     _expect(root.size == EXPECTED_VIEWPORT, "must run at exact published 960x540 viewport")
+    _expect(Vector2i(root.get_visible_rect().size) == EXPECTED_VIEWPORT,
+        "actual visible root rectangle must be 960x540")
     _expect(label.position == EXPECTED_LABEL_POSITION, "published label origin changed")
     _expect(label.size == EXPECTED_LABEL_SIZE, "published 422x134 label changed")
     _expect(panel.position == EXPECTED_PANEL_POSITION, "published panel origin changed")
@@ -83,7 +90,11 @@ func _run() -> void:
             _fail("source returned empty approved scenario " + name)
             continue
 
+        # Reset requested bounds explicitly. Godot may grow Label.size.y to its
+        # content minimum after layout: that growth is evidence of budget overrun,
+        # never additional authorized room inside the published fixed panel.
         label.text = exact_text
+        label.size = EXPECTED_LABEL_SIZE
         await process_frame
 
         var line_count: int = label.get_line_count()
@@ -92,19 +103,31 @@ func _run() -> void:
             summed_line_height += float(label.get_line_height(line_index))
         var min_height: float = label.get_combined_minimum_size().y
         var required_height: float = maxf(min_height, summed_line_height)
-        var available_height: float = label.size.y
+        var actual_label_height: float = label.size.y
+        var available_height: float = EXPECTED_LABEL_SIZE.y
         var overflow: bool = required_height > available_height + 0.5
+        var label_grew: bool = actual_label_height > available_height + 0.5
         if overflow:
             overflow_count += 1
         measured += 1
 
         _expect(line_count > 0, "no shaped lines for " + name)
+        _expect(root.size == EXPECTED_VIEWPORT, "viewport changed while measuring " + name)
+        _expect(Vector2i(root.get_visible_rect().size) == EXPECTED_VIEWPORT,
+            "visible canvas changed while measuring " + name)
+        _expect(label.position == EXPECTED_LABEL_POSITION, "label moved for " + name)
+        _expect(label.size.x == EXPECTED_LABEL_SIZE.x, "label wrap width changed for " + name)
+        _expect(panel.position == EXPECTED_PANEL_POSITION and panel.size == EXPECTED_PANEL_SIZE,
+            "published panel changed for " + name)
         _expect(label.text == exact_text, "published text mutated by label layout for " + name)
         # Runtime evidence for font wrapping / occupied label bounds.
         print("EVERFIELD_PUBLIC_TEXT_FIT_EVIDENCE " + JSON.stringify({
             "scenario": name,
             "viewport": [root.size.x, root.size.y],
-            "label_size": [label.size.x, label.size.y],
+            "label_size": [EXPECTED_LABEL_SIZE.x, EXPECTED_LABEL_SIZE.y],
+            "actual_label_size": [label.size.x, actual_label_height],
+            "label_autogrew_beyond_nominal_height": label_grew,
+            "visible_rect": [root.get_visible_rect().size.x, root.get_visible_rect().size.y],
             "line_count": line_count,
             "minimum_height": min_height,
             "sum_line_height": summed_line_height,
@@ -133,6 +156,9 @@ func _finish(measured: int, overflow_count: int) -> void:
         quit(1)
         return
     # This PASS means the MEASUREMENT ran, NOT that every text fits.
+    # Overflow reports text exceeding the nominal bounded PANEL budget.
+    # It is not itself a pixel-crop/accessibility certification, since the
+    # published Label is a non-clipped sibling of the ColorRect panel.
     # Even overflow_count=0 does not certify empirical readability.
     print("EVERFIELD_PUBLIC_TEXT_FIT_MEASURED scenarios=%d overflow_count=%d" % [measured, overflow_count])
     quit(0)
