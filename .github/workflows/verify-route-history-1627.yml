@@ -70,11 +70,14 @@ jobs:
           printf 'godot_version=%s\ngodot_zip_sha256=%s\n' "$("$GODOT_BIN" --version)" '${{ steps.lock.outputs.sha256 }}' >> route-history-evidence/identity.txt
           "$GODOT_BIN" --headless --path game --script res://tests/route_history_view/route_history_view_smoke.gd 2>&1 | tee route-history-evidence/route-history-smoke.log
           grep -E '^EVERFIELD_ROUTE_HISTORY_VIEW_PASS checks=[1-9][0-9]*$' route-history-evidence/route-history-smoke.log
-          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\\[EVERFIELD\\]\\[ROUTE-HISTORY\\]\\[FAIL\\]' route-history-evidence/route-history-smoke.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' route-history-evidence/route-history-smoke.log
+          ! grep -F '[EVERFIELD][ROUTE-HISTORY][FAIL]' route-history-evidence/route-history-smoke.log
           bash tools/implementation/run_godot_smoke.sh 2>&1 | tee route-history-evidence/first-playable.log
           bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee route-history-evidence/movement-interaction.log
-          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\\[EF-SMOKE\\]\\[FAIL\\]' route-history-evidence/first-playable.log
-          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\\[EF-MOVEMENT-SMOKE\\]\\[FAIL\\]' route-history-evidence/movement-interaction.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' route-history-evidence/first-playable.log
+          ! grep -F '[EF-SMOKE][FAIL]' route-history-evidence/first-playable.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' route-history-evidence/movement-interaction.log
+          ! grep -F '[EF-MOVEMENT-SMOKE][FAIL]' route-history-evidence/movement-interaction.log
           printf 'isolated_and_existing_smokes=PASS\n' >> route-history-evidence/identity.txt
 
       - name: Upload immutable run evidence
