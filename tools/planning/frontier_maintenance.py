@@ -57,11 +57,6 @@ READINESS_ROUTING_HISTORICAL_SOURCE_ISSUE = 1038
 SCHEMA3_TASK_OWNERSHIP_LEASE_SECONDS = 21_600
 SCHEMA3_ORPHAN_PROBE_MATURITY_SECONDS = 600
 
-# Inactive in all production executions. Only self_test() injects proof for an
-# unmodifiable historical v5 regression fixture that predated authenticated
-# HEAD_ADVANCE; never derive this test proof from issue or comment content.
-_LEGACY_V5_SELF_TEST_PROOF: frozenset[tuple[int, int, int, str, str]] | None = None
-
 
 class GitHubRateLimitExceeded(RuntimeError):
     """Retryable GitHub API rate exhaustion; grants no maintenance authority."""
@@ -496,12 +491,6 @@ def schema3_ownership_lease_state(
 
     anchor_comment_id = owner.comment_id
     consecutive_evidence = 0
-    if head_verifier is None and _LEGACY_V5_SELF_TEST_PROOF is not None:
-        # Logical v5 lease boundary test supplies a fake old/new commit pair;
-        # simulate independently authenticated branch motion in test mode ONLY.
-        head_verifier = lambda o, p, old, new: (
-            o.issue_number, o.comment_id, p.comment_id, old, new
-        ) in _LEGACY_V5_SELF_TEST_PROOF
     for record in sorted(records, key=lambda item: item.comment_id):
         if not (owner.comment_id < record.comment_id < before_comment_id):
             continue
@@ -1905,12 +1894,6 @@ def self_test() -> None:
         "[PLAN-v1][FACTORY-READINESS-DEAD-END-1038]"
     )
 
-    # v5 keeps a SHA-only historical logical positive fixture. Preserve its
-    # byte-identical script by injecting an explicitly limited TEST-ONLY branch
-    # proof after the genuine B01/M01 fail-closed tests above have run.
-    # Normal main() never invokes self_test() and the default remains None.
-    global _LEGACY_V5_SELF_TEST_PROOF
-    _LEGACY_V5_SELF_TEST_PROOF = frozenset({(104, 1, 2, "a" * 40, "b" * 40)})
     print("frontier maintenance self-test: PASS")
 
 

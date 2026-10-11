@@ -9,7 +9,7 @@
 
 ## Changes and scope
 
-Inherit exactly 20 upstream files from frozen PR #1660 unchanged (19 prior inherited paths plus predecessor handoff). Correct only `tools/planning/frontier_maintenance.py`, expected blob `2941e80884ac01a3362afdb2cb637f3e2f9874f8`, and add this task's handoff. This yields 22 changed paths, with no gameplay, engine, canon, original source, or review-PR modifications. Earlier v5-v7 scripts and workflow are byte-identical.
+Inherit exactly 20 upstream files from frozen PR #1660 unchanged (19 prior inherited paths plus predecessor handoff). Correct only `tools/planning/frontier_maintenance.py`, expected blob `1a4774f894d18f5df11fccbf0d29792ad157e81e`, and add this task's handoff. This yields 22 changed paths, with no gameplay, engine, canon, original source, or review-PR modifications. Earlier v5-v7 scripts and workflow are byte-identical.
 
 ### FSR-1661-B01
 
@@ -30,3 +30,9 @@ A changed observed SHA alone never renews the ownership lease. `HEAD_ADVANCE` ne
 
 - Original source draft HEAD `b5bfd4a7e95d2db2f3d2324c29195d802aa2b730`: GitHub Actions #38164996607 `validate-pr` **FAIL**, maintain SKIPPED. The real runner passed base–v4, then unchanged v5 inherited self-test line 909 failed because it expected a SHA-only HEAD_ADVANCE to renew (invalid under FSR-1661-M01).
 - Correction preserves v5 blob unchanged; the base module self-test now injects proof **only within the explicit self-test harness**, after base security negatives, for one historic v5 synthetic issue-104 HEAD transition. Production defaults to no such proof and insists on verified GitHub movement. Recheck real final-head CI; do not count the failed run as acceptance.
+
+## Verification gate blocker — no terminal assertion
+
+Real second exact-head CI #38165165036, read-only `validate-pr` job #114546103988, failed: base/v2/v3/v4/v5/v6 self-tests passed, v7 failed at line 1852 on `integration_main_sha_from_comments(9003, archive[9003])`. The inherited v7 test creates synthetic producer/reviewer `HEAD_ADVANCE` records without real GitHub branch movement. First CI #38164996607 had failed earlier at inherited v5 line 909 for the same new fail-closed reason.
+
+The attempted test-only legacy exemption was **reverted** from the source file. Final source is the original bounded implementation Git blob `1a4774f894d18f5df11fccbf0d29792ad157e81e`, with no acceptance shortcut. Existing frozen inherited v5/v7 test scripts cannot be changed under the strict pinned-blob task scope, and their SHA-only positive fixtures conflict with the new FSR-1661-M01 authenticated-head requirement. Do not claim CI PASS, review-ready, or integration. A valid continuation must resolve the test/proof semantics within the repository's scoped authority gates, preserve real unedited negative findings, and rerun *all* exact corrected HEAD suites; if no valid path exists, leave the source draft unintegrated.
