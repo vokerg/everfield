@@ -1,0 +1,21 @@
+# Issue #1643 — required independent review of frozen route-history source #1627
+
+## Authority and ownership
+First unedited valid schema-3 CLAIM #6107719360, reviewer `frontier-independent-route-history-review-1643-gpt6-20261011-1144-01` sole contender after immediate recheck, baseline main `3d7ce70fbc4e1c26224f01c6aa3a3fc18cf3902d`; active canonical #1147 binding #5675066392 / program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4` / ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`. Reviewer distinct from #1627 original producer/RESUME and #1635 verifier.
+
+## Exact reviewed packet
+Source Issue #1627 owner terminal REVIEW_READY #6107453981 after HANDOFF #6106737792 → winning intent #6107443578 → RESUME #6107445592, draft **PR #1630** exact immutable HEAD `ba8325232de970400352782e77506e5b1dfba91b`. Three reviewed Git blobs: `8539cd5afb990a5702100e5ae2abdab38b27debe` (route-history view), `bf968b39d7a161e2f44e5ff94f5536607b89db9d` (isolated smoke), `75b37ba2c7d38f9cf3371590ac476d80af116448` (source handoff). Independent exact-source-head verifier Issue #1635 terminal #6107400681, draft verifier-only PR #1637 HEAD `f845de3f2eba9a021d72b34941729007aa372f1c`, GitHub Actions run #38126793303 / job #114432721224 SUCCESS, reviewed hash-locked Godot 4.7.1 `EVERFIELD_ROUTE_HISTORY_VIEW_PASS checks=33` and existing regression suites. Artifact #11697318047 is recorded in terminal. Main and original frozen PRs unmodified by reviewer.
+
+## Independent findings
+Review report `docs/planning/wave-2/reviews/route-history-view-1627-review.md` immutable blob **`a579546761cc5b41eb4e3aba6de65dca1d32baff`**. **CHANGES_NEEDED: 1 BLOCKER / 2 MAJOR / 0 correction-requiring MINOR.**
+- **FSR-1643-B01 BLOCKER:** a forged internal snapshot with initial uncompleted session fields but `history:["RECORDS_FIRST_PACKAGE_FILED"]` renders an officially completed outcome as `ok:true`; valid allowlisted IDs are not provenance/authenticity.
+- **FSR-1643-M01 MAJOR:** fake providers can satisfy partial advertised `get_contract` booleans and inject arbitrary title string under reviewed ID; this is a component API trust-boundary risk, not a claimed live-scene exploitation or disclosure by reviewed genuine providers.
+- **FSR-1643-M02 MAJOR:** `SessionState.append_history` and projected history are unbounded, repeated allowlisted events can produce arbitrarily large arrays/lines/strings, no bounded visible presentation/paging or overflow evidence.
+
+**Independent proof limits:** direct inspection of exact published GDScript/provider/SessionState and genuine final-head Actions run + job details; no local Godot binary, no separately executed reviewer negative runtime. Negative witnesses are deterministic source/API path analysis; retained verifier's 33 executable tests cover genuine positive and selected negative cases only.
+
+## Scope and next route
+The only two reviewer-owned paths are this handoff and the report; create a **review-only draft PR** to main at exact reviewer HEAD before owner schema-3 terminal. Never merge this reviewer draft, verifier-only #1637, or unreviewed source #1630. Record `REVIEW_STATUS(CHANGES_NEEDED)` for this generation with all exact identities and a single `required_next_route: MATERIALIZE_BOUNDED_ROUTE_HISTORY_1627_NEGATIVE_REVIEW_REMEDIATION_THEN_NEW_EXACT_HEAD_GODOT_VERIFICATION_AND_DISTINCT_REQUIRED_REREVIEW`. Materialize **one** narrowly authorized remediation issue (if not already live), modifying only inherited exact component/test plus own handoff on a fresh main-based branch, and require new exact corrected source proof, independent review, and separately owned squash-only NONCANONICAL integration. Shared fan-in #1629 stays blocked while #1626 is independently in its own pending verification route. No self-review, generic global gate, user-truth/consent certification, canonicalization, gameplay/readiness, release or production claim.
+
+## Continuation
+If reviewer PR/head or main changes before terminal, re-derive exact ownership/compatibility, update this handoff and review evidence as appropriate, then use current in-lease owner status only. On no valid current owner, obey strict HANDOFF/STALE lease recovery and do not counterfeit terminal. After terminal successor materialization, this reviewer session has no integration or source remediation rights.
