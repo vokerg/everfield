@@ -126,7 +126,7 @@ func _history_consistent(state: Dictionary, history: Array) -> bool:
                 replay["negotiation_open"] = false
             "BOUNDED_REPAIR_PILOT_STARTED", "RECORDS_FIRST_PACKAGE_FILED":
                 var expected_commitment := "repair_pilot" if event == "BOUNDED_REPAIR_PILOT_STARTED" else "records_first"
-                if replay["commitment"] != expected_commitment or replay["negotiation_open"]:
+                if replay["commitment"] != expected_commitment:
                     return false
                 replay["completed"] = true
                 replay["outcome"] = event
