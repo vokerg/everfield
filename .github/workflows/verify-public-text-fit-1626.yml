@@ -69,25 +69,7 @@ jobs:
           test "$("$GODOT_BIN" --version)" = '4.7.1.stable.official.a13da4feb'
           printf 'godot_version=%s\ngodot_zip_sha256=%s\n' "$("$GODOT_BIN" --version)" '${{ steps.lock.outputs.sha256 }}' >> public-text-fit-evidence/identity.txt
           "$GODOT_BIN" --headless --path game --script res://tests/public_text_navigation/public_text_fit_smoke.gd 2>&1 | tee public-text-fit-evidence/public-text-fit-smoke.log
-          grep -E '^EVERFIELD_PUBLIC_TEXT_FIT_MEASURED scenarios=13 overflow_count=[0-9]+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' public-text-fit-evidence/public-text-fit-smoke.log
-          ! grep -F '[EVERFIELD][PUBLIC-TEXT-FIT][FAIL]' public-text-fit-evidence/public-text-fit-smoke.log
-          bash tools/implementation/run_godot_smoke.sh 2>&1 | tee public-text-fit-evidence/first-playable.log
-          bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee public-text-fit-evidence/movement-interaction.log
-          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' public-text-fit-evidence/first-playable.log
-          ! grep -F '[EF-SMOKE][FAIL]' public-text-fit-evidence/first-playable.log
-          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' public-text-fit-evidence/movement-interaction.log
-          ! grep -F '[EF-MOVEMENT-SMOKE][FAIL]' public-text-fit-evidence/movement-interaction.log
-          printf 'measurement_and_existing_smokes=PASS\n' >> public-text-fit-evidence/identity.txt
-
-      - name: Upload immutable run evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: public-text-fit-1626-${{ github.run_id }}-${{ github.run_attempt }}
-          path: public-text-fit-evidence/
-          if-no-files-found: warn
-          retention-days: 30
- public-text-fit-evidence/public-text-fit-smoke.log
+          grep -E '^EVERFIELD_PUBLIC_TEXT_FIT_MEASURED scenarios=13 overflow_count=[0-9]+$' public-text-fit-evidence/public-text-fit-smoke.log
           python3 - <<'PY'
           import json
           import re
@@ -136,7 +118,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: public-text-fit-1626-${{ github.run_id }}-${{ github.run_attempt }}
+          name: public-text-fit-1627-${{ github.run_id }}-${{ github.run_attempt }}
           path: public-text-fit-evidence/
           if-no-files-found: warn
           retention-days: 30
