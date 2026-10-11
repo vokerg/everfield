@@ -133,12 +133,91 @@ def paged(path: str) -> Iterable[dict[str, Any]]:
         page += 1
 
 
-def scalar(body: str, key: str) -> str | None:
-    match = re.search(rf"(?m)^\s*{re.escape(key)}:\s*([^#\n]+?)\s*$", body)
-    if not match:
+def yaml_scalar_identity(raw: str) -> str | None:
+    """Decode at most one YAML scalar quoting layer; never erase quoted data.
+
+    This is a fail-closed, intentionally small scalar subset for schema-3
+    operations, not a whole-document YAML parser. JSON-compatible double
+    escapes and YAML doubled-single-quote escaping are decoded exactly once.
+    Unsupported YAML quoting/escape syntax has no authority.
+    """
+    value = raw.strip()
+    if not value:
         return None
-    value = match.group(1).strip().strip("'\"")
-    return None if value.lower() in {"null", "none", ""} else value
+    if value.startswith("'"):
+        if re.fullmatch(r"'(?:[^']|'')*'", value) is None:
+            return None
+        value = value[1:-1].replace("''", "'")
+    elif value.startswith('"'):
+        try:
+            value = json.loads(value)
+        except (ValueError, TypeError):
+            return None
+        if not isinstance(value, str):
+            return None
+    return value if value and value.lower() not in {"null", "none", "~"} else None
+
+
+def _root_mapping_fields(body: str) -> dict[str, str] | None:
+    """Conservatively authenticate direct root fields of one YAML capsule.
+
+    Nested extensions data, secondary examples, complex and escaped mapping
+    keys, and duplicate root keys never create schema-3 authority.
+    """
+    fence = chr(96) * 3
+    if body.startswith(fence + "yaml\n"):
+        cut = body.find("\n" + fence, len(fence) + 5)
+        if cut < 0:
+            return None
+        body = body[len(fence) + 5:cut]
+    elif body.startswith(fence):
+        return None
+    result: dict[str, str] = {}
+    for line in body.splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        if line[0] in " \t":
+            # Only direct root keys grant authority. Indented scalar blocks,
+            # nested maps, and lists are never root operational fields.
+            continue
+        match = re.fullmatch(r"([A-Za-z_][A-Za-z0-9_]*):[ \t]*(.*)", line)
+        if match is None or match.group(1) in result:
+            return None
+        result[match.group(1)] = match.group(2)
+    return result
+
+
+def _root_scalar_without_comment(raw: str) -> str:
+    """Exclude YAML inline comments, preserving hashes inside quotes."""
+    quote: str | None = None
+    i = 0
+    while i < len(raw):
+        ch = raw[i]
+        if quote == "'":
+            if ch == "'" and i + 1 < len(raw) and raw[i + 1] == "'":
+                i += 2
+                continue
+            if ch == "'":
+                quote = None
+        elif quote == '"':
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == '"':
+                quote = None
+        elif ch in {"'", '"'}:
+            quote = ch
+        elif ch == "#" and (i == 0 or raw[i - 1] in " \t"):
+            return raw[:i].rstrip()
+        i += 1
+    return raw.rstrip()
+
+
+def scalar(body: str, key: str) -> str | None:
+    fields = _root_mapping_fields(body)
+    if fields is None or key not in fields:
+        return None
+    return yaml_scalar_identity(_root_scalar_without_comment(fields[key]))
 
 
 def integer_scalar(body: str, key: str) -> int | None:
@@ -147,43 +226,84 @@ def integer_scalar(body: str, key: str) -> int | None:
 
 
 def list_scalar(body: str, key: str) -> list[str]:
-    """Read one conservative YAML-like scalar/list field from an operational body."""
+    """Read only a unique, authenticated *root* operational list field.
+
+    Root mapping identity is shared with scalar(), rather than searching
+    arbitrarily indented extensions, prose, later fences or block scalars.
+    Unsupported YAML structures have no authority: this is intentionally a
+    small fail-closed subset, not a second YAML parser.
+    """
+    fields = _root_mapping_fields(body)
+    if fields is None or key not in fields:
+        return []
+
+    fence = chr(96) * 3
+    if body.startswith(fence + "yaml\n"):
+        cut = body.find("\n" + fence, len(fence) + 5)
+        if cut < 0:
+            return []
+        body = body[len(fence) + 5:cut]
+    elif body.startswith(fence):
+        return []
+
     lines = body.splitlines()
-    key_re = re.compile(rf"^(?P<indent>\s*){re.escape(key)}:\s*(?P<value>.*?)\s*$")
-    for index, line in enumerate(lines):
-        match = key_re.match(line)
-        if not match:
-            continue
-        value = match.group("value").strip()
-        if value.startswith("[") and value.endswith("]"):
-            inner = value[1:-1].strip()
-            if not inner:
-                return []
-            return [
-                item.strip().strip("'\\\"")
-                for item in inner.split(",")
-                if item.strip().strip("'\\\"")
-            ]
-        if value and value.lower() not in {"null", "none"}:
-            return [value.strip("'\\\"")]
+    key_re = re.compile(rf"^{re.escape(key)}:[ \t]*(.*)$")
+    root_indices = [i for i, line in enumerate(lines) if key_re.fullmatch(line)]
+    # _root_mapping_fields forbids duplicate/quoted/escaped/complex root keys.
+    if len(root_indices) != 1:
+        return []
 
-        indent = len(match.group("indent"))
+    raw = _root_scalar_without_comment(fields[key]).strip()
+    if raw.startswith("["):
+        if not raw.endswith("]"):
+            return []
+        inner = raw[1:-1].strip()
+        if not inner:
+            return []
+        parts = inner.split(",")
         values: list[str] = []
-        for following in lines[index + 1 :]:
-            if not following.strip():
-                continue
-            leading = len(following) - len(following.lstrip())
-            item = re.match(r"^\s*-\s*(.+?)\s*$", following)
-            if item and leading > indent:
-                parsed = item.group(1).strip().strip("'\\\"")
-                if parsed:
-                    values.append(parsed)
-                continue
-            if leading <= indent:
-                break
+        for part in parts:
+            item = _root_scalar_without_comment(part).strip()
+            if not item or item.startswith(("[", "{", "!", "&", "*", "|", ">")):
+                return []
+            parsed = yaml_scalar_identity(item)
+            if parsed is None:
+                return []
+            values.append(parsed)
         return values
-    return []
 
+    if raw:
+        if raw.startswith(("{", "!", "&", "*", "|", ">")):
+            return []
+        single = yaml_scalar_identity(raw)
+        return [single] if single is not None else []
+
+    values: list[str] = []
+    item_indent: int | None = None
+    for line in lines[root_indices[0] + 1:]:
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        indent = len(line) - len(line.lstrip(" \t"))
+        if indent == 0:
+            break  # Next direct root key, never consume its nested values.
+        if "\t" in line[:indent]:
+            return []
+        match = re.fullmatch(r" +-[ \t]+(.+?)[ \t]*", line)
+        if match is None or (item_indent is not None and indent != item_indent):
+            return []  # Nested maps or a second-level YAML sequence are invalid.
+        if item_indent is None:
+            item_indent = indent
+        item = _root_scalar_without_comment(match.group(1)).strip()
+        if not item or item.startswith(("[", "{", "!", "&", "*", "|", ">")):
+            return []
+        # Unquoted key/value sequences are mappings, not scalar list entries.
+        if item[0] not in {"'", '"'} and re.search(r":[ \t]", item):
+            return []
+        parsed = yaml_scalar_identity(item)
+        if parsed is None:
+            return []
+        values.append(parsed)
+    return values
 
 def immutable_ref(value: str) -> bool:
     """Validate the canonical immutable-ref forms maintenance can prove locally."""
@@ -384,6 +504,11 @@ def parse_operational(issue_number: int, comment: dict[str, Any]) -> Operational
     if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
         return None
     if not immutable_comment(comment):
+        return None
+    root = _root_mapping_fields(body)
+    # The first direct key of a real schema-3 mapping is protocol, not an
+    # extensions container whose child fields mimic a foreign owner record.
+    if not root or next(iter(root)) != "protocol":
         return None
     if scalar(body, "protocol") != "planning-v1" or scalar(body, "schema") != "3":
         return None
@@ -962,6 +1087,78 @@ def self_test() -> None:
     )
     assert reconcilable_terminal_from_comments(10, [claim, valid_done]) is not None
 
+    # FSR-1632-B01: these two YAML documents have only root 'extensions'.
+    # A nested operational-looking CLAIM / STATUS cannot authorize closure.
+    fake_claim = dict(claim, body=(
+        "```yaml\nextensions:\n"
+        "  protocol: planning-v1\n  schema: 3\n  kind: CLAIM\n"
+        "  issue: 10\n  mission_id: M-10\n  actor_session_id: actor-a\n"
+        "  state: IN_PROGRESS\n```"
+    ))
+    fake_done = dict(valid_done, body=(
+        "```yaml\nextensions:\n"
+        "  protocol: planning-v1\n  schema: 3\n  kind: STATUS\n"
+        "  issue: 10\n  mission_id: M-10\n  actor_session_id: actor-a\n"
+        "  state: DONE\n  authority_mode: OWNER\n"
+        "  ownership_generation_comment_id: 1\n"
+        f"  head_sha: {'a' * 40}\n  work_sha: {'b' * 40}\n```"
+    ))
+    assert parse_operational(10, fake_claim) is None
+    assert parse_operational(10, fake_done) is None
+    assert reconcilable_terminal_from_comments(10, [fake_claim, fake_done]) is None
+
+    fenced_claim = dict(claim, body="```yaml\n" + claim["body"] + "```")
+    fenced_done = dict(valid_done, body="```yaml\n" + valid_done["body"] + "```")
+    assert reconcilable_terminal_from_comments(10, [fenced_claim, fenced_done]) is not None
+
+    for shadow in (
+        "protocol: planning-v1\nprotocol: planning-v1\n",
+        "protocol: planning-v1\n'protocol': other\n",
+        'protocol: planning-v1\n"prot\\u006fcol": other\n',
+        "protocol: planning-v1\n!!str protocol: other\n",
+        "protocol: planning-v1\n<<: *foreign\n",
+    ):
+        tamper = dict(claim, body=shadow + claim["body"].split("\n", 1)[1])
+        assert parse_operational(10, tamper) is None, shadow
+    block_only = dict(claim, body=(
+        "```yaml\nnote: |\n  protocol: planning-v1\n  schema: 3\n"
+        "  kind: CLAIM\n  issue: 10\n```\n"
+    ))
+    assert parse_operational(10, block_only) is None
+    late_fence = dict(claim, body=(
+        "Example, not operational:\n```yaml\n" + claim["body"] + "```"
+    ))
+    assert parse_operational(10, late_fence) is None
+    after_first_fence = dict(claim, body=(
+        "```yaml\nnotes: ordinary\n```\n\n"
+        "```yaml\n" + claim["body"] + "```"
+    ))
+    assert parse_operational(10, after_first_fence) is None
+    assert scalar("protocol: 'planning-v1' # safe\n", "protocol") == "planning-v1"
+    assert scalar('protocol: "planning-v1"\n', "protocol") == "planning-v1"
+    assert scalar("protocol: '\"planning-v1\"'\n", "protocol") == '"planning-v1"'
+    assert scalar("protocol: '\"planning-v1\"'\n", "protocol") != "planning-v1"
+    assert scalar('protocol: "a#b" # inline comment\n', "protocol") == "a#b"
+    assert scalar('protocol: "\\u0070lanning-v1"\n', "protocol") == "planning-v1"
+
+    # FSR-1644-B01: only authenticated direct-root lists carry authority.
+    ref = "e" * 40
+    assert list_scalar("extensions:\n  evidence_refs:\n    - " + ref + "\n", "evidence_refs") == []
+    assert list_scalar("evidence_refs:\n  - " + ref + "\n", "evidence_refs") == [ref]
+    assert list_scalar("```yaml\nevidence_refs:\n  - '" + ref + "'\n```", "evidence_refs") == [ref]
+    assert list_scalar("evidence_refs: [" + ref + "]\n", "evidence_refs") == [ref]
+    assert list_scalar("extensions:\n  artifact_paths:\n    - game/foo.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - game/foo.gd\n", "artifact_paths") == ["game/foo.gd"]
+    assert list_scalar("artifact_paths:\n  - 'game/foo.gd'\n", "artifact_paths") == ["game/foo.gd"]
+    assert list_scalar("artifact_paths:\n  - game/foo.gd\nartifact_paths:\n  - game/bar.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - game/foo.gd\n  nested:\n    - game/bar.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: |\n  - game/foo.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - *foreign_alias\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - [game/foo.gd]\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: [game/foo.gd, game/bar.gd]\n", "artifact_paths") == ["game/foo.gd", "game/bar.gd"]
+    assert list_scalar("notes: |\n  artifact_paths:\n    - game/foo.gd\n", "artifact_paths") == []
+    assert list_scalar("example, not operational\n```yaml\nartifact_paths:\n  - game/foo.gd\n```", "artifact_paths") == []
+
     later_claim = c(3, "CLAIM", "IN_PROGRESS")
     assert reconcilable_terminal_from_comments(10, [claim, valid_done, later_claim]) is None
 
@@ -1089,6 +1286,58 @@ def self_test() -> None:
     )
     assert schema3_owner_unexpired_at(owner, [owner, progress], before_old_boundary) is True
     assert schema3_owner_unexpired_at(owner, [owner, progress], exact_new_boundary) is False
+
+    # Nested extensions.evidence_refs must NEVER refresh owner authority.
+    # Genuine root refs before lease expiry do renew. Existing E1/E2/E3/E4
+    # tests below also enforce the canonical consecutive-EVIDENCE cap.
+    nested_evidence_progress = OperationalRecord(
+        issue_number=77, comment_id=2, created_at="2026-09-15T17:59:00Z",
+        kind="PROGRESS", state="IN_PROGRESS", route=None,
+        body=(
+            f"observed_head_sha: {'a' * 40}\n"
+            "progress_basis: EVIDENCE\n"
+            "extensions:\n"
+            f"  evidence_refs:\n    - {'e' * 40}\n"
+        ),
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+        authority_mode=None, ownership_generation_comment_id=1,
+        head_sha=None, work_sha=None,
+    )
+    genuine_evidence_progress = OperationalRecord(
+        issue_number=77, comment_id=2, created_at="2026-09-15T17:59:00Z",
+        kind="PROGRESS", state="IN_PROGRESS", route=None,
+        body=(
+            f"observed_head_sha: {'a' * 40}\n"
+            "progress_basis: EVIDENCE\n"
+            f"evidence_refs:\n  - {'e' * 40}\n"
+        ),
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+        authority_mode=None, ownership_generation_comment_id=1,
+        head_sha=None, work_sha=None,
+    )
+    shadow_state = schema3_ownership_lease_state(
+        owner, [owner, nested_evidence_progress], before_comment_id=3
+    )
+    authentic_state = schema3_ownership_lease_state(
+        owner, [owner, genuine_evidence_progress], before_comment_id=3
+    )
+    assert shadow_state is not None and shadow_state.anchor_comment_id == 1
+    assert shadow_state.consecutive_evidence == 0
+    assert authentic_state is not None and authentic_state.anchor_comment_id == 2
+    assert authentic_state.consecutive_evidence == 1
+    boundary_1800 = OperationalRecord(
+        issue_number=77, comment_id=3, created_at="2026-09-15T18:00:00Z",
+        kind="RESUME_INTENT", state="IN_PROGRESS", route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    assert not schema3_owner_unexpired_at(
+        owner, [owner, nested_evidence_progress], boundary_1800
+    )
+    assert schema3_owner_unexpired_at(
+        owner, [owner, genuine_evidence_progress], boundary_1800
+    )
 
     evidence_records = [owner]
     for cid, hour in ((2, 13), (3, 14), (4, 15), (5, 16)):
