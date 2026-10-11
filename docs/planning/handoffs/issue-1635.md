@@ -1,0 +1,17 @@
+# Issue #1635 — independent exact-head route-history Godot validation
+
+## Current state and authority
+Scoped required verification route **PENDING actual GitHub Actions execution**, not a verification PASS, required review, source integration, canonicalization, or engine decision. Winning first CLAIM Issue #1635 comment `6107334647` by distinct session `frontier-verify-route-history-1635-gpt6-20261011-1055-01`; owner source #1627 producer session `frontier-implement-route-history-1627-gpt6-20261011-0932-01`. Initial main `3d7ce70fbc4e1c26224f01c6aa3a3fc18cf3902d` and canonical planning binding Issue #1147 terminal `5675066392`, exact canonical program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`.
+
+## Immutable causal source and missing verification
+- Source owner Issue #1627 HANDOFF_READY `6106737792`, draft [PR #1630](https://github.com/vokerg/everfield/pull/1630) exact HEAD `ba8325232de970400352782e77506e5b1dfba91b`, from main `3d7ce70fbc4e1c26224f01c6aa3a3fc18cf3902d`. It is **not** ready for independent review/integration.
+- Frozen component Git blob: `game/components/route_history_view/route_history_view.gd` at `8539cd5afb990a5702100e5ae2abdab38b27debe`.
+- Frozen isolated smoke blob: `game/tests/route_history_view/route_history_view_smoke.gd` at `bf968b39d7a161e2f44e5ff94f5536607b89db9d`.
+- Source handoff blob: `docs/planning/handoffs/issue-1627.md` at `75b37ba2c7d38f9cf3371590ac476d80af116448`.
+- Prior first-playable run `38121889047` green on preexisting suite, but it did **not** execute the isolated new test. No independent component runtime PASS was available at claim.
+
+## This issue's exclusive work and workflow evidence contract
+Own only `.github/workflows/verify-route-history-1627.yml` (initial blob `417aa7599c88a179a171987eb99fc53cc70e65ae`) and this handoff. The workflow is PR-triggered on this verifier branch, **checks out frozen producer HEAD**, hash-verifies all three immutable source files, parses the in-repo reviewed artifact lock and verifies Godot 4.7.1 ZIP SHA-256 `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`. It runs `res://tests/route_history_view/route_history_view_smoke.gd` and demands exact `EVERFIELD_ROUTE_HISTORY_VIEW_PASS checks=N`, zero exit, no parse/assertion errors; then runs existing first-playable and movement/input smokes. It archives identities and logs using a pinned upload action. No source branch, shared CI, old reviewed game or sibling component changes.
+
+## Decision and continuation
+Open **draft verifier-only PR** to main and inspect whether the new workflow runs on the true PR head, its locked checkout and SHA, actual job logs and uploaded artifacts. If it fails, publish traceable exact negative evidence and route narrow correction back to #1627; do not manufacture PASS. If it passes, publish immutable success evidence through an independent verification terminal only while current owner/canonical/main/exact-source/pr gates hold. This may unblock an eligible #1627 HANDOFF RESUME and later genuinely independent required review, but **never itself marks source REVIEW_READY, integrates source, grants canon or implementation-readiness, production, accessibility, consent, engine or release authority**. This verifier-only PR is never a gameplay-source merge. Any main integration by any later authorized route is squash-only.
