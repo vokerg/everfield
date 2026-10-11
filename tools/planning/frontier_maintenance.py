@@ -133,13 +133,34 @@ def paged(path: str) -> Iterable[dict[str, Any]]:
         page += 1
 
 
+def yaml_scalar_identity(raw: str) -> str | None:
+    """Decode at most one YAML scalar quoting layer; never erase quoted data.
+
+    This is a fail-closed, intentionally small scalar subset for schema-3
+    operations, not a whole-document YAML parser. JSON-compatible double
+    escapes and YAML doubled-single-quote escaping are decoded exactly once.
+    Unsupported YAML quoting/escape syntax has no authority.
+    """
+    value = raw.strip()
+    if not value:
+        return None
+    if value.startswith("'"):
+        if re.fullmatch(r"'(?:[^']|'')*'", value) is None:
+            return None
+        value = value[1:-1].replace("''", "'")
+    elif value.startswith('"'):
+        try:
+            value = json.loads(value)
+        except (ValueError, TypeError):
+            return None
+        if not isinstance(value, str):
+            return None
+    return value if value and value.lower() not in {"null", "none", "~"} else None
+
+
 def scalar(body: str, key: str) -> str | None:
     match = re.search(rf"(?m)^\s*{re.escape(key)}:\s*([^#\n]+?)\s*$", body)
-    if not match:
-        return None
-    value = match.group(1).strip().strip("'\"")
-    return None if value.lower() in {"null", "none", ""} else value
-
+    return yaml_scalar_identity(match.group(1)) if match else None
 
 def integer_scalar(body: str, key: str) -> int | None:
     value = scalar(body, key)
