@@ -1,0 +1,121 @@
+name: Verify corrected route-history source #1651
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-route-history-1651.yml'
+      - 'docs/planning/handoffs/issue-1654.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-route-history-1651-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-frozen-corrected-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout immutable source #1651, never verifier branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: e0bbde9daba1855f0b054fcc4bf023be3fb203cb
+          fetch-depth: 1
+
+      - name: Attest all four source identities and locked engine artifact
+        id: lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p route-history-1651-evidence
+          echo "source_issue=1651" > route-history-1651-evidence/identity.txt
+          echo "source_pr=1653" >> route-history-1651-evidence/identity.txt
+          echo "source_head=e0bbde9daba1855f0b054fcc4bf023be3fb203cb" >> route-history-1651-evidence/identity.txt
+          echo "actual_checkout=$(git rev-parse HEAD)" >> route-history-1651-evidence/identity.txt
+          echo "verifier_pr_head=${{ github.event.pull_request.head.sha }}" >> route-history-1651-evidence/identity.txt
+          echo "workflow_run_id=$GITHUB_RUN_ID" >> route-history-1651-evidence/identity.txt
+          echo "workflow_run_attempt=$GITHUB_RUN_ATTEMPT" >> route-history-1651-evidence/identity.txt
+          test "$(git rev-parse HEAD)" = 'e0bbde9daba1855f0b054fcc4bf023be3fb203cb'
+          test "$(git hash-object game/components/route_history_view/route_history_view.gd)" = '8f32a8e925d8fb0765e91ef102ad0827a0b88958'
+          test "$(git hash-object game/tests/route_history_view/route_history_view_smoke.gd)" = '298916bbdd839e2094c4e2695e305f1142bb3e30'
+          test "$(git hash-object docs/planning/handoffs/issue-1627.md)" = '75b37ba2c7d38f9cf3371590ac476d80af116448'
+          test "$(git hash-object docs/planning/handoffs/issue-1651.md)" = 'f7b1a24086672664ccbcaf39ed2fa2dacb806783'
+          git ls-tree -r HEAD game/main.gd game/main.tscn game/project.godot game/components > route-history-1651-evidence/published-tree.txt
+          test -s route-history-1651-evidence/published-tree.txt
+          sha256sum \
+            game/components/route_history_view/route_history_view.gd \
+            game/tests/route_history_view/route_history_view_smoke.gd \
+            docs/planning/handoffs/issue-1627.md \
+            docs/planning/handoffs/issue-1651.md \
+            docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json \
+            > route-history-1651-evidence/source-files.sha256
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json").read_text())
+          entry = lock["entries"]["godot_4.7.1_linux_x86_64_zip"]
+          assert entry["version"] == "4.7.1-stable"
+          assert entry["sha256"] == "c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba"
+          assert entry["url"] == "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          print("url=" + entry["url"])
+          print("sha256=" + entry["sha256"])
+          PY
+          echo "source_sha_attestation=PASS" >> route-history-1651-evidence/identity.txt
+
+      - name: Download and SHA-256 verify official locked Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.lock.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.lock.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+          sha256sum .godot-bin/Godot_v4.7.1-stable_linux.x86_64 > route-history-1651-evidence/godot-binary.sha256
+          echo 'engine_zip_sha256=${{ steps.lock.outputs.sha256 }}' >> route-history-1651-evidence/identity.txt
+          echo 'engine_zip_sha256_verified=true' >> route-history-1651-evidence/identity.txt
+
+      - name: Execute exact-source isolated smoke and published regressions
+        shell: bash
+        env:
+          GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          version="$("$GODOT_BIN" --version)"
+          printf 'actual_godot_version=%s\n' "$version" >> route-history-1651-evidence/identity.txt
+          test "$version" = '4.7.1.stable.official.a13da4feb'
+          "$GODOT_BIN" --headless --path game --script res://tests/route_history_view/route_history_view_smoke.gd 2>&1 | tee route-history-1651-evidence/route-history-smoke.log
+          sentinel_count="$(grep -Ec '^EVERFIELD_ROUTE_HISTORY_VIEW_PASS checks=[1-9][0-9]*$' route-history-1651-evidence/route-history-smoke.log)"
+          test "$sentinel_count" = 1
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' route-history-1651-evidence/route-history-smoke.log
+          ! grep -F '[EVERFIELD][ROUTE-HISTORY][FAIL]' route-history-1651-evidence/route-history-smoke.log
+          grep -E '^EVERFIELD_ROUTE_HISTORY_VIEW_PASS checks=[1-9][0-9]*$' route-history-1651-evidence/route-history-smoke.log > route-history-1651-evidence/isolated-result.txt
+          bash tools/implementation/run_godot_smoke.sh 2>&1 | tee route-history-1651-evidence/first-playable.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' route-history-1651-evidence/first-playable.log
+          ! grep -F '[EF-SMOKE][FAIL]' route-history-1651-evidence/first-playable.log
+          bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee route-history-1651-evidence/movement-interaction.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed' route-history-1651-evidence/movement-interaction.log
+          ! grep -F '[EF-MOVEMENT-SMOKE][FAIL]' route-history-1651-evidence/movement-interaction.log
+          echo 'all_three_executable_suites=PASS' >> route-history-1651-evidence/identity.txt
+
+      - name: Upload exact-run raw logs and immutable manifest
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p route-history-1651-evidence
+          if [ -d route-history-1651-evidence ]; then
+            find route-history-1651-evidence -maxdepth 1 -type f ! -name 'evidence-manifest.sha256' -print0 \
+              | LC_ALL=C sort -z | xargs -0 -r sha256sum > route-history-1651-evidence/evidence-manifest.sha256
+          fi
+
+      - name: Archive verifier evidence on hosted GitHub Actions
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: route-history-1651-${{ github.run_id }}-${{ github.run_attempt }}
+          path: route-history-1651-evidence/
+          if-no-files-found: error
+          retention-days: 30
