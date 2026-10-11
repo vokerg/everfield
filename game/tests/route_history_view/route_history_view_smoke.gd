@@ -214,6 +214,19 @@ func _run() -> void:
     _expect(model.build_view(session.snapshot(), world, consequences).get("ok", false),
         "new completion after reconsideration remains a valid history")
 
+    # Published project_table checks commitment but not negotiation_open.
+    # A completion while a separately reopened hearing remains open must
+    # retain that real, previously permitted state transition.
+    session.reset()
+    for event_id in [
+        "PUBLIC_RECORD_REVIEWED", "MATERIAL_TRACE_INSPECTED",
+        "COMMONS_HEARING_OPENED", "COMMITMENT_REPAIR_PILOT",
+        "COMMONS_HEARING_OPENED", "BOUNDED_REPAIR_PILOT_STARTED",
+    ]:
+        _append_published(session, event_id)
+    _expect(model.build_view(session.snapshot(), world, consequences).get("ok", false),
+        "controller-permitted completion while hearing is reopened remains valid")
+
     # FSR-1643-M02: repeated legal hearing/nonconsent creates many *real*
     # events. Each page is finite, deterministic, ordered and explicitly
     # navigable; original SessionState history stays complete/unchanged.
