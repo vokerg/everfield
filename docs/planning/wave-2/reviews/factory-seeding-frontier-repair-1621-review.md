@@ -1,0 +1,42 @@
+# Issue #1623 — mandatory independent adversarial review of #1621 / PR #1622
+
+## Disposition
+
+**CHANGES_NEEDED — 1 BLOCKER (FSR-1623-B01), 0 MAJOR, 0 correction-requiring MINOR.** Review-only artifact; **do not merge the reviewed source** or this review-only PR. This is a new independently discovered authority-identity defect, not a claim that the FSR-1619 spaced-key fixes failed for their original cases.
+
+Review actor `frontier-independent-review-1623-gpt6-20261011-0919-01` is distinct from source producer `frontier-remediate-1621-gpt6-20261011-0258-01` and preceding reviewer `frontier-independent-review-1619-gpt6-20261011-0249-01`. First valid CLAIM is GitHub issue comment **6106622681**, server-created and unedited at **2026-10-11T07:20:54Z**. Review base/current main `3d7ce70fbc4e1c26224f01c6aa3a3fc18cf3902d`; active canonical program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, Issue #1147 binding #5675066392, activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`. Source Issue #1621 owner terminal #6104020075 was validly published in its 6-hour lease; source **draft** PR #1622 is frozen HEAD `18a23b61d4fafd68d0def4c8fe8cfcc34ac4139e`, v7 blob `5c5f26ea583b2d37792e31f38b5abab01d3afc2b`.
+
+## FSR-1623-B01 — BLOCKER: layered YAML scalar quoting forges operational authority values
+
+Frozen source `tools/planning/frontier_maintenance_v7.py` function `_integration_field` obtains a root scalar by `hits[0].strip().strip("'\\\"")`. The second `strip` does **not** decode exactly one YAML quoting layer: it erases *any number* of leading/trailing single and double quote characters. The underlying `tools/planning/frontier_maintenance.py` `scalar` (used by `parse_operational`) uses the same lossy expression. Thus a valid YAML scalar whose **semantic content still contains literal quote characters** is accepted by both the base operational-record recognizer and v7's provenance identity checks as a different, trusted value.
+
+Literal independent fixture (the normal `\`\`\`yaml` GitHub-comment fence surrounds this content):
+
+~~~yaml
+protocol: '"planning-v1"'
+schema: "'3'"
+kind: '"INTEGRATION_STATUS"'
+state: '"DONE"'
+merge_method: '"squash"'
+canonicality: '"NOT_CANONICAL"'
+extensions:
+  source_producer_issue: 1545
+~~~
+
+On independent **PyYAML 6.0.3 `safe_load`**, the respective scalar values are `'"planning-v1"'`, `"'3'"`, `'"INTEGRATION_STATUS"'`, `'"DONE"'`, `'"squash"'`, and `'"NOT_CANONICAL"'` — the quote characters are **part of each semantic value**. In contrast, the exact frozen-reader `_integration_field` algorithm normalizes them to `planning-v1`, `3`, `INTEGRATION_STATUS`, `DONE`, `squash`, and `NOT_CANONICAL`. Base `scalar` / `parse_operational` likewise recognizes `protocol=planning-v1`, `schema=3`, `kind=INTEGRATION_STATUS`, `state=DONE` if the other required operational fields are present. The structural spaced-key guard sees no key-separator defect; this is a **value-identity** mismatch, not a key-shadow collision. No tag, alias, duplicate mapping, unsupported map node, escaped key, or prose is needed.
+
+The independently executed comparison used ordinary `yaml.safe_load` and the exact `re.findall` plus `strip().strip("'\\\"")` extraction from frozen `_integration_field`; all six values differed. Positive controls `protocol: planning-v1`, `schema: 3`, `kind: INTEGRATION_STATUS`, `state: DONE`, `merge_method: squash`, and `canonicality: NOT_CANONICAL` preserve their true identities; legitimate *single-layer* quoted scalar values can likewise be decoded with a scalar-aware reader. This proof is at the **authority-reader/record-recognition boundary**. It is not an assertion that a wholly fabricated integration would pass the separate real GitHub PR, independent review, ownership, or single-parent squash checks.
+
+**Impact:** The consumer authenticates an operational kind/phase/canonicality/merge method that is not actually declared by the YAML, undermining schema-3 authority and the noncanonical integration provenance boundary. **Correction required:** do not trim arbitrary quote layers from authority values. Decode one YAML scalar faithfully or conservatively reject layered/ambiguous quoted values before any operational record and root integration-field acceptance, while preserving ordinary direct and legitimate single-quoted/double-quoted scalars. Add negative fixtures for protocol, schema, kind, state, merge_method, canonicality and provenance role/identity fields, including the source-faithful operational parser; require semantic agreement with PyYAML for each authored fixture. This may require a coordinated, explicitly authorized narrow base-parser correction in addition to v7; do not silently broaden predecessor path ownership.
+
+## Previous findings, evidence and independent controls
+
+- The FSR-1619-B01 examples `extensions:\n  source_producer_issue: 1545\nextensions : null` and a spaced `verification_issue : 1575` now encounter the frozen v7 `_yaml_spaced_mapping_key` conservative rejection/conditional marker handling. The FSR-1619-M01 `"canonicality" : CANONICAL` shadow after an original `canonicality: NOT_CANONICAL` also rejects. Read-only source-owned CI is genuine; the new layered-value fixture is absent from that suite. No finding here proves the original spaced-map remediation ineffective for those literals.
+- Exact PR #1622 changed **16 paths**; independent GitHub PR file-blob comparison with predecessor draft PR #1618 (HEAD `e78249c7eb7acd87fa5654875e9d74e208b91159`) found all **14 non-v7 inherited predecessor blobs identical**. The corrected v7 blob is `5c5f26ea583b2d37792e31f38b5abab01d3afc2b`; added own handoff blob `9a1f92d5a2023f676334361d2ff2a83f36278491`. Frozen negative review-only PR #1620 HEAD `fe93c78df875d32e299ac9058a4f5c4c656c169e` and its review #6103950062 remain unchanged.
+- Final-head GitHub Actions `pull_request` run **38100497282 SUCCESS**, read-only `validate-pr` job **114355266109 SUCCESS**: exact log shows `python3 -m py_compile tools/planning/frontier_maintenance*.py` and composed v1–v7 `--self-test` PASS, including spaced-key fixtures. Mutation-capable `maintain` job **114355266875 SKIPPED**. Actual checkout merge SHA `cc8493a85d738d5fa5b98a7f58bb5d77215dda23` has Git commit parents current main `3d7ce70fbc4e1c26224f01c6aa3a3fc18cf3902d` and source HEAD `18a23b61d4fafd68d0def4c8fe8cfcc34ac4139e`, tree `efa825c6b0716e71beb73cbb176d406e984fdc6c`.
+- Original legitimate source PR #1568 remains merged from head `1de1155429bfa657dd6e60c4f5abc969fabd86d5`. Real source #1545 terminal #6008457546 → separate verifier #1575/#6008823087 → required reviewer #1577/#6009157969 → integrator #1583/#6009230681; noncanonical published squash `ef75cc78a217695097f5d8f6cfb48ea04beaa7de` has the *single* parent `e51703de82b9df3f5e676663d3a04fdc678bd5c6`, and six verified published paths. This valid scoped causal path must stay admissible; verification must remain conditional on a real verifier assertion/route, not imposed globally.
+- Existing source fixtures address numeric aliases, explicit tags, block scalar prose, owner generation/STALE/HANDOFF/ORPHAN, v5 two-/three-target demand, v6 bounded intake, and v7 consumed-latest/no historical replay. No claim of an exhaustive independent execution of those full tests is made; their read-only Actions outcome is recorded as source CI evidence, not independent certification.
+
+## Next required route and authority limits
+
+Freeze draft source PR #1622 and this reviewer-only draft unmerged. Publish in-lease unedited `REVIEW_STATUS(CHANGES_NEEDED)` with **1 BLOCKER / 0 MAJOR / 0 correction-requiring MINOR** and the exact finding **FSR-1623-B01**. Materialize exactly one new narrowly bounded **blocking remediation** that restores semantic scalar identity at the relevant operational-reader boundary, carries the frozen #1622 packet without changing predecessor evidence, scopes any necessary base-parser path explicitly, and adds independent negative/positive fixtures. Require new exact-final-head read-only CI, then a **new genuinely distinct mandatory independent adversarial reviewer**. Only that clean review could unlock separate owner-authorized, exact-current-main-compatible **squash-only NONCANONICAL source publication**. Neither producer CI, review-only PR, nor mergeability grants integration/canonicality/verification, gameplay/truth/consent/accessibility, implementation-readiness, engine-selection, production or release authority.
