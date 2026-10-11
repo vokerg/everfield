@@ -34,6 +34,8 @@ class StrictLoader(yaml.SafeLoader):
     def compose_node(self, parent: Any, index: Any) -> Any:
         if self.check_event(yaml.AliasEvent):
             raise ValueError("YAML aliases are not operational authority")
+        if getattr(self.peek_event(), "tag", None) is not None:
+            raise ValueError("explicit YAML tags are not operational authority")
         return super().compose_node(parent, index)
 
     def construct_mapping(self, node: yaml.nodes.MappingNode, deep: bool = False) -> dict:
@@ -253,8 +255,33 @@ def self_test() -> None:
         return {"id": id, "created_at": when, "updated_at": when,
                 "author_association": "OWNER", "user": {"login": OWNER_LOGIN}, "body": body}
 
-    claim = comment(1, claim_time, ```"\x60\x60\x60yaml\nprotocol: planning-v1\nschema: 3\nkind: CLAIM\nissue: 199\nmission_id: R-01\nactor_session_id: reviewer-1\nstate: IN_PROGRESS\n\x60\x60\x60"```)
-    terminal = comment(2, terminal_time, ```"\x60\x60\x60yaml\nprotocol: planning-v1\nschema: 3\nkind: REVIEW_STATUS\nissue: 199\nmission_id: R-01\nactor_session_id: reviewer-1\nstate: CHANGES_NEEDED\nterminal: true\nauthority_mode: REVIEWER\nownership_generation_comment_id: 1\nhead_sha: "``` + head + ```"\npr_number: 200\npr_head_sha: "``` + head + ```"\npr_draft: true\nrequired_next_route: MATERIALIZE_FIX\n\x60\x60\x60"```)
+    fence = chr(96) * 3
+    claim = comment(1, claim_time, f"""{fence}yaml
+protocol: planning-v1
+schema: 3
+kind: CLAIM
+issue: 199
+mission_id: R-01
+actor_session_id: reviewer-1
+state: IN_PROGRESS
+{fence}""")
+    terminal = comment(2, terminal_time, f"""{fence}yaml
+protocol: planning-v1
+schema: 3
+kind: REVIEW_STATUS
+issue: 199
+mission_id: R-01
+actor_session_id: reviewer-1
+state: CHANGES_NEEDED
+terminal: true
+authority_mode: REVIEWER
+ownership_generation_comment_id: 1
+head_sha: {head}
+pr_number: 200
+pr_head_sha: {head}
+pr_draft: true
+required_next_route: MATERIALIZE_FIX
+{fence}""")
     pr = {"number": 200, "title": "[PLAN-v1][#199] Required negative review",
           "state": "open", "draft": True, "merged_at": None,
           "head": {"sha": head}, "base": {"ref": "main"},
