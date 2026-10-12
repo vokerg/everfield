@@ -190,6 +190,13 @@ def schema_terminal_resolution_from_comments(
     terminal = base.reconcilable_terminal_from_comments(transition_issue_number, comments_list)
     if terminal is None:
         return None
+    # FSR-1716-M01: schema-3 owner-shaped terminal resolution, unlike
+    # independent immutable dispatch-marker resolution, MUST authenticate both
+    # result SHAs against one actual GitHub task branch tip before consumption.
+    if not base.github_verified_terminal_result_heads(
+        transition_issue_number, terminal.head_sha, terminal.work_sha
+    ):
+        return None
     if base.scalar(terminal.body, "disposition") not in RESOLUTION_DONE_DISPOSITIONS:
         return None
     if base.integer_scalar(terminal.body, "source_issue") != source_issue:
