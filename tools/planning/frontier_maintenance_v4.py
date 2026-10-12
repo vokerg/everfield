@@ -138,6 +138,13 @@ def semantic_generation_from_comments(
     terminal = base.reconcilable_terminal_from_comments(number, comments)
     if terminal is None:
         return None
+    # FSR-1716-M01: syntax/owner linkage is not source-commit provenance.
+    # A semantic-generation consumption can suppress live successor work.
+    # Authenticate BOTH terminal result SHAs against one live task branch tip.
+    if not base.github_verified_terminal_result_heads(
+        number, terminal.head_sha, terminal.work_sha
+    ):
+        return None
     return semantic_generation_from_terminal(
         transition_issue, terminal, issues_by_number
     )
@@ -405,6 +412,60 @@ def self_test() -> None:
         transition, wrong_disposition, issues
     ) is None
     assert semantic_generation_from_comments(transition, [], issues) is None
+
+    # FSR-1716-M01: exercise the actual semantic consumption predicate with
+    # the real live-branch GitHub comparison helper, not a copied regex.
+    # Only terminal parsing and GitHub I/O are mocked; no live PATCH.
+    original_parser = base.reconcilable_terminal_from_comments
+    original_request = base.request
+    terminal_for_test = materialized
+    tip = "a" * 40
+    ancestors = {"b" * 40}
+    api_calls: list[str] = []
+    def mocked_request(method: str, path: str, *args: Any) -> dict[str, Any]:
+        if method != "GET":
+            raise AssertionError("unexpected mutation")
+        api_calls.append(path)
+        if path == f"/repos/{base.REPO}/git/ref/heads/planning/issue-30":
+            return {"object": {"sha": tip}}
+        if path.startswith(f"/repos/{base.REPO}/compare/"):
+            candidate = path.rsplit("/", 1)[-1].split("...", 1)[0]
+            return (
+                {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+                if candidate in ancestors
+                else {"status": "diverged", "ahead_by": 1, "behind_by": 1}
+            )
+        raise AssertionError("unknown read-only GitHub request")
+    try:
+        base.reconcilable_terminal_from_comments = lambda number, comments: (
+            terminal_for_test if number == 30 and list(comments) else None
+        )
+        base.request = mocked_request
+        assert semantic_generation_from_comments(transition, [1], issues) == (10, 2, "NEXT")
+        assert any("/compare/" in path for path in api_calls)
+        terminal_for_test = materialized.__class__(**{
+            **vars(materialized), "work_sha": "a" * 40
+        })
+        assert semantic_generation_from_comments(transition, [1], issues) == (10, 2, "NEXT")
+        for fake_head, fake_work in (
+            ("c" * 40, "a" * 40),
+            ("a" * 40, "c" * 40),
+            ("c" * 40, "c" * 40),
+        ):
+            terminal_for_test = materialized.__class__(**{
+                **vars(materialized), "head_sha": fake_head, "work_sha": fake_work
+            })
+            assert semantic_generation_from_comments(transition, [1], issues) is None
+        terminal_for_test = materialized
+        tip, ancestors = "c" * 40, set()
+        assert semantic_generation_from_comments(transition, [1], issues) is None
+        tip = ""
+        assert semantic_generation_from_comments(transition, [1], issues) is None
+        base.request = lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("ref unavailable"))
+        assert semantic_generation_from_comments(transition, [1], issues) is None
+    finally:
+        base.reconcilable_terminal_from_comments = original_parser
+        base.request = original_request
 
     print("frontier maintenance v4 self-test: PASS")
 
