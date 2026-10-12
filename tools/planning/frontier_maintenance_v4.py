@@ -138,6 +138,13 @@ def semantic_generation_from_comments(
     terminal = base.reconcilable_terminal_from_comments(number, comments)
     if terminal is None:
         return None
+    # FSR-1716-M01: syntax/owner linkage is not source-commit provenance.
+    # A semantic-generation consumption can suppress live successor work.
+    # Authenticate BOTH terminal result SHAs against one live task branch tip.
+    if not base.github_verified_terminal_result_heads(
+        number, terminal.head_sha, terminal.work_sha
+    ):
+        return None
     return semantic_generation_from_terminal(
         transition_issue, terminal, issues_by_number
     )
