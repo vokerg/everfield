@@ -1,0 +1,9 @@
+# Issue #1710 — independent negative retirement security review
+
+**Mission:** `FACTORY-NEGATIVE-REVIEW-PR-RETIREMENT-01-REM-05-REV-01`. Source owner Issue #1707 immutable CLAIM #6131364086 and `STATUS(REVIEW_READY)` #6131423081; OPEN/DRAFT source PR #1709 HEAD `c5d1a94122ca8a97430a0bbf4e3be66438f5f520`. Active canonical #1147 binding #5675066392 / program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`; main base `a57436d194f14f5f2c5b1173a9c2e0ec6468ee7c`.
+
+**Reviewer owner:** Issue #1710 first winning immutable CLAIM #6131487608 at `2026-10-12T19:49:39Z`, actor `frontier-distinct-retirement-markdown-security-1710-gpt6-20261012-2150-cph-01`, reviewer branch `planning/issue-1710`. Frozen source was read via GitHub; source code/PR untouched.
+
+**Disposition:** **CHANGES_NEEDED**, 0 BLOCKER, **1 MAJOR FSR-1710-M01**, 0 correction-requiring MINOR. An independent Python 3 reproduction of exact source URL matcher shows Markdown `**.../pull/200**`, `*.../pull/200*`, `__.../pull/200__` and `.../pull/200|` are missed despite bona fide active first-party references. Real `eligibility` and recheck call this same function. No entire-source import, no live --apply or GitHub PATCH, no claim of comprehensive independent PASS. Evidence and bounds in `docs/planning/wave-2/reviews/negative-review-retirement-1707-review.md`.
+
+**Single required correction:** newly materialized [Issue #1712](https://github.com/vokerg/everfield/issues/1712) must remain BLOCKED until this issue publishes immutable in-lease terminal negative security REVIEW_STATUS and OPEN/DRAFT exact reviewer-only PR. Only one source correction task, followed by head-locked nonmutating CI, new genuinely distinct required review, and *separately owner-authorized, expected-current-main-compatible SQUASH-only NONCANONICAL integration*. Reviewer-only draft never integrate. No live closure authorization or canon/engine/production/release authority.
