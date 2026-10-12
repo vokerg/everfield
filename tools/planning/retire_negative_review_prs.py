@@ -504,6 +504,35 @@ artifact_paths:
     assert not ok(opened=[{**active, "comments_coverage_complete": False,
                             "live_comments": [{"id": 1, "body": "No ref"}]}])
     assert not ok(opened=[{**active, "live_comments": None}])
+    # Exercise the LIVE snapshot reader, not only the pure eligibility gate.
+    original_paged = paged
+    live = {"number": 300, "state": "open", "title": "Active remediation",
+            "body": "No direct link", "comments": 1}
+    live_comment = {"id": 50, "created_at": "2026-10-10T12:00:00Z",
+                    "body": "This open successor needs review PR #200"}
+    try:
+        def one_page(path: str) -> list[dict[str, Any]]:
+            if path.endswith("/issues?state=open"):
+                return [live]
+            if path.endswith("/issues/300/comments"):
+                return [live_comment]
+            raise AssertionError("unexpected snapshot API path")
+        globals()["paged"] = one_page
+        complete = live_open_issue_references(f"/repos/{REPO}")
+        assert len(complete) == 1 and complete[0]["comments_coverage_complete"]
+        assert not ok(opened=complete)
+
+        # A changed server comment count invalidates scan before any close.
+        globals()["paged"] = lambda path: [live] if path.endswith(
+            "/issues?state=open") else []
+        try:
+            live_open_issue_references(f"/repos/{REPO}")
+            assert False, "partial comment coverage incorrectly accepted"
+        except RuntimeError:
+            pass
+    finally:
+        globals()["paged"] = original_paged
+
     assert ok(opened=[{**active, "live_comments": [
         {"id": 1, "body": "No reference to the reviewer PR"}]}])
 
