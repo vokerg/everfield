@@ -302,61 +302,90 @@ def execute(*, apply: bool) -> None:
 
 def self_test() -> None:
     now = datetime(2026, 10, 20, tzinfo=timezone.utc)
-    head = "a" * 40
+    head, base_head = "a" * 40, "b" * 40
     claim_time = "2026-10-10T10:00:00Z"
     terminal_time = "2026-10-10T11:00:00Z"
+    report = "docs/planning/wave-2/reviews/negative-review.md"
+    handoff = "docs/planning/handoffs/issue-199.md"
+    fence = chr(96) * 3
 
-    def comment(id: int, when: str, body: str) -> dict[str, Any]:
-        return {"id": id, "created_at": when, "updated_at": when,
+    def comment(cid: int, when: str, body: str) -> dict[str, Any]:
+        return {"id": cid, "created_at": when, "updated_at": when,
                 "author_association": "OWNER", "user": {"login": OWNER_LOGIN}, "body": body}
 
-    fence = chr(96) * 3
     claim = comment(1, claim_time, f"""{fence}yaml
 protocol: planning-v1
 schema: 3
 kind: CLAIM
 issue: 199
+branch: planning/issue-199
 mission_id: R-01
 actor_session_id: reviewer-1
 state: IN_PROGRESS
+previous_ownership_comment_id: null
+base_sha: {base_head}
+observed_head_sha: {base_head}
 {fence}""")
     terminal = comment(2, terminal_time, f"""{fence}yaml
 protocol: planning-v1
 schema: 3
 kind: REVIEW_STATUS
 issue: 199
+branch: planning/issue-199
 mission_id: R-01
 actor_session_id: reviewer-1
 state: CHANGES_NEEDED
 terminal: true
 authority_mode: REVIEWER
 ownership_generation_comment_id: 1
+base_sha: {base_head}
+work_sha: {head}
 head_sha: {head}
 pr_number: 200
 pr_head_sha: {head}
 pr_draft: true
 required_next_route: MATERIALIZE_FIX
+artifact_paths:
+  - {report}
+  - {handoff}
 {fence}""")
     pr = {"number": 200, "title": "[PLAN-v1][#199] Required negative review",
           "state": "open", "draft": True, "merged_at": None,
           "head": {"sha": head}, "base": {"ref": "main"},
           "user": {"login": OWNER_LOGIN}}
-    issue = {"number": 199, "state": "closed", "state_reason": "completed"}
-    files = [{"filename": "docs/planning/wave-2/reviews/negative.md"},
-             {"filename": "docs/planning/handoffs/issue-199.md"}]
-    ok = lambda p=pr, c=[claim, terminal], f=files, opened=[], t=now: eligibility(
-        p, issue, c, f, opened, t)[0]
-    assert ok()
+    issue = {"number": 199, "state": "closed", "state_reason": "completed",
+             "user": {"login": OWNER_LOGIN}, "title": "[PLAN-v1][REVIEW-199] Challenge"}
+    files = [{"filename": report, "status": "added", "sha": "c" * 40},
+             {"filename": handoff, "status": "added", "sha": "d" * 40}]
+
+    def ok(p=pr, c=None, f=None, opened=None, t=now, rev_issue=issue) -> bool:
+        return eligibility(
+            p, rev_issue, [claim, terminal] if c is None else c,
+            files if f is None else f, [] if opened is None else opened, t,
+        )[0]
+
+    assert ok(), eligibility(pr, issue, [claim, terminal], files, [], now)
     assert not ok(p=dict(pr, draft=False))
-    assert not ok(p=dict(pr, head={"sha": "b" * 40}))
+    assert not ok(p=dict(pr, merged_at="2026-10-11T00:00:00Z"))
+    assert not ok(p=dict(pr, head={"sha": "e" * 40}))
     assert not ok(p=dict(pr, state="closed"))
     assert not ok(p=dict(pr, base={"ref": "other"}))
-    assert not ok(f=[{"filename": "game/main.gd"}, files[1]])
+    assert not ok(rev_issue=dict(issue, state="open"))
+    assert not ok(rev_issue=dict(issue, user={"login": "outsider"}))
     assert not ok(opened=[{"title": "Active successor", "body": "needs PR #200 OPEN/DRAFT"}])
     assert not ok(t=datetime(2026, 10, 11, tzinfo=timezone.utc))
+    assert not ok(f=[{"filename": "game/main.gd", "status": "added", "sha": "c"*40}, files[1]])
+    assert not ok(f=[dict(files[0], filename="docs/planning/wave-2/reviews/unrelated.md"), files[1]])
+    assert not ok(f=[files[0], dict(files[1], filename="docs/planning/handoffs/issue-777.md")])
+    assert not ok(f=[dict(files[0], sha="bogus"), files[1]])
+    assert not ok(f=[dict(files[0], status="modified"), files[1]])
     assert not ok(c=[claim, dict(terminal, updated_at="2026-10-10T11:01:00Z")])
     assert not ok(c=[claim, dict(terminal, author_association="NONE")])
     assert not ok(c=[dict(claim, body=claim["body"].replace("reviewer-1", "other")), terminal])
+    assert not ok(c=[dict(claim, body=claim["body"].replace("kind: CLAIM", "kind: RESUME")), terminal])
+    assert not ok(c=[dict(claim, body=claim["body"].replace("base_sha:", "forged_sha:")), terminal])
+    assert not ok(c=[dict(claim, body=claim["body"].replace("planning/issue-199", "planning/issue-777")), terminal])
+    assert not ok(c=[dict(claim, body=claim["body"].replace("previous_ownership_comment_id: null", "previous_ownership_comment_id: 999")), terminal])
     assert not ok(c=[claim, dict(terminal, body=terminal["body"].replace("CHANGES_NEEDED", "REVIEW_READY"))])
     assert not ok(c=[claim, dict(terminal, body=terminal["body"].replace("pr_number: 200", "pr_number: 201"))])
     assert not ok(c=[claim, dict(terminal, body=terminal["body"].replace("kind: REVIEW_STATUS", "kind: STATUS"))])
@@ -365,8 +394,19 @@ required_next_route: MATERIALIZE_FIX
     assert not ok(c=[claim, dict(terminal, body=terminal["body"].replace("state: CHANGES_NEEDED", "state: CHANGES_NEEDED\nstate: CHANGES_NEEDED"))])
     assert not ok(c=[claim, dict(terminal, body=terminal["body"].replace("protocol: planning-v1", "protocol: *shadow"))])
     assert not ok(c=[claim, dict(terminal, body=terminal["body"].replace("protocol: planning-v1", "protocol: !!str planning-v1"))])
-    assert not ok(c=[claim, dict(terminal, body=terminal["body"] + "\n\x60\x60\x60yaml\nkind: REVIEW_STATUS\n\x60\x60\x60")])
+    assert not ok(c=[claim, dict(terminal, body=terminal["body"] + f"\n{fence}yaml\nkind: REVIEW_STATUS\n{fence}")])
     assert not ok(c=[claim, dict(terminal, created_at="2026-10-10T17:00:00Z", updated_at="2026-10-10T17:00:00Z")])
+    # Genuine negative reviewer cannot be superseded by a subsequent status.
+    newer = comment(3, "2026-10-10T11:05:00Z", terminal["body"].replace("CHANGES_NEEDED", "REVIEW_READY"))
+    assert not ok(c=[claim, terminal, newer])
+    # Even malformed or edited attempted later authority fails closed.
+    assert not ok(c=[claim, terminal, dict(newer, updated_at="2026-10-10T11:06:00Z")])
+    # Any additional competing owner or PROGRESS record is outside the
+    # proven safe subset: no guessed first-winner or renewal authority.
+    extra_claim = comment(4, "2026-10-10T10:05:00Z", claim["body"])
+    assert not ok(c=[claim, extra_claim, terminal])
+    extra_progress = comment(5, "2026-10-10T10:10:00Z", claim["body"].replace("kind: CLAIM", "kind: PROGRESS"))
+    assert not ok(c=[claim, extra_progress, terminal])
     print("retire negative reviewer-only drafts self-test: PASS")
 
 
