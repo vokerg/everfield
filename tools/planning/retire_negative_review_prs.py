@@ -93,16 +93,19 @@ def timestamp(text: str | None) -> datetime | None:
 
 
 
-PR_URL = re.compile(r"https://[^\s<>\[\](){}\"'\x60]+", re.IGNORECASE)
+PR_URL = re.compile(
+    r"(?<![A-Za-z0-9+.:/-])(?:https?:)?//[^\s<>\[\](){}\"'\x60]+",
+    re.IGNORECASE,
+)
 
 
 def references_pr(text: str, number: int) -> bool:
     """Fail closed on first-party PR URL variants in active issues/comments.
 
-    A canonical PR reference may use GitHub's explicit HTTPS port 443, a
-    .diff/.patch endpoint, encoded path segments, or PR subresources. Parse
-    host and port separately: netloc includes :443 and is not the hostname.
-    Unknown/malformed first-party authority is a veto, not proof of absence.
+    A first-party PR reference may use HTTPS, HTTP (redirects to HTTPS),
+    browser-resolvable protocol-relative // links, explicit standard ports,
+    .diff/.patch endpoints, encoded paths or PR subresources. Parse host
+    and port separately. Unknown first-party authority fails closed.
     """
     if re.search(rf"(?<![0-9])#{number}(?![0-9])", text):
         return True
@@ -126,10 +129,15 @@ def references_pr(text: str, number: int) -> bool:
             port = url.port
         except ValueError:
             return True
-        if (url.scheme.lower() != "https"
-                or url.username is not None or url.password is not None
-                or port not in (None, 443)):
-            # Do not interpret ambiguous first-party authorities as absence.
+        scheme = url.scheme.lower()
+        allowed_ports = ((None, 80, 443) if scheme in ("http", "")
+                         else (None, 443))
+        if (
+            scheme not in ("http", "https", "")
+            or url.username is not None or url.password is not None
+            or port not in allowed_ports
+        ):
+            # First-party but malformed/unexpected authority: veto, never retire.
             return True
         segments = [item.casefold() for item in
                     urllib.parse.unquote(url.path).split("/") if item]
@@ -591,6 +599,43 @@ artifact_paths:
         assert not ok(opened=[{**clean, "live_comments": [
             {"id": 1, "body": "Keep " + variant}]}]), variant
 
+
+    # FSR-1705-M01: direct first-party HTTP-upgraded and browser-resolvable
+    # protocol-relative URLs are equivalent links to the same review PR.
+    http_web = f"http://github.com/{REPO}/pull/200"
+    http_api = f"http://api.github.com/repos/{REPO}/pulls/200"
+    relative_web = f"//github.com/{REPO}/pull/200"
+    relative_api = f"//api.github.com/repos/{REPO}/pulls/200"
+    upgraded_variants = (
+        http_web, http_api, relative_web, relative_api,
+        http_web + "/files?diff=split#discussion",
+        http_api + ".patch", relative_web + ".diff",
+        f"http://github.com:80/{REPO}/pull/200",
+        f"http://api.github.com:80/repos/{REPO}/pulls/200.patch",
+        f"//github.com:443/{REPO}/pull/200/files",
+        f"http://github.com./{REPO}/pull/200",
+        f"http://github.com/{REPO}/%70ull/%32%30%30",
+        f"[review]({relative_web})",
+    )
+    for variant in upgraded_variants:
+        assert not ok(opened=[{**clean, "title": "Keep " + variant}]), variant
+        assert not ok(opened=[{**clean, "body": "Keep " + variant}]), variant
+        assert not ok(opened=[{**clean, "live_comments": [
+            {"id": 1, "body": "Keep " + variant}]}]), variant
+    # Genuine nonreferences preserve eligible retirement; no substring #200
+    # extraction from 2000/200abc, untrusted host, issue path or foreign repo.
+    for nonreference in (
+        f"http://github.com/{REPO}/pull/2000",
+        f"//github.com/{REPO}/pull/200abc",
+        f"http://github.com/{REPO}/issues/200",
+        "http://github.com/vokerg/other/pull/200",
+        f"//github.com.evil.test/{REPO}/pull/200",
+        f"http://api.github.com/repos/{REPO}/pulls/2000",
+        f"//api.github.com/repos/vokerg/other/pulls/200",
+        f"ftp://github.com/{REPO}/pull/200",
+    ):
+        assert ok(opened=[{**clean, "body": nonreference}]), nonreference
+
     # Non-reference positives: no substring numeric, foreign repo or host.
     assert ok(opened=[clean])
     assert ok(opened=[{**clean, "body": f"https://github.com/{REPO}/pull/2000"}])
@@ -652,6 +697,7 @@ artifact_paths:
     original_request = request
     original_datetime = datetime
     scans = 0
+    late_link = f"Keep {web_port}.diff"
     patches: list[str] = []
     class TestClock(datetime):
         @classmethod
@@ -666,7 +712,7 @@ artifact_paths:
             scans += 1
             return [live]
         if path.endswith("/issues/300/comments"):
-            return [{**live_comment, "body": "No link" if scans == 1 else f"Keep {web_port}.diff"}]
+            return [{**live_comment, "body": "No link" if scans == 1 else late_link}]
         if path.endswith("/issues/199/comments"):
             return [claim, terminal]
         if path.endswith("/pulls/200/files"):
@@ -687,8 +733,19 @@ artifact_paths:
         globals()["paged"] = racing_paged
         globals()["request"] = racing_request
         globals()["datetime"] = TestClock
-        execute(apply=True)
-        assert scans == 2 and not patches, "active URL added before PATCH escaped veto"
+        for late_link in (
+            f"Keep {web_port}.diff",
+            f"Keep {http_web}/files",
+            f"Keep {http_api}.patch",
+            f"[review]({relative_web})",
+            f"Keep {relative_api}/files",
+        ):
+            scans = 0
+            patches.clear()
+            execute(apply=True)
+            assert scans == 2 and not patches, (
+                "active reference introduced before PATCH escaped veto: " + late_link
+            )
     finally:
         globals()["paged"] = original_paged
         globals()["request"] = original_request
