@@ -508,9 +508,11 @@ def _valid_stale_owner_transition(
         return False
     at_intent = base.schema3_ownership_lease_state(
         prior, records, before_comment_id=intent.comment_id,
+        head_verifier=base.github_verified_head_advance,
     )
     at_grant = base.schema3_ownership_lease_state(
         prior, records, before_comment_id=grant.comment_id,
+        head_verifier=base.github_verified_head_advance,
     )
     intent_time = base.parse_github_server_time(intent.created_at)
     grant_time = base.parse_github_server_time(grant.created_at)
@@ -545,6 +547,7 @@ def _valid_stale_owner_transition(
             continue
         state = base.schema3_ownership_lease_state(
             prior, records, before_comment_id=candidate.comment_id,
+            head_verifier=base.github_verified_head_advance,
         )
         when = base.parse_github_server_time(candidate.created_at)
         if (
@@ -583,11 +586,15 @@ def _valid_handoff_owner_transition(
         or handoff.head_sha != handoff.work_sha
         or not handoff.head_sha
         or not base.SHA40_RE.fullmatch(handoff.head_sha)
-        or base.schema3_owner_unexpired_at(prior, records, handoff) is not True
+        or base.schema3_owner_unexpired_at(
+            prior, records, handoff,
+            head_verifier=base.github_verified_head_advance,
+        ) is not True
     ):
         return False
     lease = base.schema3_ownership_lease_state(
         prior, records, before_comment_id=handoff.comment_id,
+        head_verifier=base.github_verified_head_advance,
     )
     if lease is None or lease.observed_head_sha != handoff.head_sha:
         return False
@@ -734,6 +741,7 @@ def _valid_owner_terminal(
             and base.SHA40_RE.fullmatch(candidate.head_sha)
             and base.schema3_owner_unexpired_at(
                 effective, records, candidate,
+                head_verifier=base.github_verified_head_advance,
             ) is True
         ):
             pending_handoff = candidate
@@ -755,11 +763,15 @@ def _valid_owner_terminal(
         return False
     lease = base.schema3_ownership_lease_state(
         owner, records, before_comment_id=terminal.comment_id,
+        head_verifier=base.github_verified_head_advance,
     )
     return bool(
         lease is not None
         and terminal.head_sha == terminal.work_sha
-        and base.schema3_owner_unexpired_at(owner, records, terminal) is True
+        and base.schema3_owner_unexpired_at(
+            owner, records, terminal,
+            head_verifier=base.github_verified_head_advance,
+        ) is True
     )
 
 
@@ -1282,6 +1294,7 @@ def _integration_provenance(
             next(record for record in records
                  if record.comment_id == rec.ownership_generation_comment_id),
             records, before_comment_id=rec.comment_id,
+            head_verifier=base.github_verified_head_advance,
         )
         if lease is None or lease.observed_head_sha.lower() != f["head_sha"].lower():
             return None
@@ -1847,6 +1860,28 @@ def self_test() -> None:
     }
     archive[9004] = [verifier_claim, verifier_terminal]
 
+    # A positive HEAD_ADVANCE fixture must prove an actual (mocked) branch
+    # tip and ancestor commit. A comment-invented SHA alone is never authority.
+    api_map.update({
+        f"/repos/{base.REPO}/git/ref/heads/planning/issue-9001": {
+            "object": {"sha": work_c},
+        },
+        f"/repos/{base.REPO}/git/ref/heads/planning/issue-9002": {
+            "object": {"sha": review_d},
+        },
+        f"/repos/{base.REPO}/compare/{base_a}...{work_c}": {
+            "status": "ahead", "ahead_by": 1, "behind_by": 0,
+        },
+        f"/repos/{base.REPO}/compare/{main_b}...{review_d}": {
+            "status": "ahead", "ahead_by": 1, "behind_by": 0,
+        },
+        f"/repos/{base.REPO}/commits/{work_c}": {
+            "commit": {"committer": {"date": "2026-10-04T00:09:00Z"}},
+        },
+        f"/repos/{base.REPO}/commits/{review_d}": {
+            "commit": {"committer": {"date": "2026-10-04T07:14:00Z"}},
+        },
+    })
     base.request, base.paged = fixture_request, fixture_paged
     try:
         assert integration_main_sha_from_comments(9003, archive[9003]) == squash_f
