@@ -1505,6 +1505,56 @@ def self_test() -> None:
     )
     assert not stable_transition_terminal(invalidated)
 
+    # FSR-1716-M01: actual v5 closed semantic ledger MUST reach v4's
+    # authenticated terminal-head consumer before any generation is consumed.
+    original_paged = base.paged
+    original_parser = base.reconcilable_terminal_from_comments
+    original_head_check = base.github_verified_terminal_result_heads
+    original_no_route = terminal_no_route_generation_from_comments
+    semantic_wrapper = dict(
+        wrapper, number=30, state="closed", state_reason="completed",
+        body="Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `NEXT`",
+        created_at="2026-09-01T00:00:05Z",
+    )
+    semantic_successor = dict(
+        trusted_successor, number=20, created_at="2026-09-01T00:00:06Z",
+        body="Materialized successor from factory transition #30.",
+    )
+    semantic_record = v4._terminal(30, 4,
+        "disposition: EXACT_REQUIRED_REVIEW_SUCCESSOR_MATERIALIZED\n"
+        "source_issue: 10\nsource_terminal_comment_id: 2\n"
+        "source_required_route: NEXT\nsuccessor_issue: 20\n"
+    )
+    head_check_calls: list[tuple[int, str | None, str | None]] = []
+    try:
+        base.paged = lambda path: [semantic_record]
+        base.reconcilable_terminal_from_comments = lambda issue_number, comments: (
+            semantic_record if issue_number == 30 else None
+        )
+        globals()["terminal_no_route_generation_from_comments"] = lambda *args: None
+        def check_result(issue_number: int, result_head: str | None, result_work: str | None) -> bool:
+            head_check_calls.append((issue_number, result_head, result_work))
+            return bool(result_head == "a" * 40 and result_work == "a" * 40)
+        base.github_verified_terminal_result_heads = check_result
+        expected_generation = (10, 2, "NEXT")
+        assert v5_resolved_transition_generations(
+            [semantic_wrapper], [semantic_wrapper, semantic_successor]
+        ) == set()
+        assert head_check_calls == [(30, "a" * 40, "b" * 40)]
+        semantic_record = semantic_record.__class__(**{
+            **vars(semantic_record), "work_sha": "a" * 40
+        })
+        head_check_calls.clear()
+        assert v5_resolved_transition_generations(
+            [semantic_wrapper], [semantic_wrapper, semantic_successor]
+        ) == {expected_generation}
+        assert head_check_calls == [(30, "a" * 40, "a" * 40)]
+    finally:
+        base.paged = original_paged
+        base.reconcilable_terminal_from_comments = original_parser
+        base.github_verified_terminal_result_heads = original_head_check
+        globals()["terminal_no_route_generation_from_comments"] = original_no_route
+
     print("frontier maintenance v5 self-test: PASS")
 
 
