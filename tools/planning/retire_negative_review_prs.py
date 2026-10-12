@@ -312,11 +312,59 @@ def paged(path: str) -> list[dict[str, Any]]:
     return result
 
 
+def live_open_issue_references(root: str) -> list[dict[str, Any]]:
+    """Conservatively cover EVERY active issue and all of its comments.
+
+    Unknown pagination, inconsistent API comment counts or excessive scan
+    volume aborts before PATCH. These separate reads cannot be atomic with a
+    subsequent GitHub PATCH; the residual last-millisecond race remains.
+    """
+    issues = paged(f"{root}/issues?state=open")
+    if len(issues) > 200:
+        raise RuntimeError("open-issue frontier too large for bounded comment scan")
+    refs: list[dict[str, Any]] = []
+    seen: set[int] = set()
+    for issue in issues:
+        if not isinstance(issue, dict):
+            raise RuntimeError("malformed live GitHub issue")
+        if issue.get("pull_request"):
+            continue
+        number = issue.get("number")
+        count = issue.get("comments")
+        if (
+            type(number) is not int or number <= 0 or number in seen
+            or issue.get("state") != "open"
+            or type(count) is not int or count < 0 or count > 1000
+            or not isinstance(issue.get("title"), str)
+            or not isinstance(issue.get("body"), str)
+        ):
+            raise RuntimeError("incomplete active issue identity/comment count")
+        seen.add(number)
+        comments = paged(f"{root}/issues/{number}/comments") if count else []
+        if len(comments) != count:
+            raise RuntimeError("incomplete active issue comment pagination")
+        comment_ids: set[int] = set()
+        for comment in comments:
+            if not isinstance(comment, dict):
+                raise RuntimeError("malformed live issue comment")
+            cid = comment.get("id")
+            if (
+                type(cid) is not int or cid <= 0 or cid in comment_ids
+                or not isinstance(comment.get("body"), str)
+                or not isinstance(comment.get("created_at"), str)
+            ):
+                raise RuntimeError("duplicate or unauthenticated live issue comment")
+            comment_ids.add(cid)
+        refs.append(dict(issue, live_comments=comments,
+                         comments_coverage_complete=True))
+    return refs
+
+
 def execute(*, apply: bool) -> None:
     root = "/repos/" + urllib.parse.quote(REPO, safe="/")
     now = datetime.now(timezone.utc)
     prs = paged(f"{root}/pulls?state=open")
-    open_issues = paged(f"{root}/issues?state=open")
+    open_issues = live_open_issue_references(root)
     possible = 0
     retired = 0
     for pr in prs:
@@ -340,12 +388,18 @@ def execute(*, apply: bool) -> None:
             current_issue = request(f"{root}/issues/{issue_number}")
             current_comments = paged(f"{root}/issues/{issue_number}/comments")
             current_files = paged(f"{root}/pulls/{number}/files")
-            current_open = paged(f"{root}/issues?state=open")
+            current_open = live_open_issue_references(root)
             safe, why = eligibility(
                 current_pr, current_issue, current_comments, current_files,
                 current_open, datetime.now(timezone.utc),
             )
-            if not safe or current_pr["head"]["sha"] != pr["head"]["sha"]:
+            if (
+                not safe
+                or current_pr["head"]["sha"] != pr["head"]["sha"]
+                or current_pr["head"]["ref"] != pr["head"]["ref"]
+                or current_pr["head"]["repo"]["full_name"] != pr["head"]["repo"]["full_name"]
+                or current_pr["base"]["repo"]["full_name"] != pr["base"]["repo"]["full_name"]
+            ):
                 print(f"PR #{number}: fresh-state veto — {why}")
                 continue
             request(f"{root}/pulls/{number}", "PATCH", {"state": "closed"})
