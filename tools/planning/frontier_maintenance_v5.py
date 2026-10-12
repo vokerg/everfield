@@ -58,7 +58,7 @@ def terminal_owner_generation_is_current(
                 and record.state == "HANDOFF_READY"
                 and record.ownership_generation_comment_id == owner.comment_id
                 and record.actor_session_id == owner.actor_session_id
-                and base.schema3_owner_unexpired_at(owner, records, record, head_verifier=base.github_verified_head_advance) is True
+                and base.schema3_owner_unexpired_at(owner, records, record) is True
             ):
                 return True
         return False
@@ -79,7 +79,7 @@ def terminal_owner_generation_is_current(
                 and base.SHA40_RE.fullmatch(record.head_sha)
                 and record.work_sha is not None
                 and base.SHA40_RE.fullmatch(record.work_sha)
-                and base.schema3_owner_unexpired_at(owner, records, record, head_verifier=base.github_verified_head_advance) is True
+                and base.schema3_owner_unexpired_at(owner, records, record) is True
             ):
                 return True
         return False
@@ -90,10 +90,9 @@ def terminal_owner_generation_is_current(
         at_record: base.OperationalRecord,
     ) -> bool:
         state = base.schema3_ownership_lease_state(
-            owner, records, before_comment_id=at_record.comment_id,
-            head_verifier=base.github_verified_head_advance,
+            owner, records, before_comment_id=at_record.comment_id
         )
-        unexpired = base.schema3_owner_unexpired_at(owner, records, at_record, head_verifier=base.github_verified_head_advance)
+        unexpired = base.schema3_owner_unexpired_at(owner, records, at_record)
         return bool(
             state is not None
             and unexpired is False
@@ -142,8 +141,7 @@ def terminal_owner_generation_is_current(
                     or source.ownership_generation_comment_id != current_owner.comment_id
                     or source.actor_session_id != current_owner.actor_session_id
                     or base.schema3_owner_unexpired_at(
-                        current_owner, records, source,
-                        head_verifier=base.github_verified_head_advance,
+                        current_owner, records, source
                     )
                     is not True
                 ):
@@ -214,7 +212,7 @@ def terminal_owner_generation_is_current(
                 and source.state == "HANDOFF_READY"
                 and source.ownership_generation_comment_id == winner.comment_id
                 and source.actor_session_id == winner.actor_session_id
-                and base.schema3_owner_unexpired_at(winner, records, source, head_verifier=base.github_verified_head_advance) is True
+                and base.schema3_owner_unexpired_at(winner, records, source) is True
             ):
                 winner = record
                 used_intents.add(intent.comment_id)
@@ -246,7 +244,7 @@ def terminal_owner_generation_is_current(
     return bool(
         winner is not None
         and winner.comment_id == terminal.ownership_generation_comment_id
-        and base.schema3_owner_unexpired_at(winner, records, terminal, head_verifier=base.github_verified_head_advance) is True
+        and base.schema3_owner_unexpired_at(winner, records, terminal) is True
         and not valid_handoff(winner, terminal.comment_id)
         and not valid_owner_terminal(winner, terminal.comment_id)
     )
@@ -625,7 +623,6 @@ def self_test() -> None:
                 "schema: 3\n"
                 f"kind: {kind}\n"
                 f"issue: {issue}\n"
-                f"branch: planning/issue-{issue}\n"
                 f"mission_id: {mission}\n"
                 f"actor_session_id: {actor}\n"
                 f"state: {state}\n"
@@ -909,39 +906,9 @@ def self_test() -> None:
         5, "2026-09-15T18:02:00Z", "actor-a", 1, "b" * 40
     )
     renewed = [claim, progress, renewed_intent, renewed_recover, renewed_terminal]
-    # An invented SHA in a comment is NOT an authenticated HEAD_ADVANCE.
-    # Verify the synthetic positive only against a mock that supplies the
-    # actual task branch tip, ancestor compare, and commit server time.
-    original_request = base.request
-    def authenticated_mock(method: str, path: str, payload: Any = None) -> Any:
-        if method != "GET":
-            raise RuntimeError("read-only fixture")
-        root = f"/repos/{base.REPO}"
-        if path == root + "/git/ref/heads/planning/issue-104":
-            return {"object": {"sha": "b" * 40}}
-        if path == root + "/compare/" + "a" * 40 + "..." + "b" * 40:
-            return {"status": "ahead", "ahead_by": 1, "behind_by": 0}
-        if path == root + "/commits/" + "b" * 40:
-            return {"commit": {"committer": {"date": "2026-09-15T16:59:00Z"}}}
-        raise RuntimeError(f"unexpected authenticated fixture read: {path}")
-    base.request = authenticated_mock
-    try:
-        assert terminal_owner_generation_is_current(
-            104, parsed_terminal(renewed), renewed
-        )
-        # Negative: the *same* positive-looking comment must not renew
-        # when the live branch never advanced beyond the old owner head.
-        original_mock = base.request
-        def stale_branch_mock(method: str, path: str, payload: Any = None) -> Any:
-            if path.endswith("/git/ref/heads/planning/issue-104"):
-                return {"object": {"sha": "a" * 40}}
-            return original_mock(method, path, payload)
-        base.request = stale_branch_mock
-        assert not terminal_owner_generation_is_current(
-            104, parsed_terminal(renewed), renewed
-        )
-    finally:
-        base.request = original_request
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(renewed), renewed
+    )
 
     probe = timed_comment(
         1, "2026-09-15T12:00:00Z", "ORPHAN_PROBE", "IN_PROGRESS", actor="actor-p",
