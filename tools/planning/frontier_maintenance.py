@@ -456,6 +456,34 @@ def github_verified_head_advance(
         return False
 
 
+def github_verified_recovery_source_head(issue_number: int, source_head: str) -> bool:
+    """Read-only proof a recovery source head belongs to the live task branch.
+
+    GitHub exposes no historical reflog. A missing/moved/diverged tip fails
+    closed; ancestry alone does not attest the historical time of the intent.
+    """
+    if type(issue_number) is not int or issue_number <= 0 or not isinstance(source_head, str) or not SHA40_RE.fullmatch(source_head):
+        return False
+    try:
+        path = f"/repos/{REPO}/git/ref/heads/planning/issue-{issue_number}"
+        ref = request("GET", path)
+        tip = ref.get("object", {}).get("sha")
+        if not isinstance(tip, str) or not SHA40_RE.fullmatch(tip):
+            return False
+        if tip == source_head:
+            return True
+        compare = request("GET", f"/repos/{REPO}/compare/{source_head}...{tip}")
+        return bool(
+            compare.get("status") == "ahead"
+            and type(compare.get("ahead_by")) is int
+            and compare["ahead_by"] >= 1
+            and type(compare.get("behind_by")) is int
+            and compare["behind_by"] == 0
+        )
+    except (RuntimeError, urllib.error.URLError, ValueError, TypeError, KeyError, AttributeError):
+        return False
+
+
 @dataclass(frozen=True)
 class OwnershipLeaseState:
     anchor_comment_id: int
@@ -774,7 +802,10 @@ def closure_authorized_terminal_from_comments(
 
     # Import at call-time to avoid a base/v5 module initialization cycle.
     from frontier_maintenance_v5 import terminal_owner_generation_is_current
-    if not terminal_owner_generation_is_current(issue_number, terminal, items):
+    if not terminal_owner_generation_is_current(
+        issue_number, terminal, items,
+        transition_head_verifier=github_verified_recovery_source_head,
+    ):
         return None
     return terminal
 
