@@ -823,6 +823,124 @@ def self_test() -> None:
     exact = [claim, exact_intent, exact_recover, recovered_terminal]
     assert terminal_owner_generation_is_current(104, parsed_terminal(exact), exact)
 
+    # FSR-1691-B01: recovery may not manufacture a different task head.
+    forged_stale_intent = timed_comment(
+        2, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("reason: STALE\nsource_comment_id: 1\n"
+               f"observed_head_sha: {'f' * 40}\n"),
+    )
+    forged_stale_grant = timed_comment(
+        3, "2026-09-15T18:00:01Z", "RECOVER", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("recovery_reason: STALE\n"
+               f"observed_head_sha: {'f' * 40}\n"
+               "previous_ownership_comment_id: 1\n"
+               "winning_intent_comment_id: 2\nsource_comment_id: 1\n"),
+    )
+    forged_stale = [
+        claim, forged_stale_intent, forged_stale_grant,
+        owner_terminal(4, "2026-09-15T18:00:02Z", "actor-b", 3, "f" * 40),
+    ]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(forged_stale), forged_stale
+    )
+
+    handoff = timed_comment(
+        2, "2026-09-15T12:01:00Z", "STATUS", "HANDOFF_READY",
+        actor="actor-a",
+        extra=("authority_mode: OWNER\n"
+               "ownership_generation_comment_id: 1\n"
+               f"head_sha: {'a' * 40}\n"
+               f"work_sha: {'a' * 40}\n"
+               "required_next_route: HANDOFF_RESUME\n"),
+    )
+    handoff_intent = timed_comment(
+        3, "2026-09-15T12:02:00Z", "RESUME_INTENT", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("reason: HANDOFF\nsource_comment_id: 2\n"
+               f"observed_head_sha: {'a' * 40}\n"),
+    )
+    handoff_grant = timed_comment(
+        4, "2026-09-15T12:03:00Z", "RESUME", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("previous_ownership_comment_id: 1\n"
+               "winning_intent_comment_id: 3\n"
+               "source_status_comment_id: 2\n"
+               f"observed_head_sha: {'a' * 40}\n"),
+    )
+    handoff_clean = [
+        claim, handoff, handoff_intent, handoff_grant,
+        owner_terminal(5, "2026-09-15T12:04:00Z", "actor-b", 4, "a" * 40),
+    ]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(handoff_clean), handoff_clean
+    )
+    forged_handoff = [
+        claim, handoff,
+        dict(handoff_intent, body=handoff_intent["body"].replace(
+            "observed_head_sha: " + "a" * 40,
+            "observed_head_sha: " + "f" * 40)),
+        dict(handoff_grant, body=handoff_grant["body"].replace(
+            "observed_head_sha: " + "a" * 40,
+            "observed_head_sha: " + "f" * 40)),
+        owner_terminal(5, "2026-09-15T12:04:00Z", "actor-b", 4, "f" * 40),
+    ]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(forged_handoff), forged_handoff
+    )
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(handoff_clean), handoff_clean,
+        transition_head_verifier=lambda _issue, _sha: False,
+    )
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(handoff_clean), handoff_clean,
+        transition_head_verifier=lambda issue, sha:
+            issue == 104 and sha == "a" * 40,
+    )
+
+    # The actual storage-close consumer also performs a fresh read-only
+    # GitHub branch / ancestry proof. Its unavailability must fail closed.
+    prior_request = base.request
+    def linked_branch_mock(method: str, path: str, payload: Any = None) -> Any:
+        if method == "GET" and path == (
+            f"/repos/{base.REPO}/git/ref/heads/planning/issue-104"
+        ):
+            return {"object": {"sha": "a" * 40}}
+        raise RuntimeError("unrecognized read or forbidden mutation")
+    try:
+        base.request = linked_branch_mock
+        assert base.closure_authorized_terminal_from_comments(
+            104, handoff_clean
+        ) is not None
+        assert base.closure_authorized_terminal_from_comments(
+            104, exact
+        ) is not None
+        assert base.closure_authorized_terminal_from_comments(
+            104, forged_handoff
+        ) is None
+        assert base.closure_authorized_terminal_from_comments(
+            104, forged_stale
+        ) is None
+        def changed_branch_mock(method: str, path: str, payload: Any = None) -> Any:
+            if path.endswith("/git/ref/heads/planning/issue-104"):
+                return {"object": {"sha": "f" * 40}}
+            if "/compare/" in path:
+                return {"status": "diverged", "ahead_by": 1, "behind_by": 1}
+            raise RuntimeError("unrecognized read")
+        base.request = changed_branch_mock
+        assert base.closure_authorized_terminal_from_comments(
+            104, handoff_clean
+        ) is None
+        base.request = lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            RuntimeError("unavailable live task branch")
+        )
+        assert base.closure_authorized_terminal_from_comments(
+            104, exact
+        ) is None
+    finally:
+        base.request = prior_request
+
     pre_expiry_terminal = timed_comment(
         2,
         "2026-09-15T17:59:59Z",
