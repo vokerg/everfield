@@ -14,9 +14,9 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta, timezone
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 
 API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
 REPO = os.environ.get("GITHUB_REPOSITORY", "vokerg/everfield")
@@ -133,12 +133,171 @@ def paged(path: str) -> Iterable[dict[str, Any]]:
         page += 1
 
 
-def scalar(body: str, key: str) -> str | None:
-    match = re.search(rf"(?m)^\s*{re.escape(key)}:\s*([^#\n]+?)\s*$", body)
-    if not match:
+def yaml_scalar_identity(raw: str) -> str | None:
+    """Decode at most one YAML scalar quoting layer; never erase quoted data.
+
+    This is a fail-closed, intentionally small scalar subset for schema-3
+    operations, not a whole-document YAML parser. JSON-compatible double
+    escapes and YAML doubled-single-quote escaping are decoded exactly once.
+    Unsupported YAML quoting/escape syntax has no authority.
+    """
+    value = raw.strip()
+    if not value:
         return None
-    value = match.group(1).strip().strip("'\"")
-    return None if value.lower() in {"null", "none", ""} else value
+    if value.startswith("'"):
+        if re.fullmatch(r"'(?:[^']|'')*'", value) is None:
+            return None
+        value = value[1:-1].replace("''", "'")
+    elif value.startswith('"'):
+        try:
+            value = json.loads(value)
+        except (ValueError, TypeError):
+            return None
+        if not isinstance(value, str):
+            return None
+    return value if value and value.lower() not in {"null", "none", "~"} else None
+
+
+def _operational_yaml_subset_valid(body: str) -> bool:
+    """Validate the *entire* operational YAML document before extracting authority.
+
+    This is deliberately narrower than YAML: unsupported valid constructs fail
+    closed, and no partial/lexically plausible invalid document is accepted.
+    An inline scalar cannot own children; nested mappings and scalar sequences
+    are accepted only with consistent indentation and unique simple keys.
+    """
+    def atom(raw: str) -> bool:
+        value = _root_scalar_without_comment(raw).strip()
+        if not value:
+            return False
+        if value.startswith(("[", "{")):
+            if not (value.startswith("[") and value.endswith("]")):
+                return False
+            inner = value[1:-1].strip()
+            if not inner:
+                return True
+            return all(atom(part) and not part.strip().startswith("[")
+                       for part in inner.split(","))
+        if value.startswith(("!", "&", "*", "|", ">", "?", "-", "%", "@", "{", "}")):
+            return False
+        if value.startswith('"'):
+            try:
+                return isinstance(json.loads(value), str)
+            except (ValueError, TypeError):
+                return False
+        if value.startswith("'"):
+            return re.fullmatch(r"'(?:[^']|'')*'", value) is not None
+        if any(ch in value for ch in ("[", "]", "{", "}", "\t", "\r")):
+            return False
+        if re.search(r":[ \t]", value) or value.endswith(":"):
+            return False
+        return not value.startswith(("---", "...", "#"))
+
+    # Each frame tracks a real mapping/sequence, its indent, and seen keys.
+    stack: list[dict[str, Any]] = []
+    pending_child = False
+    previous_indent = -1
+    have_document = False
+    for line in body.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        have_document = True
+        indent = len(line) - len(line.lstrip(" \t"))
+        if "\t" in line[:indent]:
+            return False
+        entry = line[indent:].rstrip()
+        if indent > previous_indent:
+            if previous_indent >= 0 and not pending_child:
+                return False
+            is_sequence = entry.startswith("- ")
+            stack.append({"indent": indent,
+                          "kind": "sequence" if is_sequence else "mapping",
+                          "keys": set()})
+        else:
+            while stack and indent < stack[-1]["indent"]:
+                stack.pop()
+            if not stack or indent != stack[-1]["indent"]:
+                return False
+        frame = stack[-1]
+        if frame["kind"] == "sequence":
+            if not entry.startswith("- ") or not atom(entry[2:]):
+                return False
+            pending_child = False
+        else:
+            match = re.fullmatch(r"([A-Za-z_][A-Za-z0-9_]*):(?:[ \t]+(.*))?", entry)
+            if match is None or match.group(1) in frame["keys"]:
+                return False
+            frame["keys"].add(match.group(1))
+            raw = match.group(2) or ""
+            if raw and not raw.lstrip().startswith("#") and not atom(raw):
+                return False
+            pending_child = not raw or raw.lstrip().startswith("#")
+        previous_indent = indent
+    return have_document
+
+
+def _root_mapping_fields(body: str) -> dict[str, str] | None:
+    """Conservatively authenticate direct root fields of one YAML capsule.
+
+    Nested extensions data, secondary examples, complex and escaped mapping
+    keys, and duplicate root keys never create schema-3 authority.
+    """
+    fence = chr(96) * 3
+    if body.startswith(fence + "yaml\n"):
+        cut = body.find("\n" + fence, len(fence) + 5)
+        if cut < 0:
+            return None
+        body = body[len(fence) + 5:cut]
+    elif body.startswith(fence):
+        return None
+    if not _operational_yaml_subset_valid(body):
+        return None
+    result: dict[str, str] = {}
+    for line in body.splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        if line[0] in " \t":
+            # Only direct root keys grant authority. Indented scalar blocks,
+            # nested maps, and lists are never root operational fields.
+            continue
+        match = re.fullmatch(r"([A-Za-z_][A-Za-z0-9_]*):[ \t]*(.*)", line)
+        if match is None or match.group(1) in result:
+            return None
+        result[match.group(1)] = match.group(2)
+    return result
+
+
+def _root_scalar_without_comment(raw: str) -> str:
+    """Exclude YAML inline comments, preserving hashes inside quotes."""
+    quote: str | None = None
+    i = 0
+    while i < len(raw):
+        ch = raw[i]
+        if quote == "'":
+            if ch == "'" and i + 1 < len(raw) and raw[i + 1] == "'":
+                i += 2
+                continue
+            if ch == "'":
+                quote = None
+        elif quote == '"':
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == '"':
+                quote = None
+        elif ch in {"'", '"'}:
+            quote = ch
+        elif ch == "#" and (i == 0 or raw[i - 1] in " \t"):
+            return raw[:i].rstrip()
+        i += 1
+    return raw.rstrip()
+
+
+def scalar(body: str, key: str) -> str | None:
+    fields = _root_mapping_fields(body)
+    if fields is None or key not in fields:
+        return None
+    return yaml_scalar_identity(_root_scalar_without_comment(fields[key]))
 
 
 def integer_scalar(body: str, key: str) -> int | None:
@@ -147,43 +306,84 @@ def integer_scalar(body: str, key: str) -> int | None:
 
 
 def list_scalar(body: str, key: str) -> list[str]:
-    """Read one conservative YAML-like scalar/list field from an operational body."""
+    """Read only a unique, authenticated *root* operational list field.
+
+    Root mapping identity is shared with scalar(), rather than searching
+    arbitrarily indented extensions, prose, later fences or block scalars.
+    Unsupported YAML structures have no authority: this is intentionally a
+    small fail-closed subset, not a second YAML parser.
+    """
+    fields = _root_mapping_fields(body)
+    if fields is None or key not in fields:
+        return []
+
+    fence = chr(96) * 3
+    if body.startswith(fence + "yaml\n"):
+        cut = body.find("\n" + fence, len(fence) + 5)
+        if cut < 0:
+            return []
+        body = body[len(fence) + 5:cut]
+    elif body.startswith(fence):
+        return []
+
     lines = body.splitlines()
-    key_re = re.compile(rf"^(?P<indent>\s*){re.escape(key)}:\s*(?P<value>.*?)\s*$")
-    for index, line in enumerate(lines):
-        match = key_re.match(line)
-        if not match:
-            continue
-        value = match.group("value").strip()
-        if value.startswith("[") and value.endswith("]"):
-            inner = value[1:-1].strip()
-            if not inner:
-                return []
-            return [
-                item.strip().strip("'\\\"")
-                for item in inner.split(",")
-                if item.strip().strip("'\\\"")
-            ]
-        if value and value.lower() not in {"null", "none"}:
-            return [value.strip("'\\\"")]
+    key_re = re.compile(rf"^{re.escape(key)}:[ \t]*(.*)$")
+    root_indices = [i for i, line in enumerate(lines) if key_re.fullmatch(line)]
+    # _root_mapping_fields forbids duplicate/quoted/escaped/complex root keys.
+    if len(root_indices) != 1:
+        return []
 
-        indent = len(match.group("indent"))
+    raw = _root_scalar_without_comment(fields[key]).strip()
+    if raw.startswith("["):
+        if not raw.endswith("]"):
+            return []
+        inner = raw[1:-1].strip()
+        if not inner:
+            return []
+        parts = inner.split(",")
         values: list[str] = []
-        for following in lines[index + 1 :]:
-            if not following.strip():
-                continue
-            leading = len(following) - len(following.lstrip())
-            item = re.match(r"^\s*-\s*(.+?)\s*$", following)
-            if item and leading > indent:
-                parsed = item.group(1).strip().strip("'\\\"")
-                if parsed:
-                    values.append(parsed)
-                continue
-            if leading <= indent:
-                break
+        for part in parts:
+            item = _root_scalar_without_comment(part).strip()
+            if not item or item.startswith(("[", "{", "!", "&", "*", "|", ">")):
+                return []
+            parsed = yaml_scalar_identity(item)
+            if parsed is None:
+                return []
+            values.append(parsed)
         return values
-    return []
 
+    if raw:
+        # A root YAML scalar (including a quoted string) is not a sequence.
+        # Only authenticated flow [items] and indented "- item" sequences
+        # may confer list-typed schema-3 operational authority.
+        return []
+
+    values: list[str] = []
+    item_indent: int | None = None
+    for line in lines[root_indices[0] + 1:]:
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        indent = len(line) - len(line.lstrip(" \t"))
+        if indent == 0:
+            break  # Next direct root key, never consume its nested values.
+        if "\t" in line[:indent]:
+            return []
+        match = re.fullmatch(r" +-[ \t]+(.+?)[ \t]*", line)
+        if match is None or (item_indent is not None and indent != item_indent):
+            return []  # Nested maps or a second-level YAML sequence are invalid.
+        if item_indent is None:
+            item_indent = indent
+        item = _root_scalar_without_comment(match.group(1)).strip()
+        if not item or item.startswith(("[", "{", "!", "&", "*", "|", ">")):
+            return []
+        # Unquoted key/value sequences are mappings, not scalar list entries.
+        if item[0] not in {"'", '"'} and re.search(r":[ \t]", item):
+            return []
+        parsed = yaml_scalar_identity(item)
+        if parsed is None:
+            return []
+        values.append(parsed)
+    return values
 
 def immutable_ref(value: str) -> bool:
     """Validate the canonical immutable-ref forms maintenance can prove locally."""
@@ -212,6 +412,78 @@ def parse_github_server_time(value: str | None) -> datetime | None:
     return parsed.astimezone(timezone.utc)
 
 
+def github_verified_head_advance(
+    owner: OperationalRecord, progress: OperationalRecord,
+    previous_sha: str, advanced_sha: str,
+) -> bool:
+    """Require live authenticated task-branch movement and commit ancestry.
+
+    Historical branch reflogs are unavailable through ordinary GitHub reads;
+    if the exact advanced head is no longer the live branch tip, provenance is
+    unknown and renewal is rejected rather than inferred from comment prose.
+    """
+    branch = scalar(owner.body, "branch")
+    if (
+        owner.declared_issue is None
+        or branch != f"planning/issue-{owner.declared_issue}"
+        or not SHA40_RE.fullmatch(previous_sha)
+        or not SHA40_RE.fullmatch(advanced_sha)
+    ):
+        return False
+    progressed_at = parse_github_server_time(progress.created_at)
+    if progressed_at is None:
+        return False
+    try:
+        encoded = urllib.parse.quote(branch, safe="/")
+        ref = request("GET", f"/repos/{REPO}/git/ref/heads/{encoded}")
+        if ref.get("object", {}).get("sha") != advanced_sha:
+            return False
+        comparison = request(
+            "GET", f"/repos/{REPO}/compare/{previous_sha}...{advanced_sha}"
+        )
+        if (
+            comparison.get("status") != "ahead"
+            or comparison.get("ahead_by", 0) < 1
+            or comparison.get("behind_by", 1) != 0
+        ):
+            return False
+        actual_commit = request("GET", f"/repos/{REPO}/commits/{advanced_sha}")
+        committed_at = parse_github_server_time(
+            actual_commit.get("commit", {}).get("committer", {}).get("date")
+        )
+        return committed_at is not None and committed_at <= progressed_at
+    except (RuntimeError, urllib.error.URLError, ValueError, TypeError, KeyError):
+        return False
+
+
+def github_verified_recovery_source_head(issue_number: int, source_head: str) -> bool:
+    """Read-only proof a recovery source head belongs to the live task branch.
+
+    GitHub exposes no historical reflog. A missing/moved/diverged tip fails
+    closed; ancestry alone does not attest the historical time of the intent.
+    """
+    if type(issue_number) is not int or issue_number <= 0 or not isinstance(source_head, str) or not SHA40_RE.fullmatch(source_head):
+        return False
+    try:
+        path = f"/repos/{REPO}/git/ref/heads/planning/issue-{issue_number}"
+        ref = request("GET", path)
+        tip = ref.get("object", {}).get("sha")
+        if not isinstance(tip, str) or not SHA40_RE.fullmatch(tip):
+            return False
+        if tip == source_head:
+            return True
+        compare = request("GET", f"/repos/{REPO}/compare/{source_head}...{tip}")
+        return bool(
+            compare.get("status") == "ahead"
+            and type(compare.get("ahead_by")) is int
+            and compare["ahead_by"] >= 1
+            and type(compare.get("behind_by")) is int
+            and compare["behind_by"] == 0
+        )
+    except (RuntimeError, urllib.error.URLError, ValueError, TypeError, KeyError, AttributeError):
+        return False
+
+
 @dataclass(frozen=True)
 class OwnershipLeaseState:
     anchor_comment_id: int
@@ -225,6 +497,7 @@ def schema3_ownership_lease_state(
     records: Iterable[OperationalRecord],
     *,
     before_comment_id: int,
+    head_verifier: Callable[[OperationalRecord, OperationalRecord, str, str], bool] | None = None,
 ) -> OwnershipLeaseState | None:
     """Reconstruct the canonical lease anchor through valid PROGRESS renewals.
 
@@ -271,7 +544,11 @@ def schema3_ownership_lease_state(
             continue
 
         if progress_basis == "HEAD_ADVANCE":
-            if progress_head == observed_head:
+            if (
+                progress_head == observed_head
+                or head_verifier is None
+                or not head_verifier(owner, record, observed_head, progress_head)
+            ):
                 continue
             observed_head = progress_head
             consecutive_evidence = 0
@@ -304,13 +581,16 @@ def schema3_owner_unexpired_at(
     owner: OperationalRecord,
     records: Iterable[OperationalRecord],
     at_record: OperationalRecord,
+    *,
+    head_verifier: Callable[[OperationalRecord, OperationalRecord, str, str], bool] | None = None,
 ) -> bool | None:
     """Return owner lease liveness at an operational record, or None on bad time."""
     at_time = parse_github_server_time(at_record.created_at)
     if at_time is None:
         return None
     state = schema3_ownership_lease_state(
-        owner, records, before_comment_id=at_record.comment_id
+        owner, records, before_comment_id=at_record.comment_id,
+        head_verifier=head_verifier,
     )
     if state is None or at_time < state.anchor_created_at:
         return None
@@ -384,6 +664,11 @@ def parse_operational(issue_number: int, comment: dict[str, Any]) -> Operational
     if comment.get("author_association") not in TRUSTED_ASSOCIATIONS:
         return None
     if not immutable_comment(comment):
+        return None
+    root = _root_mapping_fields(body)
+    # The first direct key of a real schema-3 mapping is protocol, not an
+    # extensions container whose child fields mimic a foreign owner record.
+    if not root or next(iter(root)) != "protocol":
         return None
     if scalar(body, "protocol") != "planning-v1" or scalar(body, "schema") != "3":
         return None
@@ -459,6 +744,76 @@ def reconcilable_terminal_from_comments(issue_number: int, comments: Iterable[di
         return None
     return latest
 
+
+
+def closure_authorized_terminal_from_comments(
+    issue_number: int, comments: Iterable[dict[str, Any]]
+) -> OperationalRecord | None:
+    """Conservatively authenticate an OWNER terminal before any storage PATCH.
+
+    Unlike the legacy parser-only reconciliation helper, this consumer requires
+    the first-winning, prefix-scoped ownership generation and its unexpired
+    GitHub-server lease.  The v5 reconstruction verifies real GitHub branch,
+    commit ancestry and commit timestamp for any HEAD_ADVANCE renewal.
+    """
+    items = list(comments)
+    if not items:
+        return None
+    records = operational_records_from_comments(issue_number, items)
+    ids = {record.comment_id for record in records}
+    if len(ids) != len(records):
+        return None
+    for comment in items:
+        if not isinstance(comment, dict) or not isinstance(comment.get("id"), int):
+            return None
+        body = comment.get("body")
+        if not isinstance(body, str):
+            return None
+        # Do not silently skip a malformed, edited or untrusted operational
+        # capsule (including one posted after an otherwise valid terminal).
+        if (
+            comment["id"] not in ids
+            and re.search(
+                r"(?m)^[ \t]*(?:protocol|schema|kind|ownership_generation_comment_id):",
+                body,
+            )
+        ):
+            return None
+    if len({comment["id"] for comment in items}) != len(items):
+        return None
+    if any(parse_github_server_time(record.created_at) is None for record in records):
+        return None
+
+    terminal = reconcilable_terminal_from_comments(issue_number, items)
+    if terminal is None:
+        return None
+    owner = next(
+        (record for record in records
+         if record.comment_id == terminal.ownership_generation_comment_id),
+        None,
+    )
+    expected_branch = f"planning/issue-{issue_number}"
+    if (
+        owner is None
+        or scalar(owner.body, "branch") != expected_branch
+        or scalar(terminal.body, "branch") != expected_branch
+    ):
+        return None
+
+    # Import at call-time to avoid a base/v5 module initialization cycle.
+    from frontier_maintenance_v5 import terminal_owner_generation_is_current
+    if not terminal_owner_generation_is_current(
+        issue_number, terminal, items,
+        transition_head_verifier=github_verified_recovery_source_head,
+    ):
+        return None
+    return terminal
+
+
+def closure_authorized_terminal(issue_number: int) -> OperationalRecord | None:
+    return closure_authorized_terminal_from_comments(
+        issue_number, paged(f"/repos/{REPO}/issues/{issue_number}/comments?")
+    )
 
 def reconcilable_terminal(issue_number: int) -> OperationalRecord | None:
     return reconcilable_terminal_from_comments(
@@ -541,7 +896,9 @@ def readiness_dead_end_terminal_from_comments(
             continue
         if owner.mission_id != candidate.mission_id:
             continue
-        if schema3_owner_unexpired_at(owner, records, candidate) is not True:
+        if schema3_owner_unexpired_at(
+            owner, records, candidate, head_verifier=github_verified_head_advance
+        ) is not True:
             continue
 
         if directive_time is not None:
@@ -630,16 +987,30 @@ def close_terminal_open_issues(open_issues: list[dict[str, Any]]) -> int:
         if "pull_request" in issue:
             continue
         number = int(issue["number"])
-        terminal = reconcilable_terminal(number)
+        terminal = closure_authorized_terminal(number)
         if not terminal:
             continue
         reason = "completed" if terminal.state == "DONE" else "not_planned"
-        print(f"reconcile issue #{number}: bound {terminal.kind}/{terminal.state} -> closed/{reason}")
+        print(f"reconcile issue #{number}: authenticated {terminal.kind}/{terminal.state} -> closed/{reason}")
         if not DRY_RUN:
-            request("PATCH", f"/repos/{REPO}/issues/{number}", {"state": "closed", "state_reason": reason})
+            # Recheck the full GitHub history immediately before the mutation;
+            # an intervening owner or edited comment must invalidate closure.
+            # REST GET/PATCH are not an atomic transaction, so a final race
+            # remains possible; never infer stronger authority from this PATCH.
+            fresh = closure_authorized_terminal(number)
+            if (
+                fresh is None
+                or fresh.comment_id != terminal.comment_id
+                or fresh.ownership_generation_comment_id != terminal.ownership_generation_comment_id
+            ):
+                continue
+            issue_snapshot = request("GET", f"/repos/{REPO}/issues/{number}")
+            if not isinstance(issue_snapshot, dict) or issue_snapshot.get("state") != "open":
+                continue
+            request("PATCH", f"/repos/{REPO}/issues/{number}",
+                    {"state": "closed", "state_reason": reason})
         closed += 1
     return closed
-
 
 def pr_explicitly_rejected(body: str) -> bool:
     disposition = re.search(
@@ -962,6 +1333,145 @@ def self_test() -> None:
     )
     assert reconcilable_terminal_from_comments(10, [claim, valid_done]) is not None
 
+    # FSR-1632-B01: these two YAML documents have only root 'extensions'.
+    # A nested operational-looking CLAIM / STATUS cannot authorize closure.
+    fake_claim = dict(claim, body=(
+        "```yaml\nextensions:\n"
+        "  protocol: planning-v1\n  schema: 3\n  kind: CLAIM\n"
+        "  issue: 10\n  mission_id: M-10\n  actor_session_id: actor-a\n"
+        "  state: IN_PROGRESS\n```"
+    ))
+    fake_done = dict(valid_done, body=(
+        "```yaml\nextensions:\n"
+        "  protocol: planning-v1\n  schema: 3\n  kind: STATUS\n"
+        "  issue: 10\n  mission_id: M-10\n  actor_session_id: actor-a\n"
+        "  state: DONE\n  authority_mode: OWNER\n"
+        "  ownership_generation_comment_id: 1\n"
+        f"  head_sha: {'a' * 40}\n  work_sha: {'b' * 40}\n```"
+    ))
+    assert parse_operational(10, fake_claim) is None
+    assert parse_operational(10, fake_done) is None
+    assert reconcilable_terminal_from_comments(10, [fake_claim, fake_done]) is None
+
+    fenced_claim = dict(claim, body="```yaml\n" + claim["body"] + "```")
+    fenced_done = dict(valid_done, body="```yaml\n" + valid_done["body"] + "```")
+    assert reconcilable_terminal_from_comments(10, [fenced_claim, fenced_done]) is not None
+
+    for shadow in (
+        "protocol: planning-v1\nprotocol: planning-v1\n",
+        "protocol: planning-v1\n'protocol': other\n",
+        'protocol: planning-v1\n"prot\\u006fcol": other\n',
+        "protocol: planning-v1\n!!str protocol: other\n",
+        "protocol: planning-v1\n<<: *foreign\n",
+    ):
+        tamper = dict(claim, body=shadow + claim["body"].split("\n", 1)[1])
+        assert parse_operational(10, tamper) is None, shadow
+    block_only = dict(claim, body=(
+        "```yaml\nnote: |\n  protocol: planning-v1\n  schema: 3\n"
+        "  kind: CLAIM\n  issue: 10\n```\n"
+    ))
+    assert parse_operational(10, block_only) is None
+    late_fence = dict(claim, body=(
+        "Example, not operational:\n```yaml\n" + claim["body"] + "```"
+    ))
+    assert parse_operational(10, late_fence) is None
+    after_first_fence = dict(claim, body=(
+        "```yaml\nnotes: ordinary\n```\n\n"
+        "```yaml\n" + claim["body"] + "```"
+    ))
+    assert parse_operational(10, after_first_fence) is None
+    assert scalar("protocol: 'planning-v1' # safe\n", "protocol") == "planning-v1"
+    assert scalar('protocol: "planning-v1"\n', "protocol") == "planning-v1"
+    assert scalar("protocol: '\"planning-v1\"'\n", "protocol") == '"planning-v1"'
+    assert scalar("protocol: '\"planning-v1\"'\n", "protocol") != "planning-v1"
+    assert scalar('protocol: "a#b" # inline comment\n', "protocol") == "a#b"
+    assert scalar('protocol: "\\u0070lanning-v1"\n', "protocol") == "planning-v1"
+
+    # FSR-1644-B01: only authenticated direct-root lists carry authority.
+    ref = "e" * 40
+    assert list_scalar("extensions:\n  evidence_refs:\n    - " + ref + "\n", "evidence_refs") == []
+    assert list_scalar("evidence_refs:\n  - " + ref + "\n", "evidence_refs") == [ref]
+    assert list_scalar("```yaml\nevidence_refs:\n  - '" + ref + "'\n```", "evidence_refs") == [ref]
+    assert list_scalar("evidence_refs: [" + ref + "]\n", "evidence_refs") == [ref]
+    assert list_scalar("extensions:\n  artifact_paths:\n    - game/foo.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - game/foo.gd\n", "artifact_paths") == ["game/foo.gd"]
+    assert list_scalar("artifact_paths:\n  - 'game/foo.gd'\n", "artifact_paths") == ["game/foo.gd"]
+    assert list_scalar("artifact_paths:\n  - game/foo.gd\nartifact_paths:\n  - game/bar.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - game/foo.gd\n  nested:\n    - game/bar.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: |\n  - game/foo.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - *foreign_alias\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths:\n  - [game/foo.gd]\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: [game/foo.gd, game/bar.gd]\n", "artifact_paths") == ["game/foo.gd", "game/bar.gd"]
+    assert list_scalar("notes: |\n  artifact_paths:\n    - game/foo.gd\n", "artifact_paths") == []
+    assert list_scalar("example, not operational\n```yaml\nartifact_paths:\n  - game/foo.gd\n```", "artifact_paths") == []
+
+    # FSR-1650-B01: schema-3 lists require actual YAML sequences, never
+    # a singleton synthesized from direct-root plain or quoted scalars.
+    for scalar_literal in (
+        ref, "'" + ref + "'", '"' + ref + '"',
+        '!!str "' + ref + '"', '&anchor ' + ref, '*anchor',
+    ):
+        assert list_scalar("evidence_refs: " + scalar_literal + "\n", "evidence_refs") == []
+    for scalar_literal in (
+        "game/foo.gd", "'game/foo.gd'", '"game/foo.gd"',
+        "!!str game/foo.gd", "&anchor game/foo.gd", "*anchor",
+    ):
+        assert list_scalar("artifact_paths: " + scalar_literal + "\n", "artifact_paths") == []
+    for consumer, path in (
+        ("source", "game/main.gd"),
+        ("review", "docs/planning/reviews/review.md"),
+        ("verifier", "docs/planning/wave-2/verification/review.md"),
+    ):
+        # v7 source/reviewer/verifier file-identity predicates all consume
+        # this same base.list_scalar; single-file PR sets cannot be supplied
+        # by YAML root scalars or an indented extensions shadow.
+        for false_list in (
+            "artifact_paths: " + path + "\n",
+            'artifact_paths: "' + path + '"\n',
+            "extensions:\n  artifact_paths:\n    - " + path + "\n",
+        ):
+            assert set(list_scalar(false_list, "artifact_paths")) != {path}, consumer
+        for real_list in (
+            "artifact_paths:\n  - " + path + "\n",
+            "artifact_paths: [" + path + "]\n",
+        ):
+            assert set(list_scalar(real_list, "artifact_paths")) == {path}, consumer
+    assert list_scalar("artifact_paths: {}\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: >\n  - game/main.gd\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: game/main.gd # comment\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: 'a#b'\n", "artifact_paths") == []
+    assert list_scalar("artifact_paths: \"a\\u002Fb\"\n", "artifact_paths") == []
+
+
+
+    # FSR-1661-B01: no lexical list may confer authority from invalid YAML.
+    # These were accepted by the predecessor even though YAML parsers reject
+    # the whole document. Reject unsupported structures before all consumers.
+    for operational_key, one_value in (
+        ("evidence_refs", ref),
+        ("artifact_paths", "game/main.gd"),
+        ("artifact_paths", "docs/planning/reviews/review.md"),
+        ("artifact_paths", "docs/planning/wave-2/verification/review.md"),
+    ):
+        for malformed in (
+            f"{operational_key}: [{one_value}]\n  injected: yes\n",
+            f"{operational_key}: [{one_value}]\n  - orphan\n",
+            f"{operational_key}: [{{foreign: {one_value}}}]\n",
+            f"{operational_key}: [{one_value}\n",
+            f"{operational_key}:\n  - {one_value}\n    forged: yes\n",
+            f"{operational_key}:\n  - {one_value}\n   bad_indent: yes\n",
+        ):
+            assert list_scalar(malformed, operational_key) == [], malformed
+            assert scalar(malformed, "protocol") is None
+        for authentic in (
+            f"{operational_key}: [{one_value}]\n",
+            f"{operational_key}:\n  - {one_value}\n",
+        ):
+            assert list_scalar(authentic, operational_key) == [one_value], authentic
+
+    invalid_claim = dict(claim, body=claim["body"] + "artifact_paths: [game/main.gd]\n  forged: yes\n")
+    assert parse_operational(10, invalid_claim) is None
+
     later_claim = c(3, "CLAIM", "IN_PROGRESS")
     assert reconcilable_terminal_from_comments(10, [claim, valid_done, later_claim]) is None
 
@@ -997,6 +1507,176 @@ def self_test() -> None:
     assert reconcilable_terminal_from_comments(10, [claim, edited_done]) is None
     edited_claim = c(1, "CLAIM", "IN_PROGRESS", edited=True)
     assert reconcilable_terminal_from_comments(10, [edited_claim, valid_done]) is None
+
+    # FSR-1677-B01: the PATCH consumer must reconstruct the first-winning
+    # schema-3 owner at the terminal's publication point, not any old owner ID.
+    def secure_comment(cid: int, when: str, kind: str, state: str, *,
+                       actor: str = "owner-a", extra: str = "",
+                       edited: bool = False) -> dict[str, Any]:
+        return {
+            "id": cid, "author_association": "OWNER",
+            "created_at": when,
+            "updated_at": "2026-09-15T23:59:59Z" if edited else when,
+            "body": (
+                "protocol: planning-v1\nschema: 3\n"
+                f"kind: {kind}\nissue: 10\nmission_id: M-10\n"
+                "branch: planning/issue-10\n"
+                f"actor_session_id: {actor}\nstate: {state}\n{extra}"
+            ),
+        }
+
+    secure_claim = secure_comment(
+        1, "2026-09-15T12:00:00Z", "CLAIM", "IN_PROGRESS",
+        extra=f"observed_head_sha: {'a' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    def secure_terminal(cid: int, when: str, generation: int, *,
+                        actor: str = "owner-a") -> dict[str, Any]:
+        return secure_comment(
+            cid, when, "STATUS", "DONE", actor=actor,
+            extra=(
+                "authority_mode: OWNER\n"
+                f"ownership_generation_comment_id: {generation}\n"
+                f"head_sha: {'a' * 40}\nwork_sha: {'b' * 40}\n"
+                "terminal: true\nrequired_next_route: NEXT\n"
+            ),
+        )
+
+    secure_done = secure_terminal(2, "2026-09-15T13:00:00Z", 1)
+    assert closure_authorized_terminal_from_comments(10, [secure_claim, secure_done])
+    expired = secure_terminal(2, "2026-09-15T18:00:00Z", 1)
+    assert closure_authorized_terminal_from_comments(10, [secure_claim, expired]) is None
+    losing = secure_comment(
+        2, "2026-09-15T12:01:00Z", "CLAIM", "IN_PROGRESS",
+        actor="owner-b",
+        extra=f"observed_head_sha: {'a' * 40}\nprevious_ownership_comment_id: null\n",
+    )
+    losing_done = secure_terminal(
+        3, "2026-09-15T13:00:00Z", 2, actor="owner-b"
+    )
+    assert closure_authorized_terminal_from_comments(
+        10, [secure_claim, losing, losing_done]
+    ) is None
+    unlinked = secure_comment(
+        2, "2026-09-15T12:01:00Z", "RESUME", "IN_PROGRESS",
+        actor="owner-b",
+        extra=(
+            "previous_ownership_comment_id: 1\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "source_status_comment_id: 1\nwinning_intent_comment_id: 999\n"
+        ),
+    )
+    assert closure_authorized_terminal_from_comments(
+        10, [secure_claim, unlinked,
+             secure_terminal(3, "2026-09-15T13:00:00Z", 2, actor="owner-b")]
+    ) is None
+    forged_recover = dict(unlinked, body=unlinked["body"].replace(
+        "kind: RESUME", "kind: RECOVER"
+    ))
+    assert closure_authorized_terminal_from_comments(
+        10, [secure_claim, forged_recover,
+             secure_terminal(3, "2026-09-15T13:00:00Z", 2, actor="owner-b")]
+    ) is None
+    assert closure_authorized_terminal_from_comments(
+        10, [secure_claim, secure_done, losing]
+    ) is None
+    assert closure_authorized_terminal_from_comments(
+        10, [secure_claim, dict(secure_done, updated_at="2026-09-15T13:01:00Z")]
+    ) is None
+    assert closure_authorized_terminal_from_comments(
+        10, [secure_claim, secure_done,
+             dict(losing, body="protocol: planning-v1\nkind: CLAIM\n", updated_at="2026-09-15T12:02:00Z")]
+    ) is None
+
+    # The fourth consecutive EVIDENCE renewal cannot rescue an expired owner.
+    evidence = [
+        secure_comment(
+            idx, f"2026-09-15T{hour:02d}:00:00Z", "PROGRESS", "IN_PROGRESS",
+            extra=(
+                "ownership_generation_comment_id: 1\n"
+                f"observed_head_sha: {'a' * 40}\n"
+                "progress_basis: EVIDENCE\n"
+                f"evidence_refs: [{'c' * 40}]\n"
+            ),
+        )
+        for idx, hour in enumerate((13, 14, 15, 16), start=2)
+    ]
+    # E1 at 13:00, E2 at 14:00, E3 at 15:00; E4 at 16:00 is invalid.
+    # At 21:30 E3 expired, whereas forged E4 would still be live.
+    assert closure_authorized_terminal_from_comments(
+        10, [secure_claim, *evidence,
+             secure_terminal(6, "2026-09-15T21:30:00Z", 1)]
+    ) is None
+
+    # FSR-1677-B01: HEAD_ADVANCE evidence must be verified against the real
+    # task branch, ahead-only ancestry and a commit timestamp before PROGRESS.
+    progressed = secure_comment(
+        2, "2026-09-15T17:00:00Z", "PROGRESS", "IN_PROGRESS",
+        extra=(
+            "ownership_generation_comment_id: 1\n"
+            f"observed_head_sha: {'b' * 40}\n"
+            "progress_basis: HEAD_ADVANCE\n"
+        ),
+    )
+    renewed_terminal = secure_terminal(3, "2026-09-15T18:30:00Z", 1)
+    original_request = request
+    def verified_head_mock(method: str, path: str, payload: Any = None) -> Any:
+        if method != "GET":
+            raise RuntimeError("write forbidden in HEAD_ADVANCE fixture")
+        root = f"/repos/{REPO}"
+        if path == root + "/git/ref/heads/planning/issue-10":
+            return {"object": {"sha": "b" * 40}}
+        if path == root + "/compare/" + "a" * 40 + "..." + "b" * 40:
+            return {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+        if path == root + "/commits/" + "b" * 40:
+            return {"commit": {"committer": {"date": "2026-09-15T16:59:59Z"}}}
+        raise RuntimeError(f"unexpected test read: {path}")
+    try:
+        globals()["request"] = verified_head_mock
+        assert closure_authorized_terminal_from_comments(
+            10, [secure_claim, progressed, renewed_terminal]
+        )
+        def false_branch_mock(method: str, path: str, payload: Any = None) -> Any:
+            if path.endswith("/git/ref/heads/planning/issue-10"):
+                return {"object": {"sha": "a" * 40}}
+            return verified_head_mock(method, path, payload)
+        globals()["request"] = false_branch_mock
+        assert closure_authorized_terminal_from_comments(
+            10, [secure_claim, progressed, renewed_terminal]
+        ) is None
+    finally:
+        globals()["request"] = original_request
+
+    # Mutation consumer must re-read ownership before PATCH; first read alone
+    # cannot authorize a write, and an issue already closed must be left alone.
+    source_terminal = closure_authorized_terminal_from_comments(
+        10, [secure_claim, secure_done]
+    )
+    assert source_terminal is not None
+    original_closure = closure_authorized_terminal
+    original_dry_run = DRY_RUN
+    reads: list[tuple[str, str]] = []
+    def patch_mock(method: str, path: str, payload: Any = None) -> Any:
+        reads.append((method, path))
+        if method == "GET":
+            return {"state": "open"}
+        if method == "PATCH":
+            return {"state": "closed"}
+        raise RuntimeError("unexpected mutation fixture method")
+    try:
+        globals()["DRY_RUN"] = False
+        globals()["request"] = patch_mock
+        samples = iter([source_terminal, None])
+        globals()["closure_authorized_terminal"] = lambda _: next(samples)
+        assert close_terminal_open_issues([{"number": 10}]) == 0
+        assert not reads
+        samples = iter([source_terminal, source_terminal])
+        globals()["closure_authorized_terminal"] = lambda _: next(samples)
+        assert close_terminal_open_issues([{"number": 10}]) == 1
+        assert [method for method, _ in reads] == ["GET", "PATCH"]
+    finally:
+        globals()["closure_authorized_terminal"] = original_closure
+        globals()["DRY_RUN"] = original_dry_run
+        globals()["request"] = original_request
 
     predecessor_prose = "Predecessor review disposition: `CHANGES_NEEDED`. This PR fixes it and requires fresh review."
     assert not pr_explicitly_rejected(predecessor_prose)
@@ -1087,8 +1767,170 @@ def self_test() -> None:
         authority_mode=None, ownership_generation_comment_id=None,
         head_sha=None, work_sha=None,
     )
-    assert schema3_owner_unexpired_at(owner, [owner, progress], before_old_boundary) is True
-    assert schema3_owner_unexpired_at(owner, [owner, progress], exact_new_boundary) is False
+    assert schema3_owner_unexpired_at(
+        owner, [owner, progress], before_old_boundary,
+        head_verifier=lambda *_: True,
+    ) is True
+    assert schema3_owner_unexpired_at(
+        owner, [owner, progress], exact_new_boundary,
+        head_verifier=lambda *_: True,
+    ) is False
+
+    # Nested extensions.evidence_refs must NEVER refresh owner authority.
+    # Genuine root refs before lease expiry do renew. Existing E1/E2/E3/E4
+    # tests below also enforce the canonical consecutive-EVIDENCE cap.
+    nested_evidence_progress = OperationalRecord(
+        issue_number=77, comment_id=2, created_at="2026-09-15T17:59:00Z",
+        kind="PROGRESS", state="IN_PROGRESS", route=None,
+        body=(
+            f"observed_head_sha: {'a' * 40}\n"
+            "progress_basis: EVIDENCE\n"
+            "extensions:\n"
+            f"  evidence_refs:\n    - {'e' * 40}\n"
+        ),
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+        authority_mode=None, ownership_generation_comment_id=1,
+        head_sha=None, work_sha=None,
+    )
+    genuine_evidence_progress = OperationalRecord(
+        issue_number=77, comment_id=2, created_at="2026-09-15T17:59:00Z",
+        kind="PROGRESS", state="IN_PROGRESS", route=None,
+        body=(
+            f"observed_head_sha: {'a' * 40}\n"
+            "progress_basis: EVIDENCE\n"
+            f"evidence_refs:\n  - {'e' * 40}\n"
+        ),
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-77",
+        authority_mode=None, ownership_generation_comment_id=1,
+        head_sha=None, work_sha=None,
+    )
+    shadow_state = schema3_ownership_lease_state(
+        owner, [owner, nested_evidence_progress], before_comment_id=3
+    )
+    authentic_state = schema3_ownership_lease_state(
+        owner, [owner, genuine_evidence_progress], before_comment_id=3
+    )
+    assert shadow_state is not None and shadow_state.anchor_comment_id == 1
+    assert shadow_state.consecutive_evidence == 0
+    assert authentic_state is not None and authentic_state.anchor_comment_id == 2
+    assert authentic_state.consecutive_evidence == 1
+    boundary_1800 = OperationalRecord(
+        issue_number=77, comment_id=3, created_at="2026-09-15T18:00:00Z",
+        kind="RESUME_INTENT", state="IN_PROGRESS", route=None, body="",
+        declared_issue=77, mission_id="M-77", actor_session_id="actor-78",
+        authority_mode=None, ownership_generation_comment_id=None,
+        head_sha=None, work_sha=None,
+    )
+    assert not schema3_owner_unexpired_at(
+        owner, [owner, nested_evidence_progress], boundary_1800
+    )
+    assert schema3_owner_unexpired_at(
+        owner, [owner, genuine_evidence_progress], boundary_1800
+    )
+
+
+    # FSR-1650-B01 full lease regression: a root scalar at 17:59 is NOT an
+    # EVIDENCE renewal of the 12:00 CLAIM, even when it is an immutable SHA.
+    # In contrast the genuine root sequence renews until 23:59.
+    scalar_evidence_progress = replace(
+        genuine_evidence_progress,
+        body=(
+            f"observed_head_sha: {'a' * 40}\n"
+            "progress_basis: EVIDENCE\n"
+            f"evidence_refs: {'e' * 40}\n"
+        ),
+    )
+    quoted_scalar_evidence_progress = replace(
+        genuine_evidence_progress,
+        body=(
+            f"observed_head_sha: {'a' * 40}\n"
+            "progress_basis: EVIDENCE\n"
+            'evidence_refs: "' + 'e' * 40 + '"\n'
+        ),
+    )
+    late_stale_check = replace(boundary_1800, created_at="2026-09-15T18:01:00Z")
+    for invalid_progress in (scalar_evidence_progress, quoted_scalar_evidence_progress):
+        invalid_state = schema3_ownership_lease_state(
+            owner, [owner, invalid_progress], before_comment_id=3
+        )
+        assert invalid_state is not None
+        assert invalid_state.anchor_comment_id == 1
+        assert invalid_state.consecutive_evidence == 0
+        assert schema3_owner_unexpired_at(
+            owner, [owner, invalid_progress], late_stale_check
+        ) is False
+    assert schema3_owner_unexpired_at(
+        owner, [owner, genuine_evidence_progress], late_stale_check
+    ) is True
+
+    # Unchanged HEAD_ADVANCE does not renew; a real advance does. An expired
+    # ownership generation is never resurrected by later EVIDENCE.
+    same_head_advance = replace(
+        progress,
+        created_at="2026-09-15T17:59:00Z",
+        body=f"observed_head_sha: {'a' * 40}\nprogress_basis: HEAD_ADVANCE\n",
+    )
+    assert schema3_owner_unexpired_at(
+        owner, [owner, same_head_advance], late_stale_check
+    ) is False
+    assert schema3_owner_unexpired_at(
+        owner, [owner, progress], late_stale_check,
+        head_verifier=lambda *_: True,
+    ) is True
+    expired_evidence = replace(
+        genuine_evidence_progress, created_at="2026-09-15T18:00:00Z"
+    )
+    assert schema3_owner_unexpired_at(
+        owner, [owner, expired_evidence], late_stale_check
+    ) is False
+
+
+    # FSR-1661-M01: a SHA literal without GitHub-proven movement is not
+    # HEAD_ADVANCE. This must hold across the original six-hour expiry.
+    assert schema3_owner_unexpired_at(
+        owner, [owner, progress], late_stale_check
+    ) is False
+    assert schema3_owner_unexpired_at(
+        owner, [owner, progress], late_stale_check,
+        head_verifier=lambda *_: False,
+    ) is False
+    assert schema3_owner_unexpired_at(
+        owner, [owner, progress], late_stale_check,
+        head_verifier=lambda o, p, old, new: (
+            o.comment_id == 1 and p.comment_id == 2
+            and old == "a" * 40 and new == "b" * 40
+        ),
+    ) is True
+
+    # Test the real GitHub-backed verifier with mocked authenticated REST
+    # responses: live branch mismatch and false ancestry both fail closed.
+    from unittest.mock import patch
+    owned_branch = replace(owner, body=(
+        "branch: planning/issue-77\n"
+        f"observed_head_sha: {'a' * 40}\n"
+    ))
+    valid_ref = {"object": {"sha": "b" * 40}}
+    valid_compare = {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+    valid_commit = {"commit": {"committer": {"date": "2026-09-15T16:30:00Z"}}}
+    with patch(__name__ + ".request", side_effect=[valid_ref, valid_compare, valid_commit]):
+        assert github_verified_head_advance(owned_branch, progress, "a" * 40, "b" * 40)
+    with patch(__name__ + ".request", return_value={"object": {"sha": "a" * 40}}):
+        assert not github_verified_head_advance(owned_branch, progress, "a" * 40, "b" * 40)
+    with patch(__name__ + ".request", side_effect=[
+        valid_ref, {"status": "diverged", "ahead_by": 1, "behind_by": 1}
+    ]):
+        assert not github_verified_head_advance(owned_branch, progress, "a" * 40, "b" * 40)
+
+    malformed_evidence = replace(
+        genuine_evidence_progress,
+        body=(
+            f"observed_head_sha: {'a' * 40}\nprogress_basis: EVIDENCE\n"
+            f"evidence_refs: [{'e' * 40}]\n  injected: yes\n"
+        ),
+    )
+    assert schema3_owner_unexpired_at(
+        owner, [owner, malformed_evidence], late_stale_check
+    ) is False
 
     evidence_records = [owner]
     for cid, hour in ((2, 13), (3, 14), (4, 15), (5, 16)):
