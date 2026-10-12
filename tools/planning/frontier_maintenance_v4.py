@@ -122,9 +122,19 @@ def semantic_generation_from_terminal(
         successor_terminal = successor_terminals.get(successor_number or -1)
     else:
         successor_terminal = base.reconcilable_terminal(successor_number or -1)
-    if successor_terminal is None:
-        return None
-    if successor_terminal.comment_id != successor_comment_id:
+    # FSR-1725-M01: a wrapper's valid result SHAs say nothing about the
+    # *different successor* terminal used to suppress required work. Do not
+    # consume it merely because a parser returned the bound GitHub comment ID.
+    # Authenticated current tip / behind-free ancestor of the successor's OWN
+    # live task ref is required for BOTH successor terminal result SHAs.
+    if (
+        successor_terminal is None
+        or successor_terminal.issue_number != successor_number
+        or successor_terminal.comment_id != successor_comment_id
+        or not base.github_verified_terminal_result_heads(
+            successor_number, successor_terminal.head_sha, successor_terminal.work_sha
+        )
+    ):
         return None
     return generation
 
@@ -376,18 +386,110 @@ def self_test() -> None:
     )
     existing = _terminal(30, 7, existing_body)
     successor_terminal = _terminal(20, 50, "disposition: DONE\n")
-    assert semantic_generation_from_terminal(
-        transition,
-        existing,
-        issues,
-        successor_terminals={20: successor_terminal},
-    ) == (10, 2, "NEXT")
-    assert semantic_generation_from_terminal(
-        transition,
-        existing,
-        issues,
-        successor_terminals={20: _terminal(20, 51, "disposition: DONE\n")},
-    ) is None
+    # FSR-1725-M01: run the actual successor SHA verifier with two separate
+    # mocked task refs and honest GitHub compare responses. It must validate
+    # the *successor* even where wrapper result SHAs have already been checked.
+    original_successor_reader = base.reconcilable_terminal
+    original_successor_request = base.request
+    original_wrapper_parser = base.reconcilable_terminal_from_comments
+    successor_tip = "a" * 40
+    successor_ancestors = {"b" * 40}
+    successor_result = successor_terminal
+    compare_status = "ahead"
+    api_calls: list[str] = []
+
+    def successor_request(method: str, path: str, *args: Any) -> dict[str, Any]:
+        if method != "GET":
+            raise AssertionError("unexpected GitHub mutation in security test")
+        api_calls.append(path)
+        prefix = f"/repos/{base.REPO}"
+        if path == prefix + "/git/ref/heads/planning/issue-20":
+            return {"object": {"sha": successor_tip}}
+        if path == prefix + "/git/ref/heads/planning/issue-30":
+            return {"object": {"sha": "a" * 40}}
+        if path.startswith(prefix + "/compare/"):
+            start, end = path.rsplit("/", 1)[-1].split("...", 1)
+            if end == successor_tip and start in successor_ancestors:
+                return (
+                    {"status": compare_status, "ahead_by": 1,
+                     "behind_by": 0 if compare_status == "ahead" else 1}
+                )
+            if end == "a" * 40 and start == "b" * 40:
+                return {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+            return {"status": "diverged", "ahead_by": 1, "behind_by": 1}
+        raise RuntimeError("unrecognized read-only endpoint")
+
+    try:
+        base.request = successor_request
+        base.reconcilable_terminal = lambda number: (
+            successor_result if number == 20 else None
+        )
+        base.reconcilable_terminal_from_comments = lambda number, comments: (
+            existing if number == 30 and list(comments) else None
+        )
+        # Positive same-tip and benign behind-free ancestor; no false drop.
+        assert semantic_generation_from_terminal(
+            transition, existing, issues, successor_terminals={20: successor_terminal}
+        ) == (10, 2, "NEXT")
+        assert semantic_generation_from_terminal(
+            transition, existing, issues
+        ) == (10, 2, "NEXT")
+        assert semantic_generation_from_comments(
+            transition, [object()], issues
+        ) == (10, 2, "NEXT")
+        assert any("/git/ref/heads/planning/issue-20" in p for p in api_calls)
+        assert any("/git/ref/heads/planning/issue-30" in p for p in api_calls)
+        assert semantic_generation_from_terminal(
+            transition, existing, issues,
+            successor_terminals={20: _terminal(20, 51, "disposition: DONE\n")}
+        ) is None
+        # Independently forge only the successor's HEAD, WORK, then both;
+        # even a fully authenticated wrapper must not consume this route.
+        for false_head, false_work in (
+            ("c" * 40, "b" * 40),
+            ("a" * 40, "c" * 40),
+            ("c" * 40, "c" * 40),
+        ):
+            successor_result = successor_terminal.__class__(**{
+                **vars(successor_terminal), "head_sha": false_head,
+                "work_sha": false_work,
+            })
+            assert semantic_generation_from_terminal(
+                transition, existing, issues
+            ) is None
+            assert semantic_generation_from_comments(
+                transition, [object()], issues
+            ) is None
+        successor_result = successor_terminal
+        # A missing/deleted/moved ref, diverged/behind/unknown comparison,
+        # wrong target issue or malformed source SHA fail closed.
+        successor_tip = ""
+        assert semantic_generation_from_terminal(transition, existing, issues) is None
+        successor_tip = "c" * 40
+        successor_ancestors = set()
+        assert semantic_generation_from_terminal(transition, existing, issues) is None
+        successor_tip = "a" * 40
+        successor_ancestors = {"b" * 40}
+        for compare_status in ("diverged", "behind", "unknown"):
+            assert semantic_generation_from_terminal(transition, existing, issues) is None
+        compare_status = "ahead"
+        successor_result = successor_terminal.__class__(**{
+            **vars(successor_terminal), "issue_number": 99
+        })
+        assert semantic_generation_from_terminal(transition, existing, issues) is None
+        successor_result = successor_terminal.__class__(**{
+            **vars(successor_terminal), "head_sha": "not-a-sha"
+        })
+        assert semantic_generation_from_terminal(transition, existing, issues) is None
+        successor_result = successor_terminal
+        base.request = lambda *args, **kwargs: (_ for _ in ()).throw(
+            RuntimeError("GitHub ref/compare unavailable")
+        )
+        assert semantic_generation_from_terminal(transition, existing, issues) is None
+    finally:
+        base.reconcilable_terminal = original_successor_reader
+        base.request = original_successor_request
+        base.reconcilable_terminal_from_comments = original_wrapper_parser
 
     route_not_consumed = _terminal(
         30,
