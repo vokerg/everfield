@@ -92,6 +92,47 @@ def timestamp(text: str | None) -> datetime | None:
         return None
 
 
+
+PR_URL = re.compile(r"https://[^\s<>\[\](){}\"'\x60]+", re.IGNORECASE)
+
+
+def references_pr(text: str, number: int) -> bool:
+    """Veto exact #N and repository-qualified web/API PR URLs, not lookalikes.
+
+    Each URL's *path segments* are compared, so /pull/2000, a foreign
+    repository, /issues/200, and an attacker-controlled similar host cannot
+    masquerade as a reference. Query, fragment and PR subresource paths are
+    unambiguous references to the same PR. Unknown URL parsing fails closed.
+    """
+    if re.search(rf"(?<![0-9])#{number}(?![0-9])", text):
+        return True
+    if not isinstance(REPO, str) or REPO.count("/") != 1:
+        return True
+    owner, repository = REPO.split("/")
+    if not owner or not repository:
+        return True
+    for match in PR_URL.finditer(text):
+        link = match.group(0).rstrip(".,;!:")
+        try:
+            url = urllib.parse.urlsplit(link)
+        except ValueError:
+            # Malformed link in active text: never use uncertainty to close.
+            return True
+        if url.scheme.lower() != "https" or url.username is not None or url.password is not None:
+            continue
+        segments = [item.casefold() for item in urllib.parse.unquote(url.path).split("/") if item]
+        if url.netloc.casefold() == "github.com":
+            expected = [owner, repository, "pull", str(number)]
+        elif url.netloc.casefold() == "api.github.com":
+            expected = ["repos", owner, repository, "pulls", str(number)]
+        else:
+            continue
+        expected = [item.casefold() for item in expected]
+        if len(segments) >= len(expected) and segments[:len(expected)] == expected:
+            return True
+    return False
+
+
 def eligibility(
     pr: dict[str, Any],
     review_issue: dict[str, Any],
@@ -168,7 +209,6 @@ def eligibility(
     required_mission_id = mission_matches[0]
 
     # All active references, including comments, must be freshly covered.
-    marker = re.compile(rf"(?<![0-9])#{number}(?![0-9])")
     for issue in open_issues:
         if issue.get("pull_request"):
             continue
@@ -184,8 +224,8 @@ def eligibility(
                    for c in live_comments)
         ):
             return False, "incomplete live open-issue comment reference coverage"
-        if marker.search(issue["title"] + "\n" + issue["body"]) or any(
-            marker.search(c["body"]) for c in live_comments
+        if references_pr(issue["title"] + "\n" + issue["body"], number) or any(
+            references_pr(c["body"], number) for c in live_comments
         ):
             return False, "open issue or its comment still references this PR"
 
@@ -504,6 +544,28 @@ artifact_paths:
     assert not ok(opened=[{**active, "comments_coverage_complete": False,
                             "live_comments": [{"id": 1, "body": "No ref"}]}])
     assert not ok(opened=[{**active, "live_comments": None}])
+
+    # FSR-1689-M01: independent review's direct web/API URL-only bypass.
+    clean = {**active, "body": "No numeric reference",
+             "live_comments": [{"id": 1, "body": "No reference"}]}
+    web = f"https://github.com/{REPO}/pull/200"
+    api = f"https://api.github.com/repos/{REPO}/pulls/200"
+    assert not ok(opened=[{**clean, "live_comments": [
+        {"id": 1, "body": f"Retain {web}"}]}])
+    assert not ok(opened=[{**clean, "body": f"Needs {web}/files"}])
+    assert not ok(opened=[{**clean, "body": f"Needs {web}?tab=files#discussion"}])
+    assert not ok(opened=[{**clean, "live_comments": [
+        {"id": 1, "body": f"Retain {api}"}]}])
+    assert not ok(opened=[{**clean, "body": f"Retain {api}/files"}])
+    assert not ok(opened=[{**clean, "title": "Please preserve #200"}])
+    # Non-reference positives: no substring numeric, foreign repo or host.
+    assert ok(opened=[clean])
+    assert ok(opened=[{**clean, "body": f"https://github.com/{REPO}/pull/2000"}])
+    assert ok(opened=[{**clean, "body": f"https://github.com/{REPO}/issues/200"}])
+    assert ok(opened=[{**clean, "body": "https://github.com/vokerg/other/pull/200"}])
+    assert ok(opened=[{**clean, "body": f"https://github.com.evil.test/{REPO}/pull/200"}])
+    assert ok(opened=[{**clean, "body": f"https://api.github.com/repos/{REPO}/pulls/2000"}])
+
     # Exercise the LIVE snapshot reader, not only the pure eligibility gate.
     original_paged = paged
     live = {"number": 300, "state": "open", "title": "Active remediation",
@@ -532,6 +594,64 @@ artifact_paths:
             pass
     finally:
         globals()["paged"] = original_paged
+
+
+    # Same live snapshot reader must preserve web links supplied only by the
+    # server's comment endpoint, even when the issue body contains none.
+    try:
+        globals()["paged"] = lambda path: [live] if path.endswith(
+            "/issues?state=open") else [{**live_comment, "body": f"Keep {web}/files"}]
+        complete_url = live_open_issue_references(f"/repos/{REPO}")
+        assert not ok(opened=complete_url)
+    finally:
+        globals()["paged"] = original_paged
+
+    # Exercise execute(apply=True) with a changing live comment between its
+    # first pass and the immediate pre-PATCH recheck. Never send a real PATCH.
+    original_request = request
+    original_datetime = datetime
+    scans = 0
+    patches: list[str] = []
+    class TestClock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return now
+
+    def racing_paged(path: str) -> list[dict[str, Any]]:
+        nonlocal scans
+        if path.endswith("/pulls?state=open"):
+            return [pr]
+        if path.endswith("/issues?state=open"):
+            scans += 1
+            return [live]
+        if path.endswith("/issues/300/comments"):
+            return [{**live_comment, "body": "No link" if scans == 1 else f"Keep {web}/files"}]
+        if path.endswith("/issues/199/comments"):
+            return [claim, terminal]
+        if path.endswith("/pulls/200/files"):
+            return files
+        raise AssertionError(f"unexpected mocked page {path}")
+
+    def racing_request(path: str, method="GET", data=None) -> Any:
+        if method == "PATCH":
+            patches.append(path)
+            return {"state": "closed"}
+        if path.endswith("/issues/199"):
+            return issue
+        if path.endswith("/pulls/200"):
+            return pr
+        raise AssertionError(f"unexpected mocked request {method} {path}")
+
+    try:
+        globals()["paged"] = racing_paged
+        globals()["request"] = racing_request
+        globals()["datetime"] = TestClock
+        execute(apply=True)
+        assert scans == 2 and not patches, "active URL added before PATCH escaped veto"
+    finally:
+        globals()["paged"] = original_paged
+        globals()["request"] = original_request
+        globals()["datetime"] = original_datetime
 
     assert ok(opened=[{**active, "live_comments": [
         {"id": 1, "body": "No reference to the reviewer PR"}]}])
