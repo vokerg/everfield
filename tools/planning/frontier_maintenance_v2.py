@@ -190,6 +190,13 @@ def schema_terminal_resolution_from_comments(
     terminal = base.reconcilable_terminal_from_comments(transition_issue_number, comments_list)
     if terminal is None:
         return None
+    # FSR-1716-M01: schema-3 owner-shaped terminal resolution, unlike
+    # independent immutable dispatch-marker resolution, MUST authenticate both
+    # result SHAs against one actual GitHub task branch tip before consumption.
+    if not base.github_verified_terminal_result_heads(
+        transition_issue_number, terminal.head_sha, terminal.work_sha
+    ):
+        return None
     if base.scalar(terminal.body, "disposition") not in RESOLUTION_DONE_DISPOSITIONS:
         return None
     if base.integer_scalar(terminal.body, "source_issue") != source_issue:
@@ -579,13 +586,75 @@ def self_test() -> None:
             "source_terminal_comment_id: 2\nrequired_route: NEXT\naccepted_dispatch_comment_id: 100\n"
         ),
     }
-    schema_pair = schema_terminal_resolution_from_comments(
-        30, [dispatch, claim_comment, schema_terminal_comment], old_generation
-    )
-    assert schema_pair is not None and schema_pair[0] is dispatch
-    assert schema_terminal_resolution_from_comments(
-        30, [dispatch, claim_comment, schema_terminal_comment], new_generation
-    ) is None
+    # FSR-1716-M01: exercise the ACTUAL GitHub task-ref and compare authority
+    # checker via read-only simulated API, never a real PATCH or live apply.
+    original_request = base.request
+    tip = "d" * 40
+    ancestors = {"b" * 40}
+    comparisons: list[str] = []
+    def mock_branch_request(method: str, path: str, *args: Any) -> dict[str, Any]:
+        if method != "GET":
+            raise AssertionError("mutating request in read-only provenance test")
+        if path == f"/repos/{base.REPO}/git/ref/heads/planning/issue-30":
+            return {"object": {"sha": tip}}
+        if path.startswith(f"/repos/{base.REPO}/compare/"):
+            comparisons.append(path)
+            candidate = path.rsplit("/", 1)[-1].split("...", 1)[0]
+            return (
+                {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+                if candidate in ancestors else
+                {"status": "diverged", "ahead_by": 2, "behind_by": 1}
+            )
+        raise AssertionError("unexpected read-only GitHub endpoint " + path)
+    try:
+        base.request = mock_branch_request
+        schema_pair = schema_terminal_resolution_from_comments(
+            30, [dispatch, claim_comment, schema_terminal_comment], old_generation
+        )
+        assert schema_pair is not None and schema_pair[0] is dispatch
+        assert schema_terminal_resolution_from_comments(
+            30, [dispatch, claim_comment, schema_terminal_comment], new_generation
+        ) is None
+        # Legitimate task-tip ancestor accepted; independent marker-only path
+        # remains available even when a schema-3 terminal is forged.
+        ancestor_terminal = dict(schema_terminal_comment, body=schema_terminal_comment["body"].replace(
+            f"work_sha: {'d' * 40}", f"work_sha: {'b' * 40}"
+        ))
+        assert schema_terminal_resolution_from_comments(
+            30, [dispatch, claim_comment, ancestor_terminal], old_generation
+        ) is not None
+        for replacement in (
+            ("head_sha", "c" * 40), ("work_sha", "c" * 40),
+        ):
+            field, fake_sha = replacement
+            forged = dict(schema_terminal_comment, body=schema_terminal_comment["body"].replace(
+                f"{field}: {'d' * 40}", f"{field}: {fake_sha}"
+            ))
+            assert schema_terminal_resolution_from_comments(
+                30, [dispatch, claim_comment, forged], old_generation
+            ) is None
+            marker_resolution = resolved_dispatch_binding(
+                30, [dispatch, resolution, claim_comment, forged], old_generation
+            )
+            assert marker_resolution is not None and marker_resolution[1] is resolution
+        both_forged = dict(schema_terminal_comment, body=schema_terminal_comment["body"].replace(
+            "d" * 40, "c" * 40
+        ))
+        assert schema_terminal_resolution_from_comments(
+            30, [dispatch, claim_comment, both_forged], old_generation
+        ) is None
+        assert comparisons
+        for tip, ancestors in (("e" * 40, set()), ("", set())):
+            assert schema_terminal_resolution_from_comments(
+                30, [dispatch, claim_comment, schema_terminal_comment], old_generation
+            ) is None
+        tip, ancestors = "d" * 40, {"b" * 40}
+        base.request = lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("unavailable"))
+        assert schema_terminal_resolution_from_comments(
+            30, [dispatch, claim_comment, schema_terminal_comment], old_generation
+        ) is None
+    finally:
+        base.request = original_request
 
     assert workflow_run_outcome(None) == "MISSING"
     assert workflow_run_outcome({"status": "queued", "conclusion": None}) == "IN_FLIGHT"
