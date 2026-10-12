@@ -458,10 +458,14 @@ artifact_paths:
 {fence}""")
     pr = {"number": 200, "title": "[PLAN-v1][#199] Required negative review",
           "state": "open", "draft": True, "merged_at": None,
-          "head": {"sha": head}, "base": {"ref": "main"},
+          "head": {"sha": head, "ref": "planning/issue-199",
+                   "repo": {"full_name": REPO}},
+          "base": {"ref": "main", "repo": {"full_name": REPO}},
           "user": {"login": OWNER_LOGIN}}
     issue = {"number": 199, "state": "closed", "state_reason": "completed",
-             "user": {"login": OWNER_LOGIN}, "title": "[PLAN-v1][REVIEW-199] Challenge"}
+             "user": {"login": OWNER_LOGIN}, "title": "[PLAN-v1][REVIEW-199] Challenge",
+             "body": "## Mission ID\nR-01\n\n## Mandatory independent review\n"
+                     "Produce " + report + " and " + handoff + "."}
     files = [{"filename": report, "status": "added", "sha": "c" * 40},
              {"filename": handoff, "status": "added", "sha": "d" * 40}]
 
@@ -472,6 +476,37 @@ artifact_paths:
         )[0]
 
     assert ok(), eligibility(pr, issue, [claim, terminal], files, [], now)
+
+    # B01: same SHA/title/login, wrong actual GitHub PR head or fork.
+    assert not ok(p={**pr, "head": {**pr["head"], "ref": "planning/issue-777"}})
+    assert not ok(p={**pr, "head": {**pr["head"], "repo": {"full_name": "vokerg/other-fork"}}})
+    assert not ok(p={**pr, "base": {**pr["base"], "repo": {"full_name": "vokerg/other-fork"}}})
+    assert not ok(p={**pr, "head": {**pr["head"], "repo": None}})
+    assert not ok(p={**pr, "base": {"ref": "main"}})
+    assert not ok(rev_issue={**issue, "body": issue["body"].replace(
+        "## Mission ID\nR-01", "## Mission ID\nR-02")})
+
+    # M02: self-consistent terminal/file rename cannot override review contract.
+    bad_report = "docs/planning/wave-2/reviews/unrelated-review.md"
+    changed_terminal = {**terminal, "body": terminal["body"].replace(report, bad_report)}
+    changed_files = [{**files[0], "filename": bad_report}, files[1]]
+    assert not ok(c=[claim, changed_terminal], f=changed_files)
+    assert not ok(rev_issue={**issue, "body": "## Mission ID\nR-01\n"
+                           "## Independent review\nNo exact report path"})
+    assert not ok(rev_issue={**issue, "body": issue["body"] +
+                           "\nAlso docs/planning/wave-2/reviews/other-review.md"})
+
+    # M01: a live active issue's comment-only reference is a veto.
+    active = {"number": 300, "state": "open", "title": "Active remediation",
+              "body": "Review still in progress", "comments_coverage_complete": True,
+              "live_comments": [{"id": 1, "body": "Do not retire reviewer PR #200"}]}
+    assert not ok(opened=[active])
+    assert not ok(opened=[{**active, "comments_coverage_complete": False,
+                            "live_comments": [{"id": 1, "body": "No ref"}]}])
+    assert not ok(opened=[{**active, "live_comments": None}])
+    assert ok(opened=[{**active, "live_comments": [
+        {"id": 1, "body": "No reference to the reviewer PR"}]}])
+
     assert not ok(p=dict(pr, draft=False))
     assert not ok(p=dict(pr, merged_at="2026-10-11T00:00:00Z"))
     assert not ok(p=dict(pr, head={"sha": "e" * 40}))
