@@ -22,6 +22,12 @@ func _run() -> void:
     _expect(game.has_method("get_presentation_text"), "integrated presentation diagnostics API exists")
     _expect(game.get_node_or_null("Player") != null, "controllable player node exists")
     _expect(game.get_node_or_null("Presentation") != null, "reviewed presentation surface exists")
+    _expect(game.get_node_or_null("PresentationNavigation") != null, "visible public paging controls wired")
+    _expect(game.get_node_or_null("History") is RichTextLabel and game.get_node_or_null("HistoryHeader") != null,
+        "read-only scrollable public history and page header wired")
+    _expect(game.public_text_navigation is RefCounted and game.route_history_view is RefCounted,
+        "both published independently reviewed component models wired")
+
     _expect(game.session_state != null, "published bounded session-state component wired")
     _expect(game.diagnostic_catalog != null, "published diagnostic catalog component wired")
     _expect(game.hud_objective_model != null, "published HUD objective/status component wired")
@@ -66,6 +72,33 @@ func _run() -> void:
     _expect(public_contract.get("mystery_state") == "UNKNOWN_BY_DESIGN" and not public_contract.get("private_information_visible", true) and not public_contract.get("deferral_is_consent", true), "new public assembler has no private, truth or implied-consent authority")
     var world_intro_view: Dictionary = game.playable_presentation.world_intro()
     _expect(world_intro_view.get("ok", false) and game.get_presentation_text() == world_intro_view["text"], "scene intro renders exactly reviewed assembler output")
+    var intro_original: String = game.get_presentation_text()
+    var intro_snapshot: Dictionary = game.get_game_state()
+    var intro_pages: int = game.presentation_page_count
+    _expect(intro_pages > 0 and intro_pages <= 128, "intro has bounded public page count")
+    _expect(game.get_visible_presentation_text() == game.get_node("Presentation").text,
+        "live presentation accessor names the actual first visible page")
+    _expect(intro_original.begins_with(game.get_visible_presentation_text()),
+        "visible first page is an exact approved source prefix")
+    var intro_reconstructed: String = game.get_visible_presentation_text()
+    for i in range(1, intro_pages):
+        _expect(game.navigate_public_text(1), "next approved intro page reachable %d" % i)
+        intro_reconstructed += game.get_visible_presentation_text()
+    _expect(intro_reconstructed == intro_original, "intro paging reconstructs all reviewed source bytes")
+    _expect(not game.navigate_public_text(1), "last public page does not wrap forward")
+    for i in range(intro_pages - 1):
+        _expect(game.navigate_public_text(-1), "earlier approved intro page reachable %d" % i)
+    _expect(not game.navigate_public_text(-1) and game.presentation_page == 0,
+        "first public page does not wrap backward")
+    _expect(game.get_game_state() == intro_snapshot,
+        "public page navigation cannot mutate or infer session state")
+    _expect((game.get_node("PresentationNavigation") as Label).text.is_empty() == (intro_pages == 1),
+        "page navigation hint only appears when more than one page exists")
+    _expect((game.get_node("History") as RichTextLabel).scroll_active,
+        "history scroll is available when approved titles exceed vertical viewport")
+    _expect(game.get_visible_history_text().is_empty() and game.history_page == 0,
+        "initial authentic session has no fabricated prior events")
+
     game.player.position = Vector2(88, 188)
     _expect(game._nearest_station_id() == "public_record", "live nearest station includes exact radius equality via traversal policy")
     game.player.position = Vector2(87, 188)
@@ -100,6 +133,12 @@ func _run() -> void:
     _expect(game.get_hud_view().get("phase", "") == "INVESTIGATE_CORROBORATE_OR_DEFER", "record-only HUD remains investigation-incomplete")
     _expect((game.get_node("Diagnostic") as Label).text == game.diagnostic_catalog.format_line("EF-INVESTIGATE-RECORD"), "record diagnostic consumes corrected current-main catalog text")
     var archive_text: String = game.get_presentation_text()
+    _expect(game.presentation_scenario == "world_public_record"
+        and game.get_visible_presentation_text() == game.public_text_navigation.page_view("world_public_record")["text"],
+        "real Archive interaction selects exact published source-backed first page")
+    _expect(game.get_visible_history_text().contains("Archive Ledger"),
+        "history visibly consumes exact reviewed Archive event title")
+
     _expect(archive_text == game.playable_presentation.old_works_station("public_record")["text"], "Archive Ledger renders exactly composed public station text")
     _expect(archive_text.contains("One recorded account argues for a single dominant cause. Another rejects that reading. Both remain recorded as accounts, not findings."), "Archive Ledger visibly consumes reviewed Old Works presentation")
     _expect(not archive_text.contains("anwen_contested_record_provenance_gap"), "public record presentation does not expose private provenance gap")
@@ -133,6 +172,14 @@ func _run() -> void:
     _expect(repair_state.get("outcome", "") == "BOUNDED_REPAIR_PILOT_STARTED", "repair route has exact bounded outcome")
     _expect(repair_state.get("mystery_state", "") == "UNKNOWN_BY_DESIGN", "repair route does not settle world mystery")
     var repair_history: Array = repair_state.get("history", [])
+    var repair_public_history: Dictionary = game.route_history_view.build_view(
+        repair_state, game.old_works_presentation, game.consequence_presentation, game.history_page
+    )
+    _expect(repair_public_history.get("ok", false) and int(repair_public_history["count"]) == repair_history.size(),
+        "visible repair history has exact authentic event count")
+    _expect(game.get_visible_history_text() == repair_public_history["text"],
+        "visible repair history is byte-identical to reviewed source projection")
+
     _expect(repair_history.size() >= 5, "repair route leaves observable state history")
     _expect(game.get_presentation_text().contains("Work beyond the pilot remains uncommitted."), "repair completion retains reviewed bounded consequence presentation")
 
@@ -169,6 +216,15 @@ func _run() -> void:
     _expect(records_state.get("deferred_truth", false) == true, "records-first defer route preserves explicit truth deferral")
     _expect(records_state.get("mystery_state", "") == "UNKNOWN_BY_DESIGN", "records-first route does not settle world mystery")
     var records_history: Array = records_state.get("history", [])
+    _expect(game.presentation_scenario == "consequence_records_completion",
+        "live records-first completion selects only reviewed consequence scenario")
+    var records_history_view: Dictionary = game.route_history_view.build_view(
+        records_state, game.old_works_presentation, game.consequence_presentation, game.history_page
+    )
+    _expect(records_history_view.get("ok", false)
+        and game.get_visible_history_text() == records_history_view["text"],
+        "defer-reopen-records history retains exactly published events and order")
+
     _expect(records_history.has("PUBLIC_COMMITMENT_DEFERRED"), "reopened records-first route preserves prior public deferral history")
     _expect(game.get_presentation_text().contains("documentation does not convert either account into a finding."), "records-first completion preserves reviewed truth boundary")
 
@@ -219,6 +275,46 @@ func _run() -> void:
         game.reset_slice()
         _expect(live_objective.text == String(game.get_hud_view()["objective"]),
             "scene reset restores reviewed phase with no E or stale R suffix")
+
+    # Force 10 real session events to exercise history's exact 8-entry page
+    # window and visibility, without mutating either independently published
+    # model or writing synthetic events into a forged snapshot.
+    game.reset_slice()
+    _expect(game.interact_with("public_record"), "history page fixture reads real public record")
+    _expect(game.interact_with("material_trace"), "history page fixture reads real material trace")
+    for _i in range(4):
+        _expect(game.interact_with("commons_hearing"), "history fixture opens a real hearing")
+        _expect(game.choose_commitment("defer"), "history fixture explicitly defers nonconsenting hearing")
+    var ten_history: Dictionary = game.get_game_state()
+    _expect((ten_history.get("history", []) as Array).size() == 10,
+        "genuine repeated hearing/deferral generates 10 legal ordered events")
+    _expect(game.history_page == 1, "actual scene follows final history page after ninth event")
+    _expect(game.get_visible_history_text() == game.route_history_view.build_view(
+        ten_history, game.old_works_presentation, game.consequence_presentation, 1)["text"],
+        "visible second history page is exact reviewed window")
+    _expect(not game.navigate_public_history(1), "last history page never wraps forward")
+    _expect(game.navigate_public_history(-1) and game.history_page == 0,
+        "older approved public events remain directly reachable")
+    _expect(game.get_visible_history_text() == game.route_history_view.build_view(
+        ten_history, game.old_works_presentation, game.consequence_presentation, 0)["text"],
+        "first history page preserves all eight exact ordered entries")
+    _expect(not game.navigate_public_history(-1), "first history page never wraps backward")
+    _expect(game.navigate_public_history(1) and game.history_page == 1,
+        "newest approved history page is reachable again")
+    _expect(game.get_game_state() == ten_history,
+        "history paging never changes session history, commitment, consent or mystery")
+    var header: Label = game.get_node("HistoryHeader") as Label
+    _expect(header != null and header.text.contains("2/2")
+        and header.text.contains("[C]") and header.text.contains("[V]"),
+        "actual scene shows previous/next keys and page number only for multi-page history")
+    game.reset_slice()
+    _expect(game.history_page == 0 and game.get_visible_history_text().is_empty(),
+        "R/reset clears all visible history without leaving stale page content")
+    _expect(game.presentation_scenario == "world_intro" and game.presentation_page == 0,
+        "reset returns to first approved world-intro page")
+    _expect(game.get_game_state().get("mystery_state") == "UNKNOWN_BY_DESIGN",
+        "new public pagination/historical recap never resolves mystery")
+
 
     _finish()
 
