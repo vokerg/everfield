@@ -1567,13 +1567,85 @@ def self_test() -> None:
                 f"evidence_refs: [{'c' * 40}]\n"
             ),
         )
-        for idx, hour in enumerate((2, 3, 4, 5), start=13)
+        for idx, hour in enumerate((13, 14, 15, 16), start=2)
     ]
-    # Time in these mock comments advances by exactly one hour from the CLAIM.
+    # E1 at 13:00, E2 at 14:00, E3 at 15:00; E4 at 16:00 is invalid.
+    # At 21:30 E3 expired, whereas forged E4 would still be live.
     assert closure_authorized_terminal_from_comments(
         10, [secure_claim, *evidence,
-             secure_terminal(18, "2026-09-15T22:00:00Z", 1)]
+             secure_terminal(6, "2026-09-15T21:30:00Z", 1)]
     ) is None
+
+    # FSR-1677-B01: HEAD_ADVANCE evidence must be verified against the real
+    # task branch, ahead-only ancestry and a commit timestamp before PROGRESS.
+    progressed = secure_comment(
+        2, "2026-09-15T17:00:00Z", "PROGRESS", "IN_PROGRESS",
+        extra=(
+            "ownership_generation_comment_id: 1\n"
+            f"observed_head_sha: {'b' * 40}\n"
+            "progress_basis: HEAD_ADVANCE\n"
+        ),
+    )
+    renewed_terminal = secure_terminal(3, "2026-09-15T18:30:00Z", 1)
+    original_request = request
+    def verified_head_mock(method: str, path: str, payload: Any = None) -> Any:
+        if method != "GET":
+            raise RuntimeError("write forbidden in HEAD_ADVANCE fixture")
+        root = f"/repos/{REPO}"
+        if path == root + "/git/ref/heads/planning/issue-10":
+            return {"object": {"sha": "b" * 40}}
+        if path == root + "/compare/" + "a" * 40 + "..." + "b" * 40:
+            return {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+        if path == root + "/commits/" + "b" * 40:
+            return {"commit": {"committer": {"date": "2026-09-15T16:59:59Z"}}}
+        raise RuntimeError(f"unexpected test read: {path}")
+    try:
+        globals()["request"] = verified_head_mock
+        assert closure_authorized_terminal_from_comments(
+            10, [secure_claim, progressed, renewed_terminal]
+        )
+        def false_branch_mock(method: str, path: str, payload: Any = None) -> Any:
+            if path.endswith("/git/ref/heads/planning/issue-10"):
+                return {"object": {"sha": "a" * 40}}
+            return verified_head_mock(method, path, payload)
+        globals()["request"] = false_branch_mock
+        assert closure_authorized_terminal_from_comments(
+            10, [secure_claim, progressed, renewed_terminal]
+        ) is None
+    finally:
+        globals()["request"] = original_request
+
+    # Mutation consumer must re-read ownership before PATCH; first read alone
+    # cannot authorize a write, and an issue already closed must be left alone.
+    source_terminal = closure_authorized_terminal_from_comments(
+        10, [secure_claim, secure_done]
+    )
+    assert source_terminal is not None
+    original_closure = closure_authorized_terminal
+    original_dry_run = DRY_RUN
+    reads: list[tuple[str, str]] = []
+    def patch_mock(method: str, path: str, payload: Any = None) -> Any:
+        reads.append((method, path))
+        if method == "GET":
+            return {"state": "open"}
+        if method == "PATCH":
+            return {"state": "closed"}
+        raise RuntimeError("unexpected mutation fixture method")
+    try:
+        globals()["DRY_RUN"] = False
+        globals()["request"] = patch_mock
+        samples = iter([source_terminal, None])
+        globals()["closure_authorized_terminal"] = lambda _: next(samples)
+        assert close_terminal_open_issues([{"number": 10}]) == 0
+        assert not reads
+        samples = iter([source_terminal, source_terminal])
+        globals()["closure_authorized_terminal"] = lambda _: next(samples)
+        assert close_terminal_open_issues([{"number": 10}]) == 1
+        assert [method for method, _ in reads] == ["GET", "PATCH"]
+    finally:
+        globals()["closure_authorized_terminal"] = original_closure
+        globals()["DRY_RUN"] = original_dry_run
+        globals()["request"] = original_request
 
     predecessor_prose = "Predecessor review disposition: `CHANGES_NEEDED`. This PR fixes it and requires fresh review."
     assert not pr_explicitly_rejected(predecessor_prose)
