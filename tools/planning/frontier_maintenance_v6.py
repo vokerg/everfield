@@ -56,6 +56,17 @@ def implementation_source_kind(issue: dict[str, Any]) -> str | None:
     body = issue.get("body") or ""
     if "[FACTORY-" in title or "IMPLEMENTATION-READINESS" in title:
         return None
+    # Modern bounded playable increments use IMPLEMENTATION_INCREMENT rather
+    # than the older IMPLEMENTATION / ... producer marker. A blocked shared
+    # fan-in still carries specific implementation-fed content demand; the
+    # content router must assess demand, not speculate new story work.
+    if (
+        title.startswith("[PLAN-v1][IMPLEMENTATION-INCREMENT-")
+        and "-REV-" not in title
+        and "-INT-" not in title
+        and "IMPLEMENTATION_INCREMENT / " in body
+    ):
+        return "IMPLEMENTATION_INCREMENT"
     if any(marker in body for marker in IMPLEMENTATION_PRODUCER_MARKERS):
         return "IMPLEMENTATION"
     if any(marker in body for marker in IMPLEMENTATION_REVIEW_MARKERS):
@@ -113,7 +124,7 @@ def select_content_demand_source(
             continue
         # Prefer the newest concrete producer. Once producer demand has been
         # consumed, a later review/test episode can seed the next intake.
-        priority = 0 if kind == "IMPLEMENTATION" else 1
+        priority = 0 if kind in {"IMPLEMENTATION", "IMPLEMENTATION_INCREMENT"} else 1
         candidates.append((priority, -number, issue))
 
     if not candidates:
@@ -259,6 +270,28 @@ def self_test() -> None:
     assert implementation_source_kind(producer) == "IMPLEMENTATION"
     assert implementation_source_kind(review) == "IMPLEMENTATION_REVIEW"
     assert implementation_source_kind(liveness_fix) is None
+    current_increment = issue(
+        1545,
+        "[PLAN-v1][IMPLEMENTATION-INCREMENT-PLAYABLE-FEEDBACK-COMMANDS-03] Fan in",
+        "IMPLEMENTATION_INCREMENT / POST_THREE_SEAM_FEEDBACK_COMMAND_FAN_IN; BLOCKED",
+    )
+    assert implementation_source_kind(current_increment) == "IMPLEMENTATION_INCREMENT"
+    assert implementation_source_kind(
+        issue(1540, "[PLAN-v1][IMPLEMENTATION-INCREMENT-SOMETHING-REV-INT-01] Review publication",
+              "IMPLEMENTATION_INCREMENT / PLAYABLE_FAN_IN")
+    ) is None
+    assert select_content_demand_source(
+        [current_increment], [current_increment]
+    ) is current_increment
+    existing_increment_intake = issue(
+        1557,
+        "[PLAN-v1][FACTORY-CONTENT-DEMAND-1545] Materialize content from #1545",
+        state="closed", state_reason="completed",
+        login="github-actions[bot]", association="NONE",
+    )
+    assert select_content_demand_source(
+        [current_increment], [current_increment, existing_increment_intake]
+    ) is None
 
     selected = select_content_demand_source(
         [producer, review, liveness_fix],
