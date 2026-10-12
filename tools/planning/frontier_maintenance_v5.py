@@ -60,8 +60,16 @@ def terminal_owner_generation_is_current(
     transition_issue_number: int,
     terminal: base.OperationalRecord,
     comments: Iterable[dict[str, Any]],
+    *,
+    transition_head_verifier: Callable[[int, str], bool] | None = None,
 ) -> bool:
-    """Validate winning ownership plus canonical temporal recovery predicates."""
+    """Validate winning ownership plus canonical temporal recovery predicates.
+
+    Recovery heads must be sourced from the current generation, not merely
+    repeated by intent and grant. The storage-closing consumer additionally
+    authenticates ancestry against the live GitHub task branch; read-only
+    synthetic tests can supply their own verifier or omit it.
+    """
     records = sorted(
         (
             record
@@ -76,6 +84,24 @@ def terminal_owner_generation_is_current(
     )
     by_id = {record.comment_id: record for record in records}
     used_intents: set[int] = set()
+    expected_branch = f"planning/issue-{transition_issue_number}"
+
+    def handoff_head_authorized(
+        owner: base.OperationalRecord, handoff: base.OperationalRecord,
+    ) -> bool:
+        lease = base.schema3_ownership_lease_state(
+            owner, records, before_comment_id=handoff.comment_id,
+            head_verifier=base.github_verified_head_advance,
+        )
+        return bool(
+            lease is not None
+            and base.scalar(owner.body, "branch") == expected_branch
+            and base.scalar(handoff.body, "branch") == expected_branch
+            and handoff.head_sha is not None
+            and base.SHA40_RE.fullmatch(handoff.head_sha)
+            and handoff.head_sha == handoff.work_sha
+            and handoff.head_sha == lease.observed_head_sha
+        )
 
     def valid_handoff(owner: base.OperationalRecord, before_comment_id: int) -> bool:
         for record in records:
@@ -86,6 +112,7 @@ def terminal_owner_generation_is_current(
                 and record.state == "HANDOFF_READY"
                 and record.ownership_generation_comment_id == owner.comment_id
                 and record.actor_session_id == owner.actor_session_id
+                and handoff_head_authorized(owner, record)
                 and base.schema3_owner_unexpired_at(owner, records, record, head_verifier=base.github_verified_head_advance) is True
             ):
                 return True
@@ -126,6 +153,8 @@ def terminal_owner_generation_is_current(
             state is not None
             and unexpired is False
             and source.comment_id == state.anchor_comment_id
+            and base.scalar(owner.body, "branch") == expected_branch
+            and base.scalar(source.body, "branch") == expected_branch
             and not valid_handoff(owner, at_record.comment_id)
             and not valid_owner_terminal(owner, at_record.comment_id)
         )
@@ -148,6 +177,9 @@ def terminal_owner_generation_is_current(
             or source is None
             or observed_head is None
             or not base.SHA40_RE.fullmatch(observed_head)
+            or base.scalar(grant.body, "branch") != expected_branch
+            or base.scalar(source.body, "branch") != expected_branch
+            or source.comment_id >= grant.comment_id
         ):
             return None
 
@@ -160,6 +192,8 @@ def terminal_owner_generation_is_current(
                 or base.scalar(record.body, "reason") != reason
                 or base.integer_scalar(record.body, "source_comment_id") != source_id
                 or base.scalar(record.body, "observed_head_sha") != observed_head
+                or base.scalar(record.body, "branch") != expected_branch
+                or record.comment_id <= source.comment_id
             ):
                 continue
             if reason == "HANDOFF":
@@ -169,6 +203,8 @@ def terminal_owner_generation_is_current(
                     or source.state != "HANDOFF_READY"
                     or source.ownership_generation_comment_id != current_owner.comment_id
                     or source.actor_session_id != current_owner.actor_session_id
+                    or not handoff_head_authorized(current_owner, source)
+                    or observed_head != source.head_sha
                     or base.schema3_owner_unexpired_at(
                         current_owner, records, source,
                         head_verifier=base.github_verified_head_advance,
@@ -182,11 +218,22 @@ def terminal_owner_generation_is_current(
                     or not stale_source_valid(current_owner, source, record)
                 ):
                     continue
+                previous_lease = base.schema3_ownership_lease_state(
+                    current_owner, records, before_comment_id=record.comment_id,
+                    head_verifier=base.github_verified_head_advance,
+                )
+                if (
+                    previous_lease is None
+                    or observed_head != previous_lease.observed_head_sha
+                    or base.scalar(source.body, "observed_head_sha") != observed_head
+                ):
+                    continue
             elif reason == "ORPHAN":
                 if (
                     current_owner is not None
                     or source.kind != "ORPHAN_PROBE"
                     or base.schema3_orphan_probe_mature_at(source, record) is not True
+                    or base.scalar(source.body, "observed_head_sha") != observed_head
                 ):
                     continue
             else:
@@ -202,6 +249,12 @@ def terminal_owner_generation_is_current(
             or intent.comment_id in used_intents
         ):
             return None
+        if (
+            reason in {"HANDOFF", "STALE"}
+            and transition_head_verifier is not None
+            and not transition_head_verifier(transition_issue_number, observed_head)
+        ):
+            return None
         return intent
 
     winner: base.OperationalRecord | None = None
@@ -211,6 +264,7 @@ def terminal_owner_generation_is_current(
             or record.state != "IN_PROGRESS"
             or not record.actor_session_id
             or base.parse_github_server_time(record.created_at) is None
+            or base.scalar(record.body, "branch") != expected_branch
         ):
             continue
         observed_head = base.scalar(record.body, "observed_head_sha")
