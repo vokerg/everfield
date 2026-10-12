@@ -79,6 +79,12 @@ jobs:
           test "$(git hash-object game/components/interaction_feedback/interaction_feedback_smoke.gd)" = '90c3608288426d29fefec8e7248074ab2ca4b969'
           test "$(git hash-object game/components/action_commands/action_command_policy.gd)" = 'd5422813a2e2bd938d9776c3f2cd12a058a9ac10'
           test "$(git hash-object game/components/action_commands/action_command_smoke.gd)" = 'b9ff3fdfe9feea28c980e624324f6a35d45254fd'
+          # Both prerequisite independent component roots were owner-authorized
+          # SQUASH-published without this shared scene wiring. Lock their blobs.
+          test "$(git hash-object game/components/public_text_navigation/public_text_navigation.gd)" = 'b081bfe234c18884650992d7251b55effbec8c2f'
+          test "$(git hash-object game/tests/public_text_navigation/public_text_navigation_smoke.gd)" = 'ff355251c9b2f303c5c9ba1633a6a0b18b6689a3'
+          test "$(git hash-object game/components/route_history_view/route_history_view.gd)" = '8f32a8e925d8fb0765e91ef102ad0827a0b88958'
+          test "$(git hash-object game/tests/route_history_view/route_history_view_smoke.gd)" = '298916bbdd839e2094c4e2695e305f1142bb3e30'
 
       - name: Run playable, movement and published-component smokes
         shell: bash
@@ -107,6 +113,14 @@ jobs:
           ! grep -F '[EF-INTERACTION-FEEDBACK][FAIL]' first-playable-evidence/interaction-feedback.log
           "$GODOT_BIN" --headless --path game --script res://components/action_commands/action_command_smoke.gd 2>&1 | tee first-playable-evidence/action-commands.log
           grep -Fx 'EVERFIELD_ACTION_COMMAND_SMOKE_PASS' first-playable-evidence/action-commands.log
+          # Required, separately published and independently reviewed
+          # component-level regressions now execute in the same exact HEAD CI.
+          "$GODOT_BIN" --headless --path game --script res://tests/public_text_navigation/public_text_navigation_smoke.gd 2>&1 | tee first-playable-evidence/public-text-navigation.log
+          grep -F 'EVERFIELD_PUBLIC_TEXT_NAV_PASS checks=' first-playable-evidence/public-text-navigation.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|\[EVERFIELD\]\[PUBLIC-TEXT-NAV\]\[FAIL\]' first-playable-evidence/public-text-navigation.log
+          "$GODOT_BIN" --headless --path game --script res://tests/route_history_view/route_history_view_smoke.gd 2>&1 | tee first-playable-evidence/route-history-view.log
+          grep -F 'EVERFIELD_ROUTE_HISTORY_VIEW_PASS checks=' first-playable-evidence/route-history-view.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|\[EVERFIELD\]\[ROUTE-HISTORY\]\[FAIL\]' first-playable-evidence/route-history-view.log
           ! grep -F '[EF-ACTION-COMMAND][FAIL]' first-playable-evidence/action-commands.log
           ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\[EF-MOVEMENT-SMOKE\]\[FAIL\]' first-playable-evidence/movement-interaction.log
           ! grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\[EF-SMOKE\]\[FAIL\]' first-playable-evidence/state-machine.log
@@ -144,6 +158,10 @@ jobs:
             game/components/interaction_feedback/interaction_feedback_smoke.gd \
             game/components/action_commands/action_command_policy.gd \
             game/components/action_commands/action_command_smoke.gd \
+            game/components/public_text_navigation/public_text_navigation.gd \
+            game/tests/public_text_navigation/public_text_navigation_smoke.gd \
+            game/components/route_history_view/route_history_view.gd \
+            game/tests/route_history_view/route_history_view_smoke.gd \
             > first-playable-evidence/implementation.sha256
 
       - name: Upload smoke evidence
