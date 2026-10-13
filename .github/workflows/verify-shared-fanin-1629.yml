@@ -1,0 +1,257 @@
+name: Independent shared fan-in 1629 exact-head Godot verification
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-shared-fanin-1629.yml'
+      - 'docs/planning/handoffs/issue-1695.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-shared-fanin-1629-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  independent-exact-head:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout independently owned verifier (never source)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Verify source PR frozen and draft at GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' \
+            'https://api.github.com/repos/vokerg/everfield/pulls/1694' -o frozen-pr.json
+          python3 - <<'PY'
+          import json
+          pr = json.load(open('frozen-pr.json'))
+          assert pr['state'] == 'open' and pr['draft'] and not pr['merged'], 'frozen source PR is no longer open draft'
+          assert pr['base']['ref'] == 'main'
+          assert pr['head']['ref'] == 'planning/issue-1629'
+          assert pr['head']['sha'] == 'ee5ff1e7931e60e4e4c9f48c32c00b02d87a423d', 'frozen source HEAD moved'
+          assert pr['changed_files'] == 6, 'source changed-file count drift'
+          print('EVERFIELD_VERIFIER_PR_IDENTITY_PASS #1694 exact source HEAD / six changed files / open draft')
+          PY
+
+      - name: Checkout frozen source PR exact HEAD, not verifier code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ee5ff1e7931e60e4e4c9f48c32c00b02d87a423d
+          path: source
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Authenticate all six frozen source paths and published component blobs
+        working-directory: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = 'ee5ff1e7931e60e4e4c9f48c32c00b02d87a423d'
+          python3 - <<'PY'
+          import subprocess
+          expected = {
+            'game/main.gd': 'df3d7cbc7a8048803870e9ab12a06d7d249a1792',
+            'game/smoke_test.gd': '5270857affe4756608ba05f9e4fdb9bddf9d78a2',
+            'game/tests/movement_interaction_smoke.gd': '8f6ba7dd7a5847bcd9572acaa3d48081d84b5167',
+            '.github/workflows/godot-first-playable-smoke.yml': '9b914e62f715630cb02b035cf996bfdbc3779e6c',
+            'docs/implementation/first-playable.md': 'ac45b66b8853a2c89d566a0bd88db850628ceaa5',
+            'docs/planning/handoffs/issue-1629.md': 'c690b96b76c6d7b48f1286aadc340182061d071d',
+            'game/components/public_text_navigation/public_text_navigation.gd': 'b081bfe234c18884650992d7251b55effbec8c2f',
+            'game/tests/public_text_navigation/public_text_navigation_smoke.gd': 'ff355251c9b2f303c5c9ba1633a6a0b18b6689a3',
+            'game/components/route_history_view/route_history_view.gd': '8f32a8e925d8fb0765e91ef102ad0827a0b88958',
+            'game/tests/route_history_view/route_history_view_smoke.gd': '298916bbdd839e2094c4e2695e305f1142bb3e30',
+          }
+          for path, sha in expected.items():
+            actual = subprocess.check_output(['git','hash-object',path],text=True).strip()
+            assert actual == sha, (path,actual,sha)
+          print('EVERFIELD_VERIFIER_BLOB_LOCK_PASS',len(expected))
+          PY
+          mkdir -p verifier-evidence
+          printf 'frozen_source_pr=1694\nfrozen_source_head=%s\nverifier_head=%s\nrun=%s\nattempt=%s\n' \
+            "$(git rev-parse HEAD)" '${{ github.event.pull_request.head.sha || github.sha }}' \
+            '${{ github.run_id }}' '${{ github.run_attempt }}' > verifier-evidence/identity.txt
+          git ls-tree -r HEAD > verifier-evidence/source-tree.txt
+
+      - name: Download exact reviewed Godot 4.7.1 via pinned SHA256
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' > godot-lock.env
+          import json, shlex
+          from pathlib import Path
+          entry = json.loads(Path('source/docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json').read_text())['entries']['godot_4.7.1_linux_x86_64_zip']
+          assert entry['version'] == '4.7.1-stable'
+          assert entry['sha256'] == 'c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba'
+          print('GODOT_URL='+shlex.quote(entry['url']))
+          print('GODOT_SHA='+shlex.quote(entry['sha256']))
+          PY
+          source godot-lock.env
+          curl --fail --location --retry 3 --output godot.zip "$GODOT_URL"
+          printf '%s  %s\n' "$GODOT_SHA" godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+          test "$(.godot-bin/Godot_v4.7.1-stable_linux.x86_64 --version)" = '4.7.1.stable.official.a13da4feb'
+          printf 'godot_version=4.7.1.stable.official.a13da4feb\ngodot_zip_sha256=%s\n' "$GODOT_SHA" >> source/verifier-evidence/identity.txt
+
+      - name: Run full exact-head independent executable regression suite
+        working-directory: source
+        shell: bash
+        env:
+          GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          bash tools/implementation/run_godot_smoke.sh 2>&1 | tee verifier-evidence/primary.log
+          grep -Fx 'EVERFIELD_SMOKE_PASS' verifier-evidence/primary.log
+          bash tools/implementation/run_godot_movement_smoke.sh 2>&1 | tee verifier-evidence/movement.log
+          grep -Fx 'EVERFIELD_MOVEMENT_INTERACTION_SMOKE_PASS' verifier-evidence/movement.log
+          run_case() {
+            local label="$1" script="$2" marker="$3"
+            "$GODOT_BIN" --headless --path game --script "$script" 2>&1 | tee "verifier-evidence/$label.log"
+            grep -F "$marker" "verifier-evidence/$label.log"
+            if grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\[FAIL\]' "verifier-evidence/$label.log"; then
+              echo "FAIL: $label emitted error" >&2; exit 1
+            fi
+          }
+          run_case session-state res://components/session_state/session_state_smoke.gd EVERFIELD_SESSION_STATE_SMOKE_PASS
+          run_case diagnostics res://components/diagnostics/diagnostic_catalog_smoke.gd EVERFIELD_DIAGNOSTIC_CONTRACT_SMOKE_PASS
+          run_case hud-objectives res://components/hud_objectives/hud_objective_model_smoke.gd EVERFIELD_HUD_OBJECTIVE_MODEL_SMOKE_PASS
+          run_case station-world res://components/station_world/station_world_smoke.gd EVERFIELD_STATION_WORLD_SMOKE_PASS
+          run_case traversal res://components/traversal_policy/traversal_policy_smoke.gd EVERFIELD_TRAVERSAL_POLICY_SMOKE_PASS
+          run_case presentation res://components/playable_presentation/playable_presentation_smoke.gd EVERFIELD_PLAYABLE_PRESENTATION_SMOKE_PASS
+          run_case interaction-feedback res://components/interaction_feedback/interaction_feedback_smoke.gd EVERFIELD_INTERACTION_FEEDBACK_SMOKE_PASS
+          run_case action-commands res://components/action_commands/action_command_smoke.gd EVERFIELD_ACTION_COMMAND_SMOKE_PASS
+          run_case public-text res://tests/public_text_navigation/public_text_navigation_smoke.gd 'EVERFIELD_PUBLIC_TEXT_NAV_PASS checks='
+          run_case route-history res://tests/route_history_view/route_history_view_smoke.gd 'EVERFIELD_ROUTE_HISTORY_VIEW_PASS checks='
+          if grep -E 'SCRIPT ERROR|Parse Error|Assertion failed|\[FAIL\]' verifier-evidence/{primary,movement}.log; then
+            echo 'Unexpected scene-test failure marker' >&2; exit 1
+          fi
+
+      - name: Independently challenge live scene geometry, pages, provenance and input
+        working-directory: source
+        shell: bash
+        env:
+          GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          cat > game/tests/_ephemeral_verify_fanin_1695.gd <<'GDSCRIPT'
+          extends SceneTree
+          const Navigation = preload("res://components/public_text_navigation/public_text_navigation.gd")
+          var failures: Array[String] = []
+
+          func _init() -> void:
+              call_deferred("_run")
+
+          func check(ok: bool, message: String) -> void:
+              if not ok:
+                  failures.append(message)
+                  push_error("[VERIFY-1695][FAIL] " + message)
+
+          func _run() -> void:
+              var packed: PackedScene = load("res://main.tscn") as PackedScene
+              check(packed != null, "scene loads")
+              if packed == null:
+                  _finish()
+                  return
+              var game = packed.instantiate()
+              get_root().add_child(game)
+              await process_frame
+              var p: Label = game.get_node("Presentation") as Label
+              var h: RichTextLabel = game.get_node("History") as RichTextLabel
+              check(get_root().get_visible_rect().size == Vector2i(960, 540), "viewport is reviewed 960x540")
+              check(p.position == Vector2(500, 98) and p.size == Vector2(422, 134), "actual 422x134 text viewport")
+              check(h.position == Vector2(500, 308) and h.size == Vector2(422, 140) and h.scroll_active,
+                  "visible scrollable history fits below paging")
+              check(game.get_node("HistoryHeader").position == Vector2(500, 282),
+                  "history page header lives inside 960x540")
+              check(game.get_node("Objective").position.y + game.get_node("Objective").size.y <= 540,
+                  "objective stays within frame")
+              var nav = game.public_text_navigation
+              var scenario_count := 0
+              var page_total := 0
+              for scenario in Navigation.SCENARIOS:
+                  var first: Dictionary = nav.page_view(scenario, 0)
+                  check(first.get("ok", false), "approved scenario loads: " + scenario)
+                  if not first.get("ok", false):
+                      continue
+                  var reconstruction := ""
+                  for i in range(int(first["page_count"])):
+                      var view: Dictionary = nav.page_view(scenario, i)
+                      check(view.get("ok", false) and int(view.get("page_index", -1)) == i,
+                          "exact page index: " + scenario)
+                      var current: String = String(view.get("text", ""))
+                      reconstruction += current
+                      p.text = current
+                      await process_frame
+                      check(p.get_line_count() * p.get_line_height() <= p.size.y + 1.0,
+                          "measured live label line height fits: " + scenario + ":" + str(i))
+                      page_total += 1
+                  check(reconstruction.sha256_text() == first["source_sha256"]
+                      and reconstruction.length() == int(first["source_length"]),
+                      "all source bytes reconstructed: " + scenario)
+                  scenario_count += 1
+              check(scenario_count == 13, "all thirteen approved scenarios checked")
+              game.reset_slice()
+              var initial: Dictionary = game.get_game_state()
+              game.navigate_public_text(1)
+              check(game.get_game_state() == initial and game.get_game_state()["mystery_state"] == "UNKNOWN_BY_DESIGN",
+                  "page navigation cannot change consent or mystery")
+              check(game.interact_with("public_record") and game.interact_with("material_trace"),
+                  "real history fixtures use legal investigation")
+              for i in range(4):
+                  check(game.interact_with("commons_hearing") and game.choose_commitment("defer"),
+                      "legal hearing and explicit nonconsent " + str(i))
+              var real_state: Dictionary = game.get_game_state()
+              check((real_state["history"] as Array).size() == 10 and game.history_page == 1,
+                  "ten actual events produce second eight-per-page window")
+              var display: String = game.get_visible_history_text()
+              var forged: Dictionary = game.get_game_state()
+              (forged["history"] as Array).append("FORGED_HISTORY")
+              check(game.get_visible_history_text() == display
+                  and not (game.get_game_state()["history"] as Array).has("FORGED_HISTORY"),
+                  "caller-forged snapshot cannot influence scene display or live history")
+              check(game.navigate_public_history(-1) and game.navigate_public_history(1),
+                  "history moves between authentic windows")
+              check(game.get_game_state() == real_state, "history scrolling is state read-only")
+              game.reset_slice()
+              check(game.get_visible_history_text().is_empty() and game.history_page == 0,
+                  "reset removes stale visible history")
+              print("EVERFIELD_INDEPENDENT_FANIN_1695_PROBE scenarios=", scenario_count,
+                  " pages=", page_total, " findings=", failures.size())
+              _finish()
+
+          func _finish() -> void:
+              if failures.is_empty():
+                  print("EVERFIELD_INDEPENDENT_FANIN_1695_PASS")
+                  quit(0)
+              else:
+                  print("EVERFIELD_INDEPENDENT_FANIN_1695_FAIL findings=", failures)
+                  quit(1)
+          GDSCRIPT
+          "$GODOT_BIN" --headless --path game --script res://tests/_ephemeral_verify_fanin_1695.gd 2>&1 | tee verifier-evidence/independent-probe.log
+          grep -Fx 'EVERFIELD_INDEPENDENT_FANIN_1695_PASS' verifier-evidence/independent-probe.log
+          ! grep -E 'SCRIPT ERROR|Parse Error|\[VERIFY-1695\]\[FAIL\]' verifier-evidence/independent-probe.log
+          rm game/tests/_ephemeral_verify_fanin_1695.gd
+          test -z "$(git status --porcelain)" || { echo 'Tracked source changed by verification' >&2; exit 1; }
+          sha256sum verifier-evidence/*.log > verifier-evidence/logs.sha256
+          sha256sum game/main.gd game/smoke_test.gd game/tests/movement_interaction_smoke.gd > verifier-evidence/fanin-files.sha256
+
+      - name: Retain immutable verifier-only evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: independent-shared-fanin-1695-${{ github.run_id }}-${{ github.run_attempt }}
+          path: source/verifier-evidence/
+          if-no-files-found: warn
+          retention-days: 30
