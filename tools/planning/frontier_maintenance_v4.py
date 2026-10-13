@@ -516,6 +516,133 @@ def self_test() -> None:
         base.closure_authorized_terminal_from_comments = original_successor_closure
         base.paged = original_successor_paged
 
+    # FSR-1733-M01: call the ACTUAL strict base closure validator, not a
+    # source-authored replacement. Valid branch ancestry cannot rescue either
+    # a losing CLAIM or a terminal published after the six-hour lease.
+    def live_comment(cid: int, created: str, operational: str) -> dict[str, Any]:
+        return {
+            "id": cid, "created_at": created, "updated_at": created,
+            "author_association": "OWNER", "user": {"login": "vokerg"},
+            "body": operational,
+        }
+
+    def owner_capsule(cid: int, actor: str) -> str:
+        return (
+            "protocol: planning-v1\n"
+            "schema: 3\n"
+            "kind: CLAIM\n"
+            "issue: 20\n"
+            "mission_id: M-20\n"
+            "branch: planning/issue-20\n"
+            f"actor_session_id: {actor}\n"
+            "state: IN_PROGRESS\n"
+            f"observed_head_sha: {'a' * 40}\n"
+            "previous_ownership_comment_id: null\n"
+        )
+
+    def done_capsule(actor: str, owner_id: int) -> str:
+        return (
+            "protocol: planning-v1\n"
+            "schema: 3\n"
+            "kind: STATUS\n"
+            "issue: 20\n"
+            "mission_id: M-20\n"
+            "branch: planning/issue-20\n"
+            f"actor_session_id: {actor}\n"
+            "state: DONE\n"
+            "terminal: true\n"
+            "authority_mode: OWNER\n"
+            f"ownership_generation_comment_id: {owner_id}\n"
+            f"head_sha: {'a' * 40}\n"
+            f"work_sha: {'b' * 40}\n"
+        )
+
+    original_live_paged = base.paged
+    original_live_request = base.request
+    first_claim = live_comment(
+        40, "2026-09-01T00:00:00Z", owner_capsule(40, "actor-20")
+    )
+    genuine_done = live_comment(
+        50, "2026-09-01T00:00:10Z", done_capsule("actor-20", 40)
+    )
+    parsed_done = base.parse_operational(20, genuine_done)
+    assert parsed_done is not None
+    live_successor_comments = [first_claim, genuine_done]
+    try:
+        base.request = successor_request
+        base.paged = lambda path: iter(live_successor_comments) if (
+            path == f"/repos/{base.REPO}/issues/20/comments?"
+        ) else iter([])
+        successor_tip = "a" * 40
+        successor_ancestors = {"b" * 40}
+        compare_status = "ahead"
+        # Validate the genuine owner and both authenticated result SHAs.
+        assert base.closure_authorized_terminal_from_comments(
+            20, live_successor_comments
+        ) == parsed_done
+        assert semantic_generation_from_terminal(
+            transition, existing, issues, successor_terminals={20: parsed_done}
+        ) == (10, 2, "NEXT")
+        assert semantic_generation_from_terminal(
+            transition, existing, issues
+        ) == (10, 2, "NEXT")
+
+        # A later losing claimant, even with both true tip/ancestor SHAs,
+        # cannot publish a terminal suppressing required downstream work.
+        losing_claim = live_comment(
+            45, "2026-09-01T00:00:05Z", owner_capsule(45, "losing-actor")
+        )
+        losing_done = live_comment(
+            50, "2026-09-01T00:00:10Z", done_capsule("losing-actor", 45)
+        )
+        losing_record = base.parse_operational(20, losing_done)
+        assert losing_record is not None
+        live_successor_comments = [first_claim, losing_claim, losing_done]
+        assert base.closure_authorized_terminal_from_comments(
+            20, live_successor_comments
+        ) is None
+        assert semantic_generation_from_terminal(
+            transition, existing, issues, successor_terminals={20: losing_record}
+        ) is None
+        assert semantic_generation_from_terminal(
+            transition, existing, issues
+        ) is None
+
+        # Expiry is based on immutable GitHub created_at, not supplied SHA.
+        expired_done = live_comment(
+            50, "2026-09-01T07:00:10Z", done_capsule("actor-20", 40)
+        )
+        expired_record = base.parse_operational(20, expired_done)
+        assert expired_record is not None
+        live_successor_comments = [first_claim, expired_done]
+        assert semantic_generation_from_terminal(
+            transition, existing, issues, successor_terminals={20: expired_record}
+        ) is None
+        assert semantic_generation_from_terminal(
+            transition, existing, issues
+        ) is None
+
+        # Even an otherwise valid injected snapshot must match the full live
+        # terminal identity; callers cannot inject a different actor/result.
+        live_successor_comments = [first_claim, genuine_done]
+        assert semantic_generation_from_terminal(
+            transition, existing, issues, successor_terminals={20: losing_record}
+        ) is None
+        edited_done = dict(genuine_done, updated_at="2026-09-01T00:00:11Z")
+        live_successor_comments = [first_claim, edited_done]
+        assert semantic_generation_from_terminal(
+            transition, existing, issues, successor_terminals={20: parsed_done}
+        ) is None
+        base.paged = lambda path: (_ for _ in ()).throw(
+            RuntimeError("incomplete GitHub comments pagination")
+        )
+        assert semantic_generation_from_terminal(
+            transition, existing, issues, successor_terminals={20: parsed_done}
+        ) is None
+    finally:
+        base.paged = original_live_paged
+        base.request = original_live_request
+
     route_not_consumed = _terminal(
         30,
         8,
