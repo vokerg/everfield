@@ -101,6 +101,18 @@ PR_URL = re.compile(
 )
 
 
+
+# A GitHub issue is rendered at /OWNER/REPO/issues/N. CommonMark relative
+# link destinations and reference definitions use that URL as the browser
+# resolution base; a live reference need not contain an absolute host or #N.
+# Scan only Markdown target slots so foreign full URLs with matching path text
+# are not accidentally interpreted as root-relative GitHub links.
+RELATIVE_MD_LINK_TARGET = re.compile(
+    r"(?:\\]\\([ \\t]*|(?m:^[ \\t]{0,3}\\[[^]\\n]+\\]:[ \\t]*))"
+    r"(?:<([^<>\\n]+)>|([^\\s<>()]+))"
+)
+
+
 def references_pr(text: str, number: int) -> bool:
     """Fail closed on first-party PR URL variants in active issues/comments.
 
@@ -166,6 +178,40 @@ def references_pr(text: str, number: int) -> bool:
         pr_segment = segments[len(prefix)].rstrip("*_")
         candidate = str(number)
         if pr_segment in {candidate, candidate + ".diff", candidate + ".patch"}:
+            return True
+
+    # FSR-1743-M01: GitHub-flavored Markdown in issue body/comments can link
+    # to this same PR using a root-relative or repository-relative destination:
+    # [review](/vokerg/everfield/pull/200), [review](../pull/200).
+    # These are clickable even though PR_URL (correctly) requires // authority.
+    # Use a fixed issue-page path (the numeric issue ID is immaterial to
+    # relative resolution), validate the resolved *first-party* repo/path and
+    # exact PR segment; never use substring numeric matching.
+    issue_base = f"https://github.com/{owner}/{repository}/issues/1"
+    for relative in RELATIVE_MD_LINK_TARGET.finditer(text):
+        destination = relative.group(1) or relative.group(2) or ""
+        if not destination.startswith(("/", "./", "../")):
+            continue
+        try:
+            resolved = urllib.parse.urlsplit(urllib.parse.urljoin(issue_base, destination))
+            host = (resolved.hostname or "").casefold().rstrip(".")
+            if host != "github.com":
+                continue
+            if resolved.username is not None or resolved.password is not None or resolved.port not in (None, 443):
+                return True
+            path_parts = [
+                part.casefold() for part in
+                urllib.parse.unquote(resolved.path).split("/") if part
+            ]
+        except (ValueError, UnicodeError):
+            # Ambiguous origin/port/path cannot certify non-reference.
+            return True
+        if path_parts[:3] != [owner.casefold(), repository.casefold(), "pull"]:
+            continue
+        if len(path_parts) < 4:
+            continue
+        pr_path_segment = path_parts[3]
+        if pr_path_segment in {candidate, candidate + ".diff", candidate + ".patch"}:
             return True
     return False
 
