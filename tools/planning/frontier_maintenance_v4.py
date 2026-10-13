@@ -766,6 +766,109 @@ def self_test() -> None:
 
     base.paged = outer_paged
     base.closure_authorized_terminal_from_comments = outer_closure
+
+    # FSR-1745-M01: exercise the REAL imported strict closure validator on
+    # the WRAPPER, not only its successor. A SHA-authenticated losing owner
+    # or a seven-hour terminal cannot suppress a required successor.
+    def wrapper_capsule(actor: str, owner_id: int) -> str:
+        return (
+            done_capsule(actor, owner_id)
+            .replace("issue: 20\\n", "issue: 30\\n")
+            .replace("mission_id: M-20\\n", "mission_id: M-30\\n")
+            .replace("branch: planning/issue-20\\n", "branch: planning/issue-30\\n")
+            + materialized_body
+        )
+
+    def wrapper_claim(actor: str) -> str:
+        return (
+            owner_capsule(40, actor)
+            .replace("issue: 20\\n", "issue: 30\\n")
+            .replace("mission_id: M-20\\n", "mission_id: M-30\\n")
+            .replace("branch: planning/issue-20\\n", "branch: planning/issue-30\\n")
+        )
+
+    root_prefix = f"/repos/{base.REPO}"
+    def wrapper_request(method: str, path: str, *args: Any) -> dict[str, Any]:
+        if method != "GET":
+            raise RuntimeError("no mutating GitHub API in adversarial test")
+        if path == root_prefix + "/git/ref/heads/planning/issue-30":
+            return {"object": {"sha": "a" * 40}}
+        if path == root_prefix + "/compare/" + "b" * 40 + "..." + "a" * 40:
+            return {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+        raise RuntimeError(f"unrecognized wrapper-proof endpoint: {path}")
+
+    valid_claim = live_comment(
+        40, "2026-09-01T00:00:00Z", wrapper_claim("actor-30")
+    )
+    valid_terminal_comment = live_comment(
+        50, "2026-09-01T00:00:10Z", wrapper_capsule("actor-30", 40)
+    )
+    wrapper_terminal = base.parse_operational(30, valid_terminal_comment)
+    assert wrapper_terminal is not None
+    live_wrapper_comments = [valid_claim, valid_terminal_comment]
+    saved_wrapper_request, saved_wrapper_paged = base.request, base.paged
+    try:
+        base.request = wrapper_request
+        base.paged = lambda path: (
+            iter(live_wrapper_comments)
+            if path == root_prefix + "/issues/30/comments?"
+            else iter([])
+        )
+        assert base.closure_authorized_terminal_from_comments(
+            30, live_wrapper_comments
+        ) == wrapper_terminal
+        assert semantic_generation_from_terminal(
+            transition, wrapper_terminal, issues
+        ) == (10, 2, "NEXT")
+        assert semantic_generation_from_comments(
+            transition, live_wrapper_comments, issues
+        ) == (10, 2, "NEXT")
+
+        losing_claim = live_comment(
+            45, "2026-09-01T00:00:05Z", wrapper_claim("losing-actor")
+        )
+        losing_done = live_comment(
+            50, "2026-09-01T00:00:10Z", wrapper_capsule("losing-actor", 45)
+        )
+        losing_terminal = base.parse_operational(30, losing_done)
+        assert losing_terminal is not None
+        live_wrapper_comments = [valid_claim, losing_claim, losing_done]
+        assert base.closure_authorized_terminal_from_comments(
+            30, live_wrapper_comments
+        ) is None
+        assert semantic_generation_from_terminal(
+            transition, losing_terminal, issues
+        ) is None
+        assert semantic_generation_from_comments(
+            transition, live_wrapper_comments, issues
+        ) is None
+
+        expired_done = live_comment(
+            50, "2026-09-01T07:00:10Z", wrapper_capsule("actor-30", 40)
+        )
+        expired_terminal = base.parse_operational(30, expired_done)
+        assert expired_terminal is not None
+        live_wrapper_comments = [valid_claim, expired_done]
+        assert base.closure_authorized_terminal_from_comments(
+            30, live_wrapper_comments
+        ) is None
+        assert semantic_generation_from_terminal(
+            transition, expired_terminal, issues
+        ) is None
+        assert semantic_generation_from_comments(
+            transition, live_wrapper_comments, issues
+        ) is None
+
+        live_wrapper_comments = [valid_claim, valid_terminal_comment]
+        base.request = lambda *args, **kwargs: (_ for _ in ()).throw(
+            RuntimeError("wrapper GitHub ref unavailable")
+        )
+        assert semantic_generation_from_terminal(
+            transition, wrapper_terminal, issues
+        ) is None
+    finally:
+        base.request, base.paged = saved_wrapper_request, saved_wrapper_paged
+
     print("frontier maintenance v4 self-test: PASS")
 
 
