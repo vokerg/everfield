@@ -770,7 +770,7 @@ def _strict_wrapper_authority_self_test() -> None:
     transition = {
         "number": 30,
         "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
-        "body": "Source terminal issue: #10\\nSource terminal comment: 2\\nRequired next route: `NEXT`",
+        "body": "Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `NEXT`",
         "state": "closed",
         "state_reason": "completed",
         "created_at": "2026-09-01T00:00:05Z",
@@ -801,35 +801,35 @@ def _strict_wrapper_authority_self_test() -> None:
 
     def claim(issue: int, actor: str) -> str:
         return (
-            "protocol: planning-v1\\nschema: 3\\nkind: CLAIM\\n"
-            f"issue: {issue}\\nmission_id: M-{issue}\\n"
-            f"branch: planning/issue-{issue}\\nactor_session_id: {actor}\\n"
-            "state: IN_PROGRESS\\n"
-            f"observed_head_sha: {tip}\\nprevious_ownership_comment_id: null\\n"
+            "protocol: planning-v1\nschema: 3\nkind: CLAIM\n"
+            f"issue: {issue}\nmission_id: M-{issue}\n"
+            f"branch: planning/issue-{issue}\nactor_session_id: {actor}\n"
+            "state: IN_PROGRESS\n"
+            f"observed_head_sha: {tip}\nprevious_ownership_comment_id: null\n"
         )
 
     def done(issue: int, actor: str, owner_id: int, outcome: str) -> str:
         return (
-            "protocol: planning-v1\\nschema: 3\\nkind: STATUS\\n"
-            f"issue: {issue}\\nmission_id: M-{issue}\\n"
-            f"branch: planning/issue-{issue}\\nactor_session_id: {actor}\\n"
-            "state: DONE\\nterminal: true\\nauthority_mode: OWNER\\n"
-            f"ownership_generation_comment_id: {owner_id}\\n"
-            f"head_sha: {tip}\\nwork_sha: {parent_sha}\\n"
+            "protocol: planning-v1\nschema: 3\nkind: STATUS\n"
+            f"issue: {issue}\nmission_id: M-{issue}\n"
+            f"branch: planning/issue-{issue}\nactor_session_id: {actor}\n"
+            "state: DONE\nterminal: true\nauthority_mode: OWNER\n"
+            f"ownership_generation_comment_id: {owner_id}\n"
+            f"head_sha: {tip}\nwork_sha: {parent_sha}\n"
             + outcome
         )
 
     materialized_body = (
-        "disposition: EXACT_REQUIRED_REVIEW_SUCCESSOR_MATERIALIZED\\n"
-        "source_issue: 10\\nsource_terminal_comment_id: 2\\n"
-        "source_required_route: NEXT\\nsuccessor_issue: 20\\n"
+        "disposition: EXACT_REQUIRED_REVIEW_SUCCESSOR_MATERIALIZED\n"
+        "source_issue: 10\nsource_terminal_comment_id: 2\n"
+        "source_required_route: NEXT\nsuccessor_issue: 20\n"
     )
     resolved_body = (
-        "disposition: REQUIRED_ROUTE_ALREADY_CONSUMED_BY_TERMINAL_SUCCESSOR\\n"
-        "source_issue: 10\\nsource_terminal_comment_id: 2\\n"
-        "source_required_route: NEXT\\n"
-        "resolved_successor_issue: 20\\n"
-        "resolved_successor_terminal_comment_id: 50\\nroute_consumed: true\\n"
+        "disposition: REQUIRED_ROUTE_ALREADY_CONSUMED_BY_TERMINAL_SUCCESSOR\n"
+        "source_issue: 10\nsource_terminal_comment_id: 2\n"
+        "source_required_route: NEXT\n"
+        "resolved_successor_issue: 20\n"
+        "resolved_successor_terminal_comment_id: 50\nroute_consumed: true\n"
     )
     claim30 = ghcomment(40, "2026-09-01T00:00:00Z", claim(30, "actor-30"))
     materialized30 = ghcomment(
@@ -924,11 +924,11 @@ def _strict_wrapper_authority_self_test() -> None:
         # Invalid HEAD_ADVANCE cannot renew the original six-hour lease.
         invalid_progress = ghcomment(
             41, "2026-09-01T05:00:00Z",
-            "protocol: planning-v1\\nschema: 3\\nkind: PROGRESS\\n"
-            "issue: 30\\nmission_id: M-30\\nbranch: planning/issue-30\\n"
-            "actor_session_id: actor-30\\nstate: IN_PROGRESS\\n"
-            "ownership_generation_comment_id: 40\\n"
-            f"observed_head_sha: {tip}\\nprogress_basis: HEAD_ADVANCE\\n",
+            "protocol: planning-v1\nschema: 3\nkind: PROGRESS\n"
+            "issue: 30\nmission_id: M-30\nbranch: planning/issue-30\n"
+            "actor_session_id: actor-30\nstate: IN_PROGRESS\n"
+            "ownership_generation_comment_id: 40\n"
+            f"observed_head_sha: {tip}\nprogress_basis: HEAD_ADVANCE\n",
         )
         late_after_progress = dict(late, id=42)
         late_after_progress["body"] = done(30, "actor-30", 40, resolved_body)
