@@ -1,0 +1,34 @@
+# Issue #1695 — independent exact-head shared playable fan-in verification handoff
+
+**Mission:** `IMPLEMENTATION-VERIFY-PUBLIC-TEXT-HISTORY-FANIN-1629-01`.  
+**Verifier owner:** sole first valid schema-3 CLAIM #6138115652, actor `everfield-independent-fanin-verify-1695-gpt6-20261013-cph-01`, GitHub server-created 2026-10-13T04:16:58Z; post-claim contention check found no other claim.  
+**Base main:** `a57436d194f14f5f2c5b1173a9c2e0ec6468ee7c`.  
+**Canonical binding:** Issue #1147 INTEGRATION_STATUS(DONE) #5675066392; program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`; activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`.  
+**Authority:** independently verify existing source, **not** author, merge or approve it. NONCANONICAL; no accessibility, final-canon, implementation-readiness, engine-choice, legal/provider, production, release or PR-retirement authority.
+
+## Frozen independent source and handoff
+
+- Source Issue #1629, first owner #6130526634 and distinct stale recovery owner #6137994727. Recovery owner `STATUS(HANDOFF_READY)` #6138025138 hands off solely to mandatory verifier #1695.
+- Frozen existing OPEN/DRAFT source PR #1694 from `planning/issue-1629` to main at `ee5ff1e7931e60e4e4c9f48c32c00b02d87a423d`, six authorized shared-scene and test/workflow/doc/handoff paths. Verified exact live source PR metadata and branch against fresh current main before verifier CLAIM.
+- Six fixed source blobs: `game/main.gd=df3d7cbc7a8048803870e9ab12a06d7d249a1792`, `game/smoke_test.gd=5270857affe4756608ba05f9e4fdb9bddf9d78a2`, `game/tests/movement_interaction_smoke.gd=8f6ba7dd7a5847bcd9572acaa3d48081d84b5167`, `.github/workflows/godot-first-playable-smoke.yml=9b914e62f715630cb02b035cf996bfdbc3779e6c`, `docs/implementation/first-playable.md=ac45b66b8853a2c89d566a0bd88db850628ceaa5`, `docs/planning/handoffs/issue-1629.md=c690b96b76c6d7b48f1286aadc340182061d071d`.
+- Both published prerequisite model and smoke blobs are independently locked by the new verifier workflow. Source authored exact-head Actions #38294388746 was SUCCESS (job #114961860358, artifact #11766714653); that remains source-authored evidence and is **not** itself independent verification.
+- Obsolete Issue #1448 identity-only run #38294388594 failed before running tests on hardcoded old hashes; its failure is expressly **not** a PASS and not treated as unrelated active gates waived.
+
+## Verifier-only packet and evidence design
+
+Own exactly `.github/workflows/verify-shared-fanin-1629.yml` and this handoff `docs/planning/handoffs/issue-1695.md`. Separate, new `planning/issue-1695` branch started from fresh main; source branch, source PR and gameplay files never edited.
+
+Workflow is triggered by its own verification-only PR, but it fetches **source PR #1694 metadata live**, requires open draft and frozen exact SHA, checks out frozen source commit **not the verifier branch**, proves all six exact source file SHA-1 Git blobs plus four integrated component/model/test blobs, retrieves reviewed Godot `4.7.1-stable` binary ZIP via the repo's review lock `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`, verifies its SHA-256 and exact `4.7.1.stable.official.a13da4feb` runtime. It executes primary scene, real input/movement and ten preexisting isolated/component suites under `set -euo pipefail`, checking the exact PASS markers and failure strings.
+
+An independently authored ephemeral engine probe (generated only in CI's frozen-source disposable worktree) checks actual 960×540 viewport positions, 422×134 presentation label, measured wrapped line heights for all 13 approved scenarios and all navigable pages, SHA-256/full byte concatenation, 8-per-page authentic ten-event history, snapshot forgery resistance, state/consent/mystery immutability across navigation and reset. CI removes ephemeral probe and checks no tracked source mutation. Source authored tests additionally cover actual Z/X/C/V input echo/release/physical-only rejection and original E/1/2/3/R, WASD/arrow flow. Immutable per-run 30-day artifact retains exact run identities, Git tree, suite logs, SHA-256 log manifest and implementation file hash manifest.
+
+**Verification decision pending hosted exact-verifier-HEAD workflow run.** GitHub green authored source CI or draft PR mergeability will never be substituted for a real independent verifier-run PASS. A substantive probe failure must yield a bounded `VERIFICATION_STATUS(CHANGES_NEEDED/FAIL)` with reproducible exact-head witness and required source correction, never a false PASS. Headless line-count measurements do not certify real raster cropping, human visual legibility, focus or full accessibility.
+
+## Required continuation
+
+1. Publish the two-file **OPEN/DRAFT verifier-only PR** to main; this PR must **NEVER MERGE**.
+2. Inspect verifier PR exact head, hosted exact-run job conclusion, immutable artifact ID/log/checksum, source PR/head still frozen and main unchanged. Investigate failure markers without changing source. Fix only this owned workflow/handoff if verifier harness itself fails; do not mutate source.
+3. Only after real independent success and strict provenance recheck, publish unedited in-lease schema-3 `VERIFICATION_STATUS(DONE/PASS)` on Issue #1695, with exact verifier PR/head, source PR/head, run/job/artifact, acceptance evidence, explicit headless/accessibility limits, and route to properly owned source #1629 HANDOFF RESUME for `REVIEW_READY`, required distinct review, then separately owner-authorized compatible SQUASH-only NONCANONICAL integration.
+4. Keep review, verification, integration and canonicalization **separate**. If hosted Actions is unavailable, record the blocker and do not manufacture a PASS.
+
+**Source status:** Existing source #1629/PR #1694 remains `HANDOFF_READY`, not REVIEW_READY, independently accepted or integrated.
