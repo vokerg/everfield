@@ -1593,8 +1593,29 @@ def materialize_implementation_demand_intake(
     return 1
 
 
+def executable_frontier_routes_configured(routes: dict[str, dict[str, Any]]) -> bool:
+    """No transition wrappers when the registry has no executable dispatcher.
+
+    An unregistered wrapper merely accumulates issues: the scheduler cannot
+    execute it. Keep content/implementation demand intake independent.
+    """
+    return any(
+        isinstance(config, dict)
+        and isinstance(config.get("workflow"), str)
+        and bool(config["workflow"].strip())
+        for config in routes.values()
+    )
+
+
 def self_test() -> None:
     v6.self_test()
+    # Empty or non-executable registry must not resurrect old wrappers.
+    assert not executable_frontier_routes_configured({})
+    assert not executable_frontier_routes_configured({"NO_WORKFLOW": {}})
+    assert not executable_frontier_routes_configured({"EMPTY": {"workflow": ""}})
+    assert executable_frontier_routes_configured({
+        "REVIEW_READY": {"workflow": "registered-valid-dispatch.yml"}
+    })
 
     def issue(
         number: int,
@@ -3078,9 +3099,22 @@ def main() -> int:
         readiness_dead_ends_created = base.materialize_readiness_dead_end_diagnostics(
             open_items
         )
-        transition_created, dispatched, transition_retired, transition_reused = (
-            v6.v5.materialize_missing_transitions(open_items, base.load_routes())
-        )
+        registered_routes = base.load_routes()
+        if executable_frontier_routes_configured(registered_routes):
+            transition_created, dispatched, transition_retired, transition_reused = (
+                v6.v5.materialize_missing_transitions(open_items, registered_routes)
+            )
+        else:
+            # Main currently ships with routes={}. Reopening 12 old wrappers
+            # and creating a 13th cannot dispatch any agent; it only sends
+            # notifications and fills the queue. Fail closed until a vetted,
+            # actual executable route is registered. Demand intake proceeds.
+            transition_created = dispatched = transition_retired = transition_reused = 0
+            print(
+                "::notice title=Unregistered frontier routes paused::"
+                "No executable dispatcher is configured. No transition "
+                "issues created or reopened; gameplay/content intakes remain live."
+            )
 
         closed_recent = list(
             base.paged(
@@ -3131,6 +3165,7 @@ def main() -> int:
                 "transitions_created": transition_created,
                 "transitions_reused": transition_reused,
                 "registered_routes_dispatched": dispatched,
+                "transition_dispatch_enabled": executable_frontier_routes_configured(registered_routes),
                 "content_demand_intakes_created": content_demand_intakes_created,
                 "implementation_demand_intakes_created": implementation_demand_intakes_created,
                 "reconciliation_complete": True,
