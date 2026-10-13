@@ -773,18 +773,18 @@ def self_test() -> None:
     def wrapper_capsule(actor: str, owner_id: int) -> str:
         return (
             done_capsule(actor, owner_id)
-            .replace("issue: 20\\n", "issue: 30\\n")
-            .replace("mission_id: M-20\\n", "mission_id: M-30\\n")
-            .replace("branch: planning/issue-20\\n", "branch: planning/issue-30\\n")
+            .replace("issue: 20\n", "issue: 30\n")
+            .replace("mission_id: M-20\n", "mission_id: M-30\n")
+            .replace("branch: planning/issue-20\n", "branch: planning/issue-30\n")
             + materialized_body
         )
 
     def wrapper_claim(actor: str) -> str:
         return (
             owner_capsule(40, actor)
-            .replace("issue: 20\\n", "issue: 30\\n")
-            .replace("mission_id: M-20\\n", "mission_id: M-30\\n")
-            .replace("branch: planning/issue-20\\n", "branch: planning/issue-30\\n")
+            .replace("issue: 20\n", "issue: 30\n")
+            .replace("mission_id: M-20\n", "mission_id: M-30\n")
+            .replace("branch: planning/issue-20\n", "branch: planning/issue-30\n")
         )
 
     root_prefix = f"/repos/{base.REPO}"
