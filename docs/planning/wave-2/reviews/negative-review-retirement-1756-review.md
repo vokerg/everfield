@@ -3,7 +3,7 @@
 **Review Issue:** #1761, mission `FACTORY-NEGATIVE-REVIEW-PR-RETIREMENT-01-REM-11-REV-01`.  
 **Distinct reviewer execution:** `independent-security-review-1761-gpt6-20261013-cph-01`; sole GitHub first-owner CLAIM #6153307345, timestamp 2026-10-13T19:19:13Z. This is not the producer execution for #1756 and has never mutated source #1760.  
 **Claim-time main:** `7da4c2d50412fe134c8632264908560b8b7995ce`; active Issue #1147 binding #5675066392, program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`.  
-**Frozen source:** owner #1756 CLAIM #6152331066 and exact-head `STATUS(REVIEW_READY)` #6152466745, OPEN/DRAFT PR #1760 branch `planning/issue-1756`, exact HEAD `480f1618be0b8a6e19c1777b7cda2cce042dc29e`, full Python module Git blob `4d8e5bec3b1a152af5ef5a78e3728cdf7b3c03c3` (1177 lines). Changed file count **7**: workflow + five inherited handoffs + source script + task handoff (see source terminal).  
+**Frozen source:** owner #1756 CLAIM #6152331066 and exact-head `STATUS(REVIEW_READY)` #6152466745, OPEN/DRAFT PR #1760 branch `planning/issue-1756`, exact HEAD `480f1618be0b8a6e19c1777b7cda2cce042dc29e`, full Python module Git blob `4d8e5bec3b1a152af5ef5a78e3728cdf7b3c03c3` (1177 lines). Changed file count **7**: workflow + four prior handoffs + this task's handoff + source script (see source terminal).  
 **Source CI:** run #38447296157 on exact final HEAD, job #115468889078 `self-test` SUCCESS, mutation-only job #115468963822 `retire` SKIPPED. This is author-written self-test evidence, not independent security acceptance.
 
 ## Disposition
