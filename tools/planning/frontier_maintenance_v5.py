@@ -1510,6 +1510,7 @@ def self_test() -> None:
     original_paged = base.paged
     original_parser = base.reconcilable_terminal_from_comments
     original_head_check = base.github_verified_terminal_result_heads
+    original_closure_check = base.closure_authorized_terminal_from_comments
     original_no_route = terminal_no_route_generation_from_comments
     semantic_wrapper = dict(
         wrapper, number=30, state="closed", state_reason="completed",
@@ -1530,6 +1531,14 @@ def self_test() -> None:
         base.paged = lambda path: [semantic_record]
         base.reconcilable_terminal_from_comments = lambda issue_number, comments: (
             semantic_record if issue_number == 30 else None
+        )
+        # Fixture for the strengthened wrapper security guard: the synthetic
+        # source-terminal value is authenticated only in this authored test.
+        # The real consumer must fetch and validate live first-winning lease.
+        base.closure_authorized_terminal_from_comments = (
+            lambda issue_number, comments: (
+                semantic_record if issue_number == 30 and list(comments) else None
+            )
         )
         globals()["terminal_no_route_generation_from_comments"] = lambda *args: None
         def check_result(issue_number: int, result_head: str | None, result_work: str | None) -> bool:
@@ -1553,6 +1562,7 @@ def self_test() -> None:
         base.paged = original_paged
         base.reconcilable_terminal_from_comments = original_parser
         base.github_verified_terminal_result_heads = original_head_check
+        base.closure_authorized_terminal_from_comments = original_closure_check
         globals()["terminal_no_route_generation_from_comments"] = original_no_route
 
     print("frontier maintenance v5 self-test: PASS")
