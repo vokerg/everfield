@@ -779,6 +779,50 @@ artifact_paths:
         ):
             assert not ok(opened=[location]), variant
 
+    # FSR-1743-M01: actual GitHub issue pages resolve these Markdown
+    # destinations to first-party PR #200 without requiring an absolute URL.
+    # Run title, body and fully paged comment vetoes through eligibility.
+    relative_positive_variants = (
+        "[review](/vokerg/everfield/pull/200)",
+        "[review](../pull/200)",
+        "[review](../../everfield/pull/200)",
+        "[review](../pull/200.diff)",
+        "[review](../pull/200#issuecomment-123)",
+        "[review](../pull/200?tab=files)",
+        "[review](<../pull/200>)",
+        "[review](../pull/%32%30%30)",
+        "[review](../pull/20&#48;)",
+        r"[review](..\/pull\/200)",
+        "[ref]: ../pull/200\n\n[review][ref]",
+        "[ref]: /vokerg/everfield/pull/200.diff\n\n[review][ref]",
+    )
+    for variant in relative_positive_variants:
+        assert references_pr(variant, 200), variant
+        for location in (
+            {**clean, "title": "Keep " + variant},
+            {**clean, "body": "Keep " + variant},
+            {**clean, "live_comments": [{"id": 1, "body": "Keep " + variant}]},
+        ):
+            assert not ok(opened=[location]), variant
+
+    # Real relative references to different PRs, repos or paths do not veto
+    # retirement of reviewer PR #200; foreign full URLs are never rebased.
+    relative_nonreferences = (
+        "[review](../pull/201)",
+        "[review](../pull/2000)",
+        "[review](../pull/200abc)",
+        "[review](../pull/200.diffuse)",
+        "[review](../issues/200)",
+        "[review](/vokerg/other/pull/200)",
+        "[review](/evil/everfield/pull/200)",
+        "[review](../../other/pull/200)",
+        "[review](https://evil.test/vokerg/everfield/pull/200)",
+        "[review](//evil.test/vokerg/everfield/pull/200)",
+    )
+    for variant in relative_nonreferences:
+        assert not references_pr(variant, 200), variant
+        assert ok(opened=[{**clean, "body": variant}]), variant
+
     # Foreign hosts, repositories, paths and numeric prefixes remain distinct.
     commonmark_escaped_nonreferences = (
         r"[review](https\://github\.com/vokerg/everfield/pull/2000)",
@@ -961,6 +1005,7 @@ artifact_paths:
             *escaped_variants,
             *html_variants,
             *commonmark_escaped_variants,
+            *relative_positive_variants,
         ):
             scans = 0
             patches.clear()
@@ -976,6 +1021,7 @@ artifact_paths:
             *escaped_variants,
             *html_variants,
             *commonmark_escaped_variants,
+            *relative_positive_variants,
         ):
             scans = 0
             patches.clear()
