@@ -77,6 +77,23 @@ def semantic_generation_from_terminal(
     if terminal.authority_mode != "OWNER":
         return None
 
+    # FSR-1745-M01: an authenticated *successor* cannot legitimize a terminal
+    # issued by a losing/expired *transition wrapper* owner. Authenticate
+    # the complete fresh comment stream, first-winner and six-hour lease
+    # before either materialized or already-consumed early-return path.
+    wrapper_number = int(transition_issue["number"])
+    try:
+        live_wrapper_comments = list(base.paged(
+            f"/repos/{base.REPO}/issues/{wrapper_number}/comments?"
+        ))
+        real_wrapper = base.closure_authorized_terminal_from_comments(
+            wrapper_number, live_wrapper_comments,
+        )
+    except (RuntimeError, ValueError, TypeError, KeyError, AttributeError):
+        return None
+    if real_wrapper is None or real_wrapper != terminal:
+        return None
+
     source_issue, source_terminal_comment_id, route = generation
     body = terminal.body
     disposition = base.scalar(body, "disposition")
@@ -285,6 +302,24 @@ def _terminal(
 def self_test() -> None:
     v3.self_test()
 
+    # Read-only authenticated-wrapper fixture: tests below exercise actual
+    # semantic consumption, while a separate live-validator adversarial suite
+    # verifies winning owner / six-hour terminal independently.
+    outer_paged = base.paged
+    outer_closure = base.closure_authorized_terminal_from_comments
+    authorized_wrapper: base.OperationalRecord | None = None
+    def wrapper_paged(path: str) -> Iterable[dict[str, Any]]:
+        if path == f"/repos/{base.REPO}/issues/30/comments?":
+            return iter([{"id": 1}])
+        return outer_paged(path)
+    def wrapper_closure(number: int, comments: Iterable[dict[str, Any]]) -> base.OperationalRecord | None:
+        items = list(comments)
+        if number == 30:
+            return authorized_wrapper if items else None
+        return outer_closure(number, items)
+    base.paged = wrapper_paged
+    base.closure_authorized_terminal_from_comments = wrapper_closure
+
     transition = {
         "number": 30,
         "title": "[PLAN-v1][FACTORY-TRANSITION-10] Materialize required next route from #10",
@@ -313,6 +348,7 @@ def self_test() -> None:
         "successor_issue: 20\n"
     )
     materialized = _terminal(30, 4, materialized_body)
+    authorized_wrapper = materialized
     issues = {20: successor, 30: transition}
     assert semantic_generation_from_terminal(transition, materialized, issues) == (
         10,
@@ -398,6 +434,7 @@ def self_test() -> None:
         "route_consumed: true\n"
     )
     existing = _terminal(30, 7, existing_body)
+    authorized_wrapper = existing
     successor_terminal = _terminal(20, 50, "disposition: DONE\n")
     # FSR-1725-M01: run the actual successor SHA verifier with two separate
     # mocked task refs and honest GitHub compare responses. It must validate
@@ -437,11 +474,13 @@ def self_test() -> None:
     try:
         base.request = successor_request
         base.paged = lambda path: iter([{"id": 50}]) if (
-            path.endswith("/issues/20/comments?")
+            path.endswith("/issues/20/comments?") or path.endswith("/issues/30/comments?")
         ) else iter([])
         base.closure_authorized_terminal_from_comments = (
             lambda number, comments: (
-                successor_result if number == 20 and list(comments) else None
+                successor_result if number == 20 and list(comments)
+                else authorized_wrapper if number == 30 and list(comments)
+                else None
             )
         )
         base.reconcilable_terminal = lambda number: (
@@ -570,9 +609,11 @@ def self_test() -> None:
     live_successor_comments = [first_claim, genuine_done]
     try:
         base.request = successor_request
-        base.paged = lambda path: iter(live_successor_comments) if (
-            path == f"/repos/{base.REPO}/issues/20/comments?"
-        ) else iter([])
+        base.paged = lambda path: (
+            iter(live_successor_comments) if path == f"/repos/{base.REPO}/issues/20/comments?"
+            else iter([{"id": 1}]) if path == f"/repos/{base.REPO}/issues/30/comments?"
+            else iter([])
+        )
         successor_tip = "a" * 40
         successor_ancestors = {"b" * 40}
         compare_status = "ahead"
@@ -673,6 +714,7 @@ def self_test() -> None:
     original_parser = base.reconcilable_terminal_from_comments
     original_request = base.request
     terminal_for_test = materialized
+    authorized_wrapper = terminal_for_test
     tip = "a" * 40
     ancestors = {"b" * 40}
     api_calls: list[str] = []
@@ -700,6 +742,7 @@ def self_test() -> None:
         terminal_for_test = materialized.__class__(**{
             **vars(materialized), "work_sha": "a" * 40
         })
+        authorized_wrapper = terminal_for_test
         assert semantic_generation_from_comments(transition, [1], issues) == (10, 2, "NEXT")
         for fake_head, fake_work in (
             ("c" * 40, "a" * 40),
@@ -721,6 +764,8 @@ def self_test() -> None:
         base.reconcilable_terminal_from_comments = original_parser
         base.request = original_request
 
+    base.paged = outer_paged
+    base.closure_authorized_terminal_from_comments = outer_closure
     print("frontier maintenance v4 self-test: PASS")
 
 
