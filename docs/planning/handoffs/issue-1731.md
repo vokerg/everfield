@@ -1,0 +1,23 @@
+# Issue #1731 — successor terminal SHA remediation handoff
+
+## Authority, frozen source and ownership
+- Mission `FACTORY-SEEDING-FRONTIER-REPAIR-01-REM-21`, mandatory bounded correction of independent adverse finding `FSR-1725-M01` against frozen source Issue #1718 / OPEN-DRAFT PR #1723 exact HEAD `186bb42292d2cb43c6c623073e4929e576a90e50`.
+- First-winning sole owner schema-3 CLAIM **#6132769733**, at GitHub 2026-10-12T21:17:37Z; actor `existing-pr-successor-terminal-sha-remediate-1731-gpt6-20261012-cph-01`. Immediate contention recheck before task branch creation.
+- Fresh base `main@a57436d194f14f5f2c5b1173a9c2e0ec6468ee7c`; canonical Issue #1147 unedited binding #5675066392, planning blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`.
+- Required distinct negative reviewer Issue #1725 REVIEW_STATUS(CHANGES_NEEDED) terminal **#6132710550**, 0 BLOCKER / 1 MAJOR / 0 correction-requiring MINOR, reviewer-only OPEN-DRAFT PR #1730 HEAD `99643ef0a70523f2e696d0f1accd93ec1c809fbd`; reviewer report `docs/planning/wave-2/reviews/factory-seeding-1718-review.md` blob `d03df057c68b730d1b55ed423b07d5c11078f9c2`. Reviewer-only source is **NOT** integrable.
+- Source #1718 code inherited exactly **27 paths byte-identically** by one Git-tree-based first commit `567490c48abbf99954436c5e23c149ab3f6305cd` from the frozen PR #1723 tree `42b26c04c3c86639336eb25b610585ef7c07cee2`. This was based on current main, not a merge of the frozen task branch.
+
+## Exactly scoped correction
+- Only inherited source root modified: `tools/planning/frontier_maintenance_v4.py` from frozen blob `1939d0be22389fa93575335e8ed622ecda2822c4` to corrected blob **`721540705e0a98ce0e3e93d4f135861f2b4c58f4`**. All other 26 inherited paths remain byte-identical; the **one additional new path** is this task-owned handoff, for 28 changed paths against main.
+- At `semantic_generation_from_terminal` disposition `REQUIRED_ROUTE_ALREADY_CONSUMED_BY_TERMINAL_SUCCESSOR`, validate resolved successor terminal's **issue_number and bound comment ID**, then independently authenticate BOTH `head_sha` and `work_sha` against the successor's **own** live `planning/issue-N` branch through inherited `base.github_verified_terminal_result_heads`. If invalid/unknown/diverged/deleted/moved/GitHub-error, reject consumption (never turn a syntactic parser result into successor authority).
+- In v4 actual module self-test, monkeypatch **only real GitHub reads and parser/terminal providers**, exercise real `semantic_generation_from_terminal`, `semantic_generation_from_comments`, and inherited actual branch-ancestry verifier: same tip, behind-free ancestor, forged successor HEAD alone/WORK alone/both, wrong successor issue/comment, missing/moved branch, diverged/behind/unknown compare, malformed SHA and ref errors. Wrapper authentication remains separate; `EXACT_REQUIRED_REVIEW_SUCCESSOR_MATERIALIZED` and independent dispatch-marker semantics unchanged.
+- Unchanged inherited v2 blob `b94e9e3544c79b158157f32b876212a0b1d43542`, base `f7dd6640210e27e18a170633ba8f8ab0d176835d`, v5 `510cd909192a1fd0dc5f355a701d429962b15671`; inherited workflow remains byte-identical.
+
+## Tests, review gates and exact-head continuation
+- Final exact-head OPEN/DRAFT source PR must run GitHub-hosted read-only syntax/full composed v1–v7 `--self-test` and confirm SUCCESS, mutation-capable `maintain` job SKIPPED. This run is **source authored** and never independent security acceptance. No live `--apply`, GitHub PATCH, retirement or closure.
+- This handoff was committed before final hosted CI; use exact GitHub run/job IDs and branch HEAD from live evidence to evaluate terminal status. If a test fails, correct on this task branch and rerun exact HEAD; if a required independent execution is unavailable, don't fabricate PASS.
+- After exact HEAD hosted green, open distinct new mandatory security review (different real execution from producer and negative reviewer). A clean required security terminal permits only a **separately owned/authorized expected-head-current-main-compatible SQUASH-only NONCANONICAL** publication route. Source `STATUS(REVIEW_READY)` alone is not merge, canon, implementation-readiness, gameplay attestation, release or production authority.
+- Frozen producer PR #1723, reviewer-only #1730 and all prior task branches remain untouched. Reviewer-only PR #1730 **MUST NEVER MERGE**. No self-review or source self-merge.
+
+## Current checkpoint
+Claim/branch, exact 27-path inheritance, one v4 correction and expanded mocked actual-function regression committed. This handoff makes the branch independently resumable. Hosted PR CI / new distinct review pending.
