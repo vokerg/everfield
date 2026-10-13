@@ -243,7 +243,7 @@ jobs:
           grep -Fx 'EVERFIELD_INDEPENDENT_FANIN_1695_PASS' verifier-evidence/independent-probe.log
           ! grep -E 'SCRIPT ERROR|Parse Error|\[VERIFY-1695\]\[FAIL\]' verifier-evidence/independent-probe.log
           rm game/tests/_ephemeral_verify_fanin_1695.gd
-          test -z "$(git status --porcelain)" || { echo 'Tracked source changed by verification' >&2; exit 1; }
+          git diff --quiet && git diff --cached --quiet || { echo 'Tracked frozen source changed by verification' >&2; exit 1; }
           sha256sum verifier-evidence/*.log > verifier-evidence/logs.sha256
           sha256sum game/main.gd game/smoke_test.gd game/tests/movement_interaction_smoke.gd > verifier-evidence/fanin-files.sha256
 
