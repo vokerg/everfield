@@ -108,8 +108,8 @@ PR_URL = re.compile(
 # Scan only Markdown target slots so foreign full URLs with matching path text
 # are not accidentally interpreted as root-relative GitHub links.
 RELATIVE_MD_LINK_TARGET = re.compile(
-    r"(?:\\]\\([ \\t]*|(?m:^[ \\t]{0,3}\\[[^]\\n]+\\]:[ \\t]*))"
-    r"(?:<([^<>\\n]+)>|([^\\s<>()]+))"
+    r"(?:\]\([ \t]*|(?m:^[ \t]{0,3}\[[^\]\n]+\]:[ \t]*))"
+    r"(?:<([^<>\n]+)>|([^\s<>()]+))"
 )
 
 
