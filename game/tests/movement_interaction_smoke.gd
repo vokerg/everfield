@@ -156,6 +156,66 @@ func _run() -> void:
     _expect(game.get_game_state().get("outcome") == "BOUNDED_REPAIR_PILOT_STARTED",
         "real repair route cannot invent an unreviewed consequence")
 
+    # Input Z/X and C/V are currently unassigned by the published E/1/2/3/R
+    # decoder and WASD/arrow traversal map. Real engine delivery must navigate
+    # visible pages only, rejecting releases/echo/physical-only fabrications.
+    game.reset_slice()
+    var intro_before: Dictionary = game.get_game_state()
+    var intro_count: int = game.presentation_page_count
+    var first_page: String = game.get_visible_presentation_text()
+    _send_action_event(KEY_X, false)
+    _send_action_event(KEY_X, true, true)
+    _send_action_event(0, true, false, KEY_X)
+    await process_frame
+    _expect(game.presentation_page == 0 and game.get_visible_presentation_text() == first_page,
+        "physical-only, released and echo navigation keys do not change public page")
+    _tap_action(KEY_X)
+    await process_frame
+    if intro_count > 1:
+        _expect(game.presentation_page == 1, "real X key reaches next exact public text page")
+        _tap_action(KEY_Z)
+        await process_frame
+        _expect(game.presentation_page == 0 and game.get_visible_presentation_text() == first_page,
+            "real Z key returns to exact source page, no lost approved bytes")
+    else:
+        _expect(game.presentation_page == 0 and game.get_visible_presentation_text() == first_page,
+            "one-page approved text refuses next navigation")
+    _expect(game.get_game_state() == intro_before,
+        "real public-page key dispatch cannot write any gameplay state")
+
+    _expect(game.interact_with("public_record"), "real history-input fixture reviews record")
+    _expect(game.interact_with("material_trace"), "real history-input fixture reviews trace")
+    for _i in range(4):
+        _expect(game.interact_with("commons_hearing"), "real history fixture reopens approved hearing")
+        _expect(game.choose_commitment("defer"), "real history fixture records explicit deferral, not assent")
+    var history_before: Dictionary = game.get_game_state()
+    _expect((history_before["history"] as Array).size() == 10 and game.history_page == 1,
+        "ten real events produce second visible history window")
+    _tap_action(KEY_C)
+    await process_frame
+    _expect(game.history_page == 0, "real C key reaches first reviewed history window")
+    _tap_action(KEY_V)
+    await process_frame
+    _expect(game.history_page == 1, "real V key returns to latest reviewed history window")
+    _tap_action(KEY_V)
+    await process_frame
+    _expect(game.history_page == 1, "real V key refuses wrapping past last history page")
+    _send_action_event(KEY_C, true, true)
+    _send_action_event(0, true, false, KEY_C)
+    await process_frame
+    _expect(game.history_page == 1, "echo and physical-only history keys never move page")
+    _expect(game.get_game_state() == history_before
+        and game.get_game_state().get("commitment", "unexpected") == ""
+        and game.get_game_state().get("mystery_state") == "UNKNOWN_BY_DESIGN",
+        "real UI-only key dispatch never implies consent, commits, or resolves private history")
+    _tap_action(KEY_R)
+    await process_frame
+    _expect(game.history_page == 0 and game.get_visible_history_text().is_empty()
+        and game.presentation_page == 0, "real R restores empty history and first intro text page")
+    _expect(game.get_game_state().get("history", []).is_empty(),
+        "reviewed session reset still exclusively owns event clearing")
+
+
     _finish()
 
 func _tap_action(keycode: int) -> void:
