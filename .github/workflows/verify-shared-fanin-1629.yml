@@ -169,7 +169,7 @@ jobs:
               await process_frame
               var p: Label = game.get_node("Presentation") as Label
               var h: RichTextLabel = game.get_node("History") as RichTextLabel
-              check(get_root().get_visible_rect().size == Vector2i(960, 540), "viewport is reviewed 960x540")
+              check(get_root().get_visible_rect().size == Vector2(960, 540), "viewport is reviewed 960x540")
               check(p.position == Vector2(500, 98) and p.size == Vector2(422, 134), "actual 422x134 text viewport")
               check(h.position == Vector2(500, 308) and h.size == Vector2(422, 140) and h.scroll_active,
                   "visible scrollable history fits below paging")
