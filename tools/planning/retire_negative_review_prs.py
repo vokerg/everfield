@@ -188,6 +188,7 @@ def references_pr(text: str, number: int) -> bool:
     # relative resolution), validate the resolved *first-party* repo/path and
     # exact PR segment; never use substring numeric matching.
     issue_base = f"https://github.com/{owner}/{repository}/issues/1"
+    candidate = str(number)
     for relative in RELATIVE_MD_LINK_TARGET.finditer(text):
         destination = relative.group(1) or relative.group(2) or ""
         if not destination.startswith(("/", "./", "../")):
