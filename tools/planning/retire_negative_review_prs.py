@@ -799,10 +799,13 @@ artifact_paths:
     )
     for variant in relative_positive_variants:
         assert references_pr(variant, 200), variant
+        # A CommonMark reference definition must begin on its own line, not
+        # after decorative prose ("Keep "), to be a real resolved link.
+        active_text = variant if variant.startswith("[ref]:") else "Keep " + variant
         for location in (
-            {**clean, "title": "Keep " + variant},
-            {**clean, "body": "Keep " + variant},
-            {**clean, "live_comments": [{"id": 1, "body": "Keep " + variant}]},
+            {**clean, "title": active_text},
+            {**clean, "body": active_text},
+            {**clean, "live_comments": [{"id": 1, "body": active_text}]},
         ):
             assert not ok(opened=[location]), variant
 
