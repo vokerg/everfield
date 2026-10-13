@@ -13,6 +13,7 @@ from datetime import datetime, timedelta, timezone
 import json
 import os
 import re
+import string
 import urllib.parse
 import urllib.request
 from typing import Any
@@ -111,7 +112,12 @@ def references_pr(text: str, number: int) -> bool:
     # FSR-1724-M01: CommonMark resolves HTML named and numeric character
     # references in clickable link destinations, including host, path and ID.
     # Decode once before strict URL parsing and numeric boundary checks.
-    text = html.unescape(text)
+    # FSR-1729-M01: CommonMark backslash escapes resolve ASCII punctuation
+    # inside clickable link destinations (scheme colon, host dots, query,
+    # path suffix, slash). Decode entities first, then escaped punctuation.
+    # Retain the strict first-party host/repo/number parser below.
+    text = re.sub(r"\\([" + re.escape(string.punctuation) + r"])", r"\1",
+                  html.unescape(text))
     if re.search(rf"(?<![0-9])#{number}(?![0-9])", text):
         return True
     if not isinstance(REPO, str) or REPO.count("/") != 1:
@@ -119,12 +125,9 @@ def references_pr(text: str, number: int) -> bool:
     owner, repository = REPO.split("/")
     if not owner or not repository:
         return True
-    # FSR-1717-M01: CommonMark link destinations can backslash-escape
-    # forward slashes, so raw [review](https:\/\/github.com/.../pull/200)
-    # renders a live first-party PR URL despite not matching PR_URL verbatim.
-    # Unescape only slash punctuation for conservative reference scanning;
-    # preserve exact host, repository, PR number and all other URL boundaries.
-    for match in PR_URL.finditer(text.replace("\\/", "/")):
+    # CommonMark escaped punctuation and HTML entities were normalized above;
+    # continue with exact first-party host, repo, and PR-number boundaries.
+    for match in PR_URL.finditer(text):
         # Markdown table pipes delimit cells, not GitHub PR URL paths.
         # Split before parsing so a following cell cannot shadow the PR ID.
         link = match.group(0).split("|", 1)[0].rstrip(".,;!:")
@@ -705,6 +708,47 @@ artifact_paths:
         ):
             assert not ok(opened=[location]), variant
 
+    # FSR-1729-M01: CommonMark escapes ASCII punctuation in rendered link
+    # destinations, not only slashes. Test the production gate with active
+    # open-issue title, body and fully loaded comment references.
+    commonmark_escaped_variants = (
+        r"[review](https\://github.com/vokerg/everfield/pull/200)",
+        r"[review](https://github\.com/vokerg/everfield/pull/200)",
+        r"[review](https://api.github\.com/repos/vokerg/everfield/pulls/200)",
+        r"[review](https://github.com/vokerg/everfield/pull/200\.diff)",
+        r"[review](https://github.com/vokerg/everfield/pull/200\?tab=files)",
+        r"[review](https://github.com:443/vokerg/everfield/pull/200\.patch)",
+        r"[review](http\://github.com/vokerg/everfield/pull/200)",
+        r"[review](//api.github\.com/repos/vokerg/everfield/pulls/200)",
+        r"[review](https\://github&#46;com/vokerg/everfield/pull/200\.diff)",
+        r"[review](https&#58;//github\.com/vokerg/everfield/pull/200\?tab=files)",
+        r"[review](https://api.github&#46;com/repos/vokerg/everfield/pulls/200\.patch)",
+    )
+    for variant in commonmark_escaped_variants:
+        assert references_pr(variant, 200), variant
+        for location in (
+            {**clean, "title": "Keep " + variant},
+            {**clean, "body": "Keep " + variant},
+            {**clean, "live_comments": [{"id": 1, "body": "Keep " + variant}]},
+        ):
+            assert not ok(opened=[location]), variant
+
+    # Foreign hosts, repositories, paths and numeric prefixes remain distinct.
+    commonmark_escaped_nonreferences = (
+        r"[review](https\://github\.com/vokerg/everfield/pull/2000)",
+        r"[review](https://github\.com/vokerg/everfield/pull/200abc)",
+        r"[review](https://github\.com/vokerg/everfield/pull/200\.diffuse)",
+        r"[review](https://github\.com/vokerg/everfield/issues/200)",
+        r"[review](https://github\.com/vokerg/other/pull/200\?tab=files)",
+        r"[review](https://github\.com.evil.test/vokerg/everfield/pull/200)",
+        r"[review](https://api.github\.com/repos/vokerg/other/pulls/200)",
+        r"[review](https://foreign.example/vokerg/everfield/pull/200)",
+        r"[review](https\://github&#46;com.evil.test/vokerg/everfield/pull/200)",
+    )
+    for variant in commonmark_escaped_nonreferences:
+        assert not references_pr(variant, 200), variant
+        assert ok(opened=[{**clean, "body": variant}]), variant
+
     html_nonreferences = (
         "[review](https://github&#46;com/vokerg/everfield/pull/2000)",
         "[review](https://github.com/vokerg/everfield/pull/200abc)",
@@ -870,6 +914,7 @@ artifact_paths:
             f"**{api}.patch**", f"{api}|Adjacent",
             *escaped_variants,
             *html_variants,
+            *commonmark_escaped_variants,
         ):
             scans = 0
             patches.clear()
@@ -884,6 +929,7 @@ artifact_paths:
             f"{api}|Adjacent cell", f"|{relative_web}|More",
             *escaped_variants,
             *html_variants,
+            *commonmark_escaped_variants,
         ):
             scans = 0
             patches.clear()
