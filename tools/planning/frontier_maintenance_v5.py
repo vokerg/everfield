@@ -25,6 +25,34 @@ EXPLICIT_SUCCESSOR_ROUTE_PATTERNS = (
     re.compile(r"(?:^|_)REMEDIATION_(?:ISSUE_)?(\d+)(?:_|$)"),
 )
 
+# Exact GitHub issue/terminal-scoped successor contracts, not generic prose IDs.
+FACTORY_EXACT_SUCCESSORS: dict[tuple[int, int, str], tuple[int, ...]] = {
+    (
+        1664, 6118374703,
+        "EXISTING_ISSUE_1673_SCOPED_FACTORY_V5_V7_REGRESSION_REPAIR_READY_"
+        "FOR_DISTINCT_MANDATORY_REVIEW_ISSUE_1677_THEN_ONLY_SEPARATELY_OWNER_"
+        "AUTHORIZED_SQUASH_SOURCE_PUBLICATION",
+    ): (1673, 1677),
+    (
+        1673, 6118356905,
+        "NEW_GENUINELY_DISTINCT_MANDATORY_ADVERSARIAL_SECURITY_REVIEW_OF_"
+        "FACTORY_1673_PR_1675_EXACT_HEAD_THEN_IF_CLEAN_SEPARATELY_AUTHORIZED_"
+        "CURRENT_MAIN_COMPATIBLE_SQUASH_ONLY_NONCANONICAL_SOURCE_PUBLICATION",
+    ): (1677,),
+}
+
+FACTORY_EXACT_SUCCESSOR_IDENTITIES = {
+    1673: (
+        "[PLAN-v1][FACTORY-SEEDING-FRONTIER-REPAIR-01-REM-16-CI-CONVERGENCE-01]",
+        "FACTORY-SEEDING-FRONTIER-REPAIR-01-REM-16-CI-CONVERGENCE-01",
+    ),
+    1677: (
+        "[PLAN-v1][FACTORY-SEEDING-FRONTIER-REPAIR-1673-REV-01]",
+        "FACTORY-SEEDING-FRONTIER-REPAIR-01-REM-16-CI-CONVERGENCE-01-REV-01",
+    ),
+}
+
+
 STABLE_TRANSITION_TERMINAL_STATES = {"DONE", "SUPERSEDED"}
 
 
@@ -32,8 +60,16 @@ def terminal_owner_generation_is_current(
     transition_issue_number: int,
     terminal: base.OperationalRecord,
     comments: Iterable[dict[str, Any]],
+    *,
+    transition_head_verifier: Callable[[int, str], bool] | None = None,
 ) -> bool:
-    """Validate winning ownership plus canonical temporal recovery predicates."""
+    """Validate winning ownership plus canonical temporal recovery predicates.
+
+    Recovery heads must be sourced from the current generation, not merely
+    repeated by intent and grant. The storage-closing consumer additionally
+    authenticates ancestry against the live GitHub task branch; read-only
+    synthetic tests can supply their own verifier or omit it.
+    """
     records = sorted(
         (
             record
@@ -48,6 +84,24 @@ def terminal_owner_generation_is_current(
     )
     by_id = {record.comment_id: record for record in records}
     used_intents: set[int] = set()
+    expected_branch = f"planning/issue-{transition_issue_number}"
+
+    def handoff_head_authorized(
+        owner: base.OperationalRecord, handoff: base.OperationalRecord,
+    ) -> bool:
+        lease = base.schema3_ownership_lease_state(
+            owner, records, before_comment_id=handoff.comment_id,
+            head_verifier=base.github_verified_head_advance,
+        )
+        return bool(
+            lease is not None
+            and base.scalar(owner.body, "branch") == expected_branch
+            and base.scalar(handoff.body, "branch") == expected_branch
+            and handoff.head_sha is not None
+            and base.SHA40_RE.fullmatch(handoff.head_sha)
+            and handoff.head_sha == handoff.work_sha
+            and handoff.head_sha == lease.observed_head_sha
+        )
 
     def valid_handoff(owner: base.OperationalRecord, before_comment_id: int) -> bool:
         for record in records:
@@ -58,7 +112,8 @@ def terminal_owner_generation_is_current(
                 and record.state == "HANDOFF_READY"
                 and record.ownership_generation_comment_id == owner.comment_id
                 and record.actor_session_id == owner.actor_session_id
-                and base.schema3_owner_unexpired_at(owner, records, record) is True
+                and handoff_head_authorized(owner, record)
+                and base.schema3_owner_unexpired_at(owner, records, record, head_verifier=base.github_verified_head_advance) is True
             ):
                 return True
         return False
@@ -79,7 +134,7 @@ def terminal_owner_generation_is_current(
                 and base.SHA40_RE.fullmatch(record.head_sha)
                 and record.work_sha is not None
                 and base.SHA40_RE.fullmatch(record.work_sha)
-                and base.schema3_owner_unexpired_at(owner, records, record) is True
+                and base.schema3_owner_unexpired_at(owner, records, record, head_verifier=base.github_verified_head_advance) is True
             ):
                 return True
         return False
@@ -90,13 +145,16 @@ def terminal_owner_generation_is_current(
         at_record: base.OperationalRecord,
     ) -> bool:
         state = base.schema3_ownership_lease_state(
-            owner, records, before_comment_id=at_record.comment_id
+            owner, records, before_comment_id=at_record.comment_id,
+            head_verifier=base.github_verified_head_advance,
         )
-        unexpired = base.schema3_owner_unexpired_at(owner, records, at_record)
+        unexpired = base.schema3_owner_unexpired_at(owner, records, at_record, head_verifier=base.github_verified_head_advance)
         return bool(
             state is not None
             and unexpired is False
             and source.comment_id == state.anchor_comment_id
+            and base.scalar(owner.body, "branch") == expected_branch
+            and base.scalar(source.body, "branch") == expected_branch
             and not valid_handoff(owner, at_record.comment_id)
             and not valid_owner_terminal(owner, at_record.comment_id)
         )
@@ -119,6 +177,9 @@ def terminal_owner_generation_is_current(
             or source is None
             or observed_head is None
             or not base.SHA40_RE.fullmatch(observed_head)
+            or base.scalar(grant.body, "branch") != expected_branch
+            or base.scalar(source.body, "branch") != expected_branch
+            or source.comment_id >= grant.comment_id
         ):
             return None
 
@@ -131,6 +192,8 @@ def terminal_owner_generation_is_current(
                 or base.scalar(record.body, "reason") != reason
                 or base.integer_scalar(record.body, "source_comment_id") != source_id
                 or base.scalar(record.body, "observed_head_sha") != observed_head
+                or base.scalar(record.body, "branch") != expected_branch
+                or record.comment_id <= source.comment_id
             ):
                 continue
             if reason == "HANDOFF":
@@ -140,8 +203,11 @@ def terminal_owner_generation_is_current(
                     or source.state != "HANDOFF_READY"
                     or source.ownership_generation_comment_id != current_owner.comment_id
                     or source.actor_session_id != current_owner.actor_session_id
+                    or not handoff_head_authorized(current_owner, source)
+                    or observed_head != source.head_sha
                     or base.schema3_owner_unexpired_at(
-                        current_owner, records, source
+                        current_owner, records, source,
+                        head_verifier=base.github_verified_head_advance,
                     )
                     is not True
                 ):
@@ -152,11 +218,22 @@ def terminal_owner_generation_is_current(
                     or not stale_source_valid(current_owner, source, record)
                 ):
                     continue
+                previous_lease = base.schema3_ownership_lease_state(
+                    current_owner, records, before_comment_id=record.comment_id,
+                    head_verifier=base.github_verified_head_advance,
+                )
+                if (
+                    previous_lease is None
+                    or observed_head != previous_lease.observed_head_sha
+                    or base.scalar(source.body, "observed_head_sha") != observed_head
+                ):
+                    continue
             elif reason == "ORPHAN":
                 if (
                     current_owner is not None
                     or source.kind != "ORPHAN_PROBE"
                     or base.schema3_orphan_probe_mature_at(source, record) is not True
+                    or base.scalar(source.body, "observed_head_sha") != observed_head
                 ):
                     continue
             else:
@@ -172,6 +249,12 @@ def terminal_owner_generation_is_current(
             or intent.comment_id in used_intents
         ):
             return None
+        if (
+            reason in {"HANDOFF", "STALE"}
+            and transition_head_verifier is not None
+            and not transition_head_verifier(transition_issue_number, observed_head)
+        ):
+            return None
         return intent
 
     winner: base.OperationalRecord | None = None
@@ -181,6 +264,7 @@ def terminal_owner_generation_is_current(
             or record.state != "IN_PROGRESS"
             or not record.actor_session_id
             or base.parse_github_server_time(record.created_at) is None
+            or base.scalar(record.body, "branch") != expected_branch
         ):
             continue
         observed_head = base.scalar(record.body, "observed_head_sha")
@@ -212,7 +296,7 @@ def terminal_owner_generation_is_current(
                 and source.state == "HANDOFF_READY"
                 and source.ownership_generation_comment_id == winner.comment_id
                 and source.actor_session_id == winner.actor_session_id
-                and base.schema3_owner_unexpired_at(winner, records, source) is True
+                and base.schema3_owner_unexpired_at(winner, records, source, head_verifier=base.github_verified_head_advance) is True
             ):
                 winner = record
                 used_intents.add(intent.comment_id)
@@ -244,7 +328,7 @@ def terminal_owner_generation_is_current(
     return bool(
         winner is not None
         and winner.comment_id == terminal.ownership_generation_comment_id
-        and base.schema3_owner_unexpired_at(winner, records, terminal) is True
+        and base.schema3_owner_unexpired_at(winner, records, terminal, head_verifier=base.github_verified_head_advance) is True
         and not valid_handoff(winner, terminal.comment_id)
         and not valid_owner_terminal(winner, terminal.comment_id)
     )
@@ -265,6 +349,10 @@ def terminal_no_route_generation_from_comments(
     if terminal is None or terminal.state not in STABLE_TRANSITION_TERMINAL_STATES:
         return None
     if not terminal_owner_generation_is_current(number, terminal, comments_list):
+        return None
+    if not base.github_verified_terminal_result_heads(
+        number, terminal.head_sha, terminal.work_sha
+    ):
         return None
     if v3.route_is_actionable(terminal.route):
         return None
@@ -295,39 +383,87 @@ def v5_resolved_transition_generations(
     return consumed
 
 
-def explicit_successor_issue_number(route: str | None) -> int | None:
-    """Return one unambiguous issue number explicitly encoded by a route."""
-    if not route:
-        return None
-    matches: set[int] = set()
+def explicit_successor_issue_numbers(
+    route: str | None, *, source_issue: int | None = None,
+    source_terminal_comment_id: int | None = None,
+) -> tuple[int, ...]:
+    """Parse conservative explicit targets, or exact authenticated factory edges."""
+    if route is not None:
+        known = FACTORY_EXACT_SUCCESSORS.get(
+            (source_issue, source_terminal_comment_id, route)
+        )
+        if known is not None:
+            return known
+    if not route or re.fullmatch(r"[A-Z][A-Z0-9_]*", route) is None:
+        return ()
+    if route.startswith("TWO_INDEPENDENT_COMPONENT_PRODUCERS_"):
+        match = re.fullmatch(
+            r"TWO_INDEPENDENT_COMPONENT_PRODUCERS_(\d+)_(\d+)_"
+            r"THEN_BLOCKED_SHARED_FANIN_(\d+)", route
+        )
+        if match is None:
+            return ()
+        numbers = tuple(int(value) for value in match.groups())
+        return numbers if all(x > 0 for x in numbers) and len(set(numbers)) == 3 else ()
+    if re.search(r"(?:^|_)ISSUE_(?!\d)", route):
+        return ()
+    numbers: set[int] = set()
     for pattern in EXPLICIT_SUCCESSOR_ROUTE_PATTERNS:
-        matches.update(int(value) for value in pattern.findall(route))
-    return next(iter(matches)) if len(matches) == 1 else None
+        numbers.update(int(x) for x in pattern.findall(route))
+    if not numbers or 0 in numbers:
+        return ()
+    if len(numbers) > 1:
+        # Do not mistake multiple provenance IDs for multiple successors.
+        # The only generic multi-target shape allowed is ISSUE_N...THEN_ISSUE_M
+        # with every parsed target named as an ISSUE token. Other mixed
+        # grammars must go to explicit recovery instead of silently vanishing.
+        named_issues = re.findall(r"(?:^|_)ISSUE_(\d+)(?=_|$)", route)
+        if len(named_issues) != len(numbers) or "_THEN_ISSUE_" not in route:
+            return ()
+    return tuple(sorted(numbers))
+
+
+def explicit_successor_issue_number(route: str | None) -> int | None:
+    """Legacy single-target API; ambiguous multi-target routes return None."""
+    numbers = explicit_successor_issue_numbers(route)
+    return numbers[0] if len(numbers) == 1 else None
 
 
 def explicit_successor_generation_consumed(
     source: base.OperationalRecord,
     issues_by_number: dict[int, dict[str, Any]],
 ) -> bool:
-    """Recognize a route-declared successor without inventing a graph edge.
-
-    The route must encode exactly one issue number and that issue must already
-    exist as a trusted/eligible non-PR, non-transition issue. This only proves
-    liveness materialization; it does not grant any authority to the successor.
-    """
-    successor_number = explicit_successor_issue_number(source.route)
-    if successor_number is None:
-        return False
-    successor = issues_by_number.get(successor_number)
-    if successor is None:
-        return False
-    if "pull_request" in successor or v2.factory_transition_source(successor) is not None:
-        return False
-    if not v2.successor_issue_eligible(successor):
-        return False
-    print(
-        f"route {source.route}: explicit trusted successor issue #{successor_number} already exists"
+    """All explicit successors must exist as trusted eligible non-wrapper issues."""
+    generation_key = (source.issue_number, source.comment_id, source.route)
+    numbers = explicit_successor_issue_numbers(
+        source.route, source_issue=source.issue_number,
+        source_terminal_comment_id=source.comment_id,
     )
+    if not numbers:
+        return False
+    scoped_factory_edge = generation_key in FACTORY_EXACT_SUCCESSORS
+    for number in numbers:
+        successor = issues_by_number.get(number)
+        if successor is None:
+            return False
+        if "pull_request" in successor or v2.factory_transition_source(successor) is not None:
+            return False
+        if not v2.successor_issue_eligible(successor):
+            return False
+        if scoped_factory_edge:
+            title_prefix, expected_mission = FACTORY_EXACT_SUCCESSOR_IDENTITIES[number]
+            title = successor.get("title") or ""
+            body = successor.get("body") or ""
+            if (
+                not title.startswith(title_prefix)
+                or re.search(
+                    r"(?m)^## Mission ID\s*\n"
+                    + re.escape(expected_mission) + r"(?:\s|$)",
+                    body,
+                ) is None
+            ):
+                return False
+    print(f"route {source.route}: explicit trusted successors {numbers} already exist")
     return True
 
 
@@ -418,6 +554,9 @@ def transition_has_stable_terminal_state(issue_number: int) -> bool:
         stable_transition_terminal(terminal)
         and terminal is not None
         and terminal_owner_generation_is_current(issue_number, terminal, comments)
+        and base.github_verified_terminal_result_heads(
+            issue_number, terminal.head_sha, terminal.work_sha
+        )
     )
 
 
@@ -602,6 +741,7 @@ def self_test() -> None:
                 "schema: 3\n"
                 f"kind: {kind}\n"
                 f"issue: {issue}\n"
+                f"branch: planning/issue-{issue}\n"
                 f"mission_id: {mission}\n"
                 f"actor_session_id: {actor}\n"
                 f"state: {state}\n"
@@ -622,7 +762,7 @@ def self_test() -> None:
                 "authority_mode: OWNER\n"
                 f"ownership_generation_comment_id: {generation}\n"
                 f"head_sha: {head}\n"
-                f"work_sha: {'d' * 40}\n"
+                f"work_sha: {head}\n"
                 "required_next_route: NONE_SOURCE_ROUTE_ALREADY_CONSUMED\n"
             ),
         )
@@ -689,6 +829,124 @@ def self_test() -> None:
     )
     exact = [claim, exact_intent, exact_recover, recovered_terminal]
     assert terminal_owner_generation_is_current(104, parsed_terminal(exact), exact)
+
+    # FSR-1691-B01: recovery may not manufacture a different task head.
+    forged_stale_intent = timed_comment(
+        2, "2026-09-15T18:00:00Z", "RESUME_INTENT", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("reason: STALE\nsource_comment_id: 1\n"
+               f"observed_head_sha: {'f' * 40}\n"),
+    )
+    forged_stale_grant = timed_comment(
+        3, "2026-09-15T18:00:01Z", "RECOVER", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("recovery_reason: STALE\n"
+               f"observed_head_sha: {'f' * 40}\n"
+               "previous_ownership_comment_id: 1\n"
+               "winning_intent_comment_id: 2\nsource_comment_id: 1\n"),
+    )
+    forged_stale = [
+        claim, forged_stale_intent, forged_stale_grant,
+        owner_terminal(4, "2026-09-15T18:00:02Z", "actor-b", 3, "f" * 40),
+    ]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(forged_stale), forged_stale
+    )
+
+    handoff = timed_comment(
+        2, "2026-09-15T12:01:00Z", "STATUS", "HANDOFF_READY",
+        actor="actor-a",
+        extra=("authority_mode: OWNER\n"
+               "ownership_generation_comment_id: 1\n"
+               f"head_sha: {'a' * 40}\n"
+               f"work_sha: {'a' * 40}\n"
+               "required_next_route: HANDOFF_RESUME\n"),
+    )
+    handoff_intent = timed_comment(
+        3, "2026-09-15T12:02:00Z", "RESUME_INTENT", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("reason: HANDOFF\nsource_comment_id: 2\n"
+               f"observed_head_sha: {'a' * 40}\n"),
+    )
+    handoff_grant = timed_comment(
+        4, "2026-09-15T12:03:00Z", "RESUME", "IN_PROGRESS",
+        actor="actor-b",
+        extra=("previous_ownership_comment_id: 1\n"
+               "winning_intent_comment_id: 3\n"
+               "source_status_comment_id: 2\n"
+               f"observed_head_sha: {'a' * 40}\n"),
+    )
+    handoff_clean = [
+        claim, handoff, handoff_intent, handoff_grant,
+        owner_terminal(5, "2026-09-15T12:04:00Z", "actor-b", 4, "a" * 40),
+    ]
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(handoff_clean), handoff_clean
+    )
+    forged_handoff = [
+        claim, handoff,
+        dict(handoff_intent, body=handoff_intent["body"].replace(
+            "observed_head_sha: " + "a" * 40,
+            "observed_head_sha: " + "f" * 40)),
+        dict(handoff_grant, body=handoff_grant["body"].replace(
+            "observed_head_sha: " + "a" * 40,
+            "observed_head_sha: " + "f" * 40)),
+        owner_terminal(5, "2026-09-15T12:04:00Z", "actor-b", 4, "f" * 40),
+    ]
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(forged_handoff), forged_handoff
+    )
+    assert not terminal_owner_generation_is_current(
+        104, parsed_terminal(handoff_clean), handoff_clean,
+        transition_head_verifier=lambda _issue, _sha: False,
+    )
+    assert terminal_owner_generation_is_current(
+        104, parsed_terminal(handoff_clean), handoff_clean,
+        transition_head_verifier=lambda issue, sha:
+            issue == 104 and sha == "a" * 40,
+    )
+
+    # The actual storage-close consumer also performs a fresh read-only
+    # GitHub branch / ancestry proof. Its unavailability must fail closed.
+    prior_request = base.request
+    def linked_branch_mock(method: str, path: str, payload: Any = None) -> Any:
+        if method == "GET" and path == (
+            f"/repos/{base.REPO}/git/ref/heads/planning/issue-104"
+        ):
+            return {"object": {"sha": "a" * 40}}
+        raise RuntimeError("unrecognized read or forbidden mutation")
+    try:
+        base.request = linked_branch_mock
+        assert base.closure_authorized_terminal_from_comments(
+            104, handoff_clean
+        ) is not None
+        assert base.closure_authorized_terminal_from_comments(
+            104, exact
+        ) is not None
+        assert base.closure_authorized_terminal_from_comments(
+            104, forged_handoff
+        ) is None
+        assert base.closure_authorized_terminal_from_comments(
+            104, forged_stale
+        ) is None
+        def changed_branch_mock(method: str, path: str, payload: Any = None) -> Any:
+            if path.endswith("/git/ref/heads/planning/issue-104"):
+                return {"object": {"sha": "f" * 40}}
+            if "/compare/" in path:
+                return {"status": "diverged", "ahead_by": 1, "behind_by": 1}
+            raise RuntimeError("unrecognized read")
+        base.request = changed_branch_mock
+        assert base.closure_authorized_terminal_from_comments(
+            104, handoff_clean
+        ) is None
+        base.request = lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            RuntimeError("unavailable live task branch")
+        )
+        assert base.closure_authorized_terminal_from_comments(
+            104, exact
+        ) is None
+    finally:
+        base.request = prior_request
 
     pre_expiry_terminal = timed_comment(
         2,
@@ -885,9 +1143,39 @@ def self_test() -> None:
         5, "2026-09-15T18:02:00Z", "actor-a", 1, "b" * 40
     )
     renewed = [claim, progress, renewed_intent, renewed_recover, renewed_terminal]
-    assert terminal_owner_generation_is_current(
-        104, parsed_terminal(renewed), renewed
-    )
+    # An invented SHA in a comment is NOT an authenticated HEAD_ADVANCE.
+    # Verify the synthetic positive only against a mock that supplies the
+    # actual task branch tip, ancestor compare, and commit server time.
+    original_request = base.request
+    def authenticated_mock(method: str, path: str, payload: Any = None) -> Any:
+        if method != "GET":
+            raise RuntimeError("read-only fixture")
+        root = f"/repos/{base.REPO}"
+        if path == root + "/git/ref/heads/planning/issue-104":
+            return {"object": {"sha": "b" * 40}}
+        if path == root + "/compare/" + "a" * 40 + "..." + "b" * 40:
+            return {"status": "ahead", "ahead_by": 1, "behind_by": 0}
+        if path == root + "/commits/" + "b" * 40:
+            return {"commit": {"committer": {"date": "2026-09-15T16:59:00Z"}}}
+        raise RuntimeError(f"unexpected authenticated fixture read: {path}")
+    base.request = authenticated_mock
+    try:
+        assert terminal_owner_generation_is_current(
+            104, parsed_terminal(renewed), renewed
+        )
+        # Negative: the *same* positive-looking comment must not renew
+        # when the live branch never advanced beyond the old owner head.
+        original_mock = base.request
+        def stale_branch_mock(method: str, path: str, payload: Any = None) -> Any:
+            if path.endswith("/git/ref/heads/planning/issue-104"):
+                return {"object": {"sha": "a" * 40}}
+            return original_mock(method, path, payload)
+        base.request = stale_branch_mock
+        assert not terminal_owner_generation_is_current(
+            104, parsed_terminal(renewed), renewed
+        )
+    finally:
+        base.request = original_request
 
     probe = timed_comment(
         1, "2026-09-15T12:00:00Z", "ORPHAN_PROBE", "IN_PROGRESS", actor="actor-p",
@@ -985,6 +1273,145 @@ def self_test() -> None:
     dead_successor = dict(trusted_successor, state="closed", state_reason="duplicate")
     assert not explicit_successor_generation_consumed(source, {917: dead_successor})
 
+    two_route = "ISSUE_1547_BLOCKING_EXACT_SMOKE_THEN_ISSUE_1548_REQUIRED_REVIEW"
+    three_route = (
+        "TWO_INDEPENDENT_COMPONENT_PRODUCERS_1543_1544_"
+        "THEN_BLOCKED_SHARED_FANIN_1545"
+    )
+    assert explicit_successor_issue_numbers(two_route) == (1547, 1548)
+    assert explicit_successor_issue_number(two_route) is None
+    assert explicit_successor_issue_numbers(three_route) == (1543, 1544, 1545)
+    assert not explicit_successor_issue_numbers(
+        "TWO_INDEPENDENT_COMPONENT_PRODUCERS_1543_1544_THEN_UNKNOWN_1545"
+    )
+    assert not explicit_successor_issue_numbers("ISSUE_BAD_THEN_ISSUE_1548")
+    assert not explicit_successor_issue_numbers("ISSUE_0_THEN_ISSUE_1548")
+    assert not explicit_successor_issue_numbers("ISSUE_1547_AFTER_INTEGRATION_819")
+    assert not explicit_successor_issue_numbers("REVIEW_917_AND_REMEDIATION_909")
+    two_source = source.__class__(**{**vars(source), "route": two_route})
+    trusted_two = {i: dict(trusted_successor, number=i) for i in (1547, 1548)}
+    assert explicit_successor_generation_consumed(two_source, trusted_two)
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547]}
+    )
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547],
+                     1548: dict(trusted_two[1548], state="closed",
+                                state_reason="duplicate")}
+    )
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547],
+                     1548: dict(trusted_two[1548], user={"login": "stranger"},
+                                author_association="NONE")}
+    )
+    assert not explicit_successor_generation_consumed(
+        two_source, {1547: trusted_two[1547],
+                     1548: dict(trusted_two[1548],
+                                title="[PLAN-v1][FACTORY-TRANSITION-42] Wrapper")}
+    )
+    three_source = source.__class__(**{**vars(source), "route": three_route})
+    trusted_three = {i: dict(trusted_successor, number=i) for i in (1543, 1544, 1545)}
+    assert explicit_successor_generation_consumed(three_source, trusted_three)
+    assert not explicit_successor_generation_consumed(
+        three_source, {1543: trusted_three[1543], 1544: trusted_three[1544]}
+    )
+
+    # FSR-1677-M01: bind real successor issues to the exact terminal
+    # generations; ignore unrelated provenance numbers and transition wrappers.
+    factory_1664 = next(key for key in FACTORY_EXACT_SUCCESSORS if key[0] == 1664)
+    factory_1673 = next(key for key in FACTORY_EXACT_SUCCESSORS if key[0] == 1673)
+    assert explicit_successor_issue_numbers(factory_1664[2]) == ()
+    assert explicit_successor_issue_numbers(factory_1673[2]) == ()
+    assert explicit_successor_issue_numbers(
+        factory_1664[2], source_issue=1664,
+        source_terminal_comment_id=6118374703,
+    ) == (1673, 1677)
+    assert explicit_successor_issue_numbers(
+        factory_1673[2], source_issue=1673,
+        source_terminal_comment_id=6118356905,
+    ) == (1677,)
+    assert explicit_successor_issue_numbers(
+        factory_1673[2], source_issue=1673,
+        source_terminal_comment_id=6118356904,
+    ) == ()
+    assert explicit_successor_issue_numbers(
+        factory_1673[2], source_issue=1664,
+        source_terminal_comment_id=6118356905,
+    ) == ()
+    exact_issues = {}
+    for successor_number, (title_prefix, expected_mission) in (
+        FACTORY_EXACT_SUCCESSOR_IDENTITIES.items()
+    ):
+        exact_issues[successor_number] = {
+            "number": successor_number, "title": title_prefix + " mission",
+            "body": "## Mission ID\n" + expected_mission + "\n",
+            "state": "open", "state_reason": None,
+            "user": {"login": "vokerg"}, "author_association": "OWNER",
+        }
+    exact_1664_source = source.__class__(**{
+        **vars(source), "issue_number": 1664, "comment_id": 6118374703,
+        "route": factory_1664[2],
+    })
+    exact_1673_source = source.__class__(**{
+        **vars(source), "issue_number": 1673, "comment_id": 6118356905,
+        "route": factory_1673[2],
+    })
+    assert explicit_successor_generation_consumed(exact_1664_source, exact_issues)
+    assert explicit_successor_generation_consumed(exact_1673_source, exact_issues)
+    assert not explicit_successor_generation_consumed(
+        exact_1664_source, {1673: exact_issues[1673]}
+    )
+    assert not explicit_successor_generation_consumed(exact_1673_source, {})
+    assert not explicit_successor_generation_consumed(
+        exact_1673_source, {
+            1677: dict(exact_issues[1677], state="closed", state_reason="duplicate")
+        }
+    )
+    assert not explicit_successor_generation_consumed(
+        exact_1673_source, {
+            1677: dict(exact_issues[1677], user={"login": "stranger"},
+                       author_association="NONE")
+        }
+    )
+    assert not explicit_successor_generation_consumed(
+        exact_1673_source, {
+            1677: dict(exact_issues[1677], body="## Mission ID\nOTHER-MISSION\n")
+        }
+    )
+    assert not explicit_successor_generation_consumed(
+        exact_1673_source, {
+            1677: dict(exact_issues[1677],
+                       title="[PLAN-v1][FACTORY-TRANSITION-1673] Wrapper")
+        }
+    )
+    assert not explicit_successor_generation_consumed(
+        exact_1673_source.__class__(**{
+            **vars(exact_1673_source), "comment_id": 6118356904
+        }), exact_issues,
+    )
+    assert explicit_successor_generation_consumed(
+        exact_1673_source, {
+            1677: dict(exact_issues[1677], state="closed", state_reason="completed")
+        },
+    )
+    wrapper_1680 = {
+        "number": 1680,
+        "title": "[PLAN-v1][FACTORY-TRANSITION-1673] Materialize",
+        "body": ("Source terminal issue: #1673\n"
+                 "Source terminal comment: 6118356905\n"
+                 "Required next route: " + chr(96) + factory_1673[2] + chr(96)),
+        "state": "open", "author_association": "NONE",
+        "user": {"login": "github-actions[bot]"},
+    }
+    assert not explicit_successor_generation_consumed(
+        exact_1673_source, {1680: wrapper_1680}
+    )
+    assert explicit_transition_redundancy_reason(
+        wrapper_1680, exact_1673_source, {
+            **exact_issues, 1680: wrapper_1680
+        },
+    ) == "EXPLICIT_SUCCESSOR_ALREADY_EXISTS"
+
     generation = (10, 2, "EXISTING_REQUIRED_REVIEW_917")
     wrapper = {
         "number": 100,
@@ -1077,6 +1504,66 @@ def self_test() -> None:
         work_sha="b" * 40,
     )
     assert not stable_transition_terminal(invalidated)
+
+    # FSR-1716-M01: actual v5 closed semantic ledger MUST reach v4's
+    # authenticated terminal-head consumer before any generation is consumed.
+    original_paged = base.paged
+    original_parser = base.reconcilable_terminal_from_comments
+    original_head_check = base.github_verified_terminal_result_heads
+    original_closure_check = base.closure_authorized_terminal_from_comments
+    original_no_route = terminal_no_route_generation_from_comments
+    semantic_wrapper = dict(
+        wrapper, number=30, state="closed", state_reason="completed",
+        body="Source terminal issue: #10\nSource terminal comment: 2\nRequired next route: `NEXT`",
+        created_at="2026-09-01T00:00:05Z",
+    )
+    semantic_successor = dict(
+        trusted_successor, number=20, created_at="2026-09-01T00:00:06Z",
+        body="Materialized successor from factory transition #30.",
+    )
+    semantic_record = v4._terminal(30, 4,
+        "disposition: EXACT_REQUIRED_REVIEW_SUCCESSOR_MATERIALIZED\n"
+        "source_issue: 10\nsource_terminal_comment_id: 2\n"
+        "source_required_route: NEXT\nsuccessor_issue: 20\n"
+    )
+    head_check_calls: list[tuple[int, str | None, str | None]] = []
+    try:
+        base.paged = lambda path: [semantic_record]
+        base.reconcilable_terminal_from_comments = lambda issue_number, comments: (
+            semantic_record if issue_number == 30 else None
+        )
+        # Fixture for the strengthened wrapper security guard: the synthetic
+        # source-terminal value is authenticated only in this authored test.
+        # The real consumer must fetch and validate live first-winning lease.
+        base.closure_authorized_terminal_from_comments = (
+            lambda issue_number, comments: (
+                semantic_record if issue_number == 30 and list(comments) else None
+            )
+        )
+        globals()["terminal_no_route_generation_from_comments"] = lambda *args: None
+        def check_result(issue_number: int, result_head: str | None, result_work: str | None) -> bool:
+            head_check_calls.append((issue_number, result_head, result_work))
+            return bool(result_head == "a" * 40 and result_work == "a" * 40)
+        base.github_verified_terminal_result_heads = check_result
+        expected_generation = (10, 2, "NEXT")
+        assert v5_resolved_transition_generations(
+            [semantic_wrapper], [semantic_wrapper, semantic_successor]
+        ) == set()
+        assert head_check_calls == [(30, "a" * 40, "b" * 40)]
+        semantic_record = semantic_record.__class__(**{
+            **vars(semantic_record), "work_sha": "a" * 40
+        })
+        head_check_calls.clear()
+        assert v5_resolved_transition_generations(
+            [semantic_wrapper], [semantic_wrapper, semantic_successor]
+        ) == {expected_generation}
+        assert head_check_calls == [(30, "a" * 40, "a" * 40)]
+    finally:
+        base.paged = original_paged
+        base.reconcilable_terminal_from_comments = original_parser
+        base.github_verified_terminal_result_heads = original_head_check
+        base.closure_authorized_terminal_from_comments = original_closure_check
+        globals()["terminal_no_route_generation_from_comments"] = original_no_route
 
     print("frontier maintenance v5 self-test: PASS")
 
