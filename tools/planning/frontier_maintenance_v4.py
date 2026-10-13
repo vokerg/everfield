@@ -118,21 +118,34 @@ def semantic_generation_from_terminal(
     if not _eligible_semantic_successor(successor) or successor_comment_id is None:
         return None
 
-    if successor_terminals is not None:
-        successor_terminal = successor_terminals.get(successor_number or -1)
-    else:
-        successor_terminal = base.reconcilable_terminal(successor_number or -1)
-    # FSR-1725-M01: a wrapper's valid result SHAs say nothing about the
-    # *different successor* terminal used to suppress required work. Do not
-    # consume it merely because a parser returned the bound GitHub comment ID.
-    # Authenticated current tip / behind-free ancestor of the successor's OWN
-    # live task ref is required for BOTH successor terminal result SHAs.
+    # FSR-1733-M01: A matching live Git commit is NOT proof that the
+    # terminal was issued by the winning, in-lease schema-3 owner. The
+    # reconciliation parser alone checks syntactic linkage, not contention,
+    # recovery, PROGRESS or canonical six-hour expiry. Load the COMPLETE live
+    # GitHub comment stream even when an injected terminal map was supplied;
+    # injected/earlier snapshots may not confer ownership authority.
+    try:
+        authenticated = base.closure_authorized_terminal_from_comments(
+            successor_number,
+            base.paged(f"/repos/{base.REPO}/issues/{successor_number}/comments?"),
+        )
+    except (RuntimeError, ValueError, TypeError, KeyError, AttributeError):
+        return None
     if (
-        successor_terminal is None
-        or successor_terminal.issue_number != successor_number
-        or successor_terminal.comment_id != successor_comment_id
+        authenticated is None
+        or authenticated.issue_number != successor_number
+        or authenticated.comment_id != successor_comment_id
+        or authenticated.kind not in base.TERMINAL_KINDS
+        or authenticated.state != "DONE"
+        or authenticated.authority_mode != "OWNER"
+        or (
+            successor_terminals is not None
+            and successor_terminals.get(successor_number) != authenticated
+        )
+        # Retain an explicit exact result-head check even though the strict
+        # closure validator authenticates both SHAs, including in mock tests.
         or not base.github_verified_terminal_result_heads(
-            successor_number, successor_terminal.head_sha, successor_terminal.work_sha
+            successor_number, authenticated.head_sha, authenticated.work_sha
         )
     ):
         return None
@@ -392,6 +405,8 @@ def self_test() -> None:
     original_successor_reader = base.reconcilable_terminal
     original_successor_request = base.request
     original_wrapper_parser = base.reconcilable_terminal_from_comments
+    original_successor_paged = base.paged
+    original_successor_closure = base.closure_authorized_terminal_from_comments
     successor_tip = "a" * 40
     successor_ancestors = {"b" * 40}
     successor_result = successor_terminal
@@ -421,6 +436,14 @@ def self_test() -> None:
 
     try:
         base.request = successor_request
+        base.paged = lambda path: iter([{"id": 50}]) if (
+            path.endswith("/issues/20/comments?")
+        ) else iter([])
+        base.closure_authorized_terminal_from_comments = (
+            lambda number, comments: (
+                successor_result if number == 20 and list(comments) else None
+            )
+        )
         base.reconcilable_terminal = lambda number: (
             successor_result if number == 20 else None
         )
@@ -490,6 +513,8 @@ def self_test() -> None:
         base.reconcilable_terminal = original_successor_reader
         base.request = original_successor_request
         base.reconcilable_terminal_from_comments = original_wrapper_parser
+        base.closure_authorized_terminal_from_comments = original_successor_closure
+        base.paged = original_successor_paged
 
     route_not_consumed = _terminal(
         30,
