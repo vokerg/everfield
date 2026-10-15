@@ -68,7 +68,7 @@ assert relative.findall("[review](../pull/200)")[0][1] == "../pull/200"
 print("3 live first-party PR targets evade frozen relative scan; direct control detected")
 ~~~
 
-**Actual independent observations:** all three first-party positives above navigated to `/vokerg/everfield/pull/200` in Markdown-it, but relative scanner extracted truncated `../` or `/vokerg/everfield/`, never the PR route; absolute scanner found zero candidates. A normal `[review](../pull/200)` single-line control was recognized. Benign/wrong-target controls `[review](../(z)/../pull/201)` and `[review](/vokerg/other/(z)/../pull/200)` rendered into distinct non-target URLs and must **not** be indiscriminately vetoed. `[review](<../(z)/../pull/200>)` is an already recognized angle-delimited positive control because the alternate angle capture permits `(`) and `)`. The discrepancy is therefore caused by target syntax, not an unavailable parser feature.
+**Actual independent observations:** all three first-party positives above navigated to `/vokerg/everfield/pull/200` in Markdown-it, but relative scanner extracted truncated `../` or `/vokerg/everfield/`, never the PR route; absolute scanner found zero candidates. A normal `[review](../pull/200)` single-line control was recognized. Benign/wrong-target controls `[review](../(z)/../pull/201)` and `[review](/vokerg/other/(z)/../pull/200)` rendered into distinct non-target URLs and must **not** be indiscriminately vetoed. `[review](<../(z)/../pull/200>)` is an already recognized angle-delimited positive control because the alternate angle capture permits the `(` and `)` characters. The discrepancy is therefore caused by target syntax, not an unavailable parser feature.
 
 ### Actual consumer impact
 
