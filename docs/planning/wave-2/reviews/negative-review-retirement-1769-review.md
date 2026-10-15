@@ -1,7 +1,7 @@
 # Independent security review — Issue #1772 / frozen source PR #1771
 
 **Mission:** `FACTORY-NEGATIVE-REVIEW-PR-RETIREMENT-01-REM-13-REV-01`  
-**Disposition:** **CHANGES_NEEDED** — 0 BLOCKER, **1 MAJOR FSR-1772-M01**, 0 separate correction-requiring MINOR.  
+**Disposition:** **CHANGES_NEEDED** — 0 BLOCKER, **2 MAJOR (FSR-1772-M01, FSR-1772-M02)**, 0 separate correction-requiring MINOR.  
 **Reviewer ownership:** sole first unedited schema-3 CLAIM [#6187042214](https://github.com/vokerg/everfield/issues/1772#issuecomment-6187042214), actor `independent-ordered-dot-review-1772-gpt6-20261015-cph-01`, based on `main@7da4c2d50412fe134c8632264908560b8b7995ce`. This is a separate review episode from the producers of #1769/#1765.
 **Canonical control:** Issue #1147 [binding #5675066392](https://github.com/vokerg/everfield/issues/1147#issuecomment-5675066392), program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af` (verified by ancestor compare at the review base). No canonical or integration status is inferred from this review.
 
@@ -33,11 +33,43 @@ The three Unicode dot-equivalents are U+3002 IDEOGRAPHIC FULL STOP, U+FF0E FULLW
 
 **Scope and limits:** The actual frozen source was fetched and inspected, including exact code, file identities and its authorization consumer paths. Independent local executions covered the *exact extracted URL recognition/hostname predicates*, Node WHATWG URL resolution and two Markdown-rendering libraries, **not the entire 1265-line frozen module** or a full-module `eligibility`/`execute` mock. Consequently no module-wide CLEAN coverage, race elimination or production-safe execution is asserted. The negative finding is deterministic at a prerequisite gate and sufficient for CHANGES_NEEDED; an independent full-module integration witness is required of the corrected successor.
 
+## FSR-1772-M02 — MAJOR: extra-slash special-scheme authority bypasses active-reference veto
+
+**Affected exact source:** `references_pr`, same 158–264 region, especially lines 184–196 and 236–249. A separate [targeted source-PR comment #6187091546](https://github.com/vokerg/everfield/pull/1771#issuecomment-6187091546) identified the candidate; this reviewer independently reproduced its Node, Python and Markdown behavior before accepting it as a separate second MAJOR.
+
+| Live Markdown destination | WHATWG `new URL(...).href` | Frozen Python `urlsplit(...).hostname` |
+| --- | --- | --- |
+| `https:////github.com/vokerg/everfield/pull/+0200` | `https://github.com/vokerg/everfield/pull/+0200` | `None` |
+| `https:///github.com/vokerg/everfield/pull/0200` | `https://github.com/vokerg/everfield/pull/0200` | `None` |
+| `http:////api.github.com/repos/vokerg/everfield/pulls/0200` | `http://api.github.com/repos/vokerg/everfield/pulls/0200` | `None` |
+
+Both independent Markdown engines (markdown-it-py and Mistune) render these as actual anchor `href` values. The frozen `PR_URL` regex matches each raw `https:`/`http:` text, but `urlsplit` returns no hostname, so the absolute branch silently skips the destination at lines 195–196. The relative Markdown target branch does not process it because it does not start with `/`, `./`, or `../`. A foreign extra-slash URL, e.g. `https:////evil.test/vokerg/everfield/pull/0200`, remains foreign after browser resolution; a corrected implementation must retain that negative control.
+
+The active open-issue title/body/paged-comment `eligibility` gate and the fresh pre-PATCH `execute(apply=True)` gate consume that same predicate. Thus the second bypass also permits an otherwise qualified 72h-aged reviewer-only draft to be retired with a live browser-resolvable PR reference. This is independently executed **exact extracted URL predicate/Markdown/WHATWG**, not complete-module execution and not a live PATCH. It does not establish a third finding or broader unsafe publication claim.
+
+### Read-only reproduction
+
+```js
+for (const s of ["https:////github.com/vokerg/everfield/pull/+0200",
+                 "https:///github.com/vokerg/everfield/pull/0200",
+                 "http:////api.github.com/repos/vokerg/everfield/pulls/0200"]) {
+  console.log(s, new URL(s).href);
+}
+```
+
+```python
+from urllib.parse import urlsplit
+for s in ["https:////github.com/vokerg/everfield/pull/+0200",
+          "https:///github.com/vokerg/everfield/pull/0200",
+          "http:////api.github.com/repos/vokerg/everfield/pulls/0200"]:
+    print(s, urlsplit(s).hostname)  # None for each
+```
+
 ## Disposition and required next route
 
-**CHANGES_NEEDED (FSR-1772-M01, 1 MAJOR).** Source #1771 must remain DRAFT, unmerged, unchanged, noncanonical and without live retirement/close authority. Reviewer-only evidence PR for #1772 must **never merge**.
+**CHANGES_NEEDED (FSR-1772-M01 and FSR-1772-M02, 2 MAJOR).** Source #1771 must remain DRAFT, unmerged, unchanged, noncanonical and without live retirement/close authority. Reviewer-only evidence PR for #1772 must **never merge**.
 
-The single bounded mandatory corrective successor is [Issue #1773](https://github.com/vokerg/everfield/issues/1773), blocked on the terminal negative review of this issue. It must inherit all nine frozen #1771 blobs, preserve eight byte-identically, change only the retirement module, add its own handoff, correct browser-equivalent host parsing conservatively, exercise actual full-module title/body/comment and both read-only/mocked pre-PATCH vetoes with foreign-origin negative controls, run fresh exact-head compile/self-test CI, and receive a **new genuinely distinct security review**. Any eventual source storage integration needs separate owner authorization and expected-head-compatible **squash-only NONCANONICAL** publication; no review evidence alone grants it.
+The single bounded mandatory corrective successor is [Issue #1773](https://github.com/vokerg/everfield/issues/1773), blocked on the terminal negative review of this issue. It must inherit all nine frozen #1771 blobs, preserve eight byte-identically, change only the retirement module, add its own handoff, correct browser-equivalent host parsing and extra-slash special-scheme authority conservatively, exercise actual full-module title/body/comment and both read-only/mocked pre-PATCH vetoes with foreign-origin negative controls, run fresh exact-head compile/self-test CI, and receive a **new genuinely distinct security review**. Any eventual source storage integration needs separate owner authorization and expected-head-compatible **squash-only NONCANONICAL** publication; no review evidence alone grants it.
 
 ## Reproduction commands (safe and read-only)
 
