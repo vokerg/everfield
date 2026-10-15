@@ -59,7 +59,7 @@ from html.parser import HTMLParser
 from markdown_it import MarkdownIt
 import mistune
 
-absolute = re.compile(r"(?<![A-Za-z0-9+.:/-])(?:https?:)?//[^\s<>\[\](){}\\"'\x60]+", re.I)
+absolute = re.compile(r"""(?<![A-Za-z0-9+.:/-])(?:https?:)?//[^\s<>\[\](){}"'\x60]+""", re.I)
 relative = re.compile(
     r"(?:\]\([ \t]*|(?m:^[ \t]{0,3}\[[^\]\n]+\]:[ \t]*))"
     r"(?:<([^<>\n]+)>|([^\s<>()]+))"
