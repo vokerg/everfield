@@ -11,7 +11,7 @@ Required independent negative review #1776 terminal #6188416710, evidence-only D
 
 This correction is a new `planning/issue-1780` branch created from exact current main. Preserve **all nine non-script paths** from frozen #1775 byte-identically: the retirement workflow and handoffs #1720, #1726, #1738, #1746, #1756, #1765, #1769, #1773. Source contract #1780 abbreviated the #1720 blob identity; its authoritative exact frozen PR #1775 blob is `088bb6afd8651c941ba1045d3ffab9b10da5d4c1`, verified by fetching that path from frozen SHA. This is not a change to the inherited artifact or a waiver of any gate.
 
-Only correct `tools/planning/retire_negative_review_prs.py` (new authored source blob `5ac4655e0417cafeb08674d76f0b3f410443826d`) and create this handoff as the eleventh changed path. Do not mutate predecessor PRs, reviewer-only evidence, main, any gameplay or factory source, or workflows.
+Only correct `tools/planning/retire_negative_review_prs.py` (new authored source blob `eaea88e3acd63c2660058e7b5f2d1f81d50b090b`) and create this handoff as the eleventh changed path. Do not mutate predecessor PRs, reviewer-only evidence, main, any gameplay or factory source, or workflows.
 
 ## Changes, adversarial regressions, known limits
 
@@ -31,3 +31,7 @@ Ten new positive and seven new negative explicit variants were added. Each posit
 ## Strict prohibitions
 
 No `--apply`, live GitHub PATCH, retirement/closure, integration, schema canonicality, engine/readiness, production or release authority. Source authored fixtures are evidence, not independent code/security review. Exact GitHub comment timestamps and first-winning schema-3 ownership must continue to be observed at terminalization.
+
+## Hosted CI correction episode
+
+Initial exact HEAD `7549c131b53286e8de91e736b35fd0abb2688360`, hosted run #38710943897 self-test job #116341858044 FAILED on an inherited HTML-entity + emphasis control at source line 820: `**[review](https://github&#46;com/vokerg/everfield/pull/200)**`. Its write-capable retire job #116341932484 was SKIPPED. Root cause: broadening the URL scanner to preserve balanced inner parentheses also preserved a closing Markdown `)` followed by trailing `**`, so the unmatched closing delimiter escaped the terminal trimming loop. The same task branch was corrected to remove trailing Markdown emphasis marks `*_ ` (actual code `.rstrip("*_")`) *before* removing excess terminal `)`. This preserves the original scanner's existing emphasis handling while preserving true inner balanced URL path data. **Only a new exact-HEAD CI success can upgrade this from correction attempt to verified source readiness.**

@@ -190,7 +190,7 @@ def references_pr(text: str, number: int) -> bool:
     for match in PR_URL.finditer(text):
         # Markdown table pipes delimit cells, not GitHub PR URL paths.
         # Split before parsing so a following cell cannot shadow the PR ID.
-        link = match.group(0).split("|", 1)[0].rstrip(".,;!:")
+        link = match.group(0).split("|", 1)[0].rstrip(".,;!:").rstrip("*_")
         # FSR-1776-M02: a balanced parenthesized segment is URL path data,
         # while extra terminal ')' closes a Markdown inline destination.
         # Preserve internal pairs so WHATWG dot processing can remove (z)/..
