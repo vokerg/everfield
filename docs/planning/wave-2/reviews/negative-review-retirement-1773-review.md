@@ -20,8 +20,8 @@ The relative destination detector is constrained to a horizontal `[ \\t]*` gap a
 
 ~~~python
 RELATIVE_MD_LINK_TARGET = re.compile(
-    r"(?:\\]\\([ \\t]*|(?m:^[ \\t]{0,3}\\[[^\\]\\n]+\\]:[ \\t]*))"
-    r"(?:<([^<>\\n]+)>|([^\\s<>()]+))"
+    r"(?:\]\([ \t]*|(?m:^[ \t]{0,3}\[[^\]\n]+\]:[ \t]*))"
+    r"(?:<([^<>\n]+)>|([^\s<>()]+))"
 )
 ~~~
 
@@ -59,10 +59,10 @@ from html.parser import HTMLParser
 from markdown_it import MarkdownIt
 import mistune
 
-absolute = re.compile(r"(?<![A-Za-z0-9+.:/-])(?:https?:)?//[^\\s<>\\[\\](){}\\\"'\\x60]+", re.I)
+absolute = re.compile(r"(?<![A-Za-z0-9+.:/-])(?:https?:)?//[^\s<>\[\](){}\\"'\x60]+", re.I)
 relative = re.compile(
-    r"(?:\\]\\([ \\t]*|(?m:^[ \\t]{0,3}\\[[^\\]\\n]+\\]:[ \\t]*))"
-    r"(?:<([^<>\\n]+)>|([^\\s<>()]+))"
+    r"(?:\]\([ \t]*|(?m:^[ \t]{0,3}\[[^\]\n]+\]:[ \t]*))"
+    r"(?:<([^<>\n]+)>|([^\s<>()]+))"
 )
 class Hrefs(HTMLParser):
     def __init__(self): super().__init__(); self.hrefs = []
@@ -72,12 +72,12 @@ class Hrefs(HTMLParser):
 base = "https://github.com/vokerg/everfield/issues/1"
 target = "https://github.com/vokerg/everfield/pull/200"
 attacks = [
-    "[review](\\n../pull/200)",
-    "[review]( \\n../pull/200)",
-    "[review](\\r\\n/vokerg/everfield/pull/200)",
-    "[review](\\n<../pull/200>)",
-    "[review]:\\n../pull/200\\n\\n[review]",
-    "[review]:\\n/vokerg/everfield/pull/200\\n\\n[review]",
+    "[review](\n../pull/200)",
+    "[review]( \n../pull/200)",
+    "[review](\r\n/vokerg/everfield/pull/200)",
+    "[review](\n<../pull/200>)",
+    "[review]:\n../pull/200\n\n[review]",
+    "[review]:\n/vokerg/everfield/pull/200\n\n[review]",
 ]
 for item in attacks:
     assert not absolute.findall(item) and not relative.findall(item)
