@@ -1,6 +1,6 @@
 # Independent adversarial security review — Issue #1776 / source PR #1775
 
-**Disposition:** CHANGES_NEEDED — **0 BLOCKER, 1 MAJOR (FSR-1776-M01), 0 correction-requiring MINOR**. This is a genuinely distinct mandatory reviewer episode, not the source-author episode. It is **not** a CLEAN or integration approval.
+**Disposition:** CHANGES_NEEDED — **0 BLOCKER, 2 MAJOR (FSR-1776-M01, FSR-1776-M02), 0 correction-requiring MINOR**. This is a genuinely distinct mandatory reviewer episode, not the source-author episode. It is **not** a CLEAN or integration approval.
 
 ## Frozen identity and evidence authority
 
@@ -95,13 +95,33 @@ print("Six validated first-party clickable PR-reference scanner bypasses")
 
 The fixed SOURCE #1773 self-tests cover previously reported Unicode-dot host and extra-solidus authorities, but the tested positive HREF syntax here was omitted. Authored exact-head CI therefore does not resolve this independently falsified property.
 
+## FSR-1776-M02 — MAJOR: valid balanced-parenthesis URL dots bypass absolute reference scanner
+
+**Additional independent finding, same frozen Python blob and same initial/fresh consumer:** `PR_URL` at lines 98–101 excludes both literal parentheses. A CommonMark destination with a **balanced** parenthesized path segment remains a valid navigable href, and the browser removes that segment when it processes a subsequent `..` path segment. The scanner sees only the first-party host prefix before `(`, **not** the actual `/pull/200` route after normalization.
+
+Reproduced read-only in Python 3 with the actual frozen regex bodies, Markdown-it, Mistune, and Node v22 WHATWG `new URL`:
+
+~~~text
+[review](<https://github.com/(z)/../vokerg/everfield/pull/200>)
+  -> https://github.com/vokerg/everfield/pull/200
+
+[review](<https://api.github.com/(z)/../repos/vokerg/everfield/pulls/0200>)
+  -> https://api.github.com/repos/vokerg/everfield/pulls/0200
+~~~
+
+Markdown-it and Mistune both produce a complete clickable anchor from the **angle-delimited** destinations above; Markdown-it additionally accepts the balanced ordinary inline form. The exact frozen `PR_URL` matches **only `https://github.com/`** or **`https://api.github.com/`**. `RELATIVE_MD_LINK_TARGET` can read an angle-delimited absolute destination but ignores it due to the explicit `startsWith(("/", "./", "../"))` equivalent in Python (`destination.startswith`); no `#200` fallback. The frozen function's first-party route parser therefore never receives the complete navigated URL.
+
+Node's WHATWG normalized destinations were independently observed as shown; wrong repository `/vokerg/other/pull/200`, wrong PR `/pull/201`, and foreign host `https://evil.test/(z)/../vokerg/everfield/pull/200` correctly resolve to non-target destinations. This is not a blanket rule that all parenthesized URLs are PR references.
+
+The resulting **same conditional unsafe close** can occur both in initial active-issue references and the fresh pre-PATCH recheck because both use the shared `references_pr` implementation. No actual full-module mock or live PATCH was conducted. A separate nonoperational issue comment #6188333199 also recorded the candidate; the reviewer independently executed the Markdown renderer, frozen scanner, and WHATWG normalization checks before assigning this second MAJOR.
+
 ### Required bounded corrective route
 
-1. Materialize **one mandatory source correction** from the exact frozen PR #1775 packet only after this review's valid immutable terminal, not an optional review or speculative unrelated PR. Future owner freshly re-derives then-current `main`, canonical binding, original source/review identity, lease, branch, comments, and exclusive claim winner.
-2. Preserve all **ten** exact existing source PR paths and nine unchanged blobs; change **only** `tools/planning/retire_negative_review_prs.py` to handle legitimate CommonMark line-end whitespace (and related reference-definition target start), then add one new owner handoff. Do not loosen foreign-origin, repo, PR-number, unsafe encodings, active-issue and complete-comment checks.
-3. Test actual corrected `references_pr`, `eligibility` and mocked `execute(apply=True)` for initial and fresh pre-PATCH issue-title/body/paged-comments veto, with zero PATCH for each multiline positive, and preservation of negative controls and six-hour owner/72-hour age gates. Run full module compile/self-test and hosted exact-head read-only CI with mutating retire job SKIPPED; publish exact-head OPEN/DRAFT source PR and owner `STATUS(REVIEW_READY)`.
+1. Materialize **one mandatory source correction for **both FSR-1776-M01 and FSR-1776-M02**** from the exact frozen PR #1775 packet only after this review's valid immutable terminal, not an optional review or speculative unrelated PR. Future owner freshly re-derives then-current `main`, canonical binding, original source/review identity, lease, branch, comments, and exclusive claim winner.
+2. Preserve all **ten** exact existing source PR paths and nine unchanged blobs; change **only** `tools/planning/retire_negative_review_prs.py` to handle legitimate CommonMark line-end whitespace (and related reference-definition target start) **and** browser-normalized first-party balanced-parenthesis path segments, then add one new owner handoff. Do not loosen foreign-origin, repo, PR-number, unsafe encodings, active-issue and complete-comment checks.
+3. Test actual corrected `references_pr`, `eligibility` and mocked `execute(apply=True)` for initial and fresh pre-PATCH issue-title/body/paged-comments veto, with zero PATCH for each multiline and balanced-parenthesis positive, and preservation of negative controls and six-hour owner/72-hour age gates. Run full module compile/self-test and hosted exact-head read-only CI with mutating retire job SKIPPED; publish exact-head OPEN/DRAFT source PR and owner `STATUS(REVIEW_READY)`.
 4. Demand a **new genuinely distinct required adversarial review** before even considering separately owner-authorized **SQUASH-only NONCANONICAL** source integration. No reviewer-only evidence PR may merge. Do not run live retirement, change main/canonical, or claim production/readiness authority.
 
 ## Proof limits, alternatives, and reopen conditions
 
-This is an adverse result based on exact frozen parser text, independent executable Markdown parser/HREF controls, and static consumer-path inspection—not a clean certification of the full ~65 KB script or proof that its full mocked execute path has run in this reviewer environment. Source-authored hosted CI was observed, not independently rerun. One MAJOR is sufficient to prohibit CLEAN despite untested surfaces. Reopen only after a fresh corrected exact-head source, real full-module/consumer adversarial tests, and a genuinely independent repeat review. Do not infer that the two original #1772 findings or other attack surfaces have obtained global clean certification.
+This is an adverse result based on exact frozen parser text, independent executable Markdown parser/HREF controls, and static consumer-path inspection—not a clean certification of the full ~65 KB script or proof that its full mocked execute path has run in this reviewer environment. Source-authored hosted CI was observed, not independently rerun. These two independently falsified MAJORs each prohibit CLEAN despite untested surfaces. Reopen only after a fresh corrected exact-head source, real full-module/consumer adversarial tests, and a genuinely independent repeat review. Do not infer that the two original #1772 findings or other attack surfaces have obtained global clean certification.
