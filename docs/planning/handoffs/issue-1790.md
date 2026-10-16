@@ -5,7 +5,7 @@
 **Claim:** immutable Issue #1790 CLAIM #6210843821 (2026-10-16T07:56:49Z; first sole owner; six-hour generation)
 **State:** reviewer security finding proven; CHANGES_NEEDED (1 MAJOR FSR-1790-M01), no independent CLEAN
 **Branch:** planning/issue-1790 from main 7da4c2d50412fe134c8632264908560b8b7995ce
-**Review diff surface:** this review is permitted exactly 2 added paths; GitHub OPEN/DRAFT PR number and final HEAD recorded in Issue #1790 terminal review record after publication. Reviewer-only PR **MUST NEVER MERGE**.
+**Review diff surface:** OPEN/DRAFT reviewer-only PR #1791 (https://github.com/vokerg/everfield/pull/1791), exactly 2 added paths. Its final HEAD is authenticated in Issue #1790 terminal REVIEW_STATUS; reviewer-only PR **MUST NEVER MERGE**.
 
 ## Source/provenance
 
