@@ -42,8 +42,8 @@ node - <<'JS'
 const base = 'https://github.com/vokerg/everfield/issues/1';
 for (const href of ['%2e%2e/pull/200',
                     '%2E%2E/pull/0200.diff',
-                    '..\\\\pull\\\\200',
-                    '%2e%2e\\\\pull\\\\200.patch']) {
+                    '..\\pull\\200',
+                    '%2e%2e\\pull\\200.patch']) {
   console.log(href, new URL(href, base).href);
 }
 JS
