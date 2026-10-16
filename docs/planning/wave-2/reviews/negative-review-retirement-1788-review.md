@@ -22,7 +22,7 @@
 
     [review](../a&#41;b/../pull/200)
 
-Both markdown-it-py 4.0.0/MarkdownIt and Mistune 3.2.1 independently rendered the linked destination as:
+Both markdown-it-py 4.2.0/MarkdownIt and Mistune 3.2.1 independently rendered the linked destination as:
 
     <a href="../a)b/../pull/200">review</a>
 
@@ -39,7 +39,7 @@ But the frozen scanner takes the entity-decoded form [review](../a)b/../pull/200
 ## Validation boundary and limitations
 
 - **Independently executed:** markdown-it-py / Mistune rendering on the exact hostile Markdown, positive escaped-backslash control, negative wrong-number target; Node 22 WHATWG URL resolution; exact frozen-source relative destination scanner control flow reproduced in a targeted Python harness.
-- **Inspected:** exact complete 1,490-line source module, key references_pr/eligibility/live_open_issue_references/execute control flow; immutable source Git blob and 13-file tree; CI run/job status; source owner and reviewer ownership GitHub API comments and server timestamps.
+- **Inspected:** exact 1,490-line source module's security-critical references_pr/eligibility/live_open_issue_references/execute control flow; immutable source Git blob and 13-file tree; CI run/job status; source owner and reviewer ownership GitHub API comments and server timestamps.
 - **Not independently executed:** importing all 73 KB of the exact frozen source module, real/mock paged execute(apply=True) end-to-end, exhaustive cold-start 72-hour/ownership/page/race controls. Hosted author full-module self-test SUCCESS does not fill that distinct-review gap. Do not claim independent full-module PASS/CLEAN. The reproducible security-negative scanner evidence is sufficient for **CHANGES_NEEDED**, not a positive certification.
 - **No mutations:** no live --apply, API PATCH/closure, source branch edits, source PR review approval, previous reviewer edits, main integration, canonicality or production activation. GitHub GET-to-PATCH non-atomic residual race remains a separate documented limitation.
 
