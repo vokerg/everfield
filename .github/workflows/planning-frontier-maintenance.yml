@@ -66,6 +66,8 @@ jobs:
           assert "--available-tools='__everfield_no_tools__'" in content
           assert "--deny-tool='shell,read,write,url,memory'" in content
           assert '--no-ask-user' in content
+          assert 'export COPILOT_HOME="$RUNNER_TEMP/copilot-fresh-home"' in content
+          assert 'cd "$RUNNER_TEMP/copilot-isolated-cwd"' in content
           assert 'payload not in (expected, expected + b"\\n")' in content
           assert '--allow-all-tools' not in content.split('Single fixed read-only model invocation')[1].split('run: |',1)[-1].split('echo \'::notice')[0].replace('# No --allow-all-tools', '')
           print('paid model workflow manual-main-only static controls: PASS')
