@@ -12,7 +12,7 @@ SOURCE PREPARED / INDEPENDENT SECURITY REVIEW STILL REQUIRED. NOT INTEGRATION AU
 
 ## Corrective changed paths and explicit owner incident scope
 1. `.github/workflows/everfield-frontier-copilot-probe.yml` — single trusted MAIN `workflow_dispatch` trigger, job-level `contents: read` and `copilot-requests: write`, pinned checkout, SHA-512 verified package, no git credentials or write-capable model tools; strict entire stdout match of the one-line sentinel (allows a single terminal LF, never extra lines). No scheduled/PR-triggered billable inference.
-2. `.github/workflows/everfield-frontier-copilot-validate.yml` — **separate** PR-only no-model read-only static and exact-tarball integrity/CLI version test. This second path is a deliberately narrow security-required addition beyond original issue's three authorized paths: a single workflow cannot safely have both PR-controlled definitions and a billable/copilot-privileged job, even if an `if` checks for `main` because PR code could edit the `if`. The owner-directed emergency scope intervention must be explicitly reconciled before integration.
+2. `.github/workflows/planning-frontier-maintenance.yml` — existing main-established PR-only `validate-pr` job extended to do no-model read-only static and exact-tarball integrity/CLI version tests, with `contents: read` and no Copilot privilege; **its mutating `maintain` remains manual `workflow_dispatch` only**, preserving the emergency freeze. This narrow shared-workflow path addition is required to obtain hosted PR CI without allowing any unreviewed PR workflow definition to trigger a paid model job. It is an owner-directed security scope intervention beyond Issue #1813 original owned paths and requires scope reconciliation before integration.
 3. `docs/planning/handoffs/issue-1806.md` — immutable inherited source provenance.
 4. This file — accurate task continuation.
 
@@ -28,7 +28,7 @@ SOURCE PREPARED / INDEPENDENT SECURITY REVIEW STILL REQUIRED. NOT INTEGRATION AU
 
 ## Reproduction
 - Static integrity: inspect manual-only `on: workflow_dispatch`, role- and job-specific permissions, absence of PR/push/schedule on paid workflow, exact `github.sha` checkout and no token-bearing git remote.
-- Hosted `Everfield Copilot probe safe PR validation`: package tarball SHA-512 and actual `copilot --version` without model token. Fail closed on missing CLI or mismatched hash.
+- Hosted existing `Everfield planning frontier maintenance` PR `validate-pr` job: strict manual-only workflow checks, package tarball SHA-512 and actual `copilot --version` without model token. Fail closed on missing CLI or mismatched hash.
 - Manual inference test is intentionally NOT triggered from any PR; it requires this reviewed workflow on trusted main and an explicit owner-invoked `workflow_dispatch`.
 
 ## Outcome
