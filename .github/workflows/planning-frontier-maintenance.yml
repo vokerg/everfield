@@ -63,6 +63,9 @@ jobs:
           assert 'persist-credentials: false' in content
           assert 'sha512sum --check --status' in content
           assert 'copilot-linux-x64-1.0.80.tgz' in content
+          assert "--available-tools='__everfield_no_tools__'" in content
+          assert "--deny-tool='shell,read,write,url,memory'" in content
+          assert '--no-ask-user' in content
           assert 'payload not in (expected, expected + b"\\n")' in content
           assert '--allow-all-tools' not in content.split('Single fixed read-only model invocation')[1].split('run: |',1)[-1].split('echo \'::notice')[0].replace('# No --allow-all-tools', '')
           print('paid model workflow manual-main-only static controls: PASS')
@@ -84,7 +87,11 @@ jobs:
           test -f "$RUNNER_TEMP/copilot-pinned/package/copilot"
           chmod 0755 "$RUNNER_TEMP/copilot-pinned/package/copilot"
           "$RUNNER_TEMP/copilot-pinned/package/copilot" --version
-          echo 'read-only immutable distribution check: PASS (zero paid model requests)'
+          "$RUNNER_TEMP/copilot-pinned/package/copilot" --help > "$RUNNER_TEMP/copilot-help.txt"
+          grep -F -- '--available-tools' "$RUNNER_TEMP/copilot-help.txt"
+          grep -F -- '--deny-tool' "$RUNNER_TEMP/copilot-help.txt"
+          grep -F -- '--no-ask-user' "$RUNNER_TEMP/copilot-help.txt"
+          echo 'read-only immutable distribution/tool isolation check: PASS (zero paid model requests)'
 
 
   maintain:
