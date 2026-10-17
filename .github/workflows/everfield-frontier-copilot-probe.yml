@@ -1,0 +1,57 @@
+name: Everfield Copilot Actions capability probe
+
+# This probes model availability only. It is NOT a frontier dispatcher and
+# cannot mutate branches, issues, PRs, routes, or main.
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/everfield-frontier-copilot-probe.yml'
+      - 'docs/planning/handoffs/issue-1806.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  copilot-requests: write
+
+concurrency:
+  group: everfield-copilot-probe-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'manual' }}
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    # No forks, pull_request_target, untrusted issue/comment-triggered prompts,
+    # scheduled model expenditure, or PR/issue write permissions.
+    if: >-
+      github.repository == 'vokerg/everfield' &&
+      ((github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == 'vokerg/everfield') ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.ref == 'refs/heads/main'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout immutable event head without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install latest Copilot CLI for GITHUB_TOKEN support
+        run: npm install --global @github/copilot
+
+      - name: Verify inference without tool calls or repository writes
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CI: 'true'
+          NO_COLOR: '1'
+        run: |
+          set -euo pipefail
+          response="$(timeout 180s copilot -p 'Reply with exactly this one plain-text line and nothing else: EVERFIELD_COPILOT_ACTIONS_PROBE_OK. Do not use tools or inspect repository files.' -s)"
+          printf '%s\n' "$response"
+          if ! printf '%s\n' "$response" | grep -Fxq 'EVERFIELD_COPILOT_ACTIONS_PROBE_OK'; then
+            echo '::error title=Copilot unavailable or unexpected response::No verified GITHUB_TOKEN model inference; keep frontier routes disabled.'
+            exit 1
+          fi
+          echo '::notice title=Read-only Copilot inference available::This does not authorize an autonomous write-capable frontier dispatcher.'
