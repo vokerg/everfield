@@ -28,11 +28,11 @@ Required fix before integrated reusable probe: keep billable model jobs **off un
 
 ### FCE-1809-m01 — output sentinel check accepts non-exact responses (MINOR, correction required)
 
-The script intends to accept exactly **one plain-text line**, but its condition is `printf '%s\\n' "$response" | grep -Fxq 'EVERFIELD_COPILOT_ACTIONS_PROBE_OK'`. `grep -Fxq` checks for *any* whole line, not exact equality of the full response. The real local Bash reproduction:
+The script intends to accept exactly **one plain-text line**, but its condition is `printf '%s\n' "$response" | grep -Fxq 'EVERFIELD_COPILOT_ACTIONS_PROBE_OK'`. `grep -Fxq` checks for *any* whole line, not exact equality of the full response. The real local Bash reproduction:
 
 ```bash
-response="$(printf 'unexpected extra line\\nEVERFIELD_COPILOT_ACTIONS_PROBE_OK\\n')"
-printf '%s\\n' "$response" | grep -Fxq 'EVERFIELD_COPILOT_ACTIONS_PROBE_OK'
+response="$(printf 'unexpected extra line\nEVERFIELD_COPILOT_ACTIONS_PROBE_OK\n')"
+printf '%s\n' "$response" | grep -Fxq 'EVERFIELD_COPILOT_ACTIONS_PROBE_OK'
 echo "$?"  # 0; falsely accepted as exact output
 ```
 
