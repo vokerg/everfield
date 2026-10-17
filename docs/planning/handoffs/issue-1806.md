@@ -1,0 +1,23 @@
+# Issue #1806 — GitHub Actions Copilot executor capability probe
+
+## Scope and owner
+- Mission: `FACTORY-ACTIONS-COPILOT-EXECUTOR-BOOTSTRAP-01`.
+- First winning owner CLAIM: [#6232301797](https://github.com/vokerg/everfield/issues/1806#issuecomment-6232301797), session `frontier-executor-capability-probe-1806-gpt6-20261017-01`. Own branch: `planning/issue-1806`.
+- Fresh main baseline: `7da4c2d50412fe134c8632264908560b8b7995ce`. Canonical Planning Program v1 blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, bound by Issue #1147 terminal #5675066392, activation ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`.
+- This work is separate from factory security producer/review chains #1800, #1802 and #1804; no source PR changes, claims, reconciliation mutations, or integrations.
+
+## Confirmed problem
+- `.github/planning-frontier-routes.json` remains `{"version":1,"routes":{}}`. The real hourly reconciliation [run #39006747604](https://github.com/vokerg/everfield/actions/runs/39006747604) completed successfully with zero dispatches, zero terminal closures and zero rejected draft PR closures; no executable AI route is registered.
+- Repository GitHub Actions currently performs deterministic maintenance and tests, but has no LLM agent execution route. Assigning `copilot-swe-agent[bot]` through the connected GitHub App was rejected (403, then invalid assignee 422), so the cloud-assignment workflow is not yet operable through that connector.
+- Current GitHub documentation specifies a different path: a Copilot CLI Actions job with `GITHUB_TOKEN` and `copilot-requests: write`. For a personally owned repo, billing goes to its owner's Copilot seat. References: https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli-in-actions and https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/copilot-cli-in-github-actions .
+
+## Bounded implementation
+- New `.github/workflows/everfield-frontier-copilot-probe.yml`: only a same-repository PR touching these two allowlisted files or manually dispatched exact main can run the probe. A fixed prompt calls `@github/copilot` in noninteractive mode and requires the exact output sentinel `EVERFIELD_COPILOT_ACTIONS_PROBE_OK`.
+- The workflow has only `contents: read` and `copilot-requests: write`, with no PAT/secrets, branch updates, PR/issue write permissions, agent tools, scheduler or executable route registration. Checkout credentials are not persisted and the run is bounded by 10 minutes (inference by 180 seconds). This tests LLM reachability/billing/policy only, not agent planning, code mutation, security approval, or full autonomous factory throughput.
+- If the capability fails in hosted Actions, leave the current factory dispatcher disabled and use the actual job error as the next diagnostic. Success would permit a **separately scoped** future write-capable implementation with exact-task lease, independence, branch and squash gates; never infer that authority here.
+- Only two changed paths are authorized for this probe. The required next step is host Actions validation at exact PR head and a genuinely distinct security review of triggers, permissions, prompt isolation, billing and installation supply chain; source-author checks are not final acceptance.
+
+## Status and handoff
+- Authored the read-only workflow on the own issue branch. **No hosted Copilot inference PASS is claimed here.** No `main` merge, registered frontier route, live GitHub issue/PR closure, AI task claim or deployment happened through this workflow.
+- The workflow uses `npm install --global @github/copilot` to get current GITHUB_TOKEN authentication support, which is a moving supply-chain dependency and MUST be independently reviewed before approval/integration. A future hardening pass should pin and attest a known-good version after the hosted capability is proven.
+- If Actions fails, capture the actual run ID/job outcome, keep the PR draft and leave reconstructable follow-up under this issue; do not add a separate failing transition wrapper or invent execution authority.
