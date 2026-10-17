@@ -63,10 +63,15 @@ jobs:
           NO_COLOR: '1'
         run: |
           set -euo pipefail
-          # No --allow-all-tools, no shell/edit/git/GitHub write tools, no PR,
-          # issue or repository content interpolated into this fixed prompt.
+          # A prompt saying "do not use tools" is NOT a security boundary.
+          # Explicitly hide every builtin/MCP tool from the model using an
+          # intentionally nonexistent allowlist entry; also deny all built-in
+          # permission classes as defense in depth. No repo content is sent.
           response="$RUNNER_TEMP/copilot-fixed-response.txt"
           timeout 180s "$COPILOT_PINNED" \
+            --available-tools='__everfield_no_tools__' \
+            --deny-tool='shell,read,write,url,memory' \
+            --no-ask-user \
             -p 'Reply with exactly this one plain-text line and nothing else: EVERFIELD_COPILOT_ACTIONS_PROBE_OK. Do not use tools or inspect repository files.' \
             -s > "$response"
           python3 - "$response" <<'PY'
