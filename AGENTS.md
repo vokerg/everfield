@@ -117,3 +117,21 @@ The maintenance implementation is `.github/workflows/planning-frontier-maintenan
 Explicit human directives override this bootstrap document. They should be recorded in the repository when they materially affect project direction so that later agents do not need hidden conversational knowledge.
 
 Absence of a human directive is never a reason to wait.
+
+## 2026-10-17 Emergency Factory Convergence — Owner Directive
+
+**Purpose:** stop uncontrolled planning/review/repair PR proliferation and prioritize shipping a genuinely executable, independently reviewed GitHub Actions factory. This is an explicit owner-directed **work-selection and automation-trigger override**, not a waiver of security, independent review, canonical binding, ownership, reproducibility, or squash-only main integration.
+
+1. **Pause the negative-review draft-retirement remediation treadmill.** No new issues, branches, review-only PRs, or corrective PRs may be created for the `FACTORY-NEGATIVE-REVIEW-PR-RETIREMENT` lineage, including further parser-edge-case successors after the currently owned review Issue #1815. Issue #1815 may finish with a truthful positive or negative security finding, but a negative finding MUST NOT seed another automatic successor while this owner pause remains active. Preserve the finding and exact source/HEAD evidence. An unsatisfied `required_next_route` is **suspended, not completed or waived**. This narrow owner pause overrides ordinary automatic successor materialization for that lineage only.
+
+2. **Do not integrate or run the retired-draft cleanup tool.** No source PR in this paused lineage may merge and no `retire_negative_review_prs.py --apply` may execute without a subsequent explicit owner unpause and its independently verified exact-head safety gates. Evidence-only reviewer PRs remain permanently nonintegrable. Do not close, delete, or relabel active referenced task PRs just to improve a PR-count metric.
+
+3. **Converge the existing Copilot Actions executor work first.** Prioritize already-claimed Issue #1813, correcting source PR #1808, the required genuinely independent security review, and then a separately authorized exact-head **squash-only** infrastructure integration. Avoid competing claims/branches, fake CLEAN reviews, or substituting another model-access smoke test for a working executor. Only a separate, safely scoped, cost-bounded, write-capable issue-to-PR worker and its real test can establish autonomous execution.
+
+4. **Freeze unattended frontier maintenance mutations until the worker is real.** The existing planning frontier maintenance workflow must run its mutating reconciliation only by deliberate `workflow_dispatch`; no scheduled or main-push-triggered mutating maintenance during this incident. PR validation of the maintenance code remains active. Restoring automatic execution requires a later explicit owner decision plus verifiable live dispatch capacity, not merely a green no-op run.
+
+5. **Integration is the goal, not an excuse to bypass gates.** On a genuinely clean, authorized infrastructure source packet with exact HEAD, current-main compatibility, passing required hosted checks and separate independent review, proceed to squash integration instead of opening unrelated follow-up work. The owner's present instruction does not itself certify any currently adverse source PR or grant a write-capable model token.
+
+6. **No speculative filler.** Do not create new factory-transition placeholders, redundant reviews or duplicate repair issues merely to keep the issue queue moving. Mark a dependency honestly blocked/paused and work another eligible independent implementation/content chain if appropriate.
+
+**Exit condition:** restore scheduled maintenance and review-retirement remediation only by a new explicit owner instruction after the trusted worker is actually running and verified. Until then, retain evidence and restrict automatic mutation to owner-invoked dispatch.
