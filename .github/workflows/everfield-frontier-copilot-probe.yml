@@ -64,9 +64,15 @@ jobs:
         run: |
           set -euo pipefail
           # A prompt saying "do not use tools" is NOT a security boundary.
+          # Isolate cwd and configuration as well: the model probe must not
+          # automatically ingest repository instructions, files or saved
+          # permissions merely because checkout exists in GITHUB_WORKSPACE.
+          export COPILOT_HOME="$RUNNER_TEMP/copilot-fresh-home"
+          mkdir -p "$COPILOT_HOME" "$RUNNER_TEMP/copilot-isolated-cwd"
+          cd "$RUNNER_TEMP/copilot-isolated-cwd"
           # Explicitly hide every builtin/MCP tool from the model using an
-          # intentionally nonexistent allowlist entry; also deny all built-in
-          # permission classes as defense in depth. No repo content is sent.
+          # intentionally nonexistent allowlist entry; deny all built-in
+          # permission classes as defense in depth.
           response="$RUNNER_TEMP/copilot-fixed-response.txt"
           timeout 180s "$COPILOT_PINNED" \
             --available-tools='__everfield_no_tools__' \
