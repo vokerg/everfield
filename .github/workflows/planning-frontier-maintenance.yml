@@ -1,10 +1,9 @@
 name: Everfield planning frontier maintenance
 
+# Owner-directed incident freeze (2026-10-17): no unattended mutating
+# reconciliation on a timer or every push while executable routes are empty.
+# Keep the PR-only regression suite and allow deliberate manual reconciliation.
 on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: '17 * * * *'
   pull_request:
     paths:
       - 'tools/planning/frontier_maintenance*.py'
@@ -41,7 +40,7 @@ jobs:
           python3 tools/planning/frontier_maintenance_v7.py --self-test
 
   maintain:
-    if: github.repository == 'vokerg/everfield' && github.event_name != 'pull_request'
+    if: github.repository == 'vokerg/everfield' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
