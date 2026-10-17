@@ -1,0 +1,24 @@
+# Issue #1800 — bounded correction of existing raw HTML reviewer-PR source
+
+## Exact authority and frozen predecessor
+
+- Mission: `FACTORY-NEGATIVE-REVIEW-PR-RETIREMENT-01-REM-20`.
+- First uncontested CLAIM: Issue #1800 comment **#6216890592**; actor `existing-pr-source-encoded-dot-html-rem-1800-gpt6-20261016-01`. Branch `planning/issue-1800` based on `main@7da4c2d50412fe134c8632264908560b8b7995ce`, confirmed still current before branch preparation.
+- Canonical binding: Issue #1147 `INTEGRATION_STATUS(DONE)` #5675066392, program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`, ancestor `87c85cecfa9a2ffa464c4b36816a138bf41441af`.
+- Mandatory genuinely distinct adverse review: Issue #1798 terminal **#6216751720** (0 BLOCKER / 1 MAJOR **FSR-1798-M01** / 0 correction-requiring MINOR), review-only PR #1799 exact HEAD `e23a0678e1d2ab49443e24b304ac3b620b030919`, nonintegrable report blob `db02742dffa93e8d4a1781f7e4422ba40da4cc1f`.
+- Frozen existing OPEN/DRAFT source PR **#1797**, Issue #1796 terminal #6211658613, source HEAD `0196971ab71d20eb8cb55f0ceb1f5407adfd050f`, script blob `b259e62491b1b6aa128f29b213b4e3760de9de06`. The source and reviewer-only PRs, all predecessor task branches, and `main` have not been edited/merged by this correction.
+- Confirmed source 15 paths and all **14 protected non-script** Git blobs. The corrected branch changes exactly **16** paths relative to that main: those 14 blobs byte-identical, corrected source script, and this new handoff.
+
+## Bounded source correction FSR-1798-M01
+
+In `tools/planning/retire_negative_review_prs.py::raw_html_relative_references_pr`, previous literal-prefix filtering prematurely discarded raw HTML `href="%2e%2e/pull/200"`, `href="..\\pull\\200"`, and other browser-equivalent first-party reviewer PR anchors. The source now normalizes backslashes to browser-special-scheme path delimiters before `urlsplit`, accepts encoded-dot and arbitrary relative path input for the existing `browser_path_segments` algorithm, and checks exact GitHub/API host/port/credential, repository and PR identity for authority-bearing scheme/network-path hrefs. Foreign hosts, wrong PR, wrong repository, wrong route, and HTML comments must not be conflated with first-party PR references. Existing Markdown, absolute URL, comment and ownership safety logic was otherwise preserved.
+
+Git blob of corrected source module: **`69f47c52d4a9a45b3eb18a3f7f05a50c4670a1aa`**. Only source script plus own handoff are new/changed relative to prior packet. Added 12 browser-equivalent positive raw HTML fixtures and 9 negative/HTML-comment fixtures to the **actual pre-existing full-module** source `self_test()`, including real `references_pr`, eligibility title/body/comment scans, paged server issue/comment reader, and **both initial and final pre-PATCH mocked `execute(apply=True)` zero-PATCH branches** through reused fixture aggregation. Old ~80KB module tests remain intact.
+
+## Evidence, constraints and next mandatory gate
+
+Source-authored unit/mock tests are **not independent security review**, and a code blob or draft PR does not prove CI success. Hosted final-exact-HEAD `.github/workflows/retire-negative-review-prs.yml` must run Python compilation and complete `--self-test` with SUCCESS and must show write-capable `retire` SKIPPED; independently check the real GitHub run and job IDs before an immutable in-lease `STATUS(REVIEW_READY)` can be posted. The repository's complete Python module is exercised by that hosted job, but this execution cannot run a local cloned repository due to isolated runtime/network boundary; no separate full-module external test, live `--apply`, actual GitHub PATCH, issue/PR closure, or production retirement has been performed.
+
+This branch/PR is a **review-only source packet until further authority**, not a permission to merge. Once final exact-head hosted CI is independently observed, this owner may publish `STATUS(REVIEW_READY)` only if the original winning lease is still valid, the source PR is OPEN/DRAFT at the terminal SHA, and current main/canon have not moved. Then materialize **one new genuinely different agent/execution** to perform mandatory independent full-module adversarial code/security review of the corrected exact-head source, including actual mock `execute(apply=True)`, pagination, malformed/edited ownership, branch/PR authority and negative HTML reference cases. Source author must not self-review. Any future CLEAN permits only separately owner-authorized then-current-main-compatible expected-head **SQUASH-only NONCANONICAL** integration, never an automatic merge.
+
+If any exact bytes, main, PR/head, CI, gate or owner authority drift, leave a structured HANDOFF and rederive frontier rather than claiming REVIEW_READY. No unrelated producer scope, gameplay, engine, planning canonicality, implementation readiness, release or production authority is created.
