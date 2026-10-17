@@ -1,6 +1,6 @@
 # Mandatory independent security review — source #1812 / PR #1814
 
-**Disposition: CHANGES_NEEDED — 0 BLOCKER, 1 MAJOR (FSR-1815-M01), 0 correction-requiring MINOR.** No security CLEAN, merge, reviewer draft publication or live retirement authorized by source CI or this report.
+**Disposition: CHANGES_NEEDED — 0 BLOCKER, 2 MAJOR (FSR-1815-M01, FSR-1815-M02), 0 correction-requiring MINOR.** No security CLEAN, merge, reviewer draft publication or live retirement authorized by source CI or this report.
 
 ## Immutable reviewed provenance
 
@@ -41,11 +41,30 @@ drops this valid browser-relative destination **before** browser_path_segments c
 
 Severity MAJOR: violates the explicit open-reference preservation invariant and affects both first and last-moment safety checks. No further exploit chain or secret access is claimed.
 
+## FSR-1815-M02 — MAJOR: even-count CommonMark backslashes leave active autolinks invisible
+
+A separate non-operational evidence comment #6232548674 brought forward a second candidate. The **claimed reviewer independently reproduced it** using real markdown-it-py 4.2.0, Mistune 3.2.1, and the actual source-exact regex in Python 3 before accepting it as a separate correction-requiring finding.
+
+For Markdown containing exactly **two literal backslashes immediately before** an angle autolink, both renderers emit a literal displayed backslash **followed by a clickable anchor**; four literal backslashes leave two displayed backslashes plus the same clickable anchor. Single or triple backslashes escape the opening angle and produce no link. Source test vector construction avoiding ambiguity:
+
+    s = '\\' * 2 + '<https:../pull/200>'
+    # rendered: one visible backslash followed by <a href="https:../pull/200">
+
+The source regex at about lines 384–386,
+
+    r"(?i)(?<!\\)<(https?:[^<>\s]+)>"
+
+returns **no match for every n=1,2,3,4** leading backslashes; it falsely assumes any immediately preceding backslash escapes the opening angle. Real CommonMark escapes operate on *parity*, so even n=2 and n=4 produce a live automatic link. WHATWG Node 22 resolves its same-scheme href on the issue page to https://github.com/vokerg/everfield/pull/200. The bare-#N, //-authority, raw HTML anchor and Markdown destination readers do not catch this standalone angle token. Both first and immediately before-PATCH scanners reuse references_pr and can therefore miss it.
+
+Falsifying controls executed: n=0 is correctly detected and rendered clickable; n=1 and n=3 render inert angle text and regex rejects; n=2 and n=4 render clickable while regex also rejects. This is a **second independent MAJOR** because it bypasses the exact new autolink correction in source #1812 itself, distinct from the encoded-leading relative Markdown destination M01. No full-module independent execution or real PATCH is claimed.
+
+One bounded successor correction MUST address **both** FSR-1815-M01 and FSR-1815-M02 together: fix browser-relative percent-encoded leading dot segment handling AND CommonMark angle-opening escape parity; include independent equivalent real-renderer positive/negative controls, first and pre-PATCH mocked zero-write scenarios, and a NEW genuinely distinct full-module review. Do not create parallel remediation chains.
+
 ## Independent review method, regression gap and limits
 
-Read the actual source's complete functional path: StrictLoader/operational identity, URL/raw-HTML/autolink/relative readers, eligibility's owner/terminal/draft/two-path/72-hour tests, paged open issue/comment scan, execute's initial and fresh pre-PATCH eligibility and source self-test coverage; compared exact file SHA, 18-path GitHub PR file list, main binding and hosted CI job conclusions. Reproduced Markdown rendering and WHATWG browser resolution on an isolated runner, and independently exercised source-verbatim URL-target regex plus the decisive prefix gate. The source-authored full --self-test passed on the hosted immutable PR head. **Did not import/run the entire 1,786-line module independently, did not run complete mocked execute(apply=True), and did not perform any real GitHub PATCH or reviewer PR closure.** The directly falsifying predicate differential is enough to reject CLEAN without inventing comprehensive independent execution evidence.
+Read the actual source's complete functional path: StrictLoader/operational identity, URL/raw-HTML/autolink/relative readers, eligibility's owner/terminal/draft/two-path/72-hour tests, paged open issue/comment scan, execute's initial and fresh pre-PATCH eligibility and source self-test coverage; compared exact file SHA, 18-path GitHub PR file list, main binding and hosted CI job conclusions. Reproduced Markdown rendering and WHATWG browser resolution on an isolated runner, and independently exercised source-verbatim URL-target regex plus the decisive prefix gate. The source-authored full --self-test passed on the hosted immutable PR head. **Did not import/run the entire 1,786-line module independently, did not run complete mocked execute(apply=True), and did not perform any real GitHub PATCH or reviewer PR closure.** The two directly falsifying predicate differentials are enough to reject CLEAN without inventing comprehensive independent execution evidence.
 
-Required correction: on a NEW owned continuation of the existing frozen PR #1814, preserve all inherited non-script SHA blobs; correct only the retirement Python module and add the correction issue's own handoff. Apply browser-equivalent relative-path normalization to actual Markdown destinations without treating explicitly foreign authorities as first-party and without false positives on non-link text. Cover percent-encoded first-segment dot variants, title/body/comments, reference definitions, first and pre-PATCH mocked zero-write vetoes, wrong-PR/wrong-route/foreign host controls, and exact head source CI before a NEW genuinely distinct mandatory full-module security review. Source #1814 remains OPEN/DRAFT/frozen and NOT integrable pending that review. Even a future CLEAN requires separately owner-authorized current-main compatible exact-head SQUASH-only NONCANONICAL integration.
+Required joint M01/M02 correction: on a NEW owned continuation of the existing frozen PR #1814, preserve all inherited non-script SHA blobs; correct only the retirement Python module and add the correction issue's own handoff. Apply browser-equivalent relative-path normalization to actual Markdown destinations without treating explicitly foreign authorities as first-party and without false positives on non-link text. Cover percent-encoded first-segment dot variants, even/odd CommonMark autolink escape counts, title/body/comments, reference definitions, first and pre-PATCH mocked zero-write vetoes, wrong-PR/wrong-route/foreign host controls, and exact head source CI before a NEW genuinely distinct mandatory full-module security review. Source #1814 remains OPEN/DRAFT/frozen and NOT integrable pending that review. Even a future CLEAN requires separately owner-authorized current-main compatible exact-head SQUASH-only NONCANONICAL integration.
 
 ## Non-goals and remaining boundaries
 
