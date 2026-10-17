@@ -1,8 +1,8 @@
 name: Everfield Copilot Actions capability probe
 
 # Security correction of the original read-only smoke test. This workflow is
-# NEVER evaluated from a PR head. PR-only validation is in a separate workflow
-# that has no copilot-requests permission.
+# NEVER evaluated from a PR head. PR-only validation runs in existing planning-frontier-maintenance.yml
+# with contents:read and no copilot-requests permission.
 on:
   workflow_dispatch:
 
