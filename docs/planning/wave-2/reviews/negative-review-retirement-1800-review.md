@@ -10,7 +10,7 @@
 
 ## Disposition: CHANGES_NEEDED
 
-**0 BLOCKER; 1 MAJOR FSR-1802-M01; 0 correction-requiring MINOR.** No CLEAN, safe `--apply`, integration, canonical or release authority is asserted.
+**0 BLOCKER; 2 MAJOR FSR-1802-M01 and FSR-1802-M02; 0 correction-requiring MINOR.** No CLEAN, safe `--apply`, integration, canonical or release authority is asserted.
 
 ### FSR-1802-M01 (MAJOR): same-scheme relative CommonMark link misses live reviewer PR veto
 
@@ -55,10 +55,27 @@ print(mistune.create_markdown(renderer='html', escape=False)(s))
 
 The regression fix must parse **CommonMark inline and reference destination slots** as browser-equivalent first-party URLs, including same-scheme relative `https:` forms, while preserving foreign-host, wrong-repo, wrong-PR, code/comment and malformed-authority negatives. Apply the live-link veto to fully paged issue comments and to both initial and fresh pre-PATCH scans. Full actual source-module mocked `execute(apply=True)` no-PATCH regression and distinct review are required before CLEAN.
 
+### FSR-1802-M02 (MAJOR): browser network-path triple/four slashes evade raw-HTML and URL readers
+
+Real raw-HTML anchors `<a href="///github.com/vokerg/everfield/pull/200">review</a>` and `<a href="////github.com/vokerg/everfield/pull/200">review</a>` point to the first-party protected PR #200 in an HTTP(S) browser. WHATWG treats three or more leading slashes as a network-path authority; Python `urlsplit` instead reports an **empty `netloc`** and a path beginning `/github.com/...`. The corrected source's `raw_html_relative_references_pr` uses `urlsplit(candidate.replace("\\\\", "/"))`, takes the **no-netloc** branch and demands the local first-party `[owner, repository, "pull"]` path prefix. It sees `["github.com", "vokerg", "everfield", "pull", "200"]` instead and misses the PR. The other `PR_URL` reader matches the `///...` string, but also applies `urlsplit` and sees an empty host, so it skips it. Raw-HTML `HTMLParser` emits the href, yet neither reader triggers the veto. The same bypass reaches both initial and late open-issue/comment scans.
+
+Independently executed Node 22 WHATWG:
+```javascript
+const base = 'https://github.com/vokerg/everfield/issues/1';
+for (const s of ['///github.com/vokerg/everfield/pull/200',
+                 '////github.com/vokerg/everfield/pull/200',
+                 '///evil.test/vokerg/everfield/pull/200',
+                 '///github.com/vokerg/everfield/pull/201'])
+  console.log(new URL(s, base).href);
+```
+Results are first-party `https://github.com/vokerg/everfield/pull/200` for the first two positives, foreign `https://evil.test/vokerg/everfield/pull/200` for the negative-host control, and `https://github.com/vokerg/everfield/pull/201` for wrong-PR. Independent Python stdlib `urllib.parse.urlsplit` and the **copied actual source `PR_URL`** confirmed empty netloc for `///github.com...` / `////github.com...` while `PR_URL` nonetheless finds the URL-looking candidate. Tested before adding this finding; this is not approval of the separate non-operational issue comment #6232191152 that also reported a similar hypothesis.
+
+Fix requires WHATWG-equivalent first-party network-path authority for raw `<a href>` and eligible Markdown references, with strict host/repo/PR number, protocol, credentials/port, `.diff`/`.patch`, foreign host and malformed-input controls. Independently execute whole-module `eligibility` and mocked initial/fresh `execute(apply=True)` to verify **zero PATCH** whenever live first-party triple-slash URLs occur in an active issue/comment.
+
 ## Limitations, operational boundaries and next route
 
 I read the **entire 1,694-line source module in chunks** over the GitHub connector and independently executed both Markdown renderers, Node WHATWG URL, the verbatim source-pattern/gate probe, and verified current GitHub issue/PR/CI/blob state. **The exact Python module could not be mounted in the isolated test runtime** (raw.githubusercontent.com DNS blocked); it was **not imported or executed as one unit**. Consequently, the real full-module `references_pr` return, `eligibility`, `live_open_issue_references`, `execute(apply=True)`, API pagination, malformed/edited owners and live PATCH tests were **not independently executed**. The code-path finding is statically deterministic plus independently reproduced rendering/URL behavior; **no full-module CLEAN is claimed**. CI remains an authored control. The residual last-millisecond non-atomic GET/PATCH race also remains unproved and must be acknowledged.
 
-**Required next route:** Materialize **one bounded mandatory correction of frozen OPEN/DRAFT source PR #1801** for FSR-1802-M01 on a new source issue/branch, preserving all inherited protected blobs and changing only the source script and own handoff; get exact-final-head hosted read-only CI success with write-capable retirement skipped; require a **new genuinely distinct full-module security reviewer**. Keep #1801, #1797, #1799, and this permanently reviewer-only evidence PR OPEN/DRAFT, unmodified and **never merge reviewer-only PRs**. No mutation of GitHub issues, PR retirement, source or main, `--apply`, source integration, production or release. Any later source integration needs separately claimed explicit authority and **SQUASH ONLY**, even following CLEAN.
+**Required next route:** Materialize **one bounded mandatory correction of frozen OPEN/DRAFT source PR #1801** for FSR-1802-M01 and FSR-1802-M02 on a new source issue/branch, preserving all inherited protected blobs and changing only the source script and own handoff; get exact-final-head hosted read-only CI success with write-capable retirement skipped; require a **new genuinely distinct full-module security reviewer**. Keep #1801, #1797, #1799, and this permanently reviewer-only evidence PR OPEN/DRAFT, unmodified and **never merge reviewer-only PRs**. No mutation of GitHub issues, PR retirement, source or main, `--apply`, source integration, production or release. Any later source integration needs separately claimed explicit authority and **SQUASH ONLY**, even following CLEAN.
 
 **Final review disposition: CHANGES_NEEDED; PR #1801 NOT INTEGRABLE.**
