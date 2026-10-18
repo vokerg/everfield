@@ -23,6 +23,8 @@ var title_label: Label
 var objective_label: Label
 var status_label: Label
 var diagnostic_label: Label
+var help_panel: ColorRect
+var help_hint_label: Label
 var presentation_panel: ColorRect
 var presentation_label: Label
 var presentation_nav_label: Label
@@ -112,6 +114,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
     if not key_event.pressed or key_event.echo:
         return
     match key_event.keycode:
+        KEY_H:
+            if help_panel != null:
+                help_panel.visible = not help_panel.visible
+            return
         KEY_Z:
             navigate_public_text(-1)
         KEY_X:
@@ -254,7 +260,39 @@ func _build_world() -> void:
     diagnostic_label.add_theme_font_size_override("font_size", 13)
     add_child(diagnostic_label)
 
+    # Small persistent hint for discoverable controls (non-modal).
+    help_hint_label = Label.new()
+    help_hint_label.name = "HelpHint"
+    help_hint_label.position = Vector2(24, 84)
+    help_hint_label.size = Vector2(220, 22)
+    help_hint_label.text = "Press H for controls"
+    help_hint_label.add_theme_font_size_override("font_size", 12)
+    help_hint_label.z_index = 7
+    add_child(help_hint_label)
+
+    # Non-modal help panel toggled by H. Hidden by default to avoid changing scene.
+    help_panel = ColorRect.new()
+    help_panel.name = "HelpPanel"
+    help_panel.position = Vector2(120, 64)
+    help_panel.size = Vector2(360, 220)
+    help_panel.color = Color(0.05, 0.06, 0.08, 0.9)
+    help_panel.z_index = 8
+    help_panel.visible = false
+    add_child(help_panel)
+
+    var help_text = RichTextLabel.new()
+    help_text.name = "HelpText"
+    help_text.position = Vector2(8, 8)
+    help_text.size = Vector2(344, 204)
+    help_text.bbcode_enabled = false
+    help_text.scroll_active = false
+    help_text.add_theme_font_size_override("normal_font_size", 14)
+    help_text.text = "Controls:\n- Move: WASD / Arrow keys\n- Interact: E\n- Choose: 1 / 2 / 3\n- Reset: R\n- Presentation: Z / X (Prev / Next)\n- History: C / V (Prev / Next)\n- Toggle Help: H"
+    help_panel.add_child(help_text)
+
 func reset_slice() -> void:
+    if help_panel != null:
+        help_panel.visible = false
     session_state.reset()
     history_page = 0
     if player != null:

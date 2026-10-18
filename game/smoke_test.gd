@@ -33,6 +33,50 @@ func _run() -> void:
     _expect(game.hud_objective_model != null, "published HUD objective/status component wired")
     _expect(game.has_method("_refresh_nearby_hint") and game.has_method("_unhandled_key_input"), "new source-frozen feedback and command dispatch seam is callable")
 
+    # Discoverable non-modal help UI exists and responds to H without mutating state
+    _expect(game.get_node_or_null("HelpHint") != null and (game.get_node_or_null("HelpHint") as Label).text == "Press H for controls", "H help hint is present and legible at boot")
+    _expect(game.get_node_or_null("HelpPanel") != null and not (game.get_node_or_null("HelpPanel") as ColorRect).visible, "Help panel exists and is hidden at boot")
+    var state_before_help: Dictionary = game.get_game_state()
+    var ev := InputEventKey.new()
+    ev.pressed = true
+    ev.echo = false
+    ev.keycode = KEY_H
+    game._unhandled_key_input(ev)
+    await process_frame
+    _expect((game.get_node("HelpPanel") as ColorRect).visible, "H toggles help panel visible without mutating game state")
+    _expect(game.get_game_state() == state_before_help, "Toggling help cannot mutate session state")
+    # Toggle off
+    game._unhandled_key_input(ev)
+    await process_frame
+    _expect(not (game.get_node("HelpPanel") as ColorRect).visible, "H toggles help panel hidden again")
+    _expect(game.get_game_state() == state_before_help, "Repeated help toggles do not mutate session state")
+    var help_hint: Label = game.get_node("HelpHint") as Label
+    _expect(help_hint.position.x >= 0 and help_hint.position.y >= 0
+        and help_hint.position.x + help_hint.size.x <= 960
+        and help_hint.position.y + help_hint.size.y <= 540,
+        "H help hint is contained within 960x540 viewport")
+
+    # Key release, echo, and physical-only H must not activate the overlay.
+    ev.pressed = false
+    game._unhandled_key_input(ev)
+    _expect(not (game.get_node("HelpPanel") as ColorRect).visible, "released H does not toggle help")
+    ev.pressed = true
+    ev.echo = true
+    game._unhandled_key_input(ev)
+    _expect(not (game.get_node("HelpPanel") as ColorRect).visible, "echo H does not toggle help")
+    ev.echo = false
+    ev.keycode = 0
+    ev.physical_keycode = KEY_H
+    game._unhandled_key_input(ev)
+    _expect(not (game.get_node("HelpPanel") as ColorRect).visible, "physical-only H does not toggle help")
+    ev.keycode = KEY_H
+    ev.physical_keycode = 0
+    game._unhandled_key_input(ev)
+    _expect((game.get_node("HelpPanel") as ColorRect).visible, "H may reopen the help panel")
+    game.reset_slice()
+    _expect(not (game.get_node("HelpPanel") as ColorRect).visible, "reset hides transient help overlay")
+    _expect(game.get_game_state() == state_before_help, "reset after help leaves initial game state intact")
+
     _expect(game.station_world is RefCounted, "reviewed station-world metadata provider is wired")
     _expect(game.playable_presentation is RefCounted, "reviewed public narrative assembler is wired")
     var ids: Array[String] = game.station_world.get_station_ids()
