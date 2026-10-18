@@ -214,8 +214,8 @@ jobs:
           {
             echo "## Guarded Everfield worker output"
             echo "- Issue: #$ISSUE_NUMBER"
-            echo "- Source branch: `$branch`"
-            echo "- Source SHA: `$(git rev-parse HEAD)`"
+            echo "- Source branch: $branch"
+            echo "- Source SHA: $(git rev-parse HEAD)"
             echo "- Requested read-only Godot smoke via workflow_dispatch on branch."
             echo "- No gameplay merge or security approval claimed."
           } >> "$GITHUB_STEP_SUMMARY"
@@ -234,7 +234,7 @@ jobs:
             # inference. Repository setting may forbid GITHUB_TOKEN PR creation.
             {
               echo "### PR publication blocked by GitHub Actions permissions"
-              echo "Source branch `$branch` remains available for recovery."
+              echo "Source branch $branch remains available for recovery."
               echo "Owner must enable Actions PR creation or recover that exact"
               echo "branch through the connected GitHub owner account."
             } >> "$GITHUB_STEP_SUMMARY"
