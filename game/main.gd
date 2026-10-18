@@ -32,6 +32,9 @@ var history_label: RichTextLabel
 var history_header_label: Label
 var station_nodes: Dictionary = {}
 
+# Currently-focused station id for visual discovery (purely visual, reversible)
+var _focused_station_id: String = ""
+
 var public_text_navigation: Variant
 var route_history_view: Variant
 var presentation_scenario := ""
@@ -616,6 +619,11 @@ func _refresh_hud() -> void:
         return
     var view: Dictionary = get_hud_view()
     var station_id := _nearest_station_id()
+
+    # Clear any actionable nearby affordance when the slice is completed.
+    if get_game_state().get("completed", false):
+        station_id = ""
+
     var display: Dictionary = {}
     if not station_id.is_empty():
         # Both IDs and public text come from existing reviewed providers;
@@ -629,6 +637,35 @@ func _refresh_hud() -> void:
         "objective", "[EF-HUD-STATE] Invalid bounded session state. Progress is not inferred."
     ))
     status_label.text = String(view.get("status", "Mystery:UNKNOWN_BY_DESIGN"))
+
+    # --- Visual-focus handling (purely visual, reversible) ---
+    var candidate_focus := station_id
+    if candidate_focus.is_empty():
+        # If nothing should be focused, clear any previous focus.
+        if _focused_station_id != "":
+            var prev_station := station_nodes.get(_focused_station_id, null)
+            if prev_station != null and prev_station.get_child_count() > 0:
+                var prev_marker := prev_station.get_child(0)
+                if typeof(prev_marker) != TYPE_NIL:
+                    prev_marker.scale = Vector2.ONE
+            _focused_station_id = ""
+    else:
+        # Focus changed — update previous and new marker scales.
+        if candidate_focus != _focused_station_id:
+            # clear previous
+            if _focused_station_id != "":
+                var prev := station_nodes.get(_focused_station_id, null)
+                if prev != null and prev.get_child_count() > 0:
+                    var prev_marker2 := prev.get_child(0)
+                    if typeof(prev_marker2) != TYPE_NIL:
+                        prev_marker2.scale = Vector2.ONE
+            # set new
+            var station_node := station_nodes.get(candidate_focus, null)
+            if station_node != null and station_node.get_child_count() > 0:
+                var marker := station_node.get_child(0)
+                if typeof(marker) != TYPE_NIL:
+                    marker.scale = Vector2(1.15, 1.15)
+                    _focused_station_id = candidate_focus
 
 func _emit_diagnostic(code: String, context: Dictionary = {}) -> void:
     # The published catalog owns all messages, dynamic context and error flags.

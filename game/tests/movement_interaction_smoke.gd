@@ -29,6 +29,7 @@ func _run() -> void:
     _expect(player.position.is_equal_approx(Vector2(92, 286)), "player starts at bounded playable start")
 
     game.reset_slice()
+    _expect(game._focused_station_id == "", "no station focused at initial spawn")
     _expect(not game.interact_nearest(), "interaction fails outside INTERACT_RADIUS")
     _expect(diagnostic.text.begins_with("[EF-INTERACT-RANGE]"), "out-of-range interaction fails visibly")
 
@@ -47,6 +48,8 @@ func _run() -> void:
     )
     var expected_hint := "[E] %s — %s" % [record_display["title"], record_display["hint"]]
     _expect(objective.text == expected_hint, "actual WASD movement renders exact reviewed public station hint")
+    game._refresh_nearby_hint()
+    _expect(game._focused_station_id == "public_record", "nearest in-range station is focused after movement")
     _tap_action(KEY_E)
     await process_frame
     var moved_state: Dictionary = game.get_game_state()
@@ -58,6 +61,7 @@ func _run() -> void:
     game._process(0.95)
     _release_key(KEY_D)
     _expect(game._nearest_station_id().is_empty(), "real D movement leaves every station radius")
+    _expect(game._focused_station_id == "", "focus cleared after leaving range")
     _expect(objective.text == String(game.get_hud_view()["objective"])
         and not objective.text.contains("[E]"), "actual near to far movement clears stale E and restores live phase")
     _press_key(KEY_A)
@@ -136,6 +140,7 @@ func _run() -> void:
     game._refresh_nearby_hint()
     _expect(objective.text == String(game.get_hud_view()["objective"]) + " Press R to reset."
         and not objective.text.contains("[E]"), "completed nearby scene suppresses E and retains original R reset")
+    _expect(game._focused_station_id == "", "focus cleared on completed slice")
     _tap_action(KEY_R)
     await process_frame
     _expect(player.position.is_equal_approx(Vector2(92, 286))
