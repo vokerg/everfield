@@ -263,8 +263,8 @@ func _build_world() -> void:
     # Small persistent hint for discoverable controls (non-modal).
     help_hint_label = Label.new()
     help_hint_label.name = "HelpHint"
-    help_hint_label.position = Vector2(860, 14)
-    help_hint_label.size = Vector2(96, 22)
+    help_hint_label.position = Vector2(24, 84)
+    help_hint_label.size = Vector2(220, 22)
     help_hint_label.text = "Press H for controls"
     help_hint_label.add_theme_font_size_override("font_size", 12)
     help_hint_label.z_index = 7
@@ -291,6 +291,8 @@ func _build_world() -> void:
     help_panel.add_child(help_text)
 
 func reset_slice() -> void:
+    if help_panel != null:
+        help_panel.visible = false
     session_state.reset()
     history_page = 0
     if player != null:
