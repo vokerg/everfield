@@ -108,8 +108,13 @@ jobs:
           from pathlib import Path
           import re
           w = Path(".github/workflows/everfield-frontier-worker.yml").read_text()
-          assert re.search(r"(?m)^on:\n  workflow_dispatch:\n    inputs:", w)
+          assert re.search(r"(?m)^on:\n  issue_comment:\n    types: \[created\]\n  workflow_dispatch:\n    inputs:", w)
           assert not re.search(r"(?m)^  (?:push|pull_request|pull_request_target|schedule):", w)
+          assert "github.event.comment.user.login == 'vokerg'" in w
+          assert "github.event.comment.author_association == 'OWNER'" in w
+          assert "github.event.comment.body == '/everfield worker run'" in w
+          assert "github.event.issue.pull_request == null" in w
+          assert w.count("github.ref == 'refs/heads/main'") == 2
           assert "github.ref == 'refs/heads/main'" in w
           assert "github.repository == 'vokerg/everfield'" in w
           assert "permissions: {}" in w
@@ -122,8 +127,14 @@ jobs:
           assert "persist-credentials: false" in generate and "persist-credentials: false" in publish
           assert "--available-tools='view,edit,create,apply_patch,grep,glob'" in generate
           assert "--allow-tool='read,write'" in generate
+          assert "--deny-tool='shell,url,memory'" in generate
+          assert "export COPILOT_AUTO_UPDATE=false" in generate
+          assert "sha256sum --check \"$RUNNER_TEMP/guarded_patch.sha256\"" in generate
+          assert 'python3 "$RUNNER_TEMP/guarded_patch.py" capture' in generate
+          assert 'python3 tools/factory/guarded_patch.py self-test' not in generate
+          assert "Frozen trusted guard" not in publish
           assert "--allow-all" not in w
-          assert "guarded_patch.py capture" in generate
+          assert 'python3 "$RUNNER_TEMP/guarded_patch.py" capture' in generate
           assert "issues/$ISSUE_NUMBER/comments?per_page=100" in generate
           assert "possible active task ownership" in generate
           assert "guarded_patch.py publish" in publish
