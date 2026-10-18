@@ -124,7 +124,7 @@ def self_test() -> None:
         good.replace(b"game/tests/fixture.gd", b".github/workflows/inject.yml"),
         good.replace(b"new file mode 100644", b"new file mode 100755"),
         good + good,
-        good.replace(b"extends Node", b"GIT binary patch"),
+        good.replace(b"@@ -0,0", b"GIT binary patch\n@@ -0,0"),
         b"",
         b"x" * (MAX_BYTES + 1),
         good.replace(b"game/tests/fixture.gd", b"game/../AGENTS.md"),
