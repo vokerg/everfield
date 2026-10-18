@@ -8,6 +8,10 @@ a draft PR. Neither job integrates a change or grants review authority.
 from __future__ import annotations
 
 import base64
+import contextlib
+import io
+import tempfile
+from pathlib import Path
 import os
 from pathlib import PurePosixPath
 import re
@@ -138,6 +142,50 @@ def self_test() -> None:
     for path in ("game/../AGENTS.md", "game/project.godot", "tools/factory/a.gd",
                  "game/.godot/cache.json", "game/foo.exe", "game//tests/a.gd"):
         assert not valid_path(path), path
+    # Exercise the complete capture -> cross-job transfer -> publish round trip
+    # in a disposable real Git repository, without GitHub credentials.
+    cwd = os.getcwd()
+    with tempfile.TemporaryDirectory() as directory:
+        try:
+            os.chdir(directory)
+            git("init", "-q")
+            git("config", "user.name", "Worker test")
+            git("config", "user.email", "worker@example.invalid")
+            Path("game/tests").mkdir(parents=True)
+            existing = Path("game/tests/existing.gd")
+            existing.write_text("extends Node\n")
+            git("add", "--", "game")
+            git("commit", "-q", "-m", "baseline")
+            existing.write_text("extends Node\nvar tested = true\n")
+            Path("game/tests/new.gd").write_text("extends Node2D\n")
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                capture()
+            encoded = output.getvalue().strip()
+            assert inspect_patch(base64.b64decode(encoded))
+            git("reset", "--hard", "HEAD")
+            git("clean", "-fd")
+            os.environ["PATCH_B64"] = encoded
+            with contextlib.redirect_stdout(io.StringIO()):
+                publish()
+            assert existing.read_text() == "extends Node\nvar tested = true\n"
+            assert Path("game/tests/new.gd").read_text() == "extends Node2D\n"
+            assert sorted(git("diff", "--cached", "--name-only").decode().splitlines()) == [
+                "game/tests/existing.gd", "game/tests/new.gd"
+            ]
+            git("reset", "--hard", "HEAD")
+            git("clean", "-fd")
+            Path("secrets.env").write_text("out-of-scope")
+            try:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    capture()
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("out-of-scope untracked file accepted")
+        finally:
+            os.chdir(cwd)
+            os.environ.pop("PATCH_B64", None)
     print("guarded worker patch self-test: PASS")
 
 
