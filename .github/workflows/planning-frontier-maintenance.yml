@@ -10,6 +10,8 @@ on:
       - '.github/workflows/planning-frontier-maintenance.yml'
       - '.github/workflows/everfield-frontier-copilot-probe.yml'
       - 'docs/planning/handoffs/issue-1813.md'
+      - '.github/workflows/everfield-frontier-worker.yml'
+      - 'tools/factory/guarded_patch.py'
   workflow_dispatch:
 
 permissions:
@@ -94,6 +96,38 @@ jobs:
           grep -F -- '--deny-tool' "$RUNNER_TEMP/copilot-help.txt"
           grep -F -- '--no-ask-user' "$RUNNER_TEMP/copilot-help.txt"
           echo 'read-only immutable distribution/tool isolation check: PASS (zero paid model requests)'
+
+
+      - name: Validate draft-worker isolation and patch allowlist
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/factory/guarded_patch.py
+          python3 tools/factory/guarded_patch.py self-test
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          w = Path(".github/workflows/everfield-frontier-worker.yml").read_text()
+          assert re.search(r"(?m)^on:\n  workflow_dispatch:\n    inputs:", w)
+          assert not re.search(r"(?m)^  (?:push|pull_request|pull_request_target|schedule):", w)
+          assert "github.ref == 'refs/heads/main'" in w
+          assert "github.repository == 'vokerg/everfield'" in w
+          assert "permissions: {}" in w
+          generate, publish = w.split("\n  publish:\n", 1)
+          assert "copilot-requests: write" in generate
+          assert "contents: write" not in generate
+          assert "pull-requests: write" not in generate
+          assert "contents: write" in publish and "pull-requests: write" in publish
+          assert "copilot-requests: write" not in publish
+          assert "persist-credentials: false" in generate and "persist-credentials: false" in publish
+          assert "--available-tools='view,edit,grep,glob'" in generate
+          assert "--allow-tool='read,write'" in generate
+          assert "--allow-all" not in w
+          assert "guarded_patch.py capture" in generate
+          assert "guarded_patch.py publish" in publish
+          assert "--draft" in publish
+          print("guarded issue-to-draft worker static isolation: PASS")
+          PY
 
 
   maintain:
