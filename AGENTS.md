@@ -2,9 +2,9 @@
 
 ## Status
 
-This file governs Everfield's **pre-implementation PLANNING phase** and delegates normal planning dispatch to canonical `docs/planning/PLANNING-PROGRAM-v1.md` through `docs/planning/START-HERE.md`.
+This file governs Everfield's canonical **PLANNING authority and dispatch protocol** while bounded, separately verified and owner-authorized **Godot first-playable implementation** exists on `main`. It delegates planning dispatch to `docs/planning/PLANNING-PROGRAM-v1.md` through `docs/planning/START-HERE.md`.
 
-Bootstrap planning artifacts are provenance after canonical activation. High-throughput gameplay implementation remains blocked until a later independently verified implementation-readiness decision.
+Bootstrap planning artifacts are provenance after canonical activation. Bounded first-playable readiness and published implementation are evidenced by their own source/verification/integration history; **unbounded or high-throughput gameplay expansion** remains separately gated. Neither the existing playable nor this text grants release or canonical narrative authority.
 
 ## Prime Directive
 
@@ -12,9 +12,9 @@ Everfield is an AI-native project. The normal development process must not depen
 
 ## Current Phase
 
-The repository is in **PLANNING** mode under canonical Planning Program v1.
+The **Planning Program v1 remains canonical** for ownership/governance; the repository also has an integrated bounded first playable in `game/`, which is not equivalent to a globally unlocked implementation phase.
 
-Agents MUST NOT implement gameplay/high-throughput implementation before verified implementation readiness, choose an engine as an unreviewed assumption, generate an unbounded implementation backlog, treat design hypotheses as permanently settled, or optimize for a single quality metric.
+Agents MUST NOT undertake unverified or unbounded high-throughput gameplay implementation, substitute a fresh engine assumption for the owner-selected Godot 4.7.1 bounded playable, generate an unbounded implementation backlog, treat design hypotheses as permanently settled, or optimize for a single quality metric. Already authorized bounded implementation tasks still require their own exact scope, ownership, reviews and verification.
 
 Agents SHOULD execute bounded canonical planning missions, preserve evidence/provenance, and reopen assumptions when evidence requires it.
 
