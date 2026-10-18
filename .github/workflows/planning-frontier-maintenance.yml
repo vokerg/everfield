@@ -138,6 +138,12 @@ jobs:
           assert "issues/$ISSUE_NUMBER/comments?per_page=100" in generate
           assert "possible active task ownership" in generate
           assert "guarded_patch.py publish" in publish
+          assert "actions: write" in publish and "issues: write" in publish
+          assert "git/matching-refs/heads/factory/issue-$ISSUE_NUMBER-run-" in publish
+          assert 'gh workflow run godot-first-playable-smoke.yml --ref "$branch"' in publish
+          assert 'if ! gh pr create --base main --head "$branch" --draft' in publish
+          assert 'gh issue comment "$ISSUE_NUMBER" --body' in publish
+          assert "Godot smoke via workflow_dispatch" in publish
           assert "Issue ownership changed before publication" in publish
           assert "--draft" in publish
           print("guarded issue-to-draft worker static isolation: PASS")
