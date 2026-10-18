@@ -43,7 +43,7 @@ def valid_path(path: str) -> bool:
         path.startswith("game/")
         and not path.startswith("game/.godot/")
         and p.as_posix() == path
-        and len(p.parts) >= 3
+        and len(p.parts) >= 2
         and all(part not in {".", ".."} for part in path.split("/"))
         and p.suffix in ALLOWED_EXTENSIONS
         and len(path) <= 180
