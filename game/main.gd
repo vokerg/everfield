@@ -619,11 +619,6 @@ func _refresh_hud() -> void:
         return
     var view: Dictionary = get_hud_view()
     var station_id := _nearest_station_id()
-
-    # Clear any actionable nearby affordance when the slice is completed.
-    if get_game_state().get("completed", false):
-        station_id = ""
-
     var display: Dictionary = {}
     if not station_id.is_empty():
         # Both IDs and public text come from existing reviewed providers;
@@ -638,34 +633,29 @@ func _refresh_hud() -> void:
     ))
     status_label.text = String(view.get("status", "Mystery:UNKNOWN_BY_DESIGN"))
 
-    # --- Visual-focus handling (purely visual, reversible) ---
-    var candidate_focus := station_id
-    if candidate_focus.is_empty():
-        # If nothing should be focused, clear any previous focus.
-        if _focused_station_id != "":
-            var prev_station := station_nodes.get(_focused_station_id, null)
-            if prev_station != null and prev_station.get_child_count() > 0:
-                var prev_marker := prev_station.get_child(0)
-                if typeof(prev_marker) != TYPE_NIL:
-                    prev_marker.scale = Vector2.ONE
-            _focused_station_id = ""
-    else:
-        # Focus changed — update previous and new marker scales.
-        if candidate_focus != _focused_station_id:
-            # clear previous
-            if _focused_station_id != "":
-                var prev := station_nodes.get(_focused_station_id, null)
-                if prev != null and prev.get_child_count() > 0:
-                    var prev_marker2 := prev.get_child(0)
-                    if typeof(prev_marker2) != TYPE_NIL:
-                        prev_marker2.scale = Vector2.ONE
-            # set new
-            var station_node := station_nodes.get(candidate_focus, null)
-            if station_node != null and station_node.get_child_count() > 0:
-                var marker := station_node.get_child(0)
-                if typeof(marker) != TYPE_NIL:
-                    marker.scale = Vector2(1.15, 1.15)
-                    _focused_station_id = candidate_focus
+    # Completed gameplay is no longer interactable: visual focus clears without
+    # changing the original approved HUD objective/interaction policy inputs.
+    var focus_id: String = station_id
+    if bool(get_game_state().get("completed", false)):
+        focus_id = ""
+    _apply_station_focus(focus_id)
+
+
+func _apply_station_focus(focus_id: String) -> void:
+    # Purely visual. Never change reviewed station positions, polygons, colors,
+    # session state or the traversal policy's interaction-radius result.
+    if focus_id == _focused_station_id:
+        return
+    for key in station_nodes.keys():
+        var station: Node2D = station_nodes[key] as Node2D
+        if station == null or station.get_child_count() == 0:
+            continue
+        var marker: Polygon2D = station.get_child(0) as Polygon2D
+        if marker == null:
+            continue
+        marker.scale = Vector2(1.15, 1.15) if String(key) == focus_id else Vector2.ONE
+    _focused_station_id = focus_id
+
 
 func _emit_diagnostic(code: String, context: Dictionary = {}) -> void:
     # The published catalog owns all messages, dynamic context and error flags.
