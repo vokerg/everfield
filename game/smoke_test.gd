@@ -32,6 +32,29 @@ func _run() -> void:
     _expect(game.diagnostic_catalog != null, "published diagnostic catalog component wired")
     _expect(game.hud_objective_model != null, "published HUD objective/status component wired")
     _expect(game.has_method("_refresh_nearby_hint") and game.has_method("_unhandled_key_input"), "new source-frozen feedback and command dispatch seam is callable")
+    # Only the nearest actionable station receives a reversible visual focus.
+    # Its rendering is independent of bounded narrative/session state.
+    _expect(game._focused_station_id == "", "no focused station at initial spawn")
+    var focus_state_before: Dictionary = game.get_game_state()
+    var public_node: Node2D = game.station_nodes.get("public_record") as Node2D
+    _expect(public_node != null and public_node.get_child(0) is Polygon2D,
+        "published record marker exists for visual focus")
+    if public_node != null:
+        var public_marker: Polygon2D = public_node.get_child(0) as Polygon2D
+        _expect(public_marker.scale == Vector2.ONE, "record marker begins at reviewed base scale")
+        game.player.position = Vector2(176, 188)
+        game._refresh_nearby_hint()
+        _expect(game._focused_station_id == "public_record", "focus names exactly nearest in-range station")
+        _expect(public_marker.scale == Vector2(1.15, 1.15),
+            "in-range marker is visibly enlarged without changing its base polygon or color")
+        _expect(game.get_game_state() == focus_state_before,
+            "visual focus repaint cannot mutate session state")
+        game.player.position = Vector2(92, 286)
+        game._refresh_nearby_hint()
+        _expect(game._focused_station_id == "" and public_marker.scale == Vector2.ONE,
+            "out-of-range marker returns to original scale and no station stays focused")
+        _expect(game.get_game_state() == focus_state_before,
+            "clearing visual focus cannot mutate session state")
 
     # Discoverable non-modal help UI exists and responds to H without mutating state
     _expect(game.get_node_or_null("HelpHint") != null and (game.get_node_or_null("HelpHint") as Label).text == "Press H for controls", "H help hint is present and legible at boot")
