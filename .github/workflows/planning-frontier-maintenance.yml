@@ -134,7 +134,7 @@ jobs:
           assert 'python3 tools/factory/guarded_patch.py self-test' not in generate
           assert "Frozen trusted guard" not in publish
           assert "--allow-all" not in w
-          assert "guarded_patch.py capture" in generate
+          assert 'python3 "$RUNNER_TEMP/guarded_patch.py" capture' in generate
           assert "issues/$ISSUE_NUMBER/comments?per_page=100" in generate
           assert "possible active task ownership" in generate
           assert "guarded_patch.py publish" in publish
