@@ -120,11 +120,14 @@ jobs:
           assert "contents: write" in publish and "pull-requests: write" in publish
           assert "copilot-requests: write" not in publish
           assert "persist-credentials: false" in generate and "persist-credentials: false" in publish
-          assert "--available-tools='view,edit,grep,glob'" in generate
+          assert "--available-tools='view,edit,create,apply_patch,grep,glob'" in generate
           assert "--allow-tool='read,write'" in generate
           assert "--allow-all" not in w
           assert "guarded_patch.py capture" in generate
+          assert "issues/$ISSUE_NUMBER/comments?per_page=100" in generate
+          assert "possible active task ownership" in generate
           assert "guarded_patch.py publish" in publish
+          assert "Issue ownership changed before publication" in publish
           assert "--draft" in publish
           print("guarded issue-to-draft worker static isolation: PASS")
           PY
