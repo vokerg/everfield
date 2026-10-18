@@ -32,6 +32,9 @@ var history_label: RichTextLabel
 var history_header_label: Label
 var station_nodes: Dictionary = {}
 
+# Currently-focused station id for visual discovery (purely visual, reversible)
+var _focused_station_id: String = ""
+
 var public_text_navigation: Variant
 var route_history_view: Variant
 var presentation_scenario := ""
@@ -629,6 +632,30 @@ func _refresh_hud() -> void:
         "objective", "[EF-HUD-STATE] Invalid bounded session state. Progress is not inferred."
     ))
     status_label.text = String(view.get("status", "Mystery:UNKNOWN_BY_DESIGN"))
+
+    # Completed gameplay is no longer interactable: visual focus clears without
+    # changing the original approved HUD objective/interaction policy inputs.
+    var focus_id: String = station_id
+    if bool(get_game_state().get("completed", false)):
+        focus_id = ""
+    _apply_station_focus(focus_id)
+
+
+func _apply_station_focus(focus_id: String) -> void:
+    # Purely visual. Never change reviewed station positions, polygons, colors,
+    # session state or the traversal policy's interaction-radius result.
+    if focus_id == _focused_station_id:
+        return
+    for key in station_nodes.keys():
+        var station: Node2D = station_nodes[key] as Node2D
+        if station == null or station.get_child_count() == 0:
+            continue
+        var marker: Polygon2D = station.get_child(0) as Polygon2D
+        if marker == null:
+            continue
+        marker.scale = Vector2(1.15, 1.15) if String(key) == focus_id else Vector2.ONE
+    _focused_station_id = focus_id
+
 
 func _emit_diagnostic(code: String, context: Dictionary = {}) -> void:
     # The published catalog owns all messages, dynamic context and error flags.
