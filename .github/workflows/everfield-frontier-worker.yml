@@ -55,7 +55,7 @@ jobs:
           title, body = item.get("title", ""), item.get("body") or ""
           if len(comments) >= 100 or any(
               "protocol: planning-v1" in (c.get("body") or "") and
-              re.search(r"(?m)^kind: (?:CLAIM|RESUME|RECOVER)\\s*$", c.get("body") or "")
+              re.search(r"(?m)^kind: (?:CLAIM|RESUME|RECOVER)\s*$", c.get("body") or "")
               for c in comments
           ):
               raise SystemExit("Issue has possible active task ownership; no competing worker")
@@ -162,7 +162,7 @@ jobs:
           comments = json.loads(Path(sys.argv[1]).read_text())
           if len(comments) >= 100 or any(
               "protocol: planning-v1" in (c.get("body") or "") and
-              re.search(r"(?m)^kind: (?:CLAIM|RESUME|RECOVER)\\s*$", c.get("body") or "")
+              re.search(r"(?m)^kind: (?:CLAIM|RESUME|RECOVER)\s*$", c.get("body") or "")
               for c in comments
           ):
               raise SystemExit("Issue ownership changed before publication")
