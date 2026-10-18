@@ -11,6 +11,7 @@ on:
       - '.github/workflows/everfield-frontier-copilot-probe.yml'
       - 'docs/planning/handoffs/issue-1813.md'
       - '.github/workflows/everfield-frontier-worker.yml'
+      - '.github/workflows/verify-movement-testability-1448.yml'
       - 'tools/factory/guarded_patch.py'
   workflow_dispatch:
 
@@ -147,6 +148,24 @@ jobs:
           assert "Issue ownership changed before publication" in publish
           assert "--draft" in publish
           print("guarded issue-to-draft worker static isolation: PASS")
+          PY
+
+
+      - name: Confirm historical movement evidence cannot veto new gameplay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          legacy = Path(".github/workflows/verify-movement-testability-1448.yml").read_text()
+          trigger = legacy.split("\npermissions:", 1)[0]
+          assert "github.event.pull_request.number == 1449" in legacy
+          assert "github.event.pull_request.head.ref == 'planning/issue-1448'" in legacy
+          assert "'game/tests/movement_interaction_smoke.gd'" not in trigger
+          assert "'tools/implementation/run_godot_movement_smoke.sh'" not in trigger
+          assert "pull_request:" in trigger
+          assert "schedule:" not in trigger and "push:" not in trigger
+          print("frozen #1448 movement verifier isolated from modern gameplay: PASS")
           PY
 
 
