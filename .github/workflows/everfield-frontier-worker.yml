@@ -196,7 +196,15 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$ISSUE_NUMBER" =~ ^[1-9][0-9]{0,5}$ ]]
-          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$GITHUB_SHA"
+          # Generation used the trusted dispatch commit. If another issue
+          # was integrated while Copilot worked, never discard a paid patch.
+          # Preserve it on its ORIGINAL base as a draft branch, then require
+          # fresh current-main compatibility verification before any merge.
+          publication_main="$(git ls-remote origin refs/heads/main | cut -f1)"
+          [[ "$publication_main" =~ ^[0-9a-f]{40}$ ]]
+          if test "$publication_main" != "$GITHUB_SHA"; then
+            echo "::warning::Main advanced during generation; preserving stale-base source as draft ONLY. Re-verify against current main before integration."
+          fi
           gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER" \
             --jq '.state + " " + .user.login + " " + .title' \
             | grep -E '^open vokerg \[PLAN-v1\]\[IMPLEMENTATION-'
@@ -237,6 +245,9 @@ jobs:
             echo "- Issue: #$ISSUE_NUMBER"
             echo "- Source branch: $branch"
             echo "- Source SHA: $(git rev-parse HEAD)"
+            echo "- Trusted generation base: $GITHUB_SHA"
+            echo "- Observed main at publication: $publication_main"
+            echo "- If main drifted, source is a STALE-BASE draft, NOT merge-eligible without current-main compatibility review and re-verification."
             echo "- Requested read-only Godot smoke via workflow_dispatch on branch."
             echo "- No gameplay merge or security approval claimed."
           } >> "$GITHUB_STEP_SUMMARY"
@@ -247,6 +258,10 @@ jobs:
             "from the AI patch during publishing. Independent review, hosted gameplay" \
             "verification and separate squash integration remain mandatory." \
             "GITHUB_TOKEN-created PR checks may require workflow approval." \
+            "Trusted generation base: $GITHUB_SHA. Main at publication: $publication_main." \
+            "If these differ, this branch is STALE BASE and CANNOT merge before" \
+            "explicit current-main compatibility review, updated full hosted checks," \
+            "and separately authorized exact-head SQUASH integration." \
             > "$RUNNER_TEMP/pr-body.md"
           if ! gh pr create --base main --head "$branch" --draft \
             --title "[FACTORY-WORKER][#$ISSUE_NUMBER] Guarded game implementation draft" \
@@ -259,6 +274,6 @@ jobs:
               echo "Owner must enable Actions PR creation or recover that exact"
               echo "branch through the connected GitHub owner account."
             } >> "$GITHUB_STEP_SUMMARY"
-            gh issue comment "$ISSUE_NUMBER" --body               "Guarded worker run $GITHUB_RUN_ID generated and pushed \`$branch\` ($(git rev-parse HEAD)); read-only Godot smoke was dispatched. Draft PR creation was denied by GitHub Actions policy. Recover this *existing* branch through the owner's GitHub connection; do not create another model run or a duplicate issue. This is a technical HANDOFF, not schema-3 terminal/review/integration authority."
+            gh issue comment "$ISSUE_NUMBER" --body               "Guarded worker run $GITHUB_RUN_ID generated and pushed \`$branch\` ($(git rev-parse HEAD)); trusted generation base $GITHUB_SHA; main at publication $publication_main; read-only Godot smoke was dispatched. If those SHAs differ, preserve as STALE-BASE draft and re-review/re-verify against current main before any integration. Draft PR creation was denied by GitHub Actions policy. Recover this *existing* branch through the owner's GitHub connection; do not create another model run or a duplicate issue. This is a technical HANDOFF, not schema-3 terminal/review/integration authority."
             exit 1
           fi
