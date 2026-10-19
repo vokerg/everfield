@@ -306,6 +306,9 @@ func reset_slice() -> void:
     _refresh_hud()
 
 func interact_nearest() -> bool:
+    if bool(get_game_state().get("completed", false)):
+        _emit_diagnostic("EF-SLICE-COMPLETE")
+        return false
     var station_id := _nearest_station_id()
     if station_id.is_empty():
         _emit_diagnostic("EF-INTERACT-RANGE")
@@ -315,6 +318,10 @@ func interact_nearest() -> bool:
 func interact_with(station_id: String) -> bool:
     if not station_world.has_station(station_id):
         _emit_diagnostic("EF-INTERACT-UNKNOWN", {"station_id": station_id})
+        return false
+
+    if bool(get_game_state().get("completed", false)):
+        _emit_diagnostic("EF-SLICE-COMPLETE")
         return false
 
     var current: Dictionary = get_game_state()
@@ -372,6 +379,9 @@ func interact_with(station_id: String) -> bool:
     return true
 
 func choose_commitment(choice: String) -> bool:
+    if bool(get_game_state().get("completed", false)):
+        _emit_diagnostic("EF-SLICE-COMPLETE")
+        return false
     if not bool(get_game_state()["negotiation_open"]):
         _emit_diagnostic("EF-GATE-NEGOTIATION")
         return false

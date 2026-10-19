@@ -250,6 +250,18 @@ func _run() -> void:
     _expect(repair_history.size() >= 5, "repair route leaves observable state history")
     _expect(game.get_presentation_text().contains("Work beyond the pilot remains uncommitted."), "repair completion retains reviewed bounded consequence presentation")
 
+    # Verify post-completion interactions do not mutate session, history, or presentation
+    var completed_snapshot: Dictionary = game.get_game_state()
+    var completed_presentation: String = game.get_presentation_text()
+    var completed_history_len: int = (completed_snapshot.get("history", []) as Array).size()
+    _expect(not game.interact_with("public_record"), "post-completion interact_with is rejected")
+    _expect(not game.choose_commitment("defer"), "post-completion choose_commitment is rejected")
+    _expect(not game.interact_nearest(), "post-completion interact_nearest is rejected")
+    await process_frame
+    _expect(game.get_game_state() == completed_snapshot, "post-completion attempts do not change deep-copy session state")
+    _expect(game.get_presentation_text() == completed_presentation, "post-completion attempts do not change visible presentation")
+    _expect((game.get_game_state().get("history", []) as Array).size() == completed_history_len, "post-completion attempts do not append history events")
+
     game.reset_slice()
     _expect(game.interact_with("public_record"), "record can be replayed after reset")
     _expect(game.interact_with("defer_conclusion"), "explicit truth defer is a legal investigation alternative")
