@@ -1,3 +1,36 @@
+# 2026-10-19 continuation — independently retrieved authentic pixels (PARTIAL EVIDENCE, NOT PLAYTEST PASS)
+
+This is a later evidence addendum to the original 2026-10-15 no-renderer diagnostic retained below as historical provenance. **The earlier `BLOCKED_ENVIRONMENT_NO_RENDERER` observation is no longer current for hosted screenshots**: an actual GitHub Actions Xvfb/llvmpipe renderer now exists on integrated `main`. The remaining blocker is **incomplete scenario and physical-input coverage**, not an absent rendering mechanism. Issue #1763 is being resumed through its *existing HANDOFF*, not a STALE reset. Canonical program binding remains Issue #1147 comment #5675066392, blob `fd4cf1119c3f86acc3af620024eea72235e81ce4`. Present inspected `main@fe1da5d33b3f64d03b81041ee39bd62b7f20bb7c`.
+
+## Retrievable and locally checked primary evidence
+
+- GitHub Actions [real viewport run #39202314071](https://github.com/vokerg/everfield/actions/runs/39202314071), `SUCCESS` in existing issue's evidence record; source checkout HEAD `d4f1843c8a30c4151fd2c92b92db0b159eaf62c6` (before exact scoped PR #1834 squash-published to `main@fe1da5d...`). GitHub artifact ID **12164257635**, name `godot-rendered-960x540-39202314071-1`, digest `sha256:b144492f1495d4e2dd2b7402284d6ae4408d2922b5155d9dd02bec37c5d3181e`, expires 2026-11-18 per artifact metadata.
+- **Fresh independent retrieval in this continuation:** downloaded artifact ZIP; examined `run-identity.txt`, `render.log`, and all five actual PNGs; independently ran PNG file/size/hash verification and visually inspected all five. The run identity states **Godot `4.7.1.stable.official.a13da4feb`**, locked engine ZIP SHA-256 `c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba`, Xvfb/software OpenGL, actual framebuffer `960×540`. The log reports `EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=5 width=960 height=540`. Each file was confirmed `960×540` RGBA PNG independently of that authored sentinel.
+- Per-image SHA-256:
+  - `01-intro.png`: `261a9b94d193a1149d85f5c77399b9fbd4cbc4e18862119af8bccf3eb2773e87`
+  - `02-world-map-unobscured.png`: `602e162f2961fe9a2e39623efc2c1ed380168ce8c111ccdad5fd0d205805e738`
+  - `03-controls-help.png`: `3c48cf2787cb577224dcd8e16569ea7a0dcd78e87566111ff9b3b413baa87716`
+  - `04-commons-hearing.png`: `7314304c5f1d9044bd1ec1530d8663c2be3b453c48920b4dc66cd83e8e8a0c2f`
+  - `05-repair-consequence.png`: `733dba84bbf7a22de7053e6b381efe7211a55915f524eeb540de3993eb217f1f`
+
+## Visually inspected result and exact limits
+
+| Frame | Positive visual observation | Boundary / remaining gap |
+|---|---|---|
+| Intro / default UI | Title, status, objective, H hint, TAB hint, narrative page controls and empty history panel visible. | Default opaque right-side story/history panels cover portions of right-side station names/markers, exactly as previously reported from real pixels. This is not an all-stations-visible default overlay. |
+| TAB world map | All five station markers and their full nearby name/purpose labels are visually exposed with right-side narrative/history panels hidden; objective and header remain displayed. The optional map-mode repair is real in this image. | Does **not** prove text remains accessible in default panel mode, full keyboard input delivery, or every route. |
+| Controls help | Help content visibly renders, including movement, interaction, decision, reset and paging keys. | Capture code assigns `HelpPanel.visible = true` directly; **does not exercise a physical H key**. Help intentionally overlays part of the world, not proof of no overlay anywhere. |
+| Commons Hearing | Visible hearing text, choices 1/2/3, page feedback and three-event public history with completed investigation. | Direct `game.interact_with()` helper calls, not physical E/1/2/3 input; no records-first/defer-choice screenshots or page-boundary audit. |
+| Repair consequence | Visible completed bounded-pilot outcome, page feedback and five-event history. The unresolved mystery remains displayed as `UNKNOWN_BY_DESIGN`. | Direct `game.choose_commitment()` and `game.interact_with()` helpers, not real physical key input. No 10+ event scroll test or explicit nonconsent route screenshot. |
+
+The exact source renderer `game/tests/viewport_capture.gd` makes direct `_unhandled_key_input(KEY_TAB)` method calls, assigns `HelpPanel.visible` explicitly, uses `game.interact_with` / `game.choose_commitment` directly, and captures a subset of successful states. **These are authentic rendered pixels from controlled game state, but not proof of actual physical keyboard events**. The remaining required matrix includes physical movement/E/1/2/3/R/Z/X/C/V/TAB/H, all 13 approved scenarios and 41-page envelope, first/middle/last paging, records-first, explicit commitment deferral/nonconsent, 10+ history events and no-wrap/reset behavior, long title/crop/scroll checks. No accessibility certification or complete visual PASS is claimed.
+
+## Evidence-backed next route
+
+Continue **this same #1763 HANDOFF** with an authorized extension of the existing read-only Xvfb capture/input harness to exercise missing states, then independently inspect and record the resulting exact SHA/hash-locked artifacts. Do not create speculative component issues from this partial capture; do not mutate production game source, merge diagnostic-only PR #1779, retroactively claim scenario/keyboard coverage, or close the evaluation. The earlier blocked report below is the original historical snapshot only.
+
+---
+
 # Issue #1763 — 960×540 viewport evaluation: blocked evidence intake
 
 **Mission:** `IMPLEMENTATION-EVALUATION-LIVE-PLAYABLE-VIEWPORT-05`  
