@@ -1,3 +1,23 @@
+# Continuation checkpoint — 2026-10-19, same Issue #1763
+
+**Current episode:** legitimate existing-HANDOFF `RESUME_INTENT` #6264726973 and first winning `RESUME` #6264734324, actor `everfield-viewport-evidence-continuation-1763-gpt6-20261019-01`. Historical original `CLAIM` #6188378340 and valid `HANDOFF_READY` #6188431199 remain below. This checkpoint does **not** claim a complete task, viewport/playtest PASS, required independent verification, accessibility certification, or production/game/canonicality authority.
+
+**Current main:** `fe1da5d33b3f64d03b81041ee39bd62b7f20bb7c`; canonical binding #1147/#5675066392 and program blob `fd4cf1119c3f86acc3af620024eea72235e81ce4` independently rechecked with activation ancestry. **Existing owned branch:** `planning/issue-1763`, existing diagnostic-only **OPEN/DRAFT PR #1779**. Changes are limited to this same handoff and `docs/implementation/playtests/issue-1763-viewport.md`; no gameplay or CI code touched.
+
+## What advanced
+
+The previous environmental *no-renderer* obstacle was narrowed by separately integrated, real Xvfb/llvmpipe Godot 4.7.1 evidence. This continuation independently downloaded hosted [run #39202314071](https://github.com/vokerg/everfield/actions/runs/39202314071) artifact ID **12164257635**, confirmed artifact digest `b144492f1495d4e2dd2b7402284d6ae4408d2922b5155d9dd02bec37c5d3181e`, inspected all five actual `960×540` PNGs, SHA-256 verified each file, and read locked-engine/run provenance. See the updated `docs/implementation/playtests/issue-1763-viewport.md` evidence table for individual image checksums and observations.
+
+**Concrete bounded visual finding:** TAB map mode exposes all five complete station labels/markers and hides the occluding panels; this is a real verified optional viewing affordance from actual pixels. Default narrative/history panels still cover some right-side world labels when shown, by design of the overlay. Intro, help, hearing and repair-consequence frames visibly render text and HUD. This does not prove all 13 scenarios, 41 approved pages, page boundaries, records-first, choice deferral, 10+ event history or physical input. Capture code directly manipulates `HelpPanel.visible`, invokes `_unhandled_key_input(KEY_TAB)` and calls game state methods; it is **not** physical H/TAB/E/1/2/3 input testing. No new content or game changes are justified solely by the partial evidence.
+
+## Remaining work / explicit next action
+
+**Disposition:** `HANDOFF_READY / BLOCKED_FULL_VIEWPORT_AND_PHYSICAL_INPUT_MATRIX_PENDING` (not terminal). Continue this **same Issue #1763** through a valid HANDOFF intent/RESUME, with current `main` and exact updated branch head. Execute the 13 reviewed public-text scenarios and 41-page coverage using genuine real 960×540 pinned-Godot render, physical movement/interaction/choice/reset/paging/history inputs and both successful/defer routes. Inspect screenshots for actual legibility, occlusions, full text, long titles and 10+ history events; classify defects with exact image/input/state/engine/main provenance. Existing workflow `.github/workflows/godot-rendered-viewport.yml` is read-only, manual or path-scoped PR and already works; expanding its game test harness requires proper separately approved source scope and exact-head verification, not an unauthorized change inside this two-doc diagnostic. Do not publish speculative component roots, claim full PASS, merge diagnostic PR #1779, close issue #1763, or lift any independent-review/integration gate.
+
+**Authoritative status for this episode:** the new issue comment and current exact PR head supersede this provisional handoff summary's branch SHA when published; branch update is not a merge. The original 2026-10-15 diagnostic is retained below as historical provenance.
+
+---
+
 # Issue #1763 — resumable handoff
 
 **Mission:** `IMPLEMENTATION-EVALUATION-LIVE-PLAYABLE-VIEWPORT-05`  
