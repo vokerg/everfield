@@ -25,12 +25,16 @@ var status_label: Label
 var diagnostic_label: Label
 var help_panel: ColorRect
 var help_hint_label: Label
+var map_view_hint_label: Label
 var presentation_panel: ColorRect
 var presentation_label: Label
 var presentation_nav_label: Label
 var history_label: RichTextLabel
 var history_header_label: Label
 var station_nodes: Dictionary = {}
+
+# UI toggle state: true when presentation/history panels are visible
+var public_panels_visible: bool = true
 
 # Currently-focused station id for visual discovery (purely visual, reversible)
 var _focused_station_id: String = ""
@@ -120,6 +124,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_H:
             if help_panel != null:
                 help_panel.visible = not help_panel.visible
+            return
+        KEY_TAB:
+            # Toggle the presentation + history UI panels (only visibility)
+            public_panels_visible = not public_panels_visible
+            _set_public_panels_visible(public_panels_visible)
             return
         KEY_Z:
             navigate_public_text(-1)
@@ -273,6 +282,16 @@ func _build_world() -> void:
     help_hint_label.z_index = 7
     add_child(help_hint_label)
 
+    # Brief discoverable TAB hint for map view toggle.
+    map_view_hint_label = Label.new()
+    map_view_hint_label.name = "MapViewHint"
+    map_view_hint_label.position = Vector2(24, 104)
+    map_view_hint_label.size = Vector2(220, 18)
+    map_view_hint_label.text = "TAB: view all stations"
+    map_view_hint_label.add_theme_font_size_override("font_size", 12)
+    map_view_hint_label.z_index = 7
+    add_child(map_view_hint_label)
+
     # Non-modal help panel toggled by H. Hidden by default to avoid changing scene.
     help_panel = ColorRect.new()
     help_panel.name = "HelpPanel"
@@ -300,6 +319,8 @@ func reset_slice() -> void:
     history_page = 0
     if player != null:
         player.position = station_world.get_layout()["player_spawn"]
+    # Ensure presentation/history panels are visible by default after reset
+    _set_public_panels_visible(true)
     _emit_diagnostic("EF-RESET")
     _show_world_intro()
     _refresh_history_view()
@@ -665,6 +686,25 @@ func _apply_station_focus(focus_id: String) -> void:
             continue
         marker.scale = Vector2(1.15, 1.15) if String(key) == focus_id else Vector2.ONE
     _focused_station_id = focus_id
+
+
+func _set_public_panels_visible(show: bool) -> void:
+    # Toggle only the presentation and history UI surfaces without mutating
+    # any session state, presentation content, pages or history source.
+    public_panels_visible = show
+    if presentation_panel != null:
+        presentation_panel.visible = show
+    if presentation_label != null:
+        presentation_label.visible = show
+    if presentation_nav_label != null:
+        presentation_nav_label.visible = show
+    var hist_panel := get_node_or_null("HistoryPanel")
+    if hist_panel != null and hist_panel is ColorRect:
+        (hist_panel as ColorRect).visible = show
+    if history_label != null:
+        history_label.visible = show
+    if history_header_label != null:
+        history_header_label.visible = show
 
 
 func _emit_diagnostic(code: String, context: Dictionary = {}) -> void:

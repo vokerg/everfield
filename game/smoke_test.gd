@@ -100,6 +100,67 @@ func _run() -> void:
     _expect(not (game.get_node("HelpPanel") as ColorRect).visible, "reset hides transient help overlay")
     _expect(game.get_game_state() == state_before_help, "reset after help leaves initial game state intact")
 
+    # Map-view TAB hint and toggle tests: ensure default panels visible, TAB hides them,
+    # TAB restores them, release/echo/physical-only events do nothing, reset restores.
+    _expect(game.get_node_or_null("PresentationPanel") != null and (game.get_node_or_null("PresentationPanel") as ColorRect).visible, "Presentation panel visible at boot")
+    _expect(game.get_node_or_null("HistoryPanel") != null and (game.get_node_or_null("HistoryPanel") as ColorRect).visible, "History panel visible at boot")
+    _expect(game.get_node_or_null("MapViewHint") != null and (game.get_node_or_null("MapViewHint") as Label).text == "TAB: view all stations", "map view TAB hint present at boot")
+
+    var snap_before_tab: Dictionary = game.get_game_state()
+    var pres_scenario_before: String = game.presentation_scenario
+    var pres_page_before: int = game.presentation_page
+    var hist_page_before: int = game.history_page
+    var pres_text_before: String = game.get_presentation_text()
+
+    var ev_tab := InputEventKey.new()
+    ev_tab.pressed = true
+    ev_tab.echo = false
+    ev_tab.keycode = KEY_TAB
+    game._unhandled_key_input(ev_tab)
+    await process_frame
+
+    _expect(not (game.get_node("PresentationPanel") as ColorRect).visible
+        and not (game.get_node("Presentation") as Label).visible
+        and not (game.get_node("PresentationNavigation") as Label).visible
+        and not (game.get_node("History") as RichTextLabel).visible
+        and not (game.get_node("HistoryHeader") as Label).visible
+        and not (game.get_node("HistoryPanel") as ColorRect).visible,
+        "TAB hides presentation and history panels and labels")
+
+    _expect(game.get_game_state() == snap_before_tab, "TAB does not mutate session state")
+    _expect(game.presentation_scenario == pres_scenario_before and game.presentation_page == pres_page_before and game.history_page == hist_page_before and game.get_presentation_text() == pres_text_before,
+        "TAB does not change presentation or history page or text")
+
+    ev_tab.pressed = false
+    game._unhandled_key_input(ev_tab)
+    _expect(not (game.get_node("PresentationPanel") as ColorRect).visible, "released TAB does not toggle panels")
+    ev_tab.pressed = true
+    ev_tab.echo = true
+    game._unhandled_key_input(ev_tab)
+    _expect(not (game.get_node("PresentationPanel") as ColorRect).visible, "echo TAB does not toggle panels")
+    ev_tab.echo = false
+    ev_tab.keycode = 0
+    ev_tab.physical_keycode = KEY_TAB
+    game._unhandled_key_input(ev_tab)
+    _expect(not (game.get_node("PresentationPanel") as ColorRect).visible, "physical-only TAB does not toggle panels")
+    ev_tab.keycode = KEY_TAB
+    ev_tab.physical_keycode = 0
+    game._unhandled_key_input(ev_tab)
+    await process_frame
+    _expect((game.get_node("PresentationPanel") as ColorRect).visible, "TAB may reopen the panels")
+
+    # TAB again toggles on
+    game._unhandled_key_input(ev_tab)
+    await process_frame
+    _expect((game.get_node("PresentationPanel") as ColorRect).visible
+        and (game.get_node("HistoryPanel") as ColorRect).visible,
+        "TAB toggles panels back on")
+
+    # Reset restores default visibility
+    game.reset_slice()
+    _expect((game.get_node("PresentationPanel") as ColorRect).visible and (game.get_node("HistoryPanel") as ColorRect).visible, "reset restores presentation/history visibility")
+    _expect(game.get_game_state() == snap_before_tab, "reset restores panels without mutating session state")
+
     _expect(game.station_world is RefCounted, "reviewed station-world metadata provider is wired")
     _expect(game.playable_presentation is RefCounted, "reviewed public narrative assembler is wired")
     var ids: Array[String] = game.station_world.get_station_ids()
