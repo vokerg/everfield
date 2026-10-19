@@ -83,13 +83,13 @@ jobs:
             "$GODOT_BIN" --path game --rendering-method gl_compatibility \
             --script res://tests/viewport_capture.gd \
             2>&1 | tee "$EVERFIELD_CAPTURE_DIR/render.log"
-          grep -Fx 'EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=4 width=960 height=540' \
+          grep -Fx 'EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=5 width=960 height=540' \
             "$EVERFIELD_CAPTURE_DIR/render.log"
           python3 - <<'PY'
           from pathlib import Path
           import struct
           base = Path('rendered-viewport-evidence')
-          expected = ['01-intro', '02-controls-help', '03-commons-hearing', '04-repair-consequence']
+          expected = ['01-intro', '02-world-map-unobscured', '03-controls-help', '04-commons-hearing', '05-repair-consequence']
           for name in expected:
               path = base / (name + '.png')
               data = path.read_bytes()
