@@ -149,12 +149,22 @@ func _run() -> void:
     await process_frame
     _expect((game.get_node("PresentationPanel") as ColorRect).visible, "TAB may reopen the panels")
 
-    # TAB again toggles on
+    # Repeated real TAB keypresses alternate cleanly and restore all panels.
+    game._unhandled_key_input(ev_tab)
+    await process_frame
+    _expect(not (game.get_node("PresentationPanel") as ColorRect).visible
+        and not (game.get_node("HistoryPanel") as ColorRect).visible,
+        "subsequent TAB hides the public panels again")
     game._unhandled_key_input(ev_tab)
     await process_frame
     _expect((game.get_node("PresentationPanel") as ColorRect).visible
-        and (game.get_node("HistoryPanel") as ColorRect).visible,
-        "TAB toggles panels back on")
+        and (game.get_node("HistoryPanel") as ColorRect).visible
+        and (game.get_node("Presentation") as Label).visible
+        and (game.get_node("History") as RichTextLabel).visible,
+        "TAB restores both full panels, labels and public text")
+    _expect(game.get_game_state() == snap_before_tab
+        and game.get_presentation_text() == pres_text_before,
+        "repeated map toggles preserve session and exact public source text")
 
     # Reset restores default visibility
     game.reset_slice()
