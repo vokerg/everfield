@@ -7,6 +7,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/godot-rendered-viewport.yml'
+      - 'game/main.gd'
+      - 'game/main.tscn'
+      - 'game/project.godot'
       - 'game/tests/viewport_capture.gd'
   workflow_dispatch:
 
