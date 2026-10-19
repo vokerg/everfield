@@ -26,12 +26,36 @@ func _run() -> void:
     if not await _capture(destination, "01-intro"):
         return
 
+    # Capture the observed UI-occlusion repair as actual pixels, rather than
+    # inferring map visibility from a headless bool-only assertion.
+    var original_state: Dictionary = game.get_game_state()
+    var original_text: String = game.get_presentation_text()
+    var key := InputEventKey.new()
+    key.keycode = KEY_TAB
+    key.pressed = true
+    key.echo = false
+    game._unhandled_key_input(key)
+    var presentation: ColorRect = game.get_node_or_null("PresentationPanel") as ColorRect
+    var history: ColorRect = game.get_node_or_null("HistoryPanel") as ColorRect
+    if presentation == null or history == null or presentation.visible or history.visible:
+        _fail("TAB did not actually hide the occluding right-side panels")
+        return
+    if not await _capture(destination, "02-world-map-unobscured"):
+        return
+    game._unhandled_key_input(key)
+    if not presentation.visible or not history.visible:
+        _fail("TAB did not restore the original right-side panels")
+        return
+    if game.get_game_state() != original_state or game.get_presentation_text() != original_text:
+        _fail("rendering map mode modified approved gameplay state/source text")
+        return
+
     var help: ColorRect = game.get_node_or_null("HelpPanel") as ColorRect
     if help == null:
         _fail("existing help panel is unavailable")
         return
     help.visible = true
-    if not await _capture(destination, "02-controls-help"):
+    if not await _capture(destination, "03-controls-help"):
         return
     game.reset_slice()
 
@@ -41,7 +65,7 @@ func _run() -> void:
     if not game.interact_with("commons_hearing"):
         _fail("real session could not open reviewed hearing")
         return
-    if not await _capture(destination, "03-commons-hearing"):
+    if not await _capture(destination, "04-commons-hearing"):
         return
 
     if not game.choose_commitment("repair_pilot") or not game.interact_with("project_table"):
@@ -50,9 +74,9 @@ func _run() -> void:
     if not bool(game.get_game_state().get("completed", false)):
         _fail("game did not actually complete")
         return
-    if not await _capture(destination, "04-repair-consequence"):
+    if not await _capture(destination, "05-repair-consequence"):
         return
-    print("EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=4 width=960 height=540")
+    print("EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=5 width=960 height=540")
     quit(0)
 
 
