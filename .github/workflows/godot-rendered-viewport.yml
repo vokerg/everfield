@@ -1,0 +1,115 @@
+name: Everfield real rendered viewport evidence
+
+# Read-only evidence path for the existing blocked #1763 viewport evaluation.
+# This captures real pixels under Xvfb; headless model tests are insufficient.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/godot-rendered-viewport.yml'
+      - 'game/tests/viewport_capture.gd'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rendered-viewport-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout immutable candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Resolve locked reviewed Godot engine
+        id: engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          data = json.loads(Path('docs/planning/wave-2/evidence/ci/engine-toolchain-artifact-lock.json').read_text())
+          engine = data['entries']['godot_4.7.1_linux_x86_64_zip']
+          assert engine['version'] == '4.7.1-stable'
+          assert engine['sha256'] == 'c7ff14fd28472c8d4f193043de30278dcf7e5241a1dcf7566b02e27addaa33ba'
+          print('url=' + engine['url'])
+          print('sha256=' + engine['sha256'])
+          PY
+
+      - name: Download and hash-verify frozen Godot binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip '${{ steps.engine.outputs.url }}'
+          printf '%s  %s\n' '${{ steps.engine.outputs.sha256 }}' godot.zip | sha256sum --check --strict
+          unzip -q godot.zip -d .godot-bin
+          chmod +x .godot-bin/Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Ensure software OpenGL and a real virtual X display
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v Xvfb >/dev/null || ! command -v xvfb-run >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq xvfb xauth libgl1-mesa-dri
+          fi
+          command -v xvfb-run
+          command -v Xvfb
+
+      - name: Render and validate authentic 960x540 gameplay pixels
+        shell: bash
+        env:
+          GODOT_BIN: ${{ github.workspace }}/.godot-bin/Godot_v4.7.1-stable_linux.x86_64
+          EVERFIELD_CAPTURE_DIR: ${{ github.workspace }}/rendered-viewport-evidence
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          MESA_LOADER_DRIVER_OVERRIDE: llvmpipe
+        run: |
+          set -euo pipefail
+          mkdir -p "$EVERFIELD_CAPTURE_DIR"
+          test "$("$GODOT_BIN" --version)" = '4.7.1.stable.official.a13da4feb'
+          "$GODOT_BIN" --headless --path game --editor --quit
+          timeout 120s xvfb-run -a -s '-screen 0 1280x800x24' \
+            "$GODOT_BIN" --path game --rendering-method gl_compatibility \
+            --script res://tests/viewport_capture.gd \
+            2>&1 | tee "$EVERFIELD_CAPTURE_DIR/render.log"
+          grep -Fx 'EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=4 width=960 height=540' \
+            "$EVERFIELD_CAPTURE_DIR/render.log"
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct
+          base = Path('rendered-viewport-evidence')
+          expected = ['01-intro', '02-controls-help', '03-commons-hearing', '04-repair-consequence']
+          for name in expected:
+              path = base / (name + '.png')
+              data = path.read_bytes()
+              assert data[:8] == b'\x89PNG\r\n\x1a\n', (name, 'not a PNG')
+              assert struct.unpack('>II', data[16:24]) == (960, 540), (name, 'wrong dimension')
+              assert len(data) > 3000, (name, 'suspiciously small')
+              print(f'{name}: verified 960x540 PNG ({len(data)} bytes)')
+          PY
+          {
+            echo "head_sha=$(git rev-parse HEAD)"
+            echo "run_id=$GITHUB_RUN_ID"
+            echo "engine_version=$("$GODOT_BIN" --version)"
+            echo "engine_sha256=${{ steps.engine.outputs.sha256 }}"
+            echo "environment=Xvfb/software-OpenGL (not headless output)"
+            echo "limits=not a physical keyboard test; not a full 13-scenario playtest"
+          } > "$EVERFIELD_CAPTURE_DIR/run-identity.txt"
+          sha256sum "$EVERFIELD_CAPTURE_DIR"/*.png > "$EVERFIELD_CAPTURE_DIR/png-sha256.txt"
+
+      - name: Upload real screenshots, identity and runtime logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: godot-rendered-960x540-${{ github.run_id }}-${{ github.run_attempt }}
+          path: rendered-viewport-evidence/
+          if-no-files-found: warn
+          retention-days: 30
