@@ -23,6 +23,7 @@ jobs:
   generate:
     if: >-
       github.repository == 'vokerg/everfield' &&
+      github.actor == 'vokerg' &&
       github.ref == 'refs/heads/main' &&
       (github.event_name == 'workflow_dispatch' ||
        (github.event_name == 'issue_comment' &&
@@ -88,6 +89,25 @@ jobs:
           )
           Path(sys.argv[3]).write_text(instructions)
           PY
+          # These checks MUST precede paid inference. A repeated owner command
+          # must not spend another model run only to fail publisher dedup later.
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$GITHUB_SHA" || {
+            echo "::error::Main advanced before paid generation; re-evaluate the issue first"
+            exit 1
+          }
+          existing_branches="$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/heads/factory/issue-$ISSUE_NUMBER-run-" --jq 'length')"
+          if test "$existing_branches" != 0; then
+            echo "::error::Already generated source for issue #$ISSUE_NUMBER; recover existing branch rather than spend model inference again"
+            exit 1
+          fi
+          # Also block a repeated owner command when the old branch has been
+          # deleted but a recovery PR still exists (within the latest 100).
+          existing="$(gh api "repos/$GITHUB_REPOSITORY/pulls?state=all&per_page=100" \
+            --jq '[.[] | select(.head.ref | startswith("factory/issue-'"$ISSUE_NUMBER"'-run-"))] | length')"
+          if test "$existing" != 0; then
+            echo "::error::Already published/recovered PR for issue #$ISSUE_NUMBER; refusing duplicate paid generation"
+            exit 1
+          fi
 
       - name: Download the exact reviewed Copilot CLI distribution
         shell: bash
@@ -145,6 +165,7 @@ jobs:
     needs: generate
     if: >-
       github.repository == 'vokerg/everfield' &&
+      github.actor == 'vokerg' &&
       github.ref == 'refs/heads/main' &&
       (github.event_name == 'workflow_dispatch' ||
        (github.event_name == 'issue_comment' &&
