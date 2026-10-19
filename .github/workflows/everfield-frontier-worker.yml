@@ -103,7 +103,7 @@ jobs:
           # Also block a repeated owner command when the old branch has been
           # deleted but a recovery PR still exists (within the latest 100).
           existing="$(gh api "repos/$GITHUB_REPOSITORY/pulls?state=all&per_page=100" \
-            --jq '[.[] | select(.title | contains("[FACTORY-WORKER][#'\''"$ISSUE_NUMBER"'\'']"))] | length')"
+            --jq '[.[] | select(.head.ref | startswith("factory/issue-'"$ISSUE_NUMBER"'-run-"))] | length')"
           if test "$existing" != 0; then
             echo "::error::Already published/recovered PR for issue #$ISSUE_NUMBER; refusing duplicate paid generation"
             exit 1
