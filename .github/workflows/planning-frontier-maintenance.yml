@@ -112,6 +112,7 @@ jobs:
           assert re.search(r"(?m)^on:\n  issue_comment:\n    types: \[created\]\n  workflow_dispatch:\n    inputs:", w)
           assert not re.search(r"(?m)^  (?:push|pull_request|pull_request_target|schedule):", w)
           assert "github.event.comment.user.login == 'vokerg'" in w
+          assert w.count("github.actor == 'vokerg'") == 2
           assert "github.event.comment.author_association == 'OWNER'" in w
           assert "github.event.comment.body == '/everfield worker run'" in w
           assert "github.event.issue.pull_request == null" in w
@@ -141,6 +142,14 @@ jobs:
           assert "guarded_patch.py publish" in publish
           assert "actions: write" in publish and "issues: write" in publish
           assert "git/matching-refs/heads/factory/issue-$ISSUE_NUMBER-run-" in publish
+          # Paid generation must fail closed on duplicate tasks and stale main
+          # before downloading/launching the billable model, not only afterward.
+          assert "git/matching-refs/heads/factory/issue-$ISSUE_NUMBER-run-" in generate
+          assert "pulls?state=all&per_page=100" in generate
+          assert ".head.ref | startswith(" in generate
+          assert "git ls-remote origin refs/heads/main" in generate
+          assert generate.index("existing_branches=") < generate.index("Download the exact reviewed Copilot CLI distribution")
+          assert generate.index("test \"$(git ls-remote origin refs/heads/main") < generate.index("Let Copilot edit only disposable workspace files")
           assert 'gh workflow run godot-first-playable-smoke.yml --ref "$branch"' in publish
           assert 'if ! gh pr create --base main --head "$branch" --draft' in publish
           assert 'gh issue comment "$ISSUE_NUMBER" --body' in publish
