@@ -7,10 +7,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/godot-rendered-viewport.yml'
-      - 'game/main.gd'
-      - 'game/main.tscn'
-      - 'game/project.godot'
-      - 'game/tests/viewport_capture.gd'
+      # Any component or approved text source may alter real rendered pixels.
+      # Capture evidence on ALL gameplay changes, not only scene/controller edits.
+      - 'game/**'
   workflow_dispatch:
 
 permissions:
@@ -83,13 +82,17 @@ jobs:
             "$GODOT_BIN" --path game --rendering-method gl_compatibility \
             --script res://tests/viewport_capture.gd \
             2>&1 | tee "$EVERFIELD_CAPTURE_DIR/render.log"
-          grep -Fx 'EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=5 width=960 height=540' \
+          grep -Fx 'EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=7 width=960 height=540' \
             "$EVERFIELD_CAPTURE_DIR/render.log"
           python3 - <<'PY'
           from pathlib import Path
           import struct
           base = Path('rendered-viewport-evidence')
-          expected = ['01-intro', '02-world-map-unobscured', '03-controls-help', '04-commons-hearing', '05-repair-consequence']
+          expected = [
+              '01-intro', '02-world-map-unobscured', '03-controls-help',
+              '04-commons-hearing', '05-repair-consequence',
+              '06-public-nonconsent', '07-records-first-consequence',
+          ]
           for name in expected:
               path = base / (name + '.png')
               data = path.read_bytes()

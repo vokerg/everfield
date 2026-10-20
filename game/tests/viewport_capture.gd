@@ -76,7 +76,39 @@ func _run() -> void:
         return
     if not await _capture(destination, "05-repair-consequence"):
         return
-    print("EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=5 width=960 height=540")
+
+    # Exercise another authentic narrative outcome: explicit nonconsent.
+    game.reset_slice()
+    if not game.interact_with("public_record") or not game.interact_with("defer_conclusion"):
+        _fail("could not set up explicit public commitment deferral")
+        return
+    if not game.interact_with("commons_hearing") or not game.choose_commitment("defer"):
+        _fail("explicit public commitment deferral was rejected")
+        return
+    var deferred: Dictionary = game.get_game_state()
+    if not String(deferred.get("commitment", "")).is_empty() or String(deferred.get("mystery_state", "")) != "UNKNOWN_BY_DESIGN":
+        _fail("public deferral changed commitment or resolved the mystery")
+        return
+    if not await _capture(destination, "06-public-nonconsent"):
+        return
+
+    # Reopen the hearing (allowed after deferral) and finish records-first.
+    if not game.interact_with("commons_hearing") or not game.choose_commitment("records_first"):
+        _fail("reopened hearing could not select records-first")
+        return
+    if not game.interact_with("project_table"):
+        _fail("records-first outcome could not be completed")
+        return
+    var records: Dictionary = game.get_game_state()
+    if (not bool(records.get("completed", false)) or
+        String(records.get("outcome", "")) != "RECORDS_FIRST_PACKAGE_FILED" or
+        String(records.get("mystery_state", "")) != "UNKNOWN_BY_DESIGN"):
+        _fail("records-first state or unresolved mystery contract failed")
+        return
+    if not await _capture(destination, "07-records-first-consequence"):
+        return
+
+    print("EVERFIELD_RENDERED_VIEWPORT_CAPTURE_PASS screenshots=7 width=960 height=540")
     quit(0)
 
 
