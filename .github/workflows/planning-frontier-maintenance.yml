@@ -166,7 +166,7 @@ jobs:
           assert "Published task specification matches frozen model-input digest" in publish
           assert w.count("sort_keys=True, ensure_ascii=False, separators=") == 2
           import textwrap
-          scripts = re.findall(r"(?ms)^          python3 [^\\n]* <<'PY'\\n(.*?)^          PY$", w)
+          scripts = re.findall(r"(?ms)^          python3 [^\n]* <<'PY'\n(.*?)^          PY$", w)
           assert len(scripts) >= 3
           for script in scripts:
               compile(textwrap.dedent(script), "<workflow inline Python>", "exec")
