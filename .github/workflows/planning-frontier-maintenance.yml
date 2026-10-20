@@ -155,6 +155,30 @@ jobs:
           assert 'gh issue comment "$ISSUE_NUMBER" --body' in publish
           assert "Godot smoke via workflow_dispatch" in publish
           assert "Issue ownership changed before publication" in publish
+          # The publish job must prove the exact title/body accepted by the
+          # paid generator remained unchanged. A renamed/reworded task must
+          # never quietly acquire authority from an older model response.
+          assert "task_sha256: ${{ steps.task.outputs.task_sha256 }}" in generate
+          assert "id: task" in generate
+          assert "task_sha256=" in generate
+          assert "TASK_SHA256: ${{ needs.generate.outputs.task_sha256 }}" in publish
+          assert "Issue title/body changed since model input" in publish
+          assert "Published task specification matches frozen model-input digest" in publish
+          assert w.count("sort_keys=True, ensure_ascii=False, separators=") == 2
+          import textwrap
+          scripts = re.findall(r"(?ms)^          python3 [^\\n]* <<'PY'\\n(.*?)^          PY$", w)
+          assert len(scripts) >= 3
+          for script in scripts:
+              compile(textwrap.dedent(script), "<workflow inline Python>", "exec")
+          import hashlib, json
+          def fingerprint(title, body):
+              data = json.dumps({"title": title, "body": body}, sort_keys=True,
+                                ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+              return hashlib.sha256(data).hexdigest()
+          original = fingerprint("[PLAN-v1][IMPLEMENTATION-A]", "scope")
+          assert original == fingerprint("[PLAN-v1][IMPLEMENTATION-A]", "scope")
+          assert original != fingerprint("[PLAN-v1][IMPLEMENTATION-A]", "modified scope")
+          assert original != fingerprint("[PLAN-v1][IMPLEMENTATION-B]", "scope")
           # Distinct issues may generate concurrently; one must not destroy
           # another's paid work solely because a reviewed merge advanced main.
           # A stale-base branch is review-only, never auto-integrated.
