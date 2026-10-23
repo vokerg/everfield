@@ -1,0 +1,62 @@
+name: Retire provably rejected reviewer-only draft PRs
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/planning/retire_negative_review_prs.py'
+      - '.github/workflows/retire-negative-review-prs.yml'
+  schedule:
+    - cron: '41 3 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: everfield-negative-review-draft-retirement
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  self-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact event source (never execute untrusted PR with write permissions)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Install strict YAML parser
+        run: python3 -m pip install --disable-pip-version-check --no-deps PyYAML==6.0.3
+      - name: Compile and run fail-closed regression suite
+        run: |
+          python3 -m py_compile tools/planning/retire_negative_review_prs.py
+          python3 tools/planning/retire_negative_review_prs.py --self-test
+
+  retire:
+    # Only a reviewed, squash-published exact-main file can close PRs.
+    if: github.repository == 'vokerg/everfield' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: self-test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: write
+    steps:
+      - name: Checkout exact integrated main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Install strict YAML parser
+        run: python3 -m pip install --disable-pip-version-check --no-deps PyYAML==6.0.3
+      - name: Dry-run candidate eligibility
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 tools/planning/retire_negative_review_prs.py
+      - name: Recheck and retire only proven rejected, aged, unreferenced review drafts
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 tools/planning/retire_negative_review_prs.py --apply
